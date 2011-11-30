@@ -1,4 +1,7 @@
 require 'json'
+require 'net/http'
+require 'ostruct'
+require_relative 'core-ext/openstruct'
 
 module GdsApi::JsonUtils
 

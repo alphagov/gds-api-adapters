@@ -1,8 +1,4 @@
-require 'net/http'
-require 'ostruct'
-
 require_relative 'json_utils'
-require_relative 'core-ext/openstruct'
 
 class GdsApi::Base
   include GdsApi::JsonUtils
