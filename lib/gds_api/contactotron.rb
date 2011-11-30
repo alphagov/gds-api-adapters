@@ -1,14 +1,10 @@
 require_relative 'base'
 
+# This adapter's a bit different from the others as it assumes we know
+# the full URI for a contact and just want to grab its json serialization
+# and convert it to an ostruct.
 class GdsApi::Contactotron < GdsApi::Base
   def contact_for_uri(uri)
     to_ostruct get_json(uri)
   end
-  
-  private
-    def json_for_uri(uri)
-      open(uri, 'Accept' => Mime::JSON.to_s).read
-    rescue OpenURI::HTTPError
-      nil
-    end
 end
