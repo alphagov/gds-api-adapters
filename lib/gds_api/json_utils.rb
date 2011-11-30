@@ -1,12 +1,14 @@
 require 'json'
 
 module GdsApi::JsonUtils
+
   def get_json(url)
     url = URI.parse(url)
+    request = url.path
+    request = request + "?" + url.query if url.query
+
     response = Net::HTTP.start(url.host, url.port) do |http|
-      request = url.path
-      request = request + "?" + url.query if url.query
-      http.get(request)
+      http.get(request, {'Accept' => 'application/json'})
     end
     if response.code.to_i != 200
       return nil
@@ -37,5 +39,3 @@ module GdsApi::JsonUtils
     end
   end
 end
-
-
