@@ -2,9 +2,10 @@ require 'test_helper'
 require 'gds_api/publisher'
 
 class GdsApi::PublisherTest < MiniTest::Unit::TestCase
+  EXPECTED_ENDPOINT = "http://publisher.test.alphagov.co.uk"
   
   def api
-    GdsApi::Publisher.new("http://example.com")
+    GdsApi::Publisher.new("test")
   end
   
   def test_given_a_slug__should_go_get_resource_from_publisher_app
@@ -16,7 +17,7 @@ class GdsApi::PublisherTest < MiniTest::Unit::TestCase
       "type":"answer",
       "body":"Something",
       "title":"A publication"}@
-    stub_request(:get, "http://example.com/publications/#{slug}.json").to_return(
+    stub_request(:get, "#{EXPECTED_ENDPOINT}/publications/#{slug}.json").to_return(
       :body => publication,:status=>200)     
     
     pub = api.publication_for_slug(slug)
@@ -33,28 +34,28 @@ class GdsApi::PublisherTest < MiniTest::Unit::TestCase
       "type":"answer",
       "body":"Something",
       "title":"A publication"}@
-    stub_request(:get, "http://example.com/publications/#{slug}.json?edition=678").to_return(
+    stub_request(:get, "#{EXPECTED_ENDPOINT}/publications/#{slug}.json?edition=678").to_return(
       :body => publication,:status=>200)     
     
     pub = api.publication_for_slug(slug,{:edition => 678})
   end
 
   def test_should_fetch_and_parse_json_into_hash
-     url = "http://example.com/some.json"
+     url = "#{EXPECTED_ENDPOINT}/some.json"
      stub_request(:get, url).to_return(
       :body => "{}",:status=>200) 
      assert_equal Hash,api.get_json(url).class
   end
 
   def test_should_return_nil_if_404_returned_from_endpoint
-     url = "http://example.com/some.json"
+     url = "#{EXPECTED_ENDPOINT}/some.json"
      stub_request(:get, url).to_return(
       :body => "{}",:status=>404) 
      assert_nil api.get_json(url)
   end
 
   def test_should_construct_correct_url_for_a_slug
-    assert_equal "http://example.com/publications/slug.json", api.url_for_slug("slug")
+    assert_equal "#{EXPECTED_ENDPOINT}/publications/slug.json", api.url_for_slug("slug")
   end
 
   def publication_with_parts(slug)
@@ -90,7 +91,7 @@ class GdsApi::PublisherTest < MiniTest::Unit::TestCase
   def test_parts_should_be_deserialised_into_whole_objects
     slug = "a-publication"
     publication = publication_with_parts(slug)
-    stub_request(:get, "http://example.com/publications/#{slug}.json").to_return(
+    stub_request(:get, "#{EXPECTED_ENDPOINT}/publications/#{slug}.json").to_return(
       :body => publication,:status=>200)     
     
     pub = api.publication_for_slug(slug)
@@ -101,7 +102,7 @@ class GdsApi::PublisherTest < MiniTest::Unit::TestCase
   def test_a_publication_with_parts_should_have_part_specific_methods
     slug = "a-publication"
     publication = publication_with_parts(slug)
-    stub_request(:get, "http://example.com/publications/#{slug}.json").to_return(
+    stub_request(:get, "#{EXPECTED_ENDPOINT}/publications/#{slug}.json").to_return(
       :body => publication,:status=>200)     
     
     pub = api.publication_for_slug(slug)
@@ -111,7 +112,7 @@ class GdsApi::PublisherTest < MiniTest::Unit::TestCase
   def test_updated_at_should_be_a_time_on_deserialisation
     slug = "a-publication"
     publication = publication_with_parts(slug)
-    stub_request(:get, "http://example.com/publications/#{slug}.json").to_return(
+    stub_request(:get, "#{EXPECTED_ENDPOINT}/publications/#{slug}.json").to_return(
       :body => publication,:status=>200)     
     
     pub = api.publication_for_slug(slug)
