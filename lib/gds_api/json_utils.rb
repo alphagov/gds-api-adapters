@@ -2,6 +2,7 @@ require 'json'
 require 'net/http'
 require 'ostruct'
 require_relative 'core-ext/openstruct'
+require_relative 'version'
 
 module GdsApi::JsonUtils
   USER_AGENT = "GDS Api Client v. #{GdsApi::VERSION}"
