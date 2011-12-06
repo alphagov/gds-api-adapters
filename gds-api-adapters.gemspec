@@ -5,15 +5,16 @@ $:.unshift lib unless $:.include?(lib)
 require 'gds_api/version'
  
 Gem::Specification.new do |s|
-  s.name        = "gds-api-adapters"
-  s.version     = GdsApi::VERSION
-  s.platform    = Gem::Platform::RUBY
-  s.authors     = ["James Stewart"]
-  s.email       = ["jystewart@gmail.com"]
-  s.summary     = "Adapters to work with GDS APIs"
+  s.name         = "gds-api-adapters"
+  s.version      = GdsApi::VERSION
+  s.platform     = Gem::Platform::RUBY
+  s.authors      = ["James Stewart"]
+  s.email        = ["jystewart@gmail.com"]
+  s.summary      = "Adapters to work with GDS APIs"
+  s.homepage     = "http://github.com/alphagov/gds-api-adapters"
  
   s.files        = Dir.glob("lib/**/*") + %w(README.md Rakefile)
-  s.test_files    = Dir['test/**/*']
+  s.test_files   = Dir['test/**/*']
   s.require_path = 'lib'
   s.add_dependency 'plek'
   
