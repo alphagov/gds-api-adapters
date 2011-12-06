@@ -22,7 +22,7 @@ module GdsApi::JsonUtils
     end
   end
 
-  def post_json(url,params)
+  def post_json(url, params)
     url = URI.parse(url)
     Net::HTTP.start(url.host, url.port) do |http|
       post_response = http.post(url.path, params.to_json, {'Content-Type' => 'application/json', 'User-Agent' => USER_AGENT})

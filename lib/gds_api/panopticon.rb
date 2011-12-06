@@ -8,8 +8,8 @@ class GdsApi::Panopticon < GdsApi::Base
     to_ostruct get_json(url_for_slug(slug))
   end
 
-  private
-    def base_url
-      "#{endpoint}/artefacts"
-    end
+private
+  def base_url
+    "#{endpoint}/artefacts"
+  end
 end

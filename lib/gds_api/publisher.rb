@@ -2,6 +2,7 @@ require_relative 'base'
 require_relative 'part_methods'
 
 class GdsApi::Publisher < GdsApi::Base
+
   def publications
     get_json(base_url)
   end
@@ -16,26 +17,26 @@ class GdsApi::Publisher < GdsApi::Base
       convert_updated_date(container)
       container
     else
-      return nil
+      nil
     end
   end
 
   def council_for_transaction(transaction,snac_codes)
     if json = post_json("#{@endpoint}/local_transactions/#{transaction.slug}/verify_snac.json",{'snac_codes' => snac_codes})
-      return json['snac']
+      json['snac']
     else
-      return nil
+      nil
     end
   end
 
-  private
-    def convert_updated_date(container)
-      if container.updated_at && container.updated_at.class == String
-        container.updated_at = Time.parse(container.updated_at)
-      end
+private
+  def convert_updated_date(container)
+    if container.updated_at && container.updated_at.class == String
+      container.updated_at = Time.parse(container.updated_at)
     end
+  end
 
-    def base_url
-      "#{@endpoint}/publications"
-    end
+  def base_url
+    "#{@endpoint}/publications"
+  end
 end

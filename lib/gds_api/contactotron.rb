@@ -4,6 +4,7 @@ require_relative 'base'
 # the full URI for a contact and just want to grab its json serialization
 # and convert it to an ostruct.
 class GdsApi::Contactotron < GdsApi::Base
+
   def initialize
   end
 

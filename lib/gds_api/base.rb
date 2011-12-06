@@ -4,13 +4,13 @@ require 'cgi'
 class GdsApi::Base
   include GdsApi::JsonUtils
 
-  def initialize(platform, endpoint_url = nil)
+  def initialize(platform, endpoint_url=nil)
     adapter_name = self.class.to_s.split("::").last.downcase
 
     self.endpoint = endpoint_url || endpoint_for_platform(adapter_name, platform)
   end
 
-  def url_for_slug(slug,options={})
+  def url_for_slug(slug, options={})
     base = "#{base_url}/#{slug}.json#{query_string(options)}"
   end
 
