@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.email        = ["jystewart@gmail.com"]
   s.summary      = "Adapters to work with GDS APIs"
   s.homepage     = "http://github.com/alphagov/gds-api-adapters"
+  s.description  = "A set of adapters providing easy access to the GDS gov.uk APIs"
  
   s.files        = Dir.glob("lib/**/*") + %w(README.md Rakefile)
   s.test_files   = Dir['test/**/*']
