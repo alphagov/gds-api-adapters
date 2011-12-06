@@ -6,7 +6,7 @@ require_relative 'version'
 
 module GdsApi::JsonUtils
   USER_AGENT = "GDS Api Client v. #{GdsApi::VERSION}"
-  
+
   def get_json(url)
     url = URI.parse(url)
     request = url.path
@@ -21,7 +21,7 @@ module GdsApi::JsonUtils
       return JSON.parse(response.body)
     end
   end
-  
+
   def post_json(url,params)
     url = URI.parse(url)
     Net::HTTP.start(url.host, url.port) do |http|
