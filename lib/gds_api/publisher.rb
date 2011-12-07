@@ -7,7 +7,7 @@ class GdsApi::Publisher < GdsApi::Base
     get_json(base_url)
   end
 
-  def publication_for_slug(slug,options = {})
+  def publication_for_slug(slug, options = {})
     return nil if slug.nil? or slug == ''
 
     publication_hash = get_json(url_for_slug(slug, options))
