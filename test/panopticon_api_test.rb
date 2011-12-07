@@ -17,6 +17,15 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
     assert_equal 'An artefact', artefact.name
   end
 
+  def test_given_a_slug_can_fetch_artefact_as_hash
+    slug = 'an-artefact'
+    artefact_json = { name: 'An artefact' }.to_json
+    stub_request(:get, "#{EXPECTED_ENDPOINT}/artefacts/#{slug}.json").to_return(body: artefact_json)
+
+    artefact = api.artefact_for_slug(slug, :as_hash => true)
+    assert artefact.is_a?(Hash)
+  end
+
   def should_fetch_and_parse_JSON_into_hash
     url = "#{EXPECTED_ENDPOINT}/some.json"
     stub_request(:get, url).to_return(body: {}.to_json)
