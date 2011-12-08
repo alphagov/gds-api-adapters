@@ -25,4 +25,5 @@ In test_helper.rb:
 In the test:
   
     panopticon_has_metadata('id' => 12345, 'need_id' => need.id, 'slug' => 'my_slug')
-  
+
+This presumes you have webmock installed and enabled.
