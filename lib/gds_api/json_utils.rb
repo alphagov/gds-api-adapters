@@ -8,15 +8,16 @@ module GdsApi::JsonUtils
   USER_AGENT = "GDS Api Client v. #{GdsApi::VERSION}"
   TIMEOUT = 500
 
-  def get_json(url)
+  def do_request(url, &block)
     url = URI.parse(url)
     request = url.path
     request = request + "?" + url.query if url.query
 
     response = Net::HTTP.start(url.host, url.port) do |http|
       http.read_timeout = TIMEOUT
-      http.get(request, {'Accept' => 'application/json', 'User-Agent' => USER_AGENT})
+      yield http, request
     end
+
     if response.code.to_i != 200
       return nil
     else
@@ -26,18 +27,16 @@ module GdsApi::JsonUtils
     nil
   end
 
-  def post_json(url, params)
-    url = URI.parse(url)
-    Net::HTTP.start(url.host, url.port) do |http|
-      http.read_timeout = TIMEOUT
-      post_response = http.post(url.path, params.to_json, {'Content-Type' => 'application/json', 'User-Agent' => USER_AGENT})
-      if post_response.code == '200'
-        return JSON.parse(post_response.body)
-      end
+  def get_json(url)
+    do_request(url) do |http, path|
+      http.get(path, {'Accept' => 'application/json', 'User-Agent' => USER_AGENT})
     end
-    return nil
-  rescue Timeout::Error, Errno::ECONNRESET
-    nil
+  end
+
+  def post_json(url, params)
+    do_request(url) do |http, path|
+      http.post(path, params.to_json, {'Content-Type' => 'application/json', 'User-Agent' => USER_AGENT})
+    end
   end
 
   def to_ostruct(object)
