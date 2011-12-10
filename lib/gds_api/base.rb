@@ -1,8 +1,17 @@
 require_relative 'json_utils'
 require 'cgi'
+require 'logger'
 
 class GdsApi::Base
   include GdsApi::JsonUtils
+
+  class <<self
+    attr_writer :logger
+  end
+
+  def self.logger
+    @logger ||= Logger.new(STDOUT)
+  end
 
   def initialize(platform, endpoint_url=nil)
     adapter_name = self.class.to_s.split("::").last.downcase
