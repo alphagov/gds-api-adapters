@@ -6,6 +6,7 @@ require_relative 'version'
 
 module GdsApi::JsonUtils
   USER_AGENT = "GDS Api Client v. #{GdsApi::VERSION}"
+  TIMEOUT = 500
 
   def get_json(url)
     url = URI.parse(url)
@@ -13,6 +14,7 @@ module GdsApi::JsonUtils
     request = request + "?" + url.query if url.query
 
     response = Net::HTTP.start(url.host, url.port) do |http|
+      http.read_timeout = TIMEOUT
       http.get(request, {'Accept' => 'application/json', 'User-Agent' => USER_AGENT})
     end
     if response.code.to_i != 200
@@ -20,17 +22,22 @@ module GdsApi::JsonUtils
     else
       return JSON.parse(response.body)
     end
+  rescue Timeout::Error, Errno::ECONNRESET
+    nil
   end
 
   def post_json(url, params)
     url = URI.parse(url)
     Net::HTTP.start(url.host, url.port) do |http|
+      http.read_timeout = TIMEOUT
       post_response = http.post(url.path, params.to_json, {'Content-Type' => 'application/json', 'User-Agent' => USER_AGENT})
       if post_response.code == '200'
         return JSON.parse(post_response.body)
       end
     end
     return nil
+  rescue Timeout::Error, Errno::ECONNRESET
+    nil
   end
 
   def to_ostruct(object)
