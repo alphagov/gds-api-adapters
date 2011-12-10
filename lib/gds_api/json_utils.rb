@@ -3,6 +3,7 @@ require 'net/http'
 require 'ostruct'
 require_relative 'core-ext/openstruct'
 require_relative 'version'
+require_relative 'exceptions'
 
 module GdsApi::JsonUtils
   USER_AGENT = "GDS Api Client v. #{GdsApi::VERSION}"
@@ -23,6 +24,8 @@ module GdsApi::JsonUtils
     else
       return JSON.parse(response.body)
     end
+  rescue Errno::ECONNREFUSED
+    raise GdsApi::EndpointNotFound.new("Could not connect to #{url}")
   rescue Timeout::Error, Errno::ECONNRESET
     nil
   end

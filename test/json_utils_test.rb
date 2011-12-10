@@ -7,6 +7,22 @@ class JsonUtilsTest < MiniTest::Unit::TestCase
     assert_nil get_json(url)
   end
 
+  def test_get_should_raise_endpoint_not_found_if_connection_refused
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_raise(Errno::ECONNREFUSED)
+    assert_raises GdsApi::EndpointNotFound do
+      get_json(url)
+    end
+  end
+
+  def test_post_should_raise_endpoint_not_found_if_connection_refused
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_raise(Errno::ECONNREFUSED)
+    assert_raises GdsApi::EndpointNotFound do
+      get_json(url)
+    end
+  end
+
   def test_post_returns_nil_on_timeout
     url = "http://some.endpoint/some.json"
     stub_request(:post, url).to_raise(Timeout::Error)
