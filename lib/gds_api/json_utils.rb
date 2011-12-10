@@ -7,7 +7,7 @@ require_relative 'exceptions'
 
 module GdsApi::JsonUtils
   USER_AGENT = "GDS Api Client v. #{GdsApi::VERSION}"
-  TIMEOUT = 0.5
+  TIMEOUT_IN_SECONDS = 0.5
 
   def do_request(url, &block)
     url = URI.parse(url)
@@ -15,7 +15,7 @@ module GdsApi::JsonUtils
     request = request + "?" + url.query if url.query
 
     response = Net::HTTP.start(url.host, url.port) do |http|
-      http.read_timeout = TIMEOUT
+      http.read_timeout = TIMEOUT_IN_SECONDS
       yield http, request
     end
 
