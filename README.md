@@ -10,9 +10,25 @@ Example usage:
 
 Very much still a work in progress.
 
+## Logging
+
+Each HTTP request is logged as JSON. Example:
+
+    {
+      "request_uri":"http://contactotron.platform/contacts/1",
+      "start_time":"2011-12-10 21:18:33 +0000",
+      "status":"success",
+      "end_time":"2011-12-10 21:18:33 +0000"
+    }
+
+By default it is logged to STDOUT using the ruby logger. To override that set GdsApi::Base.logger
+
+    GdsApi::Base.logger = Logger.new("/path/to/file.log")
+
 ## Test Helpers
 
-There's also a test helper for stubbing panopticon requests in other apps. Example usage:
+There are also test helpers for stubbing various requests in other apps. Example usage of 
+the panopticon helper:
 
 In test_helper.rb:
 
@@ -27,3 +43,7 @@ In the test:
     panopticon_has_metadata('id' => 12345, 'need_id' => need.id, 'slug' => 'my_slug')
 
 This presumes you have webmock installed and enabled.
+
+## To Do
+
+* Make timeout handling work
