@@ -98,4 +98,12 @@ class GdsApi::PublisherTest < MiniTest::Unit::TestCase
     assert_equal Time, pub.updated_at.class
   end
 
+  def test_should_be_able_to_retrieve_local_transaction_details
+    stub_request(:post, "http://publisher.test.alphagov.co.uk/local_transactions/fake-transaction/verify_snac.json").
+      with(:body => "{\"snac_codes\":[12345]}",
+           :headers => {'Accept'=>'*/*', 'Content-Type'=>'application/json', 'User-Agent'=>'GDS Api Client v. 0.0.6'}).
+      to_return(:status => 200, :body => '{"snac": "12345"}', :headers => {})
+    assert_equal '12345', api.council_for_transaction('fake-transaction', [12345])
+  end
+
 end

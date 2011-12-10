@@ -21,8 +21,8 @@ class GdsApi::Publisher < GdsApi::Base
     end
   end
 
-  def council_for_transaction(transaction,snac_codes)
-    if json = post_json("#{@endpoint}/local_transactions/#{transaction.slug}/verify_snac.json",{'snac_codes' => snac_codes})
+  def council_for_transaction(transaction_slug, snac_codes)
+    if json = post_json("#{@endpoint}/local_transactions/#{transaction_slug}/verify_snac.json", {'snac_codes' => snac_codes})
       json['snac']
     else
       nil
