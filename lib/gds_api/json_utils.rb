@@ -19,10 +19,10 @@ module GdsApi::JsonUtils
       yield http, request
     end
 
-    if response.code.to_i != 200
-      return nil
+    if response.is_a?(Net::HTTPSuccess)
+      JSON.parse(response.body)
     else
-      return JSON.parse(response.body)
+      nil
     end
   rescue Errno::ECONNREFUSED
     raise GdsApi::EndpointNotFound.new("Could not connect to #{url}")
