@@ -6,7 +6,11 @@ require_relative 'version'
 require_relative 'exceptions'
 
 module GdsApi::JsonUtils
-  USER_AGENT = "GDS Api Client v. #{GdsApi::VERSION}"
+  REQUEST_HEADERS = {
+    'Accept' => 'application/json', 
+    'Content-Type' => 'application/json',
+    'User-Agent' => "GDS Api Client v. #{GdsApi::VERSION}"
+  }
   TIMEOUT_IN_SECONDS = 0.5
 
   def do_request(url, &block)
@@ -39,13 +43,13 @@ module GdsApi::JsonUtils
 
   def get_json(url)
     do_request(url) do |http, path|
-      http.get(path, {'Accept' => 'application/json', 'User-Agent' => USER_AGENT})
+      http.get(path, REQUEST_HEADERS)
     end
   end
 
   def post_json(url, params)
     do_request(url) do |http, path|
-      http.post(path, params.to_json, {'Content-Type' => 'application/json', 'User-Agent' => USER_AGENT})
+      http.post(path, params.to_json, REQUEST_HEADERS)
     end
   end
 
