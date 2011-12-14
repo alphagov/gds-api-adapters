@@ -19,7 +19,7 @@ module GdsApi::JsonUtils
     url = URI.parse(url)
     request = url.path
     request = request + "?" + url.query if url.query
-    logger.debug "I will request #{request}"
+    GdsApi::Base.logger.debug "I will request #{request}"
 
     response = Net::HTTP.start(url.host, url.port) do |http|
       http.read_timeout = TIMEOUT_IN_SECONDS
