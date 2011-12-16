@@ -1,3 +1,5 @@
+require 'gds_api/json_utils'
+
 module GdsApi
   module TestHelpers
     module Publisher
@@ -28,7 +30,7 @@ module GdsApi
         slug = input_details.delete('slug')
         uri = "#{PUBLISHER_ENDPOINT}/local_transactions/#{slug}/verify_snac.json"
         stub_request(:post, uri).with(:body => JSON.dump(input_details), 
-          :headers => {'Accept'=>'application/json', 'Content-Type'=>'application/json', 'User-Agent'=>'GDS Api Client v. 0.0.7'}).
+          :headers => GdsApi::JsonUtils::REQUEST_HEADERS).
           to_return(:body => json, :status => 200)
       end
 
