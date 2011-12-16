@@ -12,16 +12,18 @@ Very much still a work in progress.
 
 ## Logging
 
-Each HTTP request is logged as JSON. Example:
+Each HTTP request can be logged as JSON. Example:
 
     {
       "request_uri":"http://contactotron.platform/contacts/1",
-      "start_time":"2011-12-10 21:18:33 +0000",
+      "start_time":1324035128.9056342,
       "status":"success",
-      "end_time":"2011-12-10 21:18:33 +0000"
+      "end_time":1324035129.2017104
     }
 
-By default it is logged to STDOUT using the ruby logger. To override that set GdsApi::Base.logger
+
+By default we log to a NullLogger since we don't want to pollute your test results or logs
+To log output you'll want to set `GdsApi::Base.logger` to something that actually logs:
 
     GdsApi::Base.logger = Logger.new("/path/to/file.log")
 
