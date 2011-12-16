@@ -52,3 +52,8 @@ This presumes you have webmock installed and enabled.
 ## To Do
 
 * Make timeout handling work
+
+## Licence
+
+Released under the MIT Licence, a copy of which can be found in the file
+`LICENCE`.
