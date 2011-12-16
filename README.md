@@ -27,19 +27,19 @@ By default it is logged to STDOUT using the ruby logger. To override that set Gd
 
 ## Test Helpers
 
-There are also test helpers for stubbing various requests in other apps. Example usage of 
+There are also test helpers for stubbing various requests in other apps. Example usage of
 the panopticon helper:
 
 In test_helper.rb:
 
     require 'gds_api/test_helpers/panopticon'
-    
+
     class ActiveSupport::TestCase
       include GdsApi::TestHelpers::Panopticon
     end
 
 In the test:
-  
+
     panopticon_has_metadata('id' => 12345, 'need_id' => need.id, 'slug' => 'my_slug')
 
 This presumes you have webmock installed and enabled.
