@@ -1,4 +1,5 @@
-A set of API adapters to work with the GDS APIs, extracted from the frontend app.
+A set of API adapters to work with the GDS APIs, extracted from the frontend
+app.
 
 Example usage:
 
@@ -22,15 +23,16 @@ Each HTTP request can be logged as JSON. Example:
     }
 
 
-By default we log to a NullLogger since we don't want to pollute your test results or logs
-To log output you'll want to set `GdsApi::Base.logger` to something that actually logs:
+By default we log to a NullLogger since we don't want to pollute your test
+results or logs. To log output you'll want to set `GdsApi::Base.logger` to
+something that actually logs:
 
     GdsApi::Base.logger = Logger.new("/path/to/file.log")
 
 ## Test Helpers
 
-There are also test helpers for stubbing various requests in other apps. Example usage of
-the panopticon helper:
+There are also test helpers for stubbing various requests in other apps.
+Example usage of the panopticon helper:
 
 In test_helper.rb:
 
@@ -42,7 +44,8 @@ In test_helper.rb:
 
 In the test:
 
-    panopticon_has_metadata('id' => 12345, 'need_id' => need.id, 'slug' => 'my_slug')
+    panopticon_has_metadata('id' => 12345, 'need_id' => need.id,
+      'slug' => 'my_slug')
 
 This presumes you have webmock installed and enabled.
 
