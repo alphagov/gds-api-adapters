@@ -3,10 +3,6 @@ require_relative 'part_methods'
 
 class GdsApi::Publisher < GdsApi::Base
 
-  def publications
-    get_json(base_url)
-  end
-
   def publication_for_slug(slug, options = {})
     return nil if slug.nil? or slug == ''
 
