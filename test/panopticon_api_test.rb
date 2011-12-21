@@ -65,4 +65,22 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
     assert_equal 'Department for Environment, Food and Rural Affairs (Defra)', artefact.contact.name
     assert_equal 'helpline@defra.gsi.gov.uk', artefact.contact.email_address
   end
+  
+  def test_can_create_a_new_artefact
+    url = "#{PANOPTICON_ENDPOINT}/artefacts.json"
+    stub_request(:post, url)
+      .with(body: basic_artefact.to_json)
+      .to_return(body: basic_artefact.merge(id: 1).to_json)
+    
+    api.create_artefact(basic_artefact)
+  end
+  
+  def test_can_update_existing_artefact
+    url = "#{PANOPTICON_ENDPOINT}/artefacts/1.json"
+    stub_request(:put, url)
+      .with(body: basic_artefact.to_json)
+      .to_return(status: 200, body: '{}')
+    
+    api.update_artefact(1, basic_artefact)
+  end
 end

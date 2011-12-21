@@ -59,6 +59,12 @@ module GdsApi::JsonUtils
     end
   end
 
+  def put_json(url, params)
+    do_request(url) do |http, path|
+      http.put(path, params.to_json, REQUEST_HEADERS)
+    end
+  end
+  
   def to_ostruct(object)
     case object
     when Hash

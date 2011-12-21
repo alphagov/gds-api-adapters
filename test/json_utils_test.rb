@@ -58,5 +58,11 @@ class JsonUtilsTest < MiniTest::Unit::TestCase
     stub_request(:get, url).to_return(:body => "{}", :status => 404)
     assert_nil get_json(url)
   end
-
+    
+  def test_put_json_does_put_with_json_encoded_packet
+    url = "http://some.endpoint/some.json"
+    payload = {a:1}
+    stub_request(:put, url).with(body: payload.to_json).to_return(:body => "{}", :status => 200)
+    assert_equal({}, put_json(url, payload))
+  end
 end
