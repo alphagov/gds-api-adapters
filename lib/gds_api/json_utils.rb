@@ -11,7 +11,7 @@ module GdsApi::JsonUtils
     'Content-Type' => 'application/json',
     'User-Agent' => "GDS Api Client v. #{GdsApi::VERSION}"
   }
-  TIMEOUT_IN_SECONDS = 0.5
+  DEFAULT_TIMEOUT_IN_SECONDS = 0.5
 
   def do_request(url, &block)
     loggable = {request_uri: url, start_time: Time.now.to_f}
@@ -22,7 +22,7 @@ module GdsApi::JsonUtils
     logger.debug "I will request #{request}"
 
     response = Net::HTTP.start(url.host, url.port) do |http|
-      http.read_timeout = TIMEOUT_IN_SECONDS
+      http.read_timeout = options[:timeout] || DEFAULT_TIMEOUT_IN_SECONDS
       yield http, request
     end
 
@@ -30,14 +30,19 @@ module GdsApi::JsonUtils
       logger.info loggable.merge(status: 'success', end_time: Time.now).to_json
       JSON.parse(response.body)
     else
-      loggable.merge!(status: '404', end_time: Time.now.to_f)
+      body = begin
+        JSON.parse(response.body)
+      rescue
+        response.body
+      end
+      loggable.merge!(status: response.code, end_time: Time.now.to_f, body: body)
       logger.warn loggable.to_json
       nil
     end
   rescue Errno::ECONNREFUSED
     logger.error loggable.merge(status: 'refused', end_time: Time.now.to_f).to_json
     raise GdsApi::EndpointNotFound.new("Could not connect to #{url}")
-  rescue Timeout::Error, Errno::ECONNRESET
+  rescue Timeout::Error, Errno::ECONNRESET => e
     logger.error loggable.merge(status: 'failed', end_time: Time.now.to_f).to_json
     nil
   end

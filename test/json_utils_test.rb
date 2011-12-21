@@ -11,6 +11,7 @@ end
 class JsonUtilsTest < MiniTest::Unit::TestCase
   include GdsApi::JsonUtils
 
+  def options; {}; end
   def pending_test_long_requests_timeout
     url = "http://www.example.com/timeout.json"
     stub_request(:get, url).to_rack(StubRackApp)

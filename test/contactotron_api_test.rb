@@ -6,7 +6,7 @@ class ContactotronApiTest < MiniTest::Unit::TestCase
   include GdsApi::TestHelpers::Contactotron
   
   def api
-    GdsApi::Contactotron.new
+    GdsApi::Contactotron.new "test"
   end
 
   def test_should_fetch_and_parse_JSON_into_ostruct

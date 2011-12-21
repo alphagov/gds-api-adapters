@@ -5,6 +5,8 @@ require 'null_logger'
 class GdsApi::Base
   include GdsApi::JsonUtils
 
+  attr_reader :options
+  
   class << self
     attr_writer :logger
   end
@@ -13,12 +15,20 @@ class GdsApi::Base
     @logger ||= NullLogger.instance
   end
 
-  def initialize(platform, endpoint_url=nil)
-    adapter_name = self.class.to_s.split("::").last.downcase
-
-    self.endpoint = endpoint_url || endpoint_for_platform(adapter_name, platform)
+  def initialize(platform, options_or_endpoint_url=nil, maybe_options=nil)
+    if options_or_endpoint_url.is_a?(String)
+      @options = maybe_options || {}
+      @options[:endpoint_url] = options_or_endpoint_url
+    else
+      @options = options_or_endpoint_url || {}
+    end
+    self.endpoint = options[:endpoint_url] || endpoint_for_platform(adapter_name, platform)
   end
 
+  def adapter_name
+    self.class.to_s.split("::").last.downcase
+  end
+    
   def url_for_slug(slug, options={})
     base = "#{base_url}/#{slug}.json#{query_string(options)}"
   end

@@ -5,9 +5,6 @@ require_relative 'base'
 # and convert it to an ostruct.
 class GdsApi::Contactotron < GdsApi::Base
 
-  def initialize
-  end
-
   def contact_for_uri(uri)
     to_ostruct get_json(uri)
   end
