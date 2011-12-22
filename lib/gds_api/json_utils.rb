@@ -7,7 +7,7 @@ require_relative 'exceptions'
 
 module GdsApi::JsonUtils
   REQUEST_HEADERS = {
-    'Accept' => 'application/json', 
+    'Accept' => 'application/json',
     'Content-Type' => 'application/json',
     'User-Agent' => "GDS Api Client v. #{GdsApi::VERSION}"
   }
@@ -69,7 +69,7 @@ module GdsApi::JsonUtils
       http.put(path, params.to_json, REQUEST_HEADERS)
     end
   end
-  
+
   def to_ostruct(object)
     case object
     when Hash

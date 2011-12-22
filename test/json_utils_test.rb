@@ -47,7 +47,7 @@ class JsonUtilsTest < MiniTest::Unit::TestCase
     stub_request(:post, url).to_raise(Timeout::Error)
     assert_nil post_json(url, {})
   end
-  
+
   def test_should_fetch_and_parse_json_into_hash
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(:body => "{}",:status => 200)
@@ -59,7 +59,7 @@ class JsonUtilsTest < MiniTest::Unit::TestCase
     stub_request(:get, url).to_return(:body => "{}", :status => 404)
     assert_nil get_json(url)
   end
-    
+
   def test_put_json_does_put_with_json_encoded_packet
     url = "http://some.endpoint/some.json"
     payload = {a:1}

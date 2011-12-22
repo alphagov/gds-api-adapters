@@ -54,12 +54,12 @@ class GdsApiBaseTest < MiniTest::Unit::TestCase
     u = URI.parse(url)
     assert_match /^concreteapi\.test/, u.host
   end
-  
+
   def test_should_treat_second_positional_arg_as_endpoint_url_if_string
     api = ConcreteApi.new("test", "endpoint")
     assert_equal "endpoint", api.options[:endpoint_url]
   end
-  
+
   def test_should_accept_options_as_second_arg
     api = ConcreteApi.new("test", {endpoint_url: "endpoint", foo: "bar"})
     assert_equal "endpoint", api.options[:endpoint_url]

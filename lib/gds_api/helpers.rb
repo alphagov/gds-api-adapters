@@ -15,7 +15,7 @@ module GdsApi
     def panopticon_api
       @panopticon_api ||= GdsApi::Panopticon.new(Plek.current.environment)
     end
-    
+
     def fetch_artefact(params)
       panopticon_api.artefact_for_slug(params[:slug]) || OpenStruct.new(section: 'missing', need_id: 'missing', kind: 'missing')
     end

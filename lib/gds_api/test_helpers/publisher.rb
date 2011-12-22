@@ -29,7 +29,7 @@ module GdsApi
         json = JSON.dump(output_details)
         slug = input_details.delete('slug')
         uri = "#{PUBLISHER_ENDPOINT}/local_transactions/#{slug}/verify_snac.json"
-        stub_request(:post, uri).with(:body => JSON.dump(input_details), 
+        stub_request(:post, uri).with(:body => JSON.dump(input_details),
           :headers => GdsApi::JsonUtils::REQUEST_HEADERS).
           to_return(:body => json, :status => 200)
       end
