@@ -41,7 +41,7 @@ private
     if platform == 'development'
       "http://#{adapter_name}.dev.gov.uk"
     else
-      "http://#{adapter_name}.#{platform}.alphagov.co.uk"
+      "https://#{adapter_name}.#{platform}.alphagov.co.uk"
     end
   end
 
