@@ -3,7 +3,7 @@ require 'gds_api/json_utils'
 module GdsApi
   module TestHelpers
     module Publisher
-      PUBLISHER_ENDPOINT = "http://publisher.test.alphagov.co.uk"
+      PUBLISHER_ENDPOINT = "https://publisher.test.alphagov.co.uk"
 
       def publication_exists(details)
         json = JSON.dump(details)
