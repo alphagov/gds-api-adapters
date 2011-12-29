@@ -21,7 +21,7 @@ module GdsApi::JsonUtils
     request = request + "?" + url.query if url.query
     logger.debug "I will request #{request}"
 
-    response = Net::HTTP.start(url.host, url.port) do |http|
+    response = Net::HTTP.start(url.host, url.port, nil, nil, nil, nil, {use_ssl: url.port == 443}) do |http|
       http.read_timeout = options[:timeout] || DEFAULT_TIMEOUT_IN_SECONDS
       yield http, request
     end
