@@ -1,9 +1,15 @@
-require_relative 'json_utils'
+require_relative 'json_client'
 require 'cgi'
 require 'null_logger'
 
 class GdsApi::Base
-  include GdsApi::JsonUtils
+  extend Forwardable
+  
+  def client
+    @client ||= GdsApi::JsonClient.new(options)
+  end
+  
+  def_delegators :client, :get_json, :post_json, :put_json
 
   attr_reader :options
 

@@ -2,13 +2,13 @@ require_relative 'base'
 
 class GdsApi::Needotron < GdsApi::Base
   def need_by_id(id, opts = {})
-    need_hash = get_json("#{base_url}/#{id}.json")
-    return nil if need_hash.nil? or need_hash['need'].nil?
+    response = get_json("#{base_url}/#{id}.json")
+    return nil if response.nil? or response['need'].nil?
 
     if opts[:as_hash]
-      need_hash
+      response.to_hash
     else
-      to_ostruct(need_hash['need'])
+      response.to_ostruct.need
     end
   end
 

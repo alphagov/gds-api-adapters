@@ -6,6 +6,6 @@ require_relative 'base'
 class GdsApi::Contactotron < GdsApi::Base
 
   def contact_for_uri(uri)
-    to_ostruct get_json(uri)
+    get_json(uri)
   end
 end

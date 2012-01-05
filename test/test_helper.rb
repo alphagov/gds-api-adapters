@@ -1,8 +1,12 @@
+require 'bundler'
+Bundler.setup :default, :development, :test
+
 require 'minitest/autorun'
 require 'webmock/minitest'
 require 'rack/utils'
 require 'simplecov'
 require 'simplecov-rcov'
+require 'mocha'
 
 SimpleCov.start do
   add_filter "/test/"

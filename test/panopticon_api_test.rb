@@ -37,14 +37,14 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
   def test_given_a_slug_can_fetch_artefact_as_hash
     panopticon_has_metadata(basic_artefact)
     artefact = api.artefact_for_slug(basic_artefact[:slug], :as_hash => true)
-    assert artefact.is_a?(Hash)
+    assert_equal basic_artefact[:name], artefact['name']
   end
 
   def should_fetch_and_parse_JSON_into_hash
     url = "#{PANOPTICON_ENDPOINT}/some.json"
-    stub_request(:get, url).to_return(body: {}.to_json)
-
-    assert_equal Hash, api.get_json(url).class
+    stub_request(:get, url).to_return(body: {a:1}.to_json)
+  
+    assert_equal 1, api.get_json(url)['a']
   end
 
   def test_should_return_nil_if_404_returned_from_endpoint

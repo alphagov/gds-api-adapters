@@ -4,13 +4,7 @@ class GdsApi::Panopticon < GdsApi::Base
 
   def artefact_for_slug(slug, opts = {})
     return nil if slug.nil? or slug == ''
-
-    details = get_json(url_for_slug(slug))
-    if opts[:as_hash]
-      details
-    else
-      to_ostruct(details)
-    end
+    get_json(url_for_slug(slug))
   end
 
   def create_artefact(artefact)

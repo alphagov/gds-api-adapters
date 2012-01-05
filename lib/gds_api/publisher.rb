@@ -6,9 +6,9 @@ class GdsApi::Publisher < GdsApi::Base
   def publication_for_slug(slug, options = {})
     return nil if slug.nil? or slug == ''
 
-    publication_hash = get_json(url_for_slug(slug, options))
-    if publication_hash
-      container = to_ostruct(publication_hash)
+    response = get_json(url_for_slug(slug, options))
+    if response
+      container = response.to_ostruct
       container.extend(GdsApi::PartMethods) if container.parts
       convert_updated_date(container)
       container

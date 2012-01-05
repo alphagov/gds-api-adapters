@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rake', '~> 0.9.2.2'
   s.add_development_dependency 'webmock', '~> 1.7'
+  s.add_development_dependency 'mocha', '~> 0.10.0'
   s.add_development_dependency 'rack'
   s.add_development_dependency 'simplecov', '~> 0.4.2'
   s.add_development_dependency 'simplecov-rcov'

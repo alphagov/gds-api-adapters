@@ -12,6 +12,6 @@ class ContactotronApiTest < MiniTest::Unit::TestCase
   def test_should_fetch_and_parse_JSON_into_ostruct
     uri = "http://contactotron.platform/contacts/1"
     contactotron_has_contact(uri, {details: 'value'})
-    assert_equal OpenStruct, api.contact_for_uri(uri).class
+    assert_equal "value", api.contact_for_uri(uri).details
   end
 end
