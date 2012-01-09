@@ -18,36 +18,33 @@ module GdsApi
     DEFAULT_TIMEOUT_IN_SECONDS = 0.5
 
     def get_json(url)
-      do_request(url) do |http, path|
-        http.get(path, REQUEST_HEADERS)
-      end
+      do_request(Net::HTTP::Get, url)
     end
 
     def post_json(url, params)
-      do_request(url) do |http, path|
-        http.post(path, params.to_json, REQUEST_HEADERS)
-      end
+      do_request(Net::HTTP::Post, url, params)
     end
 
     def put_json(url, params)
-      do_request(url) do |http, path|
-        http.put(path, params.to_json, REQUEST_HEADERS)
-      end
+      do_request(Net::HTTP::Put, url, params)
     end
   
   private
   
-    def do_request(url, &block)
+    def do_request(method_class, url, params = nil)
       loggable = {request_uri: url, start_time: Time.now.to_f}
 
       url = URI.parse(url)
-      request = url.path
-      request = request + "?" + url.query if url.query
-      logger.debug "I will request #{request}"
+      path = url.path
+      path = path + "?" + url.query if url.query
+      logger.debug "I will request #{path}"
 
-      response = Net::HTTP.start(url.host, url.port, nil, nil, nil, nil, {use_ssl: url.port == 443, verify_mode: (OpenSSL::SSL::VERIFY_NONE if url.port == 443) }) do |http|       
+      response = Net::HTTP.start(url.host, url.port, nil, nil, nil, nil, {use_ssl: url.port == 443, verify_mode: (OpenSSL::SSL::VERIFY_NONE if url.port == 443) }) do |http|
         http.read_timeout = options[:timeout] || DEFAULT_TIMEOUT_IN_SECONDS
-        yield http, request
+        request = method_class.new(path, REQUEST_HEADERS)
+        request.basic_auth(@options[:basic_auth][:user], @options[:basic_auth][:password]) if @options[:basic_auth]
+        request.body = params.to_json if params
+        http.request(request)
       end
 
       if response.is_a?(Net::HTTPSuccess)

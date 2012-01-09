@@ -2,6 +2,7 @@ require_relative 'test_helper'
 require 'gds_api/base'
 require 'gds_api/json_client'
 require 'rack'
+require 'base64'
 
 StubRackApp = lambda do |env|
   sleep(30)
@@ -9,7 +10,7 @@ StubRackApp = lambda do |env|
   [200, {"Content-Type" => "text/plain", "Content-Length" => body.length.to_s}, [body]]
 end
 
-class JsonClientTest < MiniTest::Unit::TestCase
+class JsonClientTest < MiniTest::Spec
   def setup
     @client = GdsApi::JsonClient.new
   end
@@ -89,5 +90,14 @@ class JsonClientTest < MiniTest::Unit::TestCase
     stub_request(:put, url).with(body: payload.to_json).to_return(:body => '{"a":{"b":2}}', :status => 200)
     response = @client.put_json(url, payload)
     assert_equal 2, response.a.b
+  end
+
+  def test_client_can_use_basic_auth
+    client = GdsApi::JsonClient.new(basic_auth: {user: 'user', password: 'password'})
+
+    stub_request(:put, "http://user:password@some.endpoint/some.json")
+      .to_return(:body => '{"a":1}', :status => 200)
+    response = client.put_json("http://some.endpoint/some.json", {})
+    assert_equal 1, response.a
   end
 end

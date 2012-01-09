@@ -6,7 +6,15 @@ class GdsApi::Base
   extend Forwardable
   
   def client
-    @client ||= GdsApi::JsonClient.new(options)
+    @client ||= create_client
+  end
+  
+  def create_client
+    if options[:access_key]
+      GdsApi::OAuth2Client.new(options)
+    else
+      GdsApi::JsonClient.new(options)
+    end
   end
   
   def_delegators :client, :get_json, :post_json, :put_json

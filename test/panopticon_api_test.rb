@@ -83,4 +83,14 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
 
     api.update_artefact(1, basic_artefact)
   end
+
+  def test_can_use_basic_auth
+    credentials = {user: 'fred', password: 'secret'}
+    api = GdsApi::Panopticon.new('test', endpoint_url: 'http://some.url', basic_auth: credentials)
+    url = "http://#{credentials[:user]}:#{credentials[:password]}@some.url/artefacts/1.json"
+    stub_request(:put, url)
+      .to_return(status: 200, body: '{}')
+
+    api.update_artefact(1, basic_artefact)
+  end
 end
