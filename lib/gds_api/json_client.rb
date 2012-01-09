@@ -33,11 +33,12 @@ module GdsApi
   
     def do_request(method_class, url, params = nil)
       loggable = {request_uri: url, start_time: Time.now.to_f}
+      start_logging = loggable.merge(action: 'start')
+      logger.debug start_logging.to_json
 
       url = URI.parse(url)
       path = url.path
       path = path + "?" + url.query if url.query
-      logger.debug "I will request #{path}"
 
       response = Net::HTTP.start(url.host, url.port, nil, nil, nil, nil, {use_ssl: url.port == 443, verify_mode: (OpenSSL::SSL::VERIFY_NONE if url.port == 443) }) do |http|
         http.read_timeout = options[:timeout] || DEFAULT_TIMEOUT_IN_SECONDS
@@ -48,7 +49,7 @@ module GdsApi
       end
 
       if response.is_a?(Net::HTTPSuccess)
-        logger.info loggable.merge(status: 'success', end_time: Time.now).to_json
+        logger.info loggable.merge(status: 'success', end_time: Time.now.to_f).to_json
         Response.new(response)
       else
         body = begin
