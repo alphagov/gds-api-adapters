@@ -1,6 +1,11 @@
 require_relative 'base'
 
 class GdsApi::Panopticon < GdsApi::Base
+  def all
+    url = base_url + '.json'
+    json = get_json url
+    to_ostruct json
+  end
 
   def artefact_for_slug(slug, opts = {})
     return nil if slug.nil? or slug == ''
