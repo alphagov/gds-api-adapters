@@ -5,18 +5,18 @@ require_relative 'version'
 module GdsApi
   class JsonClient
     attr_accessor :logger, :options
-    
+
     def initialize(options = {})
       @logger = options[:logger] || GdsApi::Base.logger
       @options = options
     end
-    
+
     REQUEST_HEADERS = {
-      'Accept' => 'application/json', 
-      'Content-Type' => 'application/json',
-      'User-Agent' => "GDS Api Client v. #{GdsApi::VERSION}"
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json',
+        'User-Agent' => "GDS Api Client v. #{GdsApi::VERSION}"
     }
-    DEFAULT_TIMEOUT_IN_SECONDS = 0.5
+    DEFAULT_TIMEOUT_IN_SECONDS = 2
 
     def get_json(url)
       do_request(Net::HTTP::Get, url)
@@ -29,9 +29,8 @@ module GdsApi
     def put_json(url, params)
       do_request(Net::HTTP::Put, url, params)
     end
-  
-  private
-  
+
+    private
     def do_request(method_class, url, params = nil)
       loggable = {request_uri: url, start_time: Time.now.to_f}
       start_logging = loggable.merge(action: 'start')
@@ -41,7 +40,7 @@ module GdsApi
       path = url.path
       path = path + "?" + url.query if url.query
 
-      response = Net::HTTP.start(url.host, url.port, nil, nil, nil, nil, {use_ssl: url.port == 443, verify_mode: (OpenSSL::SSL::VERIFY_NONE if url.port == 443) }) do |http|
+      response = Net::HTTP.start(url.host, url.port, nil, nil, nil, nil, {use_ssl: url.port == 443, verify_mode: (OpenSSL::SSL::VERIFY_NONE if url.port == 443)}) do |http|
         http.read_timeout = options[:timeout] || DEFAULT_TIMEOUT_IN_SECONDS
         request = method_class.new(path, REQUEST_HEADERS)
         request.basic_auth(@options[:basic_auth][:user], @options[:basic_auth][:password]) if @options[:basic_auth]
@@ -67,7 +66,7 @@ module GdsApi
       raise GdsApi::EndpointNotFound.new("Could not connect to #{url}")
     rescue Timeout::Error, Errno::ECONNRESET => e
       logger.error loggable.merge(status: 'failed', end_time: Time.now.to_f).to_json
-      nil
+      raise GdsApi::TimedOutException.new
     end
   end
 end
