@@ -29,10 +29,10 @@ module GdsApi
       end
     end
     
-    def respond_to_missing?(method)
-      true
+    def respond_to_missing?(method, include_private)
+      to_hash.has_key?(method.to_s)
     end
-    
+        
   private
   
     def self.build_ostruct_recursively(value)
