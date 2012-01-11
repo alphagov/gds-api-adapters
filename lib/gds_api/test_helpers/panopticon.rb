@@ -23,6 +23,12 @@ module GdsApi
 
         return urls.first
       end
+
+      def panopticon_has_no_metadata_for(slug)
+        url = "#{PANOPTICON_ENDPOINT}/artefacts/#{slug}.json"
+        stub_request(:get, url).to_return(:status => 404, :body => "", :headers => {})
+      end
+
     end
   end
 end

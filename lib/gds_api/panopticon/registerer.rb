@@ -8,6 +8,7 @@ module GdsApi
         @owning_app = options[:owning_app]
         @kind = options[:kind] || 'custom-application'
         @panopticon = options[:panopticon]
+        @platform = options[:platform] || ENV['FACTER_govuk_platform'] || 'development'
       end
   
       def record_to_artefact(record)
@@ -29,7 +30,7 @@ module GdsApi
           panopticon.create_artefact(artefact)
         elsif existing.owning_app == artefact[:owning_app]
           logger.info "Updating #{artefact[:slug]}"
-          panopticon.update_artefact(artefact)
+          panopticon.update_artefact(artefact[:slug], artefact)
         else
           raise "Slug #{artefact[:slug]} already registered to application '#{existing.owning_app}'"
         end
@@ -39,8 +40,7 @@ module GdsApi
         options = {
           timeout: 5
         }
-        platform = ENV['FACTER_govuk_platform'] || 'development'
-        @panopticon ||= GdsApi::Panopticon.new(platform, options.merge(panopticon_api_credentials))
+        @panopticon ||= GdsApi::Panopticon.new(@platform, options.merge(panopticon_api_credentials))
       end
   
       def panopticon_api_credentials
