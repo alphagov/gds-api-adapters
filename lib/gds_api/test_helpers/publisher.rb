@@ -15,6 +15,7 @@ module GdsApi
       def publication_exists_for_snac(snac, details)
         json = JSON.dump(details)
         uri = "#{PUBLISHER_ENDPOINT}/publications/#{details['slug']}.json"
+        stub_request(:get, uri).to_return(:body => json, :status => 200)
         stub_request(:get, uri).with(:query => {:snac => snac.to_s}).to_return(:body => json, :status => 200)
         return uri
       end
@@ -35,7 +36,7 @@ module GdsApi
       end
 
       def no_council_for_slug(slug)
-        uri = "#{PUBLISHER_ENDPOINT}/local_transactions/#{slug}/verify_snac.json"
+        uri = "#{PUBLISHER_ENDPOINT}/local_transactions/#{slug}.json"
         stub_request(:post, uri).to_return(:body => "", :status => 404)
       end
     end
