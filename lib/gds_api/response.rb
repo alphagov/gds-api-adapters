@@ -25,12 +25,12 @@ module GdsApi
       if to_hash.has_key?(method.to_s)
         to_ostruct.send(method)
       else
-        super
+        nil
       end
     end
     
     def respond_to_missing?(method)
-      to_hash.has_key?(method.to_s) || super
+      true
     end
     
   private
