@@ -13,7 +13,11 @@ module GdsApi
     end
 
     def panopticon_api
-      @panopticon_api ||= GdsApi::Panopticon.new(Plek.current.environment)
+      @panopticon_api ||= GdsApi::Panopticon.new(Plek.current.environment, panopticon_api_credentials)
+    end
+    
+    def panopticon_api_credentials
+      Object::const_defined?(:PANOPTICON_API_CREDENTIALS) ? PANOPTICON_API_CREDENTIALS : {}
     end
 
     def fetch_artefact(params)
