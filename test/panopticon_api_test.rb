@@ -93,4 +93,15 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
 
     api.update_artefact(1, basic_artefact)
   end
+  
+  def test_can_register_artefacts_en_masse
+    panopticon = stub_everything('Panopticon api client')
+    r = GdsApi::Panopticon::Registerer.new(owning_app: 'my-app', panopticon: panopticon)
+    record = OpenStruct.new(slug: '/foo', title: 'MyFoo')
+    
+    panopticon.stubs(:artefact_for_slug).returns(nil)
+    panopticon.expects(:create_artefact).with({slug: '/foo', owning_app: 'my-app', kind: 'custom-application', name: 'MyFoo'})
+    
+    r.register(record)
+  end
 end

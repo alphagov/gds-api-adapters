@@ -1,4 +1,5 @@
 require_relative 'base'
+require_relative 'panopticon/registerer'
 
 class GdsApi::Panopticon < GdsApi::Base
   def all
