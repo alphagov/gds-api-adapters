@@ -99,6 +99,14 @@ class JsonClientTest < MiniTest::Spec
     assert ! response.respond_to?(:does_not_exist)
   end
   
+  def test_a_response_is_always_considered_present_and_not_blank
+    url = "http://some.endpoint/some.json"
+    stub_request(:put, url).to_return(:body => '{"a":1}', :status => 200)
+    response = @client.put_json(url, {})
+    assert ! response.blank?
+    assert response.present?
+  end
+  
   def test_client_can_use_basic_auth
     client = GdsApi::JsonClient.new(basic_auth: {user: 'user', password: 'password'})
 

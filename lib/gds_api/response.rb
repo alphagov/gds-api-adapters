@@ -32,6 +32,9 @@ module GdsApi
     def respond_to_missing?(method, include_private)
       to_hash.has_key?(method.to_s)
     end
+    
+    def present?; ! blank?; end
+    def blank?; false; end
         
   private
   
