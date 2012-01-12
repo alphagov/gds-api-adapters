@@ -1,3 +1,5 @@
+require 'json'
+
 module GdsApi
   module TestHelpers
     module Panopticon
