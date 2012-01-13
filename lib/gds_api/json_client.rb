@@ -61,11 +61,14 @@ module GdsApi
         logger.warn loggable.to_json
         nil
       end
-    rescue Errno::ECONNREFUSED
-      logger.error loggable.merge(status: 'refused', end_time: Time.now.to_f).to_json
+    rescue Errno::ECONNREFUSED => e
+      logger.error loggable.merge(status: 'refused', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::EndpointNotFound.new("Could not connect to #{url}")
-    rescue Timeout::Error, Errno::ECONNRESET => e
-      logger.error loggable.merge(status: 'failed', end_time: Time.now.to_f).to_json
+    rescue Timeout::Error => e
+      logger.error loggable.merge(status: 'timeout', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
+      raise GdsApi::TimedOutException.new
+    rescue Errno::ECONNRESET => e
+      logger.error loggable.merge(status: 'connection_reset', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::TimedOutException.new
     end
   end
