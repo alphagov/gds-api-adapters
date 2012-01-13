@@ -41,7 +41,9 @@ module GdsApi
       path = path + "?" + url.query if url.query
 
       response = Net::HTTP.start(url.host, url.port, nil, nil, nil, nil, {use_ssl: url.port == 443, verify_mode: (OpenSSL::SSL::VERIFY_NONE if url.port == 443)}) do |http|
-        http.read_timeout = options[:timeout] || DEFAULT_TIMEOUT_IN_SECONDS
+        unless options[:disable_timeout]
+          http.read_timeout = options[:timeout] || DEFAULT_TIMEOUT_IN_SECONDS
+        end
         request = method_class.new(path, REQUEST_HEADERS)
         request.basic_auth(@options[:basic_auth][:user], @options[:basic_auth][:password]) if @options[:basic_auth]
         request.body = params.to_json if params

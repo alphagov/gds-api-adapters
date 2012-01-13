@@ -23,6 +23,7 @@ class GdsApi::Base
 
   class << self
     attr_writer :logger
+    attr_accessor :default_options
   end
 
   def self.logger
@@ -31,11 +32,13 @@ class GdsApi::Base
 
   def initialize(platform, options_or_endpoint_url=nil, maybe_options=nil)
     if options_or_endpoint_url.is_a?(String)
-      @options = maybe_options || {}
-      @options[:endpoint_url] = options_or_endpoint_url
+      options = maybe_options || {}
+      options[:endpoint_url] = options_or_endpoint_url
     else
-      @options = options_or_endpoint_url || {}
+      options = options_or_endpoint_url || {}
     end
+    default_options = GdsApi::Base.default_options || {}
+    @options = default_options.merge(options)
     self.endpoint = options[:endpoint_url] || endpoint_for_platform(adapter_name, platform)
   end
 
