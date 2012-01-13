@@ -13,8 +13,10 @@ module GdsApi
   
       def record_to_artefact(record)
         hash = {slug: record.slug, owning_app: owning_app, kind: kind, name: record.title}
-        if record.respond_to? :need_id
-          hash[:need_id] = record.need_id
+        [:need_id, :section].each do |attr_name|
+          if record.respond_to? attr_name
+            hash[attr_name] = record.send(attr_name)
+          end
         end
         hash
       end
