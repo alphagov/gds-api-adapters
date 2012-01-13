@@ -12,7 +12,11 @@ module GdsApi
       end
   
       def record_to_artefact(record)
-        {slug: record.slug, owning_app: owning_app, kind: kind, name: record.title}
+        hash = {slug: record.slug, owning_app: owning_app, kind: kind, name: record.title}
+        if record.respond_to? :need_id
+          hash[:need_id] = record.need_id
+        end
+        hash
       end
   
       # record should respond to #slug and #title, or override #record_to_artefact 
