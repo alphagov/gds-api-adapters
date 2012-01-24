@@ -27,15 +27,6 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
     GdsApi::Panopticon.new('test')
   end
 
-  def setup
-    @json_client_cache = GdsApi::JsonClient.cache
-    GdsApi::JsonClient.cache = {}
-  end
-
-  def teardown
-    GdsApi::JsonClient.cache = @json_client_cache
-  end
-
   def test_given_a_slug__should_fetch_artefact_from_panopticon
     panopticon_has_metadata(basic_artefact)
 

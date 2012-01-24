@@ -17,7 +17,7 @@ module GdsApi
 
     def initialize(options = {})
       @logger = options[:logger] || GdsApi::Base.logger
-      @cache = options[:cache] || JsonClient.cache
+      @cache = JsonClient.cache
       @options = options
     end
 

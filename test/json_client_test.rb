@@ -5,7 +5,13 @@ require 'base64'
 
 class JsonClientTest < MiniTest::Spec
   def setup
-    @client = GdsApi::JsonClient.new(cache: {})
+    @json_client_cache = GdsApi::JsonClient.cache
+    GdsApi::JsonClient.cache = {}
+    @client = GdsApi::JsonClient.new
+  end
+
+  def teardown
+    GdsApi::JsonClient.cache = @json_client_cache
   end
 
   def options;
