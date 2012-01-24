@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.add_dependency 'plek'
   s.add_dependency 'null_logger'
+  s.add_dependency 'lrucache', '~> 0.1.1'
 
   s.add_development_dependency 'rake', '~> 0.9.2.2'
   s.add_development_dependency 'webmock', '~> 1.7'

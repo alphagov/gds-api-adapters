@@ -1,13 +1,19 @@
 require_relative 'response'
 require_relative 'exceptions'
 require_relative 'version'
+require 'lrucache'
 
 module GdsApi
   class JsonClient
+    def self.cache
+      @cache ||= LRUCache.new(max_size: 10)
+    end
+
     attr_accessor :logger, :options
 
     def initialize(options = {})
       @logger = options[:logger] || GdsApi::Base.logger
+      @cache = options[:cache] || JsonClient.cache
       @options = options
     end
 
@@ -19,7 +25,7 @@ module GdsApi
     DEFAULT_TIMEOUT_IN_SECONDS = 2
 
     def get_json(url)
-      do_request(Net::HTTP::Get, url)
+      @cache[url] ||= do_request(Net::HTTP::Get, url)
     end
 
     def post_json(url, params)

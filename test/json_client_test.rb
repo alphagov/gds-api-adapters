@@ -5,7 +5,7 @@ require 'base64'
 
 class JsonClientTest < MiniTest::Spec
   def setup
-    @client = GdsApi::JsonClient.new
+    @client = GdsApi::JsonClient.new(cache: {})
   end
 
   def options;
@@ -48,6 +48,15 @@ class JsonClientTest < MiniTest::Spec
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(:body => "{}", :status => 200)
     assert_equal GdsApi::Response, @client.get_json(url).class
+  end
+
+  def test_should_cache_multiple_requests_to_same_url_across_instances
+    url = "http://some.endpoint/some.json"
+    result = {"foo" => "bar"}
+    stub_request(:get, url).to_return(:body => JSON.dump(result), :status => 200).times(1)
+    response_a = GdsApi::JsonClient.new.get_json(url)
+    response_b = GdsApi::JsonClient.new.get_json(url)
+    assert_equal response_a.object_id, response_b.object_id
   end
 
   def test_should_return_nil_if_404_returned_from_endpoint
