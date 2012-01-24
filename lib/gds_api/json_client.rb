@@ -9,6 +9,10 @@ module GdsApi
       @cache ||= LRUCache.new(max_size: 10)
     end
 
+    def self.cache=(c)
+      @cache = c
+    end
+
     attr_accessor :logger, :options
 
     def initialize(options = {})

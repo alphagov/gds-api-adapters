@@ -54,6 +54,15 @@ class GdsApi::PublisherTest < MiniTest::Unit::TestCase
     GdsApi::Publisher.new("test")
   end
 
+  def setup
+    @json_client_cache = GdsApi::JsonClient.cache
+    GdsApi::JsonClient.cache = {}
+  end
+
+  def teardown
+    GdsApi::JsonClient.cache = @json_client_cache
+  end
+
   def test_given_a_slug_should_go_get_resource_from_publisher_app
     publication_exists(basic_answer)
     pub = api.publication_for_slug(basic_answer['slug'])
