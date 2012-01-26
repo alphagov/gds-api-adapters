@@ -18,4 +18,8 @@ class GdsApi::Imminence < GdsApi::Base
       o
     }
   end
+
+  def places_kml(type)
+    get_raw("#{@endpoint}/places/#{type}.kml")
+  end
 end

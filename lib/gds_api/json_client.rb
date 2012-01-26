@@ -28,19 +28,46 @@ module GdsApi
     }
     DEFAULT_TIMEOUT_IN_SECONDS = 2
 
+    def get_raw(url)
+      do_raw_request(Net::HTTP::Get, url)
+    end
+
     def get_json(url)
-      @cache[url] ||= do_request(Net::HTTP::Get, url)
+      @cache[url] ||= do_json_request(Net::HTTP::Get, url)
     end
 
     def post_json(url, params)
-      do_request(Net::HTTP::Post, url, params)
+      do_json_request(Net::HTTP::Post, url, params)
     end
 
     def put_json(url, params)
-      do_request(Net::HTTP::Put, url, params)
+      do_json_request(Net::HTTP::Put, url, params)
     end
 
     private
+    def do_raw_request(method_class, url, params = nil)
+      response, loggable = do_request(method_class, url, params)
+      response.body
+    end
+
+    def do_json_request(method_class, url, params = nil)
+      response, loggable = do_request(method_class, url, params)
+
+      if response.is_a?(Net::HTTPSuccess)
+        logger.info loggable.merge(status: 'success', end_time: Time.now.to_f).to_json
+        Response.new(response)
+      else
+        body = begin
+          JSON.parse(response.body)
+        rescue
+          response.body
+        end
+        loggable.merge!(status: response.code, end_time: Time.now.to_f, body: body)
+        logger.warn loggable.to_json
+        nil
+      end
+    end
+
     def do_request(method_class, url, params = nil)
       loggable = {request_uri: url, start_time: Time.now.to_f}
       start_logging = loggable.merge(action: 'start')
@@ -60,19 +87,8 @@ module GdsApi
         http.request(request)
       end
 
-      if response.is_a?(Net::HTTPSuccess)
-        logger.info loggable.merge(status: 'success', end_time: Time.now.to_f).to_json
-        Response.new(response)
-      else
-        body = begin
-          JSON.parse(response.body)
-        rescue
-          response.body
-        end
-        loggable.merge!(status: response.code, end_time: Time.now.to_f, body: body)
-        logger.warn loggable.to_json
-        nil
-      end
+      return response, loggable
+
     rescue Errno::ECONNREFUSED => e
       logger.error loggable.merge(status: 'refused', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::EndpointNotFound.new("Could not connect to #{url}")

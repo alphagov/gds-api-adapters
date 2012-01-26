@@ -4,11 +4,11 @@ require 'null_logger'
 
 class GdsApi::Base
   extend Forwardable
-  
+
   def client
     @client ||= create_client
   end
-  
+
   def create_client
     if options[:access_key]
       GdsApi::OAuth2Client.new(options)
@@ -16,8 +16,8 @@ class GdsApi::Base
       GdsApi::JsonClient.new(options)
     end
   end
-  
-  def_delegators :client, :get_json, :post_json, :put_json
+
+  def_delegators :client, :get_json, :post_json, :put_json, :get_raw
 
   attr_reader :options
 
