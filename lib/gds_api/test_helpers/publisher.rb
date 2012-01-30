@@ -5,9 +5,12 @@ module GdsApi
     module Publisher
       PUBLISHER_ENDPOINT = "https://publisher.test.alphagov.co.uk"
 
-      def publication_exists(details)
+      def publication_exists(details, options = {})
         json = JSON.dump(details)
         uri = "#{PUBLISHER_ENDPOINT}/publications/#{details['slug']}.json"
+        if options[:edition]
+          uri += "?edition=#{options[:edition]}"
+        end
         stub_request(:get, uri).to_return(:body => json, :status => 200)
         return uri
       end
