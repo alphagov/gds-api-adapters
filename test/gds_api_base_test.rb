@@ -65,4 +65,19 @@ class GdsApiBaseTest < MiniTest::Unit::TestCase
     assert_equal "endpoint", api.options[:endpoint_url]
     assert_equal "bar", api.options[:foo]
   end
+
+  def test_setting_cache_size_from_options
+    GdsApi::JsonClient.cache = false
+    api = ConcreteApi.new("test", {endpoint_url: "endpoint", cache_size: 2})
+    assert_equal 2, api.client.cache.max_size
+  end
+
+  def test_setting_cache_size_from_default_options
+    GdsApi::JsonClient.cache = false
+    GdsApi::Base.default_options = {cache_size: 4}
+    api = ConcreteApi.new("test", {endpoint_url: "endpoint"})
+    assert_equal 4, api.client.cache.max_size
+  end
+
+
 end

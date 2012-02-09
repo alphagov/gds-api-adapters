@@ -5,19 +5,21 @@ require 'lrucache'
 
 module GdsApi
   class JsonClient
-    def self.cache
-      @cache ||= LRUCache.new(max_size: 10)
+
+    def self.cache(size=DEFAULT_CACHE_SIZE)
+      @cache ||= LRUCache.new(max_size: size)
     end
 
     def self.cache=(c)
       @cache = c
     end
 
-    attr_accessor :logger, :options
+    attr_accessor :logger, :options, :cache
 
     def initialize(options = {})
       @logger = options[:logger] || GdsApi::Base.logger
-      @cache = JsonClient.cache
+      cache_size = options[:cache_size] || DEFAULT_CACHE_SIZE
+      @cache = JsonClient.cache(cache_size)
       @options = options
     end
 
@@ -27,6 +29,7 @@ module GdsApi
         'User-Agent' => "GDS Api Client v. #{GdsApi::VERSION}"
     }
     DEFAULT_TIMEOUT_IN_SECONDS = 2
+    DEFAULT_CACHE_SIZE = 10
 
     def get_raw(url)
       do_raw_request(Net::HTTP::Get, url)
