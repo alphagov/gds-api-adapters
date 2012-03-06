@@ -98,12 +98,16 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
     artefact = {slug: 'foo', owning_app: 'my-app', kind: 'custom-application', name: 'MyFoo'}
     r = GdsApi::Panopticon::Registerer.new(platform: "test", owning_app: 'my-app')
     panopticon_has_no_metadata_for('foo')
+    
+    stub_request(:put, "#{PANOPTICON_ENDPOINT}/artefacts/foo.json")
+      .with(body: artefact.to_json)
+      .to_return(body: artefact.merge(id: 1).to_json)
 
     url = "#{PANOPTICON_ENDPOINT}/artefacts.json"
     stub_request(:post, url)
       .with(body: artefact.to_json)
       .to_return(body: artefact.merge(id: 1).to_json)
-
+  
     record = OpenStruct.new(artefact.merge(title: artefact[:name]))
     r.register(record)
   end
