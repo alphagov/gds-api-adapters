@@ -14,11 +14,12 @@ module GdsApi
 
       def panopticon_has_metadata(metadata)
         metadata = stringify_hash_keys(metadata)
+        metadata['_id'] = metadata.delete('id') if metadata['id']
 
         json = JSON.dump(metadata)
 
         urls = []
-        urls << "#{PANOPTICON_ENDPOINT}/artefacts/#{metadata['id']}.json" if metadata['id']
+        urls << "#{PANOPTICON_ENDPOINT}/artefacts/#{metadata['_id']}.json" if metadata['_id']
         urls << "#{PANOPTICON_ENDPOINT}/artefacts/#{metadata['slug']}.json" if metadata['slug']
 
         urls.each { |url| stub_request(:get, url).to_return(:status => 200, :body => json, :headers => {}) }
