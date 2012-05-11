@@ -28,4 +28,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rack'
   s.add_development_dependency 'simplecov', '~> 0.5.4'
   s.add_development_dependency 'simplecov-rcov'
+  s.add_development_dependency 'gem_publisher', '~> 1.0.0'
 end
