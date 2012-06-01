@@ -105,5 +105,4 @@ class GdsApi::PublisherTest < MiniTest::Unit::TestCase
       to_return(:status => 200, :body => '{"snac": "12345"}', :headers => {})
     assert_equal '12345', api.council_for_slug('fake-transaction', [12345])
   end
-
 end
