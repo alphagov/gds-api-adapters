@@ -21,6 +21,10 @@ class GdsApi::Panopticon < GdsApi::Base
     put_json("#{base_url}/#{id_or_slug}.json", artefact)
   end
 
+  def curated_lists
+    get_json("#{@endpoint}/curated_lists.json").to_hash
+  end
+
 private
   def base_url
     "#{endpoint}/artefacts"

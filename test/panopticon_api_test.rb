@@ -126,4 +126,10 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
     r.register(record)
   end
 
+  def test_should_be_able_to_fetch_curated_lists
+    stub_request(:get, "#{PANOPTICON_ENDPOINT}/curated_lists.json").
+      with(:headers => GdsApi::JsonClient::REQUEST_HEADERS).
+      to_return(:status => 200, :body => '{ "crume": ["pinishment", "prosin"]}', :headers => {})
+    assert_equal({ "crume" => ["pinishment", "prosin"]}, api.curated_lists)
+  end
 end
