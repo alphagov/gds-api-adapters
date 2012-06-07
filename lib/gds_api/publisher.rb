@@ -26,7 +26,7 @@ class GdsApi::Publisher < GdsApi::Base
   end
 
   def licences_for_ids(ids)
-    response = get_json("#{@endpoint}/licences.json?ids=#{ids.join(',')}")
+    response = get_json("#{@endpoint}/licences.json?ids=#{ids.map(&:to_s).sort.join(',')}")
     response.to_ostruct
   end
 
