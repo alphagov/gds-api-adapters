@@ -105,4 +105,29 @@ class GdsApi::PublisherTest < MiniTest::Unit::TestCase
       to_return(:status => 200, :body => '{"snac": "12345"}', :headers => {})
     assert_equal '12345', api.council_for_slug('fake-transaction', [12345])
   end
+
+  def test_should_get_licence_details_from_publisher
+    setup_publisher_licences_stubs
+
+    publisher_has_licence :licence_identifier => "1234", :title => 'Test Licence 1', :slug => 'test-licence-1', 
+      :licence_short_description => 'A short description'
+    publisher_has_licence :licence_identifier => "1235", :title => 'Test Licence 2', :slug => 'test-licence-2', 
+      :licence_short_description => 'A short description'
+    publisher_has_licence :licence_identifier => "AB1234", :title => 'Test Licence 3', :slug => 'test-licence-3', 
+      :licence_short_description => 'A short description'
+
+    results = api.licences_for_ids([1234, 'AB1234', 'something'])
+    assert_equal 2, results.size
+    assert_equal ['1234', 'AB1234'], results.map(&:licence_identifier)
+    assert_equal ['Test Licence 1', 'Test Licence 3'], results.map(&:title).sort
+    assert_equal ['test-licence-1', 'test-licence-3'], results.map(&:slug).sort
+    assert_equal 'A short description', results[0].licence_short_description
+    assert_equal 'A short description', results[1].licence_short_description
+  end
+
+  def test_should_return_empty_array_with_no_licences
+    setup_publisher_licences_stubs
+
+    assert_equal [], api.licences_for_ids([123,124])
+  end
 end

@@ -25,6 +25,11 @@ class GdsApi::Publisher < GdsApi::Base
     end
   end
 
+  def licences_for_ids(ids)
+    response = get_json("#{@endpoint}/licences.json?ids=#{ids.join(',')}")
+    response.to_ostruct
+  end
+
 private
   def convert_updated_date(container)
     if container.updated_at && container.updated_at.class == String

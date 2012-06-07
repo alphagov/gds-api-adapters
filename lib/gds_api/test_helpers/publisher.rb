@@ -42,6 +42,23 @@ module GdsApi
         uri = "#{PUBLISHER_ENDPOINT}/local_transactions/#{slug}.json"
         stub_request(:post, uri).to_return(:body => "", :status => 404)
       end
+
+      def setup_publisher_licences_stubs
+        @stubbed_publisher_licences = []
+        stub_request(:get, %r{\A#{PUBLISHER_ENDPOINT}/licences}).to_return do |request|
+          if request.uri.query_values and request.uri.query_values["ids"]
+            ids = request.uri.query_values["ids"].split(',')
+            {:body => @stubbed_publisher_licences.select {|l| ids.include? l[:licence_identifier] }.to_json}
+          else
+            {:body => [].to_json}
+          end
+        end
+      end
+
+      def publisher_has_licence(details)
+        raise "Need a licence identifier" if details[:licence_identifier].nil?
+        @stubbed_publisher_licences << details
+      end
     end
   end
 end
