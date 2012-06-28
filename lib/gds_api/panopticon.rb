@@ -1,7 +1,11 @@
 require_relative 'base'
 require_relative 'panopticon/registerer'
+require_relative 'exceptions'
 
 class GdsApi::Panopticon < GdsApi::Base
+
+  include GdsApi::ExceptionHandling
+
   def all
     url = base_url + '.json'
     json = get_json url
@@ -14,11 +18,23 @@ class GdsApi::Panopticon < GdsApi::Base
   end
 
   def create_artefact(artefact)
-    post_json(base_url + ".json", artefact)
+    ignoring GdsApi::HTTPErrorResponse do
+      create_artefact! artefact
+    end
+  end
+
+  def create_artefact!(artefact)
+    post_json!(base_url + ".json", artefact)
   end
 
   def put_artefact(id_or_slug, artefact)
-    put_json("#{base_url}/#{id_or_slug}.json", artefact)
+    ignoring GdsApi::HTTPErrorResponse do
+      put_artefact! id_or_slug, artefact
+    end
+  end
+
+  def put_artefact!(id_or_slug, artefact)
+    put_json!("#{base_url}/#{id_or_slug}.json", artefact)
   end
 
   def update_artefact(id_or_slug, artefact)

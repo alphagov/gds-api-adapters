@@ -12,4 +12,12 @@ module GdsApi
       @code = code
     end
   end
+
+  module ExceptionHandling
+    def ignoring(exception, &block)
+      yield
+    rescue exception
+      # Discard the exception
+    end
+  end
 end

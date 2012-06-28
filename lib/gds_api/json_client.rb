@@ -6,6 +6,8 @@ require 'lrucache'
 module GdsApi
   class JsonClient
 
+    include GdsApi::ExceptionHandling
+
     def self.cache(size=DEFAULT_CACHE_SIZE)
       @cache ||= LRUCache.new(max_size: size)
     end
@@ -36,21 +38,33 @@ module GdsApi
     end
 
     def get_json(url)
+      ignoring GdsApi::HTTPErrorResponse do
+        get_json! url
+      end
+    end
+
+    def get_json!(url)
       @cache[url] ||= do_json_request(Net::HTTP::Get, url)
-    rescue HTTPErrorResponse
-      # Discard the exception to maintain the original semantics
     end
 
     def post_json(url, params)
+      ignoring GdsApi::HTTPErrorResponse do
+        post_json! url, params
+      end
+    end
+
+    def post_json!(url, params)
       do_json_request(Net::HTTP::Post, url, params)
-    rescue HTTPErrorResponse
-      # Discard the exception to maintain the original semantics
     end
 
     def put_json(url, params)
+      ignoring GdsApi::HTTPErrorResponse do
+        put_json! url, params
+      end
+    end
+
+    def put_json!(url, params)
       do_json_request(Net::HTTP::Put, url, params)
-    rescue HTTPErrorResponse
-      # Discard the exception to maintain the original semantics
     end
 
     private
@@ -73,7 +87,7 @@ module GdsApi
         end
         loggable.merge!(status: response.code, end_time: Time.now.to_f, body: body)
         logger.warn loggable.to_json
-        raise HTTPErrorResponse.new(response.code.to_i), body
+        raise GdsApi::HTTPErrorResponse.new(response.code.to_i), body
       end
     end
 
