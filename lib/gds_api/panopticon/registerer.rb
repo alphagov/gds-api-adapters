@@ -35,16 +35,18 @@ module GdsApi
     protected
 
       def register_artefact(artefact)
-        logger.info "Checking #{artefact[:slug]}"
-        existing = panopticon.artefact_for_slug(artefact[:slug])
-        if ! existing
-          logger.info "Creating #{artefact[:slug]}"
-          panopticon.create_artefact(artefact)
-        elsif existing.owning_app == artefact[:owning_app]
-          logger.info "Updating #{artefact[:slug]}"
-          panopticon.update_artefact(artefact[:slug], artefact)
+        logger.info "Putting #{artefact[:slug]}"
+
+        # Error responses here are pretty fatal, so propagate them
+        response = panopticon.put_artefact!(artefact[:slug], artefact)
+        case response.code
+        when 200
+          logger.info "Updated #{artefact[:slug]}"
+        when 201
+          logger.info "Created #{artefact[:slug]}"
         else
-          raise "Slug #{artefact[:slug]} already registered to application '#{existing.owning_app}'"
+          # Only expect 200 or 201 success codes, but best to have a fallback
+          logger.info "Registered #{artefact[:slug]} (code #{response.code})"
         end
       end
 
