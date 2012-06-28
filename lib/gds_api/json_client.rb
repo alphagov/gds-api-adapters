@@ -37,14 +37,20 @@ module GdsApi
 
     def get_json(url)
       @cache[url] ||= do_json_request(Net::HTTP::Get, url)
+    rescue HTTPErrorResponse
+      # Discard the exception to maintain the original semantics
     end
 
     def post_json(url, params)
       do_json_request(Net::HTTP::Post, url, params)
+    rescue HTTPErrorResponse
+      # Discard the exception to maintain the original semantics
     end
 
     def put_json(url, params)
       do_json_request(Net::HTTP::Put, url, params)
+    rescue HTTPErrorResponse
+      # Discard the exception to maintain the original semantics
     end
 
     private
@@ -67,7 +73,7 @@ module GdsApi
         end
         loggable.merge!(status: response.code, end_time: Time.now.to_f, body: body)
         logger.warn loggable.to_json
-        nil
+        raise HTTPErrorResponse.new(response.code.to_i), body
       end
     end
 
