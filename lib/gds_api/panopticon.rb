@@ -17,8 +17,16 @@ class GdsApi::Panopticon < GdsApi::Base
     post_json(base_url + ".json", artefact)
   end
 
-  def update_artefact(id_or_slug, artefact)
+  def put_artefact(id_or_slug, artefact)
     put_json("#{base_url}/#{id_or_slug}.json", artefact)
+  end
+
+  def update_artefact(id_or_slug, artefact)
+    self.class.logger.warn(
+      "The update_artefact method is deprecated and may be removed in a " +
+      "future release. You should use put_artefact instead."
+    )
+    put_artefact(id_or_slug, artefact)
   end
 
   def curated_lists
