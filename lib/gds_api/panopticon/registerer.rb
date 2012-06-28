@@ -2,7 +2,7 @@ module GdsApi
   class Panopticon < GdsApi::Base
     class Registerer
       attr_accessor :logger, :owning_app, :kind
-  
+
       def initialize(options)
         @logger = options[:logger] || GdsApi::Base.logger
         @owning_app = options[:owning_app]
@@ -10,7 +10,7 @@ module GdsApi
         @panopticon = options[:panopticon]
         @platform = options[:platform] || ENV['FACTER_govuk_platform'] || 'development'
       end
-  
+
       def record_to_artefact(record)
         hash = {slug: record.slug, owning_app: owning_app, kind: kind, name: record.title}
         [:need_id, :section].each do |attr_name|
@@ -20,14 +20,14 @@ module GdsApi
         end
         hash
       end
-  
+
       # record should respond to #slug and #title, or override #record_to_artefact 
       def register(record)
         register_artefact(record_to_artefact(record))
       end
-  
+
     protected
-  
+
       def register_artefact(artefact)
         logger.info "Checking #{artefact[:slug]}"
         existing = panopticon.artefact_for_slug(artefact[:slug])
@@ -48,7 +48,7 @@ module GdsApi
         }
         @panopticon ||= GdsApi::Panopticon.new(@platform, options.merge(panopticon_api_credentials))
       end
-  
+
       def panopticon_api_credentials
         Object::const_defined?(:PANOPTICON_API_CREDENTIALS) ? PANOPTICON_API_CREDENTIALS : {}
       end
