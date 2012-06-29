@@ -17,6 +17,11 @@ module GdsApi
       @parsed ||= JSON.parse(@net_http_response.body)
     end
 
+    def code
+      # Return an integer code for consistency with HTTPErrorResponse
+      @net_http_response.code.to_i
+    end
+
     def to_ostruct
       self.class.build_ostruct_recursively(to_hash)
     end

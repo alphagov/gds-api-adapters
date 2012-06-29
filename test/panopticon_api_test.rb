@@ -23,6 +23,16 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
     }
   end
 
+  def registerable_artefact
+    {
+      slug: 'foo',
+      owning_app: 'my-app',
+      kind: 'custom-application',
+      name: 'MyFoo',
+      live: true
+    }
+  end
+
   def api
     GdsApi::Panopticon.new('test')
   end
@@ -93,12 +103,12 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
 
     api.update_artefact(1, basic_artefact)
   end
-  
+
   def test_can_register_new_artefacts_en_masse
-    artefact = {slug: 'foo', owning_app: 'my-app', kind: 'custom-application', name: 'MyFoo'}
     r = GdsApi::Panopticon::Registerer.new(platform: "test", owning_app: 'my-app')
+    artefact = registerable_artefact()
     panopticon_has_no_metadata_for('foo')
-    
+
     stub_request(:put, "#{PANOPTICON_ENDPOINT}/artefacts/foo.json")
       .with(body: artefact.to_json)
       .to_return(body: artefact.merge(id: 1).to_json)
@@ -107,13 +117,13 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
     stub_request(:post, url)
       .with(body: artefact.to_json)
       .to_return(body: artefact.merge(id: 1).to_json)
-  
+
     record = OpenStruct.new(artefact.merge(title: artefact[:name]))
     r.register(record)
   end
 
   def test_can_register_existing_artefacts_en_masse
-    artefact = {slug: 'foo', owning_app: 'my-app', kind: 'custom-application', name: 'MyFoo'}
+    artefact = registerable_artefact()
     r = GdsApi::Panopticon::Registerer.new(platform: "test", owning_app: 'my-app')
 
     panopticon_has_metadata(artefact)

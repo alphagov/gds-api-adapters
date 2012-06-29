@@ -17,7 +17,8 @@ class GdsApi::Base
     end
   end
 
-  def_delegators :client, :get_json, :post_json, :put_json, :get_raw
+  def_delegators :client, :get_json, :post_json, :post_json!,
+                          :put_json, :put_json!, :get_raw
 
   attr_reader :options
 
