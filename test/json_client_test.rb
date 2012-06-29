@@ -98,14 +98,14 @@ class JsonClientTest < MiniTest::Spec
     response = @client.put_json(url, payload)
     assert_equal 2, response.a.b
   end
-  
+
   def test_accessing_non_existent_attribute_of_response_returns_nil
     url = "http://some.endpoint/some.json"
     stub_request(:put, url).to_return(:body => '{"a":1}', :status => 200)
     response = @client.put_json(url, {})
     assert_equal nil, response.does_not_exist
   end
-  
+
   def test_response_does_not_claim_to_respond_to_methods_corresponding_to_non_existent_attributes
     # This mimics the behaviour of OpenStruct
     url = "http://some.endpoint/some.json"
@@ -113,7 +113,7 @@ class JsonClientTest < MiniTest::Spec
     response = @client.put_json(url, {})
     assert ! response.respond_to?(:does_not_exist)
   end
-  
+
   def test_a_response_is_always_considered_present_and_not_blank
     url = "http://some.endpoint/some.json"
     stub_request(:put, url).to_return(:body => '{"a":1}', :status => 200)
@@ -121,7 +121,7 @@ class JsonClientTest < MiniTest::Spec
     assert ! response.blank?
     assert response.present?
   end
-  
+
   def test_client_can_use_basic_auth
     client = GdsApi::JsonClient.new(basic_auth: {user: 'user', password: 'password'})
 
