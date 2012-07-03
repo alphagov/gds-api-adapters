@@ -29,6 +29,7 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
       owning_app: 'my-app',
       kind: 'custom-application',
       name: 'MyFoo',
+      description: 'A custom foo of great customness.',
       live: true
     }
   end

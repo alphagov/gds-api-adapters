@@ -17,6 +17,7 @@ module GdsApi
           owning_app: owning_app,
           kind: kind,
           name: record.title,
+          description: record.description,
           live: record.live
         }
         [:need_id, :section, :indexable_content].each do |attr_name|
