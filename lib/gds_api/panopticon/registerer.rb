@@ -20,7 +20,7 @@ module GdsApi
           description: record.description,
           live: record.live
         }
-        [:need_id, :section, :indexable_content].each do |attr_name|
+        [:need_id, :section, :indexable_content, :paths, :prefixes].each do |attr_name|
           if record.respond_to? attr_name
             hash[attr_name] = record.send(attr_name)
           end
