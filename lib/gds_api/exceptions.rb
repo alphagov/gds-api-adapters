@@ -1,11 +1,14 @@
 module GdsApi
-  class EndpointNotFound < StandardError
+  class BaseError < StandardError
   end
 
-  class TimedOutException < Exception
+  class EndpointNotFound < BaseError
   end
 
-  class HTTPErrorResponse < StandardError
+  class TimedOutException < BaseError
+  end
+
+  class HTTPErrorResponse < BaseError
     attr_accessor :code
 
     def initialize(code)
