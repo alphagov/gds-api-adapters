@@ -31,6 +31,13 @@ module GdsApi
         stub_request(:get, url).to_return(:status => 404, :body => "", :headers => {})
       end
 
+      def stub_panopticon_default_artefact
+        stub_request(:get, %r{\A#{PANOPTICON_ENDPOINT}/artefacts}).to_return { |request|
+          # return a response with only a slug, and set that slug to match the requested artefact slug
+          {:body => JSON.dump("slug" => request.uri.path.split('/').last.chomp('.json'))}
+        }
+      end
+
     end
   end
 end
