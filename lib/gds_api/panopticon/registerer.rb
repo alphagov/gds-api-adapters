@@ -1,11 +1,12 @@
 module GdsApi
   class Panopticon < GdsApi::Base
     class Registerer
-      attr_accessor :logger, :owning_app, :kind
+      attr_accessor :logger, :owning_app, :rendering_app, :kind
 
       def initialize(options)
         @logger = options[:logger] || GdsApi::Base.logger
         @owning_app = options[:owning_app]
+        @rendering_app = options[:rendering_app]
         @kind = options[:kind] || 'custom-application'
         @panopticon = options[:panopticon]
         @platform = options[:platform] || ENV['FACTER_govuk_platform'] || 'development'
@@ -20,6 +21,9 @@ module GdsApi
           description: record.description,
           live: record.live
         }
+        if rendering_app
+          hash[:rendering_app] = rendering_app
+        end
         [:need_id, :section, :indexable_content, :paths, :prefixes].each do |attr_name|
           if record.respond_to? attr_name
             hash[attr_name] = record.send(attr_name)
