@@ -138,5 +138,48 @@ describe GdsApi::Publisher do
 
       assert_equal nil, api.licences_for_ids([123,124])
     end
+
+    it "should return nil if a council snac code is not found" do
+      stub_request(:get, "#{PUBLISHER_ENDPOINT}/local_transactions/find_by_snac?snac=bloop").
+        with(:headers => GdsApi::JsonClient::REQUEST_HEADERS).
+        to_return(:status => 404, :body => " ", :headers => {})
+
+      assert_equal nil, api.council_for_snac_code("bloop")
+    end
+
+    it "should return a council hash for a snac code" do
+      stub_request(:get, "#{PUBLISHER_ENDPOINT}/local_transactions/find_by_snac?snac=AA00").
+        with(:headers => GdsApi::JsonClient::REQUEST_HEADERS).
+        to_return(:status => 200, :body => '{"name": "Some Council", "snac": "AA00"}', :headers => {})
+
+      expected = {"name" => "Some Council", "snac" => "AA00"}
+      assert_equal expected, api.council_for_snac_code("AA00")
+    end
+
+    it "should return nil if a council name is not found" do
+      stub_request(:get, "#{PUBLISHER_ENDPOINT}/local_transactions/find_by_council_name?name=bloop").
+        with(:headers => GdsApi::JsonClient::REQUEST_HEADERS).
+        to_return(:status => 404, :body => " ", :headers => {})
+
+      assert_equal nil, api.council_for_name("bloop")
+    end
+
+    it "should return a council hash for a mixed case council name" do
+      stub_request(:get, "#{PUBLISHER_ENDPOINT}/local_transactions/find_by_council_name?name=Some%20Council").
+        with(:headers => GdsApi::JsonClient::REQUEST_HEADERS).
+        to_return(:status => 200, :body => '{"name": "Some Council", "snac": "AA00"}', :headers => {})
+
+      expected = {"name" => "Some Council", "snac" => "AA00"}
+      assert_equal expected, api.council_for_name("Some Council")
+    end
+
+    it "should return a council hash for a lowercase council name" do
+      stub_request(:get, "#{PUBLISHER_ENDPOINT}/local_transactions/find_by_council_name?name=some%20council").
+        with(:headers => GdsApi::JsonClient::REQUEST_HEADERS).
+        to_return(:status => 200, :body => '{"name": "Some Council", "snac": "AA00"}', :headers => {})
+
+      expected = {"name" => "Some Council", "snac" => "AA00"}
+      assert_equal expected, api.council_for_name("some council")
+    end
   end
 end

@@ -25,6 +25,23 @@ class GdsApi::Publisher < GdsApi::Base
     end
   end
 
+  def council_for_snac_code(snac)
+    if json = get_json("#{@endpoint}/local_transactions/find_by_snac?snac=#{snac}")
+      json.to_hash
+    else
+      nil
+    end
+  end
+
+  def council_for_name(name)
+    name = URI.escape(name)
+    if json = get_json("#{@endpoint}/local_transactions/find_by_council_name?name=#{name}")
+      json.to_hash
+    else
+      nil
+    end
+  end
+
   def licences_for_ids(ids)
     response = get_json("#{@endpoint}/licences.json?ids=#{ids.map(&:to_s).sort.join(',')}")
     if response
