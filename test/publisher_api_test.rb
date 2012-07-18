@@ -110,11 +110,11 @@ describe GdsApi::Publisher do
     it "should get licence details from publisher" do
       setup_publisher_licences_stubs
 
-      publisher_has_licence :licence_identifier => "1234", :title => 'Test Licence 1', :slug => 'test-licence-1', 
+      publisher_has_licence :licence_identifier => "1234", :title => 'Test Licence 1', :slug => 'test-licence-1',
         :licence_short_description => 'A short description'
-      publisher_has_licence :licence_identifier => "1235", :title => 'Test Licence 2', :slug => 'test-licence-2', 
+      publisher_has_licence :licence_identifier => "1235", :title => 'Test Licence 2', :slug => 'test-licence-2',
         :licence_short_description => 'A short description'
-      publisher_has_licence :licence_identifier => "AB1234", :title => 'Test Licence 3', :slug => 'test-licence-3', 
+      publisher_has_licence :licence_identifier => "AB1234", :title => 'Test Licence 3', :slug => 'test-licence-3',
         :licence_short_description => 'A short description'
 
       results = api.licences_for_ids([1234, 'AB1234', 'something'])
