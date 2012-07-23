@@ -1,3 +1,5 @@
+require 'plek'
+
 module GdsApi
   class Panopticon < GdsApi::Base
     class Registerer
@@ -9,7 +11,7 @@ module GdsApi
         @rendering_app = options[:rendering_app]
         @kind = options[:kind] || 'custom-application'
         @panopticon = options[:panopticon]
-        @platform = options[:platform] || ENV['FACTER_govuk_platform'] || 'development'
+        @platform = options[:platform] || Plek.current.environment
       end
 
       def record_to_artefact(record)

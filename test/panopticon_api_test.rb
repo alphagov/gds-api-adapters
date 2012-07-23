@@ -137,6 +137,31 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
     r.register(record)
   end
 
+  def test_registerer_should_use_plek_env_by_default
+    # Plek.current returns a different object each time it's called.
+    plek_current = Plek.current
+    plek_current.stubs(:environment).returns("foo")
+    Plek.stubs(:current).returns(plek_current)
+
+    expected_endpoint = PANOPTICON_ENDPOINT.sub(/\.test\./, '.foo.')
+
+    r = GdsApi::Panopticon::Registerer.new(owning_app: 'my-app')
+    artefact = registerable_artefact()
+    panopticon_has_no_metadata_for('foo')
+
+    stub_request(:put, "#{expected_endpoint}/artefacts/foo.json")
+      .with(body: artefact.to_json)
+      .to_return(body: artefact.merge(id: 1).to_json)
+
+    url = "#{expected_endpoint}/artefacts.json"
+    stub_request(:post, url)
+      .with(body: artefact.to_json)
+      .to_return(body: artefact.merge(id: 1).to_json)
+
+    record = OpenStruct.new(artefact.merge(title: artefact[:name]))
+    r.register(record)
+  end
+
   def test_should_be_able_to_fetch_curated_lists
     stub_request(:get, "#{PANOPTICON_ENDPOINT}/curated_lists.json").
       with(:headers => GdsApi::JsonClient::REQUEST_HEADERS).
