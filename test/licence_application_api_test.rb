@@ -20,9 +20,7 @@ class LicenceApplicationApiTest < MiniTest::Unit::TestCase
       with(headers: GdsApi::JsonClient::REQUEST_HEADERS).
       to_return(status: 404, body: "{\"error\": [\"Unrecognised Licence Id: bloop\"]}")
 
-    expected = {"error" => ["Unrecognised Licence Id: bloop"]}
-
-    assert_equal expected, api.details_for_licence("bloop")
+    assert_equal nil, api.details_for_licence("bloop")
   end
 
   def test_should_provide_full_licence_details_for_canonical_id
@@ -53,9 +51,7 @@ class LicenceApplicationApiTest < MiniTest::Unit::TestCase
       with(headers: GdsApi::JsonClient::REQUEST_HEADERS).
       to_return(status: 404, body: "{\"error\": [\"Unrecognised SNAC: bleep\"]}")
 
-    expected = {"error" => ["Unrecognised SNAC: bleep"]}
-
-    assert_equal expected, api.details_for_licence("590001", "bleep")
+    assert_equal nil, api.details_for_licence("590001", "bleep")
   end
 
   def test_should_return_error_messages_for_bad_licence_id_and_snac_code
@@ -63,10 +59,7 @@ class LicenceApplicationApiTest < MiniTest::Unit::TestCase
       with(headers: GdsApi::JsonClient::REQUEST_HEADERS).
       to_return(status: 404, body: "{\"error\": [\"Unrecognised Licence Id: bloop\", \"Unrecognised SNAC: bleep\"]}")
 
-    expected = {"error" => ["Unrecognised Licence Id: bloop",
-                            "Unrecognised SNAC: bleep"]}
-
-    assert_equal expected, api.details_for_licence("bloop", "bleep")
+    assert_equal nil, api.details_for_licence("bloop", "bleep")
   end
 
   def test_should_return_error_message_to_pick_a_relevant_snac_code_for_the_provided_licence_id
