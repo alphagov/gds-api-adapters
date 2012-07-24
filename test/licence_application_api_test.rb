@@ -18,7 +18,7 @@ class LicenceApplicationApiTest < MiniTest::Unit::TestCase
   def test_should_return_an_error_message_if_licence_is_unrecognised
     stub_request(:get, "https://licenceapplication.test.alphagov.co.uk/api/bloop").
       with(headers: GdsApi::JsonClient::REQUEST_HEADERS).
-      to_return(status: 200, body: "{\"error\": [\"Unrecognised Licence Id: bloop\"]}")
+      to_return(status: 404, body: "{\"error\": [\"Unrecognised Licence Id: bloop\"]}")
 
     expected = {"error" => ["Unrecognised Licence Id: bloop"]}
 
@@ -51,7 +51,7 @@ class LicenceApplicationApiTest < MiniTest::Unit::TestCase
   def test_should_return_an_error_message_for_bad_snac_code_entry
     stub_request(:get, "https://licenceapplication.test.alphagov.co.uk/api/590001/bleep").
       with(headers: GdsApi::JsonClient::REQUEST_HEADERS).
-      to_return(status: 200, body: "{\"error\": [\"Unrecognised SNAC: bleep\"]}")
+      to_return(status: 404, body: "{\"error\": [\"Unrecognised SNAC: bleep\"]}")
 
     expected = {"error" => ["Unrecognised SNAC: bleep"]}
 
@@ -61,7 +61,7 @@ class LicenceApplicationApiTest < MiniTest::Unit::TestCase
   def test_should_return_error_messages_for_bad_licence_id_and_snac_code
     stub_request(:get, "https://licenceapplication.test.alphagov.co.uk/api/bloop/bleep").
       with(headers: GdsApi::JsonClient::REQUEST_HEADERS).
-      to_return(status: 200, body: "{\"error\": [\"Unrecognised Licence Id: bloop\", \"Unrecognised SNAC: bleep\"]}")
+      to_return(status: 404, body: "{\"error\": [\"Unrecognised Licence Id: bloop\", \"Unrecognised SNAC: bleep\"]}")
 
     expected = {"error" => ["Unrecognised Licence Id: bloop",
                             "Unrecognised SNAC: bleep"]}
