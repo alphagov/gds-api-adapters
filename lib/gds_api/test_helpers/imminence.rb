@@ -6,11 +6,11 @@ module GdsApi
       def imminence_has_places(latitude, longitude, details)
         response = JSON.dump(details['details'])
 
-        ["http", "https"].each { |protocol|
+        ["http", "https"].each do |protocol|
           stub_request(:get, "#{protocol}://imminence.test.alphagov.co.uk/places/#{details['slug']}.json").
           with(:query => {"lat" => latitude, "lng" => longitude, "limit" => "5"}).
           to_return(:status => 200, :body => response, :headers => {})
-        }
+        end
       end
     end
   end
