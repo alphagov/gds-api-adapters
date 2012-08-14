@@ -95,6 +95,15 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
     api.update_artefact(1, basic_artefact)
   end
 
+  def test_can_delete_an_artefact
+    url = "#{PANOPTICON_ENDPOINT}/artefacts/1.json"
+    stub_request(:delete, url)
+      .with(body: "")
+      .to_return(status: 200, body: '{}')
+
+    api.delete_artefact!(1)
+  end
+
   def test_can_use_basic_auth
     credentials = {user: 'fred', password: 'secret'}
     api = GdsApi::Panopticon.new('test', endpoint_url: 'http://some.url', basic_auth: credentials)

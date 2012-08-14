@@ -67,6 +67,10 @@ module GdsApi
       do_json_request(Net::HTTP::Put, url, params)
     end
 
+    def delete_json!(url, params = nil)
+      do_request(Net::HTTP::Delete, url, params)
+    end
+
     private
     def do_raw_request(method_class, url, params = nil)
       response, loggable = do_request(method_class, url, params)
