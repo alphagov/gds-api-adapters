@@ -1,6 +1,7 @@
 require_relative 'response'
 require_relative 'exceptions'
 require_relative 'version'
+require 'net/http'
 require 'lrucache'
 
 module GdsApi
@@ -65,6 +66,10 @@ module GdsApi
 
     def put_json!(url, params)
       do_json_request(Net::HTTP::Put, url, params)
+    end
+
+    def delete_json!(url, params = nil)
+      do_request(Net::HTTP::Delete, url, params)
     end
 
     private

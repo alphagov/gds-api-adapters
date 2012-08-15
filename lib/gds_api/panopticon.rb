@@ -45,6 +45,10 @@ class GdsApi::Panopticon < GdsApi::Base
     put_artefact(id_or_slug, artefact)
   end
 
+  def delete_artefact!(id_or_slug)
+    delete_json!("#{base_url}/#{id_or_slug}.json")
+  end
+
   def curated_lists
     get_json("#{@endpoint}/curated_lists.json").to_hash
   end
