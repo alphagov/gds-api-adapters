@@ -21,7 +21,7 @@ module GdsApi
           kind: kind,
           name: record.title,
           description: record.description,
-          live: record.live
+          state: record.state
         }
         if rendering_app
           hash[:rendering_app] = rendering_app

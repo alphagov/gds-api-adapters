@@ -30,7 +30,7 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
       kind: 'custom-application',
       name: 'MyFoo',
       description: 'A custom foo of great customness.',
-      live: true
+      state: 'live'
     }
   end
 
