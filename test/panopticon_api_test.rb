@@ -30,7 +30,7 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
       kind: 'custom-application',
       name: 'MyFoo',
       description: 'A custom foo of great customness.',
-      live: true
+      state: 'live'
     }
   end
 
@@ -93,6 +93,15 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
       .to_return(status: 200, body: '{}')
 
     api.update_artefact(1, basic_artefact)
+  end
+
+  def test_can_delete_an_artefact
+    url = "#{PANOPTICON_ENDPOINT}/artefacts/1.json"
+    stub_request(:delete, url)
+      .with(body: "")
+      .to_return(status: 200, body: '{}')
+
+    api.delete_artefact!(1)
   end
 
   def test_can_use_basic_auth
