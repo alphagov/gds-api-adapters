@@ -4,6 +4,8 @@ require "gds_api/imminence"
 class ImminenceApiTest < MiniTest::Unit::TestCase
 
   ROOT = "https://imminence.test.alphagov.co.uk"
+  LATITUDE = 52.1327584352089
+  LONGITUDE = -0.4702813074674147
 
   def api_client
     GdsApi::Imminence.new('test')
@@ -17,7 +19,7 @@ class ImminenceApiTest < MiniTest::Unit::TestCase
       "fax" => nil,
       "general_notes" => nil,
       "geocode_error" => nil,
-      "location" => [52.1327584352089, -0.4702813074674147],
+      "location" => [LATITUDE, LONGITUDE],
       "name" => "Town Hall",
       "phone" => nil,
       "postcode" => "MK42 9AP",
@@ -47,8 +49,8 @@ class ImminenceApiTest < MiniTest::Unit::TestCase
 
     assert_equal 1, places.size
     place = places[0]
-    assert_equal 52.1327584352089, place["latitude"]
-    assert_equal -0.4702813074674147, place["longitude"]
+    assert_equal LATITUDE, place["latitude"]
+    assert_equal LONGITUDE, place["longitude"]
     assert_equal "Cauldwell Street, Bedford", place["address"]
   end
 
