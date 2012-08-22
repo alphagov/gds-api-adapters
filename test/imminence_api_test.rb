@@ -67,4 +67,34 @@ class ImminenceApiTest < MiniTest::Unit::TestCase
     assert_nil place["latitude"]
     assert_nil place["longitude"]
   end
+
+  def test_nil_location
+    # Test behaviour when the location field is nil
+    c = api_client
+    url = "#{ROOT}/places/wibble.json?limit=5&lat=52&lng=0"
+    place_info = dummy_place.merge("location" => nil)
+    c.expects(:get_json).with(url).returns([place_info])
+    places = c.places("wibble", 52, 0)
+
+    assert_equal 1, places.size
+    place = places[0]
+    assert_nil place["latitude"]
+    assert_nil place["longitude"]
+  end
+
+  def test_hash_location
+    # Test behaviour when the location field is a longitude/latitude hash
+    c = api_client
+    url = "#{ROOT}/places/wibble.json?limit=5&lat=52&lng=0"
+    place_info = dummy_place.merge(
+      "location" => {"longitude" => LONGITUDE, "latitude" => LATITUDE}
+    )
+    c.expects(:get_json).with(url).returns([place_info])
+    places = c.places("wibble", 52, 0)
+
+    assert_equal 1, places.size
+    place = places[0]
+    assert_equal LATITUDE, place["latitude"]
+    assert_equal LONGITUDE, place["longitude"]
+  end
 end
