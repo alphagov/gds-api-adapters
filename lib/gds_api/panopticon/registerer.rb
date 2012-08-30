@@ -12,6 +12,7 @@ module GdsApi
         @kind = options[:kind] || 'custom-application'
         @panopticon = options[:panopticon]
         @platform = options[:platform] || Plek.current.environment
+        @timeout = options[:timeout] || 10
       end
 
       def record_to_artefact(record)
@@ -59,7 +60,7 @@ module GdsApi
 
       def panopticon
         options = {
-          timeout: 5
+          timeout: @timeout
         }
         @panopticon ||= GdsApi::Panopticon.new(@platform, options.merge(panopticon_api_credentials))
       end
