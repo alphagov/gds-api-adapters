@@ -5,7 +5,7 @@ class GdsApi::ContentApi < GdsApi::Base
   include GdsApi::ExceptionHandling
 
   def sections
-    get_json!("#{base_url}/tags.json?type=Section")
+    get_json!("#{base_url}/tags.json?type=section")
   end
 
   private
