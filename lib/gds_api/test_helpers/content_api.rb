@@ -9,14 +9,18 @@ module GdsApi
         body = plural_response_base.merge(
           "results" => slugs.map do |slug|
             {
-              "id" => "http://contentapi.test.gov.uk/tags/#{slug}.json",
-              "web_url" => "http://www.test.gov.uk/browse/#{slug}",
+              "id" => "http://contentapi.test.gov.uk/tags/#{CGI.escape(slug)}.json",
+              "web_url" => nil,
               "title" => slug.gsub("-", " ").capitalize,
               "details" => {
                 "type" => "section",
                 "description" => "#{slug} description"
               },
-              "parent" => nil
+              "parent" => nil,
+              "content_with_tag" => {
+                "id" => "http://contentapi.test.gov.uk/with_tag.json?tag=#{CGI.escape(slug)}",
+                "web_url" => "http://www.test.gov.uk/browse/#{slug}"
+              }
             }
           end
         )
