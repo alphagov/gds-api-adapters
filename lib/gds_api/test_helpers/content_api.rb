@@ -28,7 +28,7 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
-      private 
+      private
         def response_base
           {
             "_response_info" => {

@@ -9,7 +9,7 @@ module GdsApi
       @oauth_client = OAuth2::Client.new(nil, nil)
       @access_token = OAuth2::AccessToken.new(@oauth_client, options[:access_token], options[:token_options])
     end
-    
+
     def get_json(url)
       @access_token.get(url, headers: REQUEST_HEADERS)
     end

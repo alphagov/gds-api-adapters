@@ -35,7 +35,7 @@ module GdsApi
         hash
       end
 
-      # record should respond to #slug and #title, or override #record_to_artefact 
+      # record should respond to #slug and #title, or override #record_to_artefact
       def register(record)
         register_artefact(record_to_artefact(record))
       end
