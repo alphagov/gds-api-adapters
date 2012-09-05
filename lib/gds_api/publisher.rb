@@ -18,37 +18,30 @@ class GdsApi::Publisher < GdsApi::Base
   end
 
   def council_for_slug(slug, snac_codes)
-    if json = post_json("#{@endpoint}/local_transactions/#{slug}/verify_snac.json", {'snac_codes' => snac_codes})
-      json['snac']
-    else
-      nil
-    end
+    json = post_json(
+      "#{@endpoint}/local_transactions/#{slug}/verify_snac.json",
+      {'snac_codes' => snac_codes}
+    )
+    json['snac'] if json
   end
 
   def council_for_snac_code(snac)
-    if json = get_json("#{@endpoint}/local_transactions/find_by_snac?snac=#{snac}")
-      json.to_hash
-    else
-      nil
-    end
+    json = get_json("#{@endpoint}/local_transactions/find_by_snac?snac=#{snac}")
+    json.to_hash if json
   end
 
   def council_for_name(name)
     name = URI.escape(name)
-    if json = get_json("#{@endpoint}/local_transactions/find_by_council_name?name=#{name}")
-      json.to_hash
-    else
-      nil
-    end
+    json = get_json(
+      "#{@endpoint}/local_transactions/find_by_council_name?name=#{name}"
+    )
+    json.to_hash if json
   end
 
   def licences_for_ids(ids)
-    response = get_json("#{@endpoint}/licences.json?ids=#{ids.map(&:to_s).sort.join(',')}")
-    if response
-      response.to_ostruct
-    else
-      nil
-    end
+    ids = ids.map(&:to_s).sort.join(',')
+    response = get_json("#{@endpoint}/licences.json?ids=#{ids}")
+    response.to_ostruct if response
   end
 
 private
