@@ -8,6 +8,10 @@ class GdsApi::ContentApi < GdsApi::Base
     get_json!("#{base_url}/tags.json?type=section")
   end
 
+  def with_tag(tag)
+    get_json!("#{base_url}/with_tag.json?tag=#{tag}")
+  end
+
   private
     def base_url
       endpoint
