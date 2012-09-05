@@ -14,9 +14,9 @@ module GdsApi
               "title" => slug.gsub("-", " ").capitalize,
               "details" => {
                 "type" => "section",
-                "description" => "#{slug} description",
-                "parent" => nil
-              }
+                "description" => "#{slug} description"
+              },
+              "parent" => nil
             }
           end
         )
