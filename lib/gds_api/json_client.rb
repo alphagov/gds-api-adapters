@@ -26,7 +26,7 @@ module GdsApi
       @options = options
     end
 
-    REQUEST_HEADERS = {
+    DEFAULT_REQUEST_HEADERS = {
         'Accept' => 'application/json',
         'Content-Type' => 'application/json',
         'User-Agent' => "GDS Api Client v. #{GdsApi::VERSION}"
@@ -104,7 +104,9 @@ module GdsApi
     end
 
     def attach_auth_options(request)
-      if @options[:basic_auth]
+      if @options[:bearer_token]
+        request.add_field('Authorization', "Bearer #{@options[:bearer_token]}")
+      elsif @options[:basic_auth]
         request.basic_auth(@options[:basic_auth][:user], @options[:basic_auth][:password])
       end
     end
@@ -132,7 +134,7 @@ module GdsApi
 
       response = Net::HTTP.start(url.host, url.port, nil, nil, nil, nil, ssl_options(url.port)) do |http|
         set_timeout(http)
-        request = method_class.new(path, REQUEST_HEADERS)
+        request = method_class.new(path, DEFAULT_REQUEST_HEADERS)
         attach_auth_options(request)
         request.body = params.to_json if params
         http.request(request)
