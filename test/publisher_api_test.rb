@@ -101,7 +101,7 @@ describe GdsApi::Publisher do
 
   it "should be able to retrieve local transaction details" do
     stub_request(:post, "#{PUBLISHER_ENDPOINT}/local_transactions/fake-transaction/verify_snac.json").
-      with(:body => "{\"snac_codes\":[12345]}", :headers => GdsApi::JsonClient::REQUEST_HEADERS).
+      with(:body => "{\"snac_codes\":[12345]}", :headers => GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
       to_return(:status => 200, :body => '{"snac": "12345"}', :headers => {})
     assert_equal '12345', api.council_for_slug('fake-transaction', [12345])
   end
@@ -141,7 +141,7 @@ describe GdsApi::Publisher do
 
     it "should return nil if a council snac code is not found" do
       stub_request(:get, "#{PUBLISHER_ENDPOINT}/local_transactions/find_by_snac?snac=bloop").
-        with(:headers => GdsApi::JsonClient::REQUEST_HEADERS).
+        with(:headers => GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
         to_return(:status => 404, :body => " ", :headers => {})
 
       assert_equal nil, api.council_for_snac_code("bloop")
@@ -149,7 +149,7 @@ describe GdsApi::Publisher do
 
     it "should return a council hash for a snac code" do
       stub_request(:get, "#{PUBLISHER_ENDPOINT}/local_transactions/find_by_snac?snac=AA00").
-        with(:headers => GdsApi::JsonClient::REQUEST_HEADERS).
+        with(:headers => GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
         to_return(:status => 200, :body => '{"name": "Some Council", "snac": "AA00"}', :headers => {})
 
       expected = {"name" => "Some Council", "snac" => "AA00"}
@@ -158,7 +158,7 @@ describe GdsApi::Publisher do
 
     it "should return nil if a council name is not found" do
       stub_request(:get, "#{PUBLISHER_ENDPOINT}/local_transactions/find_by_council_name?name=bloop").
-        with(:headers => GdsApi::JsonClient::REQUEST_HEADERS).
+        with(:headers => GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
         to_return(:status => 404, :body => " ", :headers => {})
 
       assert_equal nil, api.council_for_name("bloop")
@@ -166,7 +166,7 @@ describe GdsApi::Publisher do
 
     it "should return a council hash for a mixed case council name" do
       stub_request(:get, "#{PUBLISHER_ENDPOINT}/local_transactions/find_by_council_name?name=Some%20Council").
-        with(:headers => GdsApi::JsonClient::REQUEST_HEADERS).
+        with(:headers => GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
         to_return(:status => 200, :body => '{"name": "Some Council", "snac": "AA00"}', :headers => {})
 
       expected = {"name" => "Some Council", "snac" => "AA00"}
@@ -175,7 +175,7 @@ describe GdsApi::Publisher do
 
     it "should return a council hash for a lowercase council name" do
       stub_request(:get, "#{PUBLISHER_ENDPOINT}/local_transactions/find_by_council_name?name=some%20council").
-        with(:headers => GdsApi::JsonClient::REQUEST_HEADERS).
+        with(:headers => GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
         to_return(:status => 200, :body => '{"name": "Some Council", "snac": "AA00"}', :headers => {})
 
       expected = {"name" => "Some Council", "snac" => "AA00"}
