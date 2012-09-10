@@ -24,8 +24,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rdoc', '3.12'
   s.add_development_dependency 'rake', '~> 0.9.2.2'
   s.add_development_dependency 'webmock', '~> 1.8'
-  s.add_development_dependency 'mocha', '~> 0.10.0'
-  s.add_development_dependency "minitest", "~> 2.10.0"
+  s.add_development_dependency 'mocha', '~> 0.12.4'
+  s.add_development_dependency "minitest", "~> 3.4.0"
   s.add_development_dependency 'rack'
   s.add_development_dependency 'simplecov', '~> 0.5.4'
   s.add_development_dependency 'simplecov-rcov'

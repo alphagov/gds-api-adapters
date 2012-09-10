@@ -10,11 +10,7 @@ class GdsApi::Base
   end
 
   def create_client
-    if options[:access_key]
-      GdsApi::OAuth2Client.new(options)
-    else
-      GdsApi::JsonClient.new(options)
-    end
+    GdsApi::JsonClient.new(options)
   end
 
   def_delegators :client, :get_json, :get_json!,

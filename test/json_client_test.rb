@@ -125,8 +125,23 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_use_basic_auth
     client = GdsApi::JsonClient.new(basic_auth: {user: 'user', password: 'password'})
 
-    stub_request(:put, "http://user:password@some.endpoint/some.json").to_return(:body => '{"a":1}', :status => 200)
+    stub_request(:put, "http://user:password@some.endpoint/some.json").
+      to_return(:body => '{"a":1}', :status => 200)
+
     response = client.put_json("http://some.endpoint/some.json", {})
     assert_equal 1, response.a
+  end
+
+  def test_client_can_use_bearer_token
+    client = GdsApi::JsonClient.new(bearer_token: 'SOME_BEARER_TOKEN')
+    expected_headers = GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS.
+      merge('Authorization' => 'Bearer SOME_BEARER_TOKEN')
+
+    stub_request(:put, "http://some.other.endpoint/some.json").
+      with(:headers => expected_headers).
+      to_return(:body => '{"a":2}', :status => 200)
+
+    response = client.put_json("http://some.other.endpoint/some.json", {})
+    assert_equal 2, response.a
   end
 end

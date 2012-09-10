@@ -26,7 +26,7 @@ module GdsApi
       @options = options
     end
 
-    REQUEST_HEADERS = {
+    DEFAULT_REQUEST_HEADERS = {
         'Accept' => 'application/json',
         'Content-Type' => 'application/json',
         'User-Agent' => "GDS Api Client v. #{GdsApi::VERSION}"
@@ -96,21 +96,46 @@ module GdsApi
       end
     end
 
+    def extract_url_and_path(url)
+      url = URI.parse(url)
+      path = url.path
+      path = path + "?" + url.query if url.query
+      return url, path
+    end
+
+    def attach_auth_options(request)
+      if @options[:bearer_token]
+        request.add_field('Authorization', "Bearer #{@options[:bearer_token]}")
+      elsif @options[:basic_auth]
+        request.basic_auth(@options[:basic_auth][:user], @options[:basic_auth][:password])
+      end
+    end
+
+    def set_timeout(http)
+      unless options[:disable_timeout]
+        http.read_timeout = options[:timeout] || DEFAULT_TIMEOUT_IN_SECONDS
+      end
+    end
+
+    def ssl_options(port)
+      if port == 443
+        {use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_NONE}
+      else
+        {}
+      end
+    end
+
     def do_request(method_class, url, params = nil)
       loggable = {request_uri: url, start_time: Time.now.to_f}
       start_logging = loggable.merge(action: 'start')
       logger.debug start_logging.to_json
 
-      url = URI.parse(url)
-      path = url.path
-      path = path + "?" + url.query if url.query
+      url, path = extract_url_and_path(url)
 
-      response = Net::HTTP.start(url.host, url.port, nil, nil, nil, nil, {use_ssl: url.port == 443, verify_mode: (OpenSSL::SSL::VERIFY_NONE if url.port == 443)}) do |http|
-        unless options[:disable_timeout]
-          http.read_timeout = options[:timeout] || DEFAULT_TIMEOUT_IN_SECONDS
-        end
-        request = method_class.new(path, REQUEST_HEADERS)
-        request.basic_auth(@options[:basic_auth][:user], @options[:basic_auth][:password]) if @options[:basic_auth]
+      response = Net::HTTP.start(url.host, url.port, nil, nil, nil, nil, ssl_options(url.port)) do |http|
+        set_timeout(http)
+        request = method_class.new(path, DEFAULT_REQUEST_HEADERS)
+        attach_auth_options(request)
         request.body = params.to_json if params
         http.request(request)
       end
