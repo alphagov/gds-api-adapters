@@ -9,7 +9,7 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def with_tag(tag)
-    get_json!("#{base_url}/with_tag.json?tag=#{tag}")
+    get_json!("#{base_url}/with_tag.json?tag=#{tag}&include_children=1")
   end
 
   private
