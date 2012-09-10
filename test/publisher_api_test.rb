@@ -5,6 +5,7 @@ require 'gds_api/test_helpers/publisher'
 
 describe GdsApi::Publisher do
   include GdsApi::TestHelpers::Publisher
+  PUBLISHER_ENDPOINT = GdsApi::TestHelpers::Publisher::PUBLISHER_ENDPOINT
 
   def basic_answer
     {
