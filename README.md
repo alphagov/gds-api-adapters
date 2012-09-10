@@ -29,6 +29,20 @@ something that actually logs:
 
     GdsApi::Base.logger = Logger.new("/path/to/file.log")
 
+## Authorization
+
+The API Adapters currently support either HTTP Basic authentication or OAuth2
+(bearer token) authorization. This is only used for Panopticon registration at
+present. The GdsApi::Panopticon::Registerer adapter expects a constant called
+PANOPTICON_API_CREDENTIALS to be defined and will use that to pass the relevant
+options to the HTTP client.
+
+To use bearer token authorization the format that constant should be a hash of
+the form:
+
+    PANOPTICON_API_CREDENTIALS = { bearer_token: 'MY_BEARER_TOKEN' }
+
+
 ## Test Helpers
 
 There are also test helpers for stubbing various requests in other apps.
