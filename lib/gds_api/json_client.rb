@@ -86,7 +86,7 @@ module GdsApi
         Response.new(response)
       else
         body = begin
-          JSON.parse(response.body)
+          JSON.parse(response.body.to_s)
         rescue JSON::ParserError
           response.body
         end
