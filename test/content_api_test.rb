@@ -18,7 +18,7 @@ class ContentApiTest < MiniTest::Unit::TestCase
 
   def test_with_tag
     tag = "crime-and-justice"
-    api_url = "https://contentapi.test.alphagov.co.uk/with_tag.json?tag=#{tag}"
+    api_url = "https://contentapi.test.alphagov.co.uk/with_tag.json?tag=#{tag}&include_children=1"
     json = {
       results: [{title: "Complain about a claims company"}]
     }.to_json
