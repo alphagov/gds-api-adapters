@@ -87,7 +87,7 @@ module GdsApi
       else
         body = begin
           JSON.parse(response.body)
-        rescue
+        rescue JSON::ParserError
           response.body
         end
         loggable.merge!(status: response.code, end_time: Time.now.to_f, body: body)
