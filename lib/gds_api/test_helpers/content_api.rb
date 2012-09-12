@@ -96,18 +96,7 @@ module GdsApi
         artefact
       end
 
-      # This lets API clients assemble sample data
-      def basic_tag_for_slug(slug, tag_type)
-        {
-          "title" => titleize_slug(slug),
-          "id" => "https://contentapi.test.alphagov.co.uk/tags/#{CGI.escape(slug)}.json",
-          "details" => {
-            "type" => tag_type
-          }
-        }
-      end
-
-      def full_tag_for_slug(slug, tag_type)
+      def tag_for_slug(slug, tag_type)
         {
           "title" => titleize_slug(slug),
           "id" => "https://contentapi.test.alphagov.co.uk/tags/#{CGI.escape(slug)}.json",
