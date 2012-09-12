@@ -79,7 +79,7 @@ module GdsApi
 
       def artefact_for_slug_in_a_section(slug, section_slug)
         artefact = artefact_for_slug(slug)
-        artefact["tags"] << full_tag_for_slug(section_slug, "section")
+        artefact["tags"] << tag_for_slug(section_slug, "section")
         artefact
       end
 
