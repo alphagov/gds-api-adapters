@@ -17,18 +17,15 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def local_authority(snac_code)
-    snac_code = CGI.escape(snac_code)
-    get_json("#{base_url}/local_authorities/#{snac_code}.json")
+    get_json("#{base_url}/local_authorities/#{CGI.escape(snac_code)}.json")
   end
 
   def local_authorities_by_name(name)
-    name = CGI.escape(name)
-    get_json!("#{base_url}/local_authorities.json?name=#{name}")
+    get_json!("#{base_url}/local_authorities.json?name=#{CGI.escape(name)}")
   end
 
   def local_authorities_by_snac_code(snac_code)
-    snac_code = CGI.escape(snac_code)
-    get_json!("#{base_url}/local_authorities.json?snac_code=#{snac_code}")
+    get_json!("#{base_url}/local_authorities.json?snac_code=#{CGI.escape(snac_code)}")
   end
 
   private
