@@ -39,7 +39,7 @@ module GdsApi
     end
 
     def get_json(url)
-      ignoring GdsApi::HTTPErrorResponse do
+      ignoring GdsApi::HTTPNotFound do
         get_json! url
       end
     end

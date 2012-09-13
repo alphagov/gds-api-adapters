@@ -79,6 +79,14 @@ class JsonClientTest < MiniTest::Spec
     assert_nil @client.get_json(url)
   end
 
+  def test_should_be_nil_if_404_returned_from_endpoint
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_return(:body => "{}", :status => 500)
+    assert_raises GdsApi::HTTPErrorResponse do
+      @client.get_json(url)
+    end
+  end
+
   def empty_response
     net_http_response = stub(:body => '{}')
     GdsApi::Response.new(net_http_response)
