@@ -83,6 +83,14 @@ module GdsApi
         artefact
       end
 
+      def artefact_for_slug_in_a_subsection(slug, subsection_slug)
+        artefact = artefact_for_slug(slug)
+        base_section = tag_for_slug(subsection_slug.split('/').first, "section")
+        section = tag_for_slug(subsection_slug, "section").merge("parent" => base_section)
+        artefact["tags"] << section
+        artefact
+      end
+
       def artefact_for_slug_with_related_artefacts(slug, related_artefact_slugs)
         artefact = artefact_for_slug(slug)
         artefact["related"] = related_artefact_slugs.map do |related_slug|
@@ -98,7 +106,7 @@ module GdsApi
 
       def tag_for_slug(slug, tag_type)
         {
-          "title" => titleize_slug(slug),
+          "title" => titleize_slug(slug.split('/').last),
           "id" => "https://contentapi.test.alphagov.co.uk/tags/#{CGI.escape(slug)}.json",
           "details" => {
             "type" => tag_type
