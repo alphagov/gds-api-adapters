@@ -4,6 +4,10 @@ require 'gds_api/panopticon'
 
 module GdsApi
   module Helpers
+    def content_api
+      @content_api ||= GdsApi::ContentApi.new(Plek.current.environment)
+    end
+
     def publisher_api
       @api ||= GdsApi::Publisher.new(Plek.current.environment)
     end
@@ -26,7 +30,7 @@ module GdsApi
 
     def self.included(klass)
       if klass.respond_to?(:helper_method)
-        klass.helper_method :publisher_api, :panopticon_api, :imminence_api
+        klass.helper_method :publisher_api, :panopticon_api, :imminence_api, :content_api
       end
     end
   end
