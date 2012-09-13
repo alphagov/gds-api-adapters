@@ -84,6 +84,8 @@ module GdsApi
       if response.is_a?(Net::HTTPSuccess)
         logger.info loggable.merge(status: 'success', end_time: Time.now.to_f).to_json
         Response.new(response)
+      elsif response.is_a?(Net::HTTPNotFound)
+        raise GdsApi::HTTPNotFound.new(response.code.to_i)
       else
         body = begin
           JSON.parse(response.body.to_s)

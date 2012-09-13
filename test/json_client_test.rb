@@ -65,7 +65,15 @@ class JsonClientTest < MiniTest::Spec
     assert_equal response_a.object_id, response_b.object_id
   end
 
-  def test_should_return_nil_if_404_returned_from_endpoint
+  def test_should_raise_http_not_found_if_404_returned_from_endpoint
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_return(:body => "{}", :status => 404)
+    assert_raises GdsApi::HTTPNotFound do
+      @client.get_json!(url)
+    end
+  end
+
+  def test_should_be_nil_if_404_returned_from_endpoint
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(:body => "{}", :status => 404)
     assert_nil @client.get_json(url)
