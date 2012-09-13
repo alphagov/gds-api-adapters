@@ -12,6 +12,21 @@ class GdsApi::ContentApi < GdsApi::Base
     get_json!("#{base_url}/with_tag.json?tag=#{tag}&include_children=1")
   end
 
+  def local_authority(snac_code)
+    snac_code = CGI.escape(snac_code)
+    get_json("#{base_url}/local_authorities/#{snac_code}.json")
+  end
+
+  def local_authorities_by_name(name)
+    name = CGI.escape(name)
+    get_json!("#{base_url}/local_authorities.json?name=#{name}")
+  end
+
+  def local_authorities_by_snac_code(snac_code)
+    snac_code = CGI.escape(snac_code)
+    get_json!("#{base_url}/local_authorities.json?snac_code=#{snac_code}")
+  end
+
   private
     def base_url
       endpoint
