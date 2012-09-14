@@ -63,7 +63,9 @@ EOS
       with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
       to_return(status: 404, body: "{\"error\": [\"Unrecognised Licence Id: bloop\"]}")
 
-    assert_nil api.details_for_licence("bloop")
+    assert_raises GdsApi::HTTPErrorResponse do
+      api.details_for_licence("bloop")
+    end
   end
 
   def test_should_provide_full_licence_details_for_canonical_id
@@ -78,7 +80,7 @@ EOS
       "issuingAuthorities" => []
     }
 
-    assert_equal expected, api.details_for_licence("590001")
+    assert_equal expected, api.details_for_licence("590001").to_hash
   end
 
   def test_should_return_an_error_message_for_bad_snac_code_entry
@@ -87,7 +89,9 @@ EOS
       to_return(status: 404,
                 body: "{\"error\": \"No authorities found for the licence 590001 and for the snacCode bleep\"}")
 
-    assert_nil api.details_for_licence("590001", "bleep")
+    assert_raises GdsApi::HTTPErrorResponse do
+      api.details_for_licence("590001", "bleep")
+    end
   end
 
   def test_should_return_error_messages_for_bad_licence_id_and_snac_code
@@ -96,7 +100,9 @@ EOS
       to_return(status: 404,
                 body: "{\"error\": \"No authorities found for the licence bloop and for the snacCode bleep\"}")
 
-    assert_nil api.details_for_licence("bloop", "bleep")
+    assert_raises GdsApi::HTTPErrorResponse do
+      api.details_for_licence("bloop", "bleep")
+    end
   end
 
   def test_should_return_error_message_to_pick_a_relevant_snac_code_for_the_provided_licence_id
@@ -105,7 +111,9 @@ EOS
       to_return(status: 404,
                 body: "{\"error\": \"No authorities found for the licence 590001 and for the snacCode sw10\"}")
 
-    assert_nil api.details_for_licence("590001", "sw10")
+    assert_raises GdsApi::HTTPErrorResponse do
+      api.details_for_licence("590001", "sw10")
+    end
   end
 
   def test_should_return_full_licence_details_with_location_specific_information
