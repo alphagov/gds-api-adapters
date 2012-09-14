@@ -49,7 +49,7 @@ module GdsApi
     end
 
     def post_json(url, params)
-      ignoring GdsApi::HTTPErrorResponse do
+      ignoring GdsApi::HTTPNotFound do
         post_json! url, params
       end
     end
@@ -59,7 +59,7 @@ module GdsApi
     end
 
     def put_json(url, params)
-      ignoring GdsApi::HTTPErrorResponse do
+      ignoring GdsApi::HTTPNotFound do
         put_json! url, params
       end
     end

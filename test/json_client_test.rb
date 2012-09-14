@@ -73,17 +73,45 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
-  def test_should_be_nil_if_404_returned_from_endpoint
+  def test_get_should_be_nil_if_404_returned_from_endpoint
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(:body => "{}", :status => 404)
     assert_nil @client.get_json(url)
   end
 
-  def test_should_raise_error_if_non_404_error_code_returned_from_endpoint
+  def test_get_should_raise_error_if_non_404_error_code_returned_from_endpoint
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(:body => "{}", :status => 500)
     assert_raises GdsApi::HTTPErrorResponse do
       @client.get_json(url)
+    end
+  end
+
+  def test_post_should_be_nil_if_404_returned_from_endpoint
+    url = "http://some.endpoint/some.json"
+    stub_request(:post, url).to_return(:body => "{}", :status => 404)
+    assert_nil @client.post_json(url, {})
+  end
+
+  def test_post_should_raise_error_if_non_404_error_code_returned_from_endpoint
+    url = "http://some.endpoint/some.json"
+    stub_request(:post, url).to_return(:body => "{}", :status => 500)
+    assert_raises GdsApi::HTTPErrorResponse do
+      @client.post_json(url, {})
+    end
+  end
+
+  def test_put_should_be_nil_if_404_returned_from_endpoint
+    url = "http://some.endpoint/some.json"
+    stub_request(:put, url).to_return(:body => "{}", :status => 404)
+    assert_nil @client.put_json(url, {})
+  end
+
+  def test_put_should_raise_error_if_non_404_error_code_returned_from_endpoint
+    url = "http://some.endpoint/some.json"
+    stub_request(:put, url).to_return(:body => "{}", :status => 500)
+    assert_raises GdsApi::HTTPErrorResponse do
+      @client.put_json(url, {})
     end
   end
 
