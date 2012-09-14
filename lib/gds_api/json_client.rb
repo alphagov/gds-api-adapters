@@ -39,7 +39,7 @@ module GdsApi
     end
 
     def get_json(url)
-      ignoring GdsApi::HTTPErrorResponse do
+      ignoring GdsApi::HTTPNotFound do
         get_json! url
       end
     end
@@ -49,7 +49,7 @@ module GdsApi
     end
 
     def post_json(url, params)
-      ignoring GdsApi::HTTPErrorResponse do
+      ignoring GdsApi::HTTPNotFound do
         post_json! url, params
       end
     end
@@ -59,7 +59,7 @@ module GdsApi
     end
 
     def put_json(url, params)
-      ignoring GdsApi::HTTPErrorResponse do
+      ignoring GdsApi::HTTPNotFound do
         put_json! url, params
       end
     end
@@ -84,6 +84,8 @@ module GdsApi
       if response.is_a?(Net::HTTPSuccess)
         logger.info loggable.merge(status: 'success', end_time: Time.now.to_f).to_json
         Response.new(response)
+      elsif response.is_a?(Net::HTTPNotFound)
+        raise GdsApi::HTTPNotFound.new(response.code.to_i)
       else
         body = begin
           JSON.parse(response.body.to_s)
