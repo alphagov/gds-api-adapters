@@ -133,11 +133,13 @@ describe GdsApi::Publisher do
       assert_equal [], api.licences_for_ids([123,124])
     end
 
-    it "should return nil if publisher returns an error" do
+    it "should raise an error if publisher returns an error" do
       stub_request(:get, %r[\A#{PUBLISHER_ENDPOINT}/licences]).
         to_return(:status => [503, "Service temporarily unabailable"])
 
-      assert_equal nil, api.licences_for_ids([123,124])
+      assert_raises GdsApi::HTTPErrorResponse do
+        api.licences_for_ids([123,124])
+      end
     end
 
     it "should return nil if a council snac code is not found" do
