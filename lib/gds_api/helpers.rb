@@ -24,6 +24,7 @@ module GdsApi
       Object::const_defined?(:PANOPTICON_API_CREDENTIALS) ? PANOPTICON_API_CREDENTIALS : {}
     end
 
+    # This method is deprecated.  Use content_api.artefact instead.
     def fetch_artefact(params)
       panopticon_api.artefact_for_slug(params[:slug]) || OpenStruct.new(section: 'missing', need_id: 'missing', kind: 'missing')
     end
