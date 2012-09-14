@@ -1,6 +1,7 @@
 require 'gds_api/publisher'
 require 'gds_api/imminence'
 require 'gds_api/panopticon'
+require 'gds_api/content_api'
 
 module GdsApi
   module Helpers
