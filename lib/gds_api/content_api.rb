@@ -13,7 +13,7 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def artefact(slug)
-    get_json!("#{base_url}/#{slug}.json")
+    get_json("#{base_url}/#{slug}.json")
   end
 
   def local_authority(snac_code)
