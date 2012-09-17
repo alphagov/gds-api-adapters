@@ -54,7 +54,7 @@ module GdsApi
       def artefact_for_slug(slug)
         singular_response_base.merge(
           "title" => titleize_slug(slug),
-          "kind" => "answer",
+          "format" => "guide",
           "id" => "http://contentapi.test.gov.uk/#{slug}.json",
           "web_url" => "http://frontend.test.gov.uk/#{slug}",
           "details" => {
