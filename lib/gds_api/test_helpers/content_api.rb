@@ -44,6 +44,13 @@ module GdsApi
         stub_request(:get, url).to_return(status: 404, body: body.to_json, headers: {})
       end
 
+      def stub_content_api_default_artefact
+        stub_request(:get, %r{\A#{CONTENT_API_ENDPOINT}/[a-z0-9-]+\.json}).to_return { |request|
+          slug = request.uri.path.split('/').last.chomp('.json')
+          {:body => artefact_for_slug(slug).to_json}
+        }
+      end
+
       def artefact_for_slug(slug)
         singular_response_base.merge(
           "title" => titleize_slug(slug),

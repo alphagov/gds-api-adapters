@@ -1,6 +1,7 @@
 require 'gds_api/publisher'
 require 'gds_api/imminence'
 require 'gds_api/panopticon'
+require 'gds_api/content_api'
 
 module GdsApi
   module Helpers
@@ -22,10 +23,6 @@ module GdsApi
 
     def panopticon_api_credentials
       Object::const_defined?(:PANOPTICON_API_CREDENTIALS) ? PANOPTICON_API_CREDENTIALS : {}
-    end
-
-    def fetch_artefact(params)
-      panopticon_api.artefact_for_slug(params[:slug]) || OpenStruct.new(section: 'missing', need_id: 'missing', kind: 'missing')
     end
 
     def self.included(klass)
