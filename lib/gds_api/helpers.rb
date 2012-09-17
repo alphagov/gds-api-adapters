@@ -25,11 +25,6 @@ module GdsApi
       Object::const_defined?(:PANOPTICON_API_CREDENTIALS) ? PANOPTICON_API_CREDENTIALS : {}
     end
 
-    # This method is deprecated.  Use content_api.artefact instead.
-    def fetch_artefact(params)
-      panopticon_api.artefact_for_slug(params[:slug]) || OpenStruct.new(section: 'missing', need_id: 'missing', kind: 'missing')
-    end
-
     def self.included(klass)
       if klass.respond_to?(:helper_method)
         klass.helper_method :publisher_api, :panopticon_api, :imminence_api, :content_api
