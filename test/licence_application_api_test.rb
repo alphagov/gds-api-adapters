@@ -63,7 +63,7 @@ EOS
       with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
       to_return(status: 404, body: "{\"error\": [\"Unrecognised Licence Id: bloop\"]}")
 
-    assert_raises GdsApi::HTTPErrorResponse do
+    assert_raises GdsApi::HTTPNotFound do
       api.details_for_licence("bloop")
     end
   end
@@ -89,7 +89,7 @@ EOS
       to_return(status: 404,
                 body: "{\"error\": \"No authorities found for the licence 590001 and for the snacCode bleep\"}")
 
-    assert_raises GdsApi::HTTPErrorResponse do
+    assert_raises GdsApi::HTTPNotFound do
       api.details_for_licence("590001", "bleep")
     end
   end
@@ -100,7 +100,7 @@ EOS
       to_return(status: 404,
                 body: "{\"error\": \"No authorities found for the licence bloop and for the snacCode bleep\"}")
 
-    assert_raises GdsApi::HTTPErrorResponse do
+    assert_raises GdsApi::HTTPNotFound do
       api.details_for_licence("bloop", "bleep")
     end
   end
@@ -111,7 +111,7 @@ EOS
       to_return(status: 404,
                 body: "{\"error\": \"No authorities found for the licence 590001 and for the snacCode sw10\"}")
 
-    assert_raises GdsApi::HTTPErrorResponse do
+    assert_raises GdsApi::HTTPNotFound do
       api.details_for_licence("590001", "sw10")
     end
   end
