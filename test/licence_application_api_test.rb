@@ -1,9 +1,12 @@
 require "test_helper"
 require "gds_api/licence_application"
+require "gds_api/test_helpers/licence_application"
 
 class LicenceApplicationApiTest < MiniTest::Unit::TestCase
+  include GdsApi::TestHelpers::LicenceApplication
+
   def setup
-    @core_url = "https://licenceapplication.test.alphagov.co.uk"
+    @core_url = LICENCE_APPLICATION_ENDPOINT
   end
 
   def api
@@ -69,10 +72,7 @@ EOS
   end
 
   def test_should_provide_full_licence_details_for_canonical_id
-    stub_request(:get, "#{@core_url}/api/licence/590001").
-      with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
-      to_return(status: 200,
-                body: "{\"isLocationSpecific\":true,\"geographicalAvailability\":[\"England\",\"Wales\"],\"issuingAuthorities\":[]}")
+    licence_exists('590001', {"isLocationSpecific" => true, "geographicalAvailability" => ["England","Wales"], "issuingAuthorities" => []})
 
     expected = {
       "isLocationSpecific" => true,
