@@ -1,23 +1,22 @@
 require_relative "base"
 
 class GdsApi::LicenceApplication < GdsApi::Base
+  def all_licences
+    get_json!("#{@endpoint}/api/licences")
+  end
+
   def details_for_licence(id, snac_code = nil)
     return nil if id.nil?
-
-    if response = get_json(build_url(id, snac_code))
-      response.to_hash
-    else
-      nil
-    end
+    get_json(build_licence_url(id, snac_code))
   end
 
   private
 
-  def build_url(id, snac_code)
+  def build_licence_url(id, snac_code)
     if snac_code
-      "#{@endpoint}/api/#{id}/#{snac_code}"
+      "#{@endpoint}/api/licence/#{id}/#{snac_code}"
     else
-      "#{@endpoint}/api/#{id}"
+      "#{@endpoint}/api/licence/#{id}"
     end
   end
 end
