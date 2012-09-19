@@ -11,7 +11,12 @@ class GdsApiBaseTest < MiniTest::Unit::TestCase
   end
 
   def setup
+    @orig_cache = GdsApi::JsonClient.cache
     @api = ConcreteApi.new('test')
+  end
+
+  def teardown
+    GdsApi::JsonClient.cache = @orig_cache
   end
 
   def test_should_construct_escaped_query_string
