@@ -3,7 +3,7 @@ require 'gds_api/test_helpers/json_client_helper'
 module GdsApi
   module TestHelpers
     module LicenceApplication
-      LICENCE_APPLICATION_ENDPOINT = "https://licenceapplication.test.alphagov.co.uk"
+      LICENCE_APPLICATION_ENDPOINT = "https://licensify.test.alphagov.co.uk"
 
       def licence_exists(identifier, licence)
         licence = licence.to_json unless licence.is_a?(String)
