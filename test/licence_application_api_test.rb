@@ -171,4 +171,20 @@ EOS
       "payment" => "none"
     }
   end
+
+  def test_should_raise_exception_on_timeout
+    licence_times_out("866-5-1")
+
+    assert_raises GdsApi::TimedOutException do
+      api.details_for_licence("866-5-1")
+    end
+  end
+
+  def test_should_raise_exception_on_api_error
+    licence_returns_error("866-5-1")
+
+    assert_raises GdsApi::HTTPErrorResponse do
+      api.details_for_licence("866-5-1")
+    end
+  end
 end
