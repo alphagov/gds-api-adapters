@@ -62,9 +62,7 @@ EOS
   end
 
   def test_should_return_an_error_message_if_licence_is_unrecognised
-    stub_request(:get, "#{@core_url}/api/licence/bloop").
-      with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
-      to_return(status: 404, body: "{\"error\": [\"Unrecognised Licence Id: bloop\"]}")
+    licence_does_not_exist('bloop')
 
     assert_raises GdsApi::HTTPNotFound do
       api.details_for_licence("bloop")
@@ -84,10 +82,7 @@ EOS
   end
 
   def test_should_return_an_error_message_for_bad_snac_code_entry
-    stub_request(:get, "#{@core_url}/api/licence/590001/bleep").
-      with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
-      to_return(status: 404,
-                body: "{\"error\": \"No authorities found for the licence 590001 and for the snacCode bleep\"}")
+    licence_does_not_exist('590001/bleep')
 
     assert_raises GdsApi::HTTPNotFound do
       api.details_for_licence("590001", "bleep")
@@ -95,10 +90,7 @@ EOS
   end
 
   def test_should_return_error_messages_for_bad_licence_id_and_snac_code
-    stub_request(:get, "#{@core_url}/api/licence/bloop/bleep").
-      with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
-      to_return(status: 404,
-                body: "{\"error\": \"No authorities found for the licence bloop and for the snacCode bleep\"}")
+    licence_does_not_exist('bloop/bleep')
 
     assert_raises GdsApi::HTTPNotFound do
       api.details_for_licence("bloop", "bleep")
@@ -117,10 +109,7 @@ EOS
   end
 
   def test_should_return_full_licence_details_with_location_specific_information
-    stub_request(:get, "#{@core_url}/api/licence/866-5-1/00AA").
-      with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
-      to_return(status: 200,
-                body: <<-EOS
+    licence_exists('866-5-1/00AA', <<-EOS
 {
    "isLocationSpecific":true,
    "geographicalAvailability":[

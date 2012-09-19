@@ -6,10 +6,11 @@ module GdsApi
       LICENCE_APPLICATION_ENDPOINT = "https://licenceapplication.test.alphagov.co.uk"
 
       def licence_exists(identifier, licence)
+        licence = licence.to_json unless licence.is_a?(String)
         stub_request(:get, "#{LICENCE_APPLICATION_ENDPOINT}/api/licence/#{identifier}").
           with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
           to_return(status: 200,
-            body: licence.to_json)
+            body: licence)
       end
 
       def licence_does_not_exist(identifier)
