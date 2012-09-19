@@ -2,6 +2,7 @@ require 'gds_api/publisher'
 require 'gds_api/imminence'
 require 'gds_api/panopticon'
 require 'gds_api/content_api'
+require 'gds_api/licence_application'
 
 module GdsApi
   module Helpers
@@ -17,6 +18,10 @@ module GdsApi
       @imminence_api ||= GdsApi::Imminence.new(Plek.current.environment)
     end
 
+    def licence_application_api
+      @licence_application_api ||= GdsApi::LicenceApplication.new(Plek.current.environment)
+    end
+
     def panopticon_api
       @panopticon_api ||= GdsApi::Panopticon.new(Plek.current.environment, panopticon_api_credentials)
     end
@@ -27,7 +32,7 @@ module GdsApi
 
     def self.included(klass)
       if klass.respond_to?(:helper_method)
-        klass.helper_method :publisher_api, :panopticon_api, :imminence_api, :content_api
+        klass.helper_method :publisher_api, :panopticon_api, :imminence_api, :content_api, :licence_application_api
       end
     end
   end
