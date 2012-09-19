@@ -57,6 +57,17 @@ EOS
     assert_includes api.all_licences, land_drainage
   end
 
+  def test_should_return_error_message_if_licences_collection_not_found
+    stub_request(:get, "#{@core_url}/api/licences").
+      with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
+      to_return(status: 404,
+        body: "{\"error\": \"Error\"}")
+
+    assert_raises GdsApi::HTTPNotFound do
+      api.all_licences
+    end
+  end
+
   def test_should_return_nil_if_id_nil
     assert_nil api.details_for_licence(nil)
   end
