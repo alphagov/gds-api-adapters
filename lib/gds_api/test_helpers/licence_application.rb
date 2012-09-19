@@ -19,6 +19,14 @@ module GdsApi
           to_return(status: 404,
             body: "{\"error\": [\"Unrecognised Licence Id: #{identifier}\"]}")
       end
+
+      def licence_times_out(identifier)
+        stub_request(:get, "#{LICENCE_APPLICATION_ENDPOINT}/api/licence/#{identifier}").to_timeout
+      end
+
+      def licence_returns_error(identifier)
+        stub_request(:get, "#{LICENCE_APPLICATION_ENDPOINT}/api/licence/#{identifier}").to_return(status: 500)
+      end
     end
   end
 end
