@@ -12,6 +12,10 @@ class GdsApi::ContentApi < GdsApi::Base
     get_json!("#{base_url}/with_tag.json?tag=#{tag}&include_children=1")
   end
 
+  def curated_list(tag)
+    get_json("#{base_url}/with_tag.json?tag=#{tag}&include_curated_list=1")
+  end
+
   def artefact(slug)
     get_json("#{base_url}/#{slug}.json")
   end
