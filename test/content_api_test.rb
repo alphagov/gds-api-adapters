@@ -33,6 +33,26 @@ describe GdsApi::ContentApi do
     end
   end
 
+  describe "licence" do
+    it "should return an artefact with licence for a snac code" do
+      response = content_api_has_an_artefact_with_snac_code("licence-example", '1234', {
+        "title" => "Licence Example",
+        "slug" => "licence-example",
+        "details" => {
+          "licence" => {
+            "location_specific" => false,
+            "availability" => [ "England", "Wales" ],
+            "authorities" => [ ]
+          }
+        }
+      })
+      response = @api.artefact_with_snac_code('licence-example', '1234')
+
+      assert_equal "Licence Example", response["title"]
+      assert_equal [ "England", "Wales" ], response["details"]["licence"]["availability"]
+    end
+  end
+
   describe "local authorities" do
     it "should return nil if no local authority found" do
       stub_request(:get, "#{@base_api_url}/local_authorities/does-not-exist.json").
