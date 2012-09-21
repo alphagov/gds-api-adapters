@@ -9,7 +9,7 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def tag(tag)
-    get_json!("#{base_url}/tags/#{CGI.escape(tag)}.json")
+    get_json("#{base_url}/tags/#{CGI.escape(tag)}.json")
   end
 
   def with_tag(tag)
