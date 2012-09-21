@@ -51,6 +51,17 @@ describe GdsApi::ContentApi do
       assert_equal "Licence Example", response["title"]
       assert_equal [ "England", "Wales" ], response["details"]["licence"]["availability"]
     end
+
+    it "should escape snac code when searching for licence" do
+      stub_request(:get, "#{@base_api_url}/licence-example.json?snac=snacks%21").
+        to_return(:status => 200,
+                  :body => {"test" => "ing"}.to_json,
+                  :headers => {})
+
+      @api.artefact_with_snac_code("licence-example","snacks!")
+
+      assert_requested :get, "#{@base_api_url}/licence-example.json?snac=snacks%21"
+    end
   end
 
   describe "local authorities" do
