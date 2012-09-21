@@ -31,6 +31,18 @@ describe GdsApi::ContentApi do
       subsection = response["results"][0]
       assert_equal "Complain about a claims company", subsection["title"]
     end
+
+    it "should return tag tree for a specific tag" do
+      tag = "crime-and-justice"
+      api_url = "#{@base_api_url}/tags/#{tag}.json"
+      json = {
+        title: "Crime and Justice"
+      }
+      stub_request(:get, api_url).to_return(:status => 200, :body => json.to_json)
+      response = @api.tag(tag)
+      title = response['title']
+      assert_equal json[:title], title
+    end
   end
 
   describe "licence" do

@@ -8,6 +8,10 @@ class GdsApi::ContentApi < GdsApi::Base
     get_json!("#{base_url}/tags.json?type=section")
   end
 
+  def tag(tag)
+    get_json("#{base_url}/tags/#{CGI.escape(tag)}.json")
+  end
+
   def with_tag(tag)
     get_json!("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&include_children=1")
   end
