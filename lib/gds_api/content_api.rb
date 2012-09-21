@@ -9,15 +9,19 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def with_tag(tag)
-    get_json!("#{base_url}/with_tag.json?tag=#{tag}&include_children=1")
+    get_json!("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&include_children=1")
   end
 
   def curated_list(tag)
-    get_json("#{base_url}/with_tag.json?tag=#{tag}&sort=curated")
+    get_json("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&sort=curated")
   end
 
   def artefact(slug)
-    get_json("#{base_url}/#{slug}.json")
+    get_json("#{base_url}/#{CGI.escape(slug)}.json")
+  end
+
+  def artefact_with_snac_code(slug, snac)
+    get_json("#{base_url}/#{CGI.escape(slug)}.json?snac=#{CGI.escape(snac)}")
   end
 
   def local_authority(snac_code)
