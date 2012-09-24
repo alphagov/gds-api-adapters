@@ -98,9 +98,27 @@ module GdsApi
 
       def artefact_for_slug_in_a_subsection(slug, subsection_slug)
         artefact = artefact_for_slug(slug)
-        base_section = tag_for_slug(subsection_slug.split('/').first, "section")
-        section = tag_for_slug(subsection_slug, "section").merge("parent" => base_section)
-        artefact["tags"] << section
+
+        # for each "part" of the path, we want to reduce across the
+        # list and build up a tree of nested tags.
+        # This will turn "thing1/thing2" into:
+        #   Tag{ thing2, parent: Tag{ thing1 } }
+
+        tag_tree = nil
+        subsection_slug.split('/').inject(nil) do |last_section, subsection|
+          subsection = [last_section, subsection].join('/') if last_section
+          section = tag_for_slug(subsection, "section")
+          if tag_tree
+            # Because tags are nested within one another, this makes
+            # the current part the top, and the rest we've seen the
+            # ancestors
+            tag_tree = section.merge("parent" => tag_tree)
+          else
+            tag_tree = section
+          end
+          subsection
+        end
+        artefact["tags"] << tag_tree
         artefact
       end
 
