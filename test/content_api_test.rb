@@ -19,6 +19,20 @@ describe GdsApi::ContentApi do
     end
   end
 
+  describe "artefact" do
+    it "should show the artefact" do
+      content_api_has_an_artefact("devolution-uk")
+      response = @api.artefact("devolution-uk")
+      assert_equal "http://contentapi.test.gov.uk/devolution-uk.json", response["id"]
+    end
+
+    it "should work with old editions" do
+      content_api_has_archived_artefact("devolution-uk", 3)
+      response = @api.artefact("devolution-uk", 3)
+      assert_equal "http://contentapi.test.gov.uk/devolution-uk.json", response["id"]
+    end
+  end
+
   describe "tags" do
     it "should produce an artefact with the provided tag" do
       tag = "crime-and-justice"
