@@ -21,11 +21,11 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def artefact(slug)
-    get_json("#{base_url}/#{CGI.escape(slug)}.json")
+    get_json("#{base_url}/#{slug}.json")
   end
 
   def artefact_with_snac_code(slug, snac)
-    get_json("#{base_url}/#{CGI.escape(slug)}.json?snac=#{CGI.escape(snac)}")
+    get_json("#{base_url}/#{slug}.json?snac=#{CGI.escape(snac)}")
   end
 
   def local_authority(snac_code)
