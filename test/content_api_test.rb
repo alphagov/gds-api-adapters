@@ -26,8 +26,8 @@ describe GdsApi::ContentApi do
       assert_equal "http://contentapi.test.gov.uk/devolution-uk.json", response["id"]
     end
 
-    it "should work with old editions" do
-      content_api_has_archived_artefact("devolution-uk", 3)
+    it "should work with unpublished editions" do
+      content_api_has_unpublished_artefact("devolution-uk", 3)
       response = @api.artefact("devolution-uk", 3)
       assert_equal "http://contentapi.test.gov.uk/devolution-uk.json", response["id"]
     end

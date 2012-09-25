@@ -34,7 +34,7 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
-      def content_api_has_archived_artefact(slug, edition, body = artefact_for_slug(slug))
+      def content_api_has_unpublished_artefact(slug, edition, body = artefact_for_slug(slug))
         url = "#{CONTENT_API_ENDPOINT}/#{slug}.json?edition=#{edition}"
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
