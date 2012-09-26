@@ -20,8 +20,16 @@ class GdsApi::ContentApi < GdsApi::Base
     get_json("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&sort=curated")
   end
 
-  def artefact(slug)
-    get_json("#{base_url}/#{slug}.json")
+  def artefact(slug, edition=nil)
+    url = "#{base_url}/#{slug}.json"
+    if edition
+      if options.include?(:bearer_token)
+        url += "?edition=#{edition}"
+      else
+        raise GdsApi::NoBearerToken
+      end
+    end
+    get_json(url)
   end
 
   def artefact_with_snac_code(slug, snac)

@@ -19,6 +19,8 @@ module GdsApi
   class HTTPNotFound < HTTPErrorResponse
   end
 
+  class NoBearerToken < BaseError; end
+
   module ExceptionHandling
     def ignoring(exception, &block)
       yield
