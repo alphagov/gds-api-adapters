@@ -21,6 +21,12 @@ class GdsApi::Imminence < GdsApi::Base
   def places_kml(type)
     get_raw("#{@endpoint}/places/#{type}.kml")
   end
+  
+  def business_support_schemes(facets_hash)
+    query = facets_hash.keys.sort.map { |k| "#{k.to_s}=#{facets_hash[k]}" }.join("&")
+    query = "?#{query}" unless query.empty?
+    get_json!("#{@endpoint}/business_support_schemes.json#{query}")
+  end
 
 private
   def self.extract_location_hash(location)
