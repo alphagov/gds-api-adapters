@@ -26,10 +26,18 @@ describe GdsApi::ContentApi do
       assert_equal "http://contentapi.test.gov.uk/devolution-uk.json", response["id"]
     end
 
-    it "should work with unpublished editions" do
+    it "should be able to fetch unpublished editions when authenticated" do
+      api = GdsApi::ContentApi.new('test', { bearer_token: 'MY_BEARER_TOKEN' })
       content_api_has_unpublished_artefact("devolution-uk", 3)
-      response = @api.artefact("devolution-uk", 3)
+      response = api.artefact("devolution-uk", 3)
       assert_equal "http://contentapi.test.gov.uk/devolution-uk.json", response["id"]
+    end
+
+    it "should raise an exception if no bearer token is used when fetching unpublished editions" do
+      content_api_has_unpublished_artefact("devolution-uk", 3)
+      assert_raises GdsApi::NoBearerToken do
+        @api.artefact("devolution-uk", 3)
+      end
     end
   end
 

@@ -23,7 +23,11 @@ class GdsApi::ContentApi < GdsApi::Base
   def artefact(slug, edition=nil)
     url = "#{base_url}/#{slug}.json"
     if edition
-      url += "?edition=#{edition}"
+      if options.include?(:bearer_token)
+        url += "?edition=#{edition}"
+      else
+        raise GdsApi::NoBearerToken
+      end
     end
     get_json(url)
   end
