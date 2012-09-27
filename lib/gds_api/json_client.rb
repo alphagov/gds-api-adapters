@@ -9,8 +9,8 @@ module GdsApi
 
     include GdsApi::ExceptionHandling
 
-    def self.cache(size=DEFAULT_CACHE_SIZE)
-      @cache ||= LRUCache.new(max_size: size)
+    def self.cache(size=DEFAULT_CACHE_SIZE, ttl=DEFAULT_CACHE_TTL)
+      @cache ||= LRUCache.new(max_size: size, ttl: ttl)
     end
 
     def self.cache=(c)
@@ -22,7 +22,8 @@ module GdsApi
     def initialize(options = {})
       @logger = options[:logger] || GdsApi::Base.logger
       cache_size = options[:cache_size] || DEFAULT_CACHE_SIZE
-      @cache = JsonClient.cache(cache_size)
+      cache_ttl = options[:cache_ttl] || DEFAULT_CACHE_TTL
+      @cache = JsonClient.cache(cache_size, cache_ttl)
       @options = options
     end
 
@@ -33,6 +34,7 @@ module GdsApi
     }
     DEFAULT_TIMEOUT_IN_SECONDS = 4
     DEFAULT_CACHE_SIZE = 10
+    DEFAULT_CACHE_TTL = 15 * 60 # 15 minutes
 
     def get_raw(url)
       do_raw_request(Net::HTTP::Get, url)
