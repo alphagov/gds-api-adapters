@@ -16,10 +16,10 @@ module GdsApi
 
       def imminence_has_business_support_schemes(facets_hash, schemes)
         results = {
-          "_response_info"=>{"status"=>"ok"},
-          "description"=>"Business Support Schemes!",
-          "total"=>schemes.size, "startIndex"=>1, "pageSize"=>schemes.size, "currentPage"=>1, "pages"=>1,
-          "results"=>schemes
+          "_response_info" => {"status" => "ok"},
+          "description" => "Business Support Schemes!",
+          "total" => schemes.size, "startIndex" => 1, "pageSize" => schemes.size, "currentPage" => 1, "pages" => 1,
+          "results" => schemes
         }
 
         stub_request(:get, "https://#{IMMINENCE_API_HOST}/business_support_schemes.json").
@@ -29,10 +29,10 @@ module GdsApi
 
       def stub_imminence_default_business_support_schemes
         empty_results = {
-          "_response_info"=>{"status"=>"ok"},
-          "description"=>"Business Support Schemes!",
-          "total"=>0, "startIndex"=>1, "pageSize"=>0, "currentPage"=>1, "pages"=>1,
-          "results"=>[]
+          "_response_info" => {"status" => "ok"},
+          "description" => "Business Support Schemes!",
+          "total" => 0, "startIndex" => 1, "pageSize" => 0, "currentPage" => 1, "pages" => 1,
+          "results" => []
         }
 
         stub_request(:get, %r{\Ahttps://#{IMMINENCE_API_HOST}/business_support_schemes\.json}).
