@@ -15,7 +15,7 @@ module GdsApi
       end
 
       def imminence_has_business_support_schemes(facets_hash, schemes)
-        response = schemes.to_json(only: [:business_support_identifier, :title])
+        response = schemes.to_json
         stub_request(:get, "https://#{IMMINENCE_API_HOST}/business_support_schemes.json").
         with(query: facets_hash).
         to_return(status: 200, body: response, headers: {})
