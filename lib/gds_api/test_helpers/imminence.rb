@@ -27,6 +27,8 @@ module GdsApi
           to_return(status: 200, body: results.to_json, headers: {})
       end
 
+      # Stubs out all bussiness_support_schemes requests to return an ampty set of results.
+      # Requests stubbed with the above method will take precedence over this.
       def stub_imminence_default_business_support_schemes
         empty_results = {
           "_response_info" => {"status" => "ok"},
