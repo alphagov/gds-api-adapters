@@ -24,6 +24,10 @@ class GdsApi::ContentApi < GdsApi::Base
     get_json("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&sort=curated")
   end
 
+  def sorted_by(tag, sort_by)
+    get_json("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&sort=#{sort_by}")
+  end
+
   def artefact(slug, edition=nil)
     url = "#{base_url}/#{slug}.json"
     if edition
