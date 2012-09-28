@@ -72,6 +72,26 @@ describe GdsApi::Rummager do
     assert_requested :get, /format_filter=specialist_guidance/
   end
 
+  it "should not tell the http client to use ssl if we're connecting to an http host" do
+    response = stub('response', code: '200', body: '[]')
+    http = stub('http', get: response)
+    Net::HTTP.stubs(:new).returns(http)
+
+    http.expects(:use_ssl=).never
+
+    client = GdsApi::Rummager.new("http://example.com").search "search-term"
+  end
+
+  it "should tell the http client to use ssl if we're connecting to an https host" do
+    response = stub('response', code: '200', body: '[]')
+    http = stub('http', get: response)
+    Net::HTTP.stubs(:new).returns(http)
+
+    http.expects(:use_ssl=).with(true)
+
+    client = GdsApi::Rummager.new("https://example.com").search "search-term"
+  end
+
   it "should add a format filter parameter to autocomplete if provided" do
     GdsApi::Rummager.new("http://example.com").autocomplete "search-term", "specialist_guidance"
 

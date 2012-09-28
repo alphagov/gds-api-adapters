@@ -29,6 +29,7 @@ module GdsApi
       request_path << "&format_filter=#{CGI.escape(format_filter)}" if format_filter
       uri = URI("#{search_uri}#{request_path}")
       http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true if uri.scheme == 'https'
       response = http.get(uri.request_uri, {"Accept" => "application/json"})
       raise SearchServiceError.new("#{response.code}: #{response.body}") unless response.code == "200"
       response
