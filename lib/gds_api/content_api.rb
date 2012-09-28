@@ -8,6 +8,10 @@ class GdsApi::ContentApi < GdsApi::Base
     get_json!("#{base_url}/tags.json?type=section")
   end
 
+  def root_sections
+    get_json!("#{base_url}/tags.json?type=section&root_sections=true")
+  end
+
   def sub_sections(parent_tag)
     get_json("#{base_url}/tags.json?type=section&parent_id=#{CGI.escape(parent_tag)}")
   end
