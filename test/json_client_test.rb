@@ -58,12 +58,15 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_should_cache_multiple_requests_to_same_url_across_instances
+    GdsApi::JsonClient.cache = nil # clear the stubbed cache instance
+
     url = "http://some.endpoint/some.json"
     result = {"foo" => "bar"}
-    stub_request(:get, url).to_return(:body => JSON.dump(result), :status => 200).times(1)
+    stub_request(:get, url).to_return(:body => JSON.dump(result), :status => 200)
     response_a = GdsApi::JsonClient.new.get_json(url)
     response_b = GdsApi::JsonClient.new.get_json(url)
     assert_equal response_a.object_id, response_b.object_id
+    assert_requested :get, url, times: 1
   end
 
   def test_should_cache_requests_for_15_mins_by_default
