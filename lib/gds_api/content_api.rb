@@ -48,6 +48,11 @@ class GdsApi::ContentApi < GdsApi::Base
     get_json!("#{base_url}/local_authorities.json?snac_code=#{CGI.escape(snac_code)}")
   end
 
+  def business_support_schemes(identifiers)
+    identifiers_string = identifiers.map {|i| CGI.escape(i)}.join(',')
+    get_json!("#{base_url}/business_support_schemes.json?identifiers=#{identifiers_string}")
+  end
+
   private
     def base_url
       endpoint

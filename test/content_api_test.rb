@@ -230,4 +230,44 @@ describe GdsApi::ContentApi do
       assert_requested :get, "#{@base_api_url}/local_authorities.json?snac_code=snacks%21"
     end
   end
+
+  describe "business support schemes" do
+    it "should query content_api for business_support_schemes" do
+      stub_request(:get, %r{\A#{@base_api_url}/business_support_schemes.json}).
+        to_return(:status => 200, :body => {"foo" => "bar"}.to_json)
+
+      response = @api.business_support_schemes(['foo', 'bar'])
+
+      assert_equal({"foo" => "bar"}, response.to_hash)
+      assert_requested :get, "#{@base_api_url}/business_support_schemes.json?identifiers=foo,bar", :times => 1
+    end
+
+    it "should CGI escape identifiers" do
+      stub_request(:get, %r{\A#{@base_api_url}/business_support_schemes.json}).
+        to_return(:status => 200, :body => {"foo" => "bar"}.to_json)
+
+      response = @api.business_support_schemes(['foo bar', 'baz&bing'])
+
+      assert_equal({"foo" => "bar"}, response.to_hash)
+      assert_requested :get, "#{@base_api_url}/business_support_schemes.json?identifiers=foo%20bar,baz%26bing", :times => 1
+    end
+
+    it "should raise an error if content_api returns 404" do
+      stub_request(:get, %r{\A#{@base_api_url}/business_support_schemes.json}).
+        to_return(:status => 404, :body => "Not Found")
+
+      assert_raises GdsApi::HTTPNotFound do
+        @api.business_support_schemes(['foo', 'bar'])
+      end
+    end
+
+    it "should raise an error if content_api returns a 50x error" do
+      stub_request(:get, %r{\A#{@base_api_url}/business_support_schemes.json}).
+        to_return(:status => 503, :body => "Gateway timeout")
+
+      assert_raises GdsApi::HTTPErrorResponse do
+        @api.business_support_schemes(['foo', 'bar'])
+      end
+    end
+  end
 end
