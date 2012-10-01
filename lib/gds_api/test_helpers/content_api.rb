@@ -25,7 +25,48 @@ module GdsApi
             }
           end
         )
-        url = "#{CONTENT_API_ENDPOINT}/tags.json?type=section"
+        ["#{CONTENT_API_ENDPOINT}/tags.json?type=section", "#{CONTENT_API_ENDPOINT}/tags.json?root_sections=true&type=section"].each do |url|
+          stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+        end
+      end
+
+      def content_api_has_section(slug, parent_slug=nil)
+        body = tag_for_slug(slug, "section", parent_slug)
+        url = "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(slug)}.json"
+        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+      end
+
+      def content_api_has_artefacts_in_a_section(slug, artefact_slugs=[])
+        body = plural_response_base.merge(
+          "results" => artefact_slugs.map do |artefact_slug|
+            artefact_for_slug(artefact_slug)
+          end
+        )
+        url = "https://contentapi.test.alphagov.co.uk/with_tag.json?sort=alphabetical&tag=#{CGI.escape(slug)}"
+        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+      end
+
+      def content_api_has_subsections(parent_slug, subsection_slugs)
+        parent_section = tag_for_slug(parent_slug, "section")
+        body = plural_response_base.merge(
+          "results" => subsection_slugs.map do |slug|
+            {
+              "id" => "http://contentapi.test.gov.uk/tags/#{CGI.escape(slug)}.json",
+              "web_url" => nil,
+              "title" => titleize_slug(slug),
+              "details" => {
+                "type" => "section",
+                "description" => "#{slug} description"
+              },
+              "parent" => parent_section,
+              "content_with_tag" => {
+                "id" => "http://contentapi.test.gov.uk/with_tag.json?tag=#{CGI.escape(slug)}",
+                "web_url" => "http://www.test.gov.uk/browse/#{slug}"
+              }
+            }
+          end
+        )
+        url = "#{CONTENT_API_ENDPOINT}/tags.json?type=section&parent_id=#{CGI.escape(parent_slug)}"
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
@@ -140,7 +181,10 @@ module GdsApi
         artefact
       end
 
-      def tag_for_slug(slug, tag_type)
+      def tag_for_slug(slug, tag_type, parent_slug=nil)
+        parent = if parent_slug
+          tag_for_slug(parent_slug, tag_type)
+        end
         {
           "title" => titleize_slug(slug.split('/').last),
           "id" => "https://contentapi.test.alphagov.co.uk/tags/#{CGI.escape(slug)}.json",
@@ -150,7 +194,8 @@ module GdsApi
           "content_with_tag" => {
             "id" => "https://contentapi.test.alphagov.co.uk/with_tag.json?tag=#{CGI.escape(slug)}",
             "web_url" => "https://www.test.gov.uk/browse/#{slug}",
-          }
+          },
+          "parent" => parent
         }
       end
 
