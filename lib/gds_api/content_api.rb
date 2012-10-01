@@ -13,7 +13,7 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def sub_sections(parent_tag)
-    get_json("#{base_url}/tags.json?type=section&parent_id=#{CGI.escape(parent_tag)}")
+    get_json!("#{base_url}/tags.json?type=section&parent_id=#{CGI.escape(parent_tag)}")
   end
 
   def tag(tag)
@@ -29,7 +29,7 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def sorted_by(tag, sort_by)
-    get_json("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&sort=#{sort_by}")
+    get_json!("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&sort=#{sort_by}")
   end
 
   def artefact(slug, edition=nil)
