@@ -49,12 +49,37 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def business_support_schemes(identifiers)
-    identifiers_string = identifiers.map {|i| CGI.escape(i)}.join(',')
-    get_json!("#{base_url}/business_support_schemes.json?identifiers=#{identifiers_string}")
+    identifiers = identifiers.map {|i| CGI.escape(i) }
+    url_template = "#{base_url}/business_support_schemes.json?identifiers="
+    response = nil # assignment necessary for variable scoping
+
+    start_url = "#{url_template}#{identifiers.shift}"
+    last_batch_url = identifiers.inject(start_url) do |url, id|
+      new_url = [url, id].join(',')
+      if new_url.length >= 2000
+        # fetch a batch using the previous url, then return a new start URL with this id
+        response = get_batch(url, response)
+        "#{url_template}#{id}"
+      else
+        new_url
+      end
+    end
+    get_batch(last_batch_url, response)
   end
 
   private
     def base_url
       endpoint
+    end
+
+    def get_batch(batch_url, existing_response = nil)
+      batch_response = get_json!(batch_url)
+      if existing_response
+        existing_response.to_hash["total"] += batch_response["total"]
+        existing_response.to_hash["results"] += batch_response["results"]
+        existing_response
+      else
+        batch_response
+      end
     end
 end
