@@ -29,14 +29,14 @@ describe GdsApi::ContentApi do
     it "should be able to fetch unpublished editions when authenticated" do
       api = GdsApi::ContentApi.new('test', { bearer_token: 'MY_BEARER_TOKEN' })
       content_api_has_unpublished_artefact("devolution-uk", 3)
-      response = api.artefact("devolution-uk", 3)
+      response = api.artefact("devolution-uk", edition: 3)
       assert_equal "http://contentapi.test.gov.uk/devolution-uk.json", response["id"]
     end
 
     it "should raise an exception if no bearer token is used when fetching unpublished editions" do
       content_api_has_unpublished_artefact("devolution-uk", 3)
       assert_raises GdsApi::NoBearerToken do
-        @api.artefact("devolution-uk", 3)
+        @api.artefact("devolution-uk", edition: 3)
       end
     end
   end
@@ -80,7 +80,7 @@ describe GdsApi::ContentApi do
           }
         }
       })
-      response = @api.artefact_with_snac_code('licence-example', '1234')
+      response = @api.artefact('licence-example', snac: '1234')
 
       assert_equal "Licence Example", response["title"]
       assert_equal [ "England", "Wales" ], response["details"]["licence"]["availability"]
@@ -92,9 +92,20 @@ describe GdsApi::ContentApi do
                   :body => {"test" => "ing"}.to_json,
                   :headers => {})
 
-      @api.artefact_with_snac_code("licence-example","snacks!")
+      @api.artefact("licence-example", snac: "snacks!")
 
       assert_requested :get, "#{@base_api_url}/licence-example.json?snac=snacks%21"
+    end
+
+    it "should return an unpublished artefact with a snac code" do
+      body = artefact_for_slug('licence-example')
+      url = "#{CONTENT_API_ENDPOINT}/licence-example.json?snac=1234&edition=1"
+      stub_request(:get, url).to_return(status: 200, body: body.to_json)
+
+      api = GdsApi::ContentApi.new('test', { bearer_token: 'MY_BEARER_TOKEN' })
+      response = api.artefact('licence-example', snac: '1234', edition: '1')
+
+      assert_equal "Licence example", response["title"]
     end
   end
 

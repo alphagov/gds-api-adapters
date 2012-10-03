@@ -32,20 +32,20 @@ class GdsApi::ContentApi < GdsApi::Base
     get_json!("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&sort=#{sort_by}")
   end
 
-  def artefact(slug, edition=nil)
+  def artefact(slug, params={})
+    edition = params[:edition]
+    snac = params[:snac]
+
     url = "#{base_url}/#{slug}.json"
-    if edition
-      if options.include?(:bearer_token)
-        url += "?edition=#{edition}"
-      else
-        raise GdsApi::NoBearerToken
-      end
+    query = params.map { |k,v| "#{k}=#{v}" }
+    if query.any?
+      url += "?#{query.join("&")}"
+    end
+
+    if edition && ! options.include?(:bearer_token)
+      raise GdsApi::NoBearerToken
     end
     get_json(url)
-  end
-
-  def artefact_with_snac_code(slug, snac)
-    get_json("#{base_url}/#{slug}.json?snac=#{CGI.escape(snac)}")
   end
 
   def local_authority(snac_code)
