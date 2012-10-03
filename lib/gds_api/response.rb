@@ -13,6 +13,10 @@ module GdsApi
       @net_http_response = net_http_response
     end
 
+    def raw_response_body
+      @net_http_response.body
+    end
+
     def to_hash
       @parsed ||= JSON.parse(@net_http_response.body)
     end
