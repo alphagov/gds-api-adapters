@@ -95,6 +95,17 @@ module GdsApi
         stub_request(:get, url).to_return(status: 404, body: body.to_json, headers: {})
       end
 
+      def content_api_has_an_archived_artefact(slug)
+        body = {
+          "_response_info" => {
+            "status" => "gone",
+            "status_message" => "This item is no longer available"
+          }
+        }
+        url = "#{CONTENT_API_ENDPOINT}/#{slug}.json"
+        stub_request(:get, url).to_return(status: 410, body: body.to_json, headers: {})
+      end
+
       def stub_content_api_default_artefact
         stub_request(:get, %r{\A#{CONTENT_API_ENDPOINT}/[a-z0-9-]+\.json}).to_return { |request|
           slug = request.uri.path.split('/').last.chomp('.json')
