@@ -38,12 +38,6 @@ class GdsApi::Publisher < GdsApi::Base
     json.to_hash if json
   end
 
-  def licences_for_ids(ids)
-    ids = ids.map(&:to_s).sort.join(',')
-    response = get_json("#{@endpoint}/licences.json?ids=#{ids}")
-    response.to_ostruct if response
-  end
-
 private
   def convert_updated_date(container)
     if container.updated_at && container.updated_at.class == String

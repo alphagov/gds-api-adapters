@@ -228,6 +228,23 @@ module GdsApi
         @stubbed_content_api_business_support_schemes << scheme
       end
 
+      def setup_content_api_licences_stubs
+        @stubbed_content_api_licences = []
+        stub_request(:get, %r{\A#{CONTENT_API_ENDPOINT}/licences}).to_return do |request|
+          if request.uri.query_values and request.uri.query_values["ids"]
+            ids = request.uri.query_values["ids"].split(',')
+            {:body => @stubbed_content_api_licences.select {|l| ids.include? l[:licence_identifier] }.to_json}
+          else
+            {:body => [].to_json}
+          end
+        end
+      end
+
+      def content_api_has_licence(details)
+        raise "Need a licence identifier" if details[:licence_identifier].nil?
+        @stubbed_content_api_licences << details
+      end
+
       private
 
         def titleize_slug(slug)
