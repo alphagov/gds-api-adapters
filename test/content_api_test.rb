@@ -99,7 +99,7 @@ describe GdsApi::ContentApi do
 
     it "should return an unpublished artefact with a snac code" do
       body = artefact_for_slug('licence-example')
-      url = "#{CONTENT_API_ENDPOINT}/licence-example.json?snac=1234&edition=1"
+      url = "#{@base_api_url}/licence-example.json?snac=1234&edition=1"
       stub_request(:get, url).to_return(status: 200, body: body.to_json)
 
       api = GdsApi::ContentApi.new('test', { bearer_token: 'MY_BEARER_TOKEN' })
@@ -354,6 +354,42 @@ describe GdsApi::ContentApi do
 
         assert_equal 2, response["total"]
         assert_equal [s1, s3], response["results"]
+      end
+    end
+  end
+
+  describe "getting licence details" do
+    it "should get licence details" do
+      setup_content_api_licences_stubs
+
+      content_api_has_licence :licence_identifier => "1234", :title => 'Test Licence 1', :slug => 'test-licence-1',
+        :licence_short_description => 'A short description'
+      content_api_has_licence :licence_identifier => "1235", :title => 'Test Licence 2', :slug => 'test-licence-2',
+        :licence_short_description => 'A short description'
+      content_api_has_licence :licence_identifier => "AB1234", :title => 'Test Licence 3', :slug => 'test-licence-3',
+        :licence_short_description => 'A short description'
+
+      results = @api.licences_for_ids([1234, 'AB1234', 'something']).to_ostruct.results
+      assert_equal 2, results.size
+      assert_equal ['1234', 'AB1234'], results.map { |r| r.details.licence_identifier }
+      assert_equal ['Test Licence 1', 'Test Licence 3'], results.map(&:title).sort
+      assert_equal ['http://www.test.gov.uk/test-licence-1', 'http://www.test.gov.uk/test-licence-3'], results.map(&:web_url).sort
+      assert_equal 'A short description', results[0].details.licence_short_description
+      assert_equal 'A short description', results[1].details.licence_short_description
+    end
+
+    it "should return empty array with no licences" do
+      setup_content_api_licences_stubs
+
+      assert_equal [], @api.licences_for_ids([123,124]).to_ostruct.results
+    end
+
+    it "should raise an error if publisher returns an error" do
+      stub_request(:get, %r[\A#{@base_api_url}/licences]).
+        to_return(:status => [503, "Service temporarily unabailable"])
+
+      assert_raises GdsApi::HTTPErrorResponse do
+        @api.licences_for_ids([123,124])
       end
     end
   end
