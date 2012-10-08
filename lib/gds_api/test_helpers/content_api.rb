@@ -228,6 +228,60 @@ module GdsApi
         @stubbed_content_api_business_support_schemes << scheme
       end
 
+      def content_api_licence_hash(licence_identifier, options = {})
+        details = {
+          title: "Publisher title",
+          slug: 'licence-slug',
+          licence_short_description: "Short description of licence"
+        }
+        details.merge!(options)
+
+        {
+          "title" => details[:title],
+          "id" => "http://example.org/#{details[:slug]}.json",
+          "web_url" =>  "http://www.test.gov.uk/#{details[:slug]}",
+          "format" => "licence",
+          "details" => {
+            "need_id" => nil,
+            "business_proposition" => false,
+            "alternative_title" => nil,
+            "overview" => nil,
+            "will_continue_on" => nil,
+            "continuation_link" => nil,
+            "licence_identifier" => licence_identifier,
+            "licence_short_description" => details[:licence_short_description],
+            "licence_overview" => nil,
+            "updated_at" => "2012-10-06T12:00:05+01:00"
+          },
+          "tags" => [],
+          "related" => []
+        }
+      end
+
+      def setup_content_api_licences_stubs
+        @stubbed_content_api_licences = []
+        stub_request(:get, %r{\A#{CONTENT_API_ENDPOINT}/licences}).to_return do |request|
+          if request.uri.query_values and request.uri.query_values["ids"]
+            ids = request.uri.query_values["ids"].split(',')
+            valid_licences = @stubbed_content_api_licences.select { |l| ids.include? l[:licence_identifier] }
+            {
+              :body => {
+                'results' => valid_licences.map { |licence| 
+                  content_api_licence_hash(licence[:licence_identifier], licence)
+                }
+              }.to_json
+            }
+          else
+            {:body => {'results' => []}.to_json}
+          end
+        end
+      end
+
+      def content_api_has_licence(details)
+        raise "Need a licence identifier" if details[:licence_identifier].nil?
+        @stubbed_content_api_licences << details
+      end
+
       private
 
         def titleize_slug(slug)
