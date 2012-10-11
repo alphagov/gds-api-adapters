@@ -10,7 +10,7 @@ module GdsApi
         body = plural_response_base.merge(
           "results" => slugs.map do |slug|
             {
-              "id" => "http://contentapi.test.gov.uk/tags/#{CGI.escape(slug)}.json",
+              "id" => "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(slug)}.json",
               "web_url" => nil,
               "title" => titleize_slug(slug),
               "details" => {
@@ -19,7 +19,7 @@ module GdsApi
               },
               "parent" => nil,
               "content_with_tag" => {
-                "id" => "http://contentapi.test.gov.uk/with_tag.json?tag=#{CGI.escape(slug)}",
+                "id" => "#{CONTENT_API_ENDPOINT}/with_tag.json?tag=#{CGI.escape(slug)}",
                 "web_url" => "http://www.test.gov.uk/browse/#{slug}"
               }
             }
@@ -42,8 +42,11 @@ module GdsApi
             artefact_for_slug(artefact_slug)
           end
         )
-        url = "https://contentapi.test.alphagov.co.uk/with_tag.json?sort=alphabetical&tag=#{CGI.escape(slug)}"
-        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+        sort_orders = ["alphabetical", "curated"]
+        sort_orders.each do |order|
+          url = "#{CONTENT_API_ENDPOINT}/with_tag.json?sort=#{order}&tag=#{CGI.escape(slug)}"
+          stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+        end
       end
 
       def content_api_has_subsections(parent_slug, subsection_slugs)
@@ -51,7 +54,7 @@ module GdsApi
         body = plural_response_base.merge(
           "results" => subsection_slugs.map do |slug|
             {
-              "id" => "http://contentapi.test.gov.uk/tags/#{CGI.escape(slug)}.json",
+              "id" => "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(slug)}.json",
               "web_url" => nil,
               "title" => titleize_slug(slug),
               "details" => {
@@ -60,7 +63,7 @@ module GdsApi
               },
               "parent" => parent_section,
               "content_with_tag" => {
-                "id" => "http://contentapi.test.gov.uk/with_tag.json?tag=#{CGI.escape(slug)}",
+                "id" => "#{CONTENT_API_ENDPOINT}/with_tag.json?tag=#{CGI.escape(slug)}",
                 "web_url" => "http://www.test.gov.uk/browse/#{slug}"
               }
             }
@@ -117,7 +120,7 @@ module GdsApi
         singular_response_base.merge(
           "title" => titleize_slug(slug),
           "format" => "guide",
-          "id" => "http://contentapi.test.gov.uk/#{slug}.json",
+          "id" => "#{CONTENT_API_ENDPOINT}/#{slug}.json",
           "web_url" => "http://frontend.test.gov.uk/#{slug}",
           "details" => {
             "need_id" => "1234",
@@ -184,7 +187,7 @@ module GdsApi
         artefact["related"] = related_artefact_slugs.map do |related_slug|
           {
             "title" => titleize_slug(related_slug),
-            "id" => "https://contentapi.test.alphagov.co.uk/#{CGI.escape(related_slug)}.json",
+            "id" => "#{CONTENT_API_ENDPOINT}/#{CGI.escape(related_slug)}.json",
             "web_url" => "https://www.test.gov.uk/#{related_slug}",
             "details" => {}
           }
@@ -198,12 +201,12 @@ module GdsApi
         end
         {
           "title" => titleize_slug(slug.split('/').last),
-          "id" => "https://contentapi.test.alphagov.co.uk/tags/#{CGI.escape(slug)}.json",
+          "id" => "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(slug)}.json",
           "details" => {
             "type" => tag_type
           },
           "content_with_tag" => {
-            "id" => "https://contentapi.test.alphagov.co.uk/with_tag.json?tag=#{CGI.escape(slug)}",
+            "id" => "#{CONTENT_API_ENDPOINT}/with_tag.json?tag=#{CGI.escape(slug)}",
             "web_url" => "https://www.test.gov.uk/browse/#{slug}",
           },
           "parent" => parent
