@@ -15,7 +15,7 @@ describe GdsApi::ContentApi do
       content_api_has_root_sections(["crime"])
       response = @api.sections
       first_section = response["results"][0]
-      assert_equal "http://contentapi.test.gov.uk/tags/crime.json", first_section["id"]
+      assert_equal "https://contentapi.test.alphagov.co.uk/tags/crime.json", first_section["id"]
     end
   end
 
@@ -23,14 +23,14 @@ describe GdsApi::ContentApi do
     it "should show the artefact" do
       content_api_has_an_artefact("devolution-uk")
       response = @api.artefact("devolution-uk")
-      assert_equal "http://contentapi.test.gov.uk/devolution-uk.json", response["id"]
+      assert_equal "https://contentapi.test.alphagov.co.uk/devolution-uk.json", response["id"]
     end
 
     it "should be able to fetch unpublished editions when authenticated" do
       api = GdsApi::ContentApi.new('test', { bearer_token: 'MY_BEARER_TOKEN' })
       content_api_has_unpublished_artefact("devolution-uk", 3)
       response = api.artefact("devolution-uk", edition: 3)
-      assert_equal "http://contentapi.test.gov.uk/devolution-uk.json", response["id"]
+      assert_equal "https://contentapi.test.alphagov.co.uk/devolution-uk.json", response["id"]
     end
 
     it "should raise an exception if no bearer token is used when fetching unpublished editions" do
