@@ -42,8 +42,11 @@ module GdsApi
             artefact_for_slug(artefact_slug)
           end
         )
-        url = "https://contentapi.test.alphagov.co.uk/with_tag.json?sort=alphabetical&tag=#{CGI.escape(slug)}"
-        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+        sort_orders = ["alphabetical", "curated"]
+        sort_orders.each do |order|
+          url = "#{CONTENT_API_ENDPOINT}/with_tag.json?sort=#{order}&tag=#{CGI.escape(slug)}"
+          stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+        end
       end
 
       def content_api_has_subsections(parent_slug, subsection_slugs)
