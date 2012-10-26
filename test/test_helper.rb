@@ -2,11 +2,11 @@ require 'bundler'
 Bundler.setup :default, :development, :test
 
 require 'minitest/autorun'
-require 'webmock/minitest'
 require 'rack/utils'
 require 'simplecov'
 require 'simplecov-rcov'
 require 'mocha'
+require 'timecop'
 
 SimpleCov.start do
   add_filter "/test/"
@@ -14,4 +14,11 @@ SimpleCov.start do
   formatter SimpleCov::Formatter::RcovFormatter
 end
 
+class MiniTest::Unit::TestCase
+  def teardown
+    Timecop.return
+  end
+end
+
+require 'webmock/minitest'
 WebMock.disable_net_connect!

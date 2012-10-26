@@ -11,6 +11,7 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def teardown
+    super
     GdsApi::JsonClient.cache = @json_client_cache
   end
 
@@ -57,12 +58,112 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_should_cache_multiple_requests_to_same_url_across_instances
+    GdsApi::JsonClient.cache = nil # clear the stubbed cache instance
+
     url = "http://some.endpoint/some.json"
     result = {"foo" => "bar"}
-    stub_request(:get, url).to_return(:body => JSON.dump(result), :status => 200).times(1)
+    stub_request(:get, url).to_return(:body => JSON.dump(result), :status => 200)
     response_a = GdsApi::JsonClient.new.get_json(url)
     response_b = GdsApi::JsonClient.new.get_json(url)
     assert_equal response_a.object_id, response_b.object_id
+    assert_requested :get, url, times: 1
+  end
+
+  def test_should_cache_up_to_10_items_by_default
+    GdsApi::JsonClient.cache = nil # clear the stubbed cache instance
+
+    url = "http://some.endpoint/"
+    result = {"foo" => "bar"}
+    stub_request(:get, %r{\A#{url}}).to_return do |request|
+      {:body => {"url" => request.uri}.to_json, :status => 200}
+    end
+
+    response_a = GdsApi::JsonClient.new.get_json("#{url}/first.json")
+    response_b = GdsApi::JsonClient.new.get_json("#{url}/second.json")
+    9.times { |n| GdsApi::JsonClient.new.get_json("#{url}/#{n}.json") }
+
+    response_c = GdsApi::JsonClient.new.get_json("#{url}/second.json")
+    response_d = GdsApi::JsonClient.new.get_json("#{url}/first.json")
+
+    assert_requested :get, "#{url}/second.json", times: 1
+    assert_requested :get, "#{url}/first.json", times: 2
+    assert_equal response_b.to_hash, response_c.to_hash
+    assert_equal response_a.to_hash, response_d.to_hash
+  end
+
+  def test_allow_overriding_the_number_of_cached_items
+    GdsApi::JsonClient.cache = nil # clear the stubbed cache instance
+
+    url = "http://some.endpoint/"
+    result = {"foo" => "bar"}
+    stub_request(:get, %r{\A#{url}}).to_return do |request|
+      {:body => {"url" => request.uri}.to_json, :status => 200}
+    end
+
+    response_a = GdsApi::JsonClient.new(:cache_size => 5).get_json("#{url}/first.json")
+    response_b = GdsApi::JsonClient.new.get_json("#{url}/second.json")
+    4.times { |n| GdsApi::JsonClient.new.get_json("#{url}/#{n}.json") }
+
+    response_c = GdsApi::JsonClient.new.get_json("#{url}/second.json")
+    response_d = GdsApi::JsonClient.new.get_json("#{url}/first.json")
+
+    assert_requested :get, "#{url}/second.json", times: 1
+    assert_requested :get, "#{url}/first.json", times: 2
+    assert_equal response_b.to_hash, response_c.to_hash
+    assert_equal response_a.to_hash, response_d.to_hash
+  end
+  def test_should_cache_requests_for_15_mins_by_default
+    GdsApi::JsonClient.cache = nil # cause it to contruct a new cache instance.
+
+    url = "http://some.endpoint/some.json"
+    result = {"foo" => "bar"}
+    stub_request(:get, url).to_return(:body => JSON.dump(result), :status => 200)#.times(1)
+    response_a = GdsApi::JsonClient.new.get_json(url)
+    response_b = GdsApi::JsonClient.new.get_json(url)
+
+    assert_requested :get, url, times: 1
+    assert_equal response_a.object_id, response_b.object_id
+
+    Timecop.travel( 15 * 60 - 30) do # now + 14 mins 30 secs
+      response_c = GdsApi::JsonClient.new.get_json(url)
+
+      assert_requested :get, url, times: 1
+      assert_same response_a, response_c
+    end
+
+    Timecop.travel( 15 * 60 + 30) do # now + 15 mins 30 secs
+      response_d = GdsApi::JsonClient.new.get_json(url)
+
+      assert_requested :get, url, times: 2
+      assert_equal response_a.to_hash, response_d.to_hash
+    end
+  end
+
+  def test_should_allow_overriding_cache_ttl
+    GdsApi::JsonClient.cache = nil # cause it to contruct a new cache instance.
+
+    url = "http://some.endpoint/some.json"
+    result = {"foo" => "bar"}
+    stub_request(:get, url).to_return(:body => JSON.dump(result), :status => 200)#.times(1)
+    response_a = GdsApi::JsonClient.new(:cache_ttl => 5 * 60).get_json(url)
+    response_b = GdsApi::JsonClient.new.get_json(url)
+
+    assert_requested :get, url, times: 1
+    assert_equal response_a.object_id, response_b.object_id
+
+    Timecop.travel( 5 * 60 - 30) do # now + 4 mins 30 secs
+      response_c = GdsApi::JsonClient.new.get_json(url)
+
+      assert_requested :get, url, times: 1
+      assert_same response_a, response_c
+    end
+
+    Timecop.travel( 5 * 60 + 30) do # now + 5 mins 30 secs
+      response_d = GdsApi::JsonClient.new.get_json(url)
+
+      assert_requested :get, url, times: 2
+      assert_equal response_a.to_hash, response_d.to_hash
+    end
   end
 
   def test_should_raise_http_not_found_if_404_returned_from_endpoint
