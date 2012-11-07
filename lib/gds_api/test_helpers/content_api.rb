@@ -6,21 +6,25 @@ module GdsApi
     module ContentApi
       CONTENT_API_ENDPOINT = 'https://contentapi.test.alphagov.co.uk'
 
-      def content_api_has_root_sections(slugs)
+      # Takes an array of slugs, or hashes with section details (including a slug).
+      # Will stub out content_api calls for tags of type section to return these sections
+      def content_api_has_root_sections(slugs_or_sections)
+        sections = slugs_or_sections.map {|s| s.is_a?(Hash) ? s : {:slug => s} }
         body = plural_response_base.merge(
-          "results" => slugs.map do |slug|
+          "results" => sections.map do |section|
             {
-              "id" => "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(slug)}.json",
+              "id" => "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(section[:slug])}.json",
               "web_url" => nil,
-              "title" => titleize_slug(slug),
+              "title" => section[:title] || titleize_slug(section[:slug]),
               "details" => {
                 "type" => "section",
-                "description" => "#{slug} description"
+                "description" => section[:description] || "#{section[:slug]} description",
+                "short_description" => section[:short_description] || "#{section[:slug]} short description",
               },
               "parent" => nil,
               "content_with_tag" => {
-                "id" => "#{CONTENT_API_ENDPOINT}/with_tag.json?tag=#{CGI.escape(slug)}",
-                "web_url" => "http://www.test.gov.uk/browse/#{slug}"
+                "id" => "#{CONTENT_API_ENDPOINT}/with_tag.json?tag=#{CGI.escape(section[:slug])}",
+                "web_url" => "http://www.test.gov.uk/browse/#{section[:slug]}"
               }
             }
           end
