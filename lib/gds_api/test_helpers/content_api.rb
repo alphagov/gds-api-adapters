@@ -6,6 +6,8 @@ module GdsApi
     module ContentApi
       CONTENT_API_ENDPOINT = 'https://contentapi.test.alphagov.co.uk'
 
+      # Takes an array of slugs, or hashes with section details (including a slug).
+      # Will stub out content_api calls for tags of type section to return these sections
       def content_api_has_root_sections(slugs_or_sections)
         sections = slugs_or_sections.map {|s| s.is_a?(Hash) ? s : {:slug => s} }
         body = plural_response_base.merge(
