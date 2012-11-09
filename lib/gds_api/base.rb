@@ -1,6 +1,8 @@
 require_relative 'json_client'
+require_relative 'core-ext/hash'
 require 'cgi'
 require 'null_logger'
+require 'yaml'
 
 class GdsApi::Base
   extend Forwardable
@@ -24,6 +26,18 @@ class GdsApi::Base
   class << self
     attr_writer :logger
     attr_accessor :default_options
+
+    def platform_override_options(adapter)
+      @platform_override_options ||= load_platform_override_config
+      @platform_override_options[adapter.to_sym] || { }
+    end
+
+    def load_platform_override_config
+      return { } if ENV['PLATFORM_OVERRIDE_CONFIG'].nil? or ENV['PLATFORM_OVERRIDE_CONFIG'].empty?
+
+      config_file = File.expand_path(ENV['PLATFORM_OVERRIDE_CONFIG'], File.dirname(__FILE__))
+      YAML.load(File.read(config_file)).symbolize_keys || { }
+    end
   end
 
   def self.logger
@@ -38,8 +52,10 @@ class GdsApi::Base
       options = options_or_endpoint_url || {}
     end
     default_options = GdsApi::Base.default_options || {}
-    @options = default_options.merge(options)
-    self.endpoint = options[:endpoint_url] || endpoint_for_platform(adapter_name, platform)
+    options_with_defaults = default_options.merge(options)
+    @options = options_with_defaults.merge(GdsApi::Base.platform_override_options(adapter_name))
+
+    self.endpoint = @options[:endpoint_url] || endpoint_for_platform(adapter_name, platform)
   end
 
   def adapter_name
