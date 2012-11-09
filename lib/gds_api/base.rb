@@ -78,7 +78,6 @@ private
     end
   end
 
-
   def query_string(params)
     return "" if params.empty?
 
