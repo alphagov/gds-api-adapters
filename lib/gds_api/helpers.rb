@@ -19,7 +19,8 @@ module GdsApi
     end
 
     def licence_application_api
-      @licence_application_api ||= GdsApi::LicenceApplication.new(Plek.current.environment)
+      options = (ENV['LICENCE_USER'] and ENV['LICENCE_PASSWORD']) ? { basic_auth: { user: ENV['LICENCE_USER'], password: ENV['LICENCE_PASSWORD'] }} : { }
+      @licence_application_api ||= GdsApi::LicenceApplication.new(ENV["LICENCE_ENV"] || Plek.current.environment, options)
     end
 
     def panopticon_api
