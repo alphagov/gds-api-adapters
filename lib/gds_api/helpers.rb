@@ -16,6 +16,7 @@ module GdsApi
 
     def imminence_api
       @imminence_api ||= GdsApi::Imminence.new(Plek.current.find("imminence"))
+    end
 
     def licence_application_api
       @licence_application_api ||= GdsApi::LicenceApplication.new(Plek.current.find("licensify"))
