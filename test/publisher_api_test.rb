@@ -52,7 +52,7 @@ describe GdsApi::Publisher do
   end
 
   def api
-    GdsApi::Publisher.new("test")
+    GdsApi::Publisher.new(PUBLISHER_ENDPOINT)
   end
 
   it "should go get resource from publisher app given a slug" do

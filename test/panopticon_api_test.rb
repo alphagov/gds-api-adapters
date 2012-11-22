@@ -35,7 +35,7 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
   end
 
   def api
-    GdsApi::Panopticon.new('test')
+    GdsApi::Panopticon.new(PANOPTICON_ENDPOINT)
   end
 
   def test_given_a_slug__should_fetch_artefact_from_panopticon
@@ -106,7 +106,7 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
 
   def test_can_use_basic_auth
     credentials = {user: 'fred', password: 'secret'}
-    api = GdsApi::Panopticon.new('test', endpoint_url: 'http://some.url', basic_auth: credentials)
+    api = GdsApi::Panopticon.new('http://some.url', basic_auth: credentials)
     url = "http://#{credentials[:user]}:#{credentials[:password]}@some.url/artefacts/1.json"
     stub_request(:put, url)
       .to_return(status: 200, body: '{}')
@@ -115,7 +115,7 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
   end
 
   def test_can_register_new_artefacts_en_masse
-    r = GdsApi::Panopticon::Registerer.new(platform: "test", owning_app: 'my-app')
+    r = GdsApi::Panopticon::Registerer.new(endpoint_url: PANOPTICON_ENDPOINT, owning_app: 'my-app')
     artefact = registerable_artefact()
     panopticon_has_no_metadata_for('foo')
 
@@ -134,38 +134,13 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
 
   def test_can_register_existing_artefacts_en_masse
     artefact = registerable_artefact()
-    r = GdsApi::Panopticon::Registerer.new(platform: "test", owning_app: 'my-app')
+    r = GdsApi::Panopticon::Registerer.new(endpoint_url: PANOPTICON_ENDPOINT, owning_app: 'my-app')
 
     panopticon_has_metadata(artefact)
     url = "#{PANOPTICON_ENDPOINT}/artefacts/foo.json"
     stub_request(:put, url)
       .with(body: artefact.to_json)
       .to_return(status: 200, body: '{}')
-
-    record = OpenStruct.new(artefact.merge(title: artefact[:name]))
-    r.register(record)
-  end
-
-  def test_registerer_should_use_plek_env_by_default
-    # Plek.current returns a different object each time it's called.
-    plek_current = Plek.current
-    plek_current.stubs(:environment).returns("foo")
-    Plek.stubs(:current).returns(plek_current)
-
-    expected_endpoint = PANOPTICON_ENDPOINT.sub(/\.test\./, '.foo.')
-
-    r = GdsApi::Panopticon::Registerer.new(owning_app: 'my-app')
-    artefact = registerable_artefact()
-    panopticon_has_no_metadata_for('foo')
-
-    stub_request(:put, "#{expected_endpoint}/artefacts/foo.json")
-      .with(body: artefact.to_json)
-      .to_return(body: artefact.merge(id: 1).to_json)
-
-    url = "#{expected_endpoint}/artefacts.json"
-    stub_request(:post, url)
-      .with(body: artefact.to_json)
-      .to_return(body: artefact.merge(id: 1).to_json)
 
     record = OpenStruct.new(artefact.merge(title: artefact[:name]))
     r.register(record)
