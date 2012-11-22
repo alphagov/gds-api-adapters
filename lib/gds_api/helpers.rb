@@ -7,23 +7,22 @@ require 'gds_api/licence_application'
 module GdsApi
   module Helpers
     def content_api
-      @content_api ||= GdsApi::ContentApi.new(Plek.current.environment)
+      @content_api ||= GdsApi::ContentApi.new(Plek.current.find("contentapi"))
     end
 
     def publisher_api
-      @api ||= GdsApi::Publisher.new(Plek.current.environment)
+      @api ||= GdsApi::Publisher.new(Plek.current.find("publisher"))
     end
 
     def imminence_api
-      @imminence_api ||= GdsApi::Imminence.new(Plek.current.environment)
-    end
+      @imminence_api ||= GdsApi::Imminence.new(Plek.current.find("imminence"))
 
     def licence_application_api
-      @licence_application_api ||= GdsApi::LicenceApplication.new(Plek.current.environment)
+      @licence_application_api ||= GdsApi::LicenceApplication.new(Plek.current.find("licensify"))
     end
 
     def panopticon_api
-      @panopticon_api ||= GdsApi::Panopticon.new(Plek.current.environment, panopticon_api_credentials)
+      @panopticon_api ||= GdsApi::Panopticon.new(Plek.current.find("panopticon"), panopticon_api_credentials)
     end
 
     def panopticon_api_credentials
