@@ -32,17 +32,16 @@ module GdsApi
 
         # Nothing is stubbed until this is called
         def stub
-          stub_request(:get, url).to_return(status: @response_status, body: @response_body.to_json)
+          comparable_query_params = @query_parameters.each_with_object({}) { |(k,v),hash| hash[k.to_s] = v.nil? ? v : v.to_s }
+          stub_request(:get, url_without_query)
+              .with(query: hash_including(comparable_query_params))
+              .to_return(status: @response_status, body: @response_body.to_json)
         end
         
-        def url
-          result = "#{CONTENT_API_ENDPOINT}/#{slug}.json"
-          if @query_parameters.any?
-            params = @query_parameters.map { |k, v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}" }.join("&")
-            result += "?#{params}"
+        private
+          def url_without_query
+            "#{CONTENT_API_ENDPOINT}/#{slug}.json"
           end
-          result
-        end
       end
     end
   end
