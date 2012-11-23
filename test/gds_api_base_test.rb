@@ -56,5 +56,9 @@ class GdsApiBaseTest < MiniTest::Unit::TestCase
     assert_equal 4, api.client.cache.max_size
   end
 
-
+  def test_should_barf_if_not_given_valid_URL
+    proc do
+      ConcreteApi.new('invalid-url')
+    end.must_raise InvalidAPIURL
+  end
 end
