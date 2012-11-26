@@ -6,7 +6,7 @@ describe GdsApi::ContentApi do
   include GdsApi::TestHelpers::ContentApi
 
   before do
-    @base_api_url = "https://contentapi.test.alphagov.co.uk"
+    @base_api_url = Plek.current.find("contentapi")
     @api = GdsApi::ContentApi.new(@base_api_url)
   end
 
@@ -15,7 +15,7 @@ describe GdsApi::ContentApi do
       content_api_has_root_sections(["crime"])
       response = @api.sections
       first_section = response["results"][0]
-      assert_equal "https://contentapi.test.alphagov.co.uk/tags/crime.json", first_section["id"]
+      assert_equal "#{@base_api_url}/tags/crime.json", first_section["id"]
     end
   end
 
@@ -23,14 +23,14 @@ describe GdsApi::ContentApi do
     it "should show the artefact" do
       content_api_has_an_artefact("devolution-uk")
       response = @api.artefact("devolution-uk")
-      assert_equal "https://contentapi.test.alphagov.co.uk/devolution-uk.json", response["id"]
+      assert_equal "#{@base_api_url}/devolution-uk.json", response["id"]
     end
 
     it "should be able to fetch unpublished editions when authenticated" do
       api = GdsApi::ContentApi.new(@base_api_url, { bearer_token: 'MY_BEARER_TOKEN' })
       content_api_has_unpublished_artefact("devolution-uk", 3)
       response = api.artefact("devolution-uk", edition: 3)
-      assert_equal "https://contentapi.test.alphagov.co.uk/devolution-uk.json", response["id"]
+      assert_equal "#{@base_api_url}/devolution-uk.json", response["id"]
     end
 
     it "should raise an exception if no bearer token is used when fetching unpublished editions" do
@@ -304,19 +304,19 @@ describe GdsApi::ContentApi do
 
         assert_requested :get, %r{\A#{@base_api_url}/business_support_schemes\.json}, :times => 2
 
-        first_batch = ids[0..190]
+        first_batch = ids[0..191]
         assert_requested :get, "#{@base_api_url}/business_support_schemes.json?identifiers=#{first_batch.join(',')}"
-        second_batch = ids[191..299]
+        second_batch = ids[192..299]
         assert_requested :get, "#{@base_api_url}/business_support_schemes.json?identifiers=#{second_batch.join(',')}"
       end
 
       it "should merge the responses into a single GdsApi::Response" do
         ids = (1..300).map {|n| sprintf "%09d", n } # each id is 9 chars long
-        first_batch = ids[0..190]
+        first_batch = ids[0..191]
         stub_request(:get, "#{@base_api_url}/business_support_schemes.json").
           with(:query => {"identifiers" => first_batch.join(',')}).
           to_return(:status => 200, :body => api_response_for_results(first_batch).to_json) # We're stubbing response that just return the requested ids
-        second_batch = ids[191..299]
+        second_batch = ids[192..299]
         stub_request(:get, "#{@base_api_url}/business_support_schemes.json").
           with(:query => {"identifiers" => second_batch.join(',')}).
           to_return(:status => 200, :body => api_response_for_results(second_batch).to_json)

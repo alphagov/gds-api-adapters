@@ -1,6 +1,7 @@
 require_relative 'json_client'
 require 'cgi'
 require 'null_logger'
+require 'plek'
 
 class GdsApi::Base
   class InvalidAPIURL < StandardError
