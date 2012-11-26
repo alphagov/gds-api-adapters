@@ -32,7 +32,6 @@ module GdsApi
 
         # Nothing is stubbed until this is called
         def stub
-          comparable_query_params = @query_parameters.each_with_object({}) { |(k,v),hash| hash[k.to_s] = v.nil? ? v : v.to_s }
           stub_request(:get, url_without_query)
               .with(query: hash_including(comparable_query_params))
               .to_return(status: @response_status, body: @response_body.to_json)
@@ -41,6 +40,14 @@ module GdsApi
         private
           def url_without_query
             "#{CONTENT_API_ENDPOINT}/#{slug}.json"
+          end
+
+          # Ensure that all keys and values are strings 
+          # because Webmock doesn't handle symbols
+          def comparable_query_params
+            @query_parameters.each_with_object({}) do |(k,v),hash| 
+              hash[k.to_s] = v.nil? ? v : v.to_s
+            end
           end
       end
     end
