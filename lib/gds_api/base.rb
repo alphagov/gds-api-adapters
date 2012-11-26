@@ -2,10 +2,10 @@ require_relative 'json_client'
 require 'cgi'
 require 'null_logger'
 
-class InvalidAPIURL < StandardError
-end
-
 class GdsApi::Base
+  class InvalidAPIURL < StandardError
+  end
+
   extend Forwardable
 
   def client

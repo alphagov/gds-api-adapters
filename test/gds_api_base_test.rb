@@ -59,6 +59,6 @@ class GdsApiBaseTest < MiniTest::Unit::TestCase
   def test_should_barf_if_not_given_valid_URL
     proc do
       ConcreteApi.new('invalid-url')
-    end.must_raise InvalidAPIURL
+    end.must_raise GdsApi::Base::InvalidAPIURL
   end
 end
