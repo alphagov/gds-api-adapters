@@ -3,7 +3,7 @@ require 'gds_api/test_helpers/json_client_helper'
 module GdsApi
   module TestHelpers
     module Publisher
-      PUBLISHER_ENDPOINT = "https://publisher.test.alphagov.co.uk"
+      PUBLISHER_ENDPOINT = Plek.current.find("publisher")
 
       def publication_exists(details, options = {})
         json = JSON.dump(details)
