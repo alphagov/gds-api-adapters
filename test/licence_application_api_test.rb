@@ -10,7 +10,7 @@ class LicenceApplicationApiTest < MiniTest::Unit::TestCase
   end
 
   def api
-    GdsApi::LicenceApplication.new "test"
+    GdsApi::LicenceApplication.new LICENCE_APPLICATION_ENDPOINT
   end
 
   def test_should_not_be_nil

@@ -7,18 +7,18 @@ describe GdsApi::Panopticon::Registerer do
   describe "creating an instance of the panopticon client" do
     describe "setting the platform" do
       it "should create an instance using the current Plek environment as the platform by default" do
-        Plek.stubs(:current).returns(stub(environment: "Something"))
+        Plek.stubs(:current).returns(stub(find: "http://thisplace"))
 
-        GdsApi::Panopticon.expects(:new).with("Something", anything()).returns(:panopticon_instance)
+        GdsApi::Panopticon.expects(:new).with("http://thisplace", anything()).returns(:panopticon_instance)
         r = GdsApi::Panopticon::Registerer.new({})
         assert_equal :panopticon_instance, r.send(:panopticon)
       end
 
-      it "should allow overriding the platform" do
-        Plek.stubs(:current).returns(stub(environment: "Something"))
+      it "should pass through the endpoint url" do
+        Plek.stubs(:current).returns(stub(find: "http://thisplace"))
 
-        GdsApi::Panopticon.expects(:new).with("Something_else", anything()).returns(:panopticon_instance)
-        r = GdsApi::Panopticon::Registerer.new({platform: "Something_else"})
+        GdsApi::Panopticon.expects(:new).with("http://otherplace", anything()).returns(:panopticon_instance)
+        r = GdsApi::Panopticon::Registerer.new({endpoint_url: "http://otherplace"})
         assert_equal :panopticon_instance, r.send(:panopticon)
       end
     end

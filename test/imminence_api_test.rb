@@ -8,7 +8,7 @@ class ImminenceApiTest < MiniTest::Unit::TestCase
   LONGITUDE = -0.4702813074674147
 
   def api_client
-    GdsApi::Imminence.new('test')
+    GdsApi::Imminence.new(ROOT)
   end
 
   def dummy_place
