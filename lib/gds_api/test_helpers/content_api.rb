@@ -5,7 +5,7 @@ require_relative 'content_api/artefact_stub'
 module GdsApi
   module TestHelpers
     module ContentApi
-      # Generally this will be true. If you are initializing the client differently,
+      # Generally true. If you are initializing the client differently,
       # you could redefine/override the constant or stub directly.
       CONTENT_API_ENDPOINT = Plek.current.find('contentapi')
 
