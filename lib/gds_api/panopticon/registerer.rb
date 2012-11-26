@@ -11,7 +11,7 @@ module GdsApi
         @rendering_app = options[:rendering_app]
         @kind = options[:kind] || 'custom-application'
         @panopticon = options[:panopticon]
-        @platform = options[:platform] || Plek.current.environment
+        @endpoint_url = options[:endpoint_url] || Plek.current.find("panopticon")
         @timeout = options[:timeout] || 10
       end
 
@@ -62,7 +62,7 @@ module GdsApi
         options = {
           timeout: @timeout
         }
-        @panopticon ||= GdsApi::Panopticon.new(@platform, options.merge(panopticon_api_credentials))
+        @panopticon ||= GdsApi::Panopticon.new(@endpoint_url, options.merge(panopticon_api_credentials))
       end
 
       def panopticon_api_credentials

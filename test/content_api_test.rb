@@ -7,7 +7,7 @@ describe GdsApi::ContentApi do
 
   before do
     @base_api_url = "https://contentapi.test.alphagov.co.uk"
-    @api = GdsApi::ContentApi.new('test')
+    @api = GdsApi::ContentApi.new(@base_api_url)
   end
 
   describe "sections" do
@@ -27,7 +27,7 @@ describe GdsApi::ContentApi do
     end
 
     it "should be able to fetch unpublished editions when authenticated" do
-      api = GdsApi::ContentApi.new('test', { bearer_token: 'MY_BEARER_TOKEN' })
+      api = GdsApi::ContentApi.new(@base_api_url, { bearer_token: 'MY_BEARER_TOKEN' })
       content_api_has_unpublished_artefact("devolution-uk", 3)
       response = api.artefact("devolution-uk", edition: 3)
       assert_equal "https://contentapi.test.alphagov.co.uk/devolution-uk.json", response["id"]
@@ -102,7 +102,7 @@ describe GdsApi::ContentApi do
       url = "#{@base_api_url}/licence-example.json?snac=1234&edition=1"
       stub_request(:get, url).to_return(status: 200, body: body.to_json)
 
-      api = GdsApi::ContentApi.new('test', { bearer_token: 'MY_BEARER_TOKEN' })
+      api = GdsApi::ContentApi.new(@base_api_url, { bearer_token: 'MY_BEARER_TOKEN' })
       response = api.artefact('licence-example', snac: '1234', edition: '1')
 
       assert_equal "Licence example", response["title"]
