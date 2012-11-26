@@ -3,7 +3,9 @@ require 'gds_api/test_helpers/json_client_helper'
 module GdsApi
   module TestHelpers
     module LicenceApplication
-      LICENCE_APPLICATION_ENDPOINT = "https://licensify.test.alphagov.co.uk"
+      # Generally true. If you are initializing the client differently,
+      # you could redefine/override the constant or stub directly.
+      LICENCE_APPLICATION_ENDPOINT = Plek.current.find("licensify")
 
       def licence_exists(identifier, licence)
         licence = licence.to_json unless licence.is_a?(String)

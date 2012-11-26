@@ -3,7 +3,9 @@ require 'gds_api/test_helpers/json_client_helper'
 module GdsApi
   module TestHelpers
     module Panopticon
-      PANOPTICON_ENDPOINT = 'https://panopticon.test.alphagov.co.uk'
+      # Generally true. If you are initializing the client differently,
+      # you could redefine/override the constant or stub directly.
+      PANOPTICON_ENDPOINT = Plek.current.find('panopticon')
 
       def stringify_hash_keys(input_hash)
         input_hash.inject({}) do |options, (key, value)|

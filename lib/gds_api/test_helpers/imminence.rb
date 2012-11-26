@@ -3,7 +3,10 @@ require 'gds_api/test_helpers/json_client_helper'
 module GdsApi
   module TestHelpers
     module Imminence
-      IMMINENCE_API_HOST = "imminence.test.alphagov.co.uk"
+      # Generally true. If you are initializing the client differently,
+      # you could redefine/override the constant or stub directly.
+      IMMINENCE_API_HOST = URI.parse(Plek.current.find('imminence')).host
+
       def imminence_has_places(latitude, longitude, details)
         response = JSON.dump(details['details'])
 

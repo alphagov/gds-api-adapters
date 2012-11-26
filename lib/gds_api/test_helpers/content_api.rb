@@ -5,7 +5,9 @@ require_relative 'content_api/artefact_stub'
 module GdsApi
   module TestHelpers
     module ContentApi
-      CONTENT_API_ENDPOINT = 'https://contentapi.test.alphagov.co.uk'
+      # Generally true. If you are initializing the client differently,
+      # you could redefine/override the constant or stub directly.
+      CONTENT_API_ENDPOINT = Plek.current.find('contentapi')
 
       # Takes an array of slugs, or hashes with section details (including a slug).
       # Will stub out content_api calls for tags of type section to return these sections

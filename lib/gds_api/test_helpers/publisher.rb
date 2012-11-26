@@ -3,7 +3,9 @@ require 'gds_api/test_helpers/json_client_helper'
 module GdsApi
   module TestHelpers
     module Publisher
-      PUBLISHER_ENDPOINT = "https://publisher.test.alphagov.co.uk"
+      # Generally true. If you are initializing the client differently,
+      # you could redefine/override the constant or stub directly.
+      PUBLISHER_ENDPOINT = Plek.current.find("publisher")
 
       def publication_exists(details, options = {})
         json = JSON.dump(details)
