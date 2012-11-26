@@ -1,5 +1,6 @@
 require 'gds_api/test_helpers/json_client_helper'
 require 'cgi'
+require_relative 'content_api/artefact_stub'
 
 module GdsApi
   module TestHelpers
@@ -78,18 +79,21 @@ module GdsApi
       end
 
       def content_api_has_an_artefact(slug, body = artefact_for_slug(slug))
-        url = "#{CONTENT_API_ENDPOINT}/#{slug}.json"
-        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+        ArtefactStub.new(slug).with_response_body(body).stub
       end
 
       def content_api_has_unpublished_artefact(slug, edition, body = artefact_for_slug(slug))
-        url = "#{CONTENT_API_ENDPOINT}/#{slug}.json?edition=#{edition}"
-        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+        ArtefactStub.new(slug)
+            .with_response_body(body)
+            .with_query_parameters(edition: edition)
+            .stub
       end
 
       def content_api_has_an_artefact_with_snac_code(slug, snac, body = artefact_for_slug(slug))
-        url = "#{CONTENT_API_ENDPOINT}/#{slug}.json?snac=#{snac}"
-        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+        ArtefactStub.new(slug)
+            .with_response_body(body)
+            .with_query_parameters(snac: snac)
+            .stub
       end
 
       def content_api_does_not_have_an_artefact(slug)
@@ -98,8 +102,10 @@ module GdsApi
             "status" => "not found"
           }
         }
-        url = "#{CONTENT_API_ENDPOINT}/#{slug}.json"
-        stub_request(:get, url).to_return(status: 404, body: body.to_json, headers: {})
+        ArtefactStub.new(slug)
+            .with_response_body(body)
+            .with_response_status(404)
+            .stub
       end
 
       def content_api_has_an_archived_artefact(slug)
@@ -109,10 +115,13 @@ module GdsApi
             "status_message" => "This item is no longer available"
           }
         }
-        url = "#{CONTENT_API_ENDPOINT}/#{slug}.json"
-        stub_request(:get, url).to_return(status: 410, body: body.to_json, headers: {})
+        ArtefactStub.new(slug)
+            .with_response_body(body)
+            .with_response_status(410)
+            .stub
       end
 
+      # Stub requests, and then dynamically generate a response based on the slug in the request
       def stub_content_api_default_artefact
         stub_request(:get, %r{\A#{CONTENT_API_ENDPOINT}/[a-z0-9-]+\.json}).to_return { |request|
           slug = request.uri.path.split('/').last.chomp('.json')
