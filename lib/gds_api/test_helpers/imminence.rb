@@ -5,16 +5,14 @@ module GdsApi
     module Imminence
       # Generally true. If you are initializing the client differently,
       # you could redefine/override the constant or stub directly.
-      IMMINENCE_API_HOST = URI.parse(Plek.current.find('imminence')).host
+      IMMINENCE_API_ENDPOINT = Plek.current.find('imminence')
 
       def imminence_has_places(latitude, longitude, details)
         response = JSON.dump(details['details'])
 
-        ["http", "https"].each do |protocol|
-          stub_request(:get, "#{protocol}://#{IMMINENCE_API_HOST}/places/#{details['slug']}.json").
-          with(:query => {"lat" => latitude, "lng" => longitude, "limit" => "5"}).
-          to_return(:status => 200, :body => response, :headers => {})
-        end
+        stub_request(:get, "#{IMMINENCE_API_ENDPOINT}/places/#{details['slug']}.json").
+        with(:query => {"lat" => latitude, "lng" => longitude, "limit" => "5"}).
+        to_return(:status => 200, :body => response, :headers => {})
       end
 
       def imminence_has_business_support_schemes(facets_hash, schemes)
@@ -25,7 +23,7 @@ module GdsApi
           "results" => schemes
         }
 
-        stub_request(:get, "https://#{IMMINENCE_API_HOST}/business_support_schemes.json").
+        stub_request(:get, "#{IMMINENCE_API_ENDPOINT}/business_support_schemes.json").
           with(query: facets_hash).
           to_return(status: 200, body: results.to_json, headers: {})
       end
@@ -40,7 +38,7 @@ module GdsApi
           "results" => []
         }
 
-        stub_request(:get, %r{\Ahttps://#{IMMINENCE_API_HOST}/business_support_schemes\.json}).
+        stub_request(:get, %r{\A#{IMMINENCE_API_ENDPOINT}/business_support_schemes\.json}).
           to_return(:body => empty_results.to_json)
       end
     end
