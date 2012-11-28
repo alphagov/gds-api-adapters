@@ -1,3 +1,5 @@
+require 'webmock'
+
 module GdsApi
   module TestHelpers
     module ContentApi
