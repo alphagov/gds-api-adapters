@@ -54,8 +54,8 @@ module GdsApi
       end
     end
 
-    def get_json!(url)
-      @cache[url] ||= do_json_request(Net::HTTP::Get, url)
+    def get_json!(url, &create_response)
+      @cache[url] ||= do_json_request(Net::HTTP::Get, url, nil, &create_response)
     end
 
     def post_json!(url, params)
@@ -76,12 +76,21 @@ module GdsApi
       response.body
     end
 
-    def do_json_request(method_class, url, params = nil)
+    # method_class: the Net::HTTP class to use, e.g. Net::HTTP::Get
+    # url:    the request URL
+    # params: the data to send (JSON-serialised) in the request body
+    # create_response: optional block to instantiate a custom response object
+    #                  from the Net::HTTPResponse
+    def do_json_request(method_class, url, params = nil, &create_response)
+
       response, loggable = do_request(method_class, url, params)
+
+      # If no custom response is given, just instantiate Response
+      create_response ||= Proc.new { |r| Response.new(r) }
 
       if response.is_a?(Net::HTTPSuccess)
         logger.info loggable.merge(status: 'success', end_time: Time.now.to_f).to_json
-        Response.new(response)
+        create_response.call(response)
       elsif response.is_a?(Net::HTTPNotFound)
         raise GdsApi::HTTPNotFound.new(response.code.to_i)
       else
