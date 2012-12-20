@@ -40,9 +40,17 @@ module GdsApi
       do_raw_request(Net::HTTP::Get, url)
     end
 
-    def get_json(url)
-      ignoring GdsApi::HTTPNotFound do
-        get_json! url
+    # Define "safe" methods for each supported HTTP method
+    #
+    # Each "bang method" tries to make a request, but raises an exception if
+    # the response is not successful. These methods discard those exceptions
+    # and return nil.
+    [:get, :post, :put, :delete].each do |http_method|
+      method_name = "#{http_method}_json"
+      define_method method_name do |url, *args|
+        ignoring GdsApi::HTTPNotFound do
+          send (method_name + "!"), url, *args
+        end
       end
     end
 
@@ -50,20 +58,8 @@ module GdsApi
       @cache[url] ||= do_json_request(Net::HTTP::Get, url)
     end
 
-    def post_json(url, params)
-      ignoring GdsApi::HTTPNotFound do
-        post_json! url, params
-      end
-    end
-
     def post_json!(url, params)
       do_json_request(Net::HTTP::Post, url, params)
-    end
-
-    def put_json(url, params)
-      ignoring GdsApi::HTTPNotFound do
-        put_json! url, params
-      end
     end
 
     def put_json!(url, params)
