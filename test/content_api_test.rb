@@ -49,6 +49,37 @@ describe GdsApi::ContentApi do
       assert_equal 20, sections.with_subsequent_pages.count
       assert_equal "Section t", sections.with_subsequent_pages.to_a.last.title
     end
+
+    it "should not load a page multiple times" do
+      first_page_url = "#{CONTENT_API_ENDPOINT}/tags.json?type=section"
+      second_page_url = "#{CONTENT_API_ENDPOINT}/tags.json?type=section&page=2"
+
+      first_page_body = plural_response_base.merge(
+        "results" => ("a".."j").map { |letter| tag_for_slug("section-#{letter}", "section") }
+      )
+      stub_request(:get, first_page_url).to_return(
+        status: 200,
+        body: first_page_body.to_json,
+        headers: {"Link" => "<#{second_page_url}>; rel=\"next\""}
+      )
+      second_page_body = plural_response_base.merge(
+        "results" => ("k".."t").map { |letter| tag_for_slug("section-#{letter}", "section") }
+      )
+      stub_request(:get, second_page_url).to_return(
+        status: 200,
+        body: second_page_body.to_json,
+        headers: {"Link" => "<#{first_page_url}>; rel=\"previous\""}
+      )
+
+      sections = @api.sections
+
+      3.times do
+        # Loop through all the items, just to make sure we load all the pages
+        sections.with_subsequent_pages.each do end
+      end
+
+      assert_requested :get, second_page_url, times: 1
+    end
   end
 
   describe "artefact" do

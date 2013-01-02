@@ -25,7 +25,11 @@ class GdsApi::ContentApi < GdsApi::Base
     end
 
     def next_page
-      if has_next_page?
+      # This shouldn't be a performance problem, since the cache will generally
+      # avoid us making multiple requests for the same page, but we shouldn't
+      # allow the data to change once it's already been loaded, so long as we
+      # retain a reference to any one page in the sequence
+      @next_page ||= if has_next_page?
         @api_client.get_list! page_link("next").href
       else
         nil
@@ -37,7 +41,8 @@ class GdsApi::ContentApi < GdsApi::Base
     end
 
     def previous_page
-      if has_previous_page?
+      # See the note in `next_page` for why this is memoised
+      @previous_page ||= if has_previous_page?
         @api_client.get_list! page_link("previous").href
       else
         nil
