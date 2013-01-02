@@ -14,8 +14,40 @@ describe GdsApi::ContentApi do
     it "should show a list of sections" do
       content_api_has_root_sections(["crime"])
       response = @api.sections
+
+      # Old-style dictionary access
       first_section = response["results"][0]
       assert_equal "#{@base_api_url}/tags/crime.json", first_section["id"]
+
+      # Also check attribute access
+      first_section = response.first
+      assert_equal "#{@base_api_url}/tags/crime.json", first_section.id
+    end
+
+    it "should allow iteration across pages" do
+      first_page_url = "#{CONTENT_API_ENDPOINT}/tags.json?type=section"
+      second_page_url = "#{CONTENT_API_ENDPOINT}/tags.json?type=section&page=2"
+
+      first_page_body = plural_response_base.merge(
+        "results" => ("a".."j").map { |letter| tag_for_slug("section-#{letter}", "section") }
+      )
+      stub_request(:get, first_page_url).to_return(
+        status: 200,
+        body: first_page_body.to_json,
+        headers: {"Link" => "<#{second_page_url}>; rel=\"next\""}
+      )
+      second_page_body = plural_response_base.merge(
+        "results" => ("k".."t").map { |letter| tag_for_slug("section-#{letter}", "section") }
+      )
+      stub_request(:get, second_page_url).to_return(
+        status: 200,
+        body: second_page_body.to_json,
+        headers: {"Link" => "<#{first_page_url}>; rel=\"previous\""}
+      )
+
+      sections = @api.sections
+      assert_equal 20, sections.with_subsequent_pages.count
+      assert_equal "Section t", sections.with_subsequent_pages.to_a.last.title
     end
   end
 
@@ -50,8 +82,13 @@ describe GdsApi::ContentApi do
       }.to_json
       stub_request(:get, api_url).to_return(:status => 200, :body => json)
       response = @api.with_tag("crime-and-justice")
+
+      # Old dictionary-style access
       subsection = response["results"][0]
       assert_equal "Complain about a claims company", subsection["title"]
+
+      # Attribute access
+      assert_equal "Complain about a claims company", response.first.title
     end
 
     it "should return tag tree for a specific tag" do
