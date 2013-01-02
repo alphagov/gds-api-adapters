@@ -24,52 +24,69 @@ describe GdsApi::ContentApi do
       assert_equal "#{@base_api_url}/tags/crime.json", first_section.id
     end
 
-    it "should allow iteration across pages" do
-      first_page_url = "#{CONTENT_API_ENDPOINT}/tags.json?type=section"
-      second_page_url = "#{CONTENT_API_ENDPOINT}/tags.json?type=section&page=2"
+    def section_page_url(page_parameter)
+      if page_parameter
+        "#{CONTENT_API_ENDPOINT}/tags.json?type=section&page=#{page_parameter}"
+      else
+        "#{CONTENT_API_ENDPOINT}/tags.json?type=section"
+      end
+    end
 
-      first_page_body = plural_response_base.merge(
-        "results" => ("a".."j").map { |letter| tag_for_slug("section-#{letter}", "section") }
+    def stub_section_page(page_parameter, options)
+      total_pages = options.fetch :of
+
+      url = section_page_url(page_parameter)
+
+      page_number = page_parameter || 1
+      # e.g. page 2 -> 11..20
+      range_start = (page_number - 1) * 10 + 1
+      range_end = page_number * 10
+      tags = (range_start..range_end).map { |number|
+        tag_for_slug("section-#{number}", "section")
+      }
+      body = plural_response_base.merge(
+        "results" => tags
       )
-      stub_request(:get, first_page_url).to_return(
+
+      links = []
+      if page_number > 1
+        links << "<#{section_page_url(page_number - 1)}>; rel=\"previous\""
+      end
+      if page_number < total_pages
+        links << "<#{section_page_url(page_number + 1)}>; rel=\"next\""
+      end
+
+      stub_request(:get, url).to_return(
         status: 200,
-        body: first_page_body.to_json,
-        headers: {"Link" => "<#{second_page_url}>; rel=\"next\""}
+        body: body.to_json,
+        headers: {"Link" => links.join(",")}
       )
-      second_page_body = plural_response_base.merge(
-        "results" => ("k".."t").map { |letter| tag_for_slug("section-#{letter}", "section") }
-      )
-      stub_request(:get, second_page_url).to_return(
-        status: 200,
-        body: second_page_body.to_json,
-        headers: {"Link" => "<#{first_page_url}>; rel=\"previous\""}
-      )
+    end
+
+    it "should allow iteration across pages" do
+      [nil, 2].each do |page_parameter|
+        stub_section_page(page_parameter, of: 2)
+      end
 
       sections = @api.sections
       assert_equal 20, sections.with_subsequent_pages.count
-      assert_equal "Section t", sections.with_subsequent_pages.to_a.last.title
+      assert_equal "Section 20", sections.with_subsequent_pages.to_a.last.title
+    end
+
+    it "should iterate across three or more pages" do
+      [nil, 2, 3].each do |page_parameter|
+        stub_section_page(page_parameter, of: 3)
+      end
+
+      sections = @api.sections
+      assert_equal 30, sections.with_subsequent_pages.count
+      assert_equal "Section 30", sections.with_subsequent_pages.to_a.last.title
     end
 
     it "should not load a page multiple times" do
-      first_page_url = "#{CONTENT_API_ENDPOINT}/tags.json?type=section"
-      second_page_url = "#{CONTENT_API_ENDPOINT}/tags.json?type=section&page=2"
-
-      first_page_body = plural_response_base.merge(
-        "results" => ("a".."j").map { |letter| tag_for_slug("section-#{letter}", "section") }
-      )
-      stub_request(:get, first_page_url).to_return(
-        status: 200,
-        body: first_page_body.to_json,
-        headers: {"Link" => "<#{second_page_url}>; rel=\"next\""}
-      )
-      second_page_body = plural_response_base.merge(
-        "results" => ("k".."t").map { |letter| tag_for_slug("section-#{letter}", "section") }
-      )
-      stub_request(:get, second_page_url).to_return(
-        status: 200,
-        body: second_page_body.to_json,
-        headers: {"Link" => "<#{first_page_url}>; rel=\"previous\""}
-      )
+      [nil, 2].each do |page_parameter|
+        stub_section_page(page_parameter, of: 2)
+      end
 
       sections = @api.sections
 
@@ -78,7 +95,13 @@ describe GdsApi::ContentApi do
         sections.with_subsequent_pages.each do end
       end
 
-      assert_requested :get, second_page_url, times: 1
+      assert_requested :get, section_page_url(2), times: 1
+    end
+
+    it "should display a single page of sections" do
+      stub_section_page(nil, of: 1)
+      sections = @api.sections
+      assert_equal 10, sections.with_subsequent_pages.count
     end
   end
 
