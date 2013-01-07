@@ -53,9 +53,9 @@ class GdsApi::ContentApi < GdsApi::Base
 
     def with_subsequent_pages
       Enumerator.new { |yielder|
-        each { |i| yielder << i }
+        self.each do |i| yielder << i end
         if has_next_page?
-          next_page.with_subsequent_pages.each { |i| yielder << i }
+          next_page.with_subsequent_pages.each do |i| yielder << i end
         end
       }
     end
