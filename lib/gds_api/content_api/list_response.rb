@@ -18,7 +18,9 @@ class GdsApi::ContentApi < GdsApi::Base
       @api_client = api_client
     end
 
-    def_delegators :results, :each
+    # Pass calls to `self.each` to the `results` sub-object, so we can iterate
+    # over the response directly
+    def_delegator :results, :each
 
     def has_next_page?
       ! page_link("next").nil?
