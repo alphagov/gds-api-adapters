@@ -40,30 +40,26 @@ module GdsApi
       do_raw_request(Net::HTTP::Get, url)
     end
 
-    def get_json(url)
-      ignoring GdsApi::HTTPNotFound do
-        get_json! url
+    # Define "safe" methods for each supported HTTP method
+    #
+    # Each "bang method" tries to make a request, but raises an exception if
+    # the response is not successful. These methods discard those exceptions
+    # and return nil.
+    [:get, :post, :put, :delete].each do |http_method|
+      method_name = "#{http_method}_json"
+      define_method method_name do |url, *args|
+        ignoring GdsApi::HTTPNotFound do
+          send (method_name + "!"), url, *args
+        end
       end
     end
 
-    def get_json!(url)
-      @cache[url] ||= do_json_request(Net::HTTP::Get, url)
-    end
-
-    def post_json(url, params)
-      ignoring GdsApi::HTTPNotFound do
-        post_json! url, params
-      end
+    def get_json!(url, &create_response)
+      @cache[url] ||= do_json_request(Net::HTTP::Get, url, nil, &create_response)
     end
 
     def post_json!(url, params)
       do_json_request(Net::HTTP::Post, url, params)
-    end
-
-    def put_json(url, params)
-      ignoring GdsApi::HTTPNotFound do
-        put_json! url, params
-      end
     end
 
     def put_json!(url, params)
@@ -80,12 +76,21 @@ module GdsApi
       response.body
     end
 
-    def do_json_request(method_class, url, params = nil)
+    # method_class: the Net::HTTP class to use, e.g. Net::HTTP::Get
+    # url:    the request URL
+    # params: the data to send (JSON-serialised) in the request body
+    # create_response: optional block to instantiate a custom response object
+    #                  from the Net::HTTPResponse
+    def do_json_request(method_class, url, params = nil, &create_response)
+
       response, loggable = do_request(method_class, url, params)
+
+      # If no custom response is given, just instantiate Response
+      create_response ||= Proc.new { |r| Response.new(r) }
 
       if response.is_a?(Net::HTTPSuccess)
         logger.info loggable.merge(status: 'success', end_time: Time.now.to_f).to_json
-        Response.new(response)
+        create_response.call(response)
       elsif response.is_a?(Net::HTTPNotFound)
         raise GdsApi::HTTPNotFound.new(response.code.to_i)
       else
