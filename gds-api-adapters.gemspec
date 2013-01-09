@@ -12,13 +12,14 @@ Gem::Specification.new do |s|
   s.email        = ["jystewart@gmail.com"]
   s.summary      = "Adapters to work with GDS APIs"
   s.homepage     = "http://github.com/alphagov/gds-api-adapters"
-  s.description  = "A set of adapters providing easy access to the GDS gov.uk APIs"
+  s.description  = "A set of adapters providing easy access to the GDS GOV.UK APIs"
 
   s.files        = Dir.glob("lib/**/*") + %w(README.md Rakefile)
   s.test_files   = Dir['test/**/*']
   s.require_path = 'lib'
   s.add_dependency 'plek'
   s.add_dependency 'null_logger'
+  s.add_dependency 'link_header'
   s.add_dependency 'lrucache', '~> 0.1.1'
 
   s.add_development_dependency 'rdoc', '3.12'

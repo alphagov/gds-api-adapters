@@ -1,19 +1,20 @@
 require_relative 'base'
 require_relative 'exceptions'
+require 'gds_api/content_api/list_response'
 
 class GdsApi::ContentApi < GdsApi::Base
   include GdsApi::ExceptionHandling
 
   def sections
-    get_json!("#{base_url}/tags.json?type=section")
+    get_list!("#{base_url}/tags.json?type=section")
   end
 
   def root_sections
-    get_json!("#{base_url}/tags.json?type=section&root_sections=true")
+    get_list!("#{base_url}/tags.json?type=section&root_sections=true")
   end
 
   def sub_sections(parent_tag)
-    get_json!("#{base_url}/tags.json?type=section&parent_id=#{CGI.escape(parent_tag)}")
+    get_list!("#{base_url}/tags.json?type=section&parent_id=#{CGI.escape(parent_tag)}")
   end
 
   def tag(tag)
@@ -21,15 +22,15 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def with_tag(tag)
-    get_json!("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&include_children=1")
+    get_list!("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&include_children=1")
   end
 
   def curated_list(tag)
-    get_json("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&sort=curated")
+    get_list("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&sort=curated")
   end
 
   def sorted_by(tag, sort_by)
-    get_json!("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&sort=#{sort_by}")
+    get_list!("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&sort=#{sort_by}")
   end
 
   def artefact(slug, params={})
@@ -82,6 +83,14 @@ class GdsApi::ContentApi < GdsApi::Base
       end
     end
     get_batch(last_batch_url, response)
+  end
+
+  def get_list!(url)
+    get_json!(url) { |r| ListResponse.new(r, self) }
+  end
+
+  def get_list(url)
+    get_json(url) { |r| ListResponse.new(r, self) }
   end
 
   private

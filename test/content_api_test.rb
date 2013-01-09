@@ -14,8 +14,94 @@ describe GdsApi::ContentApi do
     it "should show a list of sections" do
       content_api_has_root_sections(["crime"])
       response = @api.sections
+
+      # Old-style dictionary access
       first_section = response["results"][0]
       assert_equal "#{@base_api_url}/tags/crime.json", first_section["id"]
+
+      # Also check attribute access
+      first_section = response.first
+      assert_equal "#{@base_api_url}/tags/crime.json", first_section.id
+    end
+
+    def section_page_url(page_parameter)
+      if page_parameter
+        "#{GdsApi::TestHelpers::ContentApi::CONTENT_API_ENDPOINT}/tags.json?type=section&page=#{page_parameter}"
+      else
+        "#{GdsApi::TestHelpers::ContentApi::CONTENT_API_ENDPOINT}/tags.json?type=section"
+      end
+    end
+
+    def stub_section_page(page_parameter, options)
+      total_pages = options.fetch :of
+
+      url = section_page_url(page_parameter)
+
+      page_number = page_parameter || 1
+      # e.g. page 2 -> 11..20
+      range_start = (page_number - 1) * 10 + 1
+      range_end = page_number * 10
+      tags = (range_start..range_end).map { |number|
+        tag_for_slug("section-#{number}", "section")
+      }
+      body = plural_response_base.merge(
+        "results" => tags
+      )
+
+      links = []
+      if page_number > 1
+        links << "<#{section_page_url(page_number - 1)}>; rel=\"previous\""
+      end
+      if page_number < total_pages
+        links << "<#{section_page_url(page_number + 1)}>; rel=\"next\""
+      end
+
+      stub_request(:get, url).to_return(
+        status: 200,
+        body: body.to_json,
+        headers: {"Link" => links.join(",")}
+      )
+    end
+
+    it "should allow iteration across pages" do
+      [nil, 2].each do |page_parameter|
+        stub_section_page(page_parameter, of: 2)
+      end
+
+      sections = @api.sections
+      assert_equal 20, sections.with_subsequent_pages.count
+      assert_equal "Section 20", sections.with_subsequent_pages.to_a.last.title
+    end
+
+    it "should iterate across three or more pages" do
+      [nil, 2, 3].each do |page_parameter|
+        stub_section_page(page_parameter, of: 3)
+      end
+
+      sections = @api.sections
+      assert_equal 30, sections.with_subsequent_pages.count
+      assert_equal "Section 30", sections.with_subsequent_pages.to_a.last.title
+    end
+
+    it "should not load a page multiple times" do
+      [nil, 2].each do |page_parameter|
+        stub_section_page(page_parameter, of: 2)
+      end
+
+      sections = @api.sections
+
+      3.times do
+        # Loop through all the items, just to make sure we load all the pages
+        sections.with_subsequent_pages.each do end
+      end
+
+      assert_requested :get, section_page_url(2), times: 1
+    end
+
+    it "should display a single page of sections" do
+      stub_section_page(nil, of: 1)
+      sections = @api.sections
+      assert_equal 10, sections.with_subsequent_pages.count
     end
   end
 
@@ -50,8 +136,13 @@ describe GdsApi::ContentApi do
       }.to_json
       stub_request(:get, api_url).to_return(:status => 200, :body => json)
       response = @api.with_tag("crime-and-justice")
+
+      # Old dictionary-style access
       subsection = response["results"][0]
       assert_equal "Complain about a claims company", subsection["title"]
+
+      # Attribute access
+      assert_equal "Complain about a claims company", response.first.title
     end
 
     it "should return tag tree for a specific tag" do
