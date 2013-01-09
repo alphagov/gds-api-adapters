@@ -26,9 +26,9 @@ describe GdsApi::ContentApi do
 
     def section_page_url(page_parameter)
       if page_parameter
-        "#{CONTENT_API_ENDPOINT}/tags.json?type=section&page=#{page_parameter}"
+        "#{GdsApi::TestHelpers::ContentApi::CONTENT_API_ENDPOINT}/tags.json?type=section&page=#{page_parameter}"
       else
-        "#{CONTENT_API_ENDPOINT}/tags.json?type=section"
+        "#{GdsApi::TestHelpers::ContentApi::CONTENT_API_ENDPOINT}/tags.json?type=section"
       end
     end
 
