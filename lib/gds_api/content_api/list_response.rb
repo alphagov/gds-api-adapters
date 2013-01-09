@@ -51,6 +51,24 @@ class GdsApi::ContentApi < GdsApi::Base
       end
     end
 
+    # Transparently get all results across all pages. Compare this with #each
+    # or #results which only iterate over the current page.
+    #
+    # Example:
+    #
+    #   list_response.with_subsequent_pages.each do |result|
+    #     ...
+    #   end
+    #
+    # or:
+    #
+    #   list_response.with_subsequent_pages.count
+    #
+    # Pages of results are fetched on demand. When iterating, that means
+    # fetching pages as results from the current page are exhausted. If you
+    # invoke a method such as #count, this method will fetch all pages at that
+    # point. Note that the responses are stored so subsequent pages will not be
+    # loaded multiple times.
     def with_subsequent_pages
       Enumerator.new { |yielder|
         self.each do |i| yielder << i end
