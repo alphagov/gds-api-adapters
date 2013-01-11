@@ -41,7 +41,7 @@ module GdsApi
         
         private
           def url_without_query
-            "#{CONTENT_API_ENDPOINT}/#{slug}.json"
+            "#{CONTENT_API_ENDPOINT}/#{CGI.escape(slug)}.json"
           end
 
           # Ensure that all keys and values are strings 
