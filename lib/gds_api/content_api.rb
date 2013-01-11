@@ -37,7 +37,7 @@ class GdsApi::ContentApi < GdsApi::Base
     edition = params[:edition]
     snac = params[:snac]
 
-    url = "#{base_url}/#{slug}.json"
+    url = "#{base_url}/#{CGI.escape(slug)}.json"
     query = params.map { |k,v| "#{k}=#{v}" }
     if query.any?
       url += "?#{query.join("&")}"

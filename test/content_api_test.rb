@@ -125,6 +125,13 @@ describe GdsApi::ContentApi do
         @api.artefact("devolution-uk", edition: 3)
       end
     end
+
+    it "should be able to fetch artefacts with a '/' in the slug" do
+      content_api_has_an_artefact("travel-advice/aruba")
+      response = @api.artefact("travel-advice/aruba")
+      assert_requested(:get, "#{@base_api_url}/travel-advice%2Faruba.json")
+      assert_equal "#{@base_api_url}/travel-advice%2Faruba.json", response["id"]
+    end
   end
 
   describe "tags" do
