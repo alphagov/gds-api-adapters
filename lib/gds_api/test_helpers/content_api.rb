@@ -135,7 +135,7 @@ module GdsApi
         singular_response_base.merge(
           "title" => titleize_slug(slug),
           "format" => "guide",
-          "id" => "#{CONTENT_API_ENDPOINT}/#{slug}.json",
+          "id" => "#{CONTENT_API_ENDPOINT}/#{CGI.escape(slug)}.json",
           "web_url" => "http://frontend.test.gov.uk/#{slug}",
           "details" => {
             "need_id" => "1234",
