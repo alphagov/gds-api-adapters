@@ -112,6 +112,7 @@ class JsonClientTest < MiniTest::Spec
     assert_equal response_b.to_hash, response_c.to_hash
     assert_equal response_a.to_hash, response_d.to_hash
   end
+
   def test_should_cache_requests_for_15_mins_by_default
     GdsApi::JsonClient.cache = nil # cause it to contruct a new cache instance.
 
@@ -188,6 +189,58 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  def test_get_should_follow_permanent_redirect
+    url = "http://some.endpoint/some.json"
+    new_url = "http://some.endpoint/other.json"
+    stub_request(:get, url).to_return(
+      :body => "",
+      :status => 301,
+      :headers => {"Location" => new_url}
+    )
+    stub_request(:get, new_url).to_return(:body => '{"a": 1}', :status => 200)
+    result = @client.get_json(url)
+    assert_equal 1, result.a
+  end
+
+  def test_get_should_follow_found_redirect
+    url = "http://some.endpoint/some.json"
+    new_url = "http://some.endpoint/other.json"
+    stub_request(:get, url).to_return(
+      :body => "",
+      :status => 302,
+      :headers => {"Location" => new_url}
+    )
+    stub_request(:get, new_url).to_return(:body => '{"a": 1}', :status => 200)
+    result = @client.get_json(url)
+    assert_equal 1, result.a
+  end
+
+  def test_get_should_follow_see_other
+    url = "http://some.endpoint/some.json"
+    new_url = "http://some.endpoint/other.json"
+    stub_request(:get, url).to_return(
+      :body => "",
+      :status => 302,
+      :headers => {"Location" => new_url}
+    )
+    stub_request(:get, new_url).to_return(:body => '{"a": 1}', :status => 200)
+    result = @client.get_json(url)
+    assert_equal 1, result.a
+  end
+
+  def test_get_should_follow_temporary_redirect
+    url = "http://some.endpoint/some.json"
+    new_url = "http://some.endpoint/other.json"
+    stub_request(:get, url).to_return(
+      :body => "",
+      :status => 307,
+      :headers => {"Location" => new_url}
+    )
+    stub_request(:get, new_url).to_return(:body => '{"a": 1}', :status => 200)
+    result = @client.get_json(url)
+    assert_equal 1, result.a
+  end
+
   def test_post_should_be_nil_if_404_returned_from_endpoint
     url = "http://some.endpoint/some.json"
     stub_request(:post, url).to_return(:body => "{}", :status => 404)
@@ -197,6 +250,19 @@ class JsonClientTest < MiniTest::Spec
   def test_post_should_raise_error_if_non_404_error_code_returned_from_endpoint
     url = "http://some.endpoint/some.json"
     stub_request(:post, url).to_return(:body => "{}", :status => 500)
+    assert_raises GdsApi::HTTPErrorResponse do
+      @client.post_json(url, {})
+    end
+  end
+
+  def test_post_should_error_on_found_redirect
+    url = "http://some.endpoint/some.json"
+    new_url = "http://some.endpoint/other.json"
+    stub_request(:post, url).to_return(
+      :body => "",
+      :status => 302,
+      :headers => {"Location" => new_url}
+    )
     assert_raises GdsApi::HTTPErrorResponse do
       @client.post_json(url, {})
     end
