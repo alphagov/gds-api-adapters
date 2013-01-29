@@ -8,6 +8,9 @@ module GdsApi
   class TimedOutException < BaseError
   end
 
+  class TooManyRedirects < BaseError
+  end
+
   class HTTPErrorResponse < BaseError
     attr_accessor :code
 

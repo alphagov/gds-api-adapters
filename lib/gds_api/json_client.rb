@@ -100,9 +100,9 @@ module GdsApi
       rescue RestClient::Exception => e
         # Attempt to parse the body as JSON if possible
         body = begin
-          JSON.parse(e.http_body)
+          e.http_body ? JSON.parse(e.http_body) : nil
         rescue JSON::ParserError
-          e.response.body
+          e.http_body
         end
         raise GdsApi::HTTPErrorResponse.new(e.http_code), body
       end
@@ -175,6 +175,9 @@ module GdsApi
     rescue RestClient::RequestTimeout => e
       logger.error loggable.merge(status: 'timeout', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::TimedOutException.new
+
+    rescue RestClient::MaxRedirectsReached => e
+      raise GdsApi::TooManyRedirects
 
     rescue RestClient::Exception => e
       # Log the error here, since we have access to loggable, but raise the
