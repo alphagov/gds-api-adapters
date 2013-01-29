@@ -51,6 +51,14 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  def test_get_should_raise_error_on_restclient_error
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_raise(RestClient::ServerBrokeConnection)
+    assert_raises GdsApi::HTTPErrorResponse do
+      @client.get_json(url)
+    end
+  end
+
   def test_should_fetch_and_parse_json_into_response
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(:body => "{}", :status => 200)
@@ -239,6 +247,51 @@ class JsonClientTest < MiniTest::Spec
     stub_request(:get, new_url).to_return(:body => '{"a": 1}', :status => 200)
     result = @client.get_json(url)
     assert_equal 1, result.a
+  end
+
+  def test_should_handle_infinite_redirects
+    url = "http://some.endpoint/some.json"
+    redirect = {
+      :body => "",
+      :status => 302,
+      :headers => {"Location" => url}
+    }
+
+    # Theoretically, we could set this up to mock out any number of requests
+    # with a redirect to the same URL, but we'd risk getting the test code into
+    # an infinite loop if the code didn't do what it was supposed to. The
+    # failure response block aborts the test if we have too many requests.
+    failure = lambda { |request| flunk("Request called too many times") }
+    stub_request(:get, url).to_return(redirect).times(11).then.to_return(failure)
+
+    assert_raises GdsApi::TooManyRedirects do
+      @client.get_json(url)
+    end
+  end
+
+  def test_should_handle_mutual_redirects
+    first_url = "http://some.endpoint/some.json"
+    second_url = "http://some.endpoint/some-other.json"
+
+    first_redirect = {
+      :body => "",
+      :status => 302,
+      :headers => {"Location" => second_url}
+    }
+    second_redirect = {
+      :body => "",
+      :status => 302,
+      :headers => {"Location" => first_url}
+    }
+
+    # See the comment in the above test for an explanation of this
+    failure = lambda { |request| flunk("Request called too many times") }
+    stub_request(:get, first_url).to_return(first_redirect).times(6).then.to_return(failure)
+    stub_request(:get, second_url).to_return(second_redirect).times(6).then.to_return(failure)
+
+    assert_raises GdsApi::TooManyRedirects do
+      @client.get_json(first_url)
+    end
   end
 
   def test_post_should_be_nil_if_404_returned_from_endpoint
