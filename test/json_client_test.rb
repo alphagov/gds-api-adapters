@@ -249,6 +249,44 @@ class JsonClientTest < MiniTest::Spec
     assert_equal 1, result.a
   end
 
+  def test_should_handle_infinite_redirects
+    url = "http://some.endpoint/some.json"
+    redirect = {
+      :body => "",
+      :status => 302,
+      :headers => {"Location" => url}
+    }
+    failure = lambda { |request| flunk("Request called too many times") }
+    stub_request(:get, url).to_return(redirect).times(11).then.to_return(failure)
+
+    assert_raises GdsApi::TooManyRedirects do
+      @client.get_json(url)
+    end
+  end
+
+  def test_should_handle_mutual_redirects
+    first_url = "http://some.endpoint/some.json"
+    second_url = "http://some.endpoint/some-other.json"
+
+    first_redirect = {
+      :body => "",
+      :status => 302,
+      :headers => {"Location" => second_url}
+    }
+    second_redirect = {
+      :body => "",
+      :status => 302,
+      :headers => {"Location" => first_url}
+    }
+    failure = lambda { |request| flunk("Request called too many times") }
+    stub_request(:get, first_url).to_return(first_redirect).times(6).then.to_return(failure)
+    stub_request(:get, second_url).to_return(second_redirect).times(6).then.to_return(failure)
+
+    assert_raises GdsApi::TooManyRedirects do
+      @client.get_json(first_url)
+    end
+  end
+
   def test_post_should_be_nil_if_404_returned_from_endpoint
     url = "http://some.endpoint/some.json"
     stub_request(:post, url).to_return(:body => "{}", :status => 404)

@@ -176,6 +176,9 @@ module GdsApi
       logger.error loggable.merge(status: 'timeout', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::TimedOutException.new
 
+    rescue RestClient::MaxRedirectsReached => e
+      raise GdsApi::TooManyRedirects
+
     rescue RestClient::Exception => e
       # Log the error here, since we have access to loggable, but raise the
       # exception up to the calling method to deal with
