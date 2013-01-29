@@ -256,6 +256,11 @@ class JsonClientTest < MiniTest::Spec
       :status => 302,
       :headers => {"Location" => url}
     }
+
+    # Theoretically, we could set this up to mock out any number of requests
+    # with a redirect to the same URL, but we'd risk getting the test code into
+    # an infinite loop if the code didn't do what it was supposed to. The
+    # failure response block aborts the test if we have too many requests.
     failure = lambda { |request| flunk("Request called too many times") }
     stub_request(:get, url).to_return(redirect).times(11).then.to_return(failure)
 
@@ -278,6 +283,8 @@ class JsonClientTest < MiniTest::Spec
       :status => 302,
       :headers => {"Location" => first_url}
     }
+
+    # See the comment in the above test for an explanation of this
     failure = lambda { |request| flunk("Request called too many times") }
     stub_request(:get, first_url).to_return(first_redirect).times(6).then.to_return(failure)
     stub_request(:get, second_url).to_return(second_redirect).times(6).then.to_return(failure)
