@@ -93,6 +93,10 @@ class GdsApi::ContentApi < GdsApi::Base
     get_json(url) { |r| ListResponse.new(r, self) }
   end
 
+  def countries
+    get_json!("#{base_url}/travel-advice.json")
+  end
+
   private
     def base_url
       endpoint
