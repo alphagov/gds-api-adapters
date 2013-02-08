@@ -1,3 +1,5 @@
+require 'rack/utils'
+
 module GdsApi
   class Rummager
     class SearchUriNotSpecified < RuntimeError; end
@@ -22,11 +24,25 @@ module GdsApi
       search_response(:autocomplete, query, format_filter).body
     end
 
+    def advanced_search(args)
+      return [] if args.nil? || args.empty?
+      JSON.parse(advanced_search_response(args).body)
+    end
+
     private
+
+    def advanced_search_response(args)
+      request_path = "/advanced_search?#{Rack::Utils.build_nested_query(args)}"
+      get_response(request_path)
+    end
 
     def search_response(type, query, format_filter = nil)
       request_path = "/#{type}?q=#{CGI.escape(query)}"
       request_path << "&format_filter=#{CGI.escape(format_filter)}" if format_filter
+      get_response(request_path)
+    end
+
+    def get_response(request_path)
       uri = URI("#{search_uri}#{request_path}")
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true if uri.scheme == 'https'
