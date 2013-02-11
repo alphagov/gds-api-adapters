@@ -492,21 +492,26 @@ describe GdsApi::ContentApi do
     end
   end
 
-  it "should fetch the list of countries" do
-    content_api_has_countries({
-      'afghanistan' => 'Afghanistan',
-      'albania' => 'Albania',
-      'algeria' => 'Algeria'
-    })
+  describe "countries" do
+    before(:each) do
+      content_api_has_countries({
+        'afghanistan' => {:name => 'Afghanistan', :updated_at => "" },
+        'albania' => {:name => 'Albania'},
+        'algeria' => {:name => 'Algeria'}
+      })
 
-    results = @api.countries['results']
-    assert_equal 3, results.length
+      @results = @api.countries['results']
+    end
 
-    assert_equal ['afghanistan', 'albania', 'algeria'], results.map {|c| c['identifier'] }
-    assert_equal ['Afghanistan', 'Albania', 'Algeria'], results.map {|c| c['name'] }
+    it "should fetch the list of countries" do
+      assert_equal 3, @results.length
 
-    assert_equal "#{@base_api_url}/travel-advice/afghanistan.json", results.first['id']
-    assert_equal 'http://www.test.gov.uk/travel-advice/afghanistan', results.first['web_url']
+      assert_equal ['afghanistan', 'albania', 'algeria'], @results.map {|c| c['identifier'] }
+      assert_equal ['Afghanistan', 'Albania', 'Algeria'], @results.map {|c| c['name'] }
+
+      assert_equal "#{@base_api_url}/travel-advice/afghanistan.json", @results.first['id']
+      assert_equal 'http://www.test.gov.uk/travel-advice/afghanistan', @results.first['web_url']
+    end
   end
 
   def api_response_for_results(results)
