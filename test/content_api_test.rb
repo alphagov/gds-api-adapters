@@ -495,7 +495,7 @@ describe GdsApi::ContentApi do
   describe "countries" do
     before(:each) do
       content_api_has_countries({
-        'afghanistan' => {:name => 'Afghanistan', :updated_at => "" },
+        'afghanistan' => {:name => 'Afghanistan', :updated_at => "2013-02-11T16:12:22+00:00" },
         'albania' => {:name => 'Albania'},
         'algeria' => {:name => 'Algeria'}
       })
@@ -511,6 +511,10 @@ describe GdsApi::ContentApi do
 
       assert_equal "#{@base_api_url}/travel-advice/afghanistan.json", @results.first['id']
       assert_equal 'http://www.test.gov.uk/travel-advice/afghanistan', @results.first['web_url']
+    end
+
+    it "should parse all updated_at values to Time objects" do
+      assert_equal [Time.parse("2013-02-11T16:12:22+00:00"), nil, nil], @results.map {|c| c['updated_at'] }
     end
   end
 
