@@ -49,9 +49,9 @@ module GdsApi
     # and return nil.
     [:get, :post, :put, :delete].each do |http_method|
       method_name = "#{http_method}_json"
-      define_method method_name do |url, *args|
+      define_method method_name do |url, *args, &block|
         ignoring GdsApi::HTTPNotFound do
-          send (method_name + "!"), url, *args
+          send (method_name + "!"), url, *args, &block
         end
       end
     end

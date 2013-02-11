@@ -347,6 +347,32 @@ class JsonClientTest < MiniTest::Spec
     assert_equal({}, @client.put_json(url, payload).to_hash)
   end
 
+  def test_can_build_custom_response_object
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_return(:body => "Hello there!")
+
+    response = @client.get_json(url) { |http_response| http_response.body }
+    assert response.is_a? String
+    assert_equal "Hello there!", response
+  end
+
+  def test_responds_with_nil_on_custom_response_404
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_return(:body => "", :status => 404)
+
+    response = @client.get_json(url) { |http_response| http_response.body }
+    assert_nil response
+  end
+
+  def test_can_build_custom_response_object_in_bang_method
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_return(:body => "Hello there!")
+
+    response = @client.get_json!(url) { |http_response| http_response.body }
+    assert response.is_a? String
+    assert_equal "Hello there!", response
+  end
+
   def test_can_convert_response_to_ostruct
     url = "http://some.endpoint/some.json"
     payload = {a: 1}
