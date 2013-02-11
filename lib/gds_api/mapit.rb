@@ -30,6 +30,10 @@ class GdsApi::Mapit < GdsApi::Base
     def areas
       @response['areas'].map {|i, area| OpenStruct.new(area) }
     end
+
+    def postcode
+      @response['postcode']
+    end
   end
 
   private

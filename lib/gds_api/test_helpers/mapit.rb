@@ -7,7 +7,8 @@ module GdsApi
       def mapit_has_a_postcode(postcode, coords)
         response = {
           "wgs84_lat" => coords.first,
-          "wgs84_lon" => coords.last
+          "wgs84_lon" => coords.last,
+          "postcode"  => postcode
         }
 
         stub_request(:get, "#{MAPIT_ENDPOINT}/postcode/" + postcode.sub(' ','+') + ".json")
@@ -20,6 +21,7 @@ module GdsApi
         response = {
           "wgs84_lat" => coords.first,
           "wgs84_lon" => coords.last,
+          "postcode"  => postcode
         }
 
         area_response = Hash[areas.map.with_index {|area, i|

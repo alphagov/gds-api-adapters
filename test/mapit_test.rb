@@ -19,6 +19,13 @@ describe GdsApi::Mapit do
       assert_equal -0.1415870, response.lon
     end
 
+    it "should return the postcode" do
+      mapit_has_a_postcode("SW1A 1AA", [ 51.5010096, -0.1415870 ])
+
+      response = @api.location_for_postcode("SW1A 1AA")
+      assert_equal "SW1A 1AA", response.postcode
+    end
+
     it "should return areas" do
       mapit_has_a_postcode_and_areas("SW1A 1AA", [ 51.5010096, -0.1415870 ], [
         { 'name' => 'Lancashire County Council', 'type' => 'CTY', 'ons' => '30', 'gss' => 'E10000017' },
