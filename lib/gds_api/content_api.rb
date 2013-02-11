@@ -1,9 +1,20 @@
 require_relative 'base'
 require_relative 'exceptions'
+require 'gds_api/content_api/response'
 require 'gds_api/content_api/list_response'
 
 class GdsApi::ContentApi < GdsApi::Base
   include GdsApi::ExceptionHandling
+
+  def initialize(endpoint_url, options = {})
+    # If the `website_root` option is given, the adapter will convert any
+    # `web_url` values to relative URLs if they match it.
+    #
+    # For example: "https://www.gov.uk"
+
+    @website_root = options.delete(:website_root)
+    super
+  end
 
   def sections
     get_list!("#{base_url}/tags.json?type=section")
@@ -86,11 +97,29 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def get_list!(url)
-    get_json!(url) { |r| ListResponse.new(r, self) }
+    get_json!(url) { |r|
+      ListResponse.new(r, self, website_root: @website_root)
+    }
   end
 
   def get_list(url)
-    get_json(url) { |r| ListResponse.new(r, self) }
+    get_json(url) { |r|
+      ListResponse.new(r, self, website_root: @website_root)
+    }
+  end
+
+  def get_json(url, &create_response)
+    create_response = create_response || Proc.new { |r|
+      GdsApi::ContentApi::Response.new(r, website_root: @website_root)
+    }
+    super(url, &create_response)
+  end
+
+  def get_json!(url, &create_response)
+    create_response = create_response || Proc.new { |r|
+      GdsApi::ContentApi::Response.new(r, website_root: @website_root)
+    }
+    super(url, &create_response)
   end
 
   def countries

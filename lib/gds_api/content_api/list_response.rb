@@ -9,12 +9,12 @@ class GdsApi::ContentApi < GdsApi::Base
   # These responses are in a common format, with the list of results contained
   # under the `results` key. The response may also have previous and subsequent
   # pages, indicated by entries in the response's `Link` header.
-  class ListResponse < GdsApi::Response
+  class ListResponse < Response
 
     # The ListResponse is instantiated with a reference back to the API client,
     # so it can make requests for the subsequent pages
-    def initialize(response, api_client)
-      super(response)
+    def initialize(response, api_client, options = {})
+      super(response, options)
       @api_client = api_client
     end
 

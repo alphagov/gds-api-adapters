@@ -10,6 +10,46 @@ describe GdsApi::ContentApi do
     @api = GdsApi::ContentApi.new(@base_api_url)
   end
 
+  describe "when asked for relative web URLs" do
+    before do
+      @api = GdsApi::ContentApi.new(
+        @base_api_url,
+        website_root: "http://www.test.gov.uk"
+      )
+    end
+
+    it "should use relative URLs for an artefact" do
+      artefact_response = artefact_for_slug_in_a_section("bank-holidays", "cheese")
+
+      # Rewrite the web_url fields to have a common prefix
+      # The helper's default is to point the web_url for an artefact at the
+      # frontend app, and the web_url for a tag's content to www: to test the
+      # rewriting properly, they need to be the same
+      artefact_response["web_url"] = "http://www.test.gov.uk/bank-holidays"
+      section_tag_content = artefact_response["tags"][0]["content_with_tag"]
+      section_tag_content["web_url"] = "http://www.test.gov.uk/browse/cheese"
+
+      content_api_has_an_artefact("bank-holidays", artefact_response)
+      artefact = @api.artefact("bank-holidays")
+
+      assert_equal "Bank holidays", artefact.title
+      assert_equal "/bank-holidays", artefact.web_url
+
+      assert_equal "/browse/cheese", artefact.tags[0].content_with_tag.web_url
+    end
+
+    it "should use relative URLs for tag listings" do
+      content_api_has_root_sections %w(housing benefits tax)
+      tags = @api.root_sections
+
+      assert_equal 3, tags.count
+      tags.each do |tag|
+        web_url = tag.content_with_tag.web_url
+        assert web_url.start_with?("/browse/"), web_url
+      end
+    end
+  end
+
   describe "sections" do
     it "should show a list of sections" do
       content_api_has_root_sections(["crime"])
