@@ -48,6 +48,30 @@ describe GdsApi::ContentApi do
         assert web_url.start_with?("/browse/"), web_url
       end
     end
+
+    describe "with caching enabled" do
+      before do
+        @original_cache = GdsApi::JsonClient.cache
+        GdsApi::JsonClient.cache = LRUCache.new(max_size: 10, ttl: 10)
+      end
+
+      it "should not pollute the cache with relative URLs" do
+        artefact_response = artefact_for_slug("bank-holidays")
+        artefact_response["web_url"] = "http://www.test.gov.uk/bank-holidays"
+        content_api_has_an_artefact("bank-holidays", artefact_response)
+
+        assert_equal "/bank-holidays", @api.artefact("bank-holidays").web_url
+
+        clean_api = GdsApi::ContentApi.new(@base_api_url)
+        clean_artefact = clean_api.artefact("bank-holidays")
+
+        assert_equal "http://www.test.gov.uk/bank-holidays", clean_artefact.web_url
+      end
+
+      after do
+        GdsApi::JsonClient.cache = @original_cache
+      end
+    end
   end
 
   describe "sections" do

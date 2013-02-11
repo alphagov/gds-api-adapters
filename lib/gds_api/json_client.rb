@@ -57,7 +57,7 @@ module GdsApi
     end
 
     def get_json!(url, &create_response)
-      @cache[url] ||= do_json_request(:get, url, nil, &create_response)
+      do_json_request(:get, url, nil, &create_response)
     end
 
     def post_json!(url, params)
@@ -92,7 +92,13 @@ module GdsApi
     def do_json_request(method, url, params = nil, &create_response)
 
       begin
-        response = do_request(method, url, params)
+        # Only read GET requests from the cache: any other request methods
+        # should always be passed through
+        response = if method == :get
+                     @cache[url] ||= do_request(method, url, params)
+                   else
+                    do_request(method, url, params)
+                   end
 
       rescue RestClient::ResourceNotFound => e
         raise GdsApi::HTTPNotFound.new(e.http_code)
