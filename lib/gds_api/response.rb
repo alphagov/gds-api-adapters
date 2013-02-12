@@ -23,7 +23,7 @@ module GdsApi
 
     def code
       # Return an integer code for consistency with HTTPErrorResponse
-      @http_response.code.to_i
+      @http_response.code
     end
 
     def to_ostruct
