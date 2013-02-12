@@ -80,7 +80,7 @@ class GdsApi::ContentApi < GdsApi::Base
 
   private
     def link_header
-      @link_header ||= LinkHeader.parse @net_http_response["Link"]
+      @link_header ||= LinkHeader.parse @http_response.headers[:link]
     end
 
     def page_link(rel)

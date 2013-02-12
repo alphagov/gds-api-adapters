@@ -408,4 +408,13 @@ class JsonClientTest < MiniTest::Spec
     response = client.put_json("http://some.other.endpoint/some.json", {})
     assert_equal 2, response.a
   end
+
+  def test_client_can_decompress_gzip_responses
+    url = "http://some.endpoint/some.json"
+    # {"test": "hello"}
+    stub_request(:get, url).to_return(:body => "\u001F\x8B\b\u0000Q\u000F\u0019Q\u0000\u0003\xABVP*I-.Q\xB2RP\xCAH\xCD\xC9\xC9WR\xA8\u0005\u0000\xD1C\u0018\xFE\u0013\u0000\u0000\u0000", :status => 200, :headers => { 'Content-Encoding' => 'gzip' })
+    response = @client.get_json(url)
+
+    assert_equal "hello", response["test"]
+  end
 end
