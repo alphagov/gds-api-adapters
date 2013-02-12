@@ -9,21 +9,21 @@ module GdsApi
 
     def_delegators :to_hash, :[], :"<=>", :each
 
-    def initialize(net_http_response)
-      @net_http_response = net_http_response
+    def initialize(http_response)
+      @http_response = http_response
     end
 
     def raw_response_body
-      @net_http_response.body
+      @http_response.body
     end
 
     def to_hash
-      @parsed ||= JSON.parse(@net_http_response.body)
+      @parsed ||= JSON.parse(@http_response.body)
     end
 
     def code
       # Return an integer code for consistency with HTTPErrorResponse
-      @net_http_response.code.to_i
+      @http_response.code
     end
 
     def to_ostruct

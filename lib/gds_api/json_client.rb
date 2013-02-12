@@ -109,7 +109,7 @@ module GdsApi
 
       # If no custom response is given, just instantiate Response
       create_response ||= Proc.new { |r| Response.new(r) }
-      create_response.call(response.net_http_res)
+      create_response.call(response)
     end
 
     # Take a hash of parameters for Request#execute; return a hash of
