@@ -302,13 +302,14 @@ module GdsApi
 
       def content_api_has_countries(countries)
         response = response_base.merge({
-          "results" => countries.map {|id,name|
+          "results" => countries.map { |slug, values|
+            updated_at = values.has_key?(:updated_at) ? {"updated_at" => values[:updated_at]} : {}
             {
-              "id" => "#{CONTENT_API_ENDPOINT}/travel-advice/#{id}.json",
-              "name" => name,
-              "identifier" => id,
-              "web_url" => "http://www.test.gov.uk/travel-advice/#{id}"
-            }
+              "id" => "#{CONTENT_API_ENDPOINT}/travel-advice/#{slug}.json",
+              "name" => values[:name],
+              "identifier" => slug,
+              "web_url" => "http://www.test.gov.uk/travel-advice/#{slug}",
+            }.merge(updated_at)
           },
           "total" => countries.length
         })
