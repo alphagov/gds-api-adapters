@@ -8,7 +8,7 @@ class GdsApi::ContentApi < GdsApi::Base
 
   def initialize(endpoint_url, options = {})
     # If the `web_urls_relative_to` option is given, the adapter will convert
-    # any `web_url` values to relative URLs if they match it.
+    # any `web_url` values to relative URLs if they are from the same host.
     #
     # For example: "https://www.gov.uk"
 
