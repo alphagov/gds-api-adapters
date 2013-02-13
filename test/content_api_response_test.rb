@@ -79,6 +79,15 @@ describe "GdsApi::ContentApi::Response" do
 
   it "should keep URLs from other domains absolute" do
     body = {
+      "web_url" => "https://www.example.com/example"
+    }.to_json
+
+    response = response_for(DummyNetResponse.new(body))
+    assert_equal "https://www.example.com/example", response.web_url
+  end
+
+  it "should keep URLs with other schemes absolute" do
+    body = {
       "web_url" => "http://www.example.com/example"
     }.to_json
 

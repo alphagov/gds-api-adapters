@@ -35,8 +35,12 @@ module GdsApi
             # NOTE: Don't bother transforming if the value is nil
             if @website_root && WEB_URL_KEYS.include?(k) && v
               # Use relative URLs to route when the web_url value is on the
-              # same domain as the site root.
-              [k, @website_root.route_to(v).to_s]
+              # same domain as the site root. Note that we can't just use the
+              # `route_to` method, as this would give us technically correct
+              # but potentially confusing `//host/path` URLs for URLs with the
+              # same scheme but different hosts.
+              relative_url = @website_root.route_to(v)
+              [k, relative_url.host ? v : relative_url.to_s]
             else
               [k, transform_parsed(v)]
             end
