@@ -7,17 +7,17 @@ module GdsApi
       #
       # Example:
       #
-      #   r = Response.new(response, website_root: "https://www.gov.uk")
+      #   r = Response.new(response, web_urls_relative_to: "https://www.gov.uk")
       #   r.results[0].web_url
       #   => "/bank-holidays"
 
       WEB_URL_KEYS = ["web_url"]
 
       def initialize(http_response, options = {})
-        if options[:website_root]
-          @website_root = URI.parse(options[:website_root])
+        if options[:web_urls_relative_to]
+          @web_urls_relative_to = URI.parse(options[:web_urls_relative_to])
         else
-          @website_root = nil
+          @web_urls_relative_to = nil
         end
 
         super(http_response)
@@ -33,13 +33,13 @@ module GdsApi
         when Hash
           Hash[value.map { |k, v|
             # NOTE: Don't bother transforming if the value is nil
-            if @website_root && WEB_URL_KEYS.include?(k) && v
+            if @web_urls_relative_to && WEB_URL_KEYS.include?(k) && v
               # Use relative URLs to route when the web_url value is on the
               # same domain as the site root. Note that we can't just use the
               # `route_to` method, as this would give us technically correct
               # but potentially confusing `//host/path` URLs for URLs with the
               # same scheme but different hosts.
-              relative_url = @website_root.route_to(v)
+              relative_url = @web_urls_relative_to.route_to(v)
               [k, relative_url.host ? v : relative_url.to_s]
             else
               [k, transform_parsed(v)]

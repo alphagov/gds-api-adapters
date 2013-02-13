@@ -14,7 +14,7 @@ describe GdsApi::ContentApi do
     before do
       @api = GdsApi::ContentApi.new(
         @base_api_url,
-        website_root: "http://www.test.gov.uk"
+        web_urls_relative_to: "http://www.test.gov.uk"
       )
     end
 

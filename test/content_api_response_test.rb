@@ -6,8 +6,8 @@ describe "GdsApi::ContentApi::Response" do
   DummyNetResponse = Struct.new(:body)
 
   def response_for(net_response)
-    website_root = "https://www.gov.uk"
-    GdsApi::ContentApi::Response.new(net_response, website_root: website_root)
+    root = "https://www.gov.uk"
+    GdsApi::ContentApi::Response.new(net_response, web_urls_relative_to: root)
   end
 
   it "should map web URLs" do
