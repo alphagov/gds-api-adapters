@@ -102,7 +102,7 @@ describe GdsApi::Rummager do
   it "should escape characters that would otherwise be invalid in a URI" do
     GdsApi::Rummager.new("http://example.com").search "search term with spaces"
 
-    # FYI: the actual request is "?q=search+term+with+spaces", but Webmock appears to be re-escaping.
+    #the actual request is "?q=search+term+with+spaces", but Webmock appears to be re-escaping.
     assert_requested :get, /\?q=search%20term%20with%20spaces/
   end
 
@@ -168,7 +168,7 @@ describe GdsApi::Rummager do
   it "#advanced_search should issue a request for all the params supplied" do
     GdsApi::Rummager.new("http://example.com").advanced_search({keywords: "query & stuff", topics: ["1","2"], order: {public_timestamp: "desc"}})
 
-    # FYI: the actual request is "?keywords=query+%26+stuff&topic[0]=1&topic[1]=2&order[public_timestamp]=desc", but Webmock appears to be re-escaping.
+    #the actual request is "?keywords=query+%26+stuff&topic[0]=1&topic[1]=2&order[public_timestamp]=desc", but Webmock appears to be re-escaping.
     assert_requested :get, /keywords=query%20%26%20stuff/
     assert_requested :get, /topics%5B0%5D=1&topics%5B1%5D=2/
     assert_requested :get, /order%5Bpublic_timestamp%5D=desc/
