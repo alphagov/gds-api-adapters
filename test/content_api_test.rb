@@ -127,10 +127,10 @@ describe GdsApi::ContentApi do
     end
 
     it "should be able to fetch artefacts with a '/' in the slug" do
-      content_api_has_an_artefact("travel-advice/aruba")
-      response = @api.artefact("travel-advice/aruba")
-      assert_requested(:get, "#{@base_api_url}/travel-advice%2Faruba.json")
-      assert_equal "#{@base_api_url}/travel-advice%2Faruba.json", response["id"]
+      content_api_has_an_artefact("foreign-travel-advice/aruba")
+      response = @api.artefact("foreign-travel-advice/aruba")
+      assert_requested(:get, "#{@base_api_url}/foreign-travel-advice%2Faruba.json")
+      assert_equal "#{@base_api_url}/foreign-travel-advice%2Faruba.json", response["id"]
     end
   end
 
@@ -509,8 +509,8 @@ describe GdsApi::ContentApi do
       assert_equal ['afghanistan', 'albania', 'algeria'], @results.map {|c| c['identifier'] }
       assert_equal ['Afghanistan', 'Albania', 'Algeria'], @results.map {|c| c['name'] }
 
-      assert_equal "#{@base_api_url}/travel-advice/afghanistan.json", @results.first['id']
-      assert_equal 'http://www.test.gov.uk/travel-advice/afghanistan', @results.first['web_url']
+      assert_equal "#{@base_api_url}/foreign-travel-advice/afghanistan.json", @results.first['id']
+      assert_equal 'http://www.test.gov.uk/foreign-travel-advice/afghanistan', @results.first['web_url']
     end
 
     it "should parse all updated_at values to Time objects" do
