@@ -94,7 +94,7 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def countries
-    parse_times(get_json!("#{base_url}/travel-advice.json"))
+    parse_times(get_json!("#{base_url}/foreign-travel-advice.json"))
   end
 
   private
