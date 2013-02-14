@@ -34,16 +34,13 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def artefact(slug, params={})
-    edition = params[:edition]
-    snac = params[:snac]
-
     url = "#{base_url}/#{CGI.escape(slug)}.json"
     query = params.map { |k,v| "#{k}=#{v}" }
     if query.any?
       url += "?#{query.join("&")}"
     end
 
-    if edition && ! options.include?(:bearer_token)
+    if params[:edition] && ! options.include?(:bearer_token)
       raise GdsApi::NoBearerToken
     end
     get_json(url)
