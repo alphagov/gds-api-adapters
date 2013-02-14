@@ -90,10 +90,6 @@ class GdsApi::ContentApi < GdsApi::Base
     get_json(url) { |r| ListResponse.new(r, self) }
   end
 
-  def countries
-    parse_times(get_json!("#{base_url}/foreign-travel-advice.json"))
-  end
-
   private
     def base_url
       endpoint
@@ -108,14 +104,5 @@ class GdsApi::ContentApi < GdsApi::Base
       else
         batch_response
       end
-    end
-
-    def parse_times(response)
-      response["results"].map do |result|
-        if result.has_key?("updated_at")
-          result["updated_at"] = Time.parse(result["updated_at"])
-        end
-      end
-      response
     end
 end
