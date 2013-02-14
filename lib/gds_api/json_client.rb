@@ -92,13 +92,7 @@ module GdsApi
     def do_json_request(method, url, params = nil, &create_response)
 
       begin
-        # Only read GET requests from the cache: any other request methods
-        # should always be passed through
-        response = if method == :get
-                     @cache[url] ||= do_request(method, url, params)
-                   else
-                    do_request(method, url, params)
-                   end
+        response = do_request_with_cache(method, url, params)
 
       rescue RestClient::ResourceNotFound => e
         raise GdsApi::HTTPNotFound.new(e.http_code)
@@ -153,6 +147,16 @@ module GdsApi
         # This is the default value anyway, but we should probably be explicit
         verify_ssl: OpenSSL::SSL::VERIFY_NONE
       )
+    end
+
+    def do_request_with_cache(method, url, params = nil)
+      # Only read GET requests from the cache: any other request methods should
+      # always be passed through
+      if method == :get
+        @cache[url] ||= do_request(method, url, params)
+      else
+       do_request(method, url, params)
+      end
     end
 
     def do_request(method, url, params = nil)
