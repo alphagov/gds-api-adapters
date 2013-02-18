@@ -73,7 +73,7 @@ class JsonClientTest < MiniTest::Spec
     stub_request(:get, url).to_return(:body => JSON.dump(result), :status => 200)
     response_a = GdsApi::JsonClient.new.get_json(url)
     response_b = GdsApi::JsonClient.new.get_json(url)
-    assert_equal response_a.object_id, response_b.object_id
+    assert_equal response_a.to_hash, response_b.to_hash
     assert_requested :get, url, times: 1
   end
 
@@ -131,13 +131,13 @@ class JsonClientTest < MiniTest::Spec
     response_b = GdsApi::JsonClient.new.get_json(url)
 
     assert_requested :get, url, times: 1
-    assert_equal response_a.object_id, response_b.object_id
+    assert_equal response_a.to_hash, response_b.to_hash
 
     Timecop.travel( 15 * 60 - 30) do # now + 14 mins 30 secs
       response_c = GdsApi::JsonClient.new.get_json(url)
 
       assert_requested :get, url, times: 1
-      assert_same response_a, response_c
+      assert_equal response_a.to_hash, response_c.to_hash
     end
 
     Timecop.travel( 15 * 60 + 30) do # now + 15 mins 30 secs
@@ -158,13 +158,13 @@ class JsonClientTest < MiniTest::Spec
     response_b = GdsApi::JsonClient.new.get_json(url)
 
     assert_requested :get, url, times: 1
-    assert_equal response_a.object_id, response_b.object_id
+    assert_equal response_a.to_hash, response_b.to_hash
 
     Timecop.travel( 5 * 60 - 30) do # now + 4 mins 30 secs
       response_c = GdsApi::JsonClient.new.get_json(url)
 
       assert_requested :get, url, times: 1
-      assert_same response_a, response_c
+      assert_equal response_a.to_hash, response_c.to_hash
     end
 
     Timecop.travel( 5 * 60 + 30) do # now + 5 mins 30 secs
@@ -345,6 +345,32 @@ class JsonClientTest < MiniTest::Spec
     payload = {a: 1}
     stub_request(:put, url).with(body: payload.to_json).to_return(:body => "{}", :status => 200)
     assert_equal({}, @client.put_json(url, payload).to_hash)
+  end
+
+  def test_can_build_custom_response_object
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_return(:body => "Hello there!")
+
+    response = @client.get_json(url) { |http_response| http_response.body }
+    assert response.is_a? String
+    assert_equal "Hello there!", response
+  end
+
+  def test_responds_with_nil_on_custom_response_404
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_return(:body => "", :status => 404)
+
+    response = @client.get_json(url) { |http_response| http_response.body }
+    assert_nil response
+  end
+
+  def test_can_build_custom_response_object_in_bang_method
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_return(:body => "Hello there!")
+
+    response = @client.get_json!(url) { |http_response| http_response.body }
+    assert response.is_a? String
+    assert_equal "Hello there!", response
   end
 
   def test_can_convert_response_to_ostruct

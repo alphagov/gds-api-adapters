@@ -220,6 +220,7 @@ module GdsApi
           "details" => {
             "type" => tag_type
           },
+          "web_url" => nil,
           "content_with_tag" => {
             "id" => "#{CONTENT_API_ENDPOINT}/with_tag.json?tag=#{CGI.escape(slug)}",
             "web_url" => "https://www.test.gov.uk/browse/#{slug}",
