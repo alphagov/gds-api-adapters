@@ -155,7 +155,7 @@ module GdsApi
       if method == :get
         @cache[url] ||= do_request(method, url, params)
       else
-       do_request(method, url, params)
+        do_request(method, url, params)
       end
     end
 
