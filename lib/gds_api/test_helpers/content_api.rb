@@ -301,23 +301,6 @@ module GdsApi
         @stubbed_content_api_licences << details
       end
 
-      def content_api_has_countries(countries)
-        response = response_base.merge({
-          "results" => countries.map { |slug, values|
-            updated_at = values.has_key?(:updated_at) ? {"updated_at" => values[:updated_at]} : {}
-            {
-              "id" => "#{CONTENT_API_ENDPOINT}/foreign-travel-advice/#{slug}.json",
-              "name" => values[:name],
-              "identifier" => slug,
-              "web_url" => "http://www.test.gov.uk/foreign-travel-advice/#{slug}",
-            }.merge(updated_at)
-          },
-          "total" => countries.length
-        })
-
-        stub_request(:get, %r{\A#{CONTENT_API_ENDPOINT}/foreign-travel-advice\.json}).to_return(status: 200, body: response.to_json, headers: { })
-      end
-
       private
 
         def titleize_slug(slug)
