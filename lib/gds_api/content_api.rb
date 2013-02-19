@@ -45,16 +45,13 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def artefact(slug, params={})
-    edition = params[:edition]
-    snac = params[:snac]
-
     url = "#{base_url}/#{CGI.escape(slug)}.json"
     query = params.map { |k,v| "#{k}=#{v}" }
     if query.any?
       url += "?#{query.join("&")}"
     end
 
-    if edition && ! options.include?(:bearer_token)
+    if params[:edition] && ! options.include?(:bearer_token)
       raise GdsApi::NoBearerToken
     end
     get_json(url)
@@ -122,10 +119,6 @@ class GdsApi::ContentApi < GdsApi::Base
     super(url, &create_response)
   end
 
-  def countries
-    parse_times(get_json!("#{base_url}/foreign-travel-advice.json"))
-  end
-
   private
     def base_url
       endpoint
@@ -140,14 +133,5 @@ class GdsApi::ContentApi < GdsApi::Base
       else
         batch_response
       end
-    end
-
-    def parse_times(response)
-      response["results"].map do |result|
-        if result.has_key?("updated_at")
-          result["updated_at"] = Time.parse(result["updated_at"])
-        end
-      end
-      response
     end
 end
