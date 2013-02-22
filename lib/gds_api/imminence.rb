@@ -19,9 +19,9 @@ class GdsApi::Imminence < GdsApi::Base
   end
 
   def places_kml(type)
-    get_raw("#{@endpoint}/places/#{type}.kml")
+    get_raw("#{@endpoint}/places/#{type}.kml").body
   end
-  
+
   def business_support_schemes(facets_hash)
     query = facets_hash.keys.sort.map { |k| "#{k.to_s}=#{facets_hash[k]}" }.join("&")
     query = "?#{query}" unless query.empty?
