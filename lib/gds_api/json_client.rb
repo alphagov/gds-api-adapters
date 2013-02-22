@@ -92,7 +92,7 @@ module GdsApi
     def do_json_request(method, url, params = nil, &create_response)
 
       begin
-        response = do_request_with_cache(method, url, params)
+        response = do_request_with_cache(method, url, params.to_json)
 
       rescue RestClient::ResourceNotFound => e
         raise GdsApi::HTTPNotFound.new(e.http_code)
@@ -169,7 +169,7 @@ module GdsApi
         url: url,
         headers: DEFAULT_REQUEST_HEADERS
       }
-      method_params[:payload] = params.to_json if params
+      method_params[:payload] = params
       method_params = with_auth_options(method_params)
       method_params = with_timeout(method_params)
       if URI.parse(url).is_a? URI::HTTPS
