@@ -72,16 +72,22 @@ module GdsApi
       do_request(:delete, url, params)
     end
 
+    def post_multipart(url, params)
+      r = do_raw_request(:post, url, params.merge({
+        :multipart => true
+      }))
+      Response.new(r)
+    end
+
     private
     def do_raw_request(method, url, params = nil)
       response = do_request(method, url, params)
-      response.body
 
     rescue RestClient::ResourceNotFound => e
       raise GdsApi::HTTPNotFound.new(e.http_code)
 
     rescue RestClient::Exception => e
-      raise GdsApi::HTTPErrorResponse.new(response.code.to_i), e.response.body
+      raise GdsApi::HTTPErrorResponse.new(e.response.code.to_i), e.response.body
     end
 
     # method: the symbolic name of the method to use, e.g. :get, :post
