@@ -25,5 +25,9 @@ class MiniTest::Unit::TestCase
   end
 end
 
+def load_fixture_file(filename)
+  File.open( File.join( File.dirname(__FILE__), "fixtures", filename ) )
+end
+
 require 'webmock/minitest'
 WebMock.disable_net_connect!
