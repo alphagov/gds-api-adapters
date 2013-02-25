@@ -1,7 +1,9 @@
 require 'test_helper'
 require 'gds_api/asset_manager'
+require 'gds_api/test_helpers/asset_manager'
 
 describe GdsApi::AssetManager do
+  include GdsApi::TestHelpers::AssetManager
 
   before do
     @base_api_url = Plek.current.find("asset-manager")
@@ -17,5 +19,21 @@ describe GdsApi::AssetManager do
     response = @api.create_asset(:file => file)
 
     assert_equal "http://asset-manager.dev.gov.uk/assets/51278b2b686c82076c000003", response.asset.id
+  end
+
+  it "can get an asset" do
+    asset_manager_has_an_asset("test-id", { "name" => "photo.jpg", "content_type" => "image/jpeg", "file_url" => "http://fooey.gov.uk/media/photo.jpg" })
+
+    asset = @api.asset("test-id")
+
+    assert_equal "photo.jpg", asset.name
+    assert_equal "image/jpeg", asset.content_type
+    assert_equal "http://fooey.gov.uk/media/photo.jpg", asset.file_url
+  end
+
+  it "returns nil when an asset does not exist" do
+    asset_manager_does_not_have_an_asset("not-really-here")
+
+    assert_nil @api.asset("not-really-here")
   end
 end

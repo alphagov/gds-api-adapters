@@ -8,6 +8,10 @@ class GdsApi::AssetManager < GdsApi::Base
     post_multipart("#{base_url}/assets", { :asset => asset })
   end
 
+  def asset(id)
+    get_json("#{base_url}/assets/#{id}")
+  end
+
   private
     def base_url
       endpoint
