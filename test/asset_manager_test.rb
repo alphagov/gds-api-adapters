@@ -14,7 +14,7 @@ describe GdsApi::AssetManager do
       to_return(:body => '{"asset":{"id":"http://asset-manager.dev.gov.uk/assets/51278b2b686c82076c000003"}}', :status => 201)
 
     file = load_fixture_file("hello.txt")
-    response = @api.create_asset(file)
+    response = @api.create_asset(:file => file)
 
     assert_equal "http://asset-manager.dev.gov.uk/assets/51278b2b686c82076c000003", response.asset.id
   end
