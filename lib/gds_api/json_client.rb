@@ -72,16 +72,22 @@ module GdsApi
       do_request(:delete, url, params)
     end
 
+    def post_multipart(url, params)
+      r = do_raw_request(:post, url, params.merge({
+        :multipart => true
+      }))
+      Response.new(r)
+    end
+
     private
     def do_raw_request(method, url, params = nil)
       response = do_request(method, url, params)
-      response.body
 
     rescue RestClient::ResourceNotFound => e
       raise GdsApi::HTTPNotFound.new(e.http_code)
 
     rescue RestClient::Exception => e
-      raise GdsApi::HTTPErrorResponse.new(response.code.to_i), e.response.body
+      raise GdsApi::HTTPErrorResponse.new(e.response.code.to_i), e.response.body
     end
 
     # method: the symbolic name of the method to use, e.g. :get, :post
@@ -92,7 +98,7 @@ module GdsApi
     def do_json_request(method, url, params = nil, &create_response)
 
       begin
-        response = do_request_with_cache(method, url, params)
+        response = do_request_with_cache(method, url, params.to_json)
 
       rescue RestClient::ResourceNotFound => e
         raise GdsApi::HTTPNotFound.new(e.http_code)
@@ -169,7 +175,7 @@ module GdsApi
         url: url,
         headers: DEFAULT_REQUEST_HEADERS
       }
-      method_params[:payload] = params.to_json if params
+      method_params[:payload] = params
       method_params = with_auth_options(method_params)
       method_params = with_timeout(method_params)
       if URI.parse(url).is_a? URI::HTTPS
