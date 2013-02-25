@@ -347,6 +347,12 @@ class JsonClientTest < MiniTest::Spec
     assert_equal({}, @client.put_json(url, payload).to_hash)
   end
 
+  def test_does_not_encode_json_if_payload_is_nil
+    url = "http://some.endpoint/some.json"
+    stub_request(:put, url).with(body: nil).to_return(:body => "{}", :status => 200)
+    assert_equal({}, @client.put_json(url, nil).to_hash)
+  end
+
   def test_can_build_custom_response_object
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(:body => "Hello there!")

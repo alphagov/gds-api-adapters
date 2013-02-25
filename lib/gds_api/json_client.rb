@@ -98,7 +98,7 @@ module GdsApi
     def do_json_request(method, url, params = nil, &create_response)
 
       begin
-        response = do_request_with_cache(method, url, params.to_json)
+        response = do_request_with_cache(method, url, (params.to_json if params))
 
       rescue RestClient::ResourceNotFound => e
         raise GdsApi::HTTPNotFound.new(e.http_code)
