@@ -3,9 +3,14 @@ require 'gds_api/imminence'
 require 'gds_api/panopticon'
 require 'gds_api/content_api'
 require 'gds_api/licence_application'
+require 'gds_api/asset_manager'
 
 module GdsApi
   module Helpers
+    def asset_manager_api
+      @asset_manager_api ||= GdsApi::AssetManager.new(Plek.current.find('asset-manager'))
+    end
+
     def content_api
       @content_api ||= GdsApi::ContentApi.new(Plek.current.find("contentapi"))
     end
