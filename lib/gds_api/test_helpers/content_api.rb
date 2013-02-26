@@ -12,34 +12,21 @@ module GdsApi
       # Takes an array of slugs, or hashes with section details (including a slug).
       # Will stub out content_api calls for tags of type section to return these sections
       def content_api_has_root_sections(slugs_or_sections)
-        sections = slugs_or_sections.map {|s| s.is_a?(Hash) ? s : {:slug => s} }
         body = plural_response_base.merge(
-          "results" => sections.map do |section|
-            {
-              "id" => "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(section[:slug])}.json",
-              "web_url" => nil,
-              "title" => section[:title] || titleize_slug(section[:slug]),
-              "details" => {
-                "type" => "section",
-                "description" => section[:description] || "#{section[:slug]} description",
-                "short_description" => section[:short_description] || "#{section[:slug]} short description",
-              },
-              "parent" => nil,
-              "content_with_tag" => {
-                "id" => "#{CONTENT_API_ENDPOINT}/with_tag.json?tag=#{CGI.escape(section[:slug])}",
-                "web_url" => "http://www.test.gov.uk/browse/#{section[:slug]}"
-              }
-            }
-          end
+          "results" => slugs_or_sections.map { |section| tag_result(section) }
         )
-        ["#{CONTENT_API_ENDPOINT}/tags.json?type=section", "#{CONTENT_API_ENDPOINT}/tags.json?root_sections=true&type=section"].each do |url|
+        urls = ["type=section", "root_sections=true&type=section"].map { |q|
+          "#{CONTENT_API_ENDPOINT}/tags.json?#{q}"
+        }
+        urls.each do |url|
           stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
         end
       end
 
-      def content_api_has_section(slug, parent_slug=nil)
-        body = tag_for_slug(slug, "section", parent_slug)
-        url = "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(slug)}.json"
+      def content_api_has_section(slug_or_hash, parent_slug=nil)
+        section = tag_hash(slug_or_hash).merge(parent: parent_slug)
+        body = tag_result(section)
+        url = "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(section[:slug])}.json"
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
@@ -56,27 +43,15 @@ module GdsApi
         end
       end
 
-      def content_api_has_subsections(parent_slug, subsection_slugs)
-        parent_section = tag_for_slug(parent_slug, "section")
+      def content_api_has_subsections(parent_slug_or_hash, subsection_slugs)
+        parent_section = tag_hash(parent_slug_or_hash)
+        subsections = subsection_slugs.map { |s|
+          tag_hash(s).merge(parent: parent_section)
+        }
         body = plural_response_base.merge(
-          "results" => subsection_slugs.map do |slug|
-            {
-              "id" => "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(slug)}.json",
-              "web_url" => nil,
-              "title" => titleize_slug(slug),
-              "details" => {
-                "type" => "section",
-                "description" => "#{slug} description"
-              },
-              "parent" => parent_section,
-              "content_with_tag" => {
-                "id" => "#{CONTENT_API_ENDPOINT}/with_tag.json?tag=#{CGI.escape(slug)}",
-                "web_url" => "http://www.test.gov.uk/browse/#{slug}"
-              }
-            }
-          end
+          "results" => subsections.map { |s| tag_result(s) }
         )
-        url = "#{CONTENT_API_ENDPOINT}/tags.json?type=section&parent_id=#{CGI.escape(parent_slug)}"
+        url = "#{CONTENT_API_ENDPOINT}/tags.json?type=section&parent_id=#{CGI.escape(parent_section[:slug])}"
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
@@ -214,18 +189,38 @@ module GdsApi
         parent = if parent_slug
           tag_for_slug(parent_slug, tag_type)
         end
+
+        tag_result(slug: slug, type: tag_type, parent: parent)
+      end
+
+      # Construct a tag hash suitable for passing into tag_result
+      def tag_hash(slug_or_hash)
+        if slug_or_hash.is_a?(Hash)
+          slug_or_hash
+        else
+          { slug: slug_or_hash, type: "section" }
+        end
+      end
+
+      def tag_result(slug_or_hash)
+        tag = tag_hash(slug_or_hash)
+
+        parent = tag_result(tag[:parent]) if tag[:parent]
+
         {
-          "title" => titleize_slug(slug.split('/').last),
-          "id" => "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(slug)}.json",
-          "details" => {
-            "type" => tag_type
-          },
+          "id" => "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(tag[:slug])}.json",
           "web_url" => nil,
-          "content_with_tag" => {
-            "id" => "#{CONTENT_API_ENDPOINT}/with_tag.json?tag=#{CGI.escape(slug)}",
-            "web_url" => "https://www.test.gov.uk/browse/#{slug}",
+          "title" => tag[:title] || titleize_slug(tag[:slug].split("/").last),
+          "details" => {
+            "type" => tag[:type],
+            "description" => tag[:description] || "#{tag[:slug]} description",
+            "short_description" => tag[:short_description] || "#{tag[:slug]} short description"
           },
-          "parent" => parent
+          "parent" => parent,
+          "content_with_tag" => {
+            "id" => "#{CONTENT_API_ENDPOINT}/with_tag.json?tag=#{CGI.escape(tag[:slug])}",
+            "web_url" => "http://www.test.gov.uk/browse/#{tag[:slug]}"
+          }
         }
       end
 
