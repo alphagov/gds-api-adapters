@@ -7,28 +7,28 @@ require 'gds_api/asset_manager'
 
 module GdsApi
   module Helpers
-    def asset_manager_api
-      @asset_manager_api ||= GdsApi::AssetManager.new(Plek.current.find('asset-manager'))
+    def asset_manager_api(options = {})
+      @asset_manager_api ||= GdsApi::AssetManager.new(Plek.current.find('asset-manager'), options)
     end
 
-    def content_api
-      @content_api ||= GdsApi::ContentApi.new(Plek.current.find("contentapi"))
+    def content_api(options = {})
+      @content_api ||= GdsApi::ContentApi.new(Plek.current.find("contentapi"), options)
     end
 
-    def publisher_api
-      @api ||= GdsApi::Publisher.new(Plek.current.find("publisher"))
+    def publisher_api(options = {})
+      @api ||= GdsApi::Publisher.new(Plek.current.find("publisher"), options)
     end
 
-    def imminence_api
-      @imminence_api ||= GdsApi::Imminence.new(Plek.current.find("imminence"))
+    def imminence_api(options = {})
+      @imminence_api ||= GdsApi::Imminence.new(Plek.current.find("imminence"), options)
     end
 
-    def licence_application_api
-      @licence_application_api ||= GdsApi::LicenceApplication.new(Plek.current.find("licensify"))
+    def licence_application_api(options = {})
+      @licence_application_api ||= GdsApi::LicenceApplication.new(Plek.current.find("licensify"), options)
     end
 
-    def panopticon_api
-      @panopticon_api ||= GdsApi::Panopticon.new(Plek.current.find("panopticon"), panopticon_api_credentials)
+    def panopticon_api(options = {})
+      @panopticon_api ||= GdsApi::Panopticon.new(Plek.current.find("panopticon"), panopticon_api_credentials.merge(options))
     end
 
     def panopticon_api_credentials
