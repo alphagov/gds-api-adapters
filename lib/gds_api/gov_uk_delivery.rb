@@ -1,24 +1,39 @@
 require_relative 'base'
 require_relative 'exceptions'
+require 'json'
 
 class GdsApi::GovUkDelivery < GdsApi::Base
   include GdsApi::ExceptionHandling
 
   def subscribe(email, feed_urls)
-    post_json("#{base_url}/subscriptions", {email: email, feed_urls: feed_urls})
+    data = {email: email, feed_urls: feed_urls}
+    url = "#{base_url}/subscriptions"
+    post_url(url, data)
   end
 
   def topic(feed_url, title, description=nil)
-    post_json("#{base_url}/lists", {feed_url: feed_url, title: title, description: description})
+    data = {feed_url: feed_url, title: title, description: description}
+    url = "#{base_url}/lists"
+    post_url(url, data)
   end
 
   def notify(feed_urls, subject, body)
     # TODO: should this be multipart?
-    post_json("#{base_url}/notifications", {feed_urls: feed_urls, subject: subject, body: body})
+    data = {feed_urls: feed_urls, subject: subject, body: body}
+    url = "#{base_url}/notifications"
+    post_url(url, data)
   end
 
 private
   def base_url
     endpoint
+  end
+
+  def post_url(url, data)
+    if ! @options[:noop]
+      post_json(url, data)
+    elsif @options[:noop] && @options[:stdout]
+      puts "Would POST #{data.to_json} to #{url}"
+    end
   end
 end
