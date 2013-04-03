@@ -12,20 +12,32 @@ describe GdsApi::GovUkDelivery do
   end
 
   it "can create a topic" do
-    govuk_delivery_create_topic_success('http://example.com/feed', 'Title')
-    response = @api.topic("http://example.com/feed", "Title")
-    assert response
+    expected_payload = { feed_url: 'http://example.com/feed', title: 'Title', description: nil }
+    stub = stub_gov_uk_delivery_post_request('lists', expected_payload).to_return(created_response_hash)
+
+    assert @api.topic("http://example.com/feed", "Title")
+    assert_requested stub
   end
 
   it "can subscribe a new email" do
-    govuk_delivery_create_subscriber_success('me@example.com', ['http://example.com/feed'])
-    response = @api.subscribe('me@example.com', ['http://example.com/feed'])
-    assert response
+    expected_payload = { email: 'me@example.com', feed_urls: ['http://example.com/feed'] }
+    stub = stub_gov_uk_delivery_post_request('subscriptions', expected_payload).to_return(created_response_hash)
+
+    assert @api.subscribe('me@example.com', ['http://example.com/feed'])
+    assert_requested stub
   end
 
   it "can post a notification" do
-    govuk_delivery_create_notification_success(['http://example.com/feed'], 'Test', '<p>Something</p>')
-    response = @api.notify(['http://example.com/feed'], 'Test', '<p>Something</p>')
-    assert response
+    expected_payload = { feed_urls: ['http://example.com/feed'], subject: 'Test', body: '<p>Something</p>'}
+    stub = stub_gov_uk_delivery_post_request('notifications', expected_payload).to_return(created_response_hash)
+
+    assert @api.notify(['http://example.com/feed'], 'Test', '<p>Something</p>')
+    assert_requested stub
+  end
+
+  private
+
+  def created_response_hash
+    { body: '', status: 201 }
   end
 end
