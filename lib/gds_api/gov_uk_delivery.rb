@@ -5,6 +5,10 @@ require 'json'
 class GdsApi::GovUkDelivery < GdsApi::Base
   include GdsApi::ExceptionHandling
 
+  def initialize(endpoint_url, options={})
+    super(endpoint_url, options.merge({timeout: 10}))
+  end
+
   def subscribe(email, feed_urls)
     data = {email: email, feed_urls: feed_urls}
     url = "#{base_url}/subscriptions"
