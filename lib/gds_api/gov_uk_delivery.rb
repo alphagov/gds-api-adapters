@@ -22,7 +22,6 @@ class GdsApi::GovUkDelivery < GdsApi::Base
   end
 
   def notify(feed_urls, subject, body)
-    # TODO: should this be multipart?
     data = {feed_urls: feed_urls, subject: subject, body: body}
     url = "#{base_url}/notifications"
     post_url(url, data)
