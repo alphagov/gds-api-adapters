@@ -494,10 +494,6 @@ describe GdsApi::ContentApi do
       end
     end
 
-    it "should do the request in batches if the request path would otherwise exceed 2000 chars" do
-
-    end
-
     describe "test helpers" do
       it "should have representative test helpers" do
         setup_content_api_business_support_schemes_stubs
