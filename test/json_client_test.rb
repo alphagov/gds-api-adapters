@@ -6,7 +6,13 @@ require 'base64'
 class JsonClientTest < MiniTest::Spec
   def setup
     @json_client_cache = GdsApi::JsonClient.cache
+
+    # Set the cache to nil so the JsonClient recreates it on each test run
+    # This used to initialise the cache to an empty Hash, eliminating the
+    # potential problem of cache entries expiring during a test run, but that
+    # no longer works now our code calls the `store` method with an expiry time
     GdsApi::JsonClient.cache = {}
+
     @client = GdsApi::JsonClient.new
   end
 
@@ -172,6 +178,34 @@ class JsonClientTest < MiniTest::Spec
 
       assert_requested :get, url, times: 2
       assert_equal response_a.to_hash, response_d.to_hash
+    end
+  end
+
+  def test_should_respect_expiry_headers
+    GdsApi::JsonClient.cache = nil # cause it to contruct a new cache instance.
+
+    url = "http://some.endpoint/some.json"
+    result = {"foo" => "bar"}
+    stub_request(:get, url).to_return(
+      :body => JSON.dump(result),
+      :status => 200,
+      :headers => { "Expires" => (Time.now + 7 * 60).utc.httpdate }
+    )
+
+    response_a = GdsApi::JsonClient.new.get_json(url)
+
+    Timecop.travel( 7 * 60 - 30) do # now + 6 mins 30 secs
+      response_b = GdsApi::JsonClient.new.get_json(url)
+
+      assert_requested :get, url, times: 1
+      assert_equal response_a.to_hash, response_b.to_hash
+    end
+
+    Timecop.travel( 7 * 60 + 30) do # now + 7 mins 30 secs
+      response_c = GdsApi::JsonClient.new.get_json(url)
+
+      assert_requested :get, url, times: 2
+      assert_equal response_a.to_hash, response_c.to_hash
     end
   end
 

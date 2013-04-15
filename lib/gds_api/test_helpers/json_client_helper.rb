@@ -9,6 +9,9 @@ module GdsApi
 
       def []=(k, v)
       end
+
+      def store(k, v, args={})
+      end
     end
   end
 end
