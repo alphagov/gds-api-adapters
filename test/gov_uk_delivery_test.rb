@@ -43,6 +43,13 @@ describe GdsApi::GovUkDelivery do
     assert_requested stub
   end
 
+  it "returns nil if the API 404s" do
+    expected_payload = { feed_url: 'http://example.com/feed'}
+    stub = stub_gov_uk_delivery_get_request('list-url', expected_payload).to_return(not_found_hash)
+
+    assert @api.signup_url('http://example.com/feed').nil?
+  end
+
   private
 
   def created_response_hash
