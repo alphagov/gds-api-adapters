@@ -21,6 +21,12 @@ class GdsApi::GovUkDelivery < GdsApi::Base
     post_url(url, data)
   end
 
+  def signup_url(feed_url)
+    if response = get_json("#{base_url}/list-url?feed_url=#{CGI.escape(feed_url)}")
+      response.list_url
+    end
+  end
+
   def notify(feed_urls, subject, body)
     data = {feed_urls: feed_urls, subject: subject, body: body}
     url = "#{base_url}/notifications"
