@@ -11,7 +11,7 @@ class JsonClientTest < MiniTest::Spec
     # This used to initialise the cache to an empty Hash, eliminating the
     # potential problem of cache entries expiring during a test run, but that
     # no longer works now our code calls the `store` method with an expiry time
-    GdsApi::JsonClient.cache = {}
+    GdsApi::JsonClient.cache = nil
 
     @client = GdsApi::JsonClient.new
   end
