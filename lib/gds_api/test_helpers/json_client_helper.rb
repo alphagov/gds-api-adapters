@@ -1,19 +1,4 @@
 require 'gds_api/json_client'
+require 'gds_api/null_cache'
 
-module GdsApi
-  module TestHelpers
-    class NullCache
-      def [](k)
-        nil
-      end
-
-      def []=(k, v)
-      end
-
-      def store(k, v, args={})
-      end
-    end
-  end
-end
-
-GdsApi::JsonClient.cache = GdsApi::TestHelpers::NullCache.new
+GdsApi::JsonClient.cache = GdsApi::NullCache.new

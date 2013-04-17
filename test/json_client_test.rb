@@ -181,6 +181,25 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  def test_should_allow_disabling_caching
+    GdsApi::JsonClient.cache = nil # Make sure caching is generally enabled
+
+    url = "http://some.endpoint/some.json"
+    result = {"foo" => "bar"}
+    stub_request(:get, url).to_return(:body => JSON.dump(result), :status => 200)
+
+    client = GdsApi::JsonClient.new(disable_cache: true)
+
+    response_a = client.get_json(url)
+    response_b = client.get_json(url)
+
+    assert_requested :get, url, times: 2
+
+    [response_a, response_b].each do |r|
+      assert_equal result, r.to_hash
+    end
+  end
+
   def test_should_respect_expiry_headers
     GdsApi::JsonClient.cache = nil # cause it to contruct a new cache instance.
 

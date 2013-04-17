@@ -1,6 +1,7 @@
 require_relative 'response'
 require_relative 'exceptions'
 require_relative 'version'
+require_relative 'null_cache'
 require 'lrucache'
 require 'rest-client'
 
@@ -21,9 +22,14 @@ module GdsApi
 
     def initialize(options = {})
       @logger = options[:logger] || GdsApi::Base.logger
-      cache_size = options[:cache_size] || DEFAULT_CACHE_SIZE
-      cache_ttl = options[:cache_ttl] || DEFAULT_CACHE_TTL
-      @cache = JsonClient.cache(cache_size, cache_ttl)
+
+      if options[:disable_cache]
+        @cache = NullCache.new
+      else
+        cache_size = options[:cache_size] || DEFAULT_CACHE_SIZE
+        cache_ttl = options[:cache_ttl] || DEFAULT_CACHE_TTL
+        @cache = JsonClient.cache(cache_size, cache_ttl)
+      end
       @options = options
     end
 
