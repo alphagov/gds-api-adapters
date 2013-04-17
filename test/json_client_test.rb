@@ -72,8 +72,6 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_should_cache_multiple_requests_to_same_url_across_instances
-    GdsApi::JsonClient.cache = nil # clear the stubbed cache instance
-
     url = "http://some.endpoint/some.json"
     result = {"foo" => "bar"}
     stub_request(:get, url).to_return(:body => JSON.dump(result), :status => 200)
@@ -84,8 +82,6 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_should_cache_up_to_10_items_by_default
-    GdsApi::JsonClient.cache = nil # clear the stubbed cache instance
-
     url = "http://some.endpoint/"
     result = {"foo" => "bar"}
     stub_request(:get, %r{\A#{url}}).to_return do |request|
@@ -106,7 +102,9 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_allow_overriding_the_number_of_cached_items
-    GdsApi::JsonClient.cache = nil # clear the stubbed cache instance
+    # Clear out the default cache instance, because otherwise the customisation
+    # doesn't take effect, due to some non-obvious behaviour in JsonClient.
+    GdsApi::JsonClient.cache = nil
 
     url = "http://some.endpoint/"
     result = {"foo" => "bar"}
@@ -128,8 +126,6 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_should_cache_requests_for_15_mins_by_default
-    GdsApi::JsonClient.cache = nil # cause it to contruct a new cache instance.
-
     url = "http://some.endpoint/some.json"
     result = {"foo" => "bar"}
     stub_request(:get, url).to_return(:body => JSON.dump(result), :status => 200)#.times(1)
@@ -155,7 +151,9 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_should_allow_overriding_cache_ttl
-    GdsApi::JsonClient.cache = nil # cause it to contruct a new cache instance.
+    # Clear out the default cache instance, because otherwise the customisation
+    # doesn't take effect, due to some non-obvious behaviour in JsonClient.
+    GdsApi::JsonClient.cache = nil
 
     url = "http://some.endpoint/some.json"
     result = {"foo" => "bar"}
@@ -182,8 +180,6 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_should_allow_disabling_caching
-    GdsApi::JsonClient.cache = nil # Make sure caching is generally enabled
-
     url = "http://some.endpoint/some.json"
     result = {"foo" => "bar"}
     stub_request(:get, url).to_return(:body => JSON.dump(result), :status => 200)
@@ -201,8 +197,6 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_should_respect_expiry_headers
-    GdsApi::JsonClient.cache = nil # cause it to contruct a new cache instance.
-
     url = "http://some.endpoint/some.json"
     result = {"foo" => "bar"}
     stub_request(:get, url).to_return(
