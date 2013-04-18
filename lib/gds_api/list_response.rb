@@ -2,14 +2,14 @@ require "json"
 require "gds_api/response"
 require "link_header"
 
-class GdsApi::ContentApi < GdsApi::Base
+module GdsApi
 
-  # Response class for lists of multiple items from the content API.
+  # Response class for lists of multiple items.
   #
-  # These responses are in a common format, with the list of results contained
-  # under the `results` key. The response may also have previous and subsequent
-  # pages, indicated by entries in the response's `Link` header.
-  class ListResponse < GdsApi::Response
+  # This expects responses to be in a common format, with the list of results
+  # contained under the `results` key. The response may also have previous and
+  # subsequent pages, indicated by entries in the response's `Link` header.
+  class ListResponse < Response
 
     # The ListResponse is instantiated with a reference back to the API client,
     # so it can make requests for the subsequent pages
