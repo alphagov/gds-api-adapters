@@ -3,6 +3,9 @@ require 'ostruct'
 require_relative 'core-ext/openstruct'
 
 module GdsApi
+
+  # This wraps an HTTP response with a JSON body, and presents this as
+  # an object that has the read behaviour of both a Hash and an OpenStruct
   class Response
     extend Forwardable
     include Enumerable
@@ -17,35 +20,29 @@ module GdsApi
       @http_response.body
     end
 
-    def to_hash
-      @parsed ||= JSON.parse(@http_response.body)
-    end
-
     def code
       # Return an integer code for consistency with HTTPErrorResponse
       @http_response.code
     end
 
+    def to_hash
+      @parsed ||= JSON.parse(@http_response.body)
+    end
+
     def to_ostruct
-      self.class.build_ostruct_recursively(to_hash)
+      @ostruct ||= self.class.build_ostruct_recursively(to_hash)
     end
 
     def method_missing(method)
-      if to_hash.has_key?(method.to_s)
-        to_ostruct.send(method)
-      else
-        nil
-      end
+      to_ostruct.send(method)
     end
 
     def respond_to_missing?(method, include_private)
-      to_hash.has_key?(method.to_s)
+      to_ostruct.respond_to?(method, include_private)
     end
 
-    def present?; ! blank?; end
+    def present?; true; end
     def blank?; false; end
-
-  private
 
     def self.build_ostruct_recursively(value)
       case value
