@@ -6,14 +6,26 @@ module GdsApi
 
   # This wraps an HTTP response with a JSON body, and presents this as
   # an object that has the read behaviour of both a Hash and an OpenStruct
+  #
+  # Responses can be configured to use relative URLs for `web_url` properties.
+  # This is useful on non-canonical frontends, such as those in staging environments.
+  #
+  # Example:
+  #
+  #   r = Response.new(response, web_urls_relative_to: "https://www.gov.uk")
+  #   r.results[0].web_url
+  #   => "/bank-holidays"
   class Response
     extend Forwardable
     include Enumerable
 
+    WEB_URL_KEYS = ["web_url"]
+
     def_delegators :to_hash, :[], :"<=>", :each
 
-    def initialize(http_response)
+    def initialize(http_response, options = {})
       @http_response = http_response
+      @web_urls_relative_to = URI.parse(options[:web_urls_relative_to]) if options[:web_urls_relative_to]
     end
 
     def raw_response_body
@@ -26,7 +38,7 @@ module GdsApi
     end
 
     def to_hash
-      @parsed ||= JSON.parse(@http_response.body)
+      @parsed ||= transform_parsed(JSON.parse(@http_response.body))
     end
 
     def to_ostruct
@@ -43,6 +55,34 @@ module GdsApi
 
     def present?; true; end
     def blank?; false; end
+
+  private
+
+    def transform_parsed(value)
+      return value if @web_urls_relative_to.nil?
+
+      case value
+      when Hash
+        Hash[value.map { |k, v|
+          # NOTE: Don't bother transforming if the value is nil
+          if WEB_URL_KEYS.include?(k) && v
+            # Use relative URLs to route when the web_url value is on the
+            # same domain as the site root. Note that we can't just use the
+            # `route_to` method, as this would give us technically correct
+            # but potentially confusing `//host/path` URLs for URLs with the
+            # same scheme but different hosts.
+            relative_url = @web_urls_relative_to.route_to(v)
+            [k, relative_url.host ? v : relative_url.to_s]
+          else
+            [k, transform_parsed(v)]
+          end
+        }]
+      when Array
+        value.map { |v| transform_parsed(v) }
+      else
+        value
+      end
+    end
 
     def self.build_ostruct_recursively(value)
       case value

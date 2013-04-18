@@ -9,7 +9,7 @@ class GdsApi::ContentApi < GdsApi::Base
   # These responses are in a common format, with the list of results contained
   # under the `results` key. The response may also have previous and subsequent
   # pages, indicated by entries in the response's `Link` header.
-  class ListResponse < Response
+  class ListResponse < GdsApi::Response
 
     # The ListResponse is instantiated with a reference back to the API client,
     # so it can make requests for the subsequent pages
