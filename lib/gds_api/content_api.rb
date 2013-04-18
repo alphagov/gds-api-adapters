@@ -1,7 +1,6 @@
 require_relative 'base'
 require_relative 'exceptions'
-require 'gds_api/content_api/response'
-require 'gds_api/content_api/list_response'
+require_relative 'list_response'
 
 class GdsApi::ContentApi < GdsApi::Base
   include GdsApi::ExceptionHandling
@@ -95,26 +94,26 @@ class GdsApi::ContentApi < GdsApi::Base
 
   def get_list!(url)
     get_json!(url) { |r|
-      ListResponse.new(r, self, web_urls_relative_to: @web_urls_relative_to)
+      GdsApi::ListResponse.new(r, self, web_urls_relative_to: @web_urls_relative_to)
     }
   end
 
   def get_list(url)
     get_json(url) { |r|
-      ListResponse.new(r, self, web_urls_relative_to: @web_urls_relative_to)
+      GdsApi::ListResponse.new(r, self, web_urls_relative_to: @web_urls_relative_to)
     }
   end
 
   def get_json(url, &create_response)
     create_response = create_response || Proc.new { |r|
-      GdsApi::ContentApi::Response.new(r, web_urls_relative_to: @web_urls_relative_to)
+      GdsApi::Response.new(r, web_urls_relative_to: @web_urls_relative_to)
     }
     super(url, &create_response)
   end
 
   def get_json!(url, &create_response)
     create_response = create_response || Proc.new { |r|
-      GdsApi::ContentApi::Response.new(r, web_urls_relative_to: @web_urls_relative_to)
+      GdsApi::Response.new(r, web_urls_relative_to: @web_urls_relative_to)
     }
     super(url, &create_response)
   end

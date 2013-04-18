@@ -228,7 +228,7 @@ class JsonClientTest < MiniTest::Spec
     new_url = "http://some.endpoint/other.json"
     stub_request(:get, url).to_return(
       :body => "",
-      :status => 302,
+      :status => 303,
       :headers => {"Location" => new_url}
     )
     stub_request(:get, new_url).to_return(:body => '{"a": 1}', :status => 200)
