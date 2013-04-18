@@ -39,7 +39,7 @@ module GdsApi
         'User-Agent' => "GDS Api Client v. #{GdsApi::VERSION}"
     }
     DEFAULT_TIMEOUT_IN_SECONDS = 4
-    DEFAULT_CACHE_SIZE = 10
+    DEFAULT_CACHE_SIZE = 100
     DEFAULT_CACHE_TTL = 15 * 60 # 15 minutes
 
     def get_raw(url)
