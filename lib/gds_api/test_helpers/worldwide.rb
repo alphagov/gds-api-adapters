@@ -54,6 +54,12 @@ module GdsApi
         stub_request(:get, "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}").to_return(:status => 404)
       end
 
+      def worldwide_api_has_organisations_for_location(location_slug, details)
+        url = "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}/organisations"
+        stub_request(:get, url).
+          to_return(:status => 200, :body => details.to_json, :headers => {"Link" => "<#{url}; rel\"self\""})
+      end
+
       def world_location_for_slug(slug)
         singular_response_base.merge(world_location_details_for_slug(slug))
       end
