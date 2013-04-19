@@ -81,26 +81,6 @@ class JsonClientTest < MiniTest::Spec
     assert_requested :get, url, times: 1
   end
 
-  def test_should_cache_up_to_10_items_by_default
-    url = "http://some.endpoint/"
-    result = {"foo" => "bar"}
-    stub_request(:get, %r{\A#{url}}).to_return do |request|
-      {:body => {"url" => request.uri}.to_json, :status => 200}
-    end
-
-    response_a = GdsApi::JsonClient.new.get_json("#{url}/first.json")
-    response_b = GdsApi::JsonClient.new.get_json("#{url}/second.json")
-    9.times { |n| GdsApi::JsonClient.new.get_json("#{url}/#{n}.json") }
-
-    response_c = GdsApi::JsonClient.new.get_json("#{url}/second.json")
-    response_d = GdsApi::JsonClient.new.get_json("#{url}/first.json")
-
-    assert_requested :get, "#{url}/second.json", times: 1
-    assert_requested :get, "#{url}/first.json", times: 2
-    assert_equal response_b.to_hash, response_c.to_hash
-    assert_equal response_a.to_hash, response_d.to_hash
-  end
-
   def test_allow_overriding_the_number_of_cached_items
     # Clear out the default cache instance, because otherwise the customisation
     # doesn't take effect, due to some non-obvious behaviour in JsonClient.
