@@ -35,6 +35,10 @@ module GdsApi
       Object::const_defined?(:PANOPTICON_API_CREDENTIALS) ? PANOPTICON_API_CREDENTIALS : {}
     end
 
+    def worldwide_api(options = {})
+      @worldwide_api ||= GdsApi::Worldwide.new(Plek.current.find("whitehall-admin"), options)
+    end
+
     def self.included(klass)
       if klass.respond_to?(:helper_method)
         klass.helper_method :publisher_api, :panopticon_api, :imminence_api, :content_api, :licence_application_api
