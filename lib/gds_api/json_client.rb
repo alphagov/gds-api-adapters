@@ -1,6 +1,7 @@
 require_relative 'response'
 require_relative 'exceptions'
 require_relative 'version'
+require_relative 'null_cache'
 require 'lrucache'
 require 'rest-client'
 
@@ -21,9 +22,14 @@ module GdsApi
 
     def initialize(options = {})
       @logger = options[:logger] || GdsApi::Base.logger
-      cache_size = options[:cache_size] || DEFAULT_CACHE_SIZE
-      cache_ttl = options[:cache_ttl] || DEFAULT_CACHE_TTL
-      @cache = JsonClient.cache(cache_size, cache_ttl)
+
+      if options[:disable_cache]
+        @cache = NullCache.new
+      else
+        cache_size = options[:cache_size] || DEFAULT_CACHE_SIZE
+        cache_ttl = options[:cache_ttl] || DEFAULT_CACHE_TTL
+        @cache = JsonClient.cache(cache_size, cache_ttl)
+      end
       @options = options
     end
 
@@ -33,7 +39,7 @@ module GdsApi
         'User-Agent' => "GDS Api Client v. #{GdsApi::VERSION}"
     }
     DEFAULT_TIMEOUT_IN_SECONDS = 4
-    DEFAULT_CACHE_SIZE = 10
+    DEFAULT_CACHE_SIZE = 100
     DEFAULT_CACHE_TTL = 15 * 60 # 15 minutes
 
     def get_raw(url)
@@ -157,11 +163,32 @@ module GdsApi
 
     def do_request_with_cache(method, url, params = nil)
       # Only read GET requests from the cache: any other request methods should
-      # always be passed through
-      if method == :get
-        @cache[url] ||= do_request(method, url, params)
-      else
-        do_request(method, url, params)
+      # always be passed through. Note that this means HEAD requests won't get
+      # cached, but that would involve separating the cache by method and URL.
+      # Also, we don't generally make HEAD requests.
+      use_cache = (method == :get)
+
+      if use_cache
+        cached_response = @cache[url]
+        return cached_response if cached_response
+      end
+
+      response = do_request(method, url, params)
+
+      if use_cache
+        cache_time = response_cache_time(response)
+        # If cache_time is nil, this will fall back on @cache's default
+        @cache.store(url, response, cache_time)
+      end
+
+      response
+    end
+
+    # Return either a Time object representing the expiry time of the response
+    # or nil if no cache information is provided
+    def response_cache_time(response)
+      if response.headers[:expires]
+        Time.httpdate response.headers[:expires]
       end
     end
 

@@ -6,7 +6,13 @@ require 'base64'
 class JsonClientTest < MiniTest::Spec
   def setup
     @json_client_cache = GdsApi::JsonClient.cache
-    GdsApi::JsonClient.cache = {}
+
+    # Set the cache to nil so the JsonClient recreates it on each test run
+    # This used to initialise the cache to an empty Hash, eliminating the
+    # potential problem of cache entries expiring during a test run, but that
+    # no longer works now our code calls the `store` method with an expiry time
+    GdsApi::JsonClient.cache = nil
+
     @client = GdsApi::JsonClient.new
   end
 
@@ -66,8 +72,6 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_should_cache_multiple_requests_to_same_url_across_instances
-    GdsApi::JsonClient.cache = nil # clear the stubbed cache instance
-
     url = "http://some.endpoint/some.json"
     result = {"foo" => "bar"}
     stub_request(:get, url).to_return(:body => JSON.dump(result), :status => 200)
@@ -77,30 +81,10 @@ class JsonClientTest < MiniTest::Spec
     assert_requested :get, url, times: 1
   end
 
-  def test_should_cache_up_to_10_items_by_default
-    GdsApi::JsonClient.cache = nil # clear the stubbed cache instance
-
-    url = "http://some.endpoint/"
-    result = {"foo" => "bar"}
-    stub_request(:get, %r{\A#{url}}).to_return do |request|
-      {:body => {"url" => request.uri}.to_json, :status => 200}
-    end
-
-    response_a = GdsApi::JsonClient.new.get_json("#{url}/first.json")
-    response_b = GdsApi::JsonClient.new.get_json("#{url}/second.json")
-    9.times { |n| GdsApi::JsonClient.new.get_json("#{url}/#{n}.json") }
-
-    response_c = GdsApi::JsonClient.new.get_json("#{url}/second.json")
-    response_d = GdsApi::JsonClient.new.get_json("#{url}/first.json")
-
-    assert_requested :get, "#{url}/second.json", times: 1
-    assert_requested :get, "#{url}/first.json", times: 2
-    assert_equal response_b.to_hash, response_c.to_hash
-    assert_equal response_a.to_hash, response_d.to_hash
-  end
-
   def test_allow_overriding_the_number_of_cached_items
-    GdsApi::JsonClient.cache = nil # clear the stubbed cache instance
+    # Clear out the default cache instance, because otherwise the customisation
+    # doesn't take effect, due to some non-obvious behaviour in JsonClient.
+    GdsApi::JsonClient.cache = nil
 
     url = "http://some.endpoint/"
     result = {"foo" => "bar"}
@@ -122,8 +106,6 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_should_cache_requests_for_15_mins_by_default
-    GdsApi::JsonClient.cache = nil # cause it to contruct a new cache instance.
-
     url = "http://some.endpoint/some.json"
     result = {"foo" => "bar"}
     stub_request(:get, url).to_return(:body => JSON.dump(result), :status => 200)#.times(1)
@@ -149,7 +131,9 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_should_allow_overriding_cache_ttl
-    GdsApi::JsonClient.cache = nil # cause it to contruct a new cache instance.
+    # Clear out the default cache instance, because otherwise the customisation
+    # doesn't take effect, due to some non-obvious behaviour in JsonClient.
+    GdsApi::JsonClient.cache = nil
 
     url = "http://some.endpoint/some.json"
     result = {"foo" => "bar"}
@@ -172,6 +156,49 @@ class JsonClientTest < MiniTest::Spec
 
       assert_requested :get, url, times: 2
       assert_equal response_a.to_hash, response_d.to_hash
+    end
+  end
+
+  def test_should_allow_disabling_caching
+    url = "http://some.endpoint/some.json"
+    result = {"foo" => "bar"}
+    stub_request(:get, url).to_return(:body => JSON.dump(result), :status => 200)
+
+    client = GdsApi::JsonClient.new(disable_cache: true)
+
+    response_a = client.get_json(url)
+    response_b = client.get_json(url)
+
+    assert_requested :get, url, times: 2
+
+    [response_a, response_b].each do |r|
+      assert_equal result, r.to_hash
+    end
+  end
+
+  def test_should_respect_expiry_headers
+    url = "http://some.endpoint/some.json"
+    result = {"foo" => "bar"}
+    stub_request(:get, url).to_return(
+      :body => JSON.dump(result),
+      :status => 200,
+      :headers => { "Expires" => (Time.now + 7 * 60).utc.httpdate }
+    )
+
+    response_a = GdsApi::JsonClient.new.get_json(url)
+
+    Timecop.travel( 7 * 60 - 30) do # now + 6 mins 30 secs
+      response_b = GdsApi::JsonClient.new.get_json(url)
+
+      assert_requested :get, url, times: 1
+      assert_equal response_a.to_hash, response_b.to_hash
+    end
+
+    Timecop.travel( 7 * 60 + 30) do # now + 7 mins 30 secs
+      response_c = GdsApi::JsonClient.new.get_json(url)
+
+      assert_requested :get, url, times: 2
+      assert_equal response_a.to_hash, response_c.to_hash
     end
   end
 
