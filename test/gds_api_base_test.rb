@@ -56,6 +56,11 @@ class GdsApiBaseTest < MiniTest::Unit::TestCase
     assert_equal 4, api.client.cache.max_size
   end
 
+  def test_disabling_cache
+    api = ConcreteApi.new("http://bar", disable_cache: true)
+    assert api.client.cache.is_a? GdsApi::NullCache
+  end
+
   def test_should_barf_if_not_given_valid_URL
     proc do
       ConcreteApi.new('invalid-url')
