@@ -1,8 +1,12 @@
 module GdsApi
   module TestHelpers
     module CommonResponses
-      def titleize_slug(slug)
-        slug.gsub("-", " ").capitalize
+      def titleize_slug(slug, options = {})
+        if options[:title_case]
+          slug.gsub("-", " ").gsub(/\b./) {|m| m.upcase }
+        else
+          slug.gsub("-", " ").capitalize
+        end
       end
 
       def response_base

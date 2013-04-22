@@ -4,6 +4,7 @@ require 'gds_api/panopticon'
 require 'gds_api/content_api'
 require 'gds_api/licence_application'
 require 'gds_api/asset_manager'
+require 'gds_api/worldwide'
 
 module GdsApi
   module Helpers
