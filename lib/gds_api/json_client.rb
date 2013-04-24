@@ -42,9 +42,13 @@ module GdsApi
     DEFAULT_CACHE_SIZE = 100
     DEFAULT_CACHE_TTL = 15 * 60 # 15 minutes
 
+    def get_raw!(url)
+      do_raw_request(:get, url)
+    end
+
     def get_raw(url)
       ignoring GdsApi::HTTPNotFound do
-        do_raw_request(:get, url)
+        get_raw!(url)
       end
     end
 
