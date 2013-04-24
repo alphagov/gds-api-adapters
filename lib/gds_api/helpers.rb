@@ -4,6 +4,7 @@ require 'gds_api/panopticon'
 require 'gds_api/content_api'
 require 'gds_api/licence_application'
 require 'gds_api/asset_manager'
+require 'gds_api/worldwide'
 
 module GdsApi
   module Helpers
@@ -33,6 +34,10 @@ module GdsApi
 
     def panopticon_api_credentials
       Object::const_defined?(:PANOPTICON_API_CREDENTIALS) ? PANOPTICON_API_CREDENTIALS : {}
+    end
+
+    def worldwide_api(options = {})
+      @worldwide_api ||= GdsApi::Worldwide.new(Plek.current.find("whitehall-admin"), options)
     end
 
     def self.included(klass)

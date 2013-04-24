@@ -1,10 +1,11 @@
 require 'gds_api/test_helpers/json_client_helper'
 require 'cgi'
-require_relative 'content_api/artefact_stub'
+require 'gds_api/test_helpers/common_responses'
 
 module GdsApi
   module TestHelpers
     module ContentApi
+      include GdsApi::TestHelpers::CommonResponses
       # Generally true. If you are initializing the client differently,
       # you could redefine/override the constant or stub directly.
       CONTENT_API_ENDPOINT = Plek.current.find('contentapi')
@@ -295,38 +296,10 @@ module GdsApi
         raise "Need a licence identifier" if details[:licence_identifier].nil?
         @stubbed_content_api_licences << details
       end
-
-      private
-
-        def titleize_slug(slug)
-          slug.gsub("-", " ").capitalize
-        end
-
-        def response_base
-          {
-            "_response_info" => {
-              "status" => "ok"
-            }
-          }
-        end
-
-        def singular_response_base
-          response_base
-        end
-
-        def plural_response_base
-          response_base.merge(
-            {
-              "description" => "Tags!",
-              "total" => 100,
-              "startIndex" => 1,
-              "pageSize" => 100,
-              "currentPage" => 1,
-              "pages" => 1,
-              "results" => []
-            }
-          )
-        end
     end
   end
 end
+
+# This has to be after the definition of TestHelpers::ContentApi, otherwise, this doesn't pick up
+# the include of TestHelpers::CommonResponses
+require_relative 'content_api/artefact_stub'
