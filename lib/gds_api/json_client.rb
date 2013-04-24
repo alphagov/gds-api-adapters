@@ -21,6 +21,10 @@ module GdsApi
     attr_accessor :logger, :options, :cache
 
     def initialize(options = {})
+      if options[:disable_timeout] or options[:timeout].to_i < 0
+        raise "It is no longer possible to disable the timeout."
+      end
+
       @logger = options[:logger] || GdsApi::Base.logger
 
       if options[:disable_cache]
