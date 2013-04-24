@@ -2,6 +2,7 @@ require_relative 'json_client'
 require 'cgi'
 require 'null_logger'
 require 'plek'
+require_relative 'list_response'
 
 class GdsApi::Base
   class InvalidAPIURL < StandardError
@@ -48,6 +49,12 @@ class GdsApi::Base
 
   def url_for_slug(slug, options={})
     base = "#{base_url}/#{slug}.json#{query_string(options)}"
+  end
+
+  def get_list!(url)
+    get_json!(url) do |r|
+      GdsApi::ListResponse.new(r, self)
+    end
   end
 
 private
