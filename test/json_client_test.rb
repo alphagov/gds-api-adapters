@@ -504,4 +504,13 @@ class JsonClientTest < MiniTest::Spec
       @client.post_multipart("http://some.endpoint/some.json", {"a" => "123"})
     end
   end
+
+  def test_should_raise_error_if_attempting_to_disable_timeout
+    assert_raises RuntimeError do
+      GdsApi::JsonClient.new(:disable_timeout => true)
+    end
+    assert_raises RuntimeError do
+      GdsApi::JsonClient.new(:timeout => -1)
+    end
+  end
 end
