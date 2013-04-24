@@ -145,13 +145,9 @@ module GdsApi
     # Take a hash of parameters for Request#execute; return a hash of
     # parameters with timeouts included
     def with_timeout(method_params)
-      if options[:disable_timeout]
-        method_params.merge(timeout: -1)
-      else
-        method_params.merge(
-          timeout: options[:timeout] || DEFAULT_TIMEOUT_IN_SECONDS
-        )
-      end
+      method_params.merge(
+        timeout: options[:timeout] || DEFAULT_TIMEOUT_IN_SECONDS
+      )
     end
 
     def with_ssl_options(method_params)
