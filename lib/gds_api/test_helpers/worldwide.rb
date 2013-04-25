@@ -52,7 +52,7 @@ module GdsApi
 
       def worldwide_api_has_selection_of_locations
         worldwide_api_has_locations %w(
-          afghanistan angola australia bangladesh belarus brazil brunei cambodia chad
+          afghanistan angola australia bahamas belarus brazil brunei cambodia chad
           croatia denmark eritrea france ghana iceland japan laos luxembourg malta
           micronesia mozambique nicaragua panama portugal sao-tome-and-principe singapore
           south-korea sri-lanka uk-delegation-to-council-of-europe
@@ -76,6 +76,13 @@ module GdsApi
         url = "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}/organisations"
         stub_request(:get, url).
           to_return(:status => 200, :body => json, :headers => {"Link" => "<#{url}; rel\"self\""})
+      end
+
+      def worldwide_api_has_no_organisations_for_location(location_slug)
+        details = {"results" => [], "total" => 0, "_response_info" => { "status" => "ok" } }
+        url = "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}/organisations"
+        stub_request(:get, url).
+          to_return(:status => 200, :body => details.to_json, :headers => {"Link" => "<#{url}; rel\"self\""})
       end
 
       def world_location_for_slug(slug)
