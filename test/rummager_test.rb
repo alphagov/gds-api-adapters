@@ -8,27 +8,23 @@ describe GdsApi::Rummager do
     stub_request(:get, /example.com\/advanced_search/).to_return(body: "[]")
   end
 
-  it "should raise an exception if the search service uri is not set" do
-    assert_raises(GdsApi::Rummager::SearchUriNotSpecified) { GdsApi::Rummager.new(nil) }
-  end
-
   it "should raise an exception if the service at the search URI returns a 500" do
     stub_request(:get, /example.com\/search/).to_return(status: [500, "Internal Server Error"])
-    assert_raises(GdsApi::Rummager::SearchServiceError) do
+    assert_raises(GdsApi::HTTPErrorResponse) do
       GdsApi::Rummager.new("http://example.com").search("query")
     end
   end
 
   it "should raise an exception if the service at the search URI returns a 404" do
     stub_request(:get, /example.com\/search/).to_return(status: [404, "Not Found"])
-    assert_raises(GdsApi::Rummager::SearchServiceError) do
+    assert_raises(GdsApi::HTTPNotFound) do
       GdsApi::Rummager.new("http://example.com").search("query")
     end
   end
 
   it "should raise an exception if the service at the search URI times out" do
     stub_request(:get, /example.com\/search/).to_timeout
-    assert_raises(GdsApi::Rummager::SearchTimeout) do
+    assert_raises(GdsApi::TimedOutException) do
       GdsApi::Rummager.new("http://example.com").search("query")
     end
   end
@@ -38,7 +34,7 @@ describe GdsApi::Rummager do
     stub_request(:get, /example.com\/search/).to_return(body: search_results.to_json)
     results = GdsApi::Rummager.new("http://example.com").search("query")
 
-    assert_equal search_results, results
+    assert_equal search_results, results.to_hash
   end
 
   it "should return an empty set of results without making request if query is empty" do
@@ -73,26 +69,6 @@ describe GdsApi::Rummager do
     assert_requested :get, /format_filter=specialist_guidance/
   end
 
-  it "should not tell the http client to use ssl if we're connecting to an http host" do
-    response = stub('response', code: '200', body: '[]')
-    http = stub('http', get: response)
-    Net::HTTP.stubs(:new).returns(http)
-
-    http.expects(:use_ssl=).never
-
-    client = GdsApi::Rummager.new("http://example.com").search "search-term"
-  end
-
-  it "should tell the http client to use ssl if we're connecting to an https host" do
-    response = stub('response', code: '200', body: '[]')
-    http = stub('http', get: response)
-    Net::HTTP.stubs(:new).returns(http)
-
-    http.expects(:use_ssl=).with(true)
-
-    client = GdsApi::Rummager.new("https://example.com").search "search-term"
-  end
-
   it "should add a format filter parameter to autocomplete if provided" do
     GdsApi::Rummager.new("http://example.com").autocomplete "search-term", "specialist_guidance"
 
@@ -118,21 +94,21 @@ describe GdsApi::Rummager do
 
   it "#advanced_search should raise an exception if the service at the search URI returns a 500" do
     stub_request(:get, /example.com\/advanced_search/).to_return(status: [500, "Internal Server Error"])
-    assert_raises(GdsApi::Rummager::SearchServiceError) do
+    assert_raises(GdsApi::HTTPErrorResponse) do
       GdsApi::Rummager.new("http://example.com").advanced_search({keywords: "query"})
     end
   end
 
   it "#advanced_search should raise an exception if the service at the search URI returns a 404" do
     stub_request(:get, /example.com\/advanced_search/).to_return(status: [404, "Not Found"])
-    assert_raises(GdsApi::Rummager::SearchServiceError) do
+    assert_raises(GdsApi::HTTPNotFound) do
       GdsApi::Rummager.new("http://example.com").advanced_search({keywords: "query"})
     end
   end
 
   it "#advanced_search should raise an exception if the service at the search URI times out" do
     stub_request(:get, /example.com\/advanced_search/).to_timeout
-    assert_raises(GdsApi::Rummager::SearchTimeout) do
+    assert_raises(GdsApi::TimedOutException) do
       GdsApi::Rummager.new("http://example.com").advanced_search({keywords: "query"})
     end
   end
@@ -142,7 +118,7 @@ describe GdsApi::Rummager do
     stub_request(:get, /example.com\/advanced_search/).to_return(body: search_results.to_json)
     results = GdsApi::Rummager.new("http://example.com").advanced_search({keywords: "query"})
 
-    assert_equal search_results, results
+    assert_equal search_results, results.to_hash
   end
 
   it "#advanced_search should return an empty set of results without making request if arguments are empty" do
