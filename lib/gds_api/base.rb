@@ -22,7 +22,8 @@ class GdsApi::Base
                           :post_json, :post_json!,
                           :put_json, :put_json!,
                           :delete_json!,
-                          :get_raw, :post_multipart
+                          :get_raw, :get_raw!,
+                          :post_multipart
 
   attr_reader :options
 
