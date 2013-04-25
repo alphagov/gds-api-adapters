@@ -1,3 +1,4 @@
+require 'gds_api/base'
 require 'rack/utils'
 
 module GdsApi

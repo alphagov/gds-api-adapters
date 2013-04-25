@@ -31,3 +31,5 @@ end
 
 require 'webmock/minitest'
 WebMock.disable_net_connect!
+
+require 'gds_api/test_helpers/json_client_helper'
