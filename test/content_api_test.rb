@@ -198,6 +198,62 @@ describe GdsApi::ContentApi do
     end
   end
 
+  describe "artefacts" do
+    before :each do
+      @artefacts_endpoint = "#{GdsApi::TestHelpers::ContentApi::CONTENT_API_ENDPOINT}/artefacts.json"
+    end
+
+    it "should return a listresponse for the artefacts" do
+      WebMock.stub_request(:get, @artefacts_endpoint).
+        to_return(:body => {
+          "_response_info" => {"status" => "ok"},
+          "total" => 4,
+          "results" => [
+            {"format" => "answer", "web_url" => "http://www.test.gov.uk/foo"},
+            {"format" => "local_transaction", "web_url" => "http://www.test.gov.uk/bar/baz"},
+            {"format" => "place", "web_url" => "http://www.test.gov.uk/somewhere"},
+            {"format" => "guide", "web_url" => "http://www.test.gov.uk/vat"},
+          ]
+        }.to_json)
+
+      response = @api.artefacts
+      assert_equal 4, response.count
+      assert_equal %w(answer local_transaction place guide), response.map(&:format)
+    end
+
+    it "should work with a paginated response" do
+      WebMock.stub_request(:get, @artefacts_endpoint).
+        to_return(
+          :body => {
+            "_response_info" => {"status" => "ok"},
+            "total" => 4,
+            "results" => [
+              {"format" => "answer", "web_url" => "http://www.test.gov.uk/foo"},
+              {"format" => "local_transaction", "web_url" => "http://www.test.gov.uk/bar/baz"},
+              {"format" => "place", "web_url" => "http://www.test.gov.uk/somewhere"},
+              {"format" => "guide", "web_url" => "http://www.test.gov.uk/vat"},
+            ]
+          }.to_json,
+          :headers => {"Link" => "<#{@artefacts_endpoint}?page=2>; rel=\"next\""}
+        )
+      WebMock.stub_request(:get, "#{@artefacts_endpoint}?page=2").
+        to_return(
+          :body => {
+            "_response_info" => {"status" => "ok"},
+            "total" => 3,
+            "results" => [
+              {"format" => "answer", "web_url" => "http://www.test.gov.uk/foo2"},
+              {"format" => "local_transaction", "web_url" => "http://www.test.gov.uk/bar/baz2"},
+              {"format" => "guide", "web_url" => "http://www.test.gov.uk/vat2"},
+            ]
+          }.to_json
+        )
+      response = @api.artefacts
+      assert_equal 7, response.with_subsequent_pages.count
+      assert_equal "http://www.test.gov.uk/vat2", response.with_subsequent_pages.to_a.last.web_url
+    end
+  end
+
   describe "tags" do
     it "should produce an artefact with the provided tag" do
       tag = "crime-and-justice"
