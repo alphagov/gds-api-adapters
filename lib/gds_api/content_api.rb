@@ -56,6 +56,10 @@ class GdsApi::ContentApi < GdsApi::Base
     get_json(url)
   end
 
+  def artefacts
+    get_list!("#{base_url}/artefacts.json")
+  end
+
   def local_authority(snac_code)
     get_json("#{base_url}/local_authorities/#{CGI.escape(snac_code)}.json")
   end
