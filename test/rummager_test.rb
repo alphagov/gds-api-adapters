@@ -75,6 +75,15 @@ describe GdsApi::Rummager do
     assert_requested :get, /\?foo=bar&q=search-term&zoo=baz/
   end
 
+  # tests for #organisations
+
+  it "should request the list of organisations" do
+    stub_request(:get, /example.com\/organisations/).to_return(body: "{}")
+    GdsApi::Rummager.new("http://example.com").organisations
+
+    assert_requested :get, /organisations/
+  end
+
   # tests for #advanced_search
 
   it "#advanced_search should raise an exception if the service at the search URI returns a 500" do

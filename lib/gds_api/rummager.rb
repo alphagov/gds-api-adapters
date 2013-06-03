@@ -15,6 +15,10 @@ module GdsApi
       get_json!(request_path)
     end
 
+    def organisations
+      get_json!("#{base_url}/organisations")
+    end
+
   private
 
     def search_url(type, query, extra_params={})
