@@ -4,9 +4,9 @@ require 'rack/utils'
 module GdsApi
   class Rummager < Base
 
-    def search(query)
+    def search(query, extra_params={})
       return [] if query.nil? || query == ""
-      get_json!(search_url(:search, query))
+      get_json!(search_url(:search, query, extra_params))
     end
 
     def advanced_search(args)
@@ -17,8 +17,12 @@ module GdsApi
 
   private
 
-    def search_url(type, query)
+    def search_url(type, query, extra_params={})
       request_path = "#{base_url}/#{type}?q=#{CGI.escape(query)}"
+      if extra_params
+        request_path << "&"
+        request_path << Rack::Utils.build_query(extra_params)
+      end
       request_path
     end
 
