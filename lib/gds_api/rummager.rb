@@ -9,11 +9,6 @@ module GdsApi
       get_json!(search_url(:search, query))
     end
 
-    def autocomplete(query)
-      return [] if query.nil? || query == ""
-      get_raw!(search_url(:autocomplete, query)).body
-    end
-
     def advanced_search(args)
       return [] if args.nil? || args.empty?
       request_path = "#{base_url}/advanced_search?#{Rack::Utils.build_nested_query(args)}"

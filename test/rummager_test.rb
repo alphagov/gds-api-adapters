@@ -4,7 +4,6 @@ require "gds_api/rummager"
 describe GdsApi::Rummager do
   before(:each) do
     stub_request(:get, /example.com\/search/).to_return(body: "[]")
-    stub_request(:get, /example.com\/autocomplete/).to_return(body: "[]")
     stub_request(:get, /example.com\/advanced_search/).to_return(body: "[]")
   end
 
@@ -68,14 +67,6 @@ describe GdsApi::Rummager do
 
     #the actual request is "?q=search+term+with+spaces", but Webmock appears to be re-escaping.
     assert_requested :get, /\?q=search%20term%20with%20spaces/
-  end
-
-  it "should pass autocomplete responses back as-is" do
-    search_results_json = {"title" => "document-title"}.to_json
-    stub_request(:get, /example.com\/autocomplete/).to_return(body: search_results_json)
-    results = GdsApi::Rummager.new("http://example.com").autocomplete("test")
-
-    assert_equal search_results_json, results
   end
 
   # tests for #advanced_search
