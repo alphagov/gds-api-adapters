@@ -1,3 +1,10 @@
+# 7.0.0
+
+* Support arbitrary search parameters in GdsApi::Rummager
+
+* Remove obsolete format_filter param from GdsApi::Rummager methods
+* Remove obsolete autocomplete method from GdsApi::Rummager
+
 # 6.1.0
 
 * Add ContentAPI method for /artefacts.json
