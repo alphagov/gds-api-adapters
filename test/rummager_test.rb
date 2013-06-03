@@ -69,6 +69,12 @@ describe GdsApi::Rummager do
     assert_requested :get, /\?q=search%20term%20with%20spaces/
   end
 
+  it "should append arbitrary parameters when supplied" do
+    GdsApi::Rummager.new("http://example.com").search("search-term", foo: "bar", zoo: "baz")
+
+    assert_requested :get, /\?foo=bar&q=search-term&zoo=baz/
+  end
+
   # tests for #advanced_search
 
   it "#advanced_search should raise an exception if the service at the search URI returns a 500" do
