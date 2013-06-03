@@ -63,18 +63,6 @@ describe GdsApi::Rummager do
     assert_requested :get, /\?q=search-term/
   end
 
-  it "should add a format filter parameter to searches if provided" do
-    GdsApi::Rummager.new("http://example.com").search "search-term", "specialist_guidance"
-
-    assert_requested :get, /format_filter=specialist_guidance/
-  end
-
-  it "should add a format filter parameter to autocomplete if provided" do
-    GdsApi::Rummager.new("http://example.com").autocomplete "search-term", "specialist_guidance"
-
-    assert_requested :get, /format_filter=specialist_guidance/
-  end
-
   it "should escape characters that would otherwise be invalid in a URI" do
     GdsApi::Rummager.new("http://example.com").search "search term with spaces"
 
