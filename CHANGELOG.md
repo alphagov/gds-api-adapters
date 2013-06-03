@@ -1,3 +1,7 @@
+# 7.1.0
+
+* Add Rummager method for /organisations.json
+
 # 7.0.0
 
 * Support arbitrary search parameters in GdsApi::Rummager
