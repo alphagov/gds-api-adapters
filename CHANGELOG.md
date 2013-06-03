@@ -1,3 +1,7 @@
+# 6.1.0
+
+* Add ContentAPI method for /artefacts.json
+
 # 6.0.0
 
 Potentially backwards-incompatible changes:
