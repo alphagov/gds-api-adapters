@@ -27,15 +27,15 @@ describe GdsApi::FactCave do
     fact_cave_result = {"id" => "vat-rate", "title" => "VAT rate", "details" => { 
       "value" => "20%", "description" => "Value Added Tax rate" }}
     stub_request(:get, /example.com\/facts/).to_return(body: fact_cave_result.to_json)
-    results = GdsApi::FactCave.new("http://example.com").fact("vat-rate")
+    result = GdsApi::FactCave.new("http://example.com").fact("vat-rate")
 
-    assert_equal fact_cave_result, results.to_hash
+    assert_equal fact_cave_result, result.to_hash
   end
 
   it "should return an empty result without making request if slug is empty" do
-    results = GdsApi::FactCave.new("http://example.com").fact("")
+    result = GdsApi::FactCave.new("http://example.com").fact("")
 
-    assert_equal "", results
+    assert_equal "", result
     assert_not_requested :get, /example.com/
   end
 end
