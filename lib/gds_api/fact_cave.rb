@@ -4,7 +4,7 @@ require 'rack/utils'
 module GdsApi
   class FactCave < Base
 
-    def fact_for_slug(slug)
+    def fact(slug)
       return "" if slug.nil? || slug == ""
       get_json!("#{base_url}/facts/#{slug}")
     end
