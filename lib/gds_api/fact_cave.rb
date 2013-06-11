@@ -6,13 +6,8 @@ module GdsApi
 
     def fact(slug)
       return "" if slug.nil? || slug == ""
-      get_json!("#{base_url}/facts/#{slug}")
+      get_json!("#{endpoint}/facts/#{slug}")
     end
 
-  private
-
-    def base_url
-      endpoint
-    end
   end
 end
