@@ -2,19 +2,19 @@ require "test_helper"
 require "gds_api/fact_cave"
 
 describe GdsApi::FactCave do
-  it "should raise an exception if the service at the search URI returns a 500" do
+  it "should raise an exception if the service at the fact cave URI returns a 500" do
     stub_request(:get, /example.com\/facts/).to_return(status: [500, "Internal Server Error"])
     assert_raises(GdsApi::HTTPErrorResponse) do
       GdsApi::FactCave.new("http://example.com").fact("foo")
     end
   end
 
-  it "should return nil if the service at the search URI returns a 404" do
+  it "should return nil if the service at the fact cave URI returns a 404" do
     stub_request(:get, /example.com\/facts/).to_return(status: [404, "Not Found"])
     assert_nil GdsApi::FactCave.new("http://example.com").fact("bar")
   end
 
-  it "should raise an exception if the service at the search URI times out" do
+  it "should raise an exception if the service at the fact cave URI times out" do
     stub_request(:get, /example.com\/facts/).to_timeout
     assert_raises(GdsApi::TimedOutException) do
       GdsApi::FactCave.new("http://example.com").fact("meh")
