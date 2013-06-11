@@ -33,7 +33,7 @@ describe GdsApi::FactCave do
   it "should return an empty result without making request if slug is empty" do
     result = GdsApi::FactCave.new("http://example.com").fact("")
 
-    assert_equal "", result
+    assert_nil result
     assert_not_requested :get, /example.com/
   end
 end
