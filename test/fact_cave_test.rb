@@ -9,11 +9,9 @@ describe GdsApi::FactCave do
     end
   end
 
-  it "should raise an exception if the service at the search URI returns a 404" do
+  it "should return nil if the service at the search URI returns a 404" do
     stub_request(:get, /example.com\/facts/).to_return(status: [404, "Not Found"])
-    assert_raises(GdsApi::HTTPNotFound) do
-      GdsApi::FactCave.new("http://example.com").fact("bar")
-    end
+    assert_nil GdsApi::FactCave.new("http://example.com").fact("bar")
   end
 
   it "should raise an exception if the service at the search URI times out" do
