@@ -22,6 +22,7 @@ describe GdsApi::FactCave do
       GdsApi::FactCave.new("http://example.com").fact("meh")
     end
   end
+
   it "should return the fact deserialized from json" do
     fact_cave_result = {"id" => "vat-rate", "title" => "VAT rate", "details" => { 
       "value" => "20%", "description" => "Value Added Tax rate" }}
@@ -30,6 +31,7 @@ describe GdsApi::FactCave do
 
     assert_equal fact_cave_result, results.to_hash
   end
+
   it "should return an empty result without making request if slug is empty" do
     results = GdsApi::FactCave.new("http://example.com").fact("")
 
