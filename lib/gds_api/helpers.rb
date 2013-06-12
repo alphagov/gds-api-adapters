@@ -5,6 +5,7 @@ require 'gds_api/content_api'
 require 'gds_api/licence_application'
 require 'gds_api/asset_manager'
 require 'gds_api/worldwide'
+require 'gds_api/fact_cave'
 
 module GdsApi
   module Helpers
@@ -14,6 +15,10 @@ module GdsApi
 
     def content_api(options = {})
       @content_api ||= GdsApi::ContentApi.new(Plek.current.find("contentapi"), options)
+    end
+
+    def fact_cave_api(options = {})
+      @fact_cave_api ||= GdsApi::FactCave.new(Plek.current.find("fact-cave"), options)
     end
 
     def publisher_api(options = {})
