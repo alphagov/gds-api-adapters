@@ -10,6 +10,8 @@ module GdsApi
 
     include GdsApi::ExceptionHandling
 
+    # Cache TTL will be overridden for a given request/response by the Expires
+    # header if it is included in the response.
     def self.cache(size=DEFAULT_CACHE_SIZE, ttl=DEFAULT_CACHE_TTL)
       @cache ||= LRUCache.new(max_size: size, ttl: ttl)
     end
