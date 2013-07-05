@@ -57,7 +57,16 @@ class GdsApiBaseTest < MiniTest::Unit::TestCase
   end
 
   def test_disabling_cache
+    # Ensure that there is a non-null cache by default
+    GdsApi::JsonClient.cache = true
     api = ConcreteApi.new("http://bar", disable_cache: true)
+    assert api.client.cache.is_a? GdsApi::NullCache
+  end
+
+  def test_disabling_cache_old_style
+    # Ensure that there is a non-null cache by default
+    GdsApi::JsonClient.cache = true
+    api = ConcreteApi.new("http://bar", cache_size: 0)
     assert api.client.cache.is_a? GdsApi::NullCache
   end
 

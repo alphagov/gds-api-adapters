@@ -12,6 +12,9 @@ module GdsApi
 
     # Cache TTL will be overridden for a given request/response by the Expires
     # header if it is included in the response.
+    #
+    # LRUCache doesn't respect a cache size of 0, and instead effectively
+    # creates a cache with a size of 1.
     def self.cache(size=DEFAULT_CACHE_SIZE, ttl=DEFAULT_CACHE_TTL)
       @cache ||= LRUCache.new(max_size: size, ttl: ttl)
     end
@@ -29,7 +32,7 @@ module GdsApi
 
       @logger = options[:logger] || GdsApi::Base.logger
 
-      if options[:disable_cache]
+      if options[:disable_cache] || (options[:cache_size] == 0)
         @cache = NullCache.new
       else
         cache_size = options[:cache_size] || DEFAULT_CACHE_SIZE
