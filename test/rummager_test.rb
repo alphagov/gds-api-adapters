@@ -37,17 +37,15 @@ describe GdsApi::Rummager do
   end
 
   it "should return an empty set of results without making request if query is empty" do
-    results = GdsApi::Rummager.new("http://example.com").search("")
-
-    assert_equal [], results
-    assert_not_requested :get, /example.com/
+    assert_raises(ArgumentError) do
+      GdsApi::Rummager.new("http://example.com").search("")
+    end
   end
 
   it "should return an empty set of results without making request if query is nil" do
-    results = GdsApi::Rummager.new("http://example.com").search(nil)
-
-    assert_equal [], results
-    assert_not_requested :get, /example.com/
+    assert_raises(ArgumentError) do
+      GdsApi::Rummager.new("http://example.com").search(nil)
+    end
   end
 
   it "should request the search results in JSON format" do
@@ -116,17 +114,15 @@ describe GdsApi::Rummager do
   end
 
   it "#advanced_search should return an empty set of results without making request if arguments are empty" do
-    results = GdsApi::Rummager.new("http://example.com").advanced_search({})
-
-    assert_equal [], results
-    assert_not_requested :get, /example.com/
+    assert_raises(ArgumentError) do
+      GdsApi::Rummager.new("http://example.com").advanced_search({})
+    end
   end
 
   it "#advanced_search should return an empty set of results without making request if arguments is nil" do
-    results = GdsApi::Rummager.new("http://example.com").advanced_search(nil)
-
-    assert_equal [], results
-    assert_not_requested :get, /example.com/
+    assert_raises(ArgumentError) do
+      results = GdsApi::Rummager.new("http://example.com").advanced_search(nil)
+    end
   end
 
   it "#advanced_search should request the search results in JSON format" do
