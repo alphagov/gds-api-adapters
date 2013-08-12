@@ -1,5 +1,4 @@
 require_relative 'base'
-require_relative 'exceptions'
 
 class GdsApi::Support < GdsApi::Base
   def create_foi_request(request_details)
