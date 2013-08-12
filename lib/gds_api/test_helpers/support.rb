@@ -3,7 +3,7 @@ module GdsApi
     module Support
       SUPPORT_ENDPOINT = Plek.current.find('support')
 
-      def support_expects_foi_request_creation(request_details = nil)
+      def stub_support_foi_request_creation(request_details = nil)
         body_expectation = {"foi_request" => request_details}.to_json
 
         post_stub = stub_request(:post, "#{SUPPORT_ENDPOINT}/foi_requests")
