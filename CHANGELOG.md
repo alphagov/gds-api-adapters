@@ -1,3 +1,7 @@
+# 7.3.0
+
+* Integrate Support app API for creating FOI requests
+
 # 7.1.0
 
 * Add Rummager method for /organisations.json
