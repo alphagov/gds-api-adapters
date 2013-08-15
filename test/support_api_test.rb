@@ -7,7 +7,7 @@ describe GdsApi::Support do
     @api = GdsApi::Support.new(@base_api_url)
   end
 
-  it "can create an asset with a file" do
+  it "can create an FOI request" do
     request_details = {"foi_request"=>{"requester"=>{"name"=>"A", "email"=>"a@b.com"}, "details"=>"abc"}}
 
     stub_post = stub_request(:post, "#{@base_api_url}/foi_requests").
