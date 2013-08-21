@@ -64,8 +64,8 @@ module GdsApi
     # Define "safe" methods for each supported HTTP method
     #
     # Each "bang method" tries to make a request, but raises an exception if
-    # the response is not successful. These methods discard those exceptions
-    # and return nil.
+    # the response is not successful. These methods discard the HTTPNotFound
+    # exceptions (and return nil), and pass through all other exceptions.
     [:get, :post, :put, :delete].each do |http_method|
       method_name = "#{http_method}_json"
       define_method method_name do |url, *args, &block|
