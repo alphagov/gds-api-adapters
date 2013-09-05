@@ -75,20 +75,20 @@ module GdsApi
       end
     end
 
-    def get_json!(url, &create_response)
-      do_json_request(:get, url, nil, &create_response)
+    def get_json!(url, additional_headers = {}, &create_response)
+      do_json_request(:get, url, nil, additional_headers, &create_response)
     end
 
-    def post_json!(url, params)
-      do_json_request(:post, url, params)
+    def post_json!(url, params, additional_headers = {})
+      do_json_request(:post, url, params, additional_headers)
     end
 
-    def put_json!(url, params)
-      do_json_request(:put, url, params)
+    def put_json!(url, params, additional_headers = {})
+      do_json_request(:put, url, params, additional_headers)
     end
 
-    def delete_json!(url, params = nil)
-      do_request(:delete, url, params)
+    def delete_json!(url, params = nil, additional_headers = {})
+      do_request(:delete, url, params, additional_headers)
     end
 
     def post_multipart(url, params)
@@ -112,12 +112,13 @@ module GdsApi
     # method: the symbolic name of the method to use, e.g. :get, :post
     # url:    the request URL
     # params: the data to send (JSON-serialised) in the request body
+    # additional_headers: headers to set on the request (in addition to the default ones)
     # create_response: optional block to instantiate a custom response object
     #                  from the Net::HTTPResponse
-    def do_json_request(method, url, params = nil, &create_response)
+    def do_json_request(method, url, params = nil, additional_headers = {}, &create_response)
 
       begin
-        response = do_request_with_cache(method, url, (params.to_json if params))
+        response = do_request_with_cache(method, url, (params.to_json if params), additional_headers)
 
       rescue RestClient::ResourceNotFound => e
         raise GdsApi::HTTPNotFound.new(e.http_code)
@@ -163,6 +164,12 @@ module GdsApi
       )
     end
 
+    def with_headers(method_params, headers)
+      method_params.merge(
+        headers: method_params[:headers].merge(headers)
+      )
+    end
+
     def with_ssl_options(method_params)
       method_params.merge(
         # This is the default value anyway, but we should probably be explicit
@@ -170,7 +177,7 @@ module GdsApi
       )
     end
 
-    def do_request_with_cache(method, url, params = nil)
+    def do_request_with_cache(method, url, params = nil, additional_headers = {})
       # Only read GET requests from the cache: any other request methods should
       # always be passed through. Note that this means HEAD requests won't get
       # cached, but that would involve separating the cache by method and URL.
@@ -182,7 +189,7 @@ module GdsApi
         return cached_response if cached_response
       end
 
-      response = do_request(method, url, params)
+      response = do_request(method, url, params, additional_headers)
 
       if use_cache
         cache_time = response_cache_time(response)
@@ -201,7 +208,7 @@ module GdsApi
       end
     end
 
-    def do_request(method, url, params = nil)
+    def do_request(method, url, params = nil, additional_headers = {})
       loggable = {request_uri: url, start_time: Time.now.to_f}
       start_logging = loggable.merge(action: 'start')
       logger.debug start_logging.to_json
@@ -214,6 +221,7 @@ module GdsApi
       method_params[:payload] = params
       method_params = with_auth_options(method_params)
       method_params = with_timeout(method_params)
+      method_params = with_headers(method_params, additional_headers)
       if URI.parse(url).is_a? URI::HTTPS
         method_params = with_ssl_options(method_params)
       end
