@@ -60,6 +60,28 @@ describe GdsApi::Support do
     end
   end
 
+  it "can create a named contact" do
+    request_details = {certain: "details"}
+
+    stub_post = stub_request(:post, "#{@base_api_url}/named_contacts").
+      with(:body => {"named_contact" => request_details}.to_json).
+      to_return(:status => 201)
+
+    @api.create_named_contact(request_details)
+
+    assert_requested(stub_post)
+  end
+
+  it "can add a custom header onto the named_contact request to the support app" do
+    stub_request(:post, "#{@base_api_url}/named_contacts")
+
+    @api.create_named_contact({}, headers: { "X-Varnish" => "12345"})
+
+    assert_requested(:post, %r{/named_contacts}) do |request|
+      request.headers["X-Varnish"] == "12345"
+    end
+  end
+
   it "throws an exception when the support app isn't available" do
     support_isnt_available
 
