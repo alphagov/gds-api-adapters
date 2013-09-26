@@ -1,3 +1,7 @@
+# 7.5.1
+
+* Support app: problem report creation happens on /anonymous_feedback/problem_reports instead of /problem_reports
+
 # 7.3.0
 
 * Integrate Support app API for creating FOI requests
