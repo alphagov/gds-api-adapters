@@ -6,7 +6,7 @@ class GdsApi::Support < GdsApi::Base
   end
 
   def create_problem_report(request_details, options = {})
-    post_json!("#{base_url}/problem_reports", { :problem_report => request_details }, options[:headers] || {})
+    post_json!("#{base_url}/anonymous_feedback/problem_reports", { :problem_report => request_details }, options[:headers] || {})
   end
 
   private
