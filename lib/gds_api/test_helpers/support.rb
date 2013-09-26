@@ -10,7 +10,7 @@ module GdsApi
       end
 
       def stub_support_problem_report_creation(request_details = nil)
-        post_stub = stub_http_request(:post, "#{SUPPORT_ENDPOINT}/problem_reports")
+        post_stub = stub_http_request(:post, "#{SUPPORT_ENDPOINT}/anonymous_feedback/problem_reports")
         post_stub.with(:body => { problem_report: request_details }) unless request_details.nil?
         post_stub.to_return(:status => 201)
       end

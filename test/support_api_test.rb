@@ -41,7 +41,7 @@ describe GdsApi::Support do
   it "can report a problem" do
     request_details = {certain: "details"}
 
-    stub_post = stub_request(:post, "#{@base_api_url}/problem_reports").
+    stub_post = stub_request(:post, "#{@base_api_url}/anonymous_feedback/problem_reports").
       with(:body => {"problem_report" => request_details}.to_json).
       to_return(:status => 201)
 
@@ -51,7 +51,7 @@ describe GdsApi::Support do
   end
 
   it "can add a custom header onto the problem_report request to the support app" do
-    stub_request(:post, "#{@base_api_url}/problem_reports")
+    stub_request(:post, "#{@base_api_url}/anonymous_feedback/problem_reports")
 
     @api.create_problem_report({}, headers: { "X-Varnish" => "12345"})
 
