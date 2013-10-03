@@ -21,6 +21,12 @@ module GdsApi
         post_stub.to_return(:status => 201)
       end
 
+      def stub_support_long_form_anonymous_contact_creation(request_details = nil)
+        post_stub = stub_http_request(:post, "#{SUPPORT_ENDPOINT}/anonymous_feedback/long_form_contacts")
+        post_stub.with(:body => { long_form_contact: request_details }) unless request_details.nil?
+        post_stub.to_return(:status => 201)
+      end
+
       def support_isnt_available
         stub_request(:post, /#{SUPPORT_ENDPOINT}\/.*/).to_return(:status => 503)
       end

@@ -50,6 +50,18 @@ describe GdsApi::Support do
     assert_requested(stub_post)
   end
 
+  it "can submit long-form anonymous feedback" do
+    request_details = {certain: "details"}
+
+    stub_post = stub_request(:post, "#{@base_api_url}/anonymous_feedback/long_form_contacts").
+      with(:body => {"long_form_contact" => request_details}.to_json).
+      to_return(:status => 201)
+
+    @api.create_anonymous_long_form_contact(request_details)
+
+    assert_requested(stub_post)
+  end
+
   it "can add a custom header onto the problem_report request to the support app" do
     stub_request(:post, "#{@base_api_url}/anonymous_feedback/problem_reports")
 
