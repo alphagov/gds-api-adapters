@@ -50,12 +50,46 @@ describe GdsApi::Support do
     assert_requested(stub_post)
   end
 
+  it "can submit long-form anonymous feedback" do
+    request_details = {certain: "details"}
+
+    stub_post = stub_request(:post, "#{@base_api_url}/anonymous_feedback/long_form_contacts").
+      with(:body => {"long_form_contact" => request_details}.to_json).
+      to_return(:status => 201)
+
+    @api.create_anonymous_long_form_contact(request_details)
+
+    assert_requested(stub_post)
+  end
+
   it "can add a custom header onto the problem_report request to the support app" do
     stub_request(:post, "#{@base_api_url}/anonymous_feedback/problem_reports")
 
     @api.create_problem_report({}, headers: { "X-Varnish" => "12345"})
 
     assert_requested(:post, %r{/problem_reports}) do |request|
+      request.headers["X-Varnish"] == "12345"
+    end
+  end
+
+  it "can create a named contact" do
+    request_details = {certain: "details"}
+
+    stub_post = stub_request(:post, "#{@base_api_url}/named_contacts").
+      with(:body => {"named_contact" => request_details}.to_json).
+      to_return(:status => 201)
+
+    @api.create_named_contact(request_details)
+
+    assert_requested(stub_post)
+  end
+
+  it "can add a custom header onto the named_contact request to the support app" do
+    stub_request(:post, "#{@base_api_url}/named_contacts")
+
+    @api.create_named_contact({}, headers: { "X-Varnish" => "12345"})
+
+    assert_requested(:post, %r{/named_contacts}) do |request|
       request.headers["X-Varnish"] == "12345"
     end
   end
