@@ -10,10 +10,11 @@ describe GdsApi::NeedApi do
 
   describe "creating needs" do
     it "should post to the right endpoint" do
-      stub_request(:post, @base_api_url + "/needs").with(
+      request_stub = stub_request(:post, @base_api_url + "/needs").with(
         :body => '{"goal":"I wanna sammich!"}'
       )
       @api.create_need({"goal" => "I wanna sammich!"})
+      assert_requested(request_stub)
     end
   end
 end
