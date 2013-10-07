@@ -7,9 +7,9 @@ module GdsApi
       # you could redefine/override the constant or stub directly.
       NEED_API_ENDPOINT = Plek.current.find('needapi')
 
-      def need_api_has_organisations(organisations)
+      def need_api_has_organisations(organisation_ids)
         url = NEED_API_ENDPOINT + "/organisations"
-        orgs = organisations.map do |o|
+        orgs = organisation_ids.map do |o|
           { "id" => o,
             "name" => o.split('-').map(&:capitalize).join(' ')
           }
