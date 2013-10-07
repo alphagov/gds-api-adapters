@@ -1,7 +1,9 @@
 require 'test_helper'
 require 'gds_api/need_api'
+require 'gds_api/test_helpers/need_api'
 
 describe GdsApi::NeedApi do
+  include GdsApi::TestHelpers::NeedApi
 
   before do
     @base_api_url = Plek.current.find("needapi")
@@ -20,7 +22,8 @@ describe GdsApi::NeedApi do
 
   describe "viewing organisations" do
     it "should return a list of organisations" do
-      request_stub = stub_request(:get, @base_api_url + "/organisations")
+      request_stub = need_api_has_organisations(["committee-on-climate-change","competition-commission"])
+
       @api.organisations()
       assert_requested(request_stub)
     end
