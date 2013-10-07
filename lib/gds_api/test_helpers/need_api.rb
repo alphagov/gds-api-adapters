@@ -9,9 +9,9 @@ module GdsApi
 
       def need_api_has_organisations(organisation_ids)
         url = NEED_API_ENDPOINT + "/organisations"
-        orgs = organisation_ids.map do |o|
-          { "id" => o,
-            "name" => o.split('-').map(&:capitalize).join(' ')
+        orgs = organisation_ids.map do |k,v|
+          { "id" => k,
+            "name" => v
           }
         end
         stub_request(:get, url).to_return(status: 200, body: orgs.to_json, headers: {})

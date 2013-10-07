@@ -22,10 +22,17 @@ describe GdsApi::NeedApi do
 
   describe "viewing organisations" do
     it "should return a list of organisations" do
-      request_stub = need_api_has_organisations(["committee-on-climate-change","competition-commission"])
+      request_stub = need_api_has_organisations(
+        "committee-on-climate-change" => "Committee on Climate Change",
+        "competition-commission" => "Competition Commission"
+      )
 
-      @api.organisations()
+      orgs = @api.organisations()
+
       assert_requested(request_stub)
+      assert_equal("Committee on Climate Change", orgs[0]["name"])
+      assert_equal("Competition Commission", orgs[1]["name"])
+      assert_equal(2, orgs.size)
     end
   end
 end
