@@ -6,6 +6,7 @@ require 'gds_api/licence_application'
 require 'gds_api/asset_manager'
 require 'gds_api/worldwide'
 require 'gds_api/fact_cave'
+require 'gds_api/need_api'
 
 module GdsApi
   module Helpers
@@ -31,6 +32,10 @@ module GdsApi
 
     def licence_application_api(options = {})
       @licence_application_api ||= GdsApi::LicenceApplication.new(Plek.current.find("licensify"), options)
+    end
+
+    def need_api(options = {})
+      @need_api ||= GdsApi::NeedApi.new(Plek.current.find("needapi"), options)
     end
 
     def panopticon_api(options = {})

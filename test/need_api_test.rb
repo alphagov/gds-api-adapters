@@ -17,4 +17,12 @@ describe GdsApi::NeedApi do
       assert_requested(request_stub)
     end
   end
+
+  describe "viewing organisations" do
+    it "should return a list of organisations" do
+      request_stub = stub_request(:get, @base_api_url + "/organisations")
+      @api.organisations()
+      assert_requested(request_stub)
+    end
+  end
 end
