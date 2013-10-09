@@ -7,6 +7,6 @@ class GdsApi::NeedApi < GdsApi::Base
   end
 
   def organisations
-    get_json("#{endpoint}/organisations")
+    get_json!("#{endpoint}/organisations")["organisations"]
   end
 end

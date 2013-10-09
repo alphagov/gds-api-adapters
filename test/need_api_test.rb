@@ -6,7 +6,7 @@ describe GdsApi::NeedApi do
   include GdsApi::TestHelpers::NeedApi
 
   before do
-    @base_api_url = Plek.current.find("needapi")
+    @base_api_url = Plek.current.find("need-api")
     @api = GdsApi::NeedApi.new(@base_api_url)
   end
 
@@ -27,12 +27,12 @@ describe GdsApi::NeedApi do
         "competition-commission" => "Competition Commission"
       )
 
-      orgs = @api.organisations()
+      orgs = @api.organisations
 
       assert_requested(request_stub)
-      assert_equal("Committee on Climate Change", orgs[0]["name"])
-      assert_equal("Competition Commission", orgs[1]["name"])
-      assert_equal(2, orgs.size)
+      assert_equal "Committee on Climate Change", orgs[0]["name"]
+      assert_equal "Competition Commission", orgs[1]["name"]
+      assert_equal 2, orgs.size
     end
   end
 end
