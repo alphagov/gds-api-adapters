@@ -6,7 +6,7 @@ describe GdsApi::NeedApi do
   include GdsApi::TestHelpers::NeedApi
 
   before do
-    @base_api_url = Plek.current.find("needapi")
+    @base_api_url = Plek.current.find("need-api")
     @api = GdsApi::NeedApi.new(@base_api_url)
   end
 

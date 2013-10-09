@@ -5,7 +5,7 @@ module GdsApi
     module NeedApi
       # Generally true. If you are initializing the client differently,
       # you could redefine/override the constant or stub directly.
-      NEED_API_ENDPOINT = Plek.current.find('needapi')
+      NEED_API_ENDPOINT = Plek.current.find('need-api')
 
       def need_api_has_organisations(organisation_ids)
         url = NEED_API_ENDPOINT + "/organisations"
