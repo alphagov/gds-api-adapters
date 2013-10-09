@@ -3,18 +3,22 @@ require 'gds_api/test_helpers/json_client_helper'
 module GdsApi
   module TestHelpers
     module NeedApi
-      # Generally true. If you are initializing the client differently,
-      # you could redefine/override the constant or stub directly.
-      NEED_API_ENDPOINT = Plek.current.find('needapi')
+      include GdsApi::TestHelpers::CommonResponses
 
-      def need_api_has_organisations(organisation_ids)
+      NEED_API_ENDPOINT = Plek.current.find('need-api')
+
+      def need_api_has_organisations(organisations)
         url = NEED_API_ENDPOINT + "/organisations"
-        orgs = organisation_ids.map do |k,v|
-          { "id" => k,
-            "name" => v
+
+        body = response_base.merge(
+          "organisations" => organisations.map {|id, name|
+            {
+              "id" => id,
+              "name" => name
+            }
           }
-        end
-        stub_request(:get, url).to_return(status: 200, body: orgs.to_json, headers: {})
+        )
+        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
     end
   end
