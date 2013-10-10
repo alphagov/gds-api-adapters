@@ -9,6 +9,13 @@ module GdsApi
         end
       end
 
+      # expects a slug like "ministry-of-funk"
+      # returns an acronym like "MOF"
+      def acronymize_slug(slug)
+        initials = slug.gsub(/\b\w+/) {|m| m[0] }.gsub("-", "")
+        initials.upcase
+      end
+
       def response_base
         {
           "_response_info" => {
