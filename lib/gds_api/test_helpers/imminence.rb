@@ -7,7 +7,7 @@ module GdsApi
       # you could redefine/override the constant or stub directly.
       IMMINENCE_API_ENDPOINT = Plek.current.find('imminence')
 
-      def imminence_has_places(latitude, longitude, details)
+      def stub_imminence_places_for_location(latitude, longitude, details)
         response = JSON.dump(details['details'])
 
         stub_request(:get, "#{IMMINENCE_API_ENDPOINT}/places/#{details['slug']}.json").
@@ -15,7 +15,7 @@ module GdsApi
         to_return(:status => 200, :body => response, :headers => {})
       end
 
-      def imminence_has_business_support_schemes(facets_hash, schemes)
+      def stub_imminence_business_support_schemes_for_filter(facets_hash, schemes)
         results = {
           "_response_info" => {"status" => "ok"},
           "description" => "Business Support Schemes!",
@@ -28,7 +28,7 @@ module GdsApi
           to_return(status: 200, body: results.to_json, headers: {})
       end
 
-      # Stubs out all bussiness_support_schemes requests to return an ampty set of results.
+      # Stubs out all business_support_schemes requests to return an ampty set of results.
       # Requests stubbed with the above method will take precedence over this.
       def stub_imminence_default_business_support_schemes
         empty_results = {
