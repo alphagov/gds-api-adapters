@@ -78,7 +78,7 @@ module GdsApi
           "web_url" => "#{PUBLIC_HOST}/government/organisations/#{slug}",
           "details" => {
             "slug" => slug,
-            "acronym" => acronymize_slug(slug),
+            "abbreviation" => acronymize_slug(slug),
             "closed_at" => nil,
             "govuk_status" => (slug =~ /ministry/ ? "live" : "joining"),
           },
