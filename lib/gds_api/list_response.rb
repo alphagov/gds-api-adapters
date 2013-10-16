@@ -20,7 +20,7 @@ module GdsApi
 
     # Pass calls to `self.each` to the `results` sub-object, so we can iterate
     # over the response directly
-    def_delegator :results, :each
+    def_delegators :results, :each, :to_ary
 
     def has_next_page?
       ! page_link("next").nil?
