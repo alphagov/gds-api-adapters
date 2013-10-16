@@ -210,7 +210,7 @@ module GdsApi
 
         max_age = cache_parts.map {|x| x.match(/max-age=(\d+)/) }.compact.first
 
-        unless max_age.nil?
+        if max_age
           expiry = max_age[1].to_i
           return Time.now + expiry
         end
