@@ -7,6 +7,7 @@ module GdsApi
       include GdsApi::TestHelpers::CommonResponses
 
       ORGANISATIONS_API_ENDPOINT = Plek.current.find('whitehall-admin')
+      PUBLIC_HOST = Plek.current.find('www')
 
       # Sets up the index endpoints for the given organisation slugs
       # The stubs are setup to paginate in chunks of 20
@@ -70,27 +71,27 @@ module GdsApi
       # otherwise it will be set to 'Executive agency'
       def organisation_details_for_slug(slug)
         {
-          "id" => "https://www.gov.uk/api/organisations/#{slug}",
+          "id" => "#{ORGANISATIONS_API_ENDPOINT}/api/organisations/#{slug}",
           "title" => titleize_slug(slug, :title_case => true),
           "format" => (slug =~ /ministry/ ? "Ministerial department" : "Executive agency"),
           "updated_at" => "2013-03-25T13:06:42+00:00",
-          "web_url" => "https://www.gov.uk/government/organisations/#{slug}",
+          "web_url" => "#{PUBLIC_HOST}/government/organisations/#{slug}",
           "details" => {
             "slug" => slug,
-            "acronym" => acronymize_slug(slug),
+            "abbreviation" => acronymize_slug(slug),
             "closed_at" => nil,
             "govuk_status" => (slug =~ /ministry/ ? "live" : "joining"),
           },
           "parent_organisations" => [
             {
-              "id" => "https://www.gov.uk/api/organisations/#{slug}-parent-1",
-              "web_url" => "https://www.gov.uk/government/organisations/#{slug}-parent-1"
+              "id" => "#{ORGANISATIONS_API_ENDPOINT}/api/organisations/#{slug}-parent-1",
+              "web_url" => "#{PUBLIC_HOST}/government/organisations/#{slug}-parent-1"
             },
           ],
           "child_organisations" => [
             {
-              "id" => "https://www.gov.uk/api/organisations/#{slug}-child-1",
-              "web_url" => "https://www.gov.uk/government/organisations/#{slug}-child-1"
+              "id" => "#{ORGANISATIONS_API_ENDPOINT}/api/organisations/#{slug}-child-1",
+              "web_url" => "#{PUBLIC_HOST}/government/organisations/#{slug}-child-1"
             },
           ],
         }
