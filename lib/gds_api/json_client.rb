@@ -210,13 +210,13 @@ module GdsApi
 
         # If no-cache is present, this takes precedent over any other value
         # in this header
-        return Time.now if cache_parts.include?("no-cache")
+        return Time.now.utc if cache_parts.include?("no-cache")
 
         # Otherwise, look for a 'max-age=123' value, which is the number of
         # seconds for which to cache the response.
         max_age = cache_parts.map {|x| x.match(/max-age=(\d+)/) }.compact.first
         if max_age
-          return Time.now + max_age[1].to_i
+          return Time.now.utc + max_age[1].to_i
         end
       end
 
