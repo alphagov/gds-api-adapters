@@ -204,15 +204,19 @@ module GdsApi
     # or nil if no cache information is provided
     def response_cache_time(response)
       if response.headers[:cache_control]
+        # The Cache-control header is composed of a comma-separated string
+        # so split this apart before we look for particular values
         cache_parts = response.headers[:cache_control].split(',').map(&:strip)
 
+        # If no-cache is present, this takes precedent over any other value
+        # in this header
         return Time.now if cache_parts.include?("no-cache")
 
+        # Otherwise, look for a 'max-age=123' value, which is the number of
+        # seconds for which to cache the response.
         max_age = cache_parts.map {|x| x.match(/max-age=(\d+)/) }.compact.first
-
         if max_age
-          expiry = max_age[1].to_i
-          return Time.now + expiry
+          return Time.now + max_age[1].to_i
         end
       end
 
