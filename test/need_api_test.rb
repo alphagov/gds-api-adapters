@@ -10,6 +10,65 @@ describe GdsApi::NeedApi do
     @api = GdsApi::NeedApi.new(@base_api_url)
   end
 
+  describe "requesting needs" do
+    it "should return a list of all needs" do
+      req = need_api_has_needs([
+        {
+          "role" => "parent",
+          "goal" => "apply for a primary school place",
+          "benefit" => "my child can start school",
+          "organisation_ids" => ["department-for-education"],
+          "organisations" => [
+            {
+              "id" => "department-for-education",
+              "name" => "Department for Education",
+            }
+          ],
+          "justifications" => [
+            "it's something only government does",
+            "the government is legally obliged to provide it"
+          ],
+          "impact" => "Has serious consequences for the day-to-day lives of your users",
+          "met_when" => [
+            "The user applies for a school place"
+          ]
+        },
+        {
+          "role" => "user",
+          "goal" => "find out about becoming a British citizen",
+          "benefit" => "i can take the correct steps to apply for citizenship",
+          "organisation_ids" => ["home-office"],
+          "organisations" => [
+            {
+              "id" => "home-office",
+              "name" => "Home Office",
+            }
+          ],
+          "justifications" => [
+            "it's something only government does",
+            "the government is legally obliged to provide it"
+          ],
+          "impact" => "Has serious consequences for the day-to-day lives of your users",
+          "met_when" => [
+            "The user finds information about the citizenship test and the next steps"
+          ]
+        }
+      ])
+
+      needs = @api.needs
+
+      assert_requested(req)
+      assert_equal 2, needs.count
+
+      assert_equal ["parent", "user"], needs.map(&:role)
+      assert_equal ["apply for a primary school place", "find out about becoming a British citizen"], needs.map(&:goal)
+      assert_equal ["my child can start school", "i can take the correct steps to apply for citizenship"], needs.map(&:benefit)
+
+      assert_equal "department-for-education", needs.first.organisations.first.id
+      assert_equal "Department for Education", needs.first.organisations.first.name
+    end
+  end
+
   describe "creating needs" do
     it "should post to the right endpoint" do
       request_stub = stub_request(:post, @base_api_url + "/needs").with(
