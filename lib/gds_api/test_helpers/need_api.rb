@@ -22,8 +22,17 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
-      def need_api_has_needs(needs, query = "")
-        url = NEED_API_ENDPOINT + "/needs#{query}"
+      def need_api_has_needs_for_organisation(organisation, needs)
+        url = NEED_API_ENDPOINT + "/needs?organisation_id=#{organisation}"
+
+        body = response_base.merge(
+          "results" => needs
+        )
+        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+      end
+
+      def need_api_has_needs(needs)
+        url = NEED_API_ENDPOINT + "/needs"
 
         body = response_base.merge(
           "results" => needs

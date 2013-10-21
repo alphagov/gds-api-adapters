@@ -81,7 +81,7 @@ describe GdsApi::NeedApi do
 
   describe "filtering needs by organisation" do
     it "should return a subset of needs" do
-      req = need_api_has_needs([
+      req = need_api_has_needs_for_organisation("ministry-of-justice", [
         {
           "role" => "parent",
           "goal" => "apply for a primary school place",
@@ -122,9 +122,9 @@ describe GdsApi::NeedApi do
             "The user finds information about the citizenship test and the next steps"
           ]
         }
-      ], "?organisation_id=ministry-of-justice")
+      ])
 
-      @api.needs({"organisation_id" => "ministry-of-justice"})
+      @api.needs(organisation_id: "ministry-of-justice")
       assert_requested(req)
     end
   end
