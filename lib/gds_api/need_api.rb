@@ -2,8 +2,10 @@ require_relative 'base'
 
 class GdsApi::NeedApi < GdsApi::Base
 
-  def needs
-    get_list!("#{endpoint}/needs")
+  def needs(options = {})
+    query = "?"+options.map { |k,v| "#{k}=#{v}" }.join("&") unless options.empty?
+
+    get_list!("#{endpoint}/needs#{query}")
   end
 
   def create_need(need)

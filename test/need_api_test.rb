@@ -79,6 +79,56 @@ describe GdsApi::NeedApi do
     end
   end
 
+  describe "filtering needs by organisation" do
+    it "should return a subset of needs" do
+      req = need_api_has_needs([
+        {
+          "role" => "parent",
+          "goal" => "apply for a primary school place",
+          "benefit" => "my child can start school",
+          "organisation_ids" => ["ministry-of-justice"],
+          "organisations" => [
+            {
+              "id" => "ministry-of-justice",
+              "name" => "Ministry of Justice",
+            }
+          ],
+          "justifications" => [
+            "it's something only government does",
+            "the government is legally obliged to provide it"
+          ],
+          "impact" => "Has serious consequences for the day-to-day lives of your users",
+          "met_when" => [
+            "The user applies for a school place"
+          ]
+        },
+        {
+          "role" => "user",
+          "goal" => "find out about becoming a British citizen",
+          "benefit" => "i can take the correct steps to apply for citizenship",
+          "organisation_ids" => ["ministry-of-justice"],
+          "organisations" => [
+            {
+              "id" => "ministry-of-justice",
+              "name" => "Ministry of Justice",
+            }
+          ],
+          "justifications" => [
+            "it's something only government does",
+            "the government is legally obliged to provide it"
+          ],
+          "impact" => "Has serious consequences for the day-to-day lives of your users",
+          "met_when" => [
+            "The user finds information about the citizenship test and the next steps"
+          ]
+        }
+      ], "?organisation_id=ministry-of-justice")
+
+      @api.needs({"organisation_id" => "ministry-of-justice"})
+      assert_requested(req)
+    end
+  end
+
   describe "viewing organisations" do
     it "should return a list of organisations" do
       request_stub = need_api_has_organisations(
