@@ -88,7 +88,7 @@ module GdsApi
     end
 
     def delete_json!(url, params = nil, additional_headers = {})
-      do_request(:delete, url, params, additional_headers)
+      do_json_request(:delete, url, params, additional_headers)
     end
 
     def post_multipart(url, params)
