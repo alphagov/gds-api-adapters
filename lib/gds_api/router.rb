@@ -28,6 +28,6 @@ class GdsApi::Router < GdsApi::Base
   end
 
   def delete_route(path, type)
-    delete_json!("#{endpoint}/routes", :route => {:incoming_path => path, :route_type => type})
+    delete_json!("#{endpoint}/routes?incoming_path=#{CGI.escape(path)}&route_type=#{CGI.escape(type)}")
   end
 end

@@ -219,10 +219,9 @@ describe GdsApi::Router do
 
     describe "deleting a route" do
       it "should allow deleting a route" do
-        request_data = {"incoming_path" => "/foo", "route_type" => "exact"}
-        route_data = request_data.merge("handler" => "backend", "backend_id" => "foo")
+        route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "backend", "backend_id" => "foo"}
         req = WebMock.stub_request(:delete, "#{@base_api_url}/routes").
-          with(:body => {"route" => request_data}.to_json).
+          with(:query => {"incoming_path" => "/foo", "route_type" => "exact"}).
           to_return(:status => 200, :body => route_data.to_json, :headers => {"Content-type" => "application/json"})
 
         response = @api.delete_route("/foo", "exact")
@@ -232,22 +231,35 @@ describe GdsApi::Router do
         assert_requested(req)
       end
 
-      it "should raise an error if deleting the backend fails" do
-        route_data = {"incoming_path" => "/foo", "route_type" => "exact"}
+      it "should raise HTTPNotFound if nothing found" do
         req = WebMock.stub_request(:delete, "#{@base_api_url}/routes").
-          with(:body => {"route" => route_data}.to_json).
-          to_return(:status => 400, :body => {"error" => "Route not found"}.to_json, :headers => {"Content-type" => "application/json"})
+          with(:query => {"incoming_path" => "/foo", "route_type" => "exact"}).
+          to_return(:status => 404)
 
         e = nil
         begin
           @api.delete_route("/foo", "exact")
-        rescue GdsApi::HTTPErrorResponse => ex
+        rescue GdsApi::HTTPNotFound => ex
           e = ex
         end
 
         refute_nil e
-        assert_equal 400, e.code
-        assert_equal "Route not found", e.error_details["error"]
+        assert_equal 404, e.code
+
+        assert_requested(req)
+      end
+
+      it "should escape the params" do
+        # The WebMock query matcher matches unescaped params.  The call blows up if they're not escaped
+
+        req = WebMock.stub_request(:delete, "#{@base_api_url}/routes").
+          with(:query => {"incoming_path" => "/foo bar", "route_type" => "exa ct"}).
+          to_return(:status => 404)
+
+        begin
+          @api.delete_route("/foo bar", "exa ct")
+        rescue GdsApi::HTTPNotFound
+        end
 
         assert_requested(req)
       end
