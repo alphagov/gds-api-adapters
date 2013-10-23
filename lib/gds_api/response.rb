@@ -1,5 +1,6 @@
 require 'json'
 require 'ostruct'
+require 'forwardable'
 require_relative 'core-ext/openstruct'
 
 module GdsApi
