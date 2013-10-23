@@ -12,10 +12,11 @@ module GdsApi
   end
 
   class HTTPErrorResponse < BaseError
-    attr_accessor :code
+    attr_accessor :code, :error_details
 
-    def initialize(code)
+    def initialize(code, error_details = nil)
       @code = code
+      @error_details = error_details
     end
   end
 

@@ -88,7 +88,7 @@ module GdsApi
     end
 
     def delete_json!(url, params = nil, additional_headers = {})
-      do_request(:delete, url, params, additional_headers)
+      do_json_request(:delete, url, params, additional_headers)
     end
 
     def post_multipart(url, params)
@@ -125,12 +125,12 @@ module GdsApi
 
       rescue RestClient::Exception => e
         # Attempt to parse the body as JSON if possible
-        body = begin
+        error_details = begin
           e.http_body ? JSON.parse(e.http_body) : nil
         rescue JSON::ParserError
-          e.http_body
+          nil
         end
-        raise GdsApi::HTTPErrorResponse.new(e.http_code), body
+        raise GdsApi::HTTPErrorResponse.new(e.http_code, error_details), e.http_body
       end
 
       # If no custom response is given, just instantiate Response
