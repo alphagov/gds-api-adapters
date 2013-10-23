@@ -129,6 +129,26 @@ describe GdsApi::NeedApi do
     end
   end
 
+  describe "viewing needs" do
+    it "should return a need response" do
+      need = {
+        need_id: 100500,
+        role: "parent",
+        goal: "do things",
+        benefit: "good things"
+      }
+      need_api_has_need(need)
+
+      need_response = @api.need(100500)
+      assert_equal "good things", need_response.benefit
+    end
+
+    it "should return nil for a missing need" do
+      need_api_has_no_need(100600)
+      assert_nil @api.need(100600)
+    end
+  end
+
   describe "viewing organisations" do
     it "should return a list of organisations" do
       request_stub = need_api_has_organisations(

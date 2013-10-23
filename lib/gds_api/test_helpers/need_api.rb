@@ -39,6 +39,27 @@ module GdsApi
         )
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
+
+      def need_api_has_need(need)
+        need_id = need["need_id"] || need[:need_id]
+        raise ArgumentError, "Test need is missing an ID" unless need_id
+
+        url = NEED_API_ENDPOINT + "/needs/#{need_id}"
+        stub_request(:get, url).to_return(status: 200, body: need.to_json, headers: {})
+      end
+
+      def need_api_has_no_need(need_id)
+        url = NEED_API_ENDPOINT + "/needs/#{need_id}"
+        not_found_body = {
+          "_response_info" => {"status" => "not_found"},
+          "error" => "No need exists with this ID"
+        }
+        stub_request(:get, url).to_return(
+          status: 404,
+          body: not_found_body.to_json,
+          headers: {}
+        )
+      end
     end
   end
 end
