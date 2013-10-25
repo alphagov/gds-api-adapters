@@ -101,7 +101,7 @@ describe GdsApi::Support do
   end
 
   it "can pass transaction feedback" do
-    request_details = {"transactions"=>{"requester"=>{"transaction-completed-values"=>"1"}, "details"=>"abc"}}
+    request_details = {"transaction-completed-values"=>"1", "details"=>"abc"}
 
     stub_post = stub_request(:post, "#{@base_api_url}/anonymous_feedback/transactions").
       with(:body => {"transactions" => request_details}.to_json).
