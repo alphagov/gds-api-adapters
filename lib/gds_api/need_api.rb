@@ -16,6 +16,11 @@ class GdsApi::NeedApi < GdsApi::Base
     post_json!("#{endpoint}/needs", need)
   end
 
+  def update_need(need_id, need_update)
+    # `need_update` can be a hash of updated fields or a complete need
+    put_json!("#{endpoint}/needs/#{CGI.escape(need_id.to_s)}", need_update)
+  end
+
   def organisations
     get_json!("#{endpoint}/organisations")["organisations"]
   end
