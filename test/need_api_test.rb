@@ -129,6 +129,52 @@ describe GdsApi::NeedApi do
     end
   end
 
+  describe "viewing needs" do
+    it "should return a need response" do
+      need = {
+        need_id: 100500,
+        role: "parent",
+        goal: "do things",
+        benefit: "good things"
+      }
+      need_api_has_need(need)
+
+      need_response = @api.need(100500)
+      assert_equal "good things", need_response.benefit
+    end
+
+    it "should return nil for a missing need" do
+      need_api_has_no_need(100600)
+      assert_nil @api.need(100600)
+    end
+  end
+
+  describe "updating needs" do
+    it "should send a PUT request" do
+      updated_fields = {
+        role: "parent",
+        goal: "do things",
+        benefit: "good things"
+      }
+
+      update_stub = stub_request(:put, @base_api_url + "/needs/100005")
+                        .with(body: updated_fields.to_json)
+                        .to_return(status: 204)
+      @api.update_need(100005, updated_fields)
+      assert_requested update_stub
+    end
+
+    it "should accept partial updates" do
+      updated_fields = { role: "parent" }
+
+      update_stub = stub_request(:put, @base_api_url + "/needs/100005")
+                        .with(body: updated_fields.to_json)
+                        .to_return(status: 204)
+      @api.update_need(100005, updated_fields)
+      assert_requested update_stub
+    end
+  end
+
   describe "viewing organisations" do
     it "should return a list of organisations" do
       request_stub = need_api_has_organisations(
