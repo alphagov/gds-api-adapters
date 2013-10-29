@@ -132,7 +132,7 @@ describe GdsApi::NeedApi do
   describe "viewing needs" do
     it "should return a need response" do
       need = {
-        need_id: 100500,
+        id: 100500,
         role: "parent",
         goal: "do things",
         benefit: "good things"
