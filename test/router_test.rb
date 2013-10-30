@@ -216,6 +216,56 @@ describe GdsApi::Router do
       end
     end
 
+    describe "creating/updating a redirect route" do
+      it "should allow creating/updating a redirect route" do
+        route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "redirect", "redirect_to" => "/bar", "redirect_type" => "permanent"}
+        req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
+          with(:body => {"route" => route_data}.to_json).
+          to_return(:status => 201, :body => route_data.to_json, :headers => {"Content-type" => "application/json"})
+
+        response = @api.add_redirect_route("/foo", "exact", "/bar")
+        assert_equal 201, response.code
+        assert_equal "/bar", response.redirect_to
+
+        assert_requested(req)
+      end
+
+      it "should allow creating/updating a temporary redirect route" do
+        route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "redirect", "redirect_to" => "/bar", "redirect_type" => "temporary"}
+        req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
+          with(:body => {"route" => route_data}.to_json).
+          to_return(:status => 201, :body => route_data.to_json, :headers => {"Content-type" => "application/json"})
+
+        response = @api.add_redirect_route("/foo", "exact", "/bar", "temporary")
+        assert_equal 201, response.code
+        assert_equal "/bar", response.redirect_to
+
+        assert_requested(req)
+      end
+
+      it "should raise an error if creating/updating the redirect route fails" do
+        route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "redirect", "redirect_to" => "bar", "redirect_type" => "permanent"}
+        response_data = route_data.merge("errors" => {"redirect_to" => "is not a valid URL path"})
+
+        req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
+          with(:body => {"route" => route_data}.to_json).
+          to_return(:status => 400, :body => response_data.to_json, :headers => {"Content-type" => "application/json"})
+
+        e = nil
+        begin
+          @api.add_redirect_route("/foo", "exact", "bar")
+        rescue GdsApi::HTTPErrorResponse => ex
+          e = ex
+        end
+
+        refute_nil e
+        assert_equal 400, e.code
+        assert_equal response_data, e.error_details
+
+        assert_requested(req)
+      end
+    end
+
     describe "deleting a route" do
       it "should allow deleting a route" do
         route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "backend", "backend_id" => "foo"}

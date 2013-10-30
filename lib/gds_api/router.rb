@@ -27,6 +27,11 @@ class GdsApi::Router < GdsApi::Base
     put_json!("#{endpoint}/routes", :route => {:incoming_path => path, :route_type => type, :handler => "backend", :backend_id => backend_id})
   end
 
+  def add_redirect_route(path, type, destination, redirect_type = "permanent")
+    put_json!("#{endpoint}/routes", :route => {:incoming_path => path, :route_type => type, :handler => "redirect",
+              :redirect_to => destination, :redirect_type => redirect_type})
+  end
+
   def delete_route(path, type)
     delete_json!("#{endpoint}/routes?incoming_path=#{CGI.escape(path)}&route_type=#{CGI.escape(type)}")
   end
