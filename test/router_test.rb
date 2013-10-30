@@ -195,9 +195,8 @@ describe GdsApi::Router do
 
       it "should raise an error if creating/updating the route fails" do
         route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "backend", "backend_id" => "foo"}
-        response_data = route_data.merge(:errors => {"backend_id" => "does not exist"})
+        response_data = route_data.merge("errors" => {"backend_id" => "does not exist"})
 
-        response_data = {"backend_id" => "foo", "backend_url" => "ftp://foo.example.com/", "errors" => {"backend_url" => "is not an HTTP URL"}}
         req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
           with(:body => {"route" => route_data}.to_json).
           to_return(:status => 400, :body => response_data.to_json, :headers => {"Content-type" => "application/json"})
