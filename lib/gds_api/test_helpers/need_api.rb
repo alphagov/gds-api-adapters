@@ -41,7 +41,7 @@ module GdsApi
       end
 
       def need_api_has_need(need)
-        need_id = need["need_id"] || need[:need_id]
+        need_id = need["id"] || need[:id]
         raise ArgumentError, "Test need is missing an ID" unless need_id
 
         url = NEED_API_ENDPOINT + "/needs/#{need_id}"
