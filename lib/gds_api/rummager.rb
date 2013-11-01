@@ -5,12 +5,12 @@ module GdsApi
   class Rummager < Base
 
     def search(query, extra_params={})
-      return [] if query.nil? || query == ""
+      raise ArgumentError.new("Query cannot be blank") if query.nil? || query.strip.empty?
       get_json!(search_url(:search, query, extra_params))
     end
 
     def advanced_search(args)
-      return [] if args.nil? || args.empty?
+      raise ArgumentError.new("Args cannot be blank") if args.nil? || args.empty?
       request_path = "#{base_url}/advanced_search?#{Rack::Utils.build_nested_query(args)}"
       get_json!(request_path)
     end
