@@ -230,7 +230,7 @@ module GdsApi
         stub_request(:get, %r{\A#{CONTENT_API_ENDPOINT}/business_support_schemes\.json}).to_return do |request|
           if request.uri.query_values and request.uri.query_values["identifiers"]
             ids = request.uri.query_values["identifiers"].split(',')
-            results = @stubbed_content_api_business_support_schemes.select {|bs| ids.include? bs["details"]["business_support_identifier"] }
+            results = @stubbed_content_api_business_support_schemes.select {|bs| ids.include? bs["identifier"] }
           else
             results = []
           end
@@ -239,7 +239,7 @@ module GdsApi
       end
 
       def content_api_has_business_support_scheme(scheme)
-        raise "Need a licence identifier" if scheme["details"]["business_support_identifier"].nil?
+        raise "Need an identifier" if scheme["identifier"].nil?
         @stubbed_content_api_business_support_schemes << scheme
       end
 
