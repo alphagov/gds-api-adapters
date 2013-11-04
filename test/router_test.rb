@@ -202,6 +202,16 @@ describe GdsApi::Router do
         assert_requested(@commit_req)
       end
 
+      it "should not commit the routes when asked not to" do
+        req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
+          to_return(:status => 201, :body => {}.to_json, :headers => {"Content-type" => "application/json"})
+
+        @api.add_route("/foo", "exact", "foo", :skip_commit => true)
+
+        assert_requested(req)
+        assert_not_requested(@commit_req)
+      end
+
       it "should raise an error if creating/updating the route fails" do
         route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "backend", "backend_id" => "foo"}
         response_data = route_data.merge("errors" => {"backend_id" => "does not exist"})
@@ -255,6 +265,16 @@ describe GdsApi::Router do
         assert_requested(@commit_req)
       end
 
+      it "should not commit the routes when asked not to" do
+        req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
+          to_return(:status => 201, :body =>{}.to_json, :headers => {"Content-type" => "application/json"})
+
+        @api.add_redirect_route("/foo", "exact", "/bar", "temporary", :skip_commit => true)
+
+        assert_requested(req)
+        assert_not_requested(@commit_req)
+      end
+
       it "should raise an error if creating/updating the redirect route fails" do
         route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "redirect", "redirect_to" => "bar", "redirect_type" => "permanent"}
         response_data = route_data.merge("errors" => {"redirect_to" => "is not a valid URL path"})
@@ -292,6 +312,17 @@ describe GdsApi::Router do
 
         assert_requested(req)
         assert_requested(@commit_req)
+      end
+
+      it "should not commit the routes when asked not to" do
+        req = WebMock.stub_request(:delete, "#{@base_api_url}/routes").
+          with(:query => {"incoming_path" => "/foo", "route_type" => "exact"}).
+          to_return(:status => 200, :body => {}.to_json, :headers => {"Content-type" => "application/json"})
+
+        @api.delete_route("/foo", "exact", :skip_commit => true)
+
+        assert_requested(req)
+        assert_not_requested(@commit_req)
       end
 
       it "should raise HTTPNotFound if nothing found" do
