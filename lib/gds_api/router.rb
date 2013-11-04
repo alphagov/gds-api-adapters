@@ -23,16 +23,26 @@ class GdsApi::Router < GdsApi::Base
     get_json("#{endpoint}/routes?incoming_path=#{CGI.escape(path)}&route_type=#{CGI.escape(type)}")
   end
 
-  def add_route(path, type, backend_id)
-    put_json!("#{endpoint}/routes", :route => {:incoming_path => path, :route_type => type, :handler => "backend", :backend_id => backend_id})
+  def add_route(path, type, backend_id, options = {})
+    response = put_json!("#{endpoint}/routes", :route => {:incoming_path => path, :route_type => type, :handler => "backend", :backend_id => backend_id})
+    commit_routes unless options[:skip_commit]
+    response
   end
 
-  def add_redirect_route(path, type, destination, redirect_type = "permanent")
-    put_json!("#{endpoint}/routes", :route => {:incoming_path => path, :route_type => type, :handler => "redirect",
+  def add_redirect_route(path, type, destination, redirect_type = "permanent", options = {})
+    response = put_json!("#{endpoint}/routes", :route => {:incoming_path => path, :route_type => type, :handler => "redirect",
               :redirect_to => destination, :redirect_type => redirect_type})
+    commit_routes unless options[:skip_commit]
+    response
   end
 
-  def delete_route(path, type)
-    delete_json!("#{endpoint}/routes?incoming_path=#{CGI.escape(path)}&route_type=#{CGI.escape(type)}")
+  def delete_route(path, type, options = {})
+    response = delete_json!("#{endpoint}/routes?incoming_path=#{CGI.escape(path)}&route_type=#{CGI.escape(type)}")
+    commit_routes unless options[:skip_commit]
+    response
+  end
+
+  def commit_routes
+    post_json!("#{endpoint}/routes/commit", {})
   end
 end
