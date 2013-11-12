@@ -17,8 +17,8 @@ class GdsApi::Support < GdsApi::Base
     post_json!("#{base_url}/anonymous_feedback/long_form_contacts", { :long_form_contact => request_details }, options[:headers] || {})
   end
 
-  def create_transactions(request_details, options = {})
-    post_json!("#{base_url}/anonymous_feedback/transactions", { :transactions => request_details }, options[:headers] || {})
+  def create_service_feedback(request_details, options = {})
+    post_json!("#{base_url}/anonymous_feedback/service_feedback", { :service_feedback => request_details }, options[:headers] || {})
   end
 
   private
