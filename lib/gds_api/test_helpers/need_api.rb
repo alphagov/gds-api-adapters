@@ -48,6 +48,13 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: need.to_json, headers: {})
       end
 
+      def need_api_has_raw_response_for_page(response, page = nil)
+        url = NEED_API_ENDPOINT + "/needs"
+        url << "?page=#{page}" unless page.nil?
+
+        stub_request(:get, url).to_return(status: 200, body: response, headers: {})
+      end
+
       def need_api_has_no_need(need_id)
         url = NEED_API_ENDPOINT + "/needs/#{need_id}"
         not_found_body = {
