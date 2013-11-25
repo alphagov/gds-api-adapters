@@ -296,6 +296,15 @@ module GdsApi
         raise "Need a licence identifier" if details[:licence_identifier].nil?
         @stubbed_content_api_licences << details
       end
+
+      def content_api_has_artefacts_for_need_id(need_id, artefacts)
+        url = "#{CONTENT_API_ENDPOINT}/for_need/#{CGI.escape(need_id.to_s)}.json"
+        body = plural_response_base.merge(
+          'results' => artefacts
+        )
+
+        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: [])
+      end
     end
   end
 end
