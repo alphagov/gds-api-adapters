@@ -1,5 +1,6 @@
 require 'gds_api/test_helpers/json_client_helper'
 require 'gds_api/test_helpers/common_responses'
+require 'plek'
 
 module GdsApi
   module TestHelpers
