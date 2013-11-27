@@ -61,7 +61,14 @@ In the test:
     panopticon_has_metadata('id' => 12345, 'need_id' => need.id,
       'slug' => 'my_slug')
 
-This presumes you have webmock installed and enabled.
+### Dependencies
+
+Some of the helpers come with additional dependencies that you'll need to 
+have installed and configured in your consuming app/lib.
+
+At time of writing, these are:
+
+* [WebMock](https://github.com/bblimke/webmock)
 
 ## To Do
 
