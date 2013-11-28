@@ -31,6 +31,15 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
+      def need_api_has_needs_for_search(search_term, needs)
+        url = NEED_API_ENDPOINT + "/needs?q=#{search_term}"
+
+        body = response_base.merge(
+          "results" => needs
+        )
+        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+      end
+
       def need_api_has_needs(needs)
         url = NEED_API_ENDPOINT + "/needs"
 
