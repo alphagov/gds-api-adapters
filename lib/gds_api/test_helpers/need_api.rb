@@ -14,16 +14,9 @@ module GdsApi
         body = response_base.merge(
           "organisations" => organisations.map {|id, attrs|
             if attrs.is_a? String
-              {
-                "id" => id,
-                "name" => attrs
-              }
+              { "id" => id }.merge("name" => attrs)
             else
-              {
-                "id" => id,
-                "name" => attrs["name"],
-                "abbreviation" => attrs["abbreviation"]
-              }
+              { "id" => id }.merge(attrs)
             end
           }
         )
