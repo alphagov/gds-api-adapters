@@ -11,7 +11,7 @@ describe GdsApi::BusinessSupportApi do
     setup_business_support_api_schemes_stubs
   end
 
-  describe "search" do
+  describe "searching for schemes" do
     it "should return all schemes when called with no facets" do
       business_support_api_has_schemes([:scheme1, :scheme2, :scheme3])
       response = @api.schemes
