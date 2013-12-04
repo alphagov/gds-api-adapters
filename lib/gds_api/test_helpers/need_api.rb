@@ -12,11 +12,19 @@ module GdsApi
         url = NEED_API_ENDPOINT + "/organisations"
 
         body = response_base.merge(
-          "organisations" => organisations.map {|id, name|
-            {
-              "id" => id,
-              "name" => name
-            }
+          "organisations" => organisations.map {|id, attrs|
+            if attrs.is_a? String
+              {
+                "id" => id,
+                "name" => attrs
+              }
+            else
+              {
+                "id" => id,
+                "name" => attrs["name"],
+                "abbreviation" => attrs["abbreviation"]
+              }
+            end
           }
         )
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
