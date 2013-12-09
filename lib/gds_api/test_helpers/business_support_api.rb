@@ -37,6 +37,13 @@ module GdsApi
           business_support_api_has_scheme(scheme, facets)
         end
       end
+
+      def business_support_api_has_a_scheme(slug, scheme)
+        title = scheme.delete(:title)
+        stub_request(:get, %r{\A#{BUSINESS_SUPPORT_API_ENDPOINT}/business-support-schemes/#{slug}\.json}).to_return do |request|
+          {:body => response_base.merge(:format => 'business_support', :title => title, :details => scheme).to_json}
+        end
+      end
     end
   end
 end

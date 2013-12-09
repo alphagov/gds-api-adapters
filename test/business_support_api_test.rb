@@ -28,4 +28,18 @@ describe GdsApi::BusinessSupportApi do
       assert_empty response["results"]
     end
   end
+
+  describe "finding a scheme by slug" do
+    it "should give the scheme details" do
+      business_support_api_has_a_scheme('superbiz-wunderfundz', {
+        :title => 'Superbiz wunderfundz',
+        :short_description => 'Wunderfundz for your superbiz',
+        :body => 'Do you run or work for a Superbiz? Well we have the Wunderfundz.'})
+      response = @api.scheme('superbiz-wunderfundz')
+      assert_equal 'business_support', response['format']
+      assert_equal 'Superbiz wunderfundz', response['title']
+      assert_equal 'Wunderfundz for your superbiz', response['details']['short_description']
+      assert_equal 'Do you run or work for a Superbiz? Well we have the Wunderfundz.', response['details']['body']
+    end
+  end
 end

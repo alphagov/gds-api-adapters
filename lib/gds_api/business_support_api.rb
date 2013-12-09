@@ -9,6 +9,10 @@ class GdsApi::BusinessSupportApi < GdsApi::Base
     get_list!(url_for_slug('business-support-schemes', options))
   end
 
+  def scheme(slug)
+    get_json!(url_for_slug("business-support-schemes/#{slug}"))
+  end
+
   private
 
   def base_url
