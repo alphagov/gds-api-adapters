@@ -12,7 +12,7 @@ module GdsApi
 
       def setup_business_support_api_schemes_stubs
         @stubbed_content_api_business_support_schemes = {}
-        stub_request(:get, %r{\A#{BUSINESS_SUPPORT_API_ENDPOINT}/search\.json}).to_return do |request|
+        stub_request(:get, %r{\A#{BUSINESS_SUPPORT_API_ENDPOINT}/business-support-schemes\.json}).to_return do |request|
           if request.uri.query_values
             key = request.uri.query_values.values.sort.hash
             results = @stubbed_content_api_business_support_schemes[key] || []

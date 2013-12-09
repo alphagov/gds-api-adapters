@@ -6,7 +6,7 @@ class GdsApi::BusinessSupportApi < GdsApi::Base
   include GdsApi::ExceptionHandling
 
   def schemes(options = {})
-    get_list!(url_for_slug('search', options))
+    get_list!(url_for_slug('business-support-schemes', options))
   end
 
   private
