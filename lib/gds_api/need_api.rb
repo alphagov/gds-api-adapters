@@ -27,7 +27,9 @@ class GdsApi::NeedApi < GdsApi::Base
 
   def closed(need_id, duplicate_of)
     # duplicate_of is a hash of the required fields for closing
-    # a need as a duplicate
+    # a need as a duplicate: { "duplicate_of" => 100001,
+    #                          "author" => { ... }
+    #                        }
     put_json!("#{endpoint}/needs/#{CGI.escape(need_id.to_s)}/closed", duplicate_of)
   end
 end
