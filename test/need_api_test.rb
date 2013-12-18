@@ -207,4 +207,18 @@ describe GdsApi::NeedApi do
       assert_equal 2, orgs.size
     end
   end
+
+  describe "closing needs as duplicates" do
+    it "should send a PUT request" do
+      fields = {
+        duplicate_of: 100001
+      }
+
+      duplicate_stub = stub_request(:put, @base_api_url + "/needs/100005/closed")
+                         .with(body: fields.to_json)
+                         .to_return(status: 204)
+      @api.close(100005, fields)
+      assert_requested duplicate_stub
+    end
+  end
 end
