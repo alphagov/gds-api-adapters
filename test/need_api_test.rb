@@ -217,7 +217,7 @@ describe GdsApi::NeedApi do
       duplicate_stub = stub_request(:put, @base_api_url + "/needs/100005/closed")
                          .with(body: fields.to_json)
                          .to_return(status: 204)
-      @api.closed(100005, fields)
+      @api.close(100005, fields)
       assert_requested duplicate_stub
     end
   end
