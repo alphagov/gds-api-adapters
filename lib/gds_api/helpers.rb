@@ -1,13 +1,13 @@
-require 'gds_api/publisher'
-require 'gds_api/imminence'
-require 'gds_api/panopticon'
-require 'gds_api/content_api'
-require 'gds_api/licence_application'
 require 'gds_api/asset_manager'
-require 'gds_api/worldwide'
-require 'gds_api/fact_cave'
-require 'gds_api/need_api'
 require 'gds_api/business_support_api'
+require 'gds_api/content_api'
+require 'gds_api/fact_cave'
+require 'gds_api/imminence'
+require 'gds_api/licence_application'
+require 'gds_api/need_api'
+require 'gds_api/panopticon'
+require 'gds_api/publisher'
+require 'gds_api/worldwide'
 
 module GdsApi
   module Helpers
