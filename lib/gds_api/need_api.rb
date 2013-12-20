@@ -32,4 +32,9 @@ class GdsApi::NeedApi < GdsApi::Base
     #                        }
     put_json!("#{endpoint}/needs/#{CGI.escape(need_id.to_s)}/closed", duplicate_of)
   end
+
+  def reopen(need_id, author)
+    # author params: { "author" => { ... } }"
+    delete_json!("#{endpoint}/needs/#{CGI.escape(need_id.to_s)}/closed", author)
+  end
 end
