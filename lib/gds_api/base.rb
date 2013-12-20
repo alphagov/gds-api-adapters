@@ -44,10 +44,6 @@ class GdsApi::Base
     self.endpoint = options[:endpoint_url]
   end
 
-  def adapter_name
-    self.class.to_s.split("::").last.downcase
-  end
-
   def url_for_slug(slug, options={})
     base = "#{base_url}/#{slug}.json#{query_string(options)}"
   end
