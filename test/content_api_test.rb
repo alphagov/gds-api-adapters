@@ -299,6 +299,28 @@ describe GdsApi::ContentApi do
       title = response['title']
       assert_equal json[:title], title
     end
+
+    it "returns artefacts for a tag in curated list order" do
+      api_url = "#{@base_api_url}/with_tag.json?tag=crime-and-justice&sort=curated"
+      json = {
+        results: [{title: "Complain about a claims company"}]
+      }
+      stub_request(:get, api_url).to_return(:status => 200, :body => json.to_json)
+      response = @api.curated_list("crime-and-justice")
+
+      assert_equal "Complain about a claims company", response.first.title
+    end
+
+    it "returns artefacts for a tag in a given sort order" do
+      api_url = "#{@base_api_url}/with_tag.json?tag=crime-and-justice&sort=foo"
+      json = {
+        results: [{title: "Complain about a claims company"}]
+      }
+      stub_request(:get, api_url).to_return(:status => 200, :body => json.to_json)
+      response = @api.sorted_by("crime-and-justice", "foo")
+
+      assert_equal "Complain about a claims company", response.first.title
+    end
   end
 
   describe "licence" do
