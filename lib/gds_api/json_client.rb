@@ -166,7 +166,7 @@ module GdsApi
     end
 
     def with_headers(method_params, headers)
-      headers.merge!(govuk_request_id: GdsApi::GovukRequestId.value) if GdsApi::GovukRequestId.set?
+      headers = headers.merge(govuk_request_id: GdsApi::GovukRequestId.value) if GdsApi::GovukRequestId.set?
       method_params.merge(
         headers: method_params[:headers].merge(headers)
       )

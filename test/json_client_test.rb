@@ -635,6 +635,15 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  def test_additional_headers_passed_in_do_not_get_modified
+    stub_request(:get, "http://some.other.endpoint/some.json").to_return(:status => 200)
+
+    headers = { 'HEADER-A' => 'A' }
+    GdsApi::JsonClient.new.get_json("http://some.other.endpoint/some.json", headers)
+
+    assert_equal({ 'HEADER-A' => 'A' }, headers)
+  end
+
   def test_client_can_decompress_gzip_responses
     url = "http://some.endpoint/some.json"
     # {"test": "hello"}
