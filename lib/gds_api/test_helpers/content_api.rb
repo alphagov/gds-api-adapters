@@ -13,10 +13,22 @@ module GdsApi
       # Takes an array of slugs, or hashes with section details (including a slug).
       # Will stub out content_api calls for tags of type section to return these sections
       def content_api_has_root_sections(slugs_or_sections)
+        content_api_has_root_tags("section", slugs_or_sections)
+      end
+
+      def content_api_has_section(slug_or_hash, parent_slug=nil)
+        content_api_has_tag("section", slug_or_hash, parent_slug)
+      end
+
+      def content_api_has_subsections(parent_slug_or_hash, subsection_slugs)
+        content_api_has_child_tags("section", parent_slug_or_hash, subsection_slugs)
+      end
+
+      def content_api_has_root_tags(tag_type, slugs_or_tags)
         body = plural_response_base.merge(
-          "results" => slugs_or_sections.map { |section| tag_result(section) }
+          "results" => slugs_or_tags.map { |tag| tag_result(tag, tag_type) }
         )
-        urls = ["type=section", "root_sections=true&type=section"].map { |q|
+        urls = ["type=#{tag_type}", "root_sections=true&type=#{tag_type}"].map { |q|
           "#{CONTENT_API_ENDPOINT}/tags.json?#{q}"
         }
         urls.each do |url|
@@ -24,10 +36,39 @@ module GdsApi
         end
       end
 
-      def content_api_has_section(slug_or_hash, parent_slug=nil)
-        section = tag_hash(slug_or_hash).merge(parent: parent_slug)
+      def content_api_has_tag(tag_type, slug_or_hash, parent_slug=nil)
+        section = tag_hash(slug_or_hash, tag_type).merge(parent: parent_slug)
         body = tag_result(section)
-        url = "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(section[:slug])}.json"
+
+        urls = ["#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(tag_type)}/#{CGI.escape(section[:slug])}.json"]
+
+        if tag_type == "section"
+          urls << "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(section[:slug])}.json"
+        end
+
+        urls.each do |url|
+          stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+        end
+      end
+
+      def content_api_has_tags(tag_type, slugs_or_tags)
+        body = plural_response_base.merge(
+          "results" => slugs_or_tags.map { |tag| tag_result(tag, tag_type) }
+        )
+
+        url = "#{CONTENT_API_ENDPOINT}/tags.json?type=#{tag_type}"
+        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+      end
+
+      def content_api_has_child_tags(tag_type, parent_slug_or_hash, subsection_slugs)
+        parent_section = tag_hash(parent_slug_or_hash, tag_type)
+        subsections = subsection_slugs.map { |s|
+          tag_hash(s, tag_type).merge(parent: parent_section)
+        }
+        body = plural_response_base.merge(
+          "results" => subsections.map { |s| tag_result(s, tag_type) }
+        )
+        url = "#{CONTENT_API_ENDPOINT}/tags.json?type=#{tag_type}&parent_id=#{CGI.escape(parent_section[:slug])}"
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
@@ -42,18 +83,6 @@ module GdsApi
           url = "#{CONTENT_API_ENDPOINT}/with_tag.json?sort=#{order}&tag=#{CGI.escape(slug)}"
           stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
         end
-      end
-
-      def content_api_has_subsections(parent_slug_or_hash, subsection_slugs)
-        parent_section = tag_hash(parent_slug_or_hash)
-        subsections = subsection_slugs.map { |s|
-          tag_hash(s).merge(parent: parent_section)
-        }
-        body = plural_response_base.merge(
-          "results" => subsections.map { |s| tag_result(s) }
-        )
-        url = "#{CONTENT_API_ENDPOINT}/tags.json?type=section&parent_id=#{CGI.escape(parent_section[:slug])}"
-        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
       def content_api_has_an_artefact(slug, body = artefact_for_slug(slug))
@@ -195,21 +224,22 @@ module GdsApi
       end
 
       # Construct a tag hash suitable for passing into tag_result
-      def tag_hash(slug_or_hash)
+      def tag_hash(slug_or_hash, tag_type = "section")
         if slug_or_hash.is_a?(Hash)
           slug_or_hash
         else
-          { slug: slug_or_hash, type: "section" }
+          { slug: slug_or_hash, type: tag_type }
         end
       end
 
-      def tag_result(slug_or_hash)
-        tag = tag_hash(slug_or_hash)
+      def tag_result(slug_or_hash, tag_type = nil)
+        tag = tag_hash(slug_or_hash, tag_type)
 
         parent = tag_result(tag[:parent]) if tag[:parent]
+        pluralized_tag_type = simple_tag_type_pluralizer(tag[:type])
 
         {
-          "id" => "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(tag[:slug])}.json",
+          "id" => "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(pluralized_tag_type)}/#{CGI.escape(tag[:slug])}.json",
           "web_url" => nil,
           "title" => tag[:title] || titleize_slug(tag[:slug].split("/").last),
           "details" => {
@@ -223,6 +253,19 @@ module GdsApi
             "web_url" => "http://www.test.gov.uk/browse/#{tag[:slug]}"
           }
         }
+      end
+
+      # This is a nasty hack to get around the pluralized slugs in tag paths
+      # without having to require ActiveSupport
+      #
+      def simple_tag_type_pluralizer(s)
+        case s
+        when /o\Z/ then s.sub(/o\Z/, "es")
+        when /y\Z/ then s.sub(/y\Z/, "ies")
+        when /ss\Z/ then s.sub(/ss\Z/, "sses")
+        else
+          "#{s}s"
+        end
       end
 
       def setup_content_api_business_support_schemes_stubs
@@ -281,7 +324,7 @@ module GdsApi
             valid_licences = @stubbed_content_api_licences.select { |l| ids.include? l[:licence_identifier] }
             {
               :body => {
-                'results' => valid_licences.map { |licence| 
+                'results' => valid_licences.map { |licence|
                   content_api_licence_hash(licence[:licence_identifier], licence)
                 }
               }.to_json
