@@ -38,19 +38,19 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def with_tag(tag, tag_type=nil)
-    tag_key = tag_type.nil? ? "tag" : CGI.escape(tag_type)
+    tag_key = key_for_tag_type(tag_type)
 
     get_list!("#{base_url}/with_tag.json?#{tag_key}=#{CGI.escape(tag)}&include_children=1")
   end
 
   def curated_list(tag, tag_type=nil)
-    tag_key = tag_type.nil? ? "tag" : CGI.escape(tag_type)
+    tag_key = key_for_tag_type(tag_type)
 
     get_list("#{base_url}/with_tag.json?#{tag_key}=#{CGI.escape(tag)}&sort=curated")
   end
 
   def sorted_by(tag, sort_by, tag_type=nil)
-    tag_key = tag_type.nil? ? "tag" : CGI.escape(tag_type)
+    tag_key = key_for_tag_type(tag_type)
 
     get_list!("#{base_url}/with_tag.json?#{tag_key}=#{CGI.escape(tag)}&sort=#{sort_by}")
   end
@@ -152,5 +152,9 @@ class GdsApi::ContentApi < GdsApi::Base
       else
         batch_response
       end
+    end
+
+    def key_for_tag_type(tag_type)
+      tag_type.nil? ? "tag" : CGI.escape(tag_type)
     end
 end
