@@ -27,20 +27,32 @@ class GdsApi::ContentApi < GdsApi::Base
     get_list!("#{base_url}/tags.json?type=section&parent_id=#{CGI.escape(parent_tag)}")
   end
 
-  def tag(tag)
-    get_json("#{base_url}/tags/#{CGI.escape(tag)}.json")
+  def tag(tag, tag_type=nil)
+    url = "#{base_url}/tags"
+
+    if tag_type
+      url << "/#{CGI.escape(tag_type)}"
+    end
+
+    get_json("#{url}/#{CGI.escape(tag)}.json")
   end
 
-  def with_tag(tag)
-    get_list!("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&include_children=1")
+  def with_tag(tag, tag_type=nil)
+    tag_key = tag_type.nil? ? "tag" : CGI.escape(tag_type)
+
+    get_list!("#{base_url}/with_tag.json?#{tag_key}=#{CGI.escape(tag)}&include_children=1")
   end
 
-  def curated_list(tag)
-    get_list("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&sort=curated")
+  def curated_list(tag, tag_type=nil)
+    tag_key = tag_type.nil? ? "tag" : CGI.escape(tag_type)
+
+    get_list("#{base_url}/with_tag.json?#{tag_key}=#{CGI.escape(tag)}&sort=curated")
   end
 
-  def sorted_by(tag, sort_by)
-    get_list!("#{base_url}/with_tag.json?tag=#{CGI.escape(tag)}&sort=#{sort_by}")
+  def sorted_by(tag, sort_by, tag_type=nil)
+    tag_key = tag_type.nil? ? "tag" : CGI.escape(tag_type)
+
+    get_list!("#{base_url}/with_tag.json?#{tag_key}=#{CGI.escape(tag)}&sort=#{sort_by}")
   end
 
   def for_need(need_id)
