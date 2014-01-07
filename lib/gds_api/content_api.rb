@@ -16,15 +16,27 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def sections
-    get_list!("#{base_url}/tags.json?type=section")
+    tags("section")
   end
 
   def root_sections
-    get_list!("#{base_url}/tags.json?type=section&root_sections=true")
+    root_tags("section")
   end
 
   def sub_sections(parent_tag)
-    get_list!("#{base_url}/tags.json?type=section&parent_id=#{CGI.escape(parent_tag)}")
+    child_tags("section", parent_tag)
+  end
+
+  def tags(tag_type)
+    get_list!("#{base_url}/tags.json?type=#{CGI.escape(tag_type)}")
+  end
+
+  def root_tags(tag_type)
+    get_list!("#{base_url}/tags.json?type=#{CGI.escape(tag_type)}&root_sections=true")
+  end
+
+  def child_tags(tag_type, parent_tag)
+    get_list!("#{base_url}/tags.json?type=#{CGI.escape(tag_type)}&parent_id=#{CGI.escape(parent_tag)}")
   end
 
   def tag(tag, tag_type=nil)

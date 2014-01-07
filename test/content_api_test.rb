@@ -81,11 +81,11 @@ describe GdsApi::ContentApi do
 
       # Old-style dictionary access
       first_section = response["results"][0]
-      assert_equal "#{@base_api_url}/tags/crime.json", first_section["id"]
+      assert_equal "#{@base_api_url}/tags/sections/crime.json", first_section["id"]
 
       # Also check attribute access
       first_section = response.first
-      assert_equal "#{@base_api_url}/tags/crime.json", first_section.id
+      assert_equal "#{@base_api_url}/tags/sections/crime.json", first_section.id
     end
 
     def section_page_url(page_parameter)
@@ -271,6 +271,45 @@ describe GdsApi::ContentApi do
   end
 
   describe "tags" do
+    it "returns a list of tags of a given type" do
+      content_api_has_tags("author", ["justin-thyme"])
+      response = @api.tags("author")
+
+      # Old-style dictionary access
+      first_section = response["results"][0]
+      assert_equal "#{@base_api_url}/tags/authors/justin-thyme.json", first_section["id"]
+
+      # Also check attribute access
+      first_section = response.first
+      assert_equal "#{@base_api_url}/tags/authors/justin-thyme.json", first_section.id
+    end
+
+    it "returns a list of root tags of a given type" do
+      content_api_has_root_tags("author", ["oliver-sudden", "percy-vere"])
+      response = @api.root_tags("author")
+
+      # Old-style dictionary access
+      first_section = response["results"][0]
+      assert_equal "#{@base_api_url}/tags/authors/oliver-sudden.json", first_section["id"]
+
+      # Also check attribute access
+      first_section = response.first
+      assert_equal "#{@base_api_url}/tags/authors/oliver-sudden.json", first_section.id
+    end
+
+    it "returns a list of child tags of a given type" do
+      content_api_has_child_tags("genre", "indie", ["indie/indie-rock"])
+      response = @api.child_tags("genre", "indie")
+
+      # Old-style dictionary access
+      first_section = response["results"][0]
+      assert_equal "#{@base_api_url}/tags/genres/indie%2Findie-rock.json", first_section["id"]
+
+      # Also check attribute access
+      first_section = response.first
+      assert_equal "#{@base_api_url}/tags/genres/indie%2Findie-rock.json", first_section.id
+    end
+
     it "should produce an artefact with the provided tag" do
       tag = "crime-and-justice"
       api_url = "#{@base_api_url}/with_tag.json?tag=#{tag}&include_children=1"
