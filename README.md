@@ -43,15 +43,15 @@ the form:
     PANOPTICON_API_CREDENTIALS = { bearer_token: 'MY_BEARER_TOKEN' }
 
 
-## Middleware for Request tracing
+## Middleware for request tracing
 
-We set a unique header at the cache level called 'GOVUK-Request-Id'. In order
+We set a unique header at the cache level called `GOVUK-Request-Id`. In order
 to serve a user's request, if apps make API requests they should pass on this
 header, so that we can trace a request across the entire GOV.UK stack.
 
-GdsApi::GovukRequestIdSniffer middleware takes care of this. This gem contains
+`GdsApi::GovukRequestIdSniffer` middleware takes care of this. This gem contains
 a railtie that configures this middleware for Rails apps without extra effort.
-Other Rack-based apps should opt-in by adding this line to your config.ru:
+Other Rack-based apps should opt-in by adding this line to your `config.ru`:
 
 ```use GdsApi::GovukRequestIdSniffer```
 
@@ -61,7 +61,7 @@ Other Rack-based apps should opt-in by adding this line to your config.ru:
 There are also test helpers for stubbing various requests in other apps.
 Example usage of the panopticon helper:
 
-In test_helper.rb:
+In `test_helper.rb`:
 
     require 'gds_api/test_helpers/panopticon'
 
