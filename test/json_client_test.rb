@@ -579,7 +579,7 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_set_custom_headers_on_gets
     stub_request(:get, "http://some.other.endpoint/some.json").to_return(:status => 200)
 
-    response = GdsApi::JsonClient.new.get_json("http://some.other.endpoint/some.json", 
+    response = GdsApi::JsonClient.new.get_json("http://some.other.endpoint/some.json",
                                                { "HEADER-A" => "B", "HEADER-C" => "D" })
 
     assert_requested(:get, %r{/some.json}) do |request|
@@ -591,7 +591,7 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_set_custom_headers_on_posts
     stub_request(:post, "http://some.other.endpoint/some.json").to_return(:status => 200)
 
-    response = GdsApi::JsonClient.new.post_json("http://some.other.endpoint/some.json", {}, 
+    response = GdsApi::JsonClient.new.post_json("http://some.other.endpoint/some.json", {},
                                                 { "HEADER-A" => "B", "HEADER-C" => "D" })
 
     assert_requested(:post, %r{/some.json}) do |request|
@@ -603,7 +603,7 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_set_custom_headers_on_puts
     stub_request(:put, "http://some.other.endpoint/some.json").to_return(:status => 200)
 
-    response = GdsApi::JsonClient.new.put_json("http://some.other.endpoint/some.json", {}, 
+    response = GdsApi::JsonClient.new.put_json("http://some.other.endpoint/some.json", {},
                                                { "HEADER-A" => "B", "HEADER-C" => "D" })
 
     assert_requested(:put, %r{/some.json}) do |request|
@@ -615,13 +615,33 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_set_custom_headers_on_deletes
     stub_request(:delete, "http://some.other.endpoint/some.json").to_return(:status => 200)
 
-    response = GdsApi::JsonClient.new.delete_json("http://some.other.endpoint/some.json", {}, 
+    response = GdsApi::JsonClient.new.delete_json("http://some.other.endpoint/some.json", {},
                                                   { "HEADER-A" => "B", "HEADER-C" => "D" })
 
     assert_requested(:delete, %r{/some.json}) do |request|
       headers_with_uppercase_names = Hash[request.headers.collect {|key, value| [key.upcase, value] }]
       headers_with_uppercase_names["HEADER-A"] == "B" && headers_with_uppercase_names["HEADER-C"] == "D"
     end
+  end
+
+  def test_govuk_request_id_gets_set_if_present
+    GdsApi::GovukRequestId.value = "12345" # set by middleware GovukRequestIdSniffer
+    stub_request(:get, "http://some.other.endpoint/some.json").to_return(:status => 200)
+
+    GdsApi::JsonClient.new.get_json("http://some.other.endpoint/some.json")
+
+    assert_requested(:get, %r{/some.json}) do |request|
+      request.headers['Govuk-Request-Id'] == '12345'
+    end
+  end
+
+  def test_additional_headers_passed_in_do_not_get_modified
+    stub_request(:get, "http://some.other.endpoint/some.json").to_return(:status => 200)
+
+    headers = { 'HEADER-A' => 'A' }
+    GdsApi::JsonClient.new.get_json("http://some.other.endpoint/some.json", headers)
+
+    assert_equal({ 'HEADER-A' => 'A' }, headers)
   end
 
   def test_client_can_decompress_gzip_responses
