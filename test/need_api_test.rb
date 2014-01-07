@@ -221,4 +221,21 @@ describe GdsApi::NeedApi do
       assert_requested duplicate_stub
     end
   end
+
+  describe "reopening closed needs" do
+    it "should send a DELETE request" do
+      fields = {
+        author: {
+          name: "Winston Smith-Churchill",
+          email: "winston@alphagov.co.uk"
+        }
+      }
+
+      reopen_stub = stub_request(:delete, @base_api_url + "/needs/100001/closed")
+                      .with(body: fields.to_json)
+                      .to_return(status: 204)
+      @api.reopen(100001, fields)
+      assert_requested reopen_stub
+    end
+  end
 end
