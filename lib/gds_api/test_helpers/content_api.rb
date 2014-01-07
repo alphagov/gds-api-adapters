@@ -10,8 +10,11 @@ module GdsApi
       # you could redefine/override the constant or stub directly.
       CONTENT_API_ENDPOINT = Plek.current.find('contentapi')
 
-      # Takes an array of slugs, or hashes with section details (including a slug).
-      # Will stub out content_api calls for tags of type section to return these sections
+      # Legacy section test helpers
+      #
+      # Use of these should be retired in favour of the other test helpers in this
+      # module which work with any tag type.
+
       def content_api_has_root_sections(slugs_or_sections)
         content_api_has_root_tags("section", slugs_or_sections)
       end
@@ -24,6 +27,9 @@ module GdsApi
         content_api_has_child_tags("section", parent_slug_or_hash, subsection_slugs)
       end
 
+
+      # Takes an array of slugs, or hashes with section details (including a slug).
+      # Will stub out content_api calls for tags of type section to return these sections
       def content_api_has_root_tags(tag_type, slugs_or_tags)
         body = plural_response_base.merge(
           "results" => slugs_or_tags.map { |tag| tag_result(tag, tag_type) }
