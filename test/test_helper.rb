@@ -8,6 +8,7 @@ Bundler.setup :default, :development, :test
 
 require 'minitest/autorun'
 require 'rack/utils'
+require 'rack/test'
 require 'simplecov'
 require 'simplecov-rcov'
 require 'mocha'
