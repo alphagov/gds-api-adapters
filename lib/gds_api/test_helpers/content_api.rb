@@ -98,8 +98,14 @@ module GdsApi
         )
         sort_orders = ["alphabetical", "curated"]
         sort_orders.each do |order|
-          url = "#{CONTENT_API_ENDPOINT}/with_tag.json?sort=#{order}&#{CGI.escape(tag_type)}=#{CGI.escape(slug)}"
-          stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+          urls = [
+            "#{CONTENT_API_ENDPOINT}/with_tag.json?sort=#{order}&tag=#{CGI.escape(slug)}",
+            "#{CONTENT_API_ENDPOINT}/with_tag.json?sort=#{order}&#{CGI.escape(tag_type)}=#{CGI.escape(slug)}"
+          ]
+
+          urls.each do |url|
+            stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+          end
         end
       end
 
