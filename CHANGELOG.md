@@ -1,3 +1,7 @@
+# 8.1.0
+
+* We've added a unique request ID called `GOVUK-Request-Id` at the varnish layer so that it's easier to trace a request moving through the GOVUK application stack. This change ensures that all api calls pass on the GOVUK-Request-Id header. More details in [README.md](https://github.com/alphagov/gds-api-adapters#middleware-for-request-tracing).
+
 # 7.5.1
 
 * Support app: problem report creation happens on /anonymous_feedback/problem_reports instead of /problem_reports
