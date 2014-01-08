@@ -54,14 +54,14 @@ module GdsApi
         end
       end
 
-      def content_api_has_tag(tag_type, slug_or_hash, parent_slug=nil)
-        section = tag_hash(slug_or_hash, tag_type).merge(parent: parent_slug)
-        body = tag_result(section)
+      def content_api_has_tag(tag_type, slug_or_hash, parent_tag_id=nil)
+        tag = tag_hash(slug_or_hash, tag_type).merge(parent: parent_tag_id)
+        body = tag_result(tag)
 
-        urls = ["#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(tag_type)}/#{CGI.escape(section[:slug])}.json"]
+        urls = ["#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(tag_type)}/#{CGI.escape(tag[:slug])}.json"]
 
         if tag_type == "section"
-          urls << "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(section[:slug])}.json"
+          urls << "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(tag[:slug])}.json"
         end
 
         urls.each do |url|
@@ -78,22 +78,22 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
-      def content_api_has_child_tags(tag_type, parent_slug_or_hash, subsection_slugs)
-        parent_section = tag_hash(parent_slug_or_hash, tag_type)
-        subsections = subsection_slugs.map { |s|
-          tag_hash(s, tag_type).merge(parent: parent_section)
+      def content_api_has_child_tags(tag_type, parent_slug_or_hash, child_tag_ids)
+        parent_tag = tag_hash(parent_slug_or_hash, tag_type)
+        child_tags = child_tag_ids.map { |id|
+          tag_hash(id, tag_type).merge(parent: parent_tag)
         }
         body = plural_response_base.merge(
-          "results" => subsections.map { |s| tag_result(s, tag_type) }
+          "results" => child_tags.map { |s| tag_result(s, tag_type) }
         )
-        url = "#{CONTENT_API_ENDPOINT}/tags.json?type=#{tag_type}&parent_id=#{CGI.escape(parent_section[:slug])}"
+        url = "#{CONTENT_API_ENDPOINT}/tags.json?type=#{tag_type}&parent_id=#{CGI.escape(parent_tag[:slug])}"
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
       def content_api_has_artefacts_with_a_tag(tag_type, slug, artefact_slugs=[])
         body = plural_response_base.merge(
           "results" => artefact_slugs.map do |artefact_slug|
-            artefact_for_slug(artefact_slug)
+            artefact_ slug(artefact_slug)
           end
         )
         sort_orders = ["alphabetical", "curated"]
