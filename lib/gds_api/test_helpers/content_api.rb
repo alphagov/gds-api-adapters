@@ -10,8 +10,11 @@ module GdsApi
       # you could redefine/override the constant or stub directly.
       CONTENT_API_ENDPOINT = Plek.current.find('contentapi')
 
-      # Takes an array of slugs, or hashes with section details (including a slug).
-      # Will stub out content_api calls for tags of type section to return these sections
+      # Legacy section test helpers
+      #
+      # Use of these should be retired in favour of the other test helpers in this
+      # module which work with any tag type.
+
       def content_api_has_root_sections(slugs_or_sections)
         content_api_has_root_tags("section", slugs_or_sections)
       end
@@ -24,6 +27,21 @@ module GdsApi
         content_api_has_child_tags("section", parent_slug_or_hash, subsection_slugs)
       end
 
+      def content_api_has_artefacts_in_a_section(slug, artefact_slugs=nil)
+        content_api_has_artefacts_in_a_tag("section", slug, artefact_slugs)
+      end
+
+      def artefact_for_slug_in_a_section(slug, section_slug)
+        artefact_for_slug_in_a_tag("section", slug, section_slug)
+      end
+
+      def artefact_for_slug_in_a_subsection(slug, subsection_slug)
+        artefact_for_slug_in_a_child_tag("section", slug, subsection_slug)
+      end
+
+
+      # Takes an array of slugs, or hashes with section details (including a slug).
+      # Will stub out content_api calls for tags of type section to return these sections
       def content_api_has_root_tags(tag_type, slugs_or_tags)
         body = plural_response_base.merge(
           "results" => slugs_or_tags.map { |tag| tag_result(tag, tag_type) }
@@ -72,7 +90,7 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
-      def content_api_has_artefacts_in_a_section(slug, artefact_slugs=[])
+      def content_api_has_artefacts_in_a_tag(tag_type, slug, artefact_slugs=[])
         body = plural_response_base.merge(
           "results" => artefact_slugs.map do |artefact_slug|
             artefact_for_slug(artefact_slug)
@@ -80,7 +98,12 @@ module GdsApi
         )
         sort_orders = ["alphabetical", "curated"]
         sort_orders.each do |order|
-          url = "#{CONTENT_API_ENDPOINT}/with_tag.json?sort=#{order}&tag=#{CGI.escape(slug)}"
+          if tag_type == "section"
+            section_url = "#{CONTENT_API_ENDPOINT}/with_tag.json?sort=#{order}&tag=#{CGI.escape(slug)}"
+            stub_request(:get, section_url).to_return(status: 200, body: body.to_json, headers: {})
+          end
+
+          url = "#{CONTENT_API_ENDPOINT}/with_tag.json?sort=#{order}&#{CGI.escape(tag_type)}=#{CGI.escape(slug)}"
           stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
         end
       end
@@ -170,13 +193,13 @@ module GdsApi
         )
       end
 
-      def artefact_for_slug_in_a_section(slug, section_slug)
+      def artefact_for_slug_in_a_tag(tag_type, slug, section_slug)
         artefact = artefact_for_slug(slug)
-        artefact["tags"] << tag_for_slug(section_slug, "section")
+        artefact["tags"] << tag_for_slug(section_slug, tag_type)
         artefact
       end
 
-      def artefact_for_slug_in_a_subsection(slug, subsection_slug)
+      def artefact_for_slug_in_a_child_tag(tag_type, slug, subsection_slug)
         artefact = artefact_for_slug(slug)
 
         # for each "part" of the path, we want to reduce across the
@@ -187,7 +210,7 @@ module GdsApi
         tag_tree = nil
         subsection_slug.split('/').inject(nil) do |last_section, subsection|
           subsection = [last_section, subsection].join('/') if last_section
-          section = tag_for_slug(subsection, "section")
+          section = tag_for_slug(subsection, tag_type)
           if tag_tree
             # Because tags are nested within one another, this makes
             # the current part the top, and the rest we've seen the
