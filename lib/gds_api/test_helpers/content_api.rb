@@ -195,7 +195,7 @@ module GdsApi
 
       def artefact_for_slug_with_a_tag(tag_type, slug, tag_id)
         artefact = artefact_for_slug(slug)
-        artefact["tags"] << tag_for_slug(section_slug, tag_type)
+        artefact["tags"] << tag_for_slug(tag_id, tag_type)
         artefact
       end
 
@@ -208,18 +208,20 @@ module GdsApi
         #   Tag{ thing2, parent: Tag{ thing1 } }
 
         tag_tree = nil
-        subsection_slug.split('/').inject(nil) do |last_section, subsection|
-          subsection = [last_section, subsection].join('/') if last_section
-          section = tag_for_slug(subsection, tag_type)
+        child_tag_id.split('/').inject(nil) do |parent_tag, child_tag|
+          child_tag = [parent_tag, child_tag].join('/') if parent_tag
+          next_level_tag = tag_for_slug(child_tag, tag_type)
           if tag_tree
             # Because tags are nested within one another, this makes
             # the current part the top, and the rest we've seen the
             # ancestors
-            tag_tree = section.merge("parent" => tag_tree)
+            tag_tree = next_level_tag.merge("parent" => tag_tree)
           else
-            tag_tree = section
+            tag_tree = next_level_tag
           end
-          subsection
+
+          # This becomes the parent tag in the next iteration of the block
+          child_tag
         end
         artefact["tags"] << tag_tree
         artefact
