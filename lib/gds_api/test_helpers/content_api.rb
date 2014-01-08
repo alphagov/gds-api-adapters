@@ -28,15 +28,15 @@ module GdsApi
       end
 
       def content_api_has_artefacts_in_a_section(slug, artefact_slugs=nil)
-        content_api_has_artefacts_in_a_tag("section", slug, artefact_slugs)
+        content_api_has_artefacts_with_a_tag("section", slug, artefact_slugs)
       end
 
       def artefact_for_slug_in_a_section(slug, section_slug)
-        artefact_for_slug_in_a_tag("section", slug, section_slug)
+        artefact_for_slug_with_a_tag("section", slug, section_slug)
       end
 
       def artefact_for_slug_in_a_subsection(slug, subsection_slug)
-        artefact_for_slug_in_a_child_tag("section", slug, subsection_slug)
+        artefact_for_slug_with_a_child_tag("section", slug, subsection_slug)
       end
 
 
@@ -54,14 +54,14 @@ module GdsApi
         end
       end
 
-      def content_api_has_tag(tag_type, slug_or_hash, parent_slug=nil)
-        section = tag_hash(slug_or_hash, tag_type).merge(parent: parent_slug)
-        body = tag_result(section)
+      def content_api_has_tag(tag_type, slug_or_hash, parent_tag_id=nil)
+        tag = tag_hash(slug_or_hash, tag_type).merge(parent: parent_tag_id)
+        body = tag_result(tag)
 
-        urls = ["#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(tag_type)}/#{CGI.escape(section[:slug])}.json"]
+        urls = ["#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(tag_type)}/#{CGI.escape(tag[:slug])}.json"]
 
         if tag_type == "section"
-          urls << "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(section[:slug])}.json"
+          urls << "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(tag[:slug])}.json"
         end
 
         urls.each do |url|
@@ -78,22 +78,22 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
-      def content_api_has_child_tags(tag_type, parent_slug_or_hash, subsection_slugs)
-        parent_section = tag_hash(parent_slug_or_hash, tag_type)
-        subsections = subsection_slugs.map { |s|
-          tag_hash(s, tag_type).merge(parent: parent_section)
+      def content_api_has_child_tags(tag_type, parent_slug_or_hash, child_tag_ids)
+        parent_tag = tag_hash(parent_slug_or_hash, tag_type)
+        child_tags = child_tag_ids.map { |id|
+          tag_hash(id, tag_type).merge(parent: parent_tag)
         }
         body = plural_response_base.merge(
-          "results" => subsections.map { |s| tag_result(s, tag_type) }
+          "results" => child_tags.map { |s| tag_result(s, tag_type) }
         )
-        url = "#{CONTENT_API_ENDPOINT}/tags.json?type=#{tag_type}&parent_id=#{CGI.escape(parent_section[:slug])}"
+        url = "#{CONTENT_API_ENDPOINT}/tags.json?type=#{tag_type}&parent_id=#{CGI.escape(parent_tag[:slug])}"
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
-      def content_api_has_artefacts_in_a_tag(tag_type, slug, artefact_slugs=[])
+      def content_api_has_artefacts_with_a_tag(tag_type, slug, artefact_slugs=[])
         body = plural_response_base.merge(
           "results" => artefact_slugs.map do |artefact_slug|
-            artefact_for_slug(artefact_slug)
+            artefact_ slug(artefact_slug)
           end
         )
         sort_orders = ["alphabetical", "curated"]
@@ -193,13 +193,13 @@ module GdsApi
         )
       end
 
-      def artefact_for_slug_in_a_tag(tag_type, slug, section_slug)
+      def artefact_for_slug_with_a_tag(tag_type, slug, tag_id)
         artefact = artefact_for_slug(slug)
-        artefact["tags"] << tag_for_slug(section_slug, tag_type)
+        artefact["tags"] << tag_for_slug(tag_id, tag_type)
         artefact
       end
 
-      def artefact_for_slug_in_a_child_tag(tag_type, slug, subsection_slug)
+      def artefact_for_slug_with_a_child_tag(tag_type, slug, child_tag_id)
         artefact = artefact_for_slug(slug)
 
         # for each "part" of the path, we want to reduce across the
@@ -208,18 +208,20 @@ module GdsApi
         #   Tag{ thing2, parent: Tag{ thing1 } }
 
         tag_tree = nil
-        subsection_slug.split('/').inject(nil) do |last_section, subsection|
-          subsection = [last_section, subsection].join('/') if last_section
-          section = tag_for_slug(subsection, tag_type)
+        child_tag_id.split('/').inject(nil) do |parent_tag, child_tag|
+          child_tag = [parent_tag, child_tag].join('/') if parent_tag
+          next_level_tag = tag_for_slug(child_tag, tag_type)
           if tag_tree
             # Because tags are nested within one another, this makes
             # the current part the top, and the rest we've seen the
             # ancestors
-            tag_tree = section.merge("parent" => tag_tree)
+            tag_tree = next_level_tag.merge("parent" => tag_tree)
           else
-            tag_tree = section
+            tag_tree = next_level_tag
           end
-          subsection
+
+          # This becomes the parent tag in the next iteration of the block
+          child_tag
         end
         artefact["tags"] << tag_tree
         artefact
