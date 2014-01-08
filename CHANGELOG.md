@@ -1,3 +1,11 @@
+# 8.2.1
+
+* Fix a bug where `gds_api/govuk_request_id.rb` would fail to load if the `GdsApi` module was not already defined.
+
+# 8.2.0
+
+* Add a method to re-open closed needs in the need API.
+
 # 8.1.0
 
 * We've added a unique request ID called `GOVUK-Request-Id` at the varnish layer so that it's easier to trace a request moving through the GOVUK application stack. This change ensures that all api calls pass on the GOVUK-Request-Id header. More details in [README.md](https://github.com/alphagov/gds-api-adapters#middleware-for-request-tracing).
