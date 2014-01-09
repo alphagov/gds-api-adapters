@@ -312,7 +312,7 @@ describe GdsApi::ContentApi do
 
     it "should produce an artefact with the provided tag" do
       tag = "crime-and-justice"
-      api_url = "#{@base_api_url}/with_tag.json?tag=#{tag}&include_children=1"
+      api_url = "#{@base_api_url}/with_tag.json?tag=#{tag}"
       json = {
         results: [{title: "Complain about a claims company"}]
       }.to_json
@@ -328,7 +328,7 @@ describe GdsApi::ContentApi do
     end
 
     it "returns artefacts given a tag and tag type" do
-      api_url = "#{@base_api_url}/with_tag.json?genre=reggae&include_children=1"
+      api_url = "#{@base_api_url}/with_tag.json?genre=reggae"
       json = {
         results: [{title: "Three Little Birds"}]
       }
