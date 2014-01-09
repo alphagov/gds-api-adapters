@@ -1,3 +1,7 @@
+# 8.2.2
+
+* Changes the test helpers for stubbing out Content API requests for artefacts with section tags so that they work for any tag type.
+
 # 8.2.1
 
 * Fix a bug where `gds_api/govuk_request_id.rb` would fail to load if the `GdsApi` module was not already defined.
