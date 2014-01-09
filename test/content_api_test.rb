@@ -365,14 +365,10 @@ describe GdsApi::ContentApi do
     end
 
     it "returns artefacts in a given sort order for a tag and tag type" do
-      api_url = "#{@base_api_url}/with_tag.json?genre=reggae&sort=foo"
-      json = {
-        results: [{title: "Is This Love"}]
-      }
-      stub_request(:get, api_url).to_return(:status => 200, :body => json.to_json)
+      content_api_has_artefacts_with_a_sorted_tag("genre", "reggae", "foo", ["is-this-love"])
       response = @api.sorted_by("reggae", "foo", "genre")
 
-      assert_equal "Is This Love", response.first.title
+      assert_equal "Is this love", response.first.title
     end
   end
 
