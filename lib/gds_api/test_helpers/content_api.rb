@@ -96,15 +96,31 @@ module GdsApi
             artefact_for_slug(artefact_slug)
           end
         )
+
+        endpoint = "#{CONTENT_API_ENDPOINT}/with_tag.json"
+        resp = { status: 200, body: body.to_json, headers: {} }
+
+        stub_request(:get, endpoint)
+          .with(:query => { tag_type => CGI.escape(slug) })
+          .to_return(resp)
+
+        if tag_type == "section"
+          stub_request(:get, endpoint)
+            .with(:query => { "tag" => CGI.escape(slug) })
+            .to_return(resp)
+        end
+
         sort_orders = ["alphabetical", "curated"]
         sort_orders.each do |order|
-          if tag_type == "section"
-            section_url = "#{CONTENT_API_ENDPOINT}/with_tag.json?sort=#{order}&tag=#{CGI.escape(slug)}"
-            stub_request(:get, section_url).to_return(status: 200, body: body.to_json, headers: {})
-          end
+          stub_request(:get, endpoint)
+            .with(:query => { tag_type => CGI.escape(slug), "sort" => order })
+            .to_return(resp)
 
-          url = "#{CONTENT_API_ENDPOINT}/with_tag.json?sort=#{order}&#{CGI.escape(tag_type)}=#{CGI.escape(slug)}"
-          stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+          if tag_type == "section"
+            stub_request(:get, endpoint)
+              .with(:query => { "tag" => CGI.escape(slug), "sort" => order })
+              .to_return(resp)
+          end
         end
       end
 
