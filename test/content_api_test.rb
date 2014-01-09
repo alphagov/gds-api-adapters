@@ -310,13 +310,8 @@ describe GdsApi::ContentApi do
       assert_equal "#{@base_api_url}/tags/genres/indie%2Findie-rock.json", first_section.id
     end
 
-    it "should produce an artefact with the provided tag" do
-      tag = "crime-and-justice"
-      api_url = "#{@base_api_url}/with_tag.json?tag=#{tag}"
-      json = {
-        results: [{title: "Complain about a claims company"}]
-      }.to_json
-      stub_request(:get, api_url).to_return(:status => 200, :body => json)
+    it "returns artefacts given a section" do
+      content_api_has_artefacts_in_a_section("crime-and-justice", ["complain-about-a-claims-company"])
       response = @api.with_tag("crime-and-justice")
 
       # Old dictionary-style access
@@ -328,68 +323,43 @@ describe GdsApi::ContentApi do
     end
 
     it "returns artefacts given a tag and tag type" do
-      api_url = "#{@base_api_url}/with_tag.json?genre=reggae"
-      json = {
-        results: [{title: "Three Little Birds"}]
-      }
-      stub_request(:get, api_url).to_return(:status => 200, :body => json.to_json)
+      content_api_has_artefacts_with_a_tag("genre", "reggae", ["three-little-birds"])
       response = @api.with_tag("reggae", "genre")
 
-      assert_equal "Three Little Birds", response.first.title
+      assert_equal "Three little birds", response.first.title
     end
 
-    it "should return tag tree for a specific tag" do
-      tag = "crime-and-justice"
-      api_url = "#{@base_api_url}/tags/#{tag}.json"
-      json = {
-        title: "Crime and Justice"
-      }
-      stub_request(:get, api_url).to_return(:status => 200, :body => json.to_json)
-      response = @api.tag(tag)
-      title = response['title']
-      assert_equal json[:title], title
+    it "returns tag information for a section" do
+      content_api_has_section("crime-and-justice")
+      response = @api.tag("crime-and-justice")
+
+      assert_equal "Crime and justice", response["title"]
     end
 
-    it "returns tag information given a tag and tag type" do
-      api_url = "#{@base_api_url}/tags/genre/reggae.json"
-      json = {
-        title: "Reggae"
-      }
-      stub_request(:get, api_url).to_return(:status => 200, :body => json.to_json)
+    it "returns tag information for a tag and tag type" do
+      content_api_has_tag("genre", "reggae")
       response = @api.tag("reggae", "genre")
 
       assert_equal "Reggae", response['title']
     end
 
-    it "returns artefacts for a tag in curated list order" do
-      api_url = "#{@base_api_url}/with_tag.json?tag=crime-and-justice&sort=curated"
-      json = {
-        results: [{title: "Complain about a claims company"}]
-      }
-      stub_request(:get, api_url).to_return(:status => 200, :body => json.to_json)
+    it "returns artefacts in curated list order for a section" do
+      content_api_has_artefacts_in_a_section("crime-and-justice", ["complain-about-a-claims-company"])
       response = @api.curated_list("crime-and-justice")
 
       assert_equal "Complain about a claims company", response.first.title
     end
 
     it "returns artefacts in curated list order for a tag and tag type" do
-      api_url = "#{@base_api_url}/with_tag.json?genre=reggae&sort=curated"
-      json = {
-        results: [{title: "Buffalo Soldier"}]
-      }
-      stub_request(:get, api_url).to_return(:status => 200, :body => json.to_json)
+      content_api_has_artefacts_with_a_tag("genre", "reggae", ["buffalo-soldier"])
       response = @api.curated_list("reggae", "genre")
 
-      assert_equal "Buffalo Soldier", response.first.title
+      assert_equal "Buffalo soldier", response.first.title
     end
 
     it "returns artefacts for a tag in a given sort order" do
-      api_url = "#{@base_api_url}/with_tag.json?tag=crime-and-justice&sort=foo"
-      json = {
-        results: [{title: "Complain about a claims company"}]
-      }
-      stub_request(:get, api_url).to_return(:status => 200, :body => json.to_json)
-      response = @api.sorted_by("crime-and-justice", "foo")
+      content_api_has_artefacts_in_a_section("crime-and-justice", ["complain-about-a-claims-company"])
+      response = @api.sorted_by("crime-and-justice", "alphabetical")
 
       assert_equal "Complain about a claims company", response.first.title
     end
