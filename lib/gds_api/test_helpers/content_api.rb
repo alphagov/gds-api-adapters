@@ -93,7 +93,7 @@ module GdsApi
       def content_api_has_artefacts_with_a_tag(tag_type, slug, artefact_slugs=[])
         body = plural_response_base.merge(
           "results" => artefact_slugs.map do |artefact_slug|
-            artefact_ slug(artefact_slug)
+            artefact_for_slug(artefact_slug)
           end
         )
         sort_orders = ["alphabetical", "curated"]
