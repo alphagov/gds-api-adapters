@@ -124,7 +124,7 @@ module GdsApi
         end
       end
 
-      def content_api_has_artefacts_with_a_sorted_tag(tag_type, slug, sort_order, artefact_slugs=[])
+      def content_api_has_sorted_artefacts_with_a_tag(tag_type, slug, sort_order, artefact_slugs=[])
         body = plural_response_base.merge(
           "results" => artefact_slugs.map do |artefact_slug|
             artefact_for_slug(artefact_slug)

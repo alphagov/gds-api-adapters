@@ -365,7 +365,7 @@ describe GdsApi::ContentApi do
     end
 
     it "returns artefacts in a given sort order for a tag and tag type" do
-      content_api_has_artefacts_with_a_sorted_tag("genre", "reggae", "foo", ["is-this-love"])
+      content_api_has_sorted_artefacts_with_a_tag("genre", "reggae", "foo", ["is-this-love"])
       response = @api.sorted_by("reggae", "foo", "genre")
 
       assert_equal "Is this love", response.first.title
