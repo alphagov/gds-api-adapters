@@ -1,3 +1,13 @@
+# 8.2.3
+
+* Allow the `industry_sectors` attribute to be provided to the Panopticon registerer.
+
+* New Content API test helper added for stubbing `with_tag.json` request with a custom sort order.
+* The Content API tag tests now use test helpers to stub endpoints.
+* Removed the `include_children` parameter from Content API adapters, which was removed from the Content API in April '13.
+* Fix for the `content_api_has_artefacts_with_a_tag` helper to not expect query string parameters in an order when stubbing URLs.
+* Fix for a typo in a test helper.
+
 # 8.2.2
 
 * Changes the test helpers for stubbing out Content API requests for artefacts with section tags so that they work for any tag type.
