@@ -93,19 +93,48 @@ module GdsApi
       def content_api_has_artefacts_with_a_tag(tag_type, slug, artefact_slugs=[])
         body = plural_response_base.merge(
           "results" => artefact_slugs.map do |artefact_slug|
-            artefact_ slug(artefact_slug)
+            artefact_for_slug(artefact_slug)
           end
         )
+
+        endpoint = "#{CONTENT_API_ENDPOINT}/with_tag.json"
+        resp = { status: 200, body: body.to_json, headers: {} }
+
+        stub_request(:get, endpoint)
+          .with(:query => { tag_type => slug })
+          .to_return(resp)
+
+        if tag_type == "section"
+          stub_request(:get, endpoint)
+            .with(:query => { "tag" => slug })
+            .to_return(resp)
+        end
+
         sort_orders = ["alphabetical", "curated"]
         sort_orders.each do |order|
-          if tag_type == "section"
-            section_url = "#{CONTENT_API_ENDPOINT}/with_tag.json?sort=#{order}&tag=#{CGI.escape(slug)}"
-            stub_request(:get, section_url).to_return(status: 200, body: body.to_json, headers: {})
-          end
+          stub_request(:get, endpoint)
+            .with(:query => { tag_type => slug, "sort" => order })
+            .to_return(resp)
 
-          url = "#{CONTENT_API_ENDPOINT}/with_tag.json?sort=#{order}&#{CGI.escape(tag_type)}=#{CGI.escape(slug)}"
-          stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+          if tag_type == "section"
+            stub_request(:get, endpoint)
+              .with(:query => { "tag" => slug, "sort" => order })
+              .to_return(resp)
+          end
         end
+      end
+
+      def content_api_has_sorted_artefacts_with_a_tag(tag_type, slug, sort_order, artefact_slugs=[])
+        body = plural_response_base.merge(
+          "results" => artefact_slugs.map do |artefact_slug|
+            artefact_for_slug(artefact_slug)
+          end
+        )
+
+        endpoint = "#{CONTENT_API_ENDPOINT}/with_tag.json"
+        stub_request(:get, endpoint)
+          .with(:query => { tag_type => slug, "sort" => sort_order })
+          .to_return(status: 200, body: body.to_json, headers: {})
       end
 
       def content_api_has_an_artefact(slug, body = artefact_for_slug(slug))
