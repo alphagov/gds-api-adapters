@@ -1,3 +1,7 @@
+# 8.3.0
+
+* Add the Performance Platform DataIn service feedback endpoint, for uploading service feedback aggregated stats.
+
 # 8.2.3
 
 * Allow the `industry_sectors` attribute to be provided to the Panopticon registerer.
