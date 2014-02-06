@@ -1,3 +1,7 @@
+# 8.3.1
+
+* Bugfix to constructing the Performance Platform DataIn service feedback endpoint.
+
 # 8.3.0
 
 * Add the Performance Platform DataIn service feedback endpoint, for uploading service feedback aggregated stats.
