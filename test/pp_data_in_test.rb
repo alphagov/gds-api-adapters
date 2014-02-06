@@ -13,9 +13,9 @@ describe GdsApi::PerformancePlatform::DataIn do
   it "can submit a day aggregate for service feedback for a particular slug" do
     request_details = {"some"=> "data"}
 
-    stub_post = stub_service_feedback_day_aggregate_submission("some_slug", request_details)
+    stub_post = stub_service_feedback_day_aggregate_submission("some-slug", request_details)
 
-    @api.submit_service_feedback_day_aggregate("some_slug", request_details)
+    @api.submit_service_feedback_day_aggregate("some-slug", request_details)
 
     assert_requested(stub_post)
   end
