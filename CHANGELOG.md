@@ -1,3 +1,7 @@
+# 8.3.2
+
+* Update to a more sensible Performance Platform DataIn service feedback endpoint.
+
 # 8.3.1
 
 * Bugfix to constructing the Performance Platform DataIn service feedback endpoint.
