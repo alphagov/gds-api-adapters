@@ -127,4 +127,10 @@ describe GdsApi::Support do
 
     assert_raises(GdsApi::HTTPErrorResponse) { @api.create_service_feedback({}) }
   end
+
+  it "gets the correct feedback URL" do
+    assert_equal("#{@base_api_url}/anonymous_feedback?path=foo",
+                 @api.feedback_url('foo'))
+
+  end
 end
