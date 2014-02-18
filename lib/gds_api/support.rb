@@ -21,6 +21,10 @@ class GdsApi::Support < GdsApi::Base
     post_json!("#{base_url}/anonymous_feedback/service_feedback", { :service_feedback => request_details }, options[:headers] || {})
   end
 
+  def feedback_url(slug)
+    "#{base_url}/anonymous_feedback?path=#{slug}"
+  end
+
   private
   def base_url
     endpoint
