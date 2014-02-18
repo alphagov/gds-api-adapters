@@ -1,3 +1,7 @@
+# 8.4.0
+
+* Add deep-link to anonymous feedback in Feedex.
+
 # 8.3.2
 
 * Update to a more sensible Performance Platform DataIn service feedback endpoint.

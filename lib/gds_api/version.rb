@@ -1,3 +1,3 @@
 module GdsApi
-  VERSION = '8.3.2'
+  VERSION = '8.4.0'
 end
