@@ -22,6 +22,13 @@ module GdsApi
     # over the response directly
     def_delegators :results, :each, :to_ary
 
+    def results
+      # support group_by results from the content api by checking if there is a
+      # grouped_results key present first. if it's not, then fallback to the
+      # results key
+      to_ostruct.grouped_results || to_ostruct.results
+    end
+
     def has_next_page?
       ! page_link("next").nil?
     end

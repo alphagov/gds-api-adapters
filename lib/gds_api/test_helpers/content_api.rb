@@ -137,6 +137,25 @@ module GdsApi
           .to_return(status: 200, body: body.to_json, headers: {})
       end
 
+      def content_api_has_grouped_artefacts_with_a_tag(tag_type, tag_id, group_by, grouped_artefact_slugs={})
+        body = plural_response_base.merge(
+          "grouped_results" => grouped_artefact_slugs.map {|name,artefact_slugs|
+            {
+              "name" => name,
+              "formats" => [name.downcase],
+              "items" => artefact_slugs.map {|artefact_slug|
+                artefact_for_slug(artefact_slug)
+              }
+            }
+          }
+        )
+
+        endpoint = "#{CONTENT_API_ENDPOINT}/with_tag.json"
+        stub_request(:get, endpoint)
+          .with(:query => { tag_type => tag_id, "group_by" => group_by })
+          .to_return(status: 200, body: body.to_json, headers: {})
+      end
+
       def content_api_has_an_artefact(slug, body = artefact_for_slug(slug))
         ArtefactStub.new(slug).with_response_body(body).stub
       end

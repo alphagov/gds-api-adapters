@@ -49,10 +49,13 @@ class GdsApi::ContentApi < GdsApi::Base
     get_json("#{url}/#{CGI.escape(tag)}.json")
   end
 
-  def with_tag(tag, tag_type=nil)
+  def with_tag(tag, tag_type=nil, options={})
     tag_key = key_for_tag_type(tag_type)
 
-    get_list!("#{base_url}/with_tag.json?#{tag_key}=#{CGI.escape(tag)}")
+    url = "#{base_url}/with_tag.json?#{tag_key}=#{CGI.escape(tag)}"
+    url << "&group_by=#{CGI.escape(options[:group_by])}" if options.has_key?(:group_by)
+
+    get_list!(url)
   end
 
   def curated_list(tag, tag_type=nil)
