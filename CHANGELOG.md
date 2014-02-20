@@ -1,3 +1,7 @@
+# 9.0.0
+
+* Remove obsolete `curated_lists` method from Panopticon API.
+
 # 8.4.1
 
 * Rename `industry_sectors` attribute to `specialist_sectors` to match Panopticon
