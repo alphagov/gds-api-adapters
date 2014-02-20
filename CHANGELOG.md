@@ -1,3 +1,7 @@
+# 8.4.1
+
+* Rename `industry_sectors` attribute to `specialist_sectors` to match Panopticon
+
 # 8.4.0
 
 * Add deep-link to anonymous feedback in Feedex.
