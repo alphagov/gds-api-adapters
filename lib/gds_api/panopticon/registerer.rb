@@ -27,7 +27,7 @@ module GdsApi
         if rendering_app
           hash[:rendering_app] = rendering_app
         end
-        [:need_id, :section, :industry_sectors, :indexable_content, :paths, :prefixes].each do |attr_name|
+        [:need_id, :section, :specialist_sectors, :indexable_content, :paths, :prefixes].each do |attr_name|
           if record.respond_to? attr_name
             hash[attr_name] = record.send(attr_name)
           end
