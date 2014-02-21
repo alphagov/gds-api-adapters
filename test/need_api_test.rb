@@ -238,4 +238,22 @@ describe GdsApi::NeedApi do
       assert_requested reopen_stub
     end
   end
+
+  describe "creating notes" do
+    it "should send a post request" do
+      fields = {
+        "text" => "test",
+        "need_id" => "100001",
+        "author" => {
+          "name" => "Winston Smith-Churchill",
+          "email" => "winston@alphagov.co.uk"
+        }
+      }
+      request_stub = stub_request(:post, @base_api_url + "/notes").with(
+        body: fields.to_json
+      )
+      @api.create_note(fields)
+      assert_requested(request_stub)
+    end
+  end
 end
