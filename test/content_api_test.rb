@@ -370,6 +370,30 @@ describe GdsApi::ContentApi do
 
       assert_equal "Is this love", response.first.title
     end
+
+    it "returns artefacts in groups for a tag and tag type" do
+      content_api_has_grouped_artefacts_with_a_tag(
+        "genre",
+        "reggae",
+        "format",
+        {
+          "Tracks" => ["is-this-love", "three-little-birds"],
+          "Albums" => ["kaya", "exodus"],
+        }
+      )
+      response = @api.with_tag("reggae", "genre", group_by: "format")
+
+      # expect two groups to be returned
+      assert_equal 2, response.results.size
+
+      assert_equal 2, response.results[0].items.size
+      assert_equal "Is this love", response.results[0].items[0].title
+      assert_equal "Three little birds", response.results[0].items[1].title
+
+      assert_equal 2, response.results[1].items.size
+      assert_equal "Kaya", response.results[1].items[0].title
+      assert_equal "Exodus", response.results[1].items[1].title
+    end
   end
 
   describe "licence" do
