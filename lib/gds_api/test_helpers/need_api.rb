@@ -77,6 +77,12 @@ module GdsApi
           headers: {}
         )
       end
+
+      def stub_create_note(note_details = nil)
+        post_stub = stub_request(:post, NEED_API_ENDPOINT + "/notes")
+        post_stub.with(:body => note_details.to_json) unless note_details.nil?
+        post_stub.to_return(:status => 201)
+      end
     end
   end
 end
