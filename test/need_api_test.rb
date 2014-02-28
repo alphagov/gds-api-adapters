@@ -249,10 +249,10 @@ describe GdsApi::NeedApi do
           "email" => "winston@alphagov.co.uk"
         }
       }
-      request_stub = stub_request(:post, @base_api_url + "/notes").with(
-        body: fields.to_json
-      )
+      request_stub = stub_create_note(fields)
+
       @api.create_note(fields)
+
       assert_requested(request_stub)
     end
   end
