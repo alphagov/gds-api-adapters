@@ -32,7 +32,7 @@ module GdsApi
 
       def facet_key(facets)
         key = 'default'
-        key = facets.values.sort.hash.to_s if facets and !facets.empty?
+        key = facets.values.flatten.sort.hash.to_s if facets and !facets.empty?
         key
       end
     end
