@@ -576,30 +576,10 @@ describe GdsApi::ContentApi do
       stub_request(:get, %r{\A#{@base_api_url}/business_support_schemes.json}).
         to_return(:status => 200, :body => {"foo" => "bar"}.to_json)
 
-      response = @api.business_support_schemes(['foo', 'bar'])
+      response = @api.business_support_schemes(:drink => "coffee")
 
       assert_equal({"foo" => "bar"}, response.to_hash)
-      assert_requested :get, "#{@base_api_url}/business_support_schemes.json?identifiers=foo,bar", :times => 1
-    end
-
-    it "should CGI escape identifiers" do
-      stub_request(:get, %r{\A#{@base_api_url}/business_support_schemes.json}).
-        to_return(:status => 200, :body => {"foo" => "bar"}.to_json)
-
-      response = @api.business_support_schemes(['foo bar', 'baz&bing'])
-
-      assert_equal({"foo" => "bar"}, response.to_hash)
-      assert_requested :get, "#{@base_api_url}/business_support_schemes.json?identifiers=foo%20bar,baz%26bing", :times => 1
-    end
-
-    it "should not modify the given array" do
-      stub_request(:get, %r{\A#{@base_api_url}/business_support_schemes.json}).
-        to_return(:status => 200, :body => {"foo" => "bar"}.to_json)
-
-      ids = %w(foo bar baz)
-      @api.business_support_schemes(ids)
-
-      assert_equal %w(foo bar baz), ids
+      assert_requested :get, "#{@base_api_url}/business_support_schemes.json?drink=coffee", :times => 1
     end
 
     it "should raise an error if content_api returns 404" do
@@ -620,58 +600,17 @@ describe GdsApi::ContentApi do
       end
     end
 
-    describe "handling requests that would have a URI in excess of 2000 chars" do
-      before :each do
-        stub_request(:get, %r{\A#{@base_api_url}/business_support_schemes\.json}).
-          to_return(:status => 200, :body => api_response_for_results([{"foo" => "bar"}]).to_json)
-      end
-
-      it "should do the request in batches" do
-        ids = (1..300).map {|n| sprintf "%09d", n } # each id is 9 chars long
-
-        response = @api.business_support_schemes(ids)
-
-        assert_requested :get, %r{\A#{@base_api_url}/business_support_schemes\.json}, :times => 2
-
-        first_batch = ids[0..191]
-        assert_requested :get, "#{@base_api_url}/business_support_schemes.json?identifiers=#{first_batch.join(',')}"
-        second_batch = ids[192..299]
-        assert_requested :get, "#{@base_api_url}/business_support_schemes.json?identifiers=#{second_batch.join(',')}"
-      end
-
-      it "should merge the responses into a single GdsApi::Response" do
-        ids = (1..300).map {|n| sprintf "%09d", n } # each id is 9 chars long
-        first_batch = ids[0..191]
-        stub_request(:get, "#{@base_api_url}/business_support_schemes.json").
-          with(:query => {"identifiers" => first_batch.join(',')}).
-          to_return(:status => 200, :body => api_response_for_results(first_batch).to_json) # We're stubbing response that just return the requested ids
-        second_batch = ids[192..299]
-        stub_request(:get, "#{@base_api_url}/business_support_schemes.json").
-          with(:query => {"identifiers" => second_batch.join(',')}).
-          to_return(:status => 200, :body => api_response_for_results(second_batch).to_json)
-
-        response = @api.business_support_schemes(ids)
-
-        # Assert both Hash an OpenStruct access to ensure nothing's been memoized part-way through merging stuff
-        assert_equal 300, response["total"]
-        assert_equal ids, response["results"]
-
-        assert_equal 300, response.total
-        assert_equal ids, response.results
-      end
-    end
-
     describe "test helpers" do
       it "should have representative test helpers" do
         setup_content_api_business_support_schemes_stubs
-        s1 = { "title" => "Scheme 1", "identifier" => "s1", "format" => "business_support" }
-        content_api_has_business_support_scheme(s1)
-        s2 = { "title" => "Scheme 2", "identifier" => "s2", "format" => "business_support" }
-        content_api_has_business_support_scheme(s2)
-        s3 = { "title" => "Scheme 3", "identifier" => "s3", "format" => "business_support" }
-        content_api_has_business_support_scheme(s3)
+        s1 = { "title" => "Scheme 1", "format" => "business_support" }
+        content_api_has_business_support_scheme(s1, :locations => "england", :sectors => "farming")
+        s2 = { "title" => "Scheme 2", "format" => "business_support" }
+        content_api_has_business_support_scheme(s2, :sectors => "farming")
+        s3 = { "title" => "Scheme 3", "format" => "business_support" }
+        content_api_has_business_support_scheme(s3, :locations => "england", :sectors => "farming")
 
-        response = @api.business_support_schemes(['s1', 's3']).to_hash
+        response = @api.business_support_schemes(:locations => "england", :sectors => "farming").to_hash
 
         assert_equal 2, response["total"]
         assert_equal [s1, s3], response["results"]

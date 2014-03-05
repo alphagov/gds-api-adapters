@@ -1,11 +1,13 @@
 require 'gds_api/test_helpers/json_client_helper'
 require 'cgi'
 require 'gds_api/test_helpers/common_responses'
+require 'gds_api/test_helpers/business_support_helper'
 
 module GdsApi
   module TestHelpers
     module ContentApi
       include GdsApi::TestHelpers::CommonResponses
+      include GdsApi::TestHelpers::BusinessSupportHelper
       # Generally true. If you are initializing the client differently,
       # you could redefine/override the constant or stub directly.
       CONTENT_API_ENDPOINT = Plek.current.find('contentapi')
@@ -342,21 +344,23 @@ module GdsApi
       end
 
       def setup_content_api_business_support_schemes_stubs
-        @stubbed_content_api_business_support_schemes = []
-        stub_request(:get, %r{\A#{CONTENT_API_ENDPOINT}/business_support_schemes\.json}).to_return do |request|
-          if request.uri.query_values and request.uri.query_values["identifiers"]
-            ids = request.uri.query_values["identifiers"].split(',')
-            results = @stubbed_content_api_business_support_schemes.select {|bs| ids.include? bs["identifier"] }
-          else
-            results = []
-          end
-          {:body => plural_response_base.merge("results" => results, "total" => results.size).to_json}
-        end
+        setup_business_support_stubs(CONTENT_API_ENDPOINT, 'business_support_schemes')
       end
 
-      def content_api_has_business_support_scheme(scheme)
-        raise "Need an identifier" if scheme["identifier"].nil?
-        @stubbed_content_api_business_support_schemes << scheme
+      def content_api_has_business_support_scheme(scheme, facets)
+        api_has_business_support(scheme, facets)
+      end
+
+      def content_api_has_default_business_support_schemes
+        empty_results = {
+          "_response_info" => {"status" => "ok"},
+          "description" => "Business Support Schemes!",
+          "total" => 0, "startIndex" => 1, "pageSize" => 0, "currentPage" => 1, "pages" => 1,
+          "results" => []
+        }
+
+        stub_request(:get, %r{\A#{CONTENT_API_ENDPOINT}/business_support_schemes\.json}).
+          to_return(:body => empty_results.to_json)
       end
 
       def content_api_licence_hash(licence_identifier, options = {})
