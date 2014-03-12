@@ -1,6 +1,10 @@
+# 10.1.0
+
+Added client for interacting with the GOV.UK [external-link-tracker](https://github.com/alphagov/external-link-tracker).
+
 # 10.0.0
 
-* Query business support schemes by faceted search parameters e.g. ```locations=scotland,england```. 
+* Query business support schemes by faceted search parameters e.g. ```locations=scotland,england```.
 * Remove the ability to retrieve by identifiers.
 
 # 9.0.0
