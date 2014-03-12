@@ -1,3 +1,8 @@
+# 10.0.0
+
+* Query business support schemes by faceted search parameters e.g. ```locations=scotland,england```. 
+* Remove the ability to retrieve by identifiers.
+
 # 9.0.0
 
 * Remove obsolete `curated_lists` method from Panopticon API.
