@@ -315,6 +315,7 @@ module GdsApi
 
         {
           "id" => "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(pluralized_tag_type)}/#{CGI.escape(tag[:slug])}.json",
+          "slug" => tag[:slug],
           "web_url" => "http://www.test.gov.uk/browse/#{tag[:slug]}",
           "title" => tag[:title] || titleize_slug(tag[:slug].split("/").last),
           "details" => {
