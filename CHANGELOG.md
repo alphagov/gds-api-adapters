@@ -1,3 +1,8 @@
+# 10.2.0
+
+* Modify test helpers to match changes to `web_url` and `tag_id` in `content_api`.
+* Add test helper for stubbing artefacts with multiple tags.
+
 # 10.1.0
 
 Added client for interacting with the GOV.UK [external-link-tracker](https://github.com/alphagov/external-link-tracker).
