@@ -250,30 +250,37 @@ module GdsApi
       end
 
       def artefact_for_slug_with_a_child_tag(tag_type, slug, child_tag_id)
+        artefact_for_slug_with_a_child_tags(tag_type, slug, [child_tag_id])
+      end
+
+      def artefact_for_slug_with_a_child_tags(tag_type, slug, child_tag_ids)
         artefact = artefact_for_slug(slug)
 
-        # for each "part" of the path, we want to reduce across the
-        # list and build up a tree of nested tags.
-        # This will turn "thing1/thing2" into:
-        #   Tag{ thing2, parent: Tag{ thing1 } }
+        child_tag_ids.each do |child_tag_id|
+          # for each "part" of the path, we want to reduce across the
+          # list and build up a tree of nested tags.
+          # This will turn "thing1/thing2" into:
+          #   Tag{ thing2, parent: Tag{ thing1 } }
 
-        tag_tree = nil
-        child_tag_id.split('/').inject(nil) do |parent_tag, child_tag|
-          child_tag = [parent_tag, child_tag].join('/') if parent_tag
-          next_level_tag = tag_for_slug(child_tag, tag_type)
-          if tag_tree
-            # Because tags are nested within one another, this makes
-            # the current part the top, and the rest we've seen the
-            # ancestors
-            tag_tree = next_level_tag.merge("parent" => tag_tree)
-          else
-            tag_tree = next_level_tag
+          tag_tree = nil
+          child_tag_id.split('/').inject(nil) do |parent_tag, child_tag|
+            child_tag = [parent_tag, child_tag].join('/') if parent_tag
+            next_level_tag = tag_for_slug(child_tag, tag_type)
+            if tag_tree
+              # Because tags are nested within one another, this makes
+              # the current part the top, and the rest we've seen the
+              # ancestors
+              tag_tree = next_level_tag.merge("parent" => tag_tree)
+            else
+              tag_tree = next_level_tag
+            end
+
+            # This becomes the parent tag in the next iteration of the block
+            child_tag
           end
-
-          # This becomes the parent tag in the next iteration of the block
-          child_tag
+          artefact["tags"] << tag_tree
         end
-        artefact["tags"] << tag_tree
+
         artefact
       end
 
