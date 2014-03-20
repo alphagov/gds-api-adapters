@@ -80,6 +80,9 @@ module GdsApi
           "details" => {
             "slug" => slug,
             "abbreviation" => acronymize_slug(slug),
+            "logo_formatted_name" => titleize_slug(slug, :title_case => true),
+            "organisation_brand_colour_class_name" => slug,
+            "organisation_logo_type_class_name" => (slug =~ /ministry/ ? "single-identity" : "eo"),
             "closed_at" => nil,
             "govuk_status" => (slug =~ /ministry/ ? "live" : "joining"),
           },
