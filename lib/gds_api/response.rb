@@ -24,8 +24,6 @@ module GdsApi
     extend Forwardable
     include Enumerable
 
-    WEB_URL_KEYS = ["web_url"]
-
     def_delegators :to_hash, :[], :"<=>", :each
 
     def initialize(http_response, options = {})
@@ -70,7 +68,7 @@ module GdsApi
       when Hash
         Hash[value.map { |k, v|
           # NOTE: Don't bother transforming if the value is nil
-          if WEB_URL_KEYS.include?(k) && v
+          if 'web_url' == k && v
             # Use relative URLs to route when the web_url value is on the
             # same domain as the site root. Note that we can't just use the
             # `route_to` method, as this would give us technically correct
