@@ -23,13 +23,19 @@ module GdsApi
   class HTTPNotFound < HTTPErrorResponse
   end
 
+  class HTTPGone < HTTPErrorResponse; end
+
   class NoBearerToken < BaseError; end
 
   module ExceptionHandling
-    def ignoring(exception, &block)
+    def ignoring(exception_or_exceptions, &block)
       yield
-    rescue exception
+    rescue *exception_or_exceptions
       # Discard the exception
+    end
+
+    def ignoring_missing(&block)
+      ignoring([HTTPNotFound, HTTPGone], &block)
     end
   end
 end

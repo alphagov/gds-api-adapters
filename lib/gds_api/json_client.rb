@@ -57,7 +57,7 @@ module GdsApi
     end
 
     def get_raw(url)
-      ignoring GdsApi::HTTPNotFound do
+      ignoring_missing do
         get_raw!(url)
       end
     end
@@ -70,7 +70,7 @@ module GdsApi
     [:get, :post, :put, :delete].each do |http_method|
       method_name = "#{http_method}_json"
       define_method method_name do |url, *args, &block|
-        ignoring GdsApi::HTTPNotFound do
+        ignoring_missing do
           send (method_name + "!"), url, *args, &block
         end
       end
@@ -106,6 +106,9 @@ module GdsApi
     rescue RestClient::ResourceNotFound => e
       raise GdsApi::HTTPNotFound.new(e.http_code)
 
+    rescue RestClient::Gone => e
+      raise GdsApi::HTTPGone.new(e.http_code)
+
     rescue RestClient::Exception => e
       raise GdsApi::HTTPErrorResponse.new(e.response.code.to_i), e.response.body
     end
@@ -123,6 +126,9 @@ module GdsApi
 
       rescue RestClient::ResourceNotFound => e
         raise GdsApi::HTTPNotFound.new(e.http_code)
+
+      rescue RestClient::Gone => e
+        raise GdsApi::HTTPGone.new(e.http_code)
 
       rescue RestClient::Exception => e
         # Attempt to parse the body as JSON if possible
