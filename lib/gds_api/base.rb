@@ -60,8 +60,17 @@ private
   def query_string(params)
     return "" if params.empty?
 
-    "?" << params.sort.map { |kv|
-      kv.map { |a| CGI.escape(a.to_s) }.join("=")
-    }.join("&")
+    param_pairs = params.sort.map { |key, value|
+      case value
+      when Array
+        value.map { |v|
+          "#{CGI.escape(key+'[]')}=#{CGI.escape(v.to_s)}"
+        }
+      else
+        "#{CGI.escape(key.to_s)}=#{CGI.escape(value.to_s)}"
+      end
+    }.flatten
+
+    "?#{param_pairs.join("&")}"
   end
 end

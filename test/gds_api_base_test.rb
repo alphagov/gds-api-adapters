@@ -25,6 +25,18 @@ class GdsApiBaseTest < MiniTest::Unit::TestCase
     assert_equal "a=+&b=%2F", u.query
   end
 
+  def test_should_construct_escaped_query_string_for_rails
+    api = ConcreteApi.new('http://foo')
+
+    url = api.url_for_slug("slug", "b" => ['123'])
+    u = URI.parse(url)
+    assert_equal "b%5B%5D=123", u.query
+
+    url = api.url_for_slug("slug", "b" => ['123', '456'])
+    u = URI.parse(url)
+    assert_equal "b%5B%5D=123&b%5B%5D=456", u.query
+  end
+
   def test_should_not_add_a_question_mark_if_there_are_no_parameters
     api = ConcreteApi.new('http://foo')
     url = api.url_for_slug("slug")
