@@ -1,3 +1,8 @@
+# 10.3.0
+
+* Added client for interacting with the GOV.UK [finder-api](https://github.com/alphagov/finder-api).
+* Added support for array parameters in query strings (eg foo[]=bar&foo[]=baz)
+
 # 10.2.0
 
 * Modify test helpers to match changes to `web_url` and `tag_id` in `content_api`.
