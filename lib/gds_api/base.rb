@@ -45,7 +45,7 @@ class GdsApi::Base
   end
 
   def url_for_slug(slug, options={})
-    base = "#{base_url}/#{slug}.json#{query_string(options)}"
+    "#{base_url}/#{slug}.json#{query_string(options)}"
   end
 
   def get_list!(url)
