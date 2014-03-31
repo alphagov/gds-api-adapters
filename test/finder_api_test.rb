@@ -58,4 +58,43 @@ describe GdsApi::FinderApi do
       assert_requested(req)
     end
   end
+
+  describe "get_schema" do
+    let(:schema_hash) {
+      {'it is' => 'a schema'}
+    }
+
+    let(:schema_json) {
+      schema_hash.to_json
+    }
+
+    let(:schema_url) {
+      "#{@base_api_url}/finders/some-finder-slug/schema.json"
+    }
+
+    it "should return the finder's schema" do
+      req = WebMock.stub_request(:get, schema_url).
+        to_return(:body => schema_json,
+                  :headers => {"Content-type" => "application/json"})
+
+      response = @api.get_schema("some-finder-slug")
+      assert_equal 200, response.code
+      assert_equal schema_hash, response.to_hash
+
+      assert_requested(req)
+    end
+
+    it "should forward query parameters" do
+      req = WebMock.stub_request(:get, "#{@base_api_url}/finders/some-finder-slug/schema.json").
+        with(query: {locale: 'fr-FR'}).
+        to_return(:body => schema_json,
+                  :headers => {"Content-type" => "application/json"})
+
+      response = @api.get_schema("some-finder-slug", locale: 'fr-FR')
+      assert_equal 200, response.code
+      assert_equal schema_hash, response.to_hash
+
+      assert_requested(req)
+    end
+  end
 end
