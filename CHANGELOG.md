@@ -1,3 +1,7 @@
+# 10.4.0
+
+* Added method for finder API schema endpoint
+
 # 10.3.0
 
 * Added client for interacting with the GOV.UK [finder-api](https://github.com/alphagov/finder-api).
