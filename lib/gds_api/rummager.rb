@@ -9,6 +9,11 @@ module GdsApi
       get_json!(search_url(:search, query, extra_params))
     end
 
+    def unified_search(args)
+      request_url = "#{base_url}/unified_search.json?#{Rack::Utils.build_nested_query(args)}"
+      get_json!(request_url)
+    end
+
     def advanced_search(args)
       raise ArgumentError.new("Args cannot be blank") if args.nil? || args.empty?
       request_path = "#{base_url}/advanced_search?#{Rack::Utils.build_nested_query(args)}"
