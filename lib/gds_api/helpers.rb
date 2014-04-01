@@ -8,6 +8,7 @@ require 'gds_api/need_api'
 require 'gds_api/panopticon'
 require 'gds_api/publisher'
 require 'gds_api/worldwide'
+require 'gds_api/finder_api'
 
 module GdsApi
   module Helpers
@@ -53,6 +54,10 @@ module GdsApi
 
     def worldwide_api(options = {})
       @worldwide_api ||= GdsApi::Worldwide.new(Plek.current.find("whitehall-admin"), options)
+    end
+
+    def finder_api(options = {})
+      @finder_api ||= FinderApi.new(FinderSchema.method(:new), Plek.current.find("finder-api"), options)
     end
 
     def self.included(klass)
