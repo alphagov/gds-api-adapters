@@ -1,3 +1,11 @@
+# 10.6.0
+
+* Add more methods to interact with the finder API schema response
+
+# 10.5.0
+
+* Add new unified search endpoint for rummager adapter
+
 # 10.4.0
 
 * Added method for finder API schema endpoint
