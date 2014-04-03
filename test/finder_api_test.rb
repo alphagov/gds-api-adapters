@@ -2,10 +2,13 @@ require 'test_helper'
 require 'gds_api/finder_api'
 
 describe GdsApi::FinderApi do
-  before do
-    @base_api_url = Plek.current.find('finder-api')
-    @api = GdsApi::FinderApi.new(@base_api_url, schema_factory: schema_factory)
-  end
+  let(:base_api_url) { "http://finder-api" }
+  let(:api) {
+    GdsApi::FinderApi.new(
+      base_api_url,
+      schema_factory: schema_factory,
+    )
+  }
 
   let(:schema) { Object.new }
   let(:schema_factory) {
@@ -29,11 +32,11 @@ describe GdsApi::FinderApi do
         ]
       }
 
-      req = WebMock.stub_request(:get, "#{@base_api_url}/finders/some-finder-slug/documents.json").
+      req = WebMock.stub_request(:get, "#{base_api_url}/finders/some-finder-slug/documents.json").
         to_return(:body => documents_hash.to_json,
                   :headers => {"Content-type" => "application/json"})
 
-      response = @api.get_documents("some-finder-slug")
+      response = api.get_documents("some-finder-slug")
       assert_equal 200, response.code
       assert_equal documents_hash, response.to_hash
 
@@ -51,12 +54,12 @@ describe GdsApi::FinderApi do
         ]
       }
 
-      req = WebMock.stub_request(:get, "#{@base_api_url}/finders/some-finder-slug/documents.json").
+      req = WebMock.stub_request(:get, "#{base_api_url}/finders/some-finder-slug/documents.json").
         with(query: {case_type: 'market-investigations'}).
         to_return(:body => documents_hash.to_json,
                   :headers => {"Content-type" => "application/json"})
 
-      response = @api.get_documents("some-finder-slug", case_type: 'market-investigations')
+      response = api.get_documents("some-finder-slug", case_type: 'market-investigations')
       assert_equal 200, response.code
       assert_equal documents_hash, response.to_hash
 
@@ -79,41 +82,42 @@ describe GdsApi::FinderApi do
     }
 
     let(:schema_url) {
-      "#{@base_api_url}/finders/cma-cases/schema.json"
+      "#{base_api_url}/finders/cma-cases/schema.json"
     }
 
-    it "requests the finder's schema" do
-      req = WebMock.stub_request(:get, schema_url).
+
+    before do
+      @req = WebMock.stub_request(:get, schema_url).
         to_return(:body => schema_json,
                   :headers => {"Content-type" => "application/json"})
+    end
 
-      response = @api.get_schema("cma-cases")
+    it "requests the finder's schema" do
+      api.get_schema("cma-cases")
 
-      assert_requested(req)
+      assert_requested(@req)
     end
 
     it "constructs and returns a schema object" do
-      WebMock.stub_request(:get, schema_url)
-        .to_return(
-          :body => schema_json,
-          :headers => {"Content-type" => "application/json"},
-        )
-
-      returned_schema = @api.get_schema("cma-cases")
+      returned_schema = api.get_schema("cma-cases")
 
       assert_equal schema, returned_schema
       schema_factory.verify
     end
 
     it "should forward query parameters" do
-      req = WebMock.stub_request(:get, "#{@base_api_url}/finders/some-finder-slug/schema.json").
+      req = WebMock.stub_request(:get, "#{base_api_url}/finders/some-finder-slug/schema.json").
         with(query: {locale: 'fr-FR'}).
         to_return(:body => schema_json,
                   :headers => {"Content-type" => "application/json"})
 
-      response = @api.get_schema("some-finder-slug", locale: 'fr-FR')
+      response = api.get_schema("some-finder-slug", locale: 'fr-FR')
 
       assert_requested(req)
+    end
+
+    it "defaults the schema factory if not provided" do
+      GdsApi::FinderApi.new(base_api_url).get_schema("cma-cases")
     end
   end
 end

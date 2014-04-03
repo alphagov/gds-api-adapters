@@ -3,9 +3,9 @@ require_relative 'finder_schema'
 
 module GdsApi
   class FinderApi < Base
-    def initialize(url, options, &block)
-      @schema_factory = options.fetch(:schema_factory) { Schema.method(:new) }
-      super(url, options, &block)
+    def initialize(url, options = {})
+      @schema_factory = options.fetch(:schema_factory) { FinderSchema.method(:new) }
+      super
     end
 
     def get_documents(finder_slug, options = {})
