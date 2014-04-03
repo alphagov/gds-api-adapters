@@ -4,8 +4,13 @@ require 'gds_api/finder_api'
 describe GdsApi::FinderApi do
   before do
     @base_api_url = Plek.current.find('finder-api')
-    @api = GdsApi::FinderApi.new(@base_api_url)
+    @api = GdsApi::FinderApi.new(@base_api_url, schema_factory: schema_factory)
   end
+
+  let(:schema) { Object.new }
+  let(:schema_factory) {
+    ->(schema_as_a_hash) { schema }
+  }
 
   describe "get_documents" do
     it "should return all documents" do
@@ -60,6 +65,11 @@ describe GdsApi::FinderApi do
   end
 
   describe "get_schema" do
+    let(:schema_factory) {
+      Minitest::Mock.new
+        .expect(:call, schema, [schema_hash])
+    }
+
     let(:schema_hash) {
       {'it is' => 'a schema'}
     }
@@ -69,19 +79,30 @@ describe GdsApi::FinderApi do
     }
 
     let(:schema_url) {
-      "#{@base_api_url}/finders/some-finder-slug/schema.json"
+      "#{@base_api_url}/finders/cma-cases/schema.json"
     }
 
-    it "should return the finder's schema" do
+    it "requests the finder's schema" do
       req = WebMock.stub_request(:get, schema_url).
         to_return(:body => schema_json,
                   :headers => {"Content-type" => "application/json"})
 
-      response = @api.get_schema("some-finder-slug")
-      assert_equal 200, response.code
-      assert_equal schema_hash, response.to_hash
+      response = @api.get_schema("cma-cases")
 
       assert_requested(req)
+    end
+
+    it "constructs and returns a schema object" do
+      WebMock.stub_request(:get, schema_url)
+        .to_return(
+          :body => schema_json,
+          :headers => {"Content-type" => "application/json"},
+        )
+
+      returned_schema = @api.get_schema("cma-cases")
+
+      assert_equal schema, returned_schema
+      schema_factory.verify
     end
 
     it "should forward query parameters" do
@@ -91,8 +112,6 @@ describe GdsApi::FinderApi do
                   :headers => {"Content-type" => "application/json"})
 
       response = @api.get_schema("some-finder-slug", locale: 'fr-FR')
-      assert_equal 200, response.code
-      assert_equal schema_hash, response.to_hash
 
       assert_requested(req)
     end
