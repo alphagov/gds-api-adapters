@@ -1,3 +1,7 @@
+# 10.6.1
+
+* Fix bug with default schema factory for finder API
+
 # 10.6.0
 
 * Add more methods to interact with the finder API schema response
