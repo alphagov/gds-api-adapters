@@ -57,7 +57,7 @@ module GdsApi
     end
 
     def finder_api(options = {})
-      @finder_api ||= FinderApi.new(FinderSchema.method(:new), Plek.current.find("finder-api"), options)
+      @finder_api ||= FinderApi.new(Plek.current.find("finder-api"), options)
     end
 
     def self.included(klass)

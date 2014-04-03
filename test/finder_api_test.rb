@@ -4,7 +4,7 @@ require 'gds_api/finder_api'
 describe GdsApi::FinderApi do
   before do
     @base_api_url = Plek.current.find('finder-api')
-    @api = GdsApi::FinderApi.new(schema_factory, @base_api_url)
+    @api = GdsApi::FinderApi.new(@base_api_url, schema_factory: schema_factory)
   end
 
   let(:schema) { Object.new }
