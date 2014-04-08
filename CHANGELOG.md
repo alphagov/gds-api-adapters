@@ -1,3 +1,7 @@
+# 10.6.2
+
+* Data-in API (service feedback): specify which dataset is missing in the exception
+
 # 10.6.1
 
 * Fix bug with default schema factory for finder API
