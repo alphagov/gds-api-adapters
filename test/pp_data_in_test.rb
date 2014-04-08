@@ -27,6 +27,6 @@ describe GdsApi::PerformancePlatform::DataIn do
 
   it "throws an exception when the the bucket for that slug hasn't been defined" do
     stub_service_feedback_bucket_unavailable_for("some_transaction")
-    assert_raises(GdsApi::HTTPNotFound) { @api.submit_service_feedback_day_aggregate("some_transaction", {}) }
+    assert_raises(GdsApi::PerformancePlatformDatasetNotConfigured) { @api.submit_service_feedback_day_aggregate("some_transaction", {}) }
   end
 end
