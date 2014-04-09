@@ -1,3 +1,7 @@
+# 10.6.3
+
+* Added needs_by_id method to Need API adaptor for retrieving multiple needs with one request
+
 # 10.6.2
 
 * Data-in API (service feedback): specify which dataset is missing in the exception
