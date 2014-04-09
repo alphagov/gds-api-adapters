@@ -190,6 +190,13 @@ describe GdsApi::ContentApi do
       end
     end
 
+    it "should raise a 410 if an artefact has been archived" do
+      content_api_has_an_archived_artefact("atlantis")
+      assert_raises GdsApi::HTTPGone do
+        @api.artefact!("atlantis")
+      end
+    end
+
     it "should be able to fetch artefacts with a '/' in the slug" do
       content_api_has_an_artefact("foreign-travel-advice/aruba")
       response = @api.artefact("foreign-travel-advice/aruba")
