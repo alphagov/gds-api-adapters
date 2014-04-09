@@ -75,16 +75,11 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def artefact(slug, params={})
-    url = "#{base_url}/#{CGI.escape(slug)}.json"
-    query = params.map { |k,v| "#{k}=#{v}" }
-    if query.any?
-      url += "?#{query.join("&")}"
-    end
+    get_json(artefact_url(slug, params))
+  end
 
-    if params[:edition] && ! options.include?(:bearer_token)
-      raise GdsApi::NoBearerToken
-    end
-    get_json(url)
+  def artefact!(slug, params={})
+    get_json!(artefact_url(slug, params))
   end
 
   def artefacts
@@ -151,5 +146,18 @@ class GdsApi::ContentApi < GdsApi::Base
 
     def key_for_tag_type(tag_type)
       tag_type.nil? ? "tag" : CGI.escape(tag_type)
+    end
+
+    def artefact_url(slug, params)
+      url = "#{base_url}/#{CGI.escape(slug)}.json"
+      query = params.map { |k,v| "#{k}=#{v}" }
+      if query.any?
+        url += "?#{query.join("&")}"
+      end
+
+      if params[:edition] && ! options.include?(:bearer_token)
+        raise GdsApi::NoBearerToken
+      end
+      url
     end
 end
