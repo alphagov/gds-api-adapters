@@ -1,10 +1,10 @@
 # 10.6.4
 
-* Add an artefact! method to Content API adaptor that can raise exceptions
+* Add an `artefact!` method to Content API adaptor that can raise exceptions
 
 # 10.6.3
 
-* Added needs_by_id method to Need API adaptor for retrieving multiple needs with one request
+* Added `needs_by_id` method to Need API adaptor for retrieving multiple needs with one request
 
 # 10.6.2
 
@@ -20,7 +20,7 @@
 
 # 10.5.0
 
-* Add new unified search endpoint for rummager adapter
+* Add new unified search endpoint for Rummager adapter
 
 # 10.4.0
 
@@ -28,17 +28,17 @@
 
 # 10.3.0
 
-* Added client for interacting with the GOV.UK [finder-api](https://github.com/alphagov/finder-api).
-* Added support for array parameters in query strings (eg foo[]=bar&foo[]=baz)
+* Added client for interacting with the GOV.UK [finder API](https://github.com/alphagov/finder-api).
+* Added support for array parameters in query strings (eg `foo[]=bar&foo[]=baz`)
 
 # 10.2.0
 
-* Modify test helpers to match changes to `web_url` and `tag_id` in `content_api`.
+* Modify test helpers to match changes to `web_url` and `tag_id` in Content API.
 * Add test helper for stubbing artefacts with multiple tags.
 
 # 10.1.0
 
-Added client for interacting with the GOV.UK [external-link-tracker](https://github.com/alphagov/external-link-tracker).
+* Added client for interacting with the GOV.UK [external link tracker](https://github.com/alphagov/external-link-tracker).
 
 # 10.0.0
 
@@ -93,7 +93,7 @@ Added client for interacting with the GOV.UK [external-link-tracker](https://git
 
 # 8.1.0
 
-* We've added a unique request ID called `GOVUK-Request-Id` at the varnish layer so that it's easier to trace a request moving through the GOVUK application stack. This change ensures that all api calls pass on the GOVUK-Request-Id header. More details in [README.md](https://github.com/alphagov/gds-api-adapters#middleware-for-request-tracing).
+* We've added a unique request ID called `GOVUK-Request-Id` at the varnish layer so that it's easier to trace a request moving through the GOV.UK application stack. This change ensures that all API calls pass on the `GOVUK-Request-Id` header. More details in [README.md](https://github.com/alphagov/gds-api-adapters#middleware-for-request-tracing).
 
 # 8.0.0
 
@@ -102,7 +102,7 @@ Added client for interacting with the GOV.UK [external-link-tracker](https://git
 
 # 7.5.1
 
-* Support app: problem report creation happens on /anonymous_feedback/problem_reports instead of /problem_reports
+* Support app: problem report creation happens on `/anonymous_feedback/problem_reports` instead of `/problem_reports`
 
 # 7.3.0
 
@@ -110,25 +110,25 @@ Added client for interacting with the GOV.UK [external-link-tracker](https://git
 
 # 7.1.0
 
-* Add Rummager method for /organisations.json
+* Add Rummager method for `/organisations.json`
 
 # 7.0.0
 
-* Support arbitrary search parameters in GdsApi::Rummager
+* Support arbitrary search parameters in `GdsApi::Rummager`
 
-* Remove obsolete format_filter param from GdsApi::Rummager methods
-* Remove obsolete autocomplete method from GdsApi::Rummager
+* Remove obsolete format_filter param from `GdsApi::Rummager` methods
+* Remove obsolete autocomplete method from `GdsApi::Rummager`
 
 # 6.1.0
 
-* Add ContentAPI method for /artefacts.json
+* Add Content API method for `/artefacts.json`
 
 # 6.0.0
 
 Potentially backwards-incompatible changes:
 
 * The `disable_timeout` option has been removed.
-* `JsonClient` now respects the Expires headers when caching results.  If no Expires header is set, the global cache ttl will be used (defaults to 15 mins).
+* `JsonClient` now respects the `Expires` headers when caching results.  If no `Expires` header is set, the global cache TTL will be used (defaults to 15 mins).
 * The Rummager client now inherits from `GdsApi::Base`.  This means that it uses `JsonClient` and therefore inherits its timeout and caching behaviour.
 
 Other changes:
