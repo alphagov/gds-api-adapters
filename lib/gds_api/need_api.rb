@@ -8,6 +8,13 @@ class GdsApi::NeedApi < GdsApi::Base
     get_list!("#{endpoint}/needs#{query}")
   end
 
+  def needs_by_id(*ids)
+    ids_string = ids.flatten.map(&:to_i).sort.join(',')
+    query = query_string(ids: ids_string)
+
+    get_list!("#{endpoint}/needs#{query}")
+  end
+
   def need(need_id)
     get_json("#{endpoint}/needs/#{CGI.escape(need_id.to_s)}")
   end

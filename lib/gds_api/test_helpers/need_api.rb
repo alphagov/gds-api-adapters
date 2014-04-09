@@ -50,6 +50,16 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
+      def need_api_has_need_ids(needs)
+        ids = needs.map {|need| (need["id"] || need[:id]).to_i }.sort.join(',')
+        url = NEED_API_ENDPOINT + "/needs?ids=#{ids}"
+
+        body = response_base.merge(
+          "results" => needs
+        )
+        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+      end
+
       def need_api_has_need(need)
         need_id = need["id"] || need[:id]
         raise ArgumentError, "Test need is missing an ID" unless need_id

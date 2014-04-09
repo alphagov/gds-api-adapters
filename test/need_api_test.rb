@@ -10,6 +10,55 @@ describe GdsApi::NeedApi do
     @api = GdsApi::NeedApi.new(@base_api_url)
   end
 
+  describe "requesting needs by ID" do
+    before do
+      need_api_has_need_ids([
+        {
+          "id"   => "1",
+          "role" => "parent",
+          "goal" => "apply for a primary school place",
+          "benefit" => "my child can start school",
+        },
+        {
+          "id"   => "2",
+          "role" => "user",
+          "goal" => "find out about becoming a British citizen",
+          "benefit" => "i can take the correct steps to apply for citizenship",
+        },
+        {
+          "id"   => "3",
+          "role" => "user",
+          "goal" => "find out about unemployment benefits",
+          "benefit" => "i have financial support whilst unemployed",
+        }
+      ])
+    end
+
+    it "returns a list of needs matching the IDs" do
+      needs = @api.needs_by_id(1,2,3)
+
+      assert_equal 3, needs.count
+      assert_equal %w(1 2 3), needs.map(&:id)
+      assert_equal "apply for a primary school place", needs.results[0].goal
+      assert_equal "find out about becoming a British citizen", needs.results[1].goal
+      assert_equal "find out about unemployment benefits", needs.results[2].goal
+    end
+
+    it "makes the same request regardless of the order of the IDs" do
+      needs = @api.needs_by_id(2,1,3)
+
+      assert_equal 3, needs.count
+      assert_equal %w(1 2 3), needs.map(&:id)
+    end
+
+    it "correctly sorts IDs requested as strings" do
+      needs = @api.needs_by_id(%w(02 3 1))
+
+      assert_equal 3, needs.count
+      assert_equal %w(1 2 3), needs.map(&:id)
+    end
+  end
+
   describe "requesting needs" do
     it "should return a list of all needs" do
       req = need_api_has_needs([
