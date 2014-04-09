@@ -1,3 +1,7 @@
+# 10.6.4
+
+* Add an artefact! method to Content API adaptor that can raise exceptions
+
 # 10.6.3
 
 * Added needs_by_id method to Need API adaptor for retrieving multiple needs with one request
