@@ -216,7 +216,7 @@ module GdsApi
           "id" => "#{CONTENT_API_ENDPOINT}/#{CGI.escape(slug)}.json",
           "web_url" => "http://frontend.test.gov.uk/#{slug}",
           "details" => {
-            "need_id" => "1234",
+            "need_ids" => ["100001"],
             "business_proposition" => false, # To be removed and replaced with proposition tags
             "format" => "Guide",
             "alternative_title" => "",
@@ -385,7 +385,7 @@ module GdsApi
           "web_url" =>  "http://www.test.gov.uk/#{details[:slug]}",
           "format" => "licence",
           "details" => {
-            "need_id" => nil,
+            "need_ids" => [],
             "business_proposition" => false,
             "alternative_title" => nil,
             "overview" => nil,
