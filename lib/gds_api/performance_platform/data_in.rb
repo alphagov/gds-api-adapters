@@ -10,6 +10,14 @@ module GdsApi
       rescue GdsApi::HTTPNotFound
         raise PerformancePlatformDatasetNotConfigured, "Dataset for slug [#{slug}] not set up"
       end
+
+      def corporate_content_problem_report_count(entries)
+        post_json!("#{endpoint}/data/gov-uk-content/feedback-count", entries)
+      end
+
+      def corporate_content_urls_with_the_most_problem_reports(entries)
+        post_json!("#{endpoint}/data/gov-uk-content/top-urls", entries)
+      end
     end
   end
 end
