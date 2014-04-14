@@ -695,6 +695,35 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  # EXACTLY the same as the post_multipart tests
+  def test_client_can_put_multipart_responses
+    url = "http://some.endpoint/some.json"
+    stub_request(:put, url).
+      with(:body => %r{Content\-Disposition: form\-data; name="a"\r\n\r\n123}, :headers => {'Content-Type' => %r{multipart/form-data; boundary=\d+}}).
+      to_return(:body => '{"b": "1"}', :status => 200)
+
+    response = @client.put_multipart("http://some.endpoint/some.json", {"a" => "123"})
+    assert_equal "1", response["b"]
+  end
+
+  def test_put_multipart_should_raise_exception_if_not_found
+    url = "http://some.endpoint/some.json"
+    stub_request(:put, url).to_return(:body => '', :status => 404)
+
+    assert_raises GdsApi::HTTPNotFound do
+      @client.put_multipart("http://some.endpoint/some.json", {"a" => "123"})
+    end
+  end
+
+  def test_put_multipart_should_raise_error_responses
+    url = "http://some.endpoint/some.json"
+    stub_request(:put, url).to_return(:body => '', :status => 500)
+
+    assert_raises GdsApi::HTTPErrorResponse do
+      @client.put_multipart("http://some.endpoint/some.json", {"a" => "123"})
+    end
+  end
+
   def test_should_raise_error_if_attempting_to_disable_timeout
     assert_raises RuntimeError do
       GdsApi::JsonClient.new(:disable_timeout => true)

@@ -99,6 +99,13 @@ module GdsApi
       Response.new(r)
     end
 
+    def put_multipart(url, params)
+      r = do_raw_request(:put, url, params.merge({
+        :multipart => true
+      }))
+      Response.new(r)
+    end
+
     private
     def do_raw_request(method, url, params = nil)
       response = do_request(method, url, params)
