@@ -20,6 +20,26 @@ describe GdsApi::PerformancePlatform::DataIn do
     assert_requested(stub_post)
   end
 
+  it "can submit entries counts for corporate content problem reports" do
+    entries = ["some", "entries"]
+
+    stub_post = stub_corporate_content_problem_report_count_submission(entries)
+
+    @api.corporate_content_problem_report_count(entries)
+
+    assert_requested(stub_post)
+  end
+
+  it "can submit the corporate content urls with the most problem reports" do
+    entries = ["some", "entries"]
+
+    stub_post = stub_corporate_content_urls_with_the_most_problem_reports_submission(entries)
+
+    @api.corporate_content_urls_with_the_most_problem_reports(entries)
+
+    assert_requested(stub_post)
+  end
+
   it "throws an exception when the support app isn't available" do
     stub_pp_isnt_available
     assert_raises(GdsApi::HTTPErrorResponse) { @api.submit_service_feedback_day_aggregate("doesnt_matter", {}) }
