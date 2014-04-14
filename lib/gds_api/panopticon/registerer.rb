@@ -24,14 +24,22 @@ module GdsApi
           description: record.description,
           state: record.state
         }
+
         if rendering_app
           hash[:rendering_app] = rendering_app
         end
-        [:need_id, :section, :specialist_sectors, :indexable_content, :paths, :prefixes].each do |attr_name|
+
+        optional_params = [
+          :need_id, :section, :specialist_sectors, :organisation_ids,
+          :indexable_content, :paths, :prefixes
+        ]
+
+        optional_params.each do |attr_name|
           if record.respond_to? attr_name
-            hash[attr_name] = record.send(attr_name)
+            hash[attr_name] = record.public_send(attr_name)
           end
         end
+
         hash
       end
 
