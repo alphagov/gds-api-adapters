@@ -1,3 +1,7 @@
+# 10.7.0
+
+* Include organisation slugs if available when registering artefacts
+
 # 10.6.4
 
 * Add an `artefact!` method to Content API adaptor that can raise exceptions
