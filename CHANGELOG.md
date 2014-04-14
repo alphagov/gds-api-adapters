@@ -1,3 +1,7 @@
+# 10.8.0
+
+* Data-in API (corporate content problem reports): endpoints for counts, top urls
+
 # 10.7.0
 
 * Include organisation slugs if available when registering artefacts
