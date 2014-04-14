@@ -10,7 +10,7 @@ describe GdsApi::AssetManager do
     @api = GdsApi::AssetManager.new(@base_api_url)
   end
 
-  it "can create an asset with a file" do
+  it "creates an asset with a file" do
     stub_request(:post, "#{@base_api_url}/assets").
       with(:body => %r{Content\-Disposition: form\-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent\-Type: text/plain}).
       to_return(:body => '{"asset":{"id":"http://asset-manager.dev.gov.uk/assets/51278b2b686c82076c000003"}}', :status => 201)
@@ -21,7 +21,7 @@ describe GdsApi::AssetManager do
     assert_equal "http://asset-manager.dev.gov.uk/assets/51278b2b686c82076c000003", response.asset.id
   end
 
-  it "can get an asset" do
+  it "retrieves an asset" do
     asset_manager_has_an_asset("test-id", { "name" => "photo.jpg", "content_type" => "image/jpeg", "file_url" => "http://fooey.gov.uk/media/photo.jpg" })
 
     asset = @api.asset("test-id")
