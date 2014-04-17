@@ -1,3 +1,8 @@
+# 10.9.0
+
+* Add support for `PUT` multipart requests
+* Add support for replacing assets in asset manager using `PUT`
+
 # 10.8.0
 
 * Data-in API (corporate content problem reports): endpoints for counts, top urls
