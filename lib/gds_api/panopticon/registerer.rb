@@ -30,7 +30,7 @@ module GdsApi
         end
 
         optional_params = [
-          :need_id, :section, :specialist_sectors, :organisation_ids,
+          :need_id, :need_ids, :section, :specialist_sectors, :organisation_ids,
           :indexable_content, :paths, :prefixes
         ]
 

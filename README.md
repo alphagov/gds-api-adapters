@@ -71,7 +71,7 @@ In `test_helper.rb`:
 
 In the test:
 
-    panopticon_has_metadata('id' => 12345, 'need_id' => need.id,
+    panopticon_has_metadata('id' => 12345, 'need_ids' => [need.id],
       'slug' => 'my_slug')
 
 ### Dependencies
