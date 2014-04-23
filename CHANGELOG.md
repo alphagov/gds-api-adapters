@@ -1,3 +1,7 @@
+# 10.10.0
+
+* Add support for registering multiple need_ids with panopticon
+
 # 10.9.0
 
 * Add support for `PUT` multipart requests
