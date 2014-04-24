@@ -1,8 +1,9 @@
 require_relative 'test_helper'
 require 'gds_api/panopticon'
+require 'ostruct'
 
 describe GdsApi::Panopticon::Registerer do
-
+  include GdsApi::TestHelpers::Panopticon
 
   describe "creating an instance of the panopticon client" do
     describe "setting the platform" do
@@ -51,5 +52,32 @@ describe GdsApi::Panopticon::Registerer do
       assert_equal :panopticon_instance, r.send(:panopticon)
       assert_equal :panopticon_instance, r.send(:panopticon)
     end
+  end
+
+  it "should register artefacts" do
+    request = stub_artefact_registration('beards',
+      slug: 'beards',
+      owning_app: 'whitehall',
+      kind: 'detailed-guide',
+      name: 'A guide to beards',
+      description: '5 tips for keeping your beard in check',
+      state: 'draft',
+      need_ids: ["100001", "100002"]
+    )
+
+    GdsApi::Panopticon::Registerer.new(
+      owning_app: 'whitehall',
+      kind: 'detailed-guide'
+    ).register(
+      OpenStruct.new(
+        slug: 'beards',
+        title: 'A guide to beards',
+        description: '5 tips for keeping your beard in check',
+        state: 'draft',
+        need_ids: ["100001", "100002"]
+      )
+    )
+
+    assert_requested(request)
   end
 end
