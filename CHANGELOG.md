@@ -1,3 +1,7 @@
+# 10.10.1
+
+* Add panopticon artefact registration test helper
+
 # 10.10.0
 
 * Add support for registering multiple need_ids with panopticon
