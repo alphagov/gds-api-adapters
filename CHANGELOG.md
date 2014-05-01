@@ -1,3 +1,7 @@
+# 10.11.0
+
+* Add Maslow adapter with link builder
+
 # 10.10.1
 
 * Add panopticon artefact registration test helper
