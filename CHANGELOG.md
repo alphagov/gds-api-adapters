@@ -1,3 +1,7 @@
+# 10.11.1
+
+* Add router test helpers
+
 # 10.11.0
 
 * Add Maslow adapter with link builder
