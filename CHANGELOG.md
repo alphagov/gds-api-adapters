@@ -1,3 +1,7 @@
+# 10.11.2
+
+* Update organisation test helper, adding logo and brand class details to the helper
+
 # 10.11.1
 
 * Add router test helpers
