@@ -67,12 +67,15 @@ describe GdsApi::Mapit do
       mapit_does_not_have_areas('FOO')
     end
     it "should return areas of a type" do
-      response = @api.areas_for_type('EUR')
+      areas = @api.areas_for_type('EUR').to_hash
 
-      assert_equal 3, response.size
-      assert_equal "123", response.first.id
-      assert_equal "Eastern", response.first.name
-      assert_equal "England", response.first.country_name
+      assert_equal 3, areas.size
+      assert_equal "Eastern", areas["123"]["name"]
+      assert_equal "England", areas["123"]["country_name"]
+      assert_equal "North West", areas["234"]["name"]
+      assert_equal "England", areas["234"]["country_name"]
+      assert_equal "Scotland", areas["345"]["name"]
+      assert_equal "Scotland", areas["345"]["country_name"]
     end
     it "should return and empty result for an unknown area type" do
       response = @api.areas_for_type('FOO')

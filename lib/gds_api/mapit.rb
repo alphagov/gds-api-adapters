@@ -13,17 +13,7 @@ class GdsApi::Mapit < GdsApi::Base
   end
 
   def areas_for_type(type)
-    response = get_json("#{base_url}/areas/#{type}.json")
-    return areas_from_response(response)
-  end
-
-  class Area
-    def initialize(hash)
-      [:id, :name, :country_name].each do |attr|
-        self.class.send(:attr_reader, attr)
-        instance_variable_set("@#{attr}", hash[attr.to_s])
-      end
-    end
+    get_json("#{base_url}/areas/#{type}.json")
   end
 
   class Location
@@ -55,11 +45,4 @@ class GdsApi::Mapit < GdsApi::Base
       endpoint
     end
 
-    def areas_from_response(response)
-      [].tap do |ary|
-        response.each do |k,v|
-          ary << Area.new(v)
-        end
-      end
-    end
 end
