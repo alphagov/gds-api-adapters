@@ -2,7 +2,6 @@ require_relative 'base'
 require_relative 'exceptions'
 
 class GdsApi::Mapit < GdsApi::Base
-  include GdsApi::ExceptionHandling
 
   def location_for_postcode(postcode)
     response = get_json("#{base_url}/postcode/#{CGI.escape postcode}.json")

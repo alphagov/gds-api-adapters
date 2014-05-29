@@ -3,7 +3,6 @@ require_relative 'exceptions'
 require 'json'
 
 class GdsApi::GovUkDelivery < GdsApi::Base
-  include GdsApi::ExceptionHandling
 
   def initialize(endpoint_url, options={})
     super(endpoint_url, options.merge({timeout: 10}))

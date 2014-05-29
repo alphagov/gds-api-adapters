@@ -3,7 +3,6 @@ require_relative 'exceptions'
 require_relative 'list_response'
 
 class GdsApi::BusinessSupportApi < GdsApi::Base
-  include GdsApi::ExceptionHandling
 
   def schemes(options = {})
     get_list!(url_for_slug('business-support-schemes', options))
