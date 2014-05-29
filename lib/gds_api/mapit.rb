@@ -11,6 +11,10 @@ class GdsApi::Mapit < GdsApi::Base
     raise GdsApi::HTTPErrorResponse.new(e.code) unless e.code == 400
   end
 
+  def areas_for_type(type)
+    get_json("#{base_url}/areas/#{type}.json")
+  end
+
   class Location
     attr_reader :response
 
@@ -39,4 +43,5 @@ class GdsApi::Mapit < GdsApi::Base
     def base_url
       endpoint
     end
+
 end

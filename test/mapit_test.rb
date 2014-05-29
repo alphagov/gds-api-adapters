@@ -57,4 +57,30 @@ describe GdsApi::Mapit do
       assert_nil @api.location_for_postcode("B4DP05TC0D3")
     end
   end
+  describe "areas_for_type" do
+    before do
+       mapit_has_areas('EUR', {
+        "123" => { "name" => "Eastern", "id" => "123", "country_name" => "England" },
+        "234" => { "name" => "North West", "id" => "234", "country_name" => "England" },
+        "345" => { "name" => "Scotland", "id" => "345", "country_name" => "Scotland" }
+      })
+      mapit_does_not_have_areas('FOO')
+    end
+    it "should return areas of a type" do
+      areas = @api.areas_for_type('EUR').to_hash
+
+      assert_equal 3, areas.size
+      assert_equal "Eastern", areas["123"]["name"]
+      assert_equal "England", areas["123"]["country_name"]
+      assert_equal "North West", areas["234"]["name"]
+      assert_equal "England", areas["234"]["country_name"]
+      assert_equal "Scotland", areas["345"]["name"]
+      assert_equal "Scotland", areas["345"]["country_name"]
+    end
+    it "should return and empty result for an unknown area type" do
+      response = @api.areas_for_type('FOO')
+
+      assert_empty response
+    end
+  end
 end
