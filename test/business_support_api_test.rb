@@ -15,12 +15,13 @@ describe GdsApi::BusinessSupportApi do
     it "should return all schemes when called with no facets" do
       business_support_api_has_schemes([:scheme1, :scheme2, :scheme3])
       response = @api.schemes
-      assert_equal ["scheme1", "scheme2", "scheme3"], response['results']
+      assert_equal [{"title" => "scheme1"}, {"title" => "scheme2"}, {"title" => "scheme3"}], response['results']
     end
     it "should return schemes for applicable facets"  do
       business_support_api_has_scheme(:scottish_manufacturing, {locations: 'scotland', sectors: 'manufacturing', support_types: 'grant,loan'})
       response = @api.schemes({locations: 'scotland', sectors: 'manufacturing', support_types: 'grant,loan'})
-      assert_equal ["scottish_manufacturing"], response["results"]
+      assert_equal 1, response["results"].size
+      assert_equal "scottish_manufacturing", response["results"].first["title"]
     end
     it "should return an empty result when facets are not applicable" do
       business_support_api_has_scheme(:super_secret, {locations: 'the moon', sectors: 'espionage'})
