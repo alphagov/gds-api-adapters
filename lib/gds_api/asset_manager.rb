@@ -2,7 +2,6 @@ require_relative 'base'
 require_relative 'exceptions'
 
 class GdsApi::AssetManager < GdsApi::Base
-  include GdsApi::ExceptionHandling
 
   # Creates an asset given attributes
   #

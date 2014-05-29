@@ -3,7 +3,6 @@ require_relative 'exceptions'
 require_relative 'list_response'
 
 class GdsApi::ContentApi < GdsApi::Base
-  include GdsApi::ExceptionHandling
 
   def initialize(endpoint_url, options = {})
     # If the `web_urls_relative_to` option is given, the adapter will convert
