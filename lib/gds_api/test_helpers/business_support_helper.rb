@@ -7,13 +7,13 @@ module GdsApi
   module TestHelpers
     module BusinessSupportHelper
       def setup_business_support_stubs(endpoint, path)
-        @stubbed_business_supports = {}
+        @stubbed_business_supports = []
         stub_request(:get, %r{\A#{endpoint}/#{path}\.json}).to_return do |request|
           if request.uri.query_values
-            key = facet_key(request.uri.query_values)
-            results = @stubbed_business_supports[key] || []
+            facets = sanitise_facets(request.uri.query_values)
+            results = stubs_for_facets(facets) || []
           else
-            results = @stubbed_business_supports['default']
+            results = @stubbed_business_supports
           end
           {:body => plural_response_base.merge("results" => results, "total" => results.size).to_json}
         end
@@ -21,19 +21,34 @@ module GdsApi
       end
 
       def api_has_business_support(business_support, facets={})
-        key = facet_key(facets)
-        unless @stubbed_business_supports.has_key?(key)
-          @stubbed_business_supports[key] = []
+        facets = sanitise_facets(facets)
+        if business_support.is_a?(Symbol)
+          bs_with_facets = facets.merge(:title => business_support)
+        else
+          bs_with_facets = facets.merge(business_support)
         end
-        @stubbed_business_supports[key] << business_support
+        @stubbed_business_supports << bs_with_facets unless @stubbed_business_supports.include?(bs_with_facets)
       end
 
       private
 
-      def facet_key(facets)
-        key = 'default'
-        key = facets.values.flatten.sort.hash.to_s if facets and !facets.empty?
-        key
+      def stubs_for_facets(facets)
+        @stubbed_business_supports.select do |bs|
+          facet_matches = 0
+          facets.each do |k,v|
+            if bs[k] and (v & bs[k]).any?
+              facet_matches += 1
+            end
+          end
+          facet_matches == facets.keys.size
+        end
+      end
+
+      def sanitise_facets(facets)
+        Hash[facets.map{ |k, v|
+          v = v.split(',') if v.is_a?(String)
+          [k.to_sym, v]
+        }]
       end
     end
   end

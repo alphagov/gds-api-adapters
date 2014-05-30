@@ -620,7 +620,8 @@ describe GdsApi::ContentApi do
         response = @api.business_support_schemes(:locations => "england", :sectors => "farming").to_hash
 
         assert_equal 2, response["total"]
-        assert_equal [s1, s3], response["results"]
+        assert_equal s1["title"], response["results"].first["title"]
+        assert_equal s3["title"], response["results"].last["title"]
       end
     end
   end
