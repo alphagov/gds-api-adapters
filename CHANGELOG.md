@@ -1,3 +1,11 @@
+# 10.14.0
+
+* Update business support scheme helpers to match API behaviour.
+
+# 10.13.0
+
+* Expose Mapit areas by area type. Adds the method ```areas_for_type(type)```.
+
 # 10.11.2
 
 * Update organisation test helper, adding logo and brand class details to the helper
