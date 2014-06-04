@@ -98,6 +98,26 @@ class ImminenceApiTest < MiniTest::Unit::TestCase
     assert_equal LONGITUDE, place["longitude"]
   end
 
+  def test_postcode_search
+    # Test behaviour when searching by postcode
+    c = api_client
+    url = "#{ROOT}/places/wibble.json?limit=5&postcode=MK42+9AA"
+    c.expects(:get_json).with(url).returns([dummy_place])
+    places = c.places_for_postcode("wibble", "MK42 9AA")
+
+    assert_equal 1, places.size
+  end
+
+  def test_invalid_postcode_search
+    # Test behaviour when searching by invalid postcode
+    c = api_client
+    url = "#{ROOT}/places/wibble.json?limit=5&postcode=MK99+9AA"
+    c.expects(:get_json).with(url).raises(GdsApi::HTTPErrorResponse.new(400))
+    assert_raises GdsApi::HTTPErrorResponse do
+      c.places_for_postcode("wibble", "MK99 9AA")
+    end
+  end
+
   def test_business_support_schemes
     dummy_schemes = [
       { "business_support_identifier" => "bar-business-award", "title" => "Bar business award." },
