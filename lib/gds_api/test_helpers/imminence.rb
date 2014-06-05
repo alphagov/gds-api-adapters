@@ -41,6 +41,17 @@ module GdsApi
         stub_request(:get, %r{\A#{IMMINENCE_API_ENDPOINT}/business_support_schemes\.json}).
           to_return(:body => empty_results.to_json)
       end
+
+      def imminence_has_areas_for_postcode(areas, postcode)
+        results = {
+          "_response_info" => {"status" => "ok"},
+          "total" => areas.size, "startIndex" => 1, "pageSize" => areas.size,
+          "currentPage" => 1, "pages" => 1, "results" => areas
+        }
+
+        stub_request(:get, %r{\A#{IMMINENCE_API_ENDPOINT}/areas/#{postcode}\.json}).
+          to_return(:body => results.to_json)
+      end
     end
   end
 end
