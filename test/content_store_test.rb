@@ -2,7 +2,7 @@ require 'test_helper'
 require 'gds_api/content_store'
 require 'gds_api/test_helpers/content_store'
 
-describe GdsApi::ContentApi do
+describe GdsApi::ContentStore do
   include GdsApi::TestHelpers::ContentStore
 
   before do
