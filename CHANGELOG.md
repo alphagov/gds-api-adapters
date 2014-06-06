@@ -1,3 +1,7 @@
+# 10.15.1
+
+* Fix inheritance of content-store client.
+
 # 10.14.0
 
 * Update business support scheme helpers to match API behaviour.
