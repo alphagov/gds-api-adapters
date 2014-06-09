@@ -1,3 +1,7 @@
+# 10.16.0
+
+* Lookup Mapit areas by postcode via Imminence.
+
 # 10.15.1
 
 * Fix inheritance of content-store client.
