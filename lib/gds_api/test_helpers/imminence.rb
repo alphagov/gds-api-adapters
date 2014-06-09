@@ -42,7 +42,7 @@ module GdsApi
           to_return(:body => empty_results.to_json)
       end
 
-      def imminence_has_areas_for_postcode(areas, postcode)
+      def imminence_has_areas_for_postcode(postcode, areas)
         results = {
           "_response_info" => {"status" => "ok"},
           "total" => areas.size, "startIndex" => 1, "pageSize" => areas.size,
