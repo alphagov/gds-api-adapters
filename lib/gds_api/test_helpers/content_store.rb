@@ -19,7 +19,7 @@ module GdsApi
       end
 
       def stub_default_content_store_put()
-        stub_request(:put, /.*content-store.*/)
+        stub_request(:put, %r{\A#{CONTENT_STORE_ENDPOINT}/content})
       end
 
       def item_for_base_path(base_path)
