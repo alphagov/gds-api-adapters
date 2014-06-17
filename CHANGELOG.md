@@ -1,3 +1,7 @@
+# 10.17.0
+
+* Add methods for PUTing data to content-store.
+
 # 10.16.0
 
 * Lookup Mapit areas by postcode via Imminence.
