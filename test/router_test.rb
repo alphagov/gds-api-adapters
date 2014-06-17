@@ -199,17 +199,17 @@ describe GdsApi::Router do
         assert_equal "foo", response.backend_id
 
         assert_requested(req)
-        assert_requested(@commit_req)
+        assert_not_requested(@commit_req)
       end
 
-      it "should not commit the routes when asked not to" do
+      it "should commit the routes when asked to" do
         req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
           to_return(:status => 201, :body => {}.to_json, :headers => {"Content-type" => "application/json"})
 
-        @api.add_route("/foo", "exact", "foo", :skip_commit => true)
+        @api.add_route("/foo", "exact", "foo", :commit => true)
 
         assert_requested(req)
-        assert_not_requested(@commit_req)
+        assert_requested(@commit_req)
       end
 
       it "should raise an error if creating/updating the route fails" do
@@ -248,7 +248,7 @@ describe GdsApi::Router do
         assert_equal "/bar", response.redirect_to
 
         assert_requested(req)
-        assert_requested(@commit_req)
+        assert_not_requested(@commit_req)
       end
 
       it "should allow creating/updating a temporary redirect route" do
@@ -262,17 +262,17 @@ describe GdsApi::Router do
         assert_equal "/bar", response.redirect_to
 
         assert_requested(req)
-        assert_requested(@commit_req)
+        assert_not_requested(@commit_req)
       end
 
-      it "should not commit the routes when asked not to" do
+      it "should commit the routes when asked to" do
         req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
           to_return(:status => 201, :body =>{}.to_json, :headers => {"Content-type" => "application/json"})
 
-        @api.add_redirect_route("/foo", "exact", "/bar", "temporary", :skip_commit => true)
+        @api.add_redirect_route("/foo", "exact", "/bar", "temporary", :commit => true)
 
         assert_requested(req)
-        assert_not_requested(@commit_req)
+        assert_requested(@commit_req)
       end
 
       it "should raise an error if creating/updating the redirect route fails" do
@@ -311,18 +311,18 @@ describe GdsApi::Router do
         assert_equal "foo", response.backend_id
 
         assert_requested(req)
-        assert_requested(@commit_req)
+        assert_not_requested(@commit_req)
       end
 
-      it "should not commit the routes when asked not to" do
+      it "should commit the routes when asked to" do
         req = WebMock.stub_request(:delete, "#{@base_api_url}/routes").
           with(:query => {"incoming_path" => "/foo", "route_type" => "exact"}).
           to_return(:status => 200, :body => {}.to_json, :headers => {"Content-type" => "application/json"})
 
-        @api.delete_route("/foo", "exact", :skip_commit => true)
+        @api.delete_route("/foo", "exact", :commit => true)
 
         assert_requested(req)
-        assert_not_requested(@commit_req)
+        assert_requested(@commit_req)
       end
 
       it "should raise HTTPNotFound if nothing found" do
