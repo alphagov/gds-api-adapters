@@ -24,11 +24,5 @@ describe GdsApi::ContentStore do
       response = @api.put_content_item(base_path, item_for_base_path(base_path))
       assert_equal base_path, response["base_path"]
     end
-
-    it "should default the item" do
-      request = stub_default_content_store_put
-      @api.put_content_item('foo', item_for_base_path('foo'))
-      assert_requested request
-    end
   end
 end
