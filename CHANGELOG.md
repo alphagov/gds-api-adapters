@@ -1,3 +1,9 @@
+# 11.0.0
+
+* BREAKING CHANGE: router client no longer commits by default (see
+  https://github.com/alphagov/gds-api-adapters/commit/f7a6f5e for more details).
+* Added more test helpers for router client
+
 # 10.17.1
 
 * Bug fix: remove `put_content_item`, we want to be aware of `PUT` failing on content store
