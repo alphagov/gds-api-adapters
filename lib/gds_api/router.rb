@@ -1,5 +1,4 @@
 require_relative 'base'
-#require_relative 'exceptions'
 
 class GdsApi::Router < GdsApi::Base
 
@@ -25,20 +24,20 @@ class GdsApi::Router < GdsApi::Base
 
   def add_route(path, type, backend_id, options = {})
     response = put_json!("#{endpoint}/routes", :route => {:incoming_path => path, :route_type => type, :handler => "backend", :backend_id => backend_id})
-    commit_routes unless options[:skip_commit]
+    commit_routes if options[:commit]
     response
   end
 
   def add_redirect_route(path, type, destination, redirect_type = "permanent", options = {})
     response = put_json!("#{endpoint}/routes", :route => {:incoming_path => path, :route_type => type, :handler => "redirect",
               :redirect_to => destination, :redirect_type => redirect_type})
-    commit_routes unless options[:skip_commit]
+    commit_routes if options[:commit]
     response
   end
 
   def delete_route(path, type, options = {})
     response = delete_json!("#{endpoint}/routes?incoming_path=#{CGI.escape(path)}&route_type=#{CGI.escape(type)}")
-    commit_routes unless options[:skip_commit]
+    commit_routes if options[:commit]
     response
   end
 
