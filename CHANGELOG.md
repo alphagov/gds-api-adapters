@@ -1,3 +1,7 @@
+# 10.17.1
+
+* Bug fix: remove `put_content_item`, we want to be aware of `PUT` failing on content store
+
 # 10.17.0
 
 * Add methods for PUTing data to content-store.
