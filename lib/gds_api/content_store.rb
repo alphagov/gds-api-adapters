@@ -12,10 +12,6 @@ class GdsApi::ContentStore < GdsApi::Base
   end
 
   def put_content_item(base_path, payload)
-    put_json(content_item_url(base_path), payload)
-  end
-
-  def put_content_item!(base_path, payload)
     put_json!(content_item_url(base_path), payload)
   end
 
