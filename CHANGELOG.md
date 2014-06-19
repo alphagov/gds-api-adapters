@@ -1,3 +1,7 @@
+# 11.1.0
+
+* Adds areas_for_type method for Imminence.
+
 # 11.0.0
 
 * BREAKING CHANGE: router client no longer commits by default (see
