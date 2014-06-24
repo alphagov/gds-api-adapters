@@ -1,3 +1,7 @@
+# 11.2.0
+
+* Add content-store test assertion helper.
+
 # 11.1.0
 
 * Adds areas_for_type method for Imminence.
