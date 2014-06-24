@@ -1,5 +1,6 @@
 require 'gds_api/test_helpers/json_client_helper'
 require 'gds_api/test_helpers/common_responses'
+require 'json'
 
 module GdsApi
   module TestHelpers
@@ -34,6 +35,20 @@ module GdsApi
             "body" => "Some content for #{base_path}",
           }
         }
+      end
+
+      def assert_content_store_put_item(base_path, attributes = {})
+        url = CONTENT_STORE_ENDPOINT + "/content" + base_path
+        if attributes.empty?
+          assert_requested(:put, url)
+        else
+          assert_requested(:put, url) do |req|
+            data = JSON.parse(req.body)
+            attributes.to_a.all? do |key, value|
+              data[key.to_s] == value
+            end
+          end
+        end
       end
     end
   end
