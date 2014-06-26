@@ -24,6 +24,23 @@ module GdsApi
       get_json!("#{base_url}/organisations")
     end
 
+    def add_document(type, id, document)
+      post_json!(
+        documents_url,
+        document.merge(
+          _type: type,
+          _id: id,
+        )
+      )
+    end
+
+    def delete_document(type, id)
+      delete_json!(
+        "#{documents_url}/#{id}",
+        _type: type,
+      )
+    end
+
   private
 
     def search_url(type, query, extra_params={})
@@ -37,6 +54,10 @@ module GdsApi
 
     def base_url
       endpoint
+    end
+
+    def documents_url
+      "#{base_url}/documents"
     end
   end
 end
