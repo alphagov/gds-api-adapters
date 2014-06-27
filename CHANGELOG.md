@@ -1,3 +1,7 @@
+# 11.3.0
+
+* Add `add_document` and `remove_document` methods to Rummager adapter.
+
 # 11.2.0
 
 * Add content-store test assertion helper.
