@@ -1,3 +1,7 @@
+# 11.4.0
+
+* Improve content-store test helpers
+
 # 11.3.0
 
 * Add `add_document` and `remove_document` methods to Rummager adapter.
