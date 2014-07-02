@@ -11,12 +11,19 @@ module GdsApi
 
       def content_store_has_item(base_path, body = item_for_base_path(base_path))
         url = CONTENT_STORE_ENDPOINT + "/content" + base_path
-        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+        body = body.to_json unless body.is_a?(String)
+        stub_request(:get, url).to_return(status: 200, body: body, headers: {})
+      end
+
+      def content_store_does_not_have_item(base_path)
+        url = CONTENT_STORE_ENDPOINT + "/content" + base_path
+        stub_request(:get, url).to_return(status: 404, headers: {})
       end
 
       def stub_content_store_put_item(base_path, body = item_for_base_path(base_path))
         url = CONTENT_STORE_ENDPOINT + "/content" + base_path
-        stub_request(:put, url).with(body: body.to_json).to_return(status: 201, body: body.to_json, headers: {})
+        body = body.to_json unless body.is_a?(String)
+        stub_request(:put, url).with(body: body).to_return(status: 201, body: body, headers: {})
       end
 
       def stub_default_content_store_put()
