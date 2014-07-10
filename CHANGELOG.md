@@ -1,3 +1,7 @@
+# 11.5.0
+
+* Add `support-api` adapter
+
 # 11.4.0
 
 * Improve content-store test helpers
