@@ -291,6 +291,14 @@ describe GdsApi::ContentApi do
       assert_equal "#{@base_api_url}/tags/authors/justin-thyme.json", first_section.id
     end
 
+    it "returns a sorted list of tags of a given type" do
+      content_api_has_sorted_tags("author", "alphabetical", ["justin-thyme"])
+      response = @api.tags("author", sort: "alphabetical")
+
+      first_section = response.first
+      assert_equal "#{@base_api_url}/tags/authors/justin-thyme.json", first_section.id
+    end
+
     it "returns a list of root tags of a given type" do
       content_api_has_root_tags("author", ["oliver-sudden", "percy-vere"])
       response = @api.root_tags("author")
