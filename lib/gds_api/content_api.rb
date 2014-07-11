@@ -39,8 +39,14 @@ class GdsApi::ContentApi < GdsApi::Base
     get_list!("#{base_url}/tags.json?type=#{CGI.escape(tag_type)}&root_sections=true")
   end
 
-  def child_tags(tag_type, parent_tag)
-    get_list!("#{base_url}/tags.json?type=#{CGI.escape(tag_type)}&parent_id=#{CGI.escape(parent_tag)}")
+  def child_tags(tag_type, parent_tag, options={})
+    params = [
+      "type=#{CGI.escape(tag_type)}",
+      "parent_id=#{CGI.escape(parent_tag)}",
+    ]
+    params << "sort=#{options[:sort]}" if options.has_key?(:sort)
+
+    get_list!("#{base_url}/tags.json?#{params.join('&')}")
   end
 
   def tag(tag, tag_type=nil)

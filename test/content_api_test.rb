@@ -325,6 +325,14 @@ describe GdsApi::ContentApi do
       assert_equal "#{@base_api_url}/tags/genres/indie%2Findie-rock.json", first_section.id
     end
 
+    it "returns a sorted list of child tags of a given type" do
+      content_api_has_sorted_child_tags("genre", "indie", "alphabetical", ["indie/indie-rock"])
+      response = @api.child_tags("genre", "indie", sort: "alphabetical")
+
+      first_section = response.first
+      assert_equal "#{@base_api_url}/tags/genres/indie%2Findie-rock.json", first_section.id
+    end
+
     it "returns artefacts given a section" do
       content_api_has_artefacts_in_a_section("crime-and-justice", ["complain-about-a-claims-company"])
       response = @api.with_tag("crime-and-justice")

@@ -101,6 +101,19 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
+      def content_api_has_sorted_child_tags(tag_type, parent_slug_or_hash, sort_order, child_tag_ids)
+        parent_tag = tag_hash(parent_slug_or_hash, tag_type)
+        child_tags = child_tag_ids.map { |id|
+          tag_hash(id, tag_type).merge(parent: parent_tag)
+        }
+        body = plural_response_base.merge(
+          "results" => child_tags.map { |s| tag_result(s, tag_type) }
+        )
+
+        url = "#{CONTENT_API_ENDPOINT}/tags.json?parent_id=#{CGI.escape(parent_tag[:slug])}&sort=#{sort_order}&type=#{tag_type}"
+        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+      end
+
       def content_api_has_artefacts_with_a_tag(tag_type, slug, artefact_slugs=[])
         body = plural_response_base.merge(
           "results" => artefact_slugs.map do |artefact_slug|
