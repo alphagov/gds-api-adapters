@@ -1,3 +1,8 @@
+# 11.6.0
+
+* Support the `sort` parameter on the Content API adapter's `tags` and `child_tags` methods.
+* Include test for Rummager adapter behaviour  on a response with a 422 status.
+
 # 11.5.0
 
 * Add `support-api` adapter
