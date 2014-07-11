@@ -167,6 +167,16 @@ describe GdsApi::Rummager do
     end
   end
 
+  it "#unified_search should raise an exception if the service at the unified search URI returns a 422" do
+    stub_request(:get, /example.com\/unified_search/).to_return(
+      status: [422, "Bad Request"],
+      body: %q("error":"Filtering by \"coffee\" is not allowed"),
+    )
+    assert_raises(GdsApi::HTTPErrorResponse) do
+      GdsApi::Rummager.new("http://example.com").unified_search(q: "query", filter_coffee: "tea")
+    end
+  end
+
   it "#unified_search should raise an exception if the service at the search URI times out" do
     stub_request(:get, /example.com\/unified_search/).to_timeout
     assert_raises(GdsApi::TimedOutException) do
