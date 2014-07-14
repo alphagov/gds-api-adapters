@@ -40,6 +40,10 @@ module GdsApi
       @http_response.code
     end
 
+    def headers
+      @http_response.headers
+    end
+
     def to_hash
       @parsed ||= transform_parsed(JSON.parse(@http_response.body))
     end
