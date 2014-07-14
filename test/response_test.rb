@@ -5,7 +5,7 @@ describe GdsApi::Response do
 
   describe "accessing HTTP response details" do
     before :each do
-      @mock_http_response = stub(:body => "A Response body", :code => 200)
+      @mock_http_response = stub(:body => "A Response body", :code => 200, :headers => {'cache-control' => 'public'})
       @response = GdsApi::Response.new(@mock_http_response)
     end
 
@@ -15,6 +15,10 @@ describe GdsApi::Response do
 
     it "should return the status code" do
       assert_equal 200, @response.code
+    end
+
+    it "should pass-on the response headers" do
+      assert_equal({'cache-control' => 'public'}, @response.headers)
     end
   end
 
