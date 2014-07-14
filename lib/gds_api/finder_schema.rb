@@ -9,7 +9,7 @@ class GdsApi::FinderSchema
     document_attributes.each_with_object({}) do |(k, v), values|
       values.store(
         user_friendly_facet_label(k.to_s),
-        find_schema_allowed_value_entry(k.to_s, v)
+        user_friendly_facet_value(k.to_s, v),
       )
     end
   end
@@ -27,7 +27,13 @@ class GdsApi::FinderSchema
     find_facet(facet_key.to_s).fetch("name")
   end
 
-  def find_schema_allowed_value_entry(facet_key, value)
+  def user_friendly_facet_value(facet_key, value)
+    Array(value).map { |value|
+      find_schema_allowed_value_label(facet_key, value)
+    }
+  end
+
+  def find_schema_allowed_value_label(facet_key, value)
     value_label_pair = allowed_values_for(facet_key)
       .find { |schema_value|
         schema_value.fetch("value") == value
