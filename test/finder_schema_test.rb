@@ -49,8 +49,8 @@ describe GdsApi::FinderSchema do
 
     let(:formatted_attrs) {
       {
-        "Case type" => "CA98 and civil cartels",
-        "Market sector" => "Aerospace",
+        "Case type" => ["CA98 and civil cartels"],
+        "Market sector" => ["Aerospace"],
       }
     }
 
@@ -71,6 +71,24 @@ describe GdsApi::FinderSchema do
         }.must_raise(
           GdsApi::FinderSchema::NotFoundError,
           "market sector 'does-not-exist' not found in cma-cases schema")
+      end
+    end
+
+    describe "when a value is an array of values" do
+      let(:document_attrs) {
+        {
+          market_sector: ["aerospace"],
+        }
+      }
+
+      let(:formatted_attrs) {
+        {
+          "Market sector" => ["Aerospace"],
+        }
+      }
+
+      it "formats the given keys and values" do
+        schema.user_friendly_values(document_attrs).must_equal(formatted_attrs)
       end
     end
   end
