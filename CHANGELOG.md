@@ -1,3 +1,7 @@
+# 12.0.0
+
+* `FinderSchema#user_friendly_facet_value` always returns metadata values as Arrays.
+
 # 11.6.0
 
 * Support the `sort` parameter on the Content API adapter's `tags` and `child_tags` methods.
