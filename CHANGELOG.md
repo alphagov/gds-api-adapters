@@ -1,3 +1,7 @@
+# 12.1.0
+
+* Add rummager test helpers
+
 # 12.0.0
 
 * `FinderSchema#user_friendly_facet_value` always returns metadata values as Arrays.
