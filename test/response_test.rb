@@ -5,7 +5,7 @@ describe GdsApi::Response do
 
   describe "accessing HTTP response details" do
     before :each do
-      @mock_http_response = stub(:body => "A Response body", :code => 200, :headers => {'cache-control' => 'public'})
+      @mock_http_response = stub(:body => "A Response body", :code => 200, :headers => {:cache_control => 'public'})
       @response = GdsApi::Response.new(@mock_http_response)
     end
 
@@ -18,7 +18,71 @@ describe GdsApi::Response do
     end
 
     it "should pass-on the response headers" do
-      assert_equal({'cache-control' => 'public'}, @response.headers)
+      assert_equal({:cache_control => 'public'}, @response.headers)
+    end
+  end
+
+  describe ".expires_at" do
+    it "should be calculated from cache-control max-age" do
+      Timecop.freeze(Time.parse("15:00")) do
+        cache_control_headers = { :cache_control => 'public, max-age=900' }
+        headers = cache_control_headers.merge(date: Time.now.httpdate)
+
+        mock_http_response = stub(:body => "A Response body", :code => 200, :headers => headers)
+        response = GdsApi::Response.new(mock_http_response)
+
+        assert_equal Time.parse("15:15"), response.expires_at
+      end
+    end
+
+    it "should be same as the value of Expires header in absence of max-age" do
+      Timecop.freeze(Time.parse("15:00")) do
+        cache_headers = { :cache_control => 'public', :expires => (Time.now + 900).httpdate }
+        headers = cache_headers.merge(date: Time.now.httpdate)
+
+        mock_http_response = stub(:body => "A Response body", :code => 200, :headers => headers)
+        response = GdsApi::Response.new(mock_http_response)
+
+        assert_equal Time.parse("15:15"), response.expires_at
+      end
+    end
+
+    it "should be nil in absence of Expires header and max-age" do
+      mock_http_response = stub(:body => "A Response body", :code => 200, :headers => { :date => Time.now.httpdate })
+      response = GdsApi::Response.new(mock_http_response)
+
+      assert_nil response.expires_at
+    end
+  end
+
+  describe ".expires_in" do
+    it "should be seconds remaining from expiration time inferred from max-age" do
+      cache_control_headers = { :cache_control => 'public, max-age=900' }
+      headers = cache_control_headers.merge(date: Time.now.httpdate)
+      mock_http_response = stub(:body => "A Response body", :code => 200, :headers => headers)
+
+      Timecop.travel(12 * 60) do
+        response = GdsApi::Response.new(mock_http_response)
+        assert_equal 180, response.expires_in
+      end
+    end
+
+    it "should be seconds remaining from expiration time inferred from Expires header" do
+      cache_headers = { :cache_control => 'public', :expires => (Time.now + 900).httpdate }
+      headers = cache_headers.merge(date: Time.now.httpdate)
+      mock_http_response = stub(:body => "A Response body", :code => 200, :headers => headers)
+
+      Timecop.travel(12 * 60) do
+        response = GdsApi::Response.new(mock_http_response)
+        assert_equal 180, response.expires_in
+      end
+    end
+
+    it "should be nil in absence of Expires header and max-age" do
+      mock_http_response = stub(:body => "A Response body", :code => 200, :headers => { :date => Time.now.httpdate })
+      response = GdsApi::Response.new(mock_http_response)
+
+      assert_nil response.expires_in
     end
   end
 

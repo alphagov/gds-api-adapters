@@ -208,7 +208,7 @@ class JsonClientTest < MiniTest::Spec
     stub_request(:get, url).to_return(
       :body => JSON.dump(result),
       :status => 200,
-      :headers => { "Cache-Control" => "max-age=420, public" } # 6 minutes
+      :headers => { "Cache-Control" => "max-age=420, public" } # 7 minutes
     )
 
     response_a = GdsApi::JsonClient.new.get_json(url)
