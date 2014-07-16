@@ -9,10 +9,10 @@ module GdsApi
 
       CONTENT_STORE_ENDPOINT = Plek.current.find('content-store')
 
-      def content_store_has_item(base_path, body = item_for_base_path(base_path))
+      def content_store_has_item(base_path, body = item_for_base_path(base_path), expires_in = 900)
         url = CONTENT_STORE_ENDPOINT + "/content" + base_path
         body = body.to_json unless body.is_a?(String)
-        stub_request(:get, url).to_return(status: 200, body: body, headers: {})
+        stub_request(:get, url).to_return(status: 200, body: body, headers: {cache_control: "public, max-age=#{expires_in}", date: Time.now.httpdate})
       end
 
       def content_store_does_not_have_item(base_path)
