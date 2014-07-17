@@ -53,6 +53,13 @@ describe GdsApi::Response do
 
       assert_nil response.expires_at
     end
+
+    it "should be nil in absence of Date header and max-age" do
+      mock_http_response = stub(:body => "A Response body", :code => 200, :headers => {})
+      response = GdsApi::Response.new(mock_http_response)
+
+      assert_nil response.expires_at
+    end
   end
 
   describe ".expires_in" do
@@ -80,6 +87,14 @@ describe GdsApi::Response do
 
     it "should be nil in absence of Expires header and max-age" do
       mock_http_response = stub(:body => "A Response body", :code => 200, :headers => { :date => Time.now.httpdate })
+      response = GdsApi::Response.new(mock_http_response)
+
+      assert_nil response.expires_in
+    end
+
+    it "should be nil in absence of Date header" do
+      cache_control_headers = { :cache_control => 'public, max-age=900' }
+      mock_http_response = stub(:body => "A Response body", :code => 200, :headers => cache_control_headers)
       response = GdsApi::Response.new(mock_http_response)
 
       assert_nil response.expires_in
