@@ -83,10 +83,6 @@ At time of writing, these are:
 
 * [WebMock](https://github.com/bblimke/webmock)
 
-## To Do
-
-* Make timeout handling work
-
 ## Licence
 
 Released under the MIT Licence, a copy of which can be found in the file
