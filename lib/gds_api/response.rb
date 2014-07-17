@@ -1,6 +1,7 @@
 require 'json'
 require 'ostruct'
 require 'forwardable'
+require 'rack/cache'
 require_relative 'core-ext/openstruct'
 
 module GdsApi
@@ -42,6 +43,27 @@ module GdsApi
 
     def headers
       @http_response.headers
+    end
+
+    def expires_at
+      if headers[:date] && cache_control_headers = headers[:cache_control]
+        max_age = Rack::Cache::CacheControl.new(cache_control_headers)['max-age']
+        response_date = Time.parse(headers[:date])
+
+        return response_date + max_age.to_i if max_age
+      end
+      Time.parse(headers[:expires]) if headers[:expires]
+    end
+
+    def expires_in
+      return unless headers[:date]
+
+      max_age = Rack::Cache::CacheControl.new(headers[:cache_control])['max-age'] if headers[:cache_control]
+      max_age ||= Time.parse(headers[:expires]) - Time.parse(headers[:date]) if headers[:expires]
+      return unless max_age
+
+      age = Time.now.utc - Time.parse(headers[:date])
+      max_age.to_i - age.to_i
     end
 
     def to_hash
