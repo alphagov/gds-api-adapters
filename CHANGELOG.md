@@ -1,3 +1,12 @@
+# 12.2.0
+
+Add .expires_in, .expires_at to GDSApi::Response
+
+These methods expose the expiration time in seconds
+and absolute time value respectively, by inferring
+them from max-age or expires values received in
+response from content store.
+
 # 12.1.0
 
 * Add rummager test helpers
