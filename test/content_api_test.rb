@@ -299,6 +299,16 @@ describe GdsApi::ContentApi do
       assert_equal "#{@base_api_url}/tags/authors/justin-thyme.json", first_section.id
     end
 
+    it "returns draft tags if requested" do
+      content_api_has_draft_and_live_tags(type: "specialist", draft: ["draft-tag-1"], live: ["live-tag-1"])
+
+      all_tags = @api.tags("specialist", draft: true)
+      assert_equal [["draft-tag-1", "draft"], ["live-tag-1", "live"]].to_set, all_tags.map {|t| [t.slug, t.state] }.to_set
+
+      live_tags = @api.tags("specialist")
+      assert_equal [["live-tag-1", "live"]], live_tags.map {|t| [t.slug, t.state] }
+    end
+
     it "returns a list of root tags of a given type" do
       content_api_has_root_tags("author", ["oliver-sudden", "percy-vere"])
       response = @api.root_tags("author")

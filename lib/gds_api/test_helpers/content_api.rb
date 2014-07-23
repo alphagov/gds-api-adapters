@@ -71,6 +71,20 @@ module GdsApi
         end
       end
 
+      def content_api_has_draft_and_live_tags(options = {})
+        type = options.fetch(:type)
+        live_tags = options.fetch(:live).map { |tag| tag_result(tag, type, state: 'live') }
+        draft_tags = options.fetch(:draft).map { |tag| tag_result(tag, type, state: 'draft') }
+
+        body = plural_response_base.merge("results" => (live_tags + draft_tags))
+        url = "#{CONTENT_API_ENDPOINT}/tags.json?type=#{type}&draft=true"
+        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+
+        body = plural_response_base.merge("results" => live_tags)
+        url = "#{CONTENT_API_ENDPOINT}/tags.json?type=#{type}"
+        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+      end
+
       def content_api_has_tags(tag_type, slugs_or_tags)
         body = plural_response_base.merge(
           "results" => slugs_or_tags.map { |tag| tag_result(tag, tag_type) }
@@ -336,7 +350,7 @@ module GdsApi
         end
       end
 
-      def tag_result(slug_or_hash, tag_type = nil)
+      def tag_result(slug_or_hash, tag_type = nil, options = {})
         tag = tag_hash(slug_or_hash, tag_type)
 
         parent = tag_result(tag[:parent]) if tag[:parent]
@@ -356,7 +370,8 @@ module GdsApi
           "content_with_tag" => {
             "id" => "#{CONTENT_API_ENDPOINT}/with_tag.json?tag=#{CGI.escape(tag[:slug])}",
             "web_url" => "http://www.test.gov.uk/browse/#{tag[:slug]}"
-          }
+          },
+          "state" => options[:state]
         }
       end
 

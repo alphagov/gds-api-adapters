@@ -31,6 +31,7 @@ class GdsApi::ContentApi < GdsApi::Base
       "type=#{CGI.escape(tag_type)}"
     ]
     params << "sort=#{options[:sort]}" if options.has_key?(:sort)
+    params << "draft=true" if options[:draft]
 
     get_list!("#{base_url}/tags.json?#{params.join('&')}")
   end
