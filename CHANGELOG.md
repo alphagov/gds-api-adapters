@@ -1,3 +1,7 @@
+# 12.4.1
+
+* Fixes services and info data fixture
+
 # 12.4.0
 
 * Add `rummager_has_no_services_and_info_data_for_organisation`
