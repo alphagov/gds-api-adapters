@@ -1,3 +1,7 @@
+# 12.4.0
+
+* Add `rummager_has_no_services_and_info_data_for_organisation`
+
 # 12.3.0
 
 * Add "draft" option to the content_api.tags method.
