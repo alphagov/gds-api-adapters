@@ -7,34 +7,7 @@
       "options": [
       {
         "value": {
-          "title": "Waste",
-          "slug": "environmental-management/waste",
-          "example_info": {
-            "total": 49,
-            "examples": [
-            {
-              "title": "Register as a waste carrier, broker or dealer (England)",
-              "link": "/waste-carrier-or-broker-registration"
-            },
-            {
-              "title": "Hazardous waste producer registration (England and Wales)",
-              "link": "/hazardous-waste-producer-registration"
-            },
-            {
-              "title": "Check if you need an environmental permit",
-              "link": "/environmental-permit-check-if-you-need-one"
-            },
-            {
-              "title": "Classify different types of waste",
-              "link": "/how-to-classify-different-types-of-waste"
-            }
-            ]
-          }
-        },
-        "documents": 47
-      },
-      {
-        "value": {
+          "link": "/environmental-management/environmental-permits",
           "title": "Environmental permits",
           "slug": "environmental-management/environmental-permits",
           "example_info": {
@@ -55,6 +28,34 @@
             {
               "title": "Environmental permitting (EP) charges scheme: April 2014 to March 2015",
               "link": "/government/publications/environmental-permitting-ep-charges-scheme-april-2014-to-march-2015"
+            }
+            ]
+          }
+        },
+        "documents": 47
+      },
+        "value": {
+          "link": "/environmental-management/waste",
+          "title": "Waste",
+          "slug": "environmental-management/waste",
+          "example_info": {
+            "total": 49,
+            "examples": [
+            {
+              "title": "Register as a waste carrier, broker or dealer (England)",
+              "link": "/waste-carrier-or-broker-registration"
+            },
+            {
+              "title": "Hazardous waste producer registration (England and Wales)",
+              "link": "/hazardous-waste-producer-registration"
+            },
+            {
+              "title": "Check if you need an environmental permit",
+              "link": "/environmental-permit-check-if-you-need-one"
+            },
+            {
+              "title": "Classify different types of waste",
+              "link": "/how-to-classify-different-types-of-waste"
             }
             ]
           }

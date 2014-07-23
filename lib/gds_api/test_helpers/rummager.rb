@@ -26,7 +26,7 @@ module GdsApi
       def example_query
         {
           filter_organisations: ["an-organisation-slug"],
-          facet_specialist_sectors: "1000,examples:4,example_scope:global"
+          facet_specialist_sectors: "1000,examples:4,example_scope:global,order:value.title"
         }
       end
     end
