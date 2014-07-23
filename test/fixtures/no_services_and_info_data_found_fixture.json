@@ -1,0 +1,14 @@
+{
+  "results": [],
+  "total": 712,
+  "start": 0,
+  "facets": {
+    "specialist_sectors": {
+      "options": [],
+      "documents_with_no_value": 712,
+      "total_options": 0,
+      "missing_options": 0
+    }
+  },
+  "suggested_queries": []
+}
