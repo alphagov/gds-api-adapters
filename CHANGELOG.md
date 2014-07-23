@@ -1,3 +1,7 @@
+# 12.3.0
+
+* Add "draft" option to the content_api.tags method.
+
 # 12.2.0
 
 Add .expires_in, .expires_at to GDSApi::Response
