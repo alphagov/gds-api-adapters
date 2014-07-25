@@ -1,3 +1,8 @@
+# 12.4.2
+
+* Stub "everything including draft" calls for tag test helpers
+  even when the helpers themselves aren't setting up draft tags.
+
 # 12.4.1
 
 * Fixes services and info data fixture
