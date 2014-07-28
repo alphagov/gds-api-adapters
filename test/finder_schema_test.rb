@@ -49,8 +49,24 @@ describe GdsApi::FinderSchema do
 
     let(:formatted_attrs) {
       {
-        "Case type" => ["CA98 and civil cartels"],
-        "Market sector" => ["Aerospace"],
+        "case_type" => {
+          :label => "Case type",
+          :values => [
+            {
+              :label => "CA98 and civil cartels",
+              :slug => "ca98-and-civil-cartels"
+            }
+          ]
+        }, 
+        "market_sector" => {
+          :label => "Market sector",
+          :values => [
+            {
+              :label => "Aerospace",
+              :slug=>"aerospace"
+            }
+          ]
+        }
       }
     }
 
@@ -83,7 +99,15 @@ describe GdsApi::FinderSchema do
 
       let(:formatted_attrs) {
         {
-          "Market sector" => ["Aerospace"],
+          "market_sector" => {
+            :label => "Market sector",
+            :values => [
+              {
+                :label => "Aerospace",
+                :slug=>"aerospace"
+              }
+            ]
+          }
         }
       }
 
