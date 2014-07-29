@@ -57,6 +57,10 @@ module GdsApi
           end
         end
       end
+
+      def content_store_isnt_available
+        stub_request(:any, /#{CONTENT_STORE_ENDPOINT}\/.*/).to_return(:status => 503)
+      end
     end
   end
 end
