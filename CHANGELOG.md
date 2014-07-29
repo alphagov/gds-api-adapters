@@ -1,3 +1,7 @@
+# 12.5.0
+
+* Add test helper for content store being unavailable
+
 # 12.4.2
 
 * Stub "everything including draft" calls for tag test helpers
