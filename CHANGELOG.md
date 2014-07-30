@@ -1,3 +1,9 @@
+# 13.0.0
+
+* `FinderSchema#user_friendly_values` now returns a hash with the slug version
+   of the attribute as the key, with a label and a values Array, which contains
+   a label and slug version of each value.
+
 # 12.5.0
 
 * Add test helper for content store being unavailable
