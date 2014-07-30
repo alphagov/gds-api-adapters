@@ -8,8 +8,11 @@ class GdsApi::FinderSchema
   def user_friendly_values(document_attributes)
     document_attributes.each_with_object({}) do |(k, v), values|
       values.store(
-        user_friendly_facet_label(k.to_s),
-        user_friendly_facet_value(k.to_s, v),
+        k.to_s,
+        {
+          label: user_friendly_facet_label(k.to_s),
+          values: user_friendly_facet_value(k.to_s, v),
+        }
       )
     end
   end
@@ -29,7 +32,10 @@ class GdsApi::FinderSchema
 
   def user_friendly_facet_value(facet_key, value)
     Array(value).map { |value|
-      find_schema_allowed_value_label(facet_key, value)
+      {
+        label: find_schema_allowed_value_label(facet_key, value),
+        slug: value,
+      }
     }
   end
 
