@@ -1,3 +1,7 @@
+# 14.0.0
+
+* Split content item write API from the content store client into a new publishing API client.
+
 # 13.0.0
 
 * `FinderSchema#user_friendly_values` now returns a hash with the slug version
