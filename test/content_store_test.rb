@@ -17,12 +17,5 @@ describe GdsApi::ContentStore do
       response = @api.content_item(base_path)
       assert_equal base_path, response["base_path"]
     end
-
-    it "should create the item" do
-      base_path = "/test-to-content-store"
-      stub_content_store_put_item(base_path)
-      response = @api.put_content_item(base_path, item_for_base_path(base_path))
-      assert_equal base_path, response["base_path"]
-    end
   end
 end
