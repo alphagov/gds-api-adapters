@@ -13,8 +13,12 @@ module GdsApi
         run_example_query
       end
 
-      private
+      def rummager_has_specialist_sector_organisations(sub_sector)
+        stub_request_for sub_sector_organisations_results
+        run_example_query
+      end
 
+    private
       def stub_request_for(result_set)
         stub_request(:get, /example.com\/unified_search/).to_return(body: result_set)
       end
@@ -36,6 +40,15 @@ module GdsApi
         File.read(
           File.expand_path(
             "../../../../test/fixtures/no_services_and_info_data_found_fixture.json",
+            __FILE__
+          )
+        )
+      end
+
+      def sub_sector_organisations_results
+        File.read(
+          File.expand_path(
+            "../../../../test/fixtures/sub_sector_organisations.json",
             __FILE__
           )
         )
