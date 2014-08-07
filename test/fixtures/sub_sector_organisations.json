@@ -1,0 +1,57 @@
+{
+  "suggested_queries": [],
+  "facets": {
+    "organisations": {
+      "missing_options": 0,
+      "total_options": 4,
+      "documents_with_no_value": 2,
+      "options": [
+        {
+          "documents": 3,
+          "value": {
+            "organisation_state": "live",
+            "organisation_type": "Ministerial department",
+            "acronym": "DECC",
+            "title": "Department of Energy & Climate Change",
+            "link": "/government/organisations/department-of-energy-climate-change",
+            "slug": "department-of-energy-climate-change"
+          }
+        },
+        {
+          "documents": 2,
+          "value": {
+            "organisation_state": "joining",
+            "acronym": "AAIB",
+            "title": "Air Accidents Investigation Branch",
+            "link": "/government/organisations/air-accidents-investigation-branch",
+            "slug": "air-accidents-investigation-branch"
+          }
+        },
+        {
+          "documents": 1,
+          "value": {
+            "organisation_state": "live",
+            "acronym": "DPMO",
+            "title": "Deputy Prime Minister's Office",
+            "link": "/government/organisations/deputy-prime-ministers-office",
+            "slug": "deputy-prime-ministers-office"
+          }
+        },
+        {
+          "documents": 1,
+          "value": {
+            "organisation_state": "live",
+            "organisation_type": "Ministerial department",
+            "acronym": "FCO",
+            "title": "Foreign & Commonwealth Office",
+            "link": "/government/organisations/foreign-commonwealth-office",
+            "slug": "foreign-commonwealth-office"
+          }
+        }
+      ]
+    }
+  },
+  "start": 0,
+  "total": 8,
+  "results": []
+}
