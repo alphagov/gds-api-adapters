@@ -4,17 +4,17 @@ module GdsApi
   module TestHelpers
     module Rummager
       def rummager_has_services_and_info_data_for_organisation
-        stub_request_for search_results_found
+        stub_request_for(search_results_found)
         run_example_query
       end
 
       def rummager_has_no_services_and_info_data_for_organisation
-        stub_request_for no_search_results_found
+        stub_request_for(no_search_results_found)
         run_example_query
       end
 
       def rummager_has_specialist_sector_organisations(sub_sector)
-        stub_request_for sub_sector_organisations_results
+        stub_request_for(sub_sector_organisations_results)
         run_example_query
       end
 
