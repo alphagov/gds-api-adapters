@@ -1,3 +1,7 @@
+# 14.1.0
+
+* Add rummager test helper for stubbing sub-sector organisations (`rummager_has_specialist_sector_organisations`).
+
 # 14.0.0
 
 * Split content item write API from the content store client into a new publishing API client.
