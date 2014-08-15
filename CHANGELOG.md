@@ -1,3 +1,7 @@
+# 14.1.1
+
+* Update the content API sorted tags test helper to support draft mode.
+
 # 14.1.0
 
 * Add rummager test helper for stubbing sub-sector organisations (`rummager_has_specialist_sector_organisations`).
