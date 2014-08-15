@@ -103,8 +103,12 @@ module GdsApi
           "results" => slugs_or_tags.map { |tag| tag_result(tag, tag_type) }
         )
 
-        url = "#{CONTENT_API_ENDPOINT}/tags.json?sort=#{sort_order}&type=#{tag_type}"
-        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+        [
+          "#{CONTENT_API_ENDPOINT}/tags.json?sort=#{sort_order}&type=#{tag_type}",
+          "#{CONTENT_API_ENDPOINT}/tags.json?draft=true&sort=#{sort_order}&type=#{tag_type}"
+        ].each do |url|
+          stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+        end
       end
 
       def content_api_has_child_tags(tag_type, parent_slug_or_hash, child_tag_ids)
