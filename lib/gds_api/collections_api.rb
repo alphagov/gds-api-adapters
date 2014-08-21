@@ -7,7 +7,7 @@ class GdsApi::CollectionsApi < GdsApi::Base
     get_json(collections_api_url(base_path))
   end
 
-  private
+private
 
   def collections_api_url(base_path)
     "#{endpoint}/curated-lists#{base_path}"

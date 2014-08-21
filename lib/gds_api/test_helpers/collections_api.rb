@@ -4,7 +4,6 @@ require 'json'
 module GdsApi
   module TestHelpers
     module CollectionsApi
-
       COLLECTIONS_API_ENDPOINT = Plek.current.find('collections-api')
 
       def collections_api_has_curated_lists_for(base_path)
@@ -12,7 +11,7 @@ module GdsApi
 
         stub_request(:get, url).to_return(
           status: 200,
-          body: body.merge(base_path: base_path).to_json,
+          body: body_with_options(base_path: base_path).to_json,
         )
       end
 
@@ -24,10 +23,14 @@ module GdsApi
         )
       end
 
-      private
+    private
 
-      def body
+      def body_with_options(options)
         {
+          base_path: options.fetch(:base_path),
+          title: 'Example title',
+          description: 'example description',
+          public_updated_at: "2014-03-04T13:58:11+00:00",
           details: {
             groups: [
               # Curated content excluding untagged content
