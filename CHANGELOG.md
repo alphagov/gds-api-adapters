@@ -1,3 +1,7 @@
+# 14.2.0
+
+* Adds basic collections API client and test helpers
+
 # 14.1.1
 
 * Update the content API sorted tags test helper to support draft mode.
