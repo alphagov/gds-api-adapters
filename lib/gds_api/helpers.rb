@@ -1,5 +1,6 @@
 require 'gds_api/asset_manager'
 require 'gds_api/business_support_api'
+require 'gds_api/collections_api'
 require 'gds_api/content_api'
 require 'gds_api/content_store'
 require 'gds_api/fact_cave'
@@ -19,6 +20,10 @@ module GdsApi
 
     def business_support_api(options = {})
       @business_support_api ||= GdsApi::BusinessSupportApi.new(Plek.current.find("business-support-api"), options)
+    end
+
+    def collections_api(options = {})
+      @collections_api ||= GdsApi::CollectionsApi.new(Plek.current.find("collections-api"), options)
     end
 
     def content_api(options = {})
