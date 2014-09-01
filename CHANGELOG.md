@@ -1,3 +1,8 @@
+# 14.3.0
+
+* Add "does not have" stubs for content api tags.
+* Expand collections api test helpers.
+
 # 14.2.0
 
 * Adds basic collections API client and test helpers
