@@ -31,27 +31,55 @@ module GdsApi
           title: 'Example title',
           description: 'example description',
           public_updated_at: "2014-03-04T13:58:11+00:00",
+          parent: {
+            id: "nd-prison",
+            web_url: "http://example.com/browse/oil-and-gas",
+            details: {
+              description: nil,
+              short_description: nil,
+              type: "section",
+          },
+          content_with_tag: {
+            id: "http://example.com/with_tag.json?section=oil-and-gas",
+            web_url: "http://example.com/browse/oil-and-gas"
+          },
+          parent: nil,
+          title: "Oil and gas",
+          state: "live",
+          },
           details: {
             groups: [
               # Curated content excluding untagged content
               {
                 name: "Oil rigs",
                 contents: [
-                  "http://example.com/api/oil-rig-safety-requirements.json",
-                  "http://example.com/api/oil-rig-staffing.json"
+                  {
+                    web_url: "http://example.com/api/oil-rig-safety-requirements.json",
+                    title: "Oil rig safety requirements",
+                  },
+                  {
+                    web_url: "http://example.com/api/oil-rig-staffing.json",
+                    title: "Oil rig staffing",
+                  }
                 ]
               },
               {
                 name: "Piping",
                 contents: [
-                  "http://example.com/api/undersea-piping-restrictions.json"
+                  {
+                    web_url: "http://example.com/api/undersea-piping-restrictions.json",
+                    title: "Undersea piping restrictions",
+                  }
                 ]
               },
               # Uncurated content
               {
                 name: "Other",
                 contents: [
-                  "http://example.com/api/north-sea-shipping-lanes.json"
+                  {
+                    web_url: "http://example.com/api/north-sea-shipping-lanes.json",
+                    title: "North sea shipping lanes",
+                  }
                 ]
               }
             ]
