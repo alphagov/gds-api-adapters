@@ -71,6 +71,24 @@ module GdsApi
         end
       end
 
+      def content_api_does_not_have_tag(tag_type, slug)
+        body = {
+          "_response_info" => {
+            "status" => "not found"
+          }
+        }
+
+        urls = ["#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(tag_type)}/#{CGI.escape(slug)}.json"]
+
+        if tag_type == "section"
+          urls << "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(slug)}.json"
+        end
+
+        urls.each do |url|
+          stub_request(:get, url).to_return(status: 404, body: body.to_json, headers: {})
+        end
+      end
+
       def content_api_has_draft_and_live_tags(options = {})
         type = options.fetch(:type)
         live_tags = options.fetch(:live).map { |tag| tag_result(tag, type, state: 'live') }
@@ -83,6 +101,21 @@ module GdsApi
         body = plural_response_base.merge("results" => live_tags)
         url = "#{CONTENT_API_ENDPOINT}/tags.json?type=#{type}"
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+      end
+
+      def content_api_does_not_have_tags(tag_type, slugs)
+        body = {
+          "_response_info" => {
+            "status" => "not found"
+          }
+        }
+
+        [
+          "#{CONTENT_API_ENDPOINT}/tags.json?type=#{tag_type}",
+          "#{CONTENT_API_ENDPOINT}/tags.json?draft=true&type=#{tag_type}"
+        ].each do |url|
+          stub_request(:get, url).to_return(status: 404, body: body.to_json, headers: {})
+        end
       end
 
       def content_api_has_tags(tag_type, slugs_or_tags)
