@@ -32,20 +32,20 @@ module GdsApi
           description: 'example description',
           public_updated_at: "2014-03-04T13:58:11+00:00",
           parent: {
-            id: "nd-prison",
+            id: "http://example.com/oil-and-gas",
             web_url: "http://example.com/browse/oil-and-gas",
             details: {
               description: nil,
               short_description: nil,
               type: "section",
-          },
-          content_with_tag: {
-            id: "http://example.com/with_tag.json?section=oil-and-gas",
-            web_url: "http://example.com/browse/oil-and-gas"
-          },
-          parent: nil,
-          title: "Oil and gas",
-          state: "live",
+            },
+            content_with_tag: {
+              id: "http://example.com/with_tag.json?section=oil-and-gas",
+              web_url: "http://example.com/browse/oil-and-gas"
+            },
+            parent: nil,
+            title: "Oil and gas",
+            state: "live",
           },
           details: {
             groups: [
