@@ -179,7 +179,9 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
-      def content_api_has_artefacts_with_a_tag(tag_type, slug, artefact_slugs=[])
+      def content_api_has_artefacts_with_a_tag(tag_type, slug, artefact_slugs=[], options={})
+        draft = options[:draft] || false
+
         body = plural_response_base.merge(
           "results" => artefact_slugs.map do |artefact_slug|
             artefact_for_slug(artefact_slug)
@@ -189,28 +191,56 @@ module GdsApi
         endpoint = "#{CONTENT_API_ENDPOINT}/with_tag.json"
         resp = { status: 200, body: body.to_json, headers: {} }
 
+        unless draft
+          stub_request(:get, endpoint)
+            .with(:query => { tag_type => slug })
+            .to_return(resp)
+
+          if tag_type == "section"
+            stub_request(:get, endpoint)
+              .with(:query => { "tag" => slug })
+              .to_return(resp)
+          end
+        end
+
         stub_request(:get, endpoint)
-          .with(:query => { tag_type => slug })
+          .with(:query => { tag_type => slug, "draft" => "true" })
           .to_return(resp)
 
         if tag_type == "section"
           stub_request(:get, endpoint)
-            .with(:query => { "tag" => slug })
+            .with(:query => { "tag" => slug, "draft" => "true" })
             .to_return(resp)
         end
 
         sort_orders = ["alphabetical", "curated"]
         sort_orders.each do |order|
+          unless draft
+            stub_request(:get, endpoint)
+              .with(:query => { tag_type => slug, "sort" => order })
+              .to_return(resp)
+
+            if tag_type == "section"
+              stub_request(:get, endpoint)
+                .with(:query => { "tag" => slug, "sort" => order })
+                .to_return(resp)
+            end
+          end
+
           stub_request(:get, endpoint)
-            .with(:query => { tag_type => slug, "sort" => order })
+            .with(:query => { tag_type => slug, "sort" => order, "draft" => "true" })
             .to_return(resp)
 
           if tag_type == "section"
             stub_request(:get, endpoint)
-              .with(:query => { "tag" => slug, "sort" => order })
+              .with(:query => { "tag" => slug, "sort" => order, "draft" => "true" })
               .to_return(resp)
           end
         end
+      end
+
+      def content_api_has_artefacts_with_a_draft_tag(tag_type, slug, artefact_slugs=[])
+        content_api_has_artefacts_with_a_tag(tag_type, slug, artefact_slugs, draft: true)
       end
 
       def content_api_has_sorted_artefacts_with_a_tag(tag_type, slug, sort_order, artefact_slugs=[])
