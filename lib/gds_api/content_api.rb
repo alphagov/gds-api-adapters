@@ -65,6 +65,7 @@ class GdsApi::ContentApi < GdsApi::Base
 
     url = "#{base_url}/with_tag.json?#{tag_key}=#{CGI.escape(tag)}"
     url << "&group_by=#{CGI.escape(options[:group_by])}" if options.has_key?(:group_by)
+    url << "&draft=true" if options[:draft]
 
     get_list!(url)
   end
