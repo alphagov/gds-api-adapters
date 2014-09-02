@@ -1,3 +1,7 @@
+# 14.4.0
+
+* Add more content api draft tag functions.
+
 # 14.3.0
 
 * Add "does not have" stubs for content api tags.
