@@ -101,6 +101,16 @@ module GdsApi
         body = plural_response_base.merge("results" => live_tags)
         url = "#{CONTENT_API_ENDPOINT}/tags.json?type=#{type}"
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+
+        if options[:sort_order]
+          body = plural_response_base.merge("results" => (live_tags + draft_tags))
+          url = "#{CONTENT_API_ENDPOINT}/tags.json?type=#{type}&draft=true&sort=#{options[:sort_order]}"
+          stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+
+          body = plural_response_base.merge("results" => live_tags)
+          url = "#{CONTENT_API_ENDPOINT}/tags.json?type=#{type}&sort=#{options[:sort_order]}"
+          stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
+        end
       end
 
       def content_api_does_not_have_tags(tag_type, slugs)
