@@ -1,3 +1,7 @@
+# 14.4.1
+
+* Corrects the collections api endpoint for curated lists
+
 # 14.4.0
 
 * Add more content api draft tag functions.
