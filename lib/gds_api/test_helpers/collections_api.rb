@@ -16,7 +16,7 @@ module GdsApi
       end
 
       def collections_api_has_no_curated_lists_for(base_path)
-        url = COLLECTIONS_API_ENDPOINT + "/curated-lists" + base_path
+        url = COLLECTIONS_API_ENDPOINT + "/specialist-sectors" + base_path
 
         stub_request(:get, url).to_return(
           status: 404
