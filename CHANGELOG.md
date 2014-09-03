@@ -1,3 +1,7 @@
+# 14.4.2
+
+* Corrects the endpoint for `#collections_api_has_no_curated_lists_for` test helper
+
 # 14.4.1
 
 * Corrects the collections api endpoint for curated lists
