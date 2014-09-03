@@ -10,6 +10,6 @@ class GdsApi::CollectionsApi < GdsApi::Base
 private
 
   def collections_api_url(base_path)
-    "#{endpoint}/curated-lists#{base_path}"
+    "#{endpoint}/specialist-sectors#{base_path}"
   end
 end

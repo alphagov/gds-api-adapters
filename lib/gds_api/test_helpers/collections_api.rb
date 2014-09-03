@@ -7,7 +7,7 @@ module GdsApi
       COLLECTIONS_API_ENDPOINT = Plek.current.find('collections-api')
 
       def collections_api_has_curated_lists_for(base_path)
-        url = COLLECTIONS_API_ENDPOINT + "/curated-lists" + base_path
+        url = COLLECTIONS_API_ENDPOINT + "/specialist-sectors" + base_path
 
         stub_request(:get, url).to_return(
           status: 200,
