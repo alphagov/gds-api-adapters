@@ -40,9 +40,14 @@ module GdsApi
         }
       end
 
-      def stub_artefact_registration(slug, request_details = nil)
+      def stub_artefact_registration(slug, request_details = nil, custom_matcher = false)
         stub = stub_http_request(:put, "#{PANOPTICON_ENDPOINT}/artefacts/#{slug}.json")
-        stub.with(:body => request_details.to_json) unless request_details.nil?
+
+        if request_details
+          request_details = request_details.to_json unless custom_matcher
+          stub.with(:body => request_details) 
+        end
+
         stub.to_return(:status => 201)
       end
     end
