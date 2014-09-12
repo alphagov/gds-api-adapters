@@ -1,3 +1,7 @@
+# 14.5.0
+
+* Add `custom_matcher` parameter to panopticon `stub_artefact_registration` to allow partial matching of request body.
+
 # 14.4.2
 
 * Corrects the endpoint for `#collections_api_has_no_curated_lists_for` test helper
