@@ -25,7 +25,7 @@ describe GdsApi::Support do
   it "throws an exception when the support app isn't available" do
     support_isnt_available
 
-    assert_raises(GdsApi::HTTPErrorResponse) { @api.create_foi_request({}) }
+    assert_raises(GdsApi::HTTPServerError) { @api.create_foi_request({}) }
   end
 
   it "can report a problem" do
@@ -67,7 +67,7 @@ describe GdsApi::Support do
   it "throws an exception when the support app isn't available" do
     support_isnt_available
 
-    assert_raises(GdsApi::HTTPErrorResponse) { @api.create_problem_report({}) }
+    assert_raises(GdsApi::HTTPServerError) { @api.create_problem_report({}) }
   end
 
   it "can pass service feedback" do
@@ -85,7 +85,7 @@ describe GdsApi::Support do
   it "throws an exception when the support app isn't available" do
     support_isnt_available
 
-    assert_raises(GdsApi::HTTPErrorResponse) { @api.create_service_feedback({}) }
+    assert_raises(GdsApi::HTTPServerError) { @api.create_service_feedback({}) }
   end
 
   it "gets the correct feedback URL" do

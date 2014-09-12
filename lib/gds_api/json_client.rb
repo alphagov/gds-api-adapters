@@ -109,15 +109,8 @@ module GdsApi
     private
     def do_raw_request(method, url, params = nil)
       response = do_request(method, url, params)
-
-    rescue RestClient::ResourceNotFound => e
-      raise GdsApi::HTTPNotFound.new(e.http_code, "url: #{url}")
-
-    rescue RestClient::Gone => e
-      raise GdsApi::HTTPGone.new(e.http_code, "url: #{url}")
-
     rescue RestClient::Exception => e
-      raise GdsApi::HTTPErrorResponse.new(e.response.code.to_i, "url: #{url}\n#{e.response.body}")
+      raise build_specific_http_error(e, url)
     end
 
     # method: the symbolic name of the method to use, e.g. :get, :post
@@ -130,13 +123,6 @@ module GdsApi
 
       begin
         response = do_request_with_cache(method, url, (params.to_json if params), additional_headers)
-
-      rescue RestClient::ResourceNotFound => e
-        raise GdsApi::HTTPNotFound.new(e.http_code, "url: #{url}")
-
-      rescue RestClient::Gone => e
-        raise GdsApi::HTTPGone.new(e.http_code, "url: #{url}")
-
       rescue RestClient::Exception => e
         # Attempt to parse the body as JSON if possible
         error_details = begin
@@ -144,7 +130,7 @@ module GdsApi
         rescue JSON::ParserError
           nil
         end
-        raise GdsApi::HTTPErrorResponse.new(e.http_code, "url: #{url}\n#{e.http_body}", error_details)
+        raise build_specific_http_error(e, url, error_details)
       end
 
       # If no custom response is given, just instantiate Response
