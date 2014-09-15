@@ -1,3 +1,8 @@
+# 14.6.0
+
+* Add extra layer of inheritance for HTTP Exception classes to provide HTTPServerError and HTTPClientError in order to allow applications to to catch ranges of Server/Client type errors.
+* Add a helper method, `build_specific_http_error`, in order to handle raising specific error types based on HTTP error codes.
+
 # 14.5.0
 
 * Add `custom_matcher` parameter to panopticon `stub_artefact_registration` to allow partial matching of request body.
