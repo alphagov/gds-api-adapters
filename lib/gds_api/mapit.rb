@@ -8,7 +8,7 @@ class GdsApi::Mapit < GdsApi::Base
     return Location.new(response) unless response.nil?
   rescue GdsApi::HTTPErrorResponse => e
     # allow 400 errors, as they can be invalid postcodes people have entered
-    raise GdsApi::HTTPErrorResponse.new(e.code) unless e.code == 400
+    raise e unless e.code == 400
   end
 
   def areas_for_type(type)

@@ -42,7 +42,7 @@ describe GdsApi::PerformancePlatform::DataIn do
 
   it "throws an exception when the support app isn't available" do
     stub_pp_isnt_available
-    assert_raises(GdsApi::HTTPErrorResponse) { @api.submit_service_feedback_day_aggregate("doesnt_matter", {}) }
+    assert_raises(GdsApi::HTTPServerError) { @api.submit_service_feedback_day_aggregate("doesnt_matter", {}) }
   end
 
   it "throws an exception when the the bucket for that slug hasn't been defined" do

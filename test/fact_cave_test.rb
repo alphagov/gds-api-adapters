@@ -4,7 +4,7 @@ require "gds_api/fact_cave"
 describe GdsApi::FactCave do
   it "should raise an exception if the service at the fact cave URI returns a 500" do
     stub_request(:get, /example.com\/facts/).to_return(status: [500, "Internal Server Error"])
-    assert_raises(GdsApi::HTTPErrorResponse) do
+    assert_raises(GdsApi::HTTPServerError) do
       GdsApi::FactCave.new("http://example.com").fact("foo")
     end
   end
@@ -22,7 +22,7 @@ describe GdsApi::FactCave do
   end
 
   it "should return the fact deserialized from json" do
-    fact_cave_result = {"id" => "vat-rate", "title" => "VAT rate", "details" => { 
+    fact_cave_result = {"id" => "vat-rate", "title" => "VAT rate", "details" => {
       "value" => "20%", "description" => "Value Added Tax rate" }}
     stub_request(:get, "http://example.com/facts/vat-rate").to_return(body: fact_cave_result.to_json)
     result = GdsApi::FactCave.new("http://example.com").fact("vat-rate")

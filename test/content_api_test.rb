@@ -628,7 +628,7 @@ describe GdsApi::ContentApi do
       stub_request(:get, %r{\A#{@base_api_url}/business_support_schemes.json}).
         to_return(:status => 503, :body => "Gateway timeout")
 
-      assert_raises GdsApi::HTTPErrorResponse do
+      assert_raises GdsApi::HTTPServerError do
         @api.business_support_schemes(['foo', 'bar'])
       end
     end
@@ -682,7 +682,7 @@ describe GdsApi::ContentApi do
       stub_request(:get, %r[\A#{@base_api_url}/licences]).
         to_return(:status => [503, "Service temporarily unabailable"])
 
-      assert_raises GdsApi::HTTPErrorResponse do
+      assert_raises GdsApi::HTTPServerError do
         @api.licences_for_ids([123,124])
       end
     end

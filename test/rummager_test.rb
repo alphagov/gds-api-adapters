@@ -10,7 +10,7 @@ describe GdsApi::Rummager do
 
   it "should raise an exception if the service at the search URI returns a 500" do
     stub_request(:get, /example.com\/search/).to_return(status: [500, "Internal Server Error"])
-    assert_raises(GdsApi::HTTPErrorResponse) do
+    assert_raises(GdsApi::HTTPServerError) do
       GdsApi::Rummager.new("http://example.com").search("query")
     end
   end
@@ -87,7 +87,7 @@ describe GdsApi::Rummager do
 
   it "#advanced_search should raise an exception if the service at the search URI returns a 500" do
     stub_request(:get, /example.com\/advanced_search/).to_return(status: [500, "Internal Server Error"])
-    assert_raises(GdsApi::HTTPErrorResponse) do
+    assert_raises(GdsApi::HTTPServerError) do
       GdsApi::Rummager.new("http://example.com").advanced_search({keywords: "query"})
     end
   end
@@ -145,7 +145,7 @@ describe GdsApi::Rummager do
 
   it "#unified_search should raise an exception if the service at the search URI returns a 500" do
     stub_request(:get, /example.com\/unified_search.json/).to_return(status: [500, "Internal Server Error"])
-    assert_raises(GdsApi::HTTPErrorResponse) do
+    assert_raises(GdsApi::HTTPServerError) do
       GdsApi::Rummager.new("http://example.com").unified_search(q: "query")
     end
   end
@@ -162,7 +162,7 @@ describe GdsApi::Rummager do
       status: [400, "Bad Request"],
       body: %q("error":"Filtering by \"coffee\" is not allowed"),
     )
-    assert_raises(GdsApi::HTTPErrorResponse) do
+    assert_raises(GdsApi::HTTPClientError) do
       GdsApi::Rummager.new("http://example.com").unified_search(q: "query", filter_coffee: "tea")
     end
   end
@@ -172,7 +172,7 @@ describe GdsApi::Rummager do
       status: [422, "Bad Request"],
       body: %q("error":"Filtering by \"coffee\" is not allowed"),
     )
-    assert_raises(GdsApi::HTTPErrorResponse) do
+    assert_raises(GdsApi::HTTPClientError) do
       GdsApi::Rummager.new("http://example.com").unified_search(q: "query", filter_coffee: "tea")
     end
   end

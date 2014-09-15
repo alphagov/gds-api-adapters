@@ -183,7 +183,7 @@ EOS
   def test_should_raise_exception_on_api_error
     licence_returns_error("866-5-1")
 
-    assert_raises GdsApi::HTTPErrorResponse do
+    assert_raises GdsApi::HTTPServerError do
       api.details_for_licence("866-5-1")
     end
   end

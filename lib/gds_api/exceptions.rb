@@ -21,10 +21,17 @@ module GdsApi
     end
   end
 
-  class HTTPNotFound < HTTPErrorResponse
+  class HTTPClientError < HTTPErrorResponse
   end
 
-  class HTTPGone < HTTPErrorResponse; end
+  class HTTPServerError < HTTPErrorResponse
+  end
+
+  class HTTPNotFound < HTTPClientError
+  end
+
+  class HTTPGone < HTTPClientError
+  end
 
   class NoBearerToken < BaseError; end
 
@@ -37,6 +44,24 @@ module GdsApi
 
     def ignoring_missing(&block)
       ignoring([HTTPNotFound, HTTPGone], &block)
+    end
+
+    def build_specific_http_error(error, url, details = nil)
+      message = "url: #{url}\n#{error.http_body}"
+      code = error.http_code
+
+      case code
+      when 404
+        GdsApi::HTTPNotFound.new(code, message, details)
+      when 410
+        GdsApi::HTTPGone.new(code, message, details)
+      when (400..499)
+        GdsApi::HTTPClientError.new(code, message, details)
+      when (500..599)
+        GdsApi::HTTPServerError.new(code, message, details)
+      else
+        GdsApi::HTTPErrorResponse.new(code, message, details)
+      end
     end
   end
 end
