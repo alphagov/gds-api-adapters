@@ -1,3 +1,7 @@
+# 14.7.0
+
+* Add long-form contact endpoint to `support-api`
+
 # 14.6.0
 
 * Add extra layer of inheritance for HTTP Exception classes to provide HTTPServerError and HTTPClientError in order to allow applications to to catch ranges of Server/Client type errors.
