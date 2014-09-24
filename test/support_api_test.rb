@@ -34,6 +34,18 @@ describe GdsApi::SupportApi do
     assert_requested(stub_post)
   end
 
+  it "fetches problem report daily totals" do
+    response_body = {"data" => ["results"]}
+
+    stub_get = stub_request(:get, "#{@base_api_url}/anonymous-feedback/problem-reports/2014-07-12/totals").
+      to_return(:status => 200, body: response_body.to_json)
+
+    result = @api.problem_report_daily_totals_for(Date.new(2014, 7, 12))
+
+    assert_requested(stub_get)
+    assert_equal response_body, result.to_hash
+  end
+
   it "throws an exception when the support app isn't available" do
     support_api_isnt_available
 
