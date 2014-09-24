@@ -12,7 +12,12 @@ module GdsApi
       def stub_publishing_api_put_item(base_path, body = content_item_for_base_path(base_path))
         url = PUBLISHING_API_ENDPOINT + "/content" + base_path
         body = body.to_json unless body.is_a?(String)
-        stub_request(:put, url).with(body: body).to_return(status: 201, body: body, headers: {})
+        stub = stub_request(:put, url)
+        if body
+          body.to_json unless body.is_a?(String)
+          stub.with(body: body)
+        end
+        stub.to_return(status: 201, body: body, headers: {})
       end
 
       def stub_default_publishing_api_put()
