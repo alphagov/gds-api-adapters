@@ -22,6 +22,12 @@ module GdsApi
           post_stub.to_return(:status => 200)
         end
 
+        def stub_problem_report_daily_totals_submission(submissions = nil)
+          post_stub = stub_http_request(:post, "#{PP_DATA_IN_ENDPOINT}/data/govuk-info/page-contacts")
+          post_stub.with(body: submissions.to_json) unless submissions.nil?
+          post_stub.to_return(:status => 200)
+        end
+
         def stub_service_feedback_bucket_unavailable_for(slug)
           stub_request(:post, "#{PP_DATA_IN_ENDPOINT}/data/#{slug}/customer-satisfaction").to_return(:status => 404)
         end

@@ -1,3 +1,5 @@
+require 'plek'
+
 module GdsApi
   module TestHelpers
     module SupportApi
@@ -13,6 +15,14 @@ module GdsApi
         post_stub = stub_http_request(:post, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/long-form-contacts")
         post_stub.with(:body => { long_form_contact: request_details }) unless request_details.nil?
         post_stub.to_return(:status => 202)
+      end
+
+      def stub_problem_report_daily_totals_for(date, expected_results = nil)
+        date_string = date.strftime("%Y-%m-%d")
+        get_stub = stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/problem-reports/#{date_string}/totals")
+        response = { status: 200 }
+        response[:body] = expected_results if expected_results
+        get_stub.to_return(response)
       end
 
       def support_api_isnt_available
