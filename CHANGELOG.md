@@ -1,3 +1,8 @@
+# 14.8.0
+
+* Add `support-api` endpoint for getting problem report daily totals
+* Add Performance Platform endpoint for uploading problem report daily totals
+
 # 14.7.0
 
 * Add long-form contact endpoint to `support-api`
