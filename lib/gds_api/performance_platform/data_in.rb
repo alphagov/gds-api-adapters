@@ -18,6 +18,10 @@ module GdsApi
       def corporate_content_urls_with_the_most_problem_reports(entries)
         post_json!("#{endpoint}/data/gov-uk-content/top-urls", entries)
       end
+
+      def submit_problem_report_daily_totals(entries)
+        post_json!("#{endpoint}/data/govuk-info/page-contacts", entries)
+      end
     end
   end
 end
