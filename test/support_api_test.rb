@@ -10,6 +10,18 @@ describe GdsApi::SupportApi do
     @api = GdsApi::SupportApi.new(@base_api_url)
   end
 
+  it "can report a problem" do
+    request_details = {certain: "details"}
+
+    stub_post = stub_request(:post, "#{@base_api_url}/anonymous-feedback/problem-reports").
+      with(:body => {"problem_report" => request_details}.to_json).
+      to_return(:status => 201)
+
+    @api.create_problem_report(request_details)
+
+    assert_requested(stub_post)
+  end
+
   it "can pass service feedback" do
     request_details = {"transaction-completed-values"=>"1", "details"=>"abc"}
 
