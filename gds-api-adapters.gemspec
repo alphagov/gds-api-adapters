@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rdoc', '3.12'
   s.add_development_dependency 'rake', '~> 0.9.2.2'
-  s.add_development_dependency 'webmock', '~> 1.8'
+  s.add_development_dependency 'webmock', ['>= 1.8', '<= 1.18.0'] # rummager tests fail with 1.19.0
   s.add_development_dependency 'mocha', '~> 0.12.4'
   s.add_development_dependency "minitest", "~> 3.4.0"
   s.add_development_dependency 'rack'
