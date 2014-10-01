@@ -1,3 +1,7 @@
+# 14.9.0
+
+* Add problem reports endpoint to `support-api`
+
 # 14.8.0
 
 * Add `support-api` endpoint for getting problem report daily totals
