@@ -135,10 +135,9 @@ describe GdsApi::Rummager do
   it "#advanced_search should issue a request for all the params supplied" do
     GdsApi::Rummager.new("http://example.com").advanced_search({keywords: "query & stuff", topics: ["1","2"], order: {public_timestamp: "desc"}})
 
-    #the actual request is "?keywords=query+%26+stuff&topic[0]=1&topic[1]=2&order[public_timestamp]=desc", but Webmock appears to be re-escaping.
     assert_requested :get, /keywords=query%20%26%20stuff/
-    assert_requested :get, /topics%5B0%5D=1&topics%5B1%5D=2/
-    assert_requested :get, /order%5Bpublic_timestamp%5D=desc/
+    assert_requested :get, /topics\[\]=1&topics\[\]=2/
+    assert_requested :get, /order\[public_timestamp\]=desc/
   end
 
   # tests for unified search
@@ -205,7 +204,7 @@ describe GdsApi::Rummager do
     )
 
     assert_requested :get, /q=query%20%26%20stuff/
-    assert_requested :get, /filter_topics%5B0%5D=1&filter_topics%5B1%5D=2/
+    assert_requested :get, /filter_topics\[\]=1&filter_topics\[\]=2/
     assert_requested :get, /order=-public_timestamp/
   end
 
