@@ -35,4 +35,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'simplecov-rcov'
   s.add_development_dependency 'gem_publisher', '~> 1.1.1'
   s.add_development_dependency 'timecop', '~> 0.5.1'
+  s.add_development_dependency 'pry'
 end
