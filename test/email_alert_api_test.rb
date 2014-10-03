@@ -8,13 +8,40 @@ describe GdsApi::EmailAlertApi do
   let(:base_url)      { "http://some-domain" }
   let(:api_client)    { GdsApi::EmailAlertApi.new(base_url) }
 
-  describe "subscriber lists" do
-    let(:title) { "Some Title" }
-    let(:tags) {
+  let(:title) { "Some Title" }
+  let(:tags) {
+    {
+      "format" => ["some-document-format"],
+    }
+  }
+
+  describe "alerts" do
+    let(:path) { "/alerts" }
+    let(:subject) { "Email subject" }
+    let(:publication_params) {
       {
-        "format" => ["some-document-format"],
+        "title" => title,
+        "subject" => subject,
+        "tags" => tags,
       }
     }
+
+    before do
+      email_alert_api_accepts_alert
+    end
+
+    it "posts a new alert" do
+      assert api_client.send_alert(publication_params)
+
+      assert_requested(:post, "#{base_url}/notifications", publication_params)
+    end
+
+    it "returns the an empty response" do
+      assert api_client.send_alert(publication_params).to_hash.empty?
+    end
+  end
+
+  describe "subscriber lists" do
     let(:path){ "/subscriber_lists" }
     let(:expected_subscription_url) { "a subscription url" }
 

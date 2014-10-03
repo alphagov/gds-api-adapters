@@ -52,6 +52,18 @@ module GdsApi
           }.merge(attributes)
         }
       end
+
+      def email_alert_api_accepts_alert
+        stub_request(:post, "http://some-domain/notifications")
+          .to_return(
+            :status => 202,
+            :body => {}.to_json,
+          )
+      end
+
+      def post_alert_response
+        {}
+      end
     end
   end
 end
