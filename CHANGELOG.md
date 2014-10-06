@@ -1,3 +1,7 @@
+# 14.10.0
+
+* Add email alert API support
+
 # 14.9.0
 
 * Add problem reports endpoint to `support-api`
