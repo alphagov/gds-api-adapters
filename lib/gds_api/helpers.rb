@@ -11,6 +11,7 @@ require 'gds_api/panopticon'
 require 'gds_api/publisher'
 require 'gds_api/worldwide'
 require 'gds_api/finder_api'
+require 'gds_api/email_alert_api'
 
 module GdsApi
   module Helpers
@@ -68,6 +69,10 @@ module GdsApi
 
     def finder_api(options = {})
       @finder_api ||= FinderApi.new(Plek.current.find("finder-api"), options)
+    end
+
+    def email_alert_api(options = {})
+      @email_alert_api ||= EmailAlertApi.new(Plek.current.find("email-alert-api"), options)
     end
 
     def self.included(klass)
