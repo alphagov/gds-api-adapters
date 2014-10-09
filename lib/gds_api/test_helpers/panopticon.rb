@@ -50,6 +50,27 @@ module GdsApi
 
         stub.to_return(:status => 201)
       end
+
+      def stub_panopticon_tag_creation(attributes)
+        url = "#{PANOPTICON_ENDPOINT}/tags.json"
+        stub_request(:post, url)
+                .with(body: attributes.to_json)
+                .to_return(status: 201, body: attributes.to_json)
+      end
+
+      def stub_panopticon_tag_update(tag_type, tag_id, attributes)
+        url = "#{PANOPTICON_ENDPOINT}/tags/#{tag_type}/#{tag_id}.json"
+        stub_request(:put, url)
+                .with(body: attributes.to_json)
+                .to_return(status: 200)
+      end
+
+      def stub_panopticon_tag_publish(tag_type, tag_id)
+        url = "#{PANOPTICON_ENDPOINT}/tags/#{tag_type}/#{tag_id}/publish.json"
+        stub_request(:post, url)
+                .with(body: {}.to_json)
+                .to_return(status: 200)
+      end
     end
   end
 end
