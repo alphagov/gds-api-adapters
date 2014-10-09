@@ -7,7 +7,7 @@ module GdsApi
     def []=(k, v)
     end
 
-    def store(k, v, args={})
+    def store(k, v, expiry_time=nil)
     end
   end
 end
