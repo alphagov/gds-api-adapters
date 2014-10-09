@@ -20,6 +20,13 @@ module GdsApi
       @cache ||= LRUCache.new(max_size: size, ttl: ttl)
     end
 
+    # Set the caching implementation. Default is LRUCache. Can be Anything
+    # which responds to:
+    #
+    #   [](key)
+    #   []=(key, value)
+    #   store(key, value, expiry_time=nil) - or a Ruby Time object
+    #
     def self.cache=(c)
       @cache = c
     end
