@@ -1,5 +1,6 @@
 require_relative 'test_helper'
 require 'gds_api/panopticon'
+require 'gds_api/test_helpers/panopticon'
 require 'ostruct'
 
 describe GdsApi::Panopticon::Registerer do
