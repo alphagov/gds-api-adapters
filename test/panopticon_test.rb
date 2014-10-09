@@ -142,4 +142,41 @@ describe GdsApi::Panopticon do
     record = OpenStruct.new(artefact.merge(title: artefact[:name]))
     r.register(record)
   end
+
+  describe 'tags' do
+    let(:tag) {
+      { tag_type: 'section', tag_id: 'housing', title: 'Housing', description: 'Housing', parent_id: nil }
+    }
+
+    it 'creates a tag' do
+      url = "#{base_api_endpoint}/tags.json"
+      req = stub_request(:post, url)
+              .with(body: tag.to_json)
+              .to_return(status: 201, body: tag.to_json)
+
+      api.create_tag(tag)
+      assert_requested(req)
+    end
+
+    it 'updates a tag' do
+      url = "#{base_api_endpoint}/tags/section/citizenship/passports.json"
+      fields_to_update = { title: 'Passports' }
+
+      req = stub_request(:put, url)
+              .with(body: fields_to_update.to_json)
+              .to_return(status: 200)
+
+      api.put_tag('section', 'citizenship/passports', fields_to_update)
+      assert_requested(req)
+    end
+
+    it 'publishes a tag' do
+      url = "#{base_api_endpoint}/tags/section/citizenship/passports/publish.json"
+      req = stub_request(:post, url).with(body: {}.to_json)
+                                    .to_return(status: 200)
+
+      api.publish_tag('section', 'citizenship/passports')
+      assert_requested(req)
+    end
+  end
 end

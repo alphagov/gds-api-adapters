@@ -49,8 +49,32 @@ class GdsApi::Panopticon < GdsApi::Base
     delete_json!("#{base_url}/#{id_or_slug}.json")
   end
 
+  def create_tag(attributes)
+    post_json!("#{endpoint}/tags.json", attributes)
+  end
+
+  def put_tag(tag_type, tag_id, attributes)
+    put_json!(
+      tag_url(tag_type, tag_id),
+      attributes
+    )
+  end
+
+  def publish_tag(tag_type, tag_id)
+    post_json!(
+      tag_url(tag_type, tag_id, '/publish'),
+      # we don't need to send any more data along with the publish request,
+      # but a body is still required, so sending an empty JSON hash instead
+      { }
+    )
+  end
+
 private
   def base_url
     "#{endpoint}/artefacts"
+  end
+
+  def tag_url(tag_type, tag_id, action='')
+    "#{endpoint}/tags/#{tag_type}/#{tag_id}#{action}.json"
   end
 end
