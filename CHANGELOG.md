@@ -1,3 +1,7 @@
+# 14.11.0
+
+* Add support for endpoints to create, update and publish tags in Panopticon
+
 # 14.10.0
 
 * Add email alert API support
