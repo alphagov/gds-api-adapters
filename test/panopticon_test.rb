@@ -2,17 +2,19 @@ require 'test_helper'
 require 'gds_api/panopticon'
 require 'gds_api/test_helpers/panopticon'
 
-class PanopticonApiTest < MiniTest::Unit::TestCase
+describe GdsApi::Panopticon do
   include GdsApi::TestHelpers::Panopticon
 
-  def basic_artefact
+  let(:base_api_endpoint) { GdsApi::TestHelpers::Panopticon::PANOPTICON_ENDPOINT }
+  let(:api) { GdsApi::Panopticon.new(base_api_endpoint) }
+
+  let(:basic_artefact) {
     {
       name: 'An artefact',
       slug: 'a-basic-artefact'
     }
-  end
-
-  def artefact_with_contact
+  }
+  let(:artefact_with_contact) {
     {
       name: 'An artefact',
       slug: 'an-artefact-with-contact',
@@ -21,9 +23,8 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
         email_address: 'helpline@defra.gsi.gov.uk'
       }
     }
-  end
-
-  def registerable_artefact
+  }
+  let(:registerable_artefact) {
     {
       slug: 'foo',
       owning_app: 'my-app',
@@ -32,44 +33,40 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
       description: 'A custom foo of great customness.',
       state: 'live'
     }
-  end
+  }
 
-  def api
-    GdsApi::Panopticon.new(PANOPTICON_ENDPOINT)
-  end
-
-  def test_given_a_slug__should_fetch_artefact_from_panopticon
+  it 'fetches an artefact given a slug' do
     panopticon_has_metadata(basic_artefact)
 
     artefact = api.artefact_for_slug(basic_artefact[:slug])
     assert_equal 'An artefact', artefact.name
   end
 
-  def test_given_a_slug_can_fetch_artefact_as_hash
+  it 'fetches an artefact as a hash given a slug' do
     panopticon_has_metadata(basic_artefact)
     artefact = api.artefact_for_slug(basic_artefact[:slug], :as_hash => true)
     assert_equal basic_artefact[:name], artefact['name']
   end
 
-  def should_fetch_and_parse_JSON_into_hash
-    url = "#{PANOPTICON_ENDPOINT}/some.json"
+  it 'fetches and parses JSON into a hash' do
+    url = "#{base_api_endpoint}/some.json"
     stub_request(:get, url).to_return(body: {a:1}.to_json)
-  
+
     assert_equal 1, api.get_json(url)['a']
   end
 
-  def test_should_return_nil_if_404_returned_from_endpoint
-    url = "#{PANOPTICON_ENDPOINT}/some.json"
+  it 'returns nil if the endpoint returns 404' do
+    url = "#{base_api_endpoint}/some.json"
     stub_request(:get, url).to_return(status: Rack::Utils.status_code(:not_found))
 
     assert_nil api.get_json(url)
   end
 
-  def test_should_construct_correct_url_for_a_slug
-    assert_equal "#{PANOPTICON_ENDPOINT}/artefacts/slug.json", api.url_for_slug('slug')
+  it 'constructs the correct URL for a slug' do
+    assert_equal "#{base_api_endpoint}/artefacts/slug.json", api.url_for_slug('slug')
   end
 
-  def test_contacts_should_be_deserialised_into_whole_objects
+  it 'deserialises contacts into whole objects' do
     panopticon_has_metadata(artefact_with_contact)
 
     artefact = api.artefact_for_slug(artefact_with_contact[:slug])
@@ -77,8 +74,8 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
     assert_equal 'helpline@defra.gsi.gov.uk', artefact.contact.email_address
   end
 
-  def test_can_create_a_new_artefact
-    url = "#{PANOPTICON_ENDPOINT}/artefacts.json"
+  it 'creates a new artefact' do
+    url = "#{base_api_endpoint}/artefacts.json"
     stub_request(:post, url)
       .with(body: basic_artefact.to_json)
       .to_return(body: basic_artefact.merge(id: 1).to_json)
@@ -86,8 +83,8 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
     api.create_artefact(basic_artefact)
   end
 
-  def test_can_update_existing_artefact
-    url = "#{PANOPTICON_ENDPOINT}/artefacts/1.json"
+  it 'updates an existing artefact' do
+    url = "#{base_api_endpoint}/artefacts/1.json"
     stub_request(:put, url)
       .with(body: basic_artefact.to_json)
       .to_return(status: 200, body: '{}')
@@ -95,8 +92,8 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
     api.update_artefact(1, basic_artefact)
   end
 
-  def test_can_delete_an_artefact
-    url = "#{PANOPTICON_ENDPOINT}/artefacts/1.json"
+  it 'deletes an artefact' do
+    url = "#{base_api_endpoint}/artefacts/1.json"
     stub_request(:delete, url)
       .with(body: "")
       .to_return(status: 200, body: '{}')
@@ -104,7 +101,7 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
     api.delete_artefact!(1)
   end
 
-  def test_can_use_basic_auth
+  it 'uses basic auth' do
     credentials = {user: 'fred', password: 'secret'}
     api = GdsApi::Panopticon.new('http://some.url', basic_auth: credentials)
     url = "http://#{credentials[:user]}:#{credentials[:password]}@some.url/artefacts/1.json"
@@ -114,16 +111,16 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
     api.update_artefact(1, basic_artefact)
   end
 
-  def test_can_register_new_artefacts_en_masse
-    r = GdsApi::Panopticon::Registerer.new(endpoint_url: PANOPTICON_ENDPOINT, owning_app: 'my-app')
+  it 'registers new artefacts en masse' do
+    r = GdsApi::Panopticon::Registerer.new(endpoint_url: base_api_endpoint, owning_app: 'my-app')
     artefact = registerable_artefact()
     panopticon_has_no_metadata_for('foo')
 
-    stub_request(:put, "#{PANOPTICON_ENDPOINT}/artefacts/foo.json")
+    stub_request(:put, "#{base_api_endpoint}/artefacts/foo.json")
       .with(body: artefact.to_json)
       .to_return(body: artefact.merge(id: 1).to_json)
 
-    url = "#{PANOPTICON_ENDPOINT}/artefacts.json"
+    url = "#{base_api_endpoint}/artefacts.json"
     stub_request(:post, url)
       .with(body: artefact.to_json)
       .to_return(body: artefact.merge(id: 1).to_json)
@@ -132,17 +129,54 @@ class PanopticonApiTest < MiniTest::Unit::TestCase
     r.register(record)
   end
 
-  def test_can_register_existing_artefacts_en_masse
+  it 'registers existing artefacts en masse' do
     artefact = registerable_artefact()
-    r = GdsApi::Panopticon::Registerer.new(endpoint_url: PANOPTICON_ENDPOINT, owning_app: 'my-app')
+    r = GdsApi::Panopticon::Registerer.new(endpoint_url: base_api_endpoint, owning_app: 'my-app')
 
     panopticon_has_metadata(artefact)
-    url = "#{PANOPTICON_ENDPOINT}/artefacts/foo.json"
+    url = "#{base_api_endpoint}/artefacts/foo.json"
     stub_request(:put, url)
       .with(body: artefact.to_json)
       .to_return(status: 200, body: '{}')
 
     record = OpenStruct.new(artefact.merge(title: artefact[:name]))
     r.register(record)
+  end
+
+  describe 'tags' do
+    let(:tag) {
+      { tag_type: 'section', tag_id: 'housing', title: 'Housing', description: 'Housing', parent_id: nil }
+    }
+
+    it 'creates a tag' do
+      url = "#{base_api_endpoint}/tags.json"
+      req = stub_request(:post, url)
+              .with(body: tag.to_json)
+              .to_return(status: 201, body: tag.to_json)
+
+      api.create_tag(tag)
+      assert_requested(req)
+    end
+
+    it 'updates a tag' do
+      url = "#{base_api_endpoint}/tags/section/citizenship/passports.json"
+      fields_to_update = { title: 'Passports' }
+
+      req = stub_request(:put, url)
+              .with(body: fields_to_update.to_json)
+              .to_return(status: 200)
+
+      api.put_tag('section', 'citizenship/passports', fields_to_update)
+      assert_requested(req)
+    end
+
+    it 'publishes a tag' do
+      url = "#{base_api_endpoint}/tags/section/citizenship/passports/publish.json"
+      req = stub_request(:post, url).with(body: {}.to_json)
+                                    .to_return(status: 200)
+
+      api.publish_tag('section', 'citizenship/passports')
+      assert_requested(req)
+    end
   end
 end
