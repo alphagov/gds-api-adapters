@@ -1,3 +1,7 @@
+# 15.0.0
+
+* Reduce public interface for Email Alert API (unused)
+
 # 14.11.0
 
 * Add support for endpoints to create, update and publish tags in Panopticon
