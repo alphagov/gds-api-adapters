@@ -1,3 +1,8 @@
+# 15.1.0
+
+* Add panopticon support for `primary_section` and `sections`
+* Deprecate support for `section`
+
 # 15.0.0
 
 * Reduce public interface for Email Alert API (unused)
