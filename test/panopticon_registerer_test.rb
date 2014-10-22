@@ -63,7 +63,10 @@ describe GdsApi::Panopticon::Registerer do
       name: 'A guide to beards',
       description: '5 tips for keeping your beard in check',
       state: 'draft',
-      need_ids: ["100001", "100002"]
+      need_ids: ["100001", "100002"],
+      primary_section: "tax/vat",
+      sections: ["tax/vat", "tax/capital-gains"],
+      specialist_sectors: ["oil-and-gas/wells", "oil-and-gas/licensing"]
     )
 
     GdsApi::Panopticon::Registerer.new(
@@ -75,7 +78,37 @@ describe GdsApi::Panopticon::Registerer do
         title: 'A guide to beards',
         description: '5 tips for keeping your beard in check',
         state: 'draft',
-        need_ids: ["100001", "100002"]
+        need_ids: ["100001", "100002"],
+        primary_section: "tax/vat",
+        sections: ["tax/vat", "tax/capital-gains"],
+        specialist_sectors: ["oil-and-gas/wells", "oil-and-gas/licensing"]
+      )
+    )
+
+    assert_requested(request)
+  end
+
+  it "should support deprecated fields" do
+    request = stub_artefact_registration('beards',
+      slug: 'beards',
+      owning_app: 'whitehall',
+      kind: 'detailed-guide',
+      name: 'A guide to beards',
+      description: '5 tips for keeping your beard in check',
+      state: 'draft',
+      section: "tax/vat",
+    )
+
+    GdsApi::Panopticon::Registerer.new(
+      owning_app: 'whitehall',
+      kind: 'detailed-guide'
+    ).register(
+      OpenStruct.new(
+        slug: 'beards',
+        title: 'A guide to beards',
+        description: '5 tips for keeping your beard in check',
+        state: 'draft',
+        section: "tax/vat",
       )
     )
 
