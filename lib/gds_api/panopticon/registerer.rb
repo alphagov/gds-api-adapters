@@ -30,9 +30,24 @@ module GdsApi
         end
 
         optional_params = [
-          :need_id, :need_ids, :section, :specialist_sectors, :organisation_ids,
-          :indexable_content, :paths, :prefixes
+          :need_id, :need_ids,
+          :section, :primary_section, :sections,
+          :specialist_sectors,
+          :organisation_ids,
+          :indexable_content,
+          :paths, :prefixes
         ]
+
+        deprecated_params = {
+          section: [:primary_section, :sections]
+        }
+
+        deprecated_params.each do |attr_name, replacements|
+          if record.respond_to?(attr_name)
+            replacements = Array(replacements)
+            logger.warn "#{attr_name} has been deprecated in favour of #{replacements.join(' and ')}"
+          end
+        end
 
         optional_params.each do |attr_name|
           if record.respond_to? attr_name
