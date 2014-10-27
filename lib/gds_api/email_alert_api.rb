@@ -16,11 +16,11 @@ class GdsApi::EmailAlertApi < GdsApi::Base
 private
 
   def search_subscriber_list_by_tags(tags)
-    get_json!("#{endpoint}/subscriber_lists?" + nested_query_string(tags: tags))
+    get_json!("#{endpoint}/subscriber-lists?" + nested_query_string(tags: tags))
   end
 
   def create_subscriber_list(attributes)
-    post_json!("#{endpoint}/subscriber_lists", attributes)
+    post_json!("#{endpoint}/subscriber-lists", attributes)
   end
 
   def nested_query_string(params)
