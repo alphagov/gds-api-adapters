@@ -10,7 +10,7 @@ module GdsApi
 
         query = Rack::Utils.build_nested_query(tags: tags)
 
-        stub_request(:get, "http://some-domain/subscriber_lists?#{query}")
+        stub_request(:get, "http://some-domain/subscriber-lists?#{query}")
           .to_return(
             :status => 200,
             :body => get_subscriber_list_response(attributes).to_json,
@@ -20,12 +20,12 @@ module GdsApi
       def email_alert_api_does_not_have_subscriber_list(attributes)
         query = Rack::Utils.build_nested_query(tags: attributes.fetch("tags"))
 
-        stub_request(:get, "http://some-domain/subscriber_lists?#{query}")
+        stub_request(:get, "http://some-domain/subscriber-lists?#{query}")
           .to_return(status: 404)
       end
 
       def email_alert_api_creates_subscriber_list(attributes)
-        stub_request(:post, "http://some-domain/subscriber_lists")
+        stub_request(:post, "http://some-domain/subscriber-lists")
           .to_return(
             :status => 201,
             :body => get_subscriber_list_response(attributes).to_json,
@@ -33,7 +33,7 @@ module GdsApi
       end
 
       def email_alert_api_refuses_to_create_subscriber_list
-        stub_request(:post, "http://some-domain/subscriber_lists")
+        stub_request(:post, "http://some-domain/subscriber-lists")
           .to_return(
             :status => 422,
           )
