@@ -1,3 +1,6 @@
+# 15.1.1
+* Change e-mail alert API endpoints
+
 # 15.1.0
 
 * Add panopticon support for `primary_section` and `sections`
