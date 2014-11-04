@@ -3,6 +3,20 @@ require 'gds_api/test_helpers/json_client_helper'
 module GdsApi
   module TestHelpers
     module Rummager
+      def stub_any_rummager_post
+        stub_request(:post, %r{#{Plek.new.find('search')}/documents})
+      end
+
+      def assert_rummager_posted_item(attributes)
+        url = Plek.new.find('search') + "/documents"
+        assert_requested(:post, url) do |req|
+          data = JSON.parse(req.body)
+          attributes.to_a.all? do |key, value|
+            data[key.to_s] == value
+          end
+        end
+      end
+
       def rummager_has_services_and_info_data_for_organisation
         stub_request_for(search_results_found)
         run_example_query
