@@ -1,3 +1,7 @@
+# 15.2.0
+
+* Add Rummager test helpers for adding documents
+
 # 15.1.1
 * Change e-mail alert API endpoints
 
