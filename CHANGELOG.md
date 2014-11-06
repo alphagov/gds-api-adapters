@@ -1,3 +1,8 @@
+# 16.0.0
+
+* Pass correct parameters to assert_requested in email alert API endpoint helpers.
+* Include latest changes in collections API endpoint.
+
 # 15.2.0
 
 * Add Rummager test helpers for adding documents
