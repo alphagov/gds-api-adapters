@@ -10,11 +10,11 @@ describe GdsApi::CollectionsApi do
     @api = GdsApi::CollectionsApi.new(@base_api_url)
   end
 
-  describe "curated_lists_for" do
+  describe "topic" do
     it "should return the curated lists for a given base path" do
       base_path = "/test/base-path"
-      collections_api_has_curated_lists_for(base_path)
-      response = @api.curated_lists_for(base_path)
+      collections_api_has_content_for(base_path)
+      response = @api.topic(base_path)
       assert_equal base_path, response["base_path"]
     end
   end

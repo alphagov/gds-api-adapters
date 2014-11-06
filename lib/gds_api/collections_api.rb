@@ -3,7 +3,7 @@ require_relative 'exceptions'
 
 class GdsApi::CollectionsApi < GdsApi::Base
 
-  def curated_lists_for(base_path)
+  def topic(base_path)
     get_json(collections_api_url(base_path))
   end
 
