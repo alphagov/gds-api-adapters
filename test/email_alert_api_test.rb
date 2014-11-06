@@ -32,7 +32,7 @@ describe GdsApi::EmailAlertApi do
     it "posts a new alert" do
       assert api_client.send_alert(publication_params)
 
-      assert_requested(:post, "#{base_url}/notifications", publication_params)
+      assert_requested(:post, "#{base_url}/notifications", body: publication_params.to_json)
     end
 
     it "returns the an empty response" do
