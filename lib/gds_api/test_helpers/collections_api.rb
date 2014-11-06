@@ -6,7 +6,7 @@ module GdsApi
     module CollectionsApi
       COLLECTIONS_API_ENDPOINT = Plek.current.find('collections-api')
 
-      def collections_api_has_curated_lists_for(base_path)
+      def collections_api_has_content_for(base_path)
         url = COLLECTIONS_API_ENDPOINT + "/specialist-sectors" + base_path
 
         stub_request(:get, url).to_return(
@@ -15,12 +15,41 @@ module GdsApi
         )
       end
 
-      def collections_api_has_no_curated_lists_for(base_path)
+      def collections_api_has_no_content_for(base_path)
         url = COLLECTIONS_API_ENDPOINT + "/specialist-sectors" + base_path
 
         stub_request(:get, url).to_return(
           status: 404
         )
+      end
+
+      def collections_api_example_documents
+        [
+          {
+            title: "Oil rig safety requirements",
+            link: "http://example.com/documents/oil-rig-safety-requirements",
+            public_updated_at: "2014-10-27T09:35:57+00:00",
+            latest_change_note: "Updated topics"
+          },
+          {
+            title: "Undersea piping restrictions",
+            link: "http://example.com/documents/undersea-piping-restrictions",
+            public_updated_at: "2014-10-15T09:36:18+01:00"
+            # Change note deliberately missing
+          },
+          {
+            title: "North sea shipping lanes",
+            link: "http://example.com/documents/north-sea-shipping-lanes",
+            public_updated_at: "2014-10-04T09:36:42+01:00",
+            latest_change_note: "Corrected shipping lane"
+          },
+          {
+            title: "Oil rig staffing",
+            link: "http://example.com/documents/oil-rig-staffing",
+            public_updated_at: "2014-09-22T09:37:00+01:00",
+            latest_change_note: "Added annual leave allowances"
+          },
+        ]
       end
 
     private
@@ -82,7 +111,8 @@ module GdsApi
                   }
                 ]
               }
-            ]
+            ],
+            documents: collections_api_example_documents
           }
         }
       end
