@@ -6,8 +6,9 @@ module GdsApi
     module CollectionsApi
       COLLECTIONS_API_ENDPOINT = Plek.current.find('collections-api')
 
-      def collections_api_has_content_for(base_path)
-        url = COLLECTIONS_API_ENDPOINT + "/specialist-sectors" + base_path
+      def collections_api_has_content_for(base_path, options={})
+        params = options.any? ? "?#{Rack::Utils.build_nested_query(options)}" : ''
+        url = COLLECTIONS_API_ENDPOINT + "/specialist-sectors" + base_path + params
 
         stub_request(:get, url).to_return(
           status: 200,

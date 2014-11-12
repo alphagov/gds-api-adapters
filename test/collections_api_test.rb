@@ -17,5 +17,14 @@ describe GdsApi::CollectionsApi do
       response = @api.topic(base_path)
       assert_equal base_path, response["base_path"]
     end
+
+    it 'accepts "start" and "count" parameters for pagination' do
+      base_path = "/test/base-path"
+
+      collections_api_has_content_for(base_path, start: '10', count: '20')
+      response = @api.topic(base_path, start: 10, count: 20)
+
+      assert_equal base_path, response['base_path']
+    end
   end
 end
