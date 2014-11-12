@@ -1,3 +1,8 @@
+# 16.1.0
+
+* Allow the `start` and `count` arguments to be provided to the Collections API
+  adapter for a sub-topic.
+
 # 16.0.0
 
 * Pass correct parameters to assert_requested in email alert API endpoint helpers.
