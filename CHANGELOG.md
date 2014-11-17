@@ -1,3 +1,7 @@
+# 16.2.0
+
+* Add `start` and `total` options to the Collections API test helper.
+
 # 16.1.0
 
 * Allow the `start` and `count` arguments to be provided to the Collections API
