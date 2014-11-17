@@ -7,12 +7,16 @@ module GdsApi
       COLLECTIONS_API_ENDPOINT = Plek.current.find('collections-api')
 
       def collections_api_has_content_for(base_path, options={})
+        body_options = options.delete(:return_body_options) || {}
+
         params = options.any? ? "?#{Rack::Utils.build_nested_query(options)}" : ''
         url = COLLECTIONS_API_ENDPOINT + "/specialist-sectors" + base_path + params
 
         stub_request(:get, url).to_return(
           status: 200,
-          body: body_with_options(base_path: base_path).to_json,
+          body: body_with_options(
+            body_options.merge(base_path: base_path)
+          ).to_json,
         )
       end
 
@@ -113,7 +117,9 @@ module GdsApi
                 ]
               }
             ],
-            documents: collections_api_example_documents
+            documents: collections_api_example_documents,
+            documents_start: options.fetch(:start, 0),
+            documents_total: options.fetch(:total, collections_api_example_documents.size),
           }
         }
       end
