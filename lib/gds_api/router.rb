@@ -35,6 +35,12 @@ class GdsApi::Router < GdsApi::Base
     response
   end
 
+  def add_gone_route(path, type, options = {})
+    response = put_json!("#{endpoint}/routes", :route => {:incoming_path => path, :route_type => type, :handler => "gone"})
+    commit_routes if options[:commit]
+    response
+  end
+
   def delete_route(path, type, options = {})
     response = delete_json!("#{endpoint}/routes?incoming_path=#{CGI.escape(path)}&route_type=#{CGI.escape(type)}")
     commit_routes if options[:commit]
