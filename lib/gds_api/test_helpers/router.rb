@@ -45,6 +45,18 @@ module GdsApi
         [register_stub, commit_stub]
       end
 
+      def stub_gone_route_registration(path, type)
+        route = { route: {
+                      incoming_path: path,
+                      route_type: type,
+                      handler: 'gone' }
+                  }
+
+        register_stub = stub_route_put(route)
+        commit_stub = stub_router_commit
+        [register_stub, commit_stub]
+      end
+
       def stub_router_commit
         stub_http_request(:post, "#{ROUTER_API_ENDPOINT}/routes/commit")
       end
