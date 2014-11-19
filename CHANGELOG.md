@@ -1,3 +1,7 @@
+# 16.3.0
+
+* Add support for registering gone routes with the router.
+
 # 16.2.0
 
 * Add `start` and `total` options to the Collections API test helper.

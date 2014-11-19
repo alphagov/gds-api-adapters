@@ -299,6 +299,55 @@ describe GdsApi::Router do
       end
     end
 
+    describe "#add_gone_route" do
+      it "should allow creating/updating a gone route" do
+        route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "gone"}
+        req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
+          with(:body => {"route" => route_data}.to_json).
+          to_return(:status => 201, :body => route_data.to_json, :headers => {"Content-type" => "application/json"})
+
+        response = @api.add_gone_route("/foo", "exact")
+        assert_equal 201, response.code
+        assert_equal "/foo", response.incoming_path
+
+        assert_requested(req)
+        assert_not_requested(@commit_req)
+      end
+
+      it "should commit the routes when asked to" do
+        req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
+          to_return(:status => 201, :body =>{}.to_json, :headers => {"Content-type" => "application/json"})
+
+        @api.add_gone_route("/foo", "exact", :commit => true)
+
+        assert_requested(req)
+        assert_requested(@commit_req)
+      end
+
+      it "should raise an error if creating/updating the gone route fails" do
+        route_data = {"incoming_path" => "foo", "route_type" => "exact", "handler" => "gone"}
+        response_data = route_data.merge("errors" => {"incoming_path" => "is not a valid URL path"})
+
+        req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
+          with(:body => {"route" => route_data}.to_json).
+          to_return(:status => 400, :body => response_data.to_json, :headers => {"Content-type" => "application/json"})
+
+        e = nil
+        begin
+          @api.add_gone_route("foo", "exact")
+        rescue GdsApi::HTTPErrorResponse => ex
+          e = ex
+        end
+
+        refute_nil e
+        assert_equal 400, e.code
+        assert_equal response_data, e.error_details
+
+        assert_requested(req)
+        assert_not_requested(@commit_req)
+      end
+    end
+
     describe "deleting a route" do
       it "should allow deleting a route" do
         route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "backend", "backend_id" => "foo"}
