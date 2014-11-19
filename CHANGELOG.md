@@ -1,3 +1,7 @@
+# 16.3.1
+
+* Add test helper method to stub gone route registration.
+
 # 16.3.0
 
 * Add support for registering gone routes with the router.
