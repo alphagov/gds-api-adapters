@@ -339,7 +339,7 @@ module GdsApi
           "details" => {
             "need_ids" => ["100001"],
             "business_proposition" => false, # To be removed and replaced with proposition tags
-            "format" => options.fetch(:format) { "guide" },
+            "format" => options.fetch(:format, "guide"),
             "alternative_title" => "",
             "overview" => "This is an overview",
             "video_summary" => "",
