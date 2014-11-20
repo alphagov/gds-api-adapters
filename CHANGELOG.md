@@ -1,6 +1,7 @@
-# 16.3.2
+# 16.3.3
 
-* Extend content API test helpers
+* Extend content API test helper `#content_api_has_artefacts_with_a_tag` to
+  support options for artefacts.
 
 # 16.3.2
 
