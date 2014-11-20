@@ -39,8 +39,8 @@ module GdsApi
           {
             title: "Undersea piping restrictions",
             link: "http://example.com/documents/undersea-piping-restrictions",
-            public_updated_at: "2014-10-15T09:36:18+01:00"
-            # Change note deliberately missing
+            public_updated_at: "2014-10-15T09:36:18+01:00",
+            latest_change_note: nil
           },
           {
             title: "North sea shipping lanes",
