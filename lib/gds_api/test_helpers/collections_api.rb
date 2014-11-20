@@ -45,7 +45,7 @@ module GdsApi
           {
             title: "North sea shipping lanes",
             link: "http://example.com/documents/north-sea-shipping-lanes",
-            public_updated_at: "2014-10-04T09:36:42+01:00",
+            public_updated_at: nil,
             latest_change_note: "Corrected shipping lane"
           },
           {
