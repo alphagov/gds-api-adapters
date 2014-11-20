@@ -184,7 +184,7 @@ module GdsApi
           puts "Passing a key of :draft outside of the 'tag' options hash is being deprecated. Please use tag: { draft: bool }"
         end
 
-        draft = options.fetch(:draft) { options[:tag][:draft] || false }
+        draft = options[:draft] || (options[:tag] && options[:tag][:draft])
 
         body = plural_response_base.merge(
           "results" => artefact_slugs.map do |artefact_slug|
