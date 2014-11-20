@@ -1,5 +1,9 @@
 # 16.3.2
 
+* Extend content API test helpers
+
+# 16.3.2
+
 * Update collections API test helpers to reflect reality.
 
 # 16.3.1
