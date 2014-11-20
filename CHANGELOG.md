@@ -1,3 +1,8 @@
+# 16.3.4
+
+* Update content API test helper `#content_api_has_artefacts_with_a_tag` to
+  guard against missing keys
+
 # 16.3.3
 
 * Extend content API test helper `#content_api_has_artefacts_with_a_tag` to
