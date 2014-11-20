@@ -179,12 +179,16 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
       end
 
-      def content_api_has_artefacts_with_a_tag(tag_type, slug, artefact_slugs=[], options={})
-        draft = options[:draft] || false
+      def content_api_has_artefacts_with_a_tag(tag_type, slug, artefact_slugs=[], options={tag: {}, artefact: {}})
+        if options.detect { |(key, _)| key == :draft }
+          p "Passing a key of :draft outside of the 'tag' options hash is being deprecated. Please use tag: { draft: bool }"
+        end
+
+        draft = options.fetch(:draft) { options[:tag][:draft] || false }
 
         body = plural_response_base.merge(
           "results" => artefact_slugs.map do |artefact_slug|
-            artefact_for_slug(artefact_slug)
+            artefact_for_slug(artefact_slug, options[:artefact])
           end
         )
 
@@ -326,16 +330,16 @@ module GdsApi
         }
       end
 
-      def artefact_for_slug(slug)
+      def artefact_for_slug(slug, options = {})
         singular_response_base.merge(
           "title" => titleize_slug(slug),
-          "format" => "guide",
+          "format" => options.fetch(:format) { "guide" },
           "id" => "#{CONTENT_API_ENDPOINT}/#{CGI.escape(slug)}.json",
           "web_url" => "http://frontend.test.gov.uk/#{slug}",
           "details" => {
             "need_ids" => ["100001"],
             "business_proposition" => false, # To be removed and replaced with proposition tags
-            "format" => "Guide",
+            "format" => options.fetch(:format) { "Guide" },
             "alternative_title" => "",
             "overview" => "This is an overview",
             "video_summary" => "",
