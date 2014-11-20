@@ -333,13 +333,13 @@ module GdsApi
       def artefact_for_slug(slug, options = {})
         singular_response_base.merge(
           "title" => titleize_slug(slug),
-          "format" => options.fetch(:format) { "guide" },
+          "format" => options.fetch(:format, "guide"),
           "id" => "#{CONTENT_API_ENDPOINT}/#{CGI.escape(slug)}.json",
           "web_url" => "http://frontend.test.gov.uk/#{slug}",
           "details" => {
             "need_ids" => ["100001"],
             "business_proposition" => false, # To be removed and replaced with proposition tags
-            "format" => options.fetch(:format) { "Guide" },
+            "format" => options.fetch(:format) { "guide" },
             "alternative_title" => "",
             "overview" => "This is an overview",
             "video_summary" => "",
