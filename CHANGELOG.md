@@ -1,3 +1,7 @@
+# 16.3.2
+
+* Update collections API test helpers to reflect reality.
+
 # 16.3.1
 
 * Add test helper method to stub gone route registration.
