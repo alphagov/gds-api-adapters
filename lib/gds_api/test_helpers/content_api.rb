@@ -181,7 +181,7 @@ module GdsApi
 
       def content_api_has_artefacts_with_a_tag(tag_type, slug, artefact_slugs=[], options={tag: {}, artefact: {}})
         if options.has_key?(:draft)
-          p "Passing a key of :draft outside of the 'tag' options hash is being deprecated. Please use tag: { draft: bool }"
+          puts "Passing a key of :draft outside of the 'tag' options hash is being deprecated. Please use tag: { draft: bool }"
         end
 
         draft = options.fetch(:draft) { options[:tag][:draft] || false }
