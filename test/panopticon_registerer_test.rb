@@ -66,7 +66,9 @@ describe GdsApi::Panopticon::Registerer do
       need_ids: ["100001", "100002"],
       primary_section: "tax/vat",
       sections: ["tax/vat", "tax/capital-gains"],
-      specialist_sectors: ["oil-and-gas/wells", "oil-and-gas/licensing"]
+      specialist_sectors: ["oil-and-gas/wells", "oil-and-gas/licensing"],
+      public_timestamp: "2014-01-01T12:00:00+00:00",
+      latest_change_note: 'Added more stubble',
     )
 
     GdsApi::Panopticon::Registerer.new(
@@ -81,7 +83,9 @@ describe GdsApi::Panopticon::Registerer do
         need_ids: ["100001", "100002"],
         primary_section: "tax/vat",
         sections: ["tax/vat", "tax/capital-gains"],
-        specialist_sectors: ["oil-and-gas/wells", "oil-and-gas/licensing"]
+        specialist_sectors: ["oil-and-gas/wells", "oil-and-gas/licensing"],
+        public_timestamp: DateTime.parse('2014-01-01 12:00:00 +00:00'),
+        latest_change_note: 'Added more stubble',
       )
     )
 
