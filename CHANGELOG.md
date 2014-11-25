@@ -1,3 +1,8 @@
+# 16.4.0
+
+* Change the Panopticon Registerer adapter to support the `public_timestamp`
+  and `latest_change_note` fields.
+
 # 16.3.4
 
 * Update content API test helper `#content_api_has_artefacts_with_a_tag` to
