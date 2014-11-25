@@ -30,12 +30,19 @@ module GdsApi
         end
 
         optional_params = [
-          :need_id, :need_ids,
-          :section, :primary_section, :sections,
+          :need_id,
+          :need_ids,
+
+          :section,
+          :primary_section,
+          :sections,
+
+          :paths,
+          :prefixes,
+
           :specialist_sectors,
           :organisation_ids,
           :indexable_content,
-          :paths, :prefixes
         ]
 
         deprecated_params = {
