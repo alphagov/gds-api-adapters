@@ -43,6 +43,8 @@ module GdsApi
           :specialist_sectors,
           :organisation_ids,
           :indexable_content,
+          :public_timestamp,
+          :latest_change_note,
         ]
 
         deprecated_params = {
