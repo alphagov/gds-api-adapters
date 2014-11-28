@@ -1,3 +1,7 @@
+# 16.5.0
+
+* Add Whitehall and Publisher endpoints for reindexing editions tagged to topics.
+
 # 16.4.0
 
 * Change the Panopticon Registerer adapter to support the `public_timestamp`
