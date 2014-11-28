@@ -87,7 +87,7 @@ module GdsApi
       do_json_request(:get, url, nil, additional_headers, &create_response)
     end
 
-    def post_json!(url, params, additional_headers = {})
+    def post_json!(url, params = {}, additional_headers = {})
       do_json_request(:post, url, params, additional_headers)
     end
 
