@@ -52,7 +52,7 @@ describe GdsApi::Publisher do
   end
 
   def api
-    GdsApi::Publisher.new(PUBLISHER_ENDPOINT)
+    @api ||= GdsApi::Publisher.new(PUBLISHER_ENDPOINT)
   end
 
   it "should go get resource from publisher app given a slug" do
@@ -105,5 +105,14 @@ describe GdsApi::Publisher do
       with(:body => "{\"snac_codes\":[12345]}", :headers => GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
       to_return(:status => 200, :body => '{"snac": "12345"}', :headers => {})
     assert_equal '12345', api.council_for_slug('fake-transaction', [12345])
+  end
+
+  describe "#reindex_topic_editions(slug)" do
+    it "posts to the reindex URL" do
+      api.expects(:post_json!)
+        .with("#{PUBLISHER_ENDPOINT}/api/reindex-topic-editions/oil-and-gas/licensing")
+
+      api.reindex_topic_editions("oil-and-gas/licensing")
+    end
   end
 end

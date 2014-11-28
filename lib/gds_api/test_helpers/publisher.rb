@@ -7,6 +7,17 @@ module GdsApi
       # you could redefine/override the constant or stub directly.
       PUBLISHER_ENDPOINT = Plek.current.find("publisher")
 
+      def stub_all_publisher_api_requests
+        stub_request(:any, %r|^#{PUBLISHER_ENDPOINT}/api|)
+      end
+
+      def assert_publisher_received_reindex_request_for(slug)
+        assert_requested(
+          :post,
+          "#{PUBLISHER_ENDPOINT}/api/reindex-topic-editions/#{slug}"
+        )
+      end
+
       def publication_exists(details, options = {})
         json = JSON.dump(details)
         uri = "#{PUBLISHER_ENDPOINT}/publications/#{details['slug']}.json"
