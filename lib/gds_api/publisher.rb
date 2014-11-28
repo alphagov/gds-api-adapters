@@ -2,6 +2,9 @@ require_relative 'base'
 require_relative 'part_methods'
 
 class GdsApi::Publisher < GdsApi::Base
+  def reindex_topic_editions(slug)
+    post_json!("#{endpoint}/api/reindex-topic-editions/#{slug}")
+  end
 
   def publication_for_slug(slug, options = {})
     return nil if slug.nil? or slug == ''
