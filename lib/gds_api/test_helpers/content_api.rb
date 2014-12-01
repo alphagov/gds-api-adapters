@@ -94,14 +94,14 @@ module GdsApi
         live_tags = options.fetch(:live).map { |tag| tag_result(tag, type, state: 'live') }
         draft_tags = options.fetch(:draft).map { |tag| tag_result(tag, type, state: 'draft') }
 
+        body = plural_response_base.merge("results" => live_tags)
+        stub_request(:get, "#{CONTENT_API_ENDPOINT}/tags.json")
+          .with(query: hash_including({"type" => type}))
+          .to_return(status: 200, body: body.to_json, headers: {})
+
         body = plural_response_base.merge("results" => (live_tags + draft_tags))
         stub_request(:get, "#{CONTENT_API_ENDPOINT}/tags.json")
           .with(query: hash_including({"type" => type, "draft" => "true"}))
-          .to_return(status: 200, body: body.to_json, headers: {})
-
-        body = plural_response_base.merge("results" => live_tags)
-        stub_request(:get, "#{CONTENT_API_ENDPOINT}/tags.json")
-          .with(query: {"type" => type})
           .to_return(status: 200, body: body.to_json, headers: {})
       end
 
