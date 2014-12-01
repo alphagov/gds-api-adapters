@@ -427,6 +427,16 @@ describe GdsApi::ContentApi do
       assert_equal "Kaya", response.results[1].items[0].title
       assert_equal "Exodus", response.results[1].items[1].title
     end
+
+    it "permits cache busting" do
+      content_api_has_tags("specialist_sector", ["oil-and-gas/licensing"])
+
+      @api.tags("specialist_sector")
+      assert_requested :get, "#{@base_api_url}/tags.json?type=specialist_sector"
+
+      @api.tags("specialist_sector", bust_cache: true)
+      assert_requested :get, Regexp.new("#{@base_api_url}/tags.json\\?cachebust=\\d+&type=specialist_sector")
+    end
   end
 
   describe "licence" do
