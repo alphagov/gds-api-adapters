@@ -1,3 +1,9 @@
+# 17.0.1
+
+* Change the order of the ContentAPI `tags` request stubs as the first matching
+  stub is used.
+* Loosens the live `tags` stub to allow cachebust, as per the draft version.
+
 # 17.0.0
 
 * Change the matching behaviour of ContentAPI test helpers to loosen their
