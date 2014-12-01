@@ -1,3 +1,9 @@
+# 17.0.0
+
+* Change the matching behaviour of ContentAPI test helpers to loosen their
+  param requirements.
+* Add a `bust_cache` option for the ContentAPI `tags` endpoint.
+
 # 16.5.0
 
 * Add Whitehall and Publisher endpoints for reindexing editions tagged to topics.
