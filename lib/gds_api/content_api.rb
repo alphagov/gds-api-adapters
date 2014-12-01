@@ -32,6 +32,7 @@ class GdsApi::ContentApi < GdsApi::Base
     ]
     params << "sort=#{options[:sort]}" if options.has_key?(:sort)
     params << "draft=true" if options[:draft]
+    params << "cachebust=#{Time.now.utc.to_i}#{rand(1000)}" if options[:bust_cache]
 
     get_list!("#{base_url}/tags.json?#{params.join('&')}")
   end
