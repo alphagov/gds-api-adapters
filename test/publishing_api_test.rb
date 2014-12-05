@@ -18,4 +18,20 @@ describe GdsApi::PublishingApi do
       assert_equal base_path, response["base_path"]
     end
   end
+
+  describe "intent" do
+    it "should create the intent" do
+      base_path = "/test-intent"
+      stub_publishing_api_put_intent(base_path)
+      response = @api.put_intent(base_path, intent_for_base_path(base_path))
+      assert_equal base_path, response["base_path"]
+    end
+
+    it "should delete an intent" do
+      base_path = "/test-intent"
+      stub_publishing_api_destroy_intent(base_path)
+      response = @api.destroy_intent(base_path)
+      assert_equal base_path, response["base_path"]
+    end
+  end
 end
