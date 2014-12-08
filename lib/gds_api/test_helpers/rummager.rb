@@ -7,6 +7,11 @@ module GdsApi
         stub_request(:post, %r{#{Plek.new.find('search')}/documents})
       end
 
+      def stub_any_rummager_post_with_queueing_enabled
+        stub_request(:post, %r{#{Plek.new.find('search')}/documents}) \
+          .to_return(status: [202, "Accepted"])
+      end
+
       def assert_rummager_posted_item(attributes)
         url = Plek.new.find('search') + "/documents"
         assert_requested(:post, url) do |req|
