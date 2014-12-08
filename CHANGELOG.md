@@ -1,3 +1,7 @@
+# 17.1.0
+
+* Add a test helper to stub Rummager's behaviour when queueing is enabled.
+
 # 17.0.1
 
 * Change the order of the ContentAPI `tags` request stubs as the first matching
