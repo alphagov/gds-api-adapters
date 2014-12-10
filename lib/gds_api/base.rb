@@ -21,7 +21,7 @@ class GdsApi::Base
   def_delegators :client, :get_json, :get_json!,
                           :post_json, :post_json!,
                           :put_json, :put_json!,
-                          :delete_json!,
+                          :delete_json, :delete_json!,
                           :get_raw, :get_raw!,
                           :put_multipart,
                           :post_multipart
