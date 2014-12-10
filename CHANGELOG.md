@@ -1,3 +1,7 @@
+# 17.2.0
+
+* Add PublishingApi intent endpoints and test helpers.
+
 # 17.1.0
 
 * Add a test helper to stub Rummager's behaviour when queueing is enabled.
