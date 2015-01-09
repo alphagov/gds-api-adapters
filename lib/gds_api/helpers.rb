@@ -2,6 +2,7 @@ require 'gds_api/asset_manager'
 require 'gds_api/business_support_api'
 require 'gds_api/collections_api'
 require 'gds_api/content_api'
+require 'gds_api/content_register'
 require 'gds_api/content_store'
 require 'gds_api/fact_cave'
 require 'gds_api/imminence'
@@ -29,6 +30,10 @@ module GdsApi
 
     def content_api(options = {})
       @content_api ||= GdsApi::ContentApi.new(Plek.current.find("contentapi"), options)
+    end
+
+    def content_register(options = {})
+      @content_register ||= GdsApi::ContentRegister.new(Plek.current.find("content-register"), options)
     end
 
     def content_store(options = {})
