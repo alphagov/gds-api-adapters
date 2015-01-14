@@ -1,3 +1,7 @@
+# development
+
+* Deprecate passing `type` to `GdsApi::Router#get_route` and `GdsApi::Router#delete_route`
+
 # 17.2.0
 
 * Add PublishingApi intent endpoints and test helpers.
