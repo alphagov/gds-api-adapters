@@ -149,10 +149,10 @@ describe GdsApi::Router do
       it "should return the route details" do
         route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "backend", "backend_id" => "foo"}
         req = WebMock.stub_request(:get, "#{@base_api_url}/routes").
-          with(:query => {"incoming_path" => "/foo", "route_type" => "exact"}).
+          with(:query => {"incoming_path" => "/foo"}).
           to_return(:status => 200, :body => route_data.to_json, :headers => {"Content-type" => "application/json"})
 
-        response = @api.get_route("/foo", "exact")
+        response = @api.get_route("/foo")
         assert_equal 200, response.code
         assert_equal "foo", response.backend_id
 
@@ -162,10 +162,10 @@ describe GdsApi::Router do
 
       it "should return nil if nothing found" do
         req = WebMock.stub_request(:get, "#{@base_api_url}/routes").
-          with(:query => {"incoming_path" => "/foo", "route_type" => "exact"}).
+          with(:query => {"incoming_path" => "/foo"}).
           to_return(:status => 404)
 
-        response = @api.get_route("/foo", "exact")
+        response = @api.get_route("/foo")
         assert_nil response
 
         assert_requested(req)
@@ -176,10 +176,10 @@ describe GdsApi::Router do
         # The WebMock query matcher matches unescaped params.  The call blows up if they're not escaped
 
         req = WebMock.stub_request(:get, "#{@base_api_url}/routes").
-          with(:query => {"incoming_path" => "/foo bar", "route_type" => "exa ct"}).
+          with(:query => {"incoming_path" => "/foo bar"}).
           to_return(:status => 404)
 
-        response = @api.get_route("/foo bar", "exa ct")
+        response = @api.get_route("/foo bar")
         assert_nil response
 
         assert_requested(req)
@@ -352,10 +352,10 @@ describe GdsApi::Router do
       it "should allow deleting a route" do
         route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "backend", "backend_id" => "foo"}
         req = WebMock.stub_request(:delete, "#{@base_api_url}/routes").
-          with(:query => {"incoming_path" => "/foo", "route_type" => "exact"}).
+          with(:query => {"incoming_path" => "/foo"}).
           to_return(:status => 200, :body => route_data.to_json, :headers => {"Content-type" => "application/json"})
 
-        response = @api.delete_route("/foo", "exact")
+        response = @api.delete_route("/foo")
         assert_equal 200, response.code
         assert_equal "foo", response.backend_id
 
@@ -365,10 +365,10 @@ describe GdsApi::Router do
 
       it "should commit the routes when asked to" do
         req = WebMock.stub_request(:delete, "#{@base_api_url}/routes").
-          with(:query => {"incoming_path" => "/foo", "route_type" => "exact"}).
+          with(:query => {"incoming_path" => "/foo"}).
           to_return(:status => 200, :body => {}.to_json, :headers => {"Content-type" => "application/json"})
 
-        @api.delete_route("/foo", "exact", :commit => true)
+        @api.delete_route("/foo", :commit => true)
 
         assert_requested(req)
         assert_requested(@commit_req)
@@ -376,12 +376,12 @@ describe GdsApi::Router do
 
       it "should raise HTTPNotFound if nothing found" do
         req = WebMock.stub_request(:delete, "#{@base_api_url}/routes").
-          with(:query => {"incoming_path" => "/foo", "route_type" => "exact"}).
+          with(:query => {"incoming_path" => "/foo"}).
           to_return(:status => 404)
 
         e = nil
         begin
-          @api.delete_route("/foo", "exact")
+          @api.delete_route("/foo")
         rescue GdsApi::HTTPNotFound => ex
           e = ex
         end
@@ -397,11 +397,11 @@ describe GdsApi::Router do
         # The WebMock query matcher matches unescaped params.  The call blows up if they're not escaped
 
         req = WebMock.stub_request(:delete, "#{@base_api_url}/routes").
-          with(:query => {"incoming_path" => "/foo bar", "route_type" => "exa ct"}).
+          with(:query => {"incoming_path" => "/foo bar"}).
           to_return(:status => 404)
 
         begin
-          @api.delete_route("/foo bar", "exa ct")
+          @api.delete_route("/foo bar")
         rescue GdsApi::HTTPNotFound
         end
 
