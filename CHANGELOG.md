@@ -1,4 +1,4 @@
-# development
+# 17.3.0
 
 * Deprecate passing `type` to `GdsApi::Router#get_route` and `GdsApi::Router#delete_route`
 
