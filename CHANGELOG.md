@@ -1,3 +1,7 @@
+# 17.4.0
+
+* Add delete helpers to GdsApi::TestHelpers::Rummager
+
 # 17.3.0
 
 * Deprecate passing `type` to `GdsApi::Router#get_route` and `GdsApi::Router#delete_route`
