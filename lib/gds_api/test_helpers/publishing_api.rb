@@ -37,21 +37,21 @@ module GdsApi
         stub_request(:put, %r{\A#{PUBLISHING_API_ENDPOINT}/publish-intent})
       end
 
-      def assert_publishing_api_put_item(base_path, attributes = {})
+      def assert_publishing_api_put_item(base_path, attributes = {}, times = 1)
         url = PUBLISHING_API_ENDPOINT + "/content" + base_path
-        assert_publishing_api_put(url, attributes)
+        assert_publishing_api_put(url, attributes, times)
       end
 
-      def assert_publishing_api_put_intent(base_path, attributes = {})
+      def assert_publishing_api_put_intent(base_path, attributes = {}, times = 1)
         url = PUBLISHING_API_ENDPOINT + "/publish-intent" + base_path
-        assert_publishing_api_put(url, attributes)
+        assert_publishing_api_put(url, attributes, times)
       end
 
-      def assert_publishing_api_put(url, attributes = {})
+      def assert_publishing_api_put(url, attributes = {}, times = 1)
         if attributes.empty?
-          assert_requested(:put, url)
+          assert_requested(:put, url, times: times)
         else
-          assert_requested(:put, url) do |req|
+          assert_requested(:put, url, times: times) do |req|
             data = JSON.parse(req.body)
             attributes.to_a.all? do |key, value|
               data[key.to_s] == value
