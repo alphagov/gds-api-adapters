@@ -1,3 +1,8 @@
+# 17.5.0
+
+* Add ability to pass `n` to some PublishingAPI test helpers to say how many times
+  the request should be expected.
+
 # 17.4.0
 
 * Add delete helpers to GdsApi::TestHelpers::Rummager
