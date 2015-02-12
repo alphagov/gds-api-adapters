@@ -1,6 +1,8 @@
 #!/bin/bash -x
 set -e
+
 rm -f Gemfile.lock
+git clean -fdx
 
 export GOVUK_APP_DOMAIN=dev.gov.uk
 
