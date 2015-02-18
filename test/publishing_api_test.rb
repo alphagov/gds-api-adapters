@@ -14,7 +14,7 @@ describe GdsApi::PublishingApi do
     it "should create the item" do
       base_path = "/test-to-publishing-api"
       stub_publishing_api_put_item(base_path)
-      response = @api.put_content_item(base_path, content_item_for_base_path(base_path))
+      response = @api.put_content_item(base_path, content_item_for_base_path_in_a_publish_request(base_path))
       assert_equal base_path, response["base_path"]
     end
   end
