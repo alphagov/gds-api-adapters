@@ -3,6 +3,10 @@ require_relative 'exceptions'
 
 class GdsApi::PublishingApi < GdsApi::Base
 
+  def put_draft_content_item(base_path, payload)
+    put_json!(draft_content_item_url(base_path), payload)
+  end
+
   def put_content_item(base_path, payload)
     put_json!(content_item_url(base_path), payload)
   end
@@ -17,6 +21,10 @@ class GdsApi::PublishingApi < GdsApi::Base
 
 
   private
+
+  def draft_content_item_url(base_path)
+    "#{endpoint}/draft-content#{base_path}"
+  end
 
   def content_item_url(base_path)
     "#{endpoint}/content#{base_path}"

@@ -12,9 +12,19 @@ describe GdsApi::PublishingApi do
 
   describe "item" do
     it "should create the item" do
-      base_path = "/test-to-publishing-api"
+      base_path = "/test-content-item"
       stub_publishing_api_put_item(base_path)
       response = @api.put_content_item(base_path, content_item_for_base_path(base_path))
+      assert_equal base_path, response["base_path"]
+    end
+  end
+
+  describe "draft item" do
+    it "should create the draft item" do
+      base_path = "/test-draft-content-item"
+      stub_publishing_api_put_draft_item(base_path)
+
+      response = @api.put_draft_content_item(base_path, content_item_for_base_path(base_path))
       assert_equal base_path, response["base_path"]
     end
   end
