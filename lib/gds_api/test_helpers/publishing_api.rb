@@ -11,8 +11,12 @@ module GdsApi
 
       PUBLISHING_API_ENDPOINT = Plek.current.find('publishing-api')
 
-      def stub_publishing_api_put_item(base_path, body = content_item_for_base_path(base_path))
-        url = PUBLISHING_API_ENDPOINT + "/content" + base_path
+      def stub_publishing_api_put_draft_item(base_path, body = content_item_for_base_path(base_path))
+        stub_publishing_api_put_item(base_path, body, '/draft-content')
+      end
+
+      def stub_publishing_api_put_item(base_path, body = content_item_for_base_path(base_path), resource_path = '/content')
+        url = PUBLISHING_API_ENDPOINT + resource_path + base_path
         body = body.to_json unless body.is_a?(String)
         stub_request(:put, url).with(body: body).to_return(status: 201, body: body, headers: {})
       end
