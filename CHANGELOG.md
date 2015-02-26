@@ -1,3 +1,7 @@
+# 17.6.0
+
+* Add publishing API method to `PUT` draft content items, to be stored only in draft content-store.
+
 # 17.5.0
 
 * Add ability to pass `n` to some PublishingAPI test helpers to say how many times
