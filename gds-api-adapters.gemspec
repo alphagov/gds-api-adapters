@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'null_logger'
   s.add_dependency 'link_header'
   s.add_dependency 'lrucache', '~> 0.1.1'
-  s.add_dependency 'rest-client', '~> 1.6.3'  # At least 1.6.3 for redirect limits
+  s.add_dependency 'rest-client', '~> 1.7.3'
   s.add_dependency 'rack-cache'
 
   s.add_development_dependency 'rdoc', '3.12'
