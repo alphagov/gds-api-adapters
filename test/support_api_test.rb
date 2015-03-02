@@ -58,6 +58,13 @@ describe GdsApi::SupportApi do
     assert_equal response_body, result.to_hash
   end
 
+  it "fetches a list of orgs that have received feedback against their content" do
+    stub_get = stub_request(:get, "#{@base_api_url}/anonymous-feedback/organisations").
+      to_return(:status => 200, body: ['some', 'response'].to_json)
+
+    assert_equal(["some", "response"], @api.organisations_with_feedback.to_a)
+  end
+
   describe "problem report by org" do
     it "fetches problem reports by org for a given month (JSON)" do
       stub_get = stub_request(:get, "#{@base_api_url}/anonymous-feedback/problem-reports/2012-02.json?organisation_slug=moj").

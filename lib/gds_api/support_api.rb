@@ -13,6 +13,10 @@ class GdsApi::SupportApi < GdsApi::Base
     post_json!("#{endpoint}/anonymous-feedback/long-form-contacts", { :long_form_contact => request_details })
   end
 
+  def organisations_with_feedback
+    get_json!("#{endpoint}/anonymous-feedback/organisations")
+  end
+
   def problem_reports_for(options)
     date_string = if options[:day]
                     options[:day].strftime("%Y-%m-%d")
