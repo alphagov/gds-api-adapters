@@ -58,6 +58,35 @@ describe GdsApi::SupportApi do
     assert_equal response_body, result.to_hash
   end
 
+  describe "problem report by org" do
+    it "fetches problem reports by org for a given month (JSON)" do
+      stub_get = stub_request(:get, "#{@base_api_url}/anonymous-feedback/problem-reports/2012-02.json?organisation_slug=moj").
+        to_return(:status => 200, body: ['some', 'response'].to_json)
+
+      response = @api.problem_reports_for(month: Date.new(2012,02,01), organisation_slug: "moj")
+
+      assert_equal(["some", "response"], response.to_a)
+    end
+
+    it "fetches problem reports by org for a given day (JSON)" do
+      stub_get = stub_request(:get, "#{@base_api_url}/anonymous-feedback/problem-reports/2012-02-02.json?organisation_slug=moj").
+        to_return(:status => 200, body: ['some', 'response'].to_json)
+
+      response = @api.problem_reports_for(day: Date.new(2012,02,02), organisation_slug: "moj")
+
+      assert_equal(["some", "response"], response.to_a)
+    end
+
+    it "fetches problem reports by org for a given month (CSV)" do
+      stub_get = stub_request(:get, "#{@base_api_url}/anonymous-feedback/problem-reports/2012-02.csv?organisation_slug=moj").
+        to_return(:status => 200, body: 'csv response')
+
+      response = @api.problem_reports_for(month: Date.new(2012,02,01), organisation_slug: "moj", format: 'csv')
+
+      assert_equal("csv response", response.to_s)
+    end
+  end
+
   it "throws an exception when the support app isn't available" do
     support_api_isnt_available
 
