@@ -17,20 +17,18 @@ module GdsApi
 
       def stub_publishing_api_put_item(base_path, body = content_item_for_base_path(base_path), resource_path = '/content')
         url = PUBLISHING_API_ENDPOINT + resource_path + base_path
-        body = body.to_json unless body.is_a?(String)
-        stub_request(:put, url).with(body: body).to_return(status: 201, body: body, headers: {})
+        stub_request(:put, url).with(body: body).to_return(status: 201, body: '{}', headers: {})
       end
 
       def stub_publishing_api_put_intent(base_path, body = intent_for_base_path(base_path))
         url = PUBLISHING_API_ENDPOINT + "/publish-intent" + base_path
         body = body.to_json unless body.is_a?(String)
-        stub_request(:put, url).with(body: body).to_return(status: 201, body: body, headers: {})
+        stub_request(:put, url).with(body: body).to_return(status: 201, body: '{}', headers: {})
       end
 
       def stub_publishing_api_destroy_intent(base_path)
         url = PUBLISHING_API_ENDPOINT + "/publish-intent" + base_path
-        response_body = {base_path: base_path}.to_json
-        stub_request(:delete, url).to_return(status: 201, body: response_body)
+        stub_request(:delete, url).to_return(status: 201, body: '{}')
       end
 
       def stub_default_publishing_api_put()
