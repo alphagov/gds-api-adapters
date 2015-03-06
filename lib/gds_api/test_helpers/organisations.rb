@@ -1,6 +1,7 @@
 require 'gds_api/test_helpers/json_client_helper'
 require 'gds_api/test_helpers/common_responses'
 require 'plek'
+require 'securerandom'
 
 module GdsApi
   module TestHelpers
@@ -85,6 +86,7 @@ module GdsApi
             "organisation_logo_type_class_name" => (slug =~ /ministry/ ? "single-identity" : "eo"),
             "closed_at" => nil,
             "govuk_status" => (slug =~ /ministry/ ? "live" : "joining"),
+            "content_id" => SecureRandom.uuid,
           },
           "parent_organisations" => [
             {
