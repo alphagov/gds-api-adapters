@@ -1,3 +1,9 @@
+# 18.0.0
+
+* Update rest-client dependency for security fixes: https://github.com/rest-client/rest-client/commit/221e3f200f76bd1499591fbc6c3ea3f6183b66ef
+* Publishing API test helpers responses no longer include the entities
+* Government API test helpers responses include the content_id
+
 # 17.6.0
 
 * Add publishing API method to `PUT` draft content items, to be stored only in draft content-store.
