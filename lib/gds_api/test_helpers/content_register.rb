@@ -14,10 +14,19 @@ module GdsApi
           to_return(status: 201, body: response_body)
       end
 
+      def stub_content_register_entries(format, entries)
+        stub_request(:get, content_register_entries_url(format)).
+          to_return(body: entries.to_json, status: 200)
+      end
+
     private
 
       def content_register_entry_url_for(content_id)
         CONTENT_REGISTER_ENDPOINT + "/entry/" + content_id
+      end
+
+      def content_register_entries_url(format)
+        CONTENT_REGISTER_ENDPOINT + "/entries?format=#{format}"
       end
     end
   end
