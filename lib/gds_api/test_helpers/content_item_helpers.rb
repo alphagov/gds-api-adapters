@@ -10,7 +10,8 @@ module GdsApi
           "format" => "guide",
           "need_ids" => ["100001"],
           "public_updated_at" => "2014-05-06T12:01:00+00:00",
-          "base_path" => base_path,
+          # base_path is added in as necessary (ie for content-store GET responses)
+          # "base_path" => base_path,
           "details" => {
             "body" => "Some content for #{base_path}",
           }

@@ -23,6 +23,10 @@ module GdsApi
       def content_store_isnt_available
         stub_request(:any, /#{CONTENT_STORE_ENDPOINT}\/.*/).to_return(:status => 503)
       end
+
+      def content_item_for_base_path(base_path)
+        super.merge({ base_path: base_path })
+      end
     end
   end
 end
