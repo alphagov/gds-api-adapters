@@ -1,3 +1,8 @@
+# 18.1.0
+
+* Adds support for the PUT endpoint of content register
+* Test helpers for the `GdsApi::ContentRegister` adapter
+
 # 18.0.0
 
 * Update rest-client dependency for security fixes: https://github.com/rest-client/rest-client/commit/221e3f200f76bd1499591fbc6c3ea3f6183b66ef
