@@ -10,6 +10,7 @@ module GdsApi
         response_body = entry.merge(content_id: content_id).to_json
 
         stub_request(:put, content_register_entry_url_for(content_id)).
+          with(body: entry).
           to_return(status: 201, body: response_body)
       end
 
