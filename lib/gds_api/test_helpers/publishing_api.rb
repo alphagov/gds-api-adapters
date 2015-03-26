@@ -35,6 +35,10 @@ module GdsApi
         stub_request(:put, %r{\A#{PUBLISHING_API_ENDPOINT}/content})
       end
 
+      def stub_default_publishing_api_put_draft()
+        stub_request(:put, %r{\A#{PUBLISHING_API_ENDPOINT}/draft-content})
+      end
+
       def stub_default_publishing_api_put_intent()
         stub_request(:put, %r{\A#{PUBLISHING_API_ENDPOINT}/publish-intent})
       end
