@@ -1,3 +1,8 @@
+# 18.2.0
+
+* Remove base_path from publishing_api content_item_helpers.
+* Add helper to stub draft publishing API default.
+
 # 18.1.0
 
 * Adds support for the PUT endpoint of content register
