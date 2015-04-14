@@ -1,3 +1,7 @@
+# (Unreleased)
+
+* Add assert_publishing_api_put_draft_item to publishing_api_helpers
+
 # 18.2.0
 
 * Remove base_path from publishing_api content_item_helpers.
