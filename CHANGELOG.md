@@ -1,6 +1,7 @@
-# (Unreleased)
+# 18.3.0
 
 * Add assert_publishing_api_put_draft_item to publishing_api_helpers
+* Bump rest-client for security fixes
 
 # 18.2.0
 
