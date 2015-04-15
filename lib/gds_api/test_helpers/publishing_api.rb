@@ -48,6 +48,11 @@ module GdsApi
         assert_publishing_api_put(url, attributes, times)
       end
 
+      def assert_publishing_api_put_draft_item(base_path, attributes = {}, times = 1)
+        url = PUBLISHING_API_ENDPOINT + "/draft-content" + base_path
+        assert_publishing_api_put(url, attributes, times)
+      end
+
       def assert_publishing_api_put_intent(base_path, attributes = {}, times = 1)
         url = PUBLISHING_API_ENDPOINT + "/publish-intent" + base_path
         assert_publishing_api_put(url, attributes, times)
