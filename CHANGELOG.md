@@ -1,3 +1,7 @@
+# 18.3.1
+
+* Fix `content_api_has_artefacts_with_a_tag` test helper
+
 # 18.3.0
 
 * Add assert_publishing_api_put_draft_item to publishing_api_helpers
