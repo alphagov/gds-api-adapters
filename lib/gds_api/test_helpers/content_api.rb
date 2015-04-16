@@ -171,7 +171,7 @@ module GdsApi
 
         body = plural_response_base.merge(
           "results" => artefact_slugs.map do |artefact_slug|
-            artefact_for_slug(artefact_slug, options[:artefact])
+            artefact_for_slug(artefact_slug, options.fetch(:artefact, {}))
           end
         )
 
@@ -227,7 +227,7 @@ module GdsApi
       end
 
       def content_api_has_artefacts_with_a_draft_tag(tag_type, slug, artefact_slugs=[])
-        content_api_has_artefacts_with_a_tag(tag_type, slug, artefact_slugs, draft: true)
+        content_api_has_artefacts_with_a_tag(tag_type, slug, artefact_slugs, tag: {draft: true})
       end
 
       def content_api_has_sorted_artefacts_with_a_tag(tag_type, slug, sort_order, artefact_slugs=[])
