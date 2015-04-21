@@ -11,22 +11,32 @@ module GdsApi
       ORGANISATIONS_API_ENDPOINT = Plek.current.find('whitehall-admin')
       PUBLIC_HOST = Plek.current.find('www')
 
+      def organisations_api_has_organisations(organisation_slugs)
+        bodies = organisation_slugs.map { |slug| organisation_for_slug(slug) }
+        organisations_api_has_organisations_with_bodies(bodies)
+      end
+
       # Sets up the index endpoints for the given organisation slugs
       # The stubs are setup to paginate in chunks of 20
       #
       # This also sets up the individual endpoints for each slug
       # by calling organisations_api_has_organisation below
-      def organisations_api_has_organisations(organisation_slugs)
-        organisation_slugs.each {|s| organisations_api_has_organisation(s) }
+      def organisations_api_has_organisations_with_bodies(organisation_bodies)
+        # Stub API call to the endpoint for an individual organisation
+        organisation_bodies.each do |body|
+          slug = body["details"]["slug"]
+          organisations_api_has_organisation(slug, body)
+        end
+
         pages = []
-        organisation_slugs.each_slice(20) do |slugs|
-          pages << slugs.map {|s| organisation_details_for_slug(s) }
+        organisation_bodies.each_slice(20) do |bodies|
+          pages << bodies
         end
 
         pages.each_with_index do |page, i|
           page_details = plural_response_base.merge({
             "results" => page,
-            "total" => organisation_slugs.size,
+            "total" => organisation_bodies.size,
             "pages" => pages.size,
             "current_page" => i + 1,
             "page_size" => 20,
@@ -71,7 +81,7 @@ module GdsApi
       #
       # if the slug contains 'ministry' the format will be set to 'Ministerial department'
       # otherwise it will be set to 'Executive agency'
-      def organisation_details_for_slug(slug)
+      def organisation_details_for_slug(slug, content_id=SecureRandom.uuid)
         {
           "id" => "#{ORGANISATIONS_API_ENDPOINT}/api/organisations/#{slug}",
           "title" => titleize_slug(slug, :title_case => true),
@@ -86,7 +96,7 @@ module GdsApi
             "organisation_logo_type_class_name" => (slug =~ /ministry/ ? "single-identity" : "eo"),
             "closed_at" => nil,
             "govuk_status" => (slug =~ /ministry/ ? "live" : "joining"),
-            "content_id" => SecureRandom.uuid,
+            "content_id" => content_id,
           },
           "parent_organisations" => [
             {
@@ -102,7 +112,6 @@ module GdsApi
           ],
         }
       end
-
     end
   end
 end
