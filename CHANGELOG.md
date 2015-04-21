@@ -1,3 +1,7 @@
+# 18.4.0
+
+* Make TestHelpers::Organisations more flexible
+
 # 18.3.1
 
 * Fix `content_api_has_artefacts_with_a_tag` test helper
