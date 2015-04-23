@@ -1,3 +1,7 @@
+# 18.5.0
+
+* Add Rummager test helpers to stub requests for policies for an organisation.
+
 # 18.4.0
 
 * Make TestHelpers::Organisations more flexible
