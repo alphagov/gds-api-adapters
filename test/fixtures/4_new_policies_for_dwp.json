@@ -1,0 +1,104 @@
+{
+  "results": [
+    {
+      "title": "Welfare reform",
+      "description": "The governments policy on welfare reform",
+      "link": "/government/policies/welfare-reform",
+      "slug": "welfare-reform",
+      "format": "policy",
+      "organisations": [
+        {
+          "slug": "department-for-work-pensions",
+          "link": "/government/organisations/department-for-work-pensions",
+          "title": "Department for Work and Pensions",
+          "acronym": "DWP",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        }
+      ],
+      "public_timestamp": "2015-04-23T09:31:18.369Z",
+      "index": "mainstream",
+      "es_score": null,
+      "_id": "/government/policies/welfare-reform",
+      "document_type": "policy"
+    },
+    {
+      "title": "State Pension simplification",
+      "description": "The governments policy on state pension simplification",
+      "link": "/government/policies/state-pension-simplification",
+      "slug": "state-pension-simplification",
+      "format": "policy",
+      "organisations": [
+        {
+          "slug": "department-for-work-pensions",
+          "link": "/government/organisations/department-for-work-pensions",
+          "title": "Department for Work and Pensions",
+          "acronym": "DWP",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        }
+      ],
+      "public_timestamp": "2015-04-23T09:31:16.374Z",
+      "index": "mainstream",
+      "es_score": null,
+      "_id": "/government/policies/state-pension-simplification",
+      "document_type": "policy"
+    },
+    {
+      "title": "State Pension age",
+      "description": "The governments policy on state pension age",
+      "link": "/government/policies/state-pension-age",
+      "slug": "state-pension-age",
+      "format": "policy",
+      "organisations": [
+        {
+          "slug": "department-for-work-pensions",
+          "link": "/government/organisations/department-for-work-pensions",
+          "title": "Department for Work and Pensions",
+          "acronym": "DWP",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        }
+      ],
+      "public_timestamp": "2015-04-23T09:31:16.279Z",
+      "index": "mainstream",
+      "es_score": null,
+      "_id": "/government/policies/state-pension-age",
+      "document_type": "policy"
+    },
+    {
+      "title": "Poverty and social justice",
+      "description": "The governments policy on poverty and social justice",
+      "link": "/government/policies/poverty-and-social-justice",
+      "slug": "poverty-and-social-justice",
+      "format": "policy",
+      "organisations": [
+        {
+          "slug": "department-for-work-pensions",
+          "link": "/government/organisations/department-for-work-pensions",
+          "title": "Department for Work and Pensions",
+          "acronym": "DWP",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        },
+        {
+          "slug": "department-for-education",
+          "link": "/government/organisations/department-for-education",
+          "title": "Department for Education",
+          "acronym": "DfE",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        }
+      ],
+      "public_timestamp": "2015-04-23T09:31:13.699Z",
+      "index": "mainstream",
+      "es_score": null,
+      "_id": "/government/policies/poverty-and-social-justice",
+      "document_type": "policy"
+    }
+  ],
+  "total": 11,
+  "start": 0,
+  "facets": {},
+  "suggested_queries": []
+}

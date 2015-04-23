@@ -49,6 +49,21 @@ module GdsApi
         run_example_query
       end
 
+      def rummager_has_no_policies_for_any_organisation
+        stub_request(:get, %r{/unified_search.json})
+          .to_return(body: no_search_results_found)
+      end
+
+      def rummager_has_four_new_policies_for_every_organisation
+        stub_request(:get, %r{/unified_search.json})
+          .to_return(body: four_new_policies_results)
+      end
+
+      def rummager_has_four_old_policies_for_every_organisation
+        stub_request(:get, %r{/unified_search.json})
+          .to_return(body: four_old_policies_results)
+      end
+
     private
       def stub_request_for(result_set)
         stub_request(:get, /example.com\/unified_search/).to_return(body: result_set)
@@ -80,6 +95,24 @@ module GdsApi
         File.read(
           File.expand_path(
             "../../../../test/fixtures/sub_sector_organisations.json",
+            __FILE__
+          )
+        )
+      end
+
+      def four_new_policies_results
+        File.read(
+          File.expand_path(
+            "../../../../test/fixtures/4_new_policies_for_dwp.json",
+            __FILE__
+          )
+        )
+      end
+
+      def four_old_policies_results
+        File.read(
+          File.expand_path(
+            "../../../../test/fixtures/4_old_policies_for_dwp.json",
             __FILE__
           )
         )
