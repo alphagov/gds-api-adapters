@@ -1,3 +1,8 @@
+# 18.6.0
+
+* Change Rummager test helpers to allow stubbing specific counts for requests
+  for policies for an organisation.
+
 # 18.5.0
 
 * Add Rummager test helpers to stub requests for policies for an organisation.
