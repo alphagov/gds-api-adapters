@@ -1,0 +1,413 @@
+{
+  "results": [
+    {
+      "topics": [
+        {
+          "slug": "employment",
+          "link": "/government/topics/employment",
+          "title": "Employment"
+        },
+        {
+          "slug": "welfare",
+          "link": "/government/topics/welfare",
+          "title": "Welfare"
+        }
+      ],
+      "title": "Employment",
+      "description": "How the government is getting Britain working and helping people break the cycle of benefit dependency.",
+      "link": "/government/policies/helping-people-to-find-and-stay-in-work",
+      "format": "policy",
+      "display_type": "Policy",
+      "organisations": [
+        {
+          "slug": "department-for-work-pensions",
+          "link": "/government/organisations/department-for-work-pensions",
+          "title": "Department for Work and Pensions",
+          "acronym": "DWP",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        },
+        {
+          "slug": "hm-treasury",
+          "link": "/government/organisations/hm-treasury",
+          "title": "HM Treasury",
+          "acronym": "HMT",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        }
+      ],
+      "public_timestamp": "2015-03-26T15:06:42.000+00:00",
+      "index": "government",
+      "es_score": null,
+      "_id": "/government/policies/helping-people-to-find-and-stay-in-work",
+      "document_type": "edition"
+    },
+    {
+      "topics": [
+        {
+          "slug": "energy",
+          "link": "/government/topics/energy",
+          "title": "Energy"
+        },
+        {
+          "slug": "climate-change",
+          "link": "/government/topics/climate-change",
+          "title": "Climate change"
+        }
+      ],
+      "title": "Household energy",
+      "description": "How we're helping households to save on their energy bills and supporting people in fuel poverty.",
+      "link": "/government/policies/helping-households-to-cut-their-energy-bills",
+      "format": "policy",
+      "display_type": "Policy",
+      "organisations": [
+        {
+          "slug": "department-for-communities-and-local-government",
+          "link": "/government/organisations/department-for-communities-and-local-government",
+          "title": "Department for Communities and Local Government",
+          "acronym": "DCLG",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        },
+        {
+          "slug": "department-for-work-pensions",
+          "link": "/government/organisations/department-for-work-pensions",
+          "title": "Department for Work and Pensions",
+          "acronym": "DWP",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        },
+        {
+          "slug": "department-of-energy-climate-change",
+          "link": "/government/organisations/department-of-energy-climate-change",
+          "title": "Department of Energy & Climate Change",
+          "acronym": "DECC",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        },
+        {
+          "slug": "ofgem",
+          "link": "/government/organisations/ofgem",
+          "title": "Ofgem",
+          "organisation_state": "exempt"
+        }
+      ],
+      "public_timestamp": "2015-03-26T11:40:02.000+00:00",
+      "index": "government",
+      "es_score": null,
+      "_id": "/government/policies/helping-households-to-cut-their-energy-bills",
+      "document_type": "edition"
+    },
+    {
+      "topics": [
+        {
+          "slug": "welfare",
+          "link": "/government/topics/welfare",
+          "title": "Welfare"
+        },
+        {
+          "slug": "community-and-society",
+          "link": "/government/topics/community-and-society",
+          "title": "Community and society"
+        }
+      ],
+      "title": "Poverty and social justice",
+      "description": "How the government is working to help people overcome complex problems that lead to poverty, to help them change the course of their lives",
+      "link": "/government/policies/helping-to-reduce-poverty-and-improve-social-justice",
+      "format": "policy",
+      "display_type": "Policy",
+      "organisations": [
+        {
+          "slug": "department-for-education",
+          "link": "/government/organisations/department-for-education",
+          "title": "Department for Education",
+          "acronym": "DfE",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        },
+        {
+          "slug": "department-for-work-pensions",
+          "link": "/government/organisations/department-for-work-pensions",
+          "title": "Department for Work and Pensions",
+          "acronym": "DWP",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        }
+      ],
+      "public_timestamp": "2014-10-22T16:15:41.000+01:00",
+      "index": "government",
+      "es_score": null,
+      "_id": "/government/policies/helping-to-reduce-poverty-and-improve-social-justice",
+      "document_type": "edition"
+    },
+    {
+      "topics": [
+        {
+          "slug": "employment",
+          "link": "/government/topics/employment",
+          "title": "Employment"
+        },
+        {
+          "slug": "welfare",
+          "link": "/government/topics/welfare",
+          "title": "Welfare"
+        }
+      ],
+      "title": "Welfare reform",
+      "description": "Making the welfare system fairer, more affordable and better able to reduce poverty, worklessness and welfare dependency.",
+      "link": "/government/policies/simplifying-the-welfare-system-and-making-sure-work-pays",
+      "format": "policy",
+      "display_type": "Policy",
+      "organisations": [
+        {
+          "slug": "department-for-work-pensions",
+          "link": "/government/organisations/department-for-work-pensions",
+          "title": "Department for Work and Pensions",
+          "acronym": "DWP",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        }
+      ],
+      "public_timestamp": "2014-10-22T11:30:00.000+01:00",
+      "index": "government",
+      "es_score": null,
+      "_id": "/government/policies/simplifying-the-welfare-system-and-making-sure-work-pays",
+      "document_type": "edition"
+    },
+    {
+      "topics": [
+        {
+          "slug": "business-and-enterprise",
+          "link": "/government/topics/business-and-enterprise",
+          "title": "Business and enterprise"
+        },
+        {
+          "slug": "europe",
+          "link": "/government/topics/europe",
+          "title": "Europe"
+        },
+        {
+          "slug": "uk-economy",
+          "link": "/government/topics/uk-economy",
+          "title": "UK economy"
+        }
+      ],
+      "title": "European funds",
+      "description": "Negotiating the European Union (EU) Common Strategic Framework for 2014 to 2020.",
+      "link": "/government/policies/making-european-funding-work-better-for-the-uk-economy",
+      "format": "policy",
+      "display_type": "Policy",
+      "organisations": [
+        {
+          "slug": "department-for-business-innovation-skills",
+          "link": "/government/organisations/department-for-business-innovation-skills",
+          "title": "Department for Business, Innovation & Skills",
+          "acronym": "BIS",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        },
+        {
+          "slug": "department-for-communities-and-local-government",
+          "link": "/government/organisations/department-for-communities-and-local-government",
+          "title": "Department for Communities and Local Government",
+          "acronym": "DCLG",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        },
+        {
+          "slug": "department-for-environment-food-rural-affairs",
+          "link": "/government/organisations/department-for-environment-food-rural-affairs",
+          "title": "Department for Environment, Food & Rural Affairs",
+          "acronym": "Defra",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        },
+        {
+          "slug": "department-for-work-pensions",
+          "link": "/government/organisations/department-for-work-pensions",
+          "title": "Department for Work and Pensions",
+          "acronym": "DWP",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        },
+        {
+          "slug": "hm-treasury",
+          "link": "/government/organisations/hm-treasury",
+          "title": "HM Treasury",
+          "acronym": "HMT",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        }
+      ],
+      "public_timestamp": "2014-07-23T14:21:36.000+01:00",
+      "index": "government",
+      "es_score": null,
+      "_id": "/government/policies/making-european-funding-work-better-for-the-uk-economy",
+      "document_type": "edition"
+    },
+    {
+      "topics": [
+        {
+          "slug": "pensions-and-ageing-society",
+          "link": "/government/topics/pensions-and-ageing-society",
+          "title": "Pensions and ageing society"
+        }
+      ],
+      "title": "Older people",
+      "description": "What the government is doing to help improve life for older people in an ageing society.",
+      "link": "/government/policies/improving-opportunities-for-older-people",
+      "format": "policy",
+      "display_type": "Policy",
+      "organisations": [
+        {
+          "slug": "department-for-work-pensions",
+          "link": "/government/organisations/department-for-work-pensions",
+          "title": "Department for Work and Pensions",
+          "acronym": "DWP",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        }
+      ],
+      "public_timestamp": "2014-06-13T09:30:06.000+01:00",
+      "index": "government",
+      "es_score": null,
+      "_id": "/government/policies/improving-opportunities-for-older-people",
+      "document_type": "edition"
+    },
+    {
+      "topics": [
+        {
+          "slug": "business-and-enterprise",
+          "link": "/government/topics/business-and-enterprise",
+          "title": "Business and enterprise"
+        },
+        {
+          "slug": "regulation-reform",
+          "link": "/government/topics/regulation-reform",
+          "title": "Regulation reform"
+        }
+      ],
+      "title": "Health and safety reform",
+      "description": "How the government is improving the health and safety system, making sure it is taken seriously and reducing the burden on business.",
+      "link": "/government/policies/improving-the-health-and-safety-system",
+      "format": "policy",
+      "display_type": "Policy",
+      "organisations": [
+        {
+          "slug": "department-for-work-pensions",
+          "link": "/government/organisations/department-for-work-pensions",
+          "title": "Department for Work and Pensions",
+          "acronym": "DWP",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        }
+      ],
+      "public_timestamp": "2014-01-02T14:31:58.000+00:00",
+      "index": "government",
+      "es_score": null,
+      "_id": "/government/policies/improving-the-health-and-safety-system",
+      "document_type": "edition"
+    },
+    {
+      "topics": [
+        {
+          "slug": "pensions-and-ageing-society",
+          "link": "/government/topics/pensions-and-ageing-society",
+          "title": "Pensions and ageing society"
+        }
+      ],
+      "title": "State Pension age",
+      "description": "How the government is making sure the State Pension is affordable in the long term and fair between generations.",
+      "link": "/government/policies/reviewing-the-state-pension-age",
+      "format": "policy",
+      "display_type": "Policy",
+      "organisations": [
+        {
+          "slug": "department-for-work-pensions",
+          "link": "/government/organisations/department-for-work-pensions",
+          "title": "Department for Work and Pensions",
+          "acronym": "DWP",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        }
+      ],
+      "public_timestamp": "2013-12-05T14:19:47.000+00:00",
+      "index": "government",
+      "es_score": null,
+      "_id": "/government/policies/reviewing-the-state-pension-age",
+      "document_type": "edition"
+    },
+    {
+      "topics": [
+        {
+          "slug": "pensions-and-ageing-society",
+          "link": "/government/topics/pensions-and-ageing-society",
+          "title": "Pensions and ageing society"
+        }
+      ],
+      "title": "State Pension simplification",
+      "description": "How the government is making the State Pension simpler and fairer so it’s a good starting point for planning and saving for retirement.",
+      "link": "/government/policies/making-the-state-pension-simpler-and-fairer",
+      "format": "policy",
+      "display_type": "Policy",
+      "organisations": [
+        {
+          "slug": "department-for-work-pensions",
+          "link": "/government/organisations/department-for-work-pensions",
+          "title": "Department for Work and Pensions",
+          "acronym": "DWP",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        }
+      ],
+      "public_timestamp": "2013-08-08T09:30:52.000+01:00",
+      "index": "government",
+      "es_score": null,
+      "_id": "/government/policies/making-the-state-pension-simpler-and-fairer",
+      "document_type": "edition"
+    },
+    {
+      "topics": [
+        {
+          "slug": "children-and-young-people",
+          "link": "/government/topics/children-and-young-people",
+          "title": "Children and young people"
+        },
+        {
+          "slug": "welfare",
+          "link": "/government/topics/welfare",
+          "title": "Welfare"
+        },
+        {
+          "slug": "community-and-society",
+          "link": "/government/topics/community-and-society",
+          "title": "Community and society"
+        }
+      ],
+      "title": "Child maintenance reform",
+      "description": "Increasing the number of children who benefit from effective maintenance arrangements and improving collaboration between separated parents.",
+      "link": "/government/policies/improving-the-child-maintenance-system",
+      "format": "policy",
+      "display_type": "Policy",
+      "organisations": [
+        {
+          "slug": "department-for-work-pensions",
+          "link": "/government/organisations/department-for-work-pensions",
+          "title": "Department for Work and Pensions",
+          "acronym": "DWP",
+          "organisation_type": "Ministerial department",
+          "organisation_state": "live"
+        }
+      ],
+      "public_timestamp": "2013-08-08T09:28:12.000+01:00",
+      "index": "government",
+      "es_score": null,
+      "_id": "/government/policies/improving-the-child-maintenance-system",
+      "document_type": "edition"
+    }
+  ],
+  "total": 11,
+  "start": 0,
+  "facets": {},
+  "suggested_queries": []
+}

@@ -1,3 +1,4 @@
+require 'json'
 require 'gds_api/test_helpers/json_client_helper'
 
 module GdsApi
@@ -54,14 +55,24 @@ module GdsApi
           .to_return(body: no_search_results_found)
       end
 
-      def rummager_has_four_new_policies_for_every_organisation
-        stub_request(:get, %r{/unified_search.json})
-          .to_return(body: four_new_policies_results)
+      def rummager_has_new_policies_for_every_organisation(options = {})
+        if count = options[:count]
+          stub_request(:get, %r{/unified_search.json.*count=#{count}.*})
+            .to_return(body: first_n_results(new_policies_results, n: count))
+        else
+          stub_request(:get, %r{/unified_search.json})
+            .to_return(body: new_policies_results)
+        end
       end
 
-      def rummager_has_four_old_policies_for_every_organisation
-        stub_request(:get, %r{/unified_search.json})
-          .to_return(body: four_old_policies_results)
+      def rummager_has_old_policies_for_every_organisation(options = {})
+        if count = options[:count]
+          stub_request(:get, %r{/unified_search.json.*count=#{count}.*})
+            .to_return(body: first_n_results(old_policies_results, n: count))
+        else
+          stub_request(:get, %r{/unified_search.json})
+            .to_return(body: old_policies_results)
+        end
       end
 
     private
@@ -100,22 +111,30 @@ module GdsApi
         )
       end
 
-      def four_new_policies_results
+      def new_policies_results
         File.read(
           File.expand_path(
-            "../../../../test/fixtures/4_new_policies_for_dwp.json",
+            "../../../../test/fixtures/new_policies_for_dwp.json",
             __FILE__
           )
         )
       end
 
-      def four_old_policies_results
+      def old_policies_results
         File.read(
           File.expand_path(
-            "../../../../test/fixtures/4_old_policies_for_dwp.json",
+            "../../../../test/fixtures/old_policies_for_dwp.json",
             __FILE__
           )
         )
+      end
+
+      def first_n_results(results, options)
+        n = options[:n]
+        results = JSON.parse(results)
+        results["results"] = results["results"][0...n]
+
+        results.to_json
       end
 
       def client
