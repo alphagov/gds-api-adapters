@@ -63,4 +63,20 @@ describe GdsApi::SupportApi do
 
     assert_raises(GdsApi::HTTPServerError) { @api.create_service_feedback({}) }
   end
+
+  describe "GET /anonymous-feedback" do
+    it "fetches anonymous feedback" do
+      stub_get = stub_anonymous_feedback(
+        path_prefix: "/vat-rates",
+        page: 55,
+      )
+
+      result = @api.anonymous_feedback(
+        path_prefix: "/vat-rates",
+        page: 55,
+      )
+
+      assert_requested(stub_get)
+    end
+  end
 end

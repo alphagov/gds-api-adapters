@@ -17,4 +17,9 @@ class GdsApi::SupportApi < GdsApi::Base
     date_string = date.strftime("%Y-%m-%d")
     get_json!("#{endpoint}/anonymous-feedback/problem-reports/#{date_string}/totals")
   end
+
+  def anonymous_feedback(options = {})
+    uri = "#{endpoint}/anonymous-feedback" + query_string(options)
+    get_json!(uri)
+  end
 end
