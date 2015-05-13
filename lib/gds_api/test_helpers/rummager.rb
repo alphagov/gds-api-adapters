@@ -51,11 +51,21 @@ module GdsApi
       end
 
       def rummager_has_no_policies_for_any_organisation
+        puts "`rummager_has_no_policies_for_any_organisation` has been deprecated in favour of `rummager_has_no_policies_for_any_type`"
+        rummager_has_no_policies_for_any_type
+      end
+
+      def rummager_has_no_policies_for_any_type
         stub_request(:get, %r{/unified_search.json})
           .to_return(body: no_search_results_found)
       end
 
-      def rummager_has_new_policies_for_every_organisation(options = {})
+      def rummager_has_new_policies_for_every_organisation(*args)
+        puts "`rummager_has_new_policies_for_every_organisation` has been deprecated in favour of `rummager_has_new_policies_for_every_type`"
+        rummager_has_new_policies_for_every_type(*args)
+      end
+
+      def rummager_has_new_policies_for_every_type(options = {})
         if count = options[:count]
           stub_request(:get, %r{/unified_search.json.*count=#{count}.*})
             .to_return(body: first_n_results(new_policies_results, n: count))
