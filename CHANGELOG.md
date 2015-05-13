@@ -1,3 +1,8 @@
+# 18.7.0
+
+* Change name of Rummager policy-tagging test helpers to reflect the fact that
+  they stub for any type.  Deprecates the old helpers.
+
 # 18.6.0
 
 * Change Rummager test helpers to allow stubbing specific counts for requests
