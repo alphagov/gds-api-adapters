@@ -1,3 +1,7 @@
+# 18.8.0
+
+* Support API: add adapter for `/anonymous-feedback` feed endpoint
+
 # 18.7.0
 
 * Change name of Rummager policy-tagging test helpers to reflect the fact that
