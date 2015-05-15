@@ -1,3 +1,4 @@
+require 'cgi'
 require 'plek'
 
 module GdsApi
@@ -33,6 +34,12 @@ module GdsApi
 
       def support_api_isnt_available
         stub_request(:post, /#{SUPPORT_API_ENDPOINT}\/.*/).to_return(:status => 503)
+      end
+
+      def stub_anonymous_feedback(params, response_body = {})
+        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback").
+          with(query: params).
+          to_return(status: 200, body: response_body.to_json)
       end
     end
   end
