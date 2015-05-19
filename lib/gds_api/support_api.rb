@@ -22,4 +22,8 @@ class GdsApi::SupportApi < GdsApi::Base
     uri = "#{endpoint}/anonymous-feedback" + query_string(options)
     get_json!(uri)
   end
+
+  def organisation_summary(organisation_slug)
+    get_json!("#{endpoint}/anonymous-feedback/organisations/#{organisation_slug}")
+  end
 end
