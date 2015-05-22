@@ -1,3 +1,8 @@
+# 18.9.0
+
+* Support API: add adapters for `/anonymous-feedback/organisations` list, and
+  `/anonymous-feedback/organisations/:slug` feedback summary endpoints.
+
 # 18.8.0
 
 * Support API: add adapter for `/anonymous-feedback` feed endpoint
