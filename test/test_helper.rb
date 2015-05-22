@@ -26,6 +26,23 @@ class MiniTest::Unit::TestCase
   end
 end
 
+require 'pact/consumer/minitest'
+module PactTest
+  include Pact::Consumer::Minitest
+
+  def before_suite
+    # Pact does its own stubbing of network connections, so we want to
+    # prevent WebMock interfering when pact is being used.
+    ::WebMock.allow_net_connect!
+    super
+  end
+
+  def after_suite
+    super
+    ::WebMock.disable_net_connect!
+  end
+end
+
 def load_fixture_file(filename)
   File.open( File.join( File.dirname(__FILE__), "fixtures", filename ), :encoding => 'utf-8' )
 end
@@ -34,3 +51,4 @@ require 'webmock/minitest'
 WebMock.disable_net_connect!
 
 require 'gds_api/test_helpers/json_client_helper'
+require 'test_helpers/pact_helper'

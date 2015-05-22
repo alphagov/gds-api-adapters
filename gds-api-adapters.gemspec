@@ -36,4 +36,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'gem_publisher', '~> 1.5.0'
   s.add_development_dependency 'timecop', '~> 0.5.1'
   s.add_development_dependency 'pry'
+  s.add_development_dependency 'pact'
+  s.add_development_dependency 'pact-consumer-minitest'
+
 end
