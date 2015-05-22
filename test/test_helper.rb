@@ -11,7 +11,7 @@ require 'rack/utils'
 require 'rack/test'
 require 'simplecov'
 require 'simplecov-rcov'
-require 'mocha'
+require 'mocha/mini_test'
 require 'timecop'
 
 SimpleCov.start do
