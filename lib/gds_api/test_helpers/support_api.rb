@@ -42,8 +42,9 @@ module GdsApi
           to_return(status: 200, body: response_body.to_json)
       end
 
-      def stub_anonymous_feedback_organisation_summary(slug, response_body = {})
+      def stub_anonymous_feedback_organisation_summary(slug, ordering = nil, response_body = {})
         uri = "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/organisations/#{slug}"
+        uri << "?ordering=#{ordering}" if ordering
         stub_http_request(:get, uri).
           to_return(status: 200, body: response_body.to_json)
       end

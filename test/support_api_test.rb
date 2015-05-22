@@ -90,5 +90,16 @@ describe GdsApi::SupportApi do
 
       assert_requested(stub_get)
     end
+
+    it "accepts an ordering parameter" do
+      slug = "hm-revenue-customs"
+      ordering = "last_30_days"
+
+      stub_get = stub_anonymous_feedback_organisation_summary(slug, ordering)
+
+      @api.organisation_summary(slug, ordering: ordering)
+
+      assert_requested(stub_get)
+    end
   end
 end
