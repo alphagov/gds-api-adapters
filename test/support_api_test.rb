@@ -102,4 +102,14 @@ describe GdsApi::SupportApi do
       assert_requested(stub_get)
     end
   end
+
+  describe "GET /anonymous-feedback/organisations" do
+    it "fetches a list of organisations" do
+      stub_get = stub_anonymous_feedback_organisations_list
+
+      @api.organisations_list
+
+      assert_requested(stub_get)
+    end
+  end
 end
