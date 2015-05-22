@@ -59,7 +59,7 @@ module GdsApi
         }]
 
         stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/organisations").
-          to_return(status: 200, body: response_body)
+          to_return(status: 200, body: response_body.to_json)
       end
     end
   end

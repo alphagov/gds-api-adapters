@@ -1,3 +1,7 @@
+# 18.9.1
+
+* Fix a bug in the SupportApi test helper for organisations_list
+
 # 18.9.0
 
 * Support API: add adapters for `/anonymous-feedback/organisations` list, and
