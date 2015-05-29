@@ -67,6 +67,16 @@ module GdsApi
         stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/organisations").
           to_return(status: 200, body: response_body.to_json)
       end
+
+      def stub_support_feedback_export_request(id, response_body = nil)
+        response_body ||= {
+          filename: "feedex_0000-00-00_2015-01-01.csv",
+          ready: true
+        }
+
+        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/export-requests/#{id}").
+          to_return(status: 200, body: response_body.to_json)
+      end
     end
   end
 end

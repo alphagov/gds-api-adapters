@@ -35,4 +35,8 @@ class GdsApi::SupportApi < GdsApi::Base
   def organisations_list
     get_json!("#{endpoint}/anonymous-feedback/organisations")
   end
+
+  def feedback_export_request(id)
+    get_json!("#{endpoint}/anonymous-feedback/export-requests/#{id}")
+  end
 end
