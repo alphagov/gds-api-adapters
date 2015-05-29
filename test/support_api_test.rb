@@ -112,4 +112,14 @@ describe GdsApi::SupportApi do
       assert_requested(stub_get)
     end
   end
+
+  describe "POST /anonymous-feedback/export-request" do
+    it "makes a POST request to the support api" do
+      stub_post = stub_support_feedback_export_request_creation(notification_email: "foo@example.com")
+
+      @api.create_feedback_export_request(notification_email: "foo@example.com")
+
+      assert_requested(stub_post)
+    end
+  end
 end
