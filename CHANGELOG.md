@@ -1,3 +1,7 @@
+# 18.10.0
+
+* Add support for exporting CSVs from the Support API
+
 # 18.9.1
 
 * Fix a bug in the SupportApi test helper for organisations_list
