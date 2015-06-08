@@ -1,3 +1,7 @@
+# 18.11.0
+
+* Add support for organisation list and show in Support API
+
 # 18.10.0
 
 * Add support for exporting CSVs from the Support API
