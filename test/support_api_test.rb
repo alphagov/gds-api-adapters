@@ -103,16 +103,6 @@ describe GdsApi::SupportApi do
     end
   end
 
-  describe "GET /anonymous-feedback/organisations" do
-    it "fetches a list of organisations" do
-      stub_get = stub_anonymous_feedback_organisations_list
-
-      @api.organisations_list
-
-      assert_requested(stub_get)
-    end
-  end
-
   describe "POST /anonymous-feedback/export-requests" do
     it "makes a POST request to the support api" do
       stub_post = stub_support_feedback_export_request_creation(notification_email: "foo@example.com")
@@ -128,6 +118,26 @@ describe GdsApi::SupportApi do
       stub_get = stub_support_feedback_export_request(123)
 
       @api.feedback_export_request(123)
+
+      assert_requested(stub_get)
+    end
+  end
+
+  describe "GET /organisations" do
+    it "fetches a list of organisations" do
+      stub_get = stub_organisations_list
+
+      @api.organisations_list
+
+      assert_requested(stub_get)
+    end
+  end
+
+  describe "GET /organisations/:slug" do
+    it "fetches a list of organisations" do
+      stub_get = stub_organisation("foo")
+
+      @api.organisation("foo")
 
       assert_requested(stub_get)
     end
