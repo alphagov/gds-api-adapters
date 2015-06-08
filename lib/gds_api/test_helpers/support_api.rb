@@ -55,7 +55,7 @@ module GdsApi
           to_return(status: 200, body: response_body.to_json)
       end
 
-      def stub_anonymous_feedback_organisations_list(response_body = nil)
+      def stub_organisations_list(response_body = nil)
         response_body ||= [{
           slug: "cabinet-office",
           web_url: "https://www.gov.uk/government/organisations/cabinet-office",
@@ -64,7 +64,7 @@ module GdsApi
           govuk_status: "live"
         }]
 
-        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/organisations").
+        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/organisations").
           to_return(status: 200, body: response_body.to_json)
       end
 
