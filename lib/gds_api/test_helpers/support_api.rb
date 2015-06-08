@@ -68,6 +68,19 @@ module GdsApi
           to_return(status: 200, body: response_body.to_json)
       end
 
+      def stub_organisation(slug = "cabinet-office", response_body = nil)
+        response_body ||= {
+          slug: slug,
+          web_url: "https://www.gov.uk/government/organisations/#{slug}",
+          title: "Cabinet Office",
+          acronym: "CO",
+          govuk_status: "live"
+        }
+
+        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/organisations/#{slug}").
+          to_return(status: 200, body: response_body.to_json)
+      end
+
       def stub_support_feedback_export_request(id, response_body = nil)
         response_body ||= {
           filename: "feedex_0000-00-00_2015-01-01.csv",

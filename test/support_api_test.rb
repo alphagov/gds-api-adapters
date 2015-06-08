@@ -133,4 +133,13 @@ describe GdsApi::SupportApi do
     end
   end
 
+  describe "GET /organisations/:slug" do
+    it "fetches a list of organisations" do
+      stub_get = stub_organisation("foo")
+
+      @api.organisation("foo")
+
+      assert_requested(stub_get)
+    end
+  end
 end
