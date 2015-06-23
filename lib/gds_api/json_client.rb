@@ -2,7 +2,7 @@ require_relative 'response'
 require_relative 'exceptions'
 require_relative 'version'
 require_relative 'null_cache'
-require_relative 'govuk_request_id'
+require_relative 'govuk_headers'
 require 'lrucache'
 require 'rest-client'
 
@@ -172,7 +172,7 @@ module GdsApi
     end
 
     def with_headers(method_params, headers)
-      headers = headers.merge(govuk_request_id: GdsApi::GovukRequestId.value) if GdsApi::GovukRequestId.set?
+      headers = headers.merge(GdsApi::GovukHeaders.headers)
       method_params.merge(
         headers: method_params[:headers].merge(headers)
       )
