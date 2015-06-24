@@ -638,21 +638,19 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
-  def test_govuk_request_id_gets_set_if_present
-    header_name = 'Govuk-Request-Id'
-    GdsApi::GovukHeaders.set_header(header_name, "12345") # set by middleware GovukHeaderSniffer
+  def test_govuk_headers_are_included_in_requests_if_present
+    GdsApi::GovukHeaders.set_header(:govuk_request_id, "12345") # set by middleware GovukHeaderSniffer
     stub_request(:get, "http://some.other.endpoint/some.json").to_return(:status => 200)
 
     GdsApi::JsonClient.new.get_json("http://some.other.endpoint/some.json")
 
     assert_requested(:get, %r{/some.json}) do |request|
-      request.headers[header_name] == '12345'
+      request.headers['Govuk-Request-Id'] == '12345'
     end
   end
 
-  def test_govuk_headers_ignored_if_not_present
-    header_name = 'Govuk-Request-Id'
-    GdsApi::GovukHeaders.set_header(header_name, "")
+  def test_govuk_headers_ignored_in_requests_if_not_present
+    GdsApi::GovukHeaders.set_header(:x_govuk_authenticated_user, "")
     stub_request(:get, "http://some.other.endpoint/some.json").to_return(:status => 200)
 
     GdsApi::JsonClient.new.get_json("http://some.other.endpoint/some.json")
