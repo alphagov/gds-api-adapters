@@ -41,25 +41,28 @@ Other Rack-based apps should opt-in by adding this line to your `config.ru`:
 
     use GdsApi::GovukHeaderSniffer, 'HTTP_GOVUK_REQUEST_ID', 'GOVUK-Request-Id'
 
+## Middleware for identifying authenticated users
 
-## Authentication and authorisation
+Applications can make use of user-based identification for additional
+authorisation when making API requests. Any application that is using gds-sso
+for authentication can set an additional header called
+'X-Govuk-Authenticated-User' to identify the currently authenticated user ID.
+This will automatically be picked up by the `GdsApi::GovukHeaderSniffer`
+middleware in Rails applications and sent with API requests so that the
+downstream service can optionally use the identifier to perform authorisation
+on the request. This will be used by content-store as a mechanism to only
+return access-limited content to authenticated and authorised users.
+
+## App-level Authentication
 
 The API Adapters currently support either HTTP Basic or OAuth2 (bearer token)
-authentication. This is only used for Panopticon registration at present. The
-GdsApi::Panopticon::Registerer adapter expects a constant called
-PANOPTICON_API_CREDENTIALS to be defined and will use that to pass the relevant
-options to the HTTP client.
+authentication. This allows an application to identify itself with another where
+required. This is currently used by the GdsApi::Panopticon::Registerer
+adapter, which  expects a constant called PANOPTICON_API_CREDENTIALS to be
+defined that identifies the calling applicatioh to Panopticon:
 
-To use bearer token authentication the format that constant should be a hash of
-the form:
 
     PANOPTICON_API_CREDENTIALS = { bearer_token: 'MY_BEARER_TOKEN' }
-
-To provide authorisation, the adapters can pass on a header containing the
-authenticated user ID, using the `GovukHeaderSniffer` middleware as above. This
-is configured by default for Rails apps, using the
-`HTTP_X_GOVUK_AUTHENTICATED_USER` header.
-
 
 ## Test Helpers
 
