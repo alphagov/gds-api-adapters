@@ -1,3 +1,7 @@
+# 19.1.0
+
+* Pass HTTP_X_GOVUK_AUTHENTICATED_USER in API requests.
+
 # 19.0.0
 
 * Remove old policy test helpers for rummager.
