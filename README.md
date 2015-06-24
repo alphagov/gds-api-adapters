@@ -29,32 +29,39 @@ something that actually logs:
 
     GdsApi::Base.logger = Logger.new("/path/to/file.log")
 
-## Authorization
-
-The API Adapters currently support either HTTP Basic authentication or OAuth2
-(bearer token) authorization. This is only used for Panopticon registration at
-present. The GdsApi::Panopticon::Registerer adapter expects a constant called
-PANOPTICON_API_CREDENTIALS to be defined and will use that to pass the relevant
-options to the HTTP client.
-
-To use bearer token authorization the format that constant should be a hash of
-the form:
-
-    PANOPTICON_API_CREDENTIALS = { bearer_token: 'MY_BEARER_TOKEN' }
-
-
 ## Middleware for request tracing
 
-We set a unique header at the cache level called `GOVUK-Request-Id`. In order
+We set a unique header at the cache level called `Govuk-Request-Id`. In order
 to serve a user's request, if apps make API requests they should pass on this
 header, so that we can trace a request across the entire GOV.UK stack.
 
-`GdsApi::GovukRequestIdSniffer` middleware takes care of this. This gem contains
+`GdsApi::GovukHeaderSniffer` middleware takes care of this. This gem contains
 a railtie that configures this middleware for Rails apps without extra effort.
 Other Rack-based apps should opt-in by adding this line to your `config.ru`:
 
-```use GdsApi::GovukRequestIdSniffer```
+    use GdsApi::GovukHeaderSniffer, 'HTTP_GOVUK_REQUEST_ID'
 
+## Middleware for identifying authenticated users
+
+Applications can make use of user-based identification for additional
+authorisation when making API requests. Any application that is using gds-sso
+for authentication can set an additional header called
+'X-Govuk-Authenticated-User' to identify the currently authenticated user ID.
+This will automatically be picked up by the `GdsApi::GovukHeaderSniffer`
+middleware in Rails applications and sent with API requests so that the
+downstream service can optionally use the identifier to perform authorisation
+on the request. This will be used by content-store as a mechanism to only
+return access-limited content to authenticated and authorised users.
+
+## App-level Authentication
+
+The API Adapters currently support either HTTP Basic or OAuth2 (bearer token)
+authentication. This allows an application to identify itself to another where
+required. This is currently used by the `GdsApi::Panopticon::Registerer`
+adapter, which  expects a constant called `PANOPTICON_API_CREDENTIALS` to be
+defined that identifies the calling application to Panopticon:
+
+    PANOPTICON_API_CREDENTIALS = { bearer_token: 'MY_BEARER_TOKEN' }
 
 ## Test Helpers
 
