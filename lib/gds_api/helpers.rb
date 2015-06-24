@@ -24,10 +24,6 @@ module GdsApi
       @business_support_api ||= GdsApi::BusinessSupportApi.new(Plek.current.find("business-support-api"), options)
     end
 
-    def collections_api(options = {})
-      @collections_api ||= GdsApi::CollectionsApi.new(Plek.current.find("collections-api"), options)
-    end
-
     def content_api(options = {})
       @content_api ||= GdsApi::ContentApi.new(Plek.current.find("contentapi"), options)
     end
