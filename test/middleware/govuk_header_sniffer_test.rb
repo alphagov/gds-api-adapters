@@ -10,9 +10,9 @@ describe GdsApi::GovukHeaderSniffer do
 
   let(:app) { GdsApi::GovukHeaderSniffer.new(inner_app, 'HTTP_GOVUK_REQUEST_ID') }
 
-  it "sniffs the govuk request id from request headers" do
+  it "sniffs custom request headers and stores them for later use" do
     header "Govuk-Request-Id", "12345"
     get "/"
-    assert_equal '12345', GdsApi::GovukHeaders.headers[:'govuk-request-id']
+    assert_equal '12345', GdsApi::GovukHeaders.headers[:govuk_request_id]
   end
 end

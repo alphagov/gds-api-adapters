@@ -15,7 +15,7 @@ module GdsApi
     private
 
     def readable_name
-      @header_name.sub(/^HTTP_/, "").gsub(/_/, "-").downcase.to_sym
+      @header_name.sub(/^HTTP_/, "").downcase.to_sym
     end
   end
 end
