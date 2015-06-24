@@ -31,7 +31,7 @@ something that actually logs:
 
 ## Middleware for request tracing
 
-We set a unique header at the cache level called `GOVUK-Request-Id`. In order
+We set a unique header at the cache level called `Govuk-Request-Id`. In order
 to serve a user's request, if apps make API requests they should pass on this
 header, so that we can trace a request across the entire GOV.UK stack.
 
@@ -39,7 +39,7 @@ header, so that we can trace a request across the entire GOV.UK stack.
 a railtie that configures this middleware for Rails apps without extra effort.
 Other Rack-based apps should opt-in by adding this line to your `config.ru`:
 
-    use GdsApi::GovukHeaderSniffer, 'HTTP_GOVUK_REQUEST_ID', 'GOVUK-Request-Id'
+    use GdsApi::GovukHeaderSniffer, 'HTTP_GOVUK_REQUEST_ID'
 
 ## Middleware for identifying authenticated users
 
@@ -56,11 +56,10 @@ return access-limited content to authenticated and authorised users.
 ## App-level Authentication
 
 The API Adapters currently support either HTTP Basic or OAuth2 (bearer token)
-authentication. This allows an application to identify itself with another where
-required. This is currently used by the GdsApi::Panopticon::Registerer
-adapter, which  expects a constant called PANOPTICON_API_CREDENTIALS to be
-defined that identifies the calling applicatioh to Panopticon:
-
+authentication. This allows an application to identify itself to another where
+required. This is currently used by the `GdsApi::Panopticon::Registerer`
+adapter, which  expects a constant called `PANOPTICON_API_CREDENTIALS` to be
+defined that identifies the calling application to Panopticon:
 
     PANOPTICON_API_CREDENTIALS = { bearer_token: 'MY_BEARER_TOKEN' }
 
