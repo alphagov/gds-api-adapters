@@ -326,6 +326,14 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  def test_get_bang_should_raise_http_forbidden_if_403_returned_from_endpoint
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_return(:body => "{}", :status => 403)
+    assert_raises GdsApi::HTTPForbidden do
+      @client.get_json!(url)
+    end
+  end
+
   def test_get_should_be_nil_if_404_returned_from_endpoint
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(:body => "{}", :status => 404)
