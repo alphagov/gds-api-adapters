@@ -33,6 +33,9 @@ module GdsApi
   class HTTPGone < HTTPClientError
   end
 
+  class HTTPForbidden < HTTPClientError
+  end
+
   class NoBearerToken < BaseError; end
 
   module ExceptionHandling
@@ -51,6 +54,8 @@ module GdsApi
       code = error.http_code
 
       case code
+      when 403
+        GdsApi::HTTPForbidden.new(code, message, details)
       when 404
         GdsApi::HTTPNotFound.new(code, message, details)
       when 410
