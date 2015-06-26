@@ -218,7 +218,9 @@ module GdsApi
 
         # If no-cache is present, this takes precedent over any other value
         # in this header
-        return Time.now.utc if cache_parts.include?("no-cache")
+        if cache_parts.any? { |part| ["no-cache","private"].include?(part) }
+          return Time.now.utc
+        end
 
         # Otherwise, look for a 'max-age=123' value, which is the number of
         # seconds for which to cache the response.
