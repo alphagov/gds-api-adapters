@@ -1,3 +1,7 @@
+# 19.2.0
+
+* Raise HTTPForbidden on a 403 response.
+
 # 19.1.0
 
 * Pass HTTP_X_GOVUK_AUTHENTICATED_USER in API requests.
