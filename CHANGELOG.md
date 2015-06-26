@@ -1,3 +1,8 @@
+# Unreleased
+
+* remove collections-api client and helpers.
+  The application has been retired.
+
 # 19.2.0
 
 * Raise HTTPForbidden on a 403 response.
