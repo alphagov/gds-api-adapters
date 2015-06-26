@@ -1,3 +1,3 @@
 module GdsApi
-  VERSION = '19.2.0'
+  VERSION = '20.0.0'
 end
