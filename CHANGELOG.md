@@ -1,7 +1,10 @@
-# Unreleased
+# 20.0.0
 
 * remove collections-api client and helpers.
   The application has been retired.
+
+* Update content_store_has_item test helper to support better overriding of
+  Cache-Control headers in responses.
 
 # 19.2.0
 
