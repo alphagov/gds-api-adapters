@@ -214,10 +214,10 @@ module GdsApi
       if response.headers[:cache_control]
         cache_control = Rack::Cache::CacheControl.new(response.headers[:cache_control])
 
-        if cache_control["private"] || cache_control["no-cache"] || cache_control["no-store"]
+        if cache_control.private? || cache_control.no_cache? || cache_control.no_store?
           Time.now.utc
-        elsif cache_control["max-age"]
-          Time.now.utc + cache_control["max-age"].to_i
+        elsif cache_control.max_age
+          Time.now.utc + cache_control.max_age
         end
       elsif response.headers[:expires]
         Time.httpdate response.headers[:expires]

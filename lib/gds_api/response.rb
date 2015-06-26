@@ -46,9 +46,9 @@ module GdsApi
     end
 
     def expires_at
-      if headers[:date] && cache_control['max-age']
+      if headers[:date] && cache_control.max_age
         response_date = Time.parse(headers[:date])
-        response_date + cache_control['max-age'].to_i
+        response_date + cache_control.max_age
       elsif headers[:expires]
         Time.parse(headers[:expires])
       end
@@ -59,8 +59,8 @@ module GdsApi
 
       age = Time.now.utc - Time.parse(headers[:date])
 
-      if cache_control['max-age']
-        cache_control['max-age'].to_i - age.to_i
+      if cache_control.max_age
+        cache_control.max_age - age.to_i
       elsif headers[:expires]
         Time.parse(headers[:expires]).to_i - Time.now.utc.to_i
       end
@@ -68,10 +68,6 @@ module GdsApi
 
     def cache_control
       @cache_control ||= Rack::Cache::CacheControl.new(headers[:cache_control])
-    end
-
-    def cache_control_private?
-      cache_control["private"]
     end
 
     def to_hash
