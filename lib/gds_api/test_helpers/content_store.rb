@@ -9,10 +9,26 @@ module GdsApi
 
       CONTENT_STORE_ENDPOINT = Plek.current.find('content-store')
 
-      def content_store_has_item(base_path, body = content_item_for_base_path(base_path), expires_in = 900)
+      # Stubs a content item in the content store.
+      # The following options can be passed in:
+      #
+      #   :max_age  will set the max-age of the Cache-Control header in the response. Defaults to 900
+      #   :private  if true, the Cache-Control header will include the "private" directive. By default it
+      #             will include "public"
+      def content_store_has_item(base_path, body = content_item_for_base_path(base_path), options = {})
+        max_age = options.fetch(:max_age, 900)
+        visibility = options[:private] ? "private" : "public"
         url = CONTENT_STORE_ENDPOINT + "/content" + base_path
         body = body.to_json unless body.is_a?(String)
-        stub_request(:get, url).to_return(status: 200, body: body, headers: {cache_control: "public, max-age=#{expires_in}", date: Time.now.httpdate})
+
+        stub_request(:get, url).to_return(
+          status: 200,
+          body: body,
+          headers: {
+            cache_control: "#{visibility}, max-age=#{max_age}",
+            date: Time.now.httpdate
+          }
+        )
       end
 
       def content_store_does_not_have_item(base_path)

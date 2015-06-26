@@ -247,6 +247,44 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  def test_does_not_cache_responses_with_cache_control_private
+    url = "http://some.endpoint/private.json"
+    result = {"foo" => "bar"}
+    stub_request(:get, url).to_return(
+      :body => JSON.dump(result),
+      :status => 200,
+      :headers => { "Cache-Control" => "max-age=600, private" }
+    )
+
+    response_a = GdsApi::JsonClient.new.get_json(url)
+
+    Timecop.travel( 7 * 60 - 30) do # now + 6 mins 30 secs
+      response_b = GdsApi::JsonClient.new.get_json(url)
+
+      assert_requested :get, url, times: 2
+      assert_equal response_a.to_hash, response_b.to_hash
+    end
+  end
+
+  def test_does_not_cache_responses_with_cache_control_no_store
+    url = "http://some.endpoint/private.json"
+    result = {"foo" => "bar"}
+    stub_request(:get, url).to_return(
+      :body => JSON.dump(result),
+      :status => 200,
+      :headers => { "Cache-Control" => "max-age=600, no-store" }
+    )
+
+    response_a = GdsApi::JsonClient.new.get_json(url)
+
+    Timecop.travel( 7 * 60 - 30) do # now + 6 mins 30 secs
+      response_b = GdsApi::JsonClient.new.get_json(url)
+
+      assert_requested :get, url, times: 2
+      assert_equal response_a.to_hash, response_b.to_hash
+    end
+  end
+
   def test_should_respect_cache_control_headers_with_no_cache_and_max_age
     url = "http://some.endpoint/no_cache_and_max_age.json"
     result = {"foo" => "bar"}
