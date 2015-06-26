@@ -214,7 +214,7 @@ module GdsApi
       if response.headers[:cache_control]
         cache_control = Rack::Cache::CacheControl.new(response.headers[:cache_control])
 
-        if cache_control["private"] || cache_control["no-cache"]
+        if cache_control["private"] || cache_control["no-cache"] || cache_control["no-store"]
           Time.now.utc
         elsif cache_control["max-age"]
           Time.now.utc + cache_control["max-age"].to_i
