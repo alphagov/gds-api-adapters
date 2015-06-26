@@ -66,6 +66,10 @@ module GdsApi
       max_age.to_i - age.to_i
     end
 
+    def cache_control_private?
+      Rack::Cache::CacheControl.new(headers[:cache_control])["private"]
+    end
+
     def to_hash
       @parsed ||= transform_parsed(JSON.parse(@http_response.body))
     end

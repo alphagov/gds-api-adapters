@@ -22,6 +22,26 @@ describe GdsApi::Response do
     end
   end
 
+  describe ".cache_control_private?" do
+    it "returns true if the response contains a cache-control private header" do
+      headers = { :cache_control => 'max-age=5, private' }
+
+      mock_http_response = stub(:body => "{}", :code => 200, :headers => headers)
+      response = GdsApi::Response.new(mock_http_response)
+
+      assert response.cache_control_private?
+    end
+
+    it "returns false if the response does not contain a cache-control private header" do
+      headers = { :cache_control => 'max-age=5, public' }
+
+      mock_http_response = stub(:body => "{}", :code => 200, :headers => headers)
+      response = GdsApi::Response.new(mock_http_response)
+
+      refute response.cache_control_private?
+    end
+  end
+
   describe ".expires_at" do
     it "should be calculated from cache-control max-age" do
       Timecop.freeze(Time.parse("15:00")) do
