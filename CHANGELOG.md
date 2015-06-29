@@ -3,6 +3,8 @@
 * remove collections-api client and helpers.
   The application has been retired.
 
+* Don't cache Cache-Control "private" and "no-store" responses.
+
 * Update content_store_has_item test helper to support better overriding of
   Cache-Control headers in responses.
 
