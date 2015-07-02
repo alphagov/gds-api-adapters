@@ -1,6 +1,5 @@
 require 'gds_api/asset_manager'
 require 'gds_api/business_support_api'
-require 'gds_api/collections_api'
 require 'gds_api/content_api'
 require 'gds_api/content_register'
 require 'gds_api/content_store'
