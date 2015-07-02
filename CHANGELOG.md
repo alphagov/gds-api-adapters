@@ -1,3 +1,8 @@
+# 20.1.0
+
+* Change the user agent string to include the app name, eg:
+  `GDS Api Client v. 20.1.0` -> `gds-api-adapters/20.1.0 (whitehall)`
+
 # 20.0.0
 
 * remove collections-api client and helpers.
