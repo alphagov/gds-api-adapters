@@ -1,3 +1,7 @@
+# 20.1.1
+
+* Fix stray collections-api require
+
 # 20.1.0
 
 * Change the user agent string to include the app name, eg:
