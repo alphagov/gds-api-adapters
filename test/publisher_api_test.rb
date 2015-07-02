@@ -102,7 +102,7 @@ describe GdsApi::Publisher do
 
   it "should be able to retrieve local transaction details" do
     stub_request(:post, "#{PUBLISHER_ENDPOINT}/local_transactions/fake-transaction/verify_snac.json").
-      with(:body => "{\"snac_codes\":[12345]}", :headers => GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
+      with(:body => "{\"snac_codes\":[12345]}", :headers => GdsApi::JsonClient.default_request_headers).
       to_return(:status => 200, :body => '{"snac": "12345"}', :headers => {})
     assert_equal '12345', api.council_for_slug('fake-transaction', [12345])
   end

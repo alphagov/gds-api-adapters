@@ -157,7 +157,7 @@ class ImminenceApiTest < MiniTest::Unit::TestCase
 EOS
 
     stub_request(:get, "#{ROOT}/places/test.kml").
-      with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
+      with(headers: GdsApi::JsonClient.default_request_headers).
       to_return(status: 200, body: kml_body )
 
     response_body = api_client.places_kml("test")
@@ -176,7 +176,7 @@ EOS
     }
 
     stub_request(:get, "#{ROOT}/areas/WC2B%206SE.json").
-      with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
+      with(headers: GdsApi::JsonClient.default_request_headers).
       to_return(status: 200, body: results.to_json )
 
     response = api_client.areas_for_postcode("WC2B 6SE")
@@ -200,7 +200,7 @@ EOS
     }
 
     stub_request(:get, "#{ROOT}/areas/EUR.json").
-      with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
+      with(headers: GdsApi::JsonClient.default_request_headers).
       to_return(status: 200, body: results.to_json )
 
     response = api_client.areas_for_type("EUR")
