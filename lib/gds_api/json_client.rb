@@ -54,7 +54,8 @@ module GdsApi
       {
         'Accept' => 'application/json',
         'Content-Type' => 'application/json',
-        'User-Agent' => "GDS Api Client v. #{GdsApi::VERSION}"
+        # GOVUK_APP_NAME is set for all apps by Puppet
+        'User-Agent' => "gds-api-adapters/#{GdsApi::VERSION} (#{ENV["GOVUK_APP_NAME"]})"
       }
     end
 

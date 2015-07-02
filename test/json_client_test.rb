@@ -789,4 +789,20 @@ class JsonClientTest < MiniTest::Spec
       GdsApi::JsonClient.new(:timeout => -1)
     end
   end
+
+  def test_should_add_user_agent_using_env
+    previous_govuk_app_name = ENV['GOVUK_APP_NAME']
+    ENV['GOVUK_APP_NAME'] = "api-tests"
+
+    url = "http://some.other.endpoint/some.json"
+    stub_request(:get, url).to_return(:status => 200)
+
+    GdsApi::JsonClient.new.get_json(url)
+
+    assert_requested(:get, %r{/some.json}) do |request|
+      request.headers["User-Agent"] == "gds-api-adapters/#{GdsApi::VERSION} (api-tests)"
+    end
+  ensure
+    ENV['GOVUK_APP_NAME'] = previous_govuk_app_name
+  end
 end
