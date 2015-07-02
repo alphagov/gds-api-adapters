@@ -10,14 +10,14 @@ module GdsApi
       def licence_exists(identifier, licence)
         licence = licence.to_json unless licence.is_a?(String)
         stub_request(:get, "#{LICENCE_APPLICATION_ENDPOINT}/api/licence/#{identifier}").
-          with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
+          with(headers: GdsApi::JsonClient.default_request_headers).
           to_return(status: 200,
             body: licence)
       end
 
       def licence_does_not_exist(identifier)
         stub_request(:get, "#{LICENCE_APPLICATION_ENDPOINT}/api/licence/#{identifier}").
-          with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
+          with(headers: GdsApi::JsonClient.default_request_headers).
           to_return(status: 404,
             body: "{\"error\": [\"Unrecognised Licence Id: #{identifier}\"]}")
       end

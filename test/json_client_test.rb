@@ -625,7 +625,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_client_can_use_bearer_token
     client = GdsApi::JsonClient.new(bearer_token: 'SOME_BEARER_TOKEN')
-    expected_headers = GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS.
+    expected_headers = GdsApi::JsonClient.default_request_headers.
       merge('Authorization' => 'Bearer SOME_BEARER_TOKEN')
 
     stub_request(:put, "http://some.other.endpoint/some.json").
@@ -788,5 +788,21 @@ class JsonClientTest < MiniTest::Spec
     assert_raises RuntimeError do
       GdsApi::JsonClient.new(:timeout => -1)
     end
+  end
+
+  def test_should_add_user_agent_using_env
+    previous_govuk_app_name = ENV['GOVUK_APP_NAME']
+    ENV['GOVUK_APP_NAME'] = "api-tests"
+
+    url = "http://some.other.endpoint/some.json"
+    stub_request(:get, url).to_return(:status => 200)
+
+    GdsApi::JsonClient.new.get_json(url)
+
+    assert_requested(:get, %r{/some.json}) do |request|
+      request.headers["User-Agent"] == "gds-api-adapters/#{GdsApi::VERSION} (api-tests)"
+    end
+  ensure
+    ENV['GOVUK_APP_NAME'] = previous_govuk_app_name
   end
 end

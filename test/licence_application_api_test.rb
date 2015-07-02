@@ -19,7 +19,7 @@ class LicenceApplicationApiTest < MiniTest::Unit::TestCase
 
   def test_should_return_list_of_licences
     stub_request(:get, "#{@core_url}/api/licences").
-      with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
+      with(headers: GdsApi::JsonClient.default_request_headers).
       to_return(:status => 200,
                 :body => <<-EOS
 [
@@ -59,7 +59,7 @@ EOS
 
   def test_should_return_error_message_if_licences_collection_not_found
     stub_request(:get, "#{@core_url}/api/licences").
-      with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
+      with(headers: GdsApi::JsonClient.default_request_headers).
       to_return(status: 404,
         body: "{\"error\": \"Error\"}")
 
@@ -104,7 +104,7 @@ EOS
 
   def test_should_return_error_message_to_pick_a_relevant_snac_code_for_the_provided_licence_id
     stub_request(:get, "#{@core_url}/api/licence/590001/sw10").
-      with(headers: GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
+      with(headers: GdsApi::JsonClient.default_request_headers).
       to_return(status: 404,
                 body: "{\"error\": \"No authorities found for the licence 590001 and for the snacCode sw10\"}")
 

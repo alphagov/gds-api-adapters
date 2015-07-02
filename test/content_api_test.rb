@@ -484,7 +484,7 @@ describe GdsApi::ContentApi do
   describe "local authorities" do
     it "should return nil if no local authority found" do
       stub_request(:get, "#{@base_api_url}/local_authorities/does-not-exist.json").
-        with(:headers => GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
+        with(:headers => GdsApi::JsonClient.default_request_headers).
         to_return(:status => 404,
                   :body => {"_response_info" => {"status" => "ok"}}.to_json,
                   :headers => {})
@@ -501,7 +501,7 @@ describe GdsApi::ContentApi do
       }
 
       stub_request(:get, "#{@base_api_url}/local_authorities/00CT.json").
-        with(:headers => GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
+        with(:headers => GdsApi::JsonClient.default_request_headers).
         to_return(:status => 200,
                   :body => body_response.to_json,
                   :headers => {})
@@ -520,7 +520,7 @@ describe GdsApi::ContentApi do
       }.to_json
 
       stub_request(:get, "#{@base_api_url}/local_authorities.json?name=Swansalona").
-        with(:headers => GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
+        with(:headers => GdsApi::JsonClient.default_request_headers).
         to_return(:status => 200,
                   :body => body_response,
                   :headers => {})
@@ -540,7 +540,7 @@ describe GdsApi::ContentApi do
       }.to_json
 
       stub_request(:get, "#{@base_api_url}/local_authorities.json?snac_code=SNACKS").
-        with(:headers => GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
+        with(:headers => GdsApi::JsonClient.default_request_headers).
         to_return(:status => 200,
                   :body => body_response,
                   :headers => {})
@@ -569,7 +569,7 @@ describe GdsApi::ContentApi do
       }.to_json
 
       stub_request(:get, "#{@base_api_url}/local_authorities.json?name=Swans").
-        with(:headers => GdsApi::JsonClient::DEFAULT_REQUEST_HEADERS).
+        with(:headers => GdsApi::JsonClient.default_request_headers).
         to_return(:status => 200,
                   :body => body_response,
                   :headers => {})

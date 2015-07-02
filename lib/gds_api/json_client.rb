@@ -50,11 +50,15 @@ module GdsApi
       @options = options
     end
 
-    DEFAULT_REQUEST_HEADERS = {
+    def self.default_request_headers
+      {
         'Accept' => 'application/json',
         'Content-Type' => 'application/json',
-        'User-Agent' => "GDS Api Client v. #{GdsApi::VERSION}"
-    }
+        # GOVUK_APP_NAME is set for all apps by Puppet
+        'User-Agent' => "gds-api-adapters/#{GdsApi::VERSION} (#{ENV["GOVUK_APP_NAME"]})"
+      }
+    end
+
     DEFAULT_TIMEOUT_IN_SECONDS = 4
     DEFAULT_CACHE_SIZE = 100
     DEFAULT_CACHE_TTL = 15 * 60 # 15 minutes
@@ -232,7 +236,7 @@ module GdsApi
       method_params = {
         method: method,
         url: url,
-        headers: DEFAULT_REQUEST_HEADERS
+        headers: self.class.default_request_headers
       }
       method_params[:payload] = params
       method_params = with_auth_options(method_params)
