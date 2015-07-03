@@ -1,3 +1,8 @@
+# 20.1.2
+
+* Fix content-store test stubs key type
+* Fix GdsApi::Response `method_missing` signature
+
 # 20.1.1
 
 * Fix stray collections-api require
