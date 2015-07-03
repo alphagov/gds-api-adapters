@@ -41,7 +41,7 @@ module GdsApi
       end
 
       def content_item_for_base_path(base_path)
-        super.merge({ base_path: base_path })
+        super.merge({ "base_path" => base_path })
       end
     end
   end
