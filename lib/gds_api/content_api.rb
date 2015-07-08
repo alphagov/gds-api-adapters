@@ -52,13 +52,12 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def tag(tag, tag_type=nil)
-    url = "#{base_url}/tags"
-
-    if tag_type
-      url << "/#{CGI.escape(tag_type)}"
+    if tag_type.nil?
+      raise "Requests for tags without a tag_type are no longer supported. You probably want a tag_type of 'section'. See https://github.com/alphagov/govuk_content_api/blob/f4c0102a1ae4970be6a440707b89798442f768b9/govuk_content_api.rb#L241-L250"
     end
 
-    get_json("#{url}/#{CGI.escape(tag)}.json")
+    url = [base_url, "tags", CGI.escape(tag_type), CGI.escape(tag)].join("/") + ".json"
+    get_json(url)
   end
 
   def with_tag(tag, tag_type=nil, options={})

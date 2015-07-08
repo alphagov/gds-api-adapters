@@ -62,10 +62,6 @@ module GdsApi
 
         urls = ["#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(tag_type)}/#{CGI.escape(tag[:slug])}.json"]
 
-        if tag_type == "section"
-          urls << "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(tag[:slug])}.json"
-        end
-
         urls.each do |url|
           stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
         end
@@ -79,10 +75,6 @@ module GdsApi
         }
 
         urls = ["#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(tag_type)}/#{CGI.escape(slug)}.json"]
-
-        if tag_type == "section"
-          urls << "#{CONTENT_API_ENDPOINT}/tags/#{CGI.escape(slug)}.json"
-        end
 
         urls.each do |url|
           stub_request(:get, url).to_return(status: 404, body: body.to_json, headers: {})
