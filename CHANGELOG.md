@@ -1,3 +1,8 @@
+# 21.0.0
+
+* Using GdsApi::ContentApi#tag without the second parameter for tag type will
+raise an error.
+
 # 20.1.2
 
 * Fix content-store test stubs key type
