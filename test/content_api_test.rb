@@ -364,7 +364,7 @@ describe GdsApi::ContentApi do
 
     it "returns tag information for a section" do
       content_api_has_section("crime-and-justice")
-      response = @api.tag("crime-and-justice")
+      response = @api.tag("crime-and-justice", "section")
 
       assert_equal "Crime and justice", response["title"]
     end
