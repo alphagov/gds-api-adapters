@@ -67,10 +67,6 @@ module GdsApi
       @worldwide_api ||= GdsApi::Worldwide.new(Plek.current.find("whitehall-admin"), options)
     end
 
-    def finder_api(options = {})
-      @finder_api ||= FinderApi.new(Plek.current.find("finder-api"), options)
-    end
-
     def email_alert_api(options = {})
       @email_alert_api ||= EmailAlertApi.new(Plek.current.find("email-alert-api"), options)
     end
