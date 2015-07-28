@@ -1,3 +1,7 @@
+# Unreleased
+
+* Raise specific error on 404 in content-store client.
+
 # 21.0.0
 
 * Using GdsApi::ContentApi#tag without the second parameter for tag type will
