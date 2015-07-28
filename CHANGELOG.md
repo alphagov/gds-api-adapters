@@ -1,4 +1,7 @@
-# Unreleased
+# 22.0.0
+
+* Remove `FinderAPI` and `FinderSchema` classes.
+  Finder API has been retired and these are no longer used.
 
 * Raise specific error on 404 in content-store client.
 
