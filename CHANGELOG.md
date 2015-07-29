@@ -1,3 +1,8 @@
+## Unreleased
+
+* Remove `GdsApi::Rummager#search`. The `/search` endpoint was removed
+  from rummager in favor of `/unified_search`.
+
 # 22.0.0
 
 * Remove `FinderAPI` and `FinderSchema` classes.

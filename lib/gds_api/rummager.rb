@@ -4,11 +4,6 @@ require 'rack/utils'
 module GdsApi
   class Rummager < Base
 
-    def search(query, extra_params={})
-      raise ArgumentError.new("Query cannot be blank") if query.nil? || query.strip.empty?
-      get_json!(search_url(:search, query, extra_params))
-    end
-
     def unified_search(args)
       request_url = "#{base_url}/unified_search.json?#{Rack::Utils.build_nested_query(args)}"
       get_json!(request_url)
@@ -42,15 +37,6 @@ module GdsApi
     end
 
   private
-
-    def search_url(type, query, extra_params={})
-      request_path = "#{base_url}/#{type}?q=#{CGI.escape(query)}"
-      if extra_params
-        request_path << "&"
-        request_path << Rack::Utils.build_query(extra_params)
-      end
-      request_path
-    end
 
     def base_url
       endpoint
