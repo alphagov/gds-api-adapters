@@ -3,75 +3,8 @@ require "gds_api/rummager"
 
 describe GdsApi::Rummager do
   before(:each) do
-    stub_request(:get, /example.com\/search/).to_return(body: "[]")
     stub_request(:get, /example.com\/advanced_search/).to_return(body: "[]")
     stub_request(:get, /example.com\/unified_search/).to_return(body: "[]")
-  end
-
-  it "should raise an exception if the service at the search URI returns a 500" do
-    stub_request(:get, /example.com\/search/).to_return(status: [500, "Internal Server Error"])
-    assert_raises(GdsApi::HTTPServerError) do
-      GdsApi::Rummager.new("http://example.com").search("query")
-    end
-  end
-
-  it "should raise an exception if the service at the search URI returns a 404" do
-    stub_request(:get, /example.com\/search/).to_return(status: [404, "Not Found"])
-    assert_raises(GdsApi::HTTPNotFound) do
-      GdsApi::Rummager.new("http://example.com").search("query")
-    end
-  end
-
-  it "should raise an exception if the service at the search URI times out" do
-    stub_request(:get, /example.com\/search/).to_timeout
-    assert_raises(GdsApi::TimedOutException) do
-      GdsApi::Rummager.new("http://example.com").search("query")
-    end
-  end
-
-  it "should return the search deserialized from json" do
-    search_results = [{"title" => "document-title"}]
-    stub_request(:get, /example.com\/search/).to_return(body: search_results.to_json)
-    results = GdsApi::Rummager.new("http://example.com").search("query")
-
-    assert_equal search_results, results.to_hash
-  end
-
-  it "should return an empty set of results without making request if query is empty" do
-    assert_raises(ArgumentError) do
-      GdsApi::Rummager.new("http://example.com").search("")
-    end
-  end
-
-  it "should return an empty set of results without making request if query is nil" do
-    assert_raises(ArgumentError) do
-      GdsApi::Rummager.new("http://example.com").search(nil)
-    end
-  end
-
-  it "should request the search results in JSON format" do
-    GdsApi::Rummager.new("http://example.com").search("query")
-
-    assert_requested :get, /.*/, headers: {"Accept" => "application/json"}
-  end
-
-  it "should issue a request for the search term specified" do
-    GdsApi::Rummager.new("http://example.com").search "search-term"
-
-    assert_requested :get, /\?q=search-term/
-  end
-
-  it "should escape characters that would otherwise be invalid in a URI" do
-    GdsApi::Rummager.new("http://example.com").search "search term with spaces"
-
-    #the actual request is "?q=search+term+with+spaces", but Webmock appears to be re-escaping.
-    assert_requested :get, /\?q=search%20term%20with%20spaces/
-  end
-
-  it "should append arbitrary parameters when supplied" do
-    GdsApi::Rummager.new("http://example.com").search("search-term", foo: "bar", zoo: "baz")
-
-    assert_requested :get, /\?foo=bar&q=search-term&zoo=baz/
   end
 
   # tests for #organisations
