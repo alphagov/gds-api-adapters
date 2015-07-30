@@ -1,4 +1,4 @@
-## Unreleased
+# 23.0.0
 
 * Remove `GdsApi::Rummager#search`. The `/search` endpoint was removed
   from rummager in favor of `/unified_search`.
