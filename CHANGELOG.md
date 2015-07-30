@@ -1,3 +1,15 @@
+# 23.1.0
+
+* GdsApi::TestHelpers::PublishingApi
+
+  added the ability to make more flexible assertions about publishing api
+  requests by optionally passing a predicate to the assertions. The
+  `request_json_including` predicate will match required elements of a hash or
+  a nested hash in the JSON body.
+
+  The existing stricter behaviour is retained as the default
+  (`request_json_matching` predicate).
+
 # 23.0.0
 
 * Remove `GdsApi::Rummager#search`. The `/search` endpoint was removed
