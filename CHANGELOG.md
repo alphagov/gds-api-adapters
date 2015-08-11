@@ -1,3 +1,12 @@
+# 23.2.0
+
+* Add special route publisher under PublishingApi.
+
+  This is be used in several apps for registering
+  "special" routes like /government or /robots.txt
+
+  See https://trello.com/c/blLdEZN5/292-make-apps-register-special-routes-on-deploy
+
 # 23.1.0
 
 * GdsApi::TestHelpers::PublishingApi
