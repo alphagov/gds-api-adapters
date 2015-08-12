@@ -10,7 +10,6 @@ require 'gds_api/need_api'
 require 'gds_api/panopticon'
 require 'gds_api/publisher'
 require 'gds_api/worldwide'
-require 'gds_api/finder_api'
 require 'gds_api/email_alert_api'
 
 module GdsApi
