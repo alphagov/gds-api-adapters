@@ -1,3 +1,7 @@
+# 23.2.1
+
+* Bugfix: remove invalid require from GdsApi::Helpers
+
 # 23.2.0
 
 * Add special route publisher under PublishingApi.
