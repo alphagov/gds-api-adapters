@@ -1,4 +1,5 @@
 require "gds_api/publishing_api"
+require "time"
 
 module GdsApi
   class PublishingApi < GdsApi::Base
@@ -25,12 +26,16 @@ module GdsApi
           publishing_app: options.fetch(:publishing_app),
           rendering_app: options.fetch(:rendering_app),
           update_type: "major",
-          public_updated_at: (Time.respond_to?(:zone) ? Time.zone.try(:now) : Time.now).iso8601,
+          public_updated_at: time.now.iso8601,
         })
       end
 
     private
       attr_reader :logger, :publishing_api
+
+      def time
+        (Time.respond_to?(:zone) && Time.zone) || Time
+      end
     end
   end
 end
