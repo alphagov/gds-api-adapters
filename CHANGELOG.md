@@ -1,3 +1,7 @@
+# 23.2.2
+
+* Bugfix: `SpecialRoutePublisher` handles case where `Time.zone` returns `nil`
+
 # 23.2.1
 
 * Bugfix: remove invalid require from GdsApi::Helpers
