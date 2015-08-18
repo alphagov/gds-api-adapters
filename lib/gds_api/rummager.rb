@@ -15,10 +15,6 @@ module GdsApi
       get_json!(request_path)
     end
 
-    def organisations
-      get_json!("#{base_url}/organisations")
-    end
-
     def add_document(type, id, document)
       post_json!(
         documents_url,
