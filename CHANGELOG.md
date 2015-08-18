@@ -1,3 +1,5 @@
+* Remove support for the `/organisations` endpoint on Rummager.
+
 # 23.2.2
 
 * Bugfix: `SpecialRoutePublisher` handles case where `Time.zone` returns `nil`
