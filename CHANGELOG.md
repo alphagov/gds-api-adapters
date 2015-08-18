@@ -1,3 +1,5 @@
+# 24.0.0
+
 * Remove support for the `/organisations` endpoint on Rummager.
 
 # 23.2.2
