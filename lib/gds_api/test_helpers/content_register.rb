@@ -19,6 +19,11 @@ module GdsApi
           to_return(body: entries.to_json, status: 200)
       end
 
+      def content_register_isnt_available
+        stub_request(:any, /#{CONTENT_REGISTER_ENDPOINT}\/.*/).
+          to_return(status: 503)
+      end
+
     private
 
       def content_register_entry_url_for(content_id)
