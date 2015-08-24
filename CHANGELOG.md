@@ -1,3 +1,7 @@
+# 24.1.0
+
+* Add test helper `content_register_isnt_available`
+
 # 24.0.0
 
 * Remove support for the `/organisations` endpoint on Rummager.
