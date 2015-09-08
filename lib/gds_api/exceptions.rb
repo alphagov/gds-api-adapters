@@ -36,6 +36,9 @@ module GdsApi
   class HTTPForbidden < HTTPClientError
   end
 
+  class HTTPConflict < HTTPClientError
+  end
+
   class NoBearerToken < BaseError; end
 
   module ExceptionHandling
@@ -60,6 +63,8 @@ module GdsApi
         GdsApi::HTTPNotFound.new(code, message, details)
       when 410
         GdsApi::HTTPGone.new(code, message, details)
+      when 409
+        GdsApi::HTTPConflict.new(code, message, details)
       when (400..499)
         GdsApi::HTTPClientError.new(code, message, details)
       when (500..599)
