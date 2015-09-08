@@ -1,4 +1,6 @@
-* Raise `HTTPConflict` exception for HTTP 409 status codes. 
+# 24.3.0
+
+* Raise `HTTPConflict` exception for HTTP 409 status codes.
 
 # 24.2.0
 
