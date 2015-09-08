@@ -392,6 +392,14 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  def test_get_should_raise_conflict_for_410
+    url = "http://some.endpoint/some.json"
+    stub_request(:delete, url).to_return(:body => "{}", :status => 409)
+    assert_raises GdsApi::HTTPConflict do
+      @client.delete_json!(url)
+    end
+  end
+
   def test_get_should_follow_permanent_redirect
     url = "http://some.endpoint/some.json"
     new_url = "http://some.endpoint/other.json"
