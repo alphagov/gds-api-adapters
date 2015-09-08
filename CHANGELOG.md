@@ -1,4 +1,4 @@
-# Unreleased
+# 24.2.0
 
 * Change the Panopticon Registerer adapter to support the `content_id` field.
 
