@@ -45,6 +45,8 @@ module GdsApi
           :indexable_content,
           :public_timestamp,
           :latest_change_note,
+
+          :content_id,
         ]
 
         deprecated_params = {

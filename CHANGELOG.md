@@ -1,3 +1,7 @@
+# Unreleased
+
+* Change the Panopticon Registerer adapter to support the `content_id` field.
+
 # 24.1.0
 
 * Add test helper `content_register_isnt_available`

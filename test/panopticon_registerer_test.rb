@@ -69,6 +69,7 @@ describe GdsApi::Panopticon::Registerer do
       specialist_sectors: ["oil-and-gas/wells", "oil-and-gas/licensing"],
       public_timestamp: "2014-01-01T12:00:00+00:00",
       latest_change_note: 'Added more stubble',
+      content_id: 'f47b4fab-46fa-4020-97a2-3413a5d75402'
     )
 
     GdsApi::Panopticon::Registerer.new(
@@ -86,6 +87,7 @@ describe GdsApi::Panopticon::Registerer do
         specialist_sectors: ["oil-and-gas/wells", "oil-and-gas/licensing"],
         public_timestamp: DateTime.parse('2014-01-01 12:00:00 +00:00'),
         latest_change_note: 'Added more stubble',
+        content_id: 'f47b4fab-46fa-4020-97a2-3413a5d75402'
       )
     )
 
