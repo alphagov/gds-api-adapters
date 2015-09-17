@@ -1,3 +1,7 @@
+# 24.4.0
+
+* Set the connection timeout in RestClient as well as the read timeout
+
 # 24.3.0
 
 * Raise `HTTPConflict` exception for HTTP 409 status codes.
