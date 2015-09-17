@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'plek'
   s.add_dependency 'rack-cache'
   s.add_dependency 'rest-client', '~> 1.8.0'
+  s.add_dependency 'statsd-ruby', '1.2.1'
 
   s.add_development_dependency "minitest", "~> 3.4.0"
   s.add_development_dependency 'gem_publisher', '~> 1.5.0'

@@ -5,6 +5,7 @@ require_relative 'null_cache'
 require_relative 'govuk_headers'
 require 'lrucache'
 require 'rest-client'
+require 'statsd-ruby'
 
 module GdsApi
   class JsonClient
@@ -242,11 +243,19 @@ module GdsApi
       method_params = with_auth_options(method_params)
       method_params = with_timeout(method_params)
       method_params = with_headers(method_params, additional_headers)
-      if URI.parse(url).is_a? URI::HTTPS
+
+      parsed_url = URI.parse(url)
+
+      if parsed_url.is_a? URI::HTTPS
         method_params = with_ssl_options(method_params)
       end
 
-      return ::RestClient::Request.execute(method_params)
+      payload = ''
+      statsd.time("gds_api_call_to.#{parsed_url.host}") do
+        payload = ::RestClient::Request.execute(method_params)
+      end
+
+      return payload
 
     rescue Errno::ECONNREFUSED => e
       logger.error loggable.merge(status: 'refused', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
@@ -269,6 +278,12 @@ module GdsApi
     rescue Errno::ECONNRESET => e
       logger.error loggable.merge(status: 'connection_reset', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::TimedOutException.new
+    end
+
+    def statsd
+      @statsd ||= Statsd.new("localhost").tap do |c|
+        c.namespace = ENV['GOVUK_STATSD_PREFIX'].to_s
+      end
     end
   end
 end
