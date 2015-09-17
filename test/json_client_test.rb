@@ -35,7 +35,8 @@ class JsonClientTest < MiniTest::Spec
 
   def test_long_connections_timeout
     url = "http://www.example.com/timeout.json"
-    stub_request(:get, url).to_raise(Net::OpenTimeout)
+    exception = defined?(Net::OpenTimeout) ? Net::OpenTimeout : TimeoutError
+    stub_request(:get, url).to_raise(exception)
     assert_raises GdsApi::TimedOutException do
       @client.get_json(url)
     end
