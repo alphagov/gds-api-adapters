@@ -33,6 +33,14 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  def test_long_connections_timeout
+    url = "http://www.example.com/timeout.json"
+    stub_request(:get, url).to_raise(Net::OpenTimeout)
+    assert_raises GdsApi::TimedOutException do
+      @client.get_json(url)
+    end
+  end
+
   def test_get_should_raise_endpoint_not_found_if_connection_refused
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_raise(Errno::ECONNREFUSED)

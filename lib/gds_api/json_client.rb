@@ -171,7 +171,8 @@ module GdsApi
     # parameters with timeouts included
     def with_timeout(method_params)
       method_params.merge(
-        timeout: options[:timeout] || DEFAULT_TIMEOUT_IN_SECONDS
+        timeout: options[:timeout] || DEFAULT_TIMEOUT_IN_SECONDS,
+        open_timeout: options[:timeout] || DEFAULT_TIMEOUT_IN_SECONDS,
       )
     end
 
