@@ -24,14 +24,14 @@ describe GdsApi::PublishingApi do
           path: "/content#{base_path}",
           body: content_item,
           headers: {
-            "Content-type" => "application/json"
+            "Content-Type" => "application/json"
           },
         )
         .will_respond_with(
           status: 200,
           body: content_item,
           headers: {
-            "Content-type" => "application/json"
+            "Content-Type" => "application/json; charset=utf-8"
           },
         )
 
@@ -53,14 +53,14 @@ describe GdsApi::PublishingApi do
           path: "/draft-content#{base_path}",
           body: content_item,
           headers: {
-            "Content-type" => "application/json"
+            "Content-Type" => "application/json"
           },
         )
         .will_respond_with(
           status: 200,
           body: content_item,
           headers: {
-            "Content-type" => "application/json"
+            "Content-Type" => "application/json; charset=utf-8"
           },
         )
 
@@ -82,14 +82,14 @@ describe GdsApi::PublishingApi do
           path: "/publish-intent#{base_path}",
           body: publish_intent,
           headers: {
-            "Content-type" => "application/json"
+            "Content-Type" => "application/json"
           },
         )
         .will_respond_with(
           status: 200,
           body: publish_intent,
           headers: {
-            "Content-type" => "application/json"
+            "Content-Type" => "application/json; charset=utf-8"
           },
         )
 
@@ -115,7 +115,7 @@ describe GdsApi::PublishingApi do
           status: 200,
           body: "{}",
           headers: {
-            "Content-type" => "application/json"
+            "Content-Type" => "application/json; charset=utf-8"
           }
         )
 
@@ -139,7 +139,7 @@ describe GdsApi::PublishingApi do
           status: 404,
           body: "{}",
           headers: {
-            "Content-type" => "application/json"
+            "Content-Type" => "application/json; charset=utf-8"
           }
         )
 
