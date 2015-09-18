@@ -14,7 +14,7 @@ describe GdsApi::PublishingApi do
   describe "#put_content_item" do
     it "responds with 200 OK if the entry is valid" do
       base_path = "/test-content-item"
-      content_item = content_item_for_base_path(base_path)
+      content_item = content_item_for_base_path(base_path).merge("update_type" => "major")
 
       publishing_api
         .given("both content stores and url-arbiter empty")
@@ -43,7 +43,7 @@ describe GdsApi::PublishingApi do
   describe "#put_draft_content_item" do
     it "responds with 200 OK if the entry is valid" do
       base_path = "/test-draft-content-item"
-      content_item = content_item_for_base_path(base_path)
+      content_item = content_item_for_base_path(base_path).merge("update_type" => "major")
 
       publishing_api
         .given("both content stores and url-arbiter empty")
@@ -64,7 +64,7 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      response = @api_client.put_draft_content_item(base_path, content_item_for_base_path(base_path))
+      response = @api_client.put_draft_content_item(base_path, content_item)
       assert_equal 200, response.code
     end
   end
