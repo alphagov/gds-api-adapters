@@ -105,7 +105,7 @@ describe GdsApi::PublishingApi do
       publish_intent = intent_for_base_path(base_path)
 
       publishing_api
-        .given("a publish intent exists in the live content store")
+        .given("a publish intent exists at /test-intent in the live content store")
         .upon_receiving("DELETE /publish-intent/:base_path")
         .with(
           method: :delete,
