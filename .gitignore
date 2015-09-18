@@ -4,3 +4,4 @@ pkg/
 *.gem
 .bundle
 /spec/pacts
+/log
