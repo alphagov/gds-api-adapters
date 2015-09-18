@@ -18,7 +18,7 @@ describe GdsApi::PublishingApi do
 
       publishing_api
         .given("both content stores and url-arbiter empty")
-        .upon_receiving("PUT /content/:base_path")
+        .upon_receiving("a request to create a content item")
         .with(
           method: :put,
           path: "/content#{base_path}",
@@ -47,7 +47,7 @@ describe GdsApi::PublishingApi do
 
       publishing_api
         .given("both content stores and url-arbiter empty")
-        .upon_receiving("PUT /draft-content/:base_path")
+        .upon_receiving("a request to create a draft content item")
         .with(
           method: :put,
           path: "/draft-content#{base_path}",
@@ -76,7 +76,7 @@ describe GdsApi::PublishingApi do
 
       publishing_api
         .given("both content stores and url-arbiter empty")
-        .upon_receiving("PUT /publish-intent/:base_path")
+        .upon_receiving("a request to create a publish intent")
         .with(
           method: :put,
           path: "/publish-intent#{base_path}",
@@ -106,7 +106,7 @@ describe GdsApi::PublishingApi do
 
       publishing_api
         .given("a publish intent exists at /test-intent in the live content store")
-        .upon_receiving("DELETE /publish-intent/:base_path")
+        .upon_receiving("a request to delete a publish intent")
         .with(
           method: :delete,
           path: "/publish-intent#{base_path}",
@@ -130,7 +130,7 @@ describe GdsApi::PublishingApi do
 
       publishing_api
         .given("both content stores and url-arbiter empty")
-        .upon_receiving("DELETE /publish-intent/:base_path")
+        .upon_receiving("a request to delete a publish intent")
         .with(
           method: :delete,
           path: "/publish-intent#{base_path}",
