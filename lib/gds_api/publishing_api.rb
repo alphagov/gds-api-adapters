@@ -16,7 +16,9 @@ class GdsApi::PublishingApi < GdsApi::Base
   end
 
   def destroy_intent(base_path)
-    delete_json(intent_url(base_path))
+    delete_json!(intent_url(base_path))
+  rescue GdsApi::HTTPNotFound => e
+    e
   end
 
 
