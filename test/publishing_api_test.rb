@@ -122,5 +122,29 @@ describe GdsApi::PublishingApi do
       response = @api_client.destroy_intent(base_path)
       assert_equal 200, response.code
     end
+
+    it "returns 404 Not found if the intent does not exist" do
+      base_path = "/test-intent"
+
+      publish_intent = intent_for_base_path(base_path)
+
+      publishing_api
+        .given("both content stores and url-arbiter empty")
+        .upon_receiving("DELETE /publish-intent/:base_path")
+        .with(
+          method: :delete,
+          path: "/publish-intent#{base_path}",
+        )
+        .will_respond_with(
+          status: 404,
+          body: "{}",
+          headers: {
+            "Content-type" => "application/json"
+          }
+        )
+
+      response = @api_client.destroy_intent(base_path)
+      assert_equal 404, response.code
+    end
   end
 end
