@@ -87,7 +87,7 @@ describe GdsApi::PublishingApi do
         )
         .will_respond_with(
           status: 200,
-          body: publish_intent,
+          body: {},
           headers: {
             "Content-Type" => "application/json; charset=utf-8"
           },
@@ -113,7 +113,7 @@ describe GdsApi::PublishingApi do
         )
         .will_respond_with(
           status: 200,
-          body: "{}",
+          body: {},
           headers: {
             "Content-Type" => "application/json; charset=utf-8"
           }
@@ -137,7 +137,7 @@ describe GdsApi::PublishingApi do
         )
         .will_respond_with(
           status: 404,
-          body: "{}",
+          body: {},
           headers: {
             "Content-Type" => "application/json; charset=utf-8"
           }
