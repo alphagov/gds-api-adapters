@@ -17,7 +17,7 @@ describe GdsApi::PublishingApi do
       content_item = content_item_for_base_path(base_path).merge("update_type" => "major")
 
       publishing_api
-        .given("both content stores and url-arbiter empty")
+        .given("both content stores and the url-arbiter are empty")
         .upon_receiving("a request to create a content item")
         .with(
           method: :put,
@@ -46,7 +46,7 @@ describe GdsApi::PublishingApi do
       content_item = content_item_for_base_path(base_path).merge("update_type" => "major")
 
       publishing_api
-        .given("both content stores and url-arbiter empty")
+        .given("both content stores and the url-arbiter are empty")
         .upon_receiving("a request to create a draft content item")
         .with(
           method: :put,
@@ -75,7 +75,7 @@ describe GdsApi::PublishingApi do
       publish_intent = intent_for_base_path(base_path)
 
       publishing_api
-        .given("both content stores and url-arbiter empty")
+        .given("both content stores and the url-arbiter are empty")
         .upon_receiving("a request to create a publish intent")
         .with(
           method: :put,
@@ -129,7 +129,7 @@ describe GdsApi::PublishingApi do
       publish_intent = intent_for_base_path(base_path)
 
       publishing_api
-        .given("both content stores and url-arbiter empty")
+        .given("both content stores and the url-arbiter are empty")
         .upon_receiving("a request to delete a publish intent")
         .with(
           method: :delete,
