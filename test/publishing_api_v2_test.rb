@@ -66,7 +66,8 @@ describe GdsApi::PublishingApiV2 do
           status: 409,
           body: {
             "error" => {
-              "code" => 422, "message" => Pact.term(generate: "Conflict", matcher:/\S+/),
+              "code" => 409,
+              "message" => Pact.term(generate: "Conflict", matcher:/\S+/),
               "fields" => {
                 "base_path" => Pact.each_like("is already in use by the 'publisher' app", :min => 1),
               },
@@ -101,7 +102,8 @@ describe GdsApi::PublishingApiV2 do
           status: 422,
           body: {
             "error" => {
-              "code" => 422, "message" => Pact.term(generate: "Unprocessable entity", matcher:/\S+/),
+              "code" => 422,
+              "message" => Pact.term(generate: "Unprocessable entity", matcher:/\S+/),
               "fields" => {
                 "base_path" => Pact.each_like("is invalid", :min => 1),
               },
@@ -154,7 +156,10 @@ describe GdsApi::PublishingApiV2 do
         .will_respond_with(
           status: 404,
           body: {
-            "error" => {"code" => 404, "message" => Pact.term(generate: "not found", matcher:/\S+/)},
+            "error" => {
+              "code" => 404,
+              "message" => Pact.term(generate: "not found", matcher:/\S+/)
+            },
           },
           headers: {
             "Content-Type" => "application/json; charset=utf-8",
@@ -164,5 +169,4 @@ describe GdsApi::PublishingApiV2 do
       assert_nil @api_client.get_content(@content_id)
     end
   end
-
 end
