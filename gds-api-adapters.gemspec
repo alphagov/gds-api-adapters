@@ -24,19 +24,18 @@ Gem::Specification.new do |s|
   s.add_dependency 'rest-client', '~> 1.8.0'
   s.add_dependency 'rack-cache'
 
-  s.add_development_dependency 'rdoc', '3.12'
-  s.add_development_dependency 'rake', '~> 0.9.2.2'
-  s.add_development_dependency 'webmock', '~> 1.19'
-  s.add_development_dependency 'mocha'
-  s.add_development_dependency "minitest", "> 5.0.0"
-  s.add_development_dependency 'rack'
-  s.add_development_dependency 'rack-test'
-  s.add_development_dependency 'simplecov', '~> 0.5.4'
-  s.add_development_dependency 'simplecov-rcov'
   s.add_development_dependency 'gem_publisher', '~> 1.5.0'
-  s.add_development_dependency 'timecop', '~> 0.5.1'
-  s.add_development_dependency 'pry'
+  s.add_development_dependency "minitest", "> 5.0.0"
+  s.add_development_dependency 'mocha'
   s.add_development_dependency 'pact'
   s.add_development_dependency 'pact-consumer-minitest'
-
+  s.add_development_dependency 'pry'
+  s.add_development_dependency 'rack'
+  s.add_development_dependency 'rack-test'
+  s.add_development_dependency 'rake', '~> 0.9.2.2'
+  s.add_development_dependency 'rdoc', '3.12'
+  s.add_development_dependency 'simplecov', '~> 0.5.4'
+  s.add_development_dependency 'simplecov-rcov'
+  s.add_development_dependency 'timecop', '~> 0.5.1'
+  s.add_development_dependency 'webmock', '~> 1.19'
 end
