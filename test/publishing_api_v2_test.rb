@@ -1,23 +1,21 @@
 require 'test_helper'
 require 'gds_api/publishing_api_v2'
+require 'json'
 
 describe GdsApi::PublishingApiV2 do
   include PactTest
 
   def content_item_for_content_id(content_id, attrs = {})
-    item = {
-      'content_id' => content_id,
-      'base_path' => '/foo',
-      "format" => "gone",
-      "publishing_app" => "publisher",
-      "update_type" => "major",
-    }.merge(attrs)
+    robots_json = GovukContentSchemaTestHelpers::Examples.new.get('special_route', 'robots.txt')
+    robots = JSON.parse(robots_json)
+
+    robots.merge(attrs.merge(content_id: content_id))
     unless attrs.has_key?("routes")
-      item["routes"] = [
-        { "path" => item["base_path"], "type" => "exact" },
+      robots["routes"] = [
+        { "path" => robots["base_path"], "type" => "exact" },
       ]
     end
-    item
+    robots
   end
 
   before do

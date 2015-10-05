@@ -52,3 +52,10 @@ WebMock.disable_net_connect!
 
 require 'gds_api/test_helpers/json_client_helper'
 require 'test_helpers/pact_helper'
+
+require 'govuk-content-schema-test-helpers'
+
+GovukContentSchemaTestHelpers.configure do |config|
+  config.schema_type = 'publisher'
+  config.project_root = File.absolute_path(File.join(File.basename(__FILE__), '..'))
+end
