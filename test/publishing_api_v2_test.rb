@@ -6,16 +6,23 @@ describe GdsApi::PublishingApiV2 do
   include PactTest
 
   def content_item_for_content_id(content_id, attrs = {})
-    robots_json = GovukContentSchemaTestHelpers::Examples.new.get('special_route', 'robots.txt')
-    robots = JSON.parse(robots_json)
-    robots = robots.merge(attrs.merge("content_id" => content_id))
-
-    unless attrs.has_key?("routes")
-      robots["routes"] = [
-        { "path" => robots["base_path"], "type" => "exact" },
-      ]
-    end
-    robots
+    {
+      "base_path" => "/robots.txt",
+      "content_id" => content_id,
+      "title" => "Instructions for crawler robots",
+      "description" => "robots.txt provides rules for which parts of GOV.UK are permitted to be crawled by different bots.",
+      "format" => "special_route",
+      "public_updated_at" => "2015-07-30T13:58:11.000Z",
+      "publishing_app" => "static",
+      "rendering_app" => "static",
+      "routes" => [
+        {
+          "path" => attrs["base_path"] || "/robots.txt",
+          "type" => "exact"
+        }
+      ],
+      "update_type" => "major"
+    }.merge(attrs)
   end
 
   before do
