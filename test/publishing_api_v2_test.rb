@@ -8,8 +8,8 @@ describe GdsApi::PublishingApiV2 do
   def content_item_for_content_id(content_id, attrs = {})
     robots_json = GovukContentSchemaTestHelpers::Examples.new.get('special_route', 'robots.txt')
     robots = JSON.parse(robots_json)
+    robots = robots.merge(attrs.merge("content_id" => content_id))
 
-    robots.merge(attrs.merge(content_id: content_id))
     unless attrs.has_key?("routes")
       robots["routes"] = [
         { "path" => robots["base_path"], "type" => "exact" },
