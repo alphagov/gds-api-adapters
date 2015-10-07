@@ -134,7 +134,16 @@ describe GdsApi::PublishingApiV2 do
         )
         .will_respond_with(
           status: 200,
-          body: content_item,
+          body: {
+            "content_id" => @content_id,
+            "format" => Pact.like("special_route"),
+            "publishing_app" => Pact.like("publisher"),
+            "rendering_app" => Pact.like("frontend"),
+            "locale" => Pact.like("en"),
+            "routes" => Pact.like([{}]),
+            "public_updated_at" => Pact.like("2015-07-30T13:58:11.000Z"),
+            "details" => Pact.like({})
+          },
           headers: {
             "Content-Type" => "application/json; charset=utf-8",
           },
