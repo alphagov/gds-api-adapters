@@ -31,9 +31,8 @@ module GdsApi
         if id =~ %r{^/}
           raise ArgumentError, 'Rummager id must not start with a slash'
         end
-        stub_request(:delete, %r{#{Plek.new.find('search')}/documents/#{id}})
+        assert_requested(:delete, %r{#{Plek.new.find('search')}/documents/#{id}})
       end
-
 
       def rummager_has_services_and_info_data_for_organisation
         stub_request_for(search_results_found)
