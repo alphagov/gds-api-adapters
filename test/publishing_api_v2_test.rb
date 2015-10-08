@@ -185,4 +185,161 @@ describe GdsApi::PublishingApiV2 do
       assert_nil @api_client.get_content(@content_id)
     end
   end
+
+  describe "#publish" do
+    it "responds with 200 if the publish command succeeds" do
+      publishing_api
+        .given("a draft content item exists with content_id: #{@content_id}")
+        .upon_receiving("a publish request")
+        .with(
+          method: :post,
+          path: "/v2/content/#{@content_id}/publish",
+          body: {
+            update_type: "major",
+          },
+          headers: {
+            "Content-Type" => "application/json",
+          },
+        )
+        .will_respond_with(
+          status: 200
+        )
+
+      response = @api_client.publish(@content_id,
+        update_type: "major",
+      )
+      assert_equal 200, response.code
+    end
+
+    it "responds with 404 if the content item does not exist" do
+      publishing_api
+        .given("both content stores and url-arbiter empty")
+        .upon_receiving("a publish request")
+        .with(
+          method: :post,
+          path: "/v2/content/#{@content_id}/publish",
+          body: {
+            update_type: "major",
+          },
+          headers: {
+            "Content-Type" => "application/json",
+          },
+        )
+        .will_respond_with(
+          status: 404
+        )
+
+      error = assert_raises GdsApi::HTTPClientError do
+        @api_client.publish(@content_id,
+          update_type: "major",
+        )
+      end
+
+      assert_equal 404, error.code
+    end
+
+    it "responds with 422 if the content item is not publishable" do
+      publishing_api
+        .given("a draft content item exists with content_id: #{@content_id} which does not have a publishing_app")
+        .upon_receiving("a publish request")
+        .with(
+          method: :post,
+          path: "/v2/content/#{@content_id}/publish",
+          body: {
+            update_type: "major",
+          },
+          headers: {
+            "Content-Type" => "application/json",
+          },
+        )
+        .will_respond_with(
+          status: 422,
+          body: {
+            "error" => {
+              "code" => 422,
+              "fields" => {
+                "publishing_app"=>["can't be blank"],
+              },
+            },
+          }
+        )
+
+      error = assert_raises GdsApi::HTTPClientError do
+        @api_client.publish(@content_id,
+          update_type: "major",
+        )
+      end
+
+      assert_equal 422, error.code
+      assert_equal ["can't be blank"], error.error_details["error"]["fields"]["publishing_app"]
+    end
+
+    it "responds with 422 if the update information is invalid" do
+      publishing_api
+        .given("a draft content item exists with content_id: #{@content_id}")
+        .upon_receiving("an invalid publish request")
+        .with(
+          method: :post,
+          path: "/v2/content/#{@content_id}/publish",
+          body: {
+            "update_type" => ""
+          },
+          headers: {
+            "Content-Type" => "application/json",
+          },
+        )
+        .will_respond_with(
+          status: 422,
+          body: {
+            "error" => {
+              "code" => 422,
+              "message" => Pact.term(generate: "Unprocessable entity", matcher:/\S+/),
+              "fields" => {
+                "update_type" => Pact.each_like("is required", :min => 1),
+              },
+            },
+          }
+        )
+
+      error = assert_raises GdsApi::HTTPClientError do
+        @api_client.publish(@content_id, update_type: "")
+      end
+
+      assert_equal 422, error.code
+      assert_equal "Unprocessable entity", error.error_details["error"]["message"]
+    end
+
+    it "responds with 400 if the content item is already published" do
+      publishing_api
+        .given("a published content item exists with content_id: #{@content_id}")
+        .upon_receiving("a publish request")
+        .with(
+          method: :post,
+          path: "/v2/content/#{@content_id}/publish",
+          body: {
+            update_type: "major",
+          },
+          headers: {
+            "Content-Type" => "application/json",
+          },
+        )
+        .will_respond_with(
+          status: 400,
+          body: {
+            "error" => {
+              "code" => 400, "message" => Pact.term(generate: "Cannot publish an already published content item", matcher:/\S+/),
+            },
+          }
+        )
+
+      error = assert_raises GdsApi::HTTPClientError do
+        @api_client.publish(@content_id,
+          update_type: "major",
+        )
+      end
+
+      assert_equal 400, error.code
+      assert_equal "Cannot publish an already published content item", error.error_details["error"]["message"]
+    end
+  end
 end
