@@ -1,12 +1,12 @@
 #!/bin/bash -x
 set -e
 
-rm -f Gemfile.lock
 git clean -fdx
 
 export GOVUK_APP_DOMAIN=dev.gov.uk
 
 for version in 2.2 2.1 1.9.3; do
+  rm -f Gemfile.lock
   export RBENV_VERSION=$version
   echo "Running tests under ruby $version"
   bundle install --path "${HOME}/bundles/${JOB_NAME}"
