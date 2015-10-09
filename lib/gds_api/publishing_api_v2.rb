@@ -16,9 +16,17 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     })
   end
 
-  private
+  def get_links(content_id)
+    get_json(links_url(content_id))
+  end
+
+private
 
   def content_url(content_id)
     "#{endpoint}/v2/content/#{content_id}"
+  end
+
+  def links_url(content_id)
+    "#{endpoint}/v2/links/#{content_id}"
   end
 end
