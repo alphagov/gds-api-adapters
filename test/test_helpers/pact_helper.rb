@@ -5,3 +5,8 @@ Pact.service_consumer "GDS API Adapters" do
     end
   end
 end
+
+Pact.configure do |config|
+  config.doc_dir = './doc'
+  config.doc_generator = :markdown
+end
