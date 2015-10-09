@@ -205,9 +205,7 @@ describe GdsApi::PublishingApiV2 do
           status: 200
         )
 
-      response = @api_client.publish(@content_id,
-        update_type: "major",
-      )
+      response = @api_client.publish(@content_id, "major")
       assert_equal 200, response.code
     end
 
@@ -230,9 +228,7 @@ describe GdsApi::PublishingApiV2 do
         )
 
       error = assert_raises GdsApi::HTTPClientError do
-        @api_client.publish(@content_id,
-          update_type: "major",
-        )
+        @api_client.publish(@content_id, "major")
       end
 
       assert_equal 404, error.code
@@ -265,9 +261,7 @@ describe GdsApi::PublishingApiV2 do
         )
 
       error = assert_raises GdsApi::HTTPClientError do
-        @api_client.publish(@content_id,
-          update_type: "major",
-        )
+        @api_client.publish(@content_id, "major")
       end
 
       assert_equal 422, error.code
@@ -302,7 +296,7 @@ describe GdsApi::PublishingApiV2 do
         )
 
       error = assert_raises GdsApi::HTTPClientError do
-        @api_client.publish(@content_id, update_type: "")
+        @api_client.publish(@content_id, "")
       end
 
       assert_equal 422, error.code
@@ -333,9 +327,7 @@ describe GdsApi::PublishingApiV2 do
         )
 
       error = assert_raises GdsApi::HTTPClientError do
-        @api_client.publish(@content_id,
-          update_type: "major",
-        )
+        @api_client.publish(@content_id, "major")
       end
 
       assert_equal 400, error.code
