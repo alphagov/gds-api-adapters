@@ -407,4 +407,157 @@ describe GdsApi::PublishingApiV2 do
       end
     end
   end
+
+  describe "#put_links" do
+    describe "when setting links of the same type" do
+      before do
+        publishing_api
+          .given("organisation links exist for content_id #{@content_id}")
+          .upon_receiving("a put organisation links request")
+          .with(
+            method: :put,
+            path: "/v2/links/#{@content_id}",
+            body: {
+              links: {
+                organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+              }
+            },
+            headers: {
+              "Content-Type" => "application/json",
+            },
+          )
+          .will_respond_with(
+            status: 200,
+            body: {
+              links: {
+                organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+              }
+            }
+          )
+      end
+
+      it "replaces the links and responds with the new links" do
+        response = @api_client.put_links(@content_id, links: {
+          organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+        })
+        assert_equal 200, response.code
+        assert_equal ["591436ab-c2ae-416f-a3c5-1901d633fbfb"], response.links[:organisations]
+      end
+    end
+
+    describe "when setting links of a different type" do
+      before do
+        publishing_api
+          .given("organisation links exist for content_id #{@content_id}")
+          .upon_receiving("a put topic links request")
+          .with(
+            method: :put,
+            path: "/v2/links/#{@content_id}",
+            body: {
+              links: {
+                topics: ["225df4a8-2945-4e9b-8799-df7424a90b69"],
+              }
+            },
+            headers: {
+              "Content-Type" => "application/json",
+            },
+          )
+          .will_respond_with(
+            status: 200,
+            body: {
+              links: {
+                topics: ["225df4a8-2945-4e9b-8799-df7424a90b69"],
+                organisations: ["20583132-1619-4c68-af24-77583172c070"]
+              }
+            }
+          )
+      end
+
+      it "adds the new type of links and responds with the whole link set" do
+        response = @api_client.put_links(@content_id, links: {
+          topics: ["225df4a8-2945-4e9b-8799-df7424a90b69"],
+        })
+
+        assert_equal 200, response.code
+        assert_equal(OpenStruct.new(
+          topics: ["225df4a8-2945-4e9b-8799-df7424a90b69"],
+          organisations: ["20583132-1619-4c68-af24-77583172c070"],
+        ), response.links)
+      end
+    end
+
+    describe "when deleting links of a specific type" do
+      before do
+        publishing_api
+          .given("organisation links exist for content_id #{@content_id}")
+          .upon_receiving("a put blank organisation links request")
+          .with(
+            method: :put,
+            path: "/v2/links/#{@content_id}",
+            body: {
+              links: {
+                organisations: [],
+              }
+            },
+            headers: {
+              "Content-Type" => "application/json",
+            },
+          )
+          .will_respond_with(
+            status: 200,
+            body: {
+              links: {}
+            }
+          )
+      end
+
+      it "responds with the links" do
+        response = @api_client.put_links(@content_id, links: {
+          organisations: [],
+        })
+
+        assert_equal 200, response.code
+        assert_equal OpenStruct.new({}), response.links
+      end
+    end
+
+    describe "when there's no links entry" do
+      before do
+        publishing_api
+          .given("no links exist for content_id #{@content_id}")
+          .upon_receiving("a put organisation links request")
+          .with(
+            method: :put,
+            path: "/v2/links/#{@content_id}",
+            body: {
+              links: {
+                organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+              }
+            },
+            headers: {
+              "Content-Type" => "application/json",
+            },
+          )
+          .will_respond_with(
+            status: 200,
+            body: {
+              links: {
+                organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+              }
+            },
+          )
+      end
+
+      it "responds with the links" do
+        response = @api_client.put_links(@content_id, links: {
+          organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+        })
+
+        assert_equal 200, response.code
+        assert_equal(OpenStruct.new(
+          organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+        ), response.links)
+      end
+    end
+  end
 end

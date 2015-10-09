@@ -20,6 +20,11 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json(links_url(content_id))
   end
 
+  def put_links(content_id, payload)
+    links = payload.fetch(:links)
+    put_json!(links_url(content_id), links: links)
+  end
+
 private
 
   def content_url(content_id)
