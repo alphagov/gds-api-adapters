@@ -1,3 +1,8 @@
+# 24.5.0
+
+* Adds the helper methods and pact tests for the GET and PUT publishing API endpoints for managing links  
+  independently of content items.
+
 # 24.4.0
 
 * Set the connection timeout in RestClient as well as the read timeout
