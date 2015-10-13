@@ -399,7 +399,7 @@ describe GdsApi::PublishingApiV2 do
       it "responds with the links" do
         response = @api_client.get_links(@content_id)
         assert_equal 200, response.code
-        assert_equal ["20583132-1619-4c68-af24-77583172c070"], response.links[:organisations]
+        assert_equal ["20583132-1619-4c68-af24-77583172c070"], response.links.organisations
       end
     end
 
@@ -482,7 +482,7 @@ describe GdsApi::PublishingApiV2 do
           organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
         })
         assert_equal 200, response.code
-        assert_equal ["591436ab-c2ae-416f-a3c5-1901d633fbfb"], response.links[:organisations]
+        assert_equal ["591436ab-c2ae-416f-a3c5-1901d633fbfb"], response.links.organisations
       end
     end
 
