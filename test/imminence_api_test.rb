@@ -118,25 +118,6 @@ class ImminenceApiTest < MiniTest::Unit::TestCase
     end
   end
 
-  def test_business_support_schemes
-    dummy_schemes = [
-      { "business_support_identifier" => "bar-business-award", "title" => "Bar business award." },
-      { "business_support_identifier" => "bar-small-business-loan", "title" => "Bar small business loan." },
-      { "business_support_identifier" => "foo-small-business-loan", "title" => "Foo small business loan." }
-    ]
-    c = api_client
-    url = "#{ROOT}/business_support_schemes.json?business_types=private-company&" +
-      "sectors=agriculture,healthcare,manufacturing&stages=grow-and-sustain&types=award,loan"
-    c.expects(:get_json!).with(url).returns(dummy_schemes)
-
-    schemes = c.business_support_schemes(sectors: "agriculture,healthcare,manufacturing",
-      business_types: "private-company", stages: "grow-and-sustain", types: "award,loan")
-
-    assert_equal 3, schemes.size
-    assert_equal "bar-business-award", schemes.first["business_support_identifier"]
-    assert_equal "Foo small business loan.", schemes.last["title"]
-  end
-
   def test_places_kml
     kml_body = <<-EOS
 <?xml version="1.0" encoding="UTF-8"?>
