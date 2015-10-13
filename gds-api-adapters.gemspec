@@ -27,7 +27,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'gem_publisher', '~> 1.5.0'
   s.add_development_dependency 'mocha', "> 1.0.0"
   s.add_development_dependency "minitest", "> 5.0.0"
-  s.add_development_dependency 'mocha'
   s.add_development_dependency 'pact'
   s.add_development_dependency 'pact-consumer-minitest'
   s.add_development_dependency 'pry'
