@@ -31,12 +31,6 @@ class GdsApi::Imminence < GdsApi::Base
     get_raw("#{@endpoint}/places/#{type}.kml").body
   end
 
-  def business_support_schemes(facets_hash)
-    query = facets_hash.keys.sort.map { |k| "#{k.to_s}=#{facets_hash[k]}" }.join("&")
-    query = "?#{query}" unless query.empty?
-    get_json!("#{@endpoint}/business_support_schemes.json#{query}")
-  end
-
   def areas_for_postcode(postcode)
     url = "#{@endpoint}/areas/#{URI.encode(postcode)}.json"
     get_json(url)
@@ -69,6 +63,5 @@ private
     ].reject { |a| a.nil? or a == "" }
     {"address" => address_fields.map(&:strip).join(", ")}
   end
-
 
 end
