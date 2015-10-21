@@ -38,4 +38,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'simplecov-rcov'
   s.add_development_dependency 'timecop', '~> 0.5.1'
   s.add_development_dependency 'webmock', '~> 1.19'
+  s.add_development_dependency 'pact_broker-client', '~> 1.0.0'
 end

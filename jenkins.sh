@@ -49,6 +49,10 @@ for version in 2.2 2.1 1.9.3; do
 done
 unset RBENV_VERSION
 
+if [ -n "$PACT_TARGET_BRANCH" ]; then
+  bundle exec rake pact:publish:branch
+fi
+
 if [[ -n "$PUBLISH_GEM" ]]; then
   bundle install --path "${HOME}/bundles/${JOB_NAME}"
   bundle exec rake publish_gem --trace
