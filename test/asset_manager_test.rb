@@ -52,7 +52,7 @@ describe GdsApi::AssetManager do
     let(:asset_id) { "test-id" }
 
     it "updates an asset with a file" do
-      req = stub_request(:put, "http://asset-manager.dev.gov.uk/assets/test-id").
+      req = stub_request(:put, "#{base_api_url}/assets/test-id").
         to_return(:body => JSON.dump(asset_manager_response), :status => 200)
 
       response = api.update_asset(asset_id, :file => file_fixture)

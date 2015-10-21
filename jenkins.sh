@@ -3,8 +3,6 @@ set -e
 
 git clean -fdx
 
-export GOVUK_APP_DOMAIN=dev.gov.uk
-
 for version in 2.2 2.1 1.9.3; do
   rm -f Gemfile.lock
   export RBENV_VERSION=$version
