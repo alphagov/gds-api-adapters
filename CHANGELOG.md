@@ -1,3 +1,7 @@
+# 24.6.0
+
+* Support segments_mode option for add_redirect_route.
+
 # 24.5.0
 
 * Adds the helper methods and pact tests for the GET and PUT publishing API endpoints for managing links  
