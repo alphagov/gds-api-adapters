@@ -1,3 +1,9 @@
+# Unreleased
+
+* Update Pulishing API Pact.
+* Removes mention of url-arbiter and updates response codes to reflect url validation in publishing API.
+* Deduplicates empty content store provider states. 
+
 # 24.5.0
 
 * Adds the helper methods and pact tests for the GET and PUT publishing API endpoints for managing links  
