@@ -11,16 +11,16 @@ module GdsApi
 
       PUBLISHING_API_ENDPOINT = Plek.current.find('publishing-api')
 
-      def stub_publishing_api_put_draft_item(base_path, body = content_item_for_base_path(base_path))
+      def stub_publishing_api_put_draft_item(base_path, body = content_item_for_publishing_api(base_path))
         stub_publishing_api_put_item(base_path, body, '/draft-content')
       end
 
-      def stub_publishing_api_put_item(base_path, body = content_item_for_base_path(base_path), resource_path = '/content')
+      def stub_publishing_api_put_item(base_path, body = content_item_for_publishing_api(base_path), resource_path = '/content')
         url = PUBLISHING_API_ENDPOINT + resource_path + base_path
         stub_request(:put, url).with(body: body).to_return(status: 200, body: '{}', headers: {"Content-Type" => "application/json; charset=utf-8"})
       end
 
-      def stub_publishing_api_put_intent(base_path, body = intent_for_base_path(base_path))
+      def stub_publishing_api_put_intent(base_path, body = intent_for_publishing_api(base_path))
         url = PUBLISHING_API_ENDPOINT + "/publish-intent" + base_path
         body = body.to_json unless body.is_a?(String)
         stub_request(:put, url).with(body: body).to_return(status: 200, body: '{}', headers: {"Content-Type" => "application/json; charset=utf-8"})
@@ -108,6 +108,14 @@ module GdsApi
         else
           expected_value == actual_value
         end
+      end
+
+      def content_item_for_publishing_api(base_path, publishing_app="publisher")
+        content_item_for_base_path(base_path).merge("publishing_app" => publishing_app)
+      end
+
+      def intent_for_publishing_api(base_path, publishing_app="publisher")
+        intent_for_base_path(base_path).merge("publishing_app" => publishing_app)
       end
     end
   end
