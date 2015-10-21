@@ -2,7 +2,7 @@ require 'test_helper'
 require 'gds_api/rummager'
 require 'gds_api/test_helpers/rummager'
 
-class RummagerHelpersTest < MiniTest::Unit::TestCase
+class RummagerHelpersTest < Minitest::Test
   include GdsApi::TestHelpers::Rummager
 
   def test_services_and_info_data_returns_an_adequate_response_object

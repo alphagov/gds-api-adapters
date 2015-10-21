@@ -2,7 +2,7 @@ require 'test_helper'
 require 'gds_api/base'
 require 'uri'
 
-class GdsApiBaseTest < MiniTest::Unit::TestCase
+class GdsApiBaseTest < Minitest::Test
 
   class ConcreteApi < GdsApi::Base
     def base_url
