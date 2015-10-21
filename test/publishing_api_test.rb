@@ -14,10 +14,10 @@ describe GdsApi::PublishingApi do
   describe "#put_content_item" do
     it "responds with 200 OK if the entry is valid" do
       base_path = "/test-content-item"
-      content_item = content_item_for_base_path(base_path).merge("update_type" => "major")
+      content_item = content_item_for_publishing_api(base_path).merge("update_type" => "major")
 
       publishing_api
-        .given("both content stores and the url-arbiter are empty")
+        .given("both content stores are empty")
         .upon_receiving("a request to create a content item")
         .with(
           method: :put,
@@ -43,10 +43,10 @@ describe GdsApi::PublishingApi do
   describe "#put_draft_content_item" do
     it "responds with 200 OK if the entry is valid" do
       base_path = "/test-draft-content-item"
-      content_item = content_item_for_base_path(base_path).merge("update_type" => "major")
+      content_item = content_item_for_publishing_api(base_path).merge("update_type" => "major")
 
       publishing_api
-        .given("both content stores and the url-arbiter are empty")
+        .given("both content stores are empty")
         .upon_receiving("a request to create a draft content item")
         .with(
           method: :put,
@@ -72,10 +72,10 @@ describe GdsApi::PublishingApi do
   describe "#put_intent" do
     it "responds with 200 OK if publish intent is valid" do
       base_path = "/test-intent"
-      publish_intent = intent_for_base_path(base_path)
+      publish_intent = intent_for_publishing_api(base_path)
 
       publishing_api
-        .given("both content stores and the url-arbiter are empty")
+        .given("both content stores are empty")
         .upon_receiving("a request to create a publish intent")
         .with(
           method: :put,
@@ -102,7 +102,7 @@ describe GdsApi::PublishingApi do
     it "returns 200 OK if intent existed and was deleted" do
       base_path = "/test-intent"
 
-      publish_intent = intent_for_base_path(base_path)
+      publish_intent = intent_for_publishing_api(base_path)
 
       publishing_api
         .given("a publish intent exists at /test-intent in the live content store")
@@ -126,10 +126,10 @@ describe GdsApi::PublishingApi do
     it "returns 404 Not found if the intent does not exist" do
       base_path = "/test-intent"
 
-      publish_intent = intent_for_base_path(base_path)
+      publish_intent = intent_for_publishing_api(base_path)
 
       publishing_api
-        .given("both content stores and the url-arbiter are empty")
+        .given("both content stores are empty")
         .upon_receiving("a request to delete a publish intent")
         .with(
           method: :delete,

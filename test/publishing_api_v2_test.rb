@@ -38,7 +38,7 @@ describe GdsApi::PublishingApiV2 do
         @content_item = content_item_for_content_id(@content_id)
 
         publishing_api
-          .given("both content stores and the url-arbiter are empty")
+          .given("both content stores are empty")
           .upon_receiving("a request to create a content item without links")
           .with(
             method: :put,
@@ -64,7 +64,7 @@ describe GdsApi::PublishingApiV2 do
         @content_item = content_item_for_content_id(@content_id, "base_path" => "/test-item", "publishing_app" => "whitehall")
 
         publishing_api
-          .given("/test-item has been reserved in url-arbiter by the Publisher application")
+          .given("the path /test-item has been reserved by the Publisher application")
           .upon_receiving("a request from the Whitehall application to create a content item at /test-item")
           .with(
             method: :put,
@@ -75,10 +75,10 @@ describe GdsApi::PublishingApiV2 do
             }
           )
           .will_respond_with(
-            status: 409,
+            status: 422,
             body: {
               "error" => {
-                "code" => 409,
+                "code" => 422,
                 "message" => Pact.term(generate: "Conflict", matcher:/\S+/),
                 "fields" => {
                   "base_path" => Pact.each_like("is already in use by the 'publisher' app", :min => 1),
@@ -92,7 +92,7 @@ describe GdsApi::PublishingApiV2 do
       end
 
       it "responds with 409 Conflict" do
-        error = assert_raises GdsApi::HTTPConflict do
+        error = assert_raises GdsApi::HTTPClientError do
           @api_client.put_content(@content_id, @content_item)
         end
         assert_equal "Conflict", error.error_details["error"]["message"]
@@ -104,7 +104,7 @@ describe GdsApi::PublishingApiV2 do
         @content_item = content_item_for_content_id(@content_id, "base_path" => "not a url path")
 
         publishing_api
-          .given("both content stores and the url-arbiter are empty")
+          .given("both content stores are empty")
           .upon_receiving("a request to create an invalid content-item")
           .with(
             method: :put,
@@ -181,7 +181,7 @@ describe GdsApi::PublishingApiV2 do
     describe "a non-existent item" do
       before do
         publishing_api
-          .given("both content stores and the url-arbiter are empty")
+          .given("both content stores are empty")
           .upon_receiving("a request for a non-existent content item")
           .with(
             method: :get,
@@ -237,7 +237,7 @@ describe GdsApi::PublishingApiV2 do
     describe "if the content item does not exist" do
       before do
         publishing_api
-          .given("both content stores and url-arbiter empty")
+          .given("both content stores are empty")
           .upon_receiving("a publish request")
           .with(
             method: :post,
