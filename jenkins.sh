@@ -16,5 +16,6 @@ done
 unset RBENV_VERSION
 
 if [[ -n "$PUBLISH_GEM" ]]; then
+  bundle install --path "${HOME}/bundles/${JOB_NAME}"
   bundle exec rake publish_gem --trace
 fi
