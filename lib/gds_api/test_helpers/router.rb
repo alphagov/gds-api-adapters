@@ -31,13 +31,14 @@ module GdsApi
         [register_stub, commit_stub]
       end
 
-      def stub_redirect_registration(path, type, destination, redirect_type)
+      def stub_redirect_registration(path, type, destination, redirect_type, segments_mode = nil)
         redirect = { route: {
                       incoming_path: path,
                       route_type: type,
                       handler: 'redirect',
                       redirect_to: destination,
-                      redirect_type: redirect_type }
+                      redirect_type: redirect_type,
+                      segments_mode: segments_mode }
                   }
 
         register_stub = stub_route_put(redirect)
