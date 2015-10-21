@@ -20,7 +20,7 @@ SimpleCov.start do
   formatter SimpleCov::Formatter::RcovFormatter
 end
 
-class MiniTest::Unit::TestCase
+class Minitest::Test
   def teardown
     Timecop.return
   end

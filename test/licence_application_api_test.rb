@@ -2,7 +2,7 @@ require "test_helper"
 require "gds_api/licence_application"
 require "gds_api/test_helpers/licence_application"
 
-class LicenceApplicationApiTest < MiniTest::Unit::TestCase
+class LicenceApplicationApiTest < Minitest::Test
   include GdsApi::TestHelpers::LicenceApplication
 
   def setup

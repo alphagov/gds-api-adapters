@@ -1,7 +1,7 @@
 require "test_helper"
 require "gds_api/imminence"
 
-class ImminenceApiTest < MiniTest::Unit::TestCase
+class ImminenceApiTest < Minitest::Test
 
   ROOT = "https://imminence.test.alphagov.co.uk"
   LATITUDE = 52.1327584352089

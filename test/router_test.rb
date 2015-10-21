@@ -238,7 +238,8 @@ describe GdsApi::Router do
 
     describe "creating/updating a redirect route" do
       it "should allow creating/updating a redirect route" do
-        route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "redirect", "redirect_to" => "/bar", "redirect_type" => "permanent"}
+        route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "redirect",
+          "redirect_to" => "/bar", "redirect_type" => "permanent", "segments_mode" => nil}
         req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
           with(:body => {"route" => route_data}.to_json).
           to_return(:status => 201, :body => route_data.to_json, :headers => {"Content-type" => "application/json"})
@@ -252,12 +253,28 @@ describe GdsApi::Router do
       end
 
       it "should allow creating/updating a temporary redirect route" do
-        route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "redirect", "redirect_to" => "/bar", "redirect_type" => "temporary"}
+        route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "redirect",
+          "redirect_to" => "/bar", "redirect_type" => "temporary", "segments_mode" => nil}
         req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
           with(:body => {"route" => route_data}.to_json).
           to_return(:status => 201, :body => route_data.to_json, :headers => {"Content-type" => "application/json"})
 
         response = @api.add_redirect_route("/foo", "exact", "/bar", "temporary")
+        assert_equal 201, response.code
+        assert_equal "/bar", response.redirect_to
+
+        assert_requested(req)
+        assert_not_requested(@commit_req)
+      end
+
+      it "should allow creating/updating a redirect route which preserves segments" do
+        route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "redirect",
+          "redirect_to" => "/bar", "redirect_type" => "temporary", "segments_mode" => "preserve"}
+        req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
+          with(:body => {"route" => route_data}.to_json).
+          to_return(:status => 201, :body => route_data.to_json, :headers => {"Content-type" => "application/json"})
+
+        response = @api.add_redirect_route("/foo", "exact", "/bar", "temporary", :segments_mode => "preserve")
         assert_equal 201, response.code
         assert_equal "/bar", response.redirect_to
 
@@ -276,7 +293,8 @@ describe GdsApi::Router do
       end
 
       it "should raise an error if creating/updating the redirect route fails" do
-        route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "redirect", "redirect_to" => "bar", "redirect_type" => "permanent"}
+        route_data = {"incoming_path" => "/foo", "route_type" => "exact", "handler" => "redirect",
+          "redirect_to" => "bar", "redirect_type" => "permanent", "segments_mode" => nil}
         response_data = route_data.merge("errors" => {"redirect_to" => "is not a valid URL path"})
 
         req = WebMock.stub_request(:put, "#{@base_api_url}/routes").

@@ -33,7 +33,7 @@ class GdsApi::Router < GdsApi::Base
 
   def add_redirect_route(path, type, destination, redirect_type = "permanent", options = {})
     response = put_json!("#{endpoint}/routes", :route => {:incoming_path => path, :route_type => type, :handler => "redirect",
-              :redirect_to => destination, :redirect_type => redirect_type})
+              :redirect_to => destination, :redirect_type => redirect_type, :segments_mode => options[:segments_mode]})
     commit_routes if options[:commit]
     response
   end
