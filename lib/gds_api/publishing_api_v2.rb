@@ -10,10 +10,11 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json(content_url(content_id))
   end
 
-  def publish(content_id, update_type)
-    post_json!(content_url(content_id) + "/publish", {
-      update_type: update_type,
-    })
+  def publish(content_id, update_type, locale = nil)
+    body = { update_type: update_type }
+    body = body.merge(locale: locale) if locale
+
+    post_json!(content_url(content_id) + "/publish", body)
   end
 
   def get_links(content_id)

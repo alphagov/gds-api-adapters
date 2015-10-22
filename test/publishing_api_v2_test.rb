@@ -374,6 +374,33 @@ describe GdsApi::PublishingApiV2 do
         assert_equal "Cannot publish an already published content item", error.error_details["error"]["message"]
       end
     end
+
+    describe "if the update information contains a locale" do
+      before do
+        publishing_api
+          .given("a draft content item exists with content_id: #{@content_id} and locale: fr")
+          .upon_receiving("a publish request")
+          .with(
+            method: :post,
+            path: "/v2/content/#{@content_id}/publish",
+            body: {
+              update_type: "major",
+              locale: "fr",
+            },
+            headers: {
+              "Content-Type" => "application/json",
+            },
+          )
+          .will_respond_with(
+            status: 200,
+          )
+      end
+
+      it "responds with 200 if the publish command succeeds" do
+        response = @api_client.publish(@content_id, "major", "fr")
+        assert_equal 200, response.code
+      end
+    end
   end
 
   describe "#get_links" do
