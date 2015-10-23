@@ -6,14 +6,18 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     put_json!(content_url(content_id), payload)
   end
 
-  def get_content(content_id)
-    get_json(content_url(content_id))
+  def get_content(content_id, options = {})
+    params = {}
+    params = params.merge(locale: options[:locale]) if options[:locale]
+
+    get_json(content_url(content_id, params))
   end
 
-  def publish(content_id, update_type)
-    post_json!(content_url(content_id) + "/publish", {
-      update_type: update_type,
-    })
+  def publish(content_id, update_type, options = {})
+    params = { update_type: update_type }
+    params = params.merge(locale: options[:locale]) if options[:locale]
+
+    post_json!(publish_url(content_id), params)
   end
 
   def get_links(content_id)
@@ -27,11 +31,16 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
 
 private
 
-  def content_url(content_id)
-    "#{endpoint}/v2/content/#{content_id}"
+  def content_url(content_id, params = {})
+    query = query_string(params)
+    "#{endpoint}/v2/content/#{content_id}#{query}"
   end
 
   def links_url(content_id)
     "#{endpoint}/v2/links/#{content_id}"
+  end
+
+  def publish_url(content_id)
+    "#{endpoint}/v2/content/#{content_id}/publish"
   end
 end

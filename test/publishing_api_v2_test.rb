@@ -178,6 +178,43 @@ describe GdsApi::PublishingApiV2 do
       end
     end
 
+    describe "when a content item exists in multiple locales" do
+      before do
+        @content_item = content_item_for_content_id(@content_id)
+
+        publishing_api
+          .given("a content item exists in multiple locales with content_id: #{@content_id}")
+          .upon_receiving("a request to return the content item")
+          .with(
+            method: :get,
+            path: "/v2/content/#{@content_id}",
+            query: "locale=fr",
+          )
+          .will_respond_with(
+            status: 200,
+            body: {
+              "content_id" => @content_id,
+              "format" => Pact.like("special_route"),
+              "publishing_app" => Pact.like("publisher"),
+              "rendering_app" => Pact.like("frontend"),
+              "locale" => "fr",
+              "routes" => Pact.like([{}]),
+              "public_updated_at" => Pact.like("2015-07-30T13:58:11.000Z"),
+              "details" => Pact.like({})
+            },
+            headers: {
+              "Content-Type" => "application/json; charset=utf-8",
+            },
+          )
+      end
+
+      it "responds with 200 and the content item" do
+        response = @api_client.get_content(@content_id, locale: "fr")
+        assert_equal 200, response.code
+        assert_equal response["locale"], "fr"
+      end
+    end
+
     describe "a non-existent item" do
       before do
         publishing_api
@@ -372,6 +409,33 @@ describe GdsApi::PublishingApiV2 do
 
         assert_equal 400, error.code
         assert_equal "Cannot publish an already published content item", error.error_details["error"]["message"]
+      end
+    end
+
+    describe "if the update information contains a locale" do
+      before do
+        publishing_api
+          .given("a draft content item exists with content_id: #{@content_id} and locale: fr")
+          .upon_receiving("a publish request")
+          .with(
+            method: :post,
+            path: "/v2/content/#{@content_id}/publish",
+            body: {
+              update_type: "major",
+              locale: "fr",
+            },
+            headers: {
+              "Content-Type" => "application/json",
+            },
+          )
+          .will_respond_with(
+            status: 200,
+          )
+      end
+
+      it "responds with 200 if the publish command succeeds" do
+        response = @api_client.publish(@content_id, "major", locale: "fr")
+        assert_equal 200, response.code
       end
     end
   end
