@@ -1,3 +1,7 @@
+# 24.7.0
+
+* Add put_path endpoint for Publishing-API
+
 # 24.6.0
 
 * Support segments_mode option for add_redirect_route.
