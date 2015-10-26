@@ -38,7 +38,7 @@ describe GdsApi::PublishingApiV2 do
         @content_item = content_item_for_content_id(@content_id)
 
         publishing_api
-          .given("both content stores and the url-arbiter are empty")
+          .given("both content stores are empty")
           .upon_receiving("a request to create a content item without links")
           .with(
             method: :put,
@@ -64,7 +64,7 @@ describe GdsApi::PublishingApiV2 do
         @content_item = content_item_for_content_id(@content_id, "base_path" => "/test-item", "publishing_app" => "whitehall")
 
         publishing_api
-          .given("/test-item has been reserved in url-arbiter by the Publisher application")
+          .given("/test-item has been reserved by the Publisher application")
           .upon_receiving("a request from the Whitehall application to create a content item at /test-item")
           .with(
             method: :put,
@@ -104,7 +104,7 @@ describe GdsApi::PublishingApiV2 do
         @content_item = content_item_for_content_id(@content_id, "base_path" => "not a url path")
 
         publishing_api
-          .given("both content stores and the url-arbiter are empty")
+          .given("both content stores are empty")
           .upon_receiving("a request to create an invalid content-item")
           .with(
             method: :put,
@@ -218,7 +218,7 @@ describe GdsApi::PublishingApiV2 do
     describe "a non-existent item" do
       before do
         publishing_api
-          .given("both content stores and the url-arbiter are empty")
+          .given("both content stores are empty")
           .upon_receiving("a request for a non-existent content item")
           .with(
             method: :get,
@@ -274,7 +274,7 @@ describe GdsApi::PublishingApiV2 do
     describe "if the content item does not exist" do
       before do
         publishing_api
-          .given("both content stores and the url-arbiter are empty")
+          .given("both content stores are empty")
           .upon_receiving("a publish request")
           .with(
             method: :post,
