@@ -21,6 +21,10 @@ class GdsApi::PublishingApi < GdsApi::Base
     e
   end
 
+  def put_path(base_path, payload)
+    put_json!(paths_url(base_path), payload)
+  end
+
 
   private
 
@@ -34,5 +38,9 @@ class GdsApi::PublishingApi < GdsApi::Base
 
   def intent_url(base_path)
     "#{endpoint}/publish-intent#{base_path}"
+  end
+
+  def paths_url(base_path)
+    "#{endpoint}/paths#{base_path}"
   end
 end
