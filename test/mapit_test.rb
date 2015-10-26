@@ -51,10 +51,12 @@ describe GdsApi::Mapit do
       assert_nil @api.location_for_postcode("SW1A 1AA")
     end
 
-    it "should return nil for an invalid postcode" do
+    it "should return 400 for an invalid postcode" do
       mapit_does_not_have_a_bad_postcode("B4DP05TC0D3")
 
-      assert_nil @api.location_for_postcode("B4DP05TC0D3")
+      assert_raises GdsApi::HTTPClientError do
+        @api.location_for_postcode("B4DP05TC0D3")
+      end
     end
   end
   describe "areas_for_type" do

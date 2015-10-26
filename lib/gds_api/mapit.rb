@@ -5,10 +5,7 @@ class GdsApi::Mapit < GdsApi::Base
 
   def location_for_postcode(postcode)
     response = get_json("#{base_url}/postcode/#{CGI.escape postcode}.json")
-    return Location.new(response) unless response.nil?
-  rescue GdsApi::HTTPErrorResponse => e
-    # allow 400 errors, as they can be invalid postcodes people have entered
-    raise e unless e.code == 400
+    Location.new(response) unless response.nil?
   end
 
   def areas_for_type(type)
