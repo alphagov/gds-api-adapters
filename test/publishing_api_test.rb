@@ -17,7 +17,7 @@ describe GdsApi::PublishingApi do
       content_item = content_item_for_publishing_api(base_path).merge("update_type" => "major")
 
       publishing_api
-        .given("both content stores are empty")
+        .given("no content exists")
         .upon_receiving("a request to create a content item")
         .with(
           method: :put,
@@ -46,7 +46,7 @@ describe GdsApi::PublishingApi do
       content_item = content_item_for_publishing_api(base_path).merge("update_type" => "major")
 
       publishing_api
-        .given("both content stores are empty")
+        .given("no content exists")
         .upon_receiving("a request to create a draft content item")
         .with(
           method: :put,
@@ -75,7 +75,7 @@ describe GdsApi::PublishingApi do
       publish_intent = intent_for_publishing_api(base_path)
 
       publishing_api
-        .given("both content stores are empty")
+        .given("no content exists")
         .upon_receiving("a request to create a publish intent")
         .with(
           method: :put,
@@ -105,7 +105,7 @@ describe GdsApi::PublishingApi do
       publish_intent = intent_for_publishing_api(base_path)
 
       publishing_api
-        .given("a publish intent exists at /test-intent in the live content store")
+        .given("a publish intent exists at /test-intent")
         .upon_receiving("a request to delete a publish intent")
         .with(
           method: :delete,
@@ -129,7 +129,7 @@ describe GdsApi::PublishingApi do
       publish_intent = intent_for_publishing_api(base_path)
 
       publishing_api
-        .given("both content stores are empty")
+        .given("no content exists")
         .upon_receiving("a request to delete a publish intent")
         .with(
           method: :delete,
@@ -156,7 +156,7 @@ describe GdsApi::PublishingApi do
       }
 
       publishing_api
-        .given("both content stores are empty")
+        .given("no content exists")
         .upon_receiving("a request to put a path")
         .with(
           method: :put,
