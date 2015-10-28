@@ -4,11 +4,15 @@ require_relative 'exceptions'
 class GdsApi::Mapit < GdsApi::Base
 
   def location_for_postcode(postcode)
-    response = get_json("#{base_url}/postcode/#{CGI.escape postcode}.json")
-    return Location.new(response) unless response.nil?
+    response = get_json!("#{base_url}/postcode/#{CGI.escape postcode}.json")
+    Location.new(response)
+
+  rescue GdsApi::HTTPNotFound => e
+    # allow 404 errors, as these will be valid postcodes with no match in Mapit
+    e
   rescue GdsApi::HTTPErrorResponse => e
     # allow 400 errors, as they can be invalid postcodes people have entered
-    raise e unless e.code == 400
+    e
   end
 
   def areas_for_type(type)

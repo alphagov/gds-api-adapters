@@ -45,16 +45,18 @@ describe GdsApi::Mapit do
       assert_equal "30UN", response.areas.last.codes['ons']
     end
 
-    it "should return nil if a postcode doesn't exist" do
+    it "should return 404 if a postcode doesn't exist" do
       mapit_does_not_have_a_postcode("SW1A 1AA")
 
-      assert_nil @api.location_for_postcode("SW1A 1AA")
+      response = @api.location_for_postcode("SW1A 1AA")
+      assert_equal 404, response.code
     end
 
-    it "should return nil for an invalid postcode" do
+    it "should return 400 for an invalid postcode" do
       mapit_does_not_have_a_bad_postcode("B4DP05TC0D3")
 
-      assert_nil @api.location_for_postcode("B4DP05TC0D3")
+      response = @api.location_for_postcode("B4DP05TC0D3")
+      assert_equal 400, response.code
     end
   end
   describe "areas_for_type" do
