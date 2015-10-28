@@ -1,3 +1,7 @@
+# 24.8.0
+
+* Add test helpers for Publishing-API path reservation endpoint
+
 # 24.7.0
 
 * Add put_path endpoint for Publishing-API
@@ -8,7 +12,7 @@
 
 # 24.5.0
 
-* Adds the helper methods and pact tests for the GET and PUT publishing API endpoints for managing links  
+* Adds the helper methods and pact tests for the GET and PUT publishing API endpoints for managing links
   independently of content items.
 
 # 24.4.0
