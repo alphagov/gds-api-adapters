@@ -90,6 +90,39 @@ module GdsApi
         stub_request(:any, /#{PUBLISHING_API_ENDPOINT}\/.*/).to_return(:status => 503)
       end
 
+      def stub_default_publishing_api_path_reservation
+        stub_request(:put, %r[\A#{PUBLISHING_API_ENDPOINT}/paths/]).to_return { |request|
+           base_path = request.uri.path.sub(%r{\A/paths/}, "")
+           { :status => 200,  :headers => {:content_type => "application/json"},
+             :body => publishing_api_path_data_for(base_path).to_json }
+        }
+      end
+
+      def publishing_api_has_path_reservation_for(path, publishing_app)
+        data = publishing_api_path_data_for(path, "publishing_app" => publishing_app)
+        error_data = data.merge({
+          "errors" => {"path" => ["is already reserved by the #{publishing_app} application"]},
+        })
+
+        stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{path}").
+                  to_return(:status => 422, :body => error_data.to_json,
+                            :headers => {:content_type => "application/json"})
+
+        stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{path}").
+          with(:body => {"publishing_app" => publishing_app}).
+          to_return(:status => 200,
+                    :headers => {:content_type => "application/json"},
+                    :body => data.to_json)
+      end
+
+      def publishing_api_returns_path_reservation_validation_error_for(path, error_details = nil)
+        error_details ||= {"base" => ["computer says no"]}
+        error_data = publishing_api_path_data_for(path).merge("errors" => error_details)
+
+        stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{path}").
+          to_return(:status => 422, :body => error_data.to_json, :headers => {:content_type => "application/json"})
+      end
+
     private
       def values_match_recursively(expected_value, actual_value)
         case expected_value
@@ -116,6 +149,16 @@ module GdsApi
 
       def intent_for_publishing_api(base_path, publishing_app="publisher")
         intent_for_base_path(base_path).merge("publishing_app" => publishing_app)
+      end
+
+      def publishing_api_path_data_for(path, override_attributes = {})
+        now = Time.zone.now.utc.iso8601
+        {
+          "path" => path,
+          "publishing_app" => "foo-publisher",
+          "created_at" => now,
+          "updated_at" => now,
+        }.merge(override_attributes)
       end
     end
   end
