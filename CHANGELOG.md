@@ -1,3 +1,7 @@
+# 25.0.0
+
+* Allow `Mapit#location_for_postcode` to raise if it receives something which doesn't look like a postcode.
+
 # 24.8.0
 
 * Add test helpers for Publishing-API path reservation endpoint
