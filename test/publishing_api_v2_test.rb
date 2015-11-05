@@ -139,6 +139,75 @@ describe GdsApi::PublishingApiV2 do
         assert_equal "Unprocessable entity", error.error_details["error"]["message"]
       end
     end
+
+    describe "optimistic locking" do
+      describe "if the content item has not change since it was requested" do
+        before do
+          @content_item = content_item_for_content_id(@content_id, "previous_version" => 3)
+
+          publishing_api
+            .given("the content item #{@content_id} is at version 3")
+            .upon_receiving("a request to update the content item at version 3")
+            .with(
+              method: :put,
+              path: "/v2/content/#{@content_id}",
+              body: @content_item,
+              headers: {
+                "Content-Type" => "application/json",
+              },
+            )
+            .will_respond_with(
+              status: 200,
+            )
+        end
+
+        it "responds with 200 OK" do
+          response = @api_client.put_content(@content_id, @content_item)
+          assert_equal 200, response.code
+        end
+      end
+
+      describe "if the content item has changed in the meantime" do
+        before do
+          @content_item = content_item_for_content_id(@content_id, "previous_version" => 2)
+
+          publishing_api
+            .given("the content item #{@content_id} is at version 3")
+            .upon_receiving("a request to update the content item at version 2")
+            .with(
+              method: :put,
+              path: "/v2/content/#{@content_id}",
+              body: @content_item,
+              headers: {
+                "Content-Type" => "application/json",
+              },
+            )
+            .will_respond_with(
+              status: 409,
+              body: {
+                "error" => {
+                  "code" => 409,
+                  "message" => Pact.term(generate: "Conflict", matcher:/\S+/),
+                  "fields" => {
+                    "previous_version" => Pact.each_like("does not match", :min => 1),
+                  },
+                },
+              },
+              headers: {
+                "Content-Type" => "application/json; charset=utf-8"
+              }
+            )
+        end
+
+        it "responds with 409 Conflict" do
+          error = assert_raises GdsApi::HTTPClientError do
+            @api_client.put_content(@content_id, @content_item)
+          end
+          assert_equal 409, error.code
+          assert_equal "Conflict", error.error_details["error"]["message"]
+        end
+      end
+    end
   end
 
   describe "#get_content" do
@@ -438,6 +507,77 @@ describe GdsApi::PublishingApiV2 do
         assert_equal 200, response.code
       end
     end
+
+    describe "optimistic locking" do
+      describe "if the content item has not change since it was requested" do
+        before do
+          publishing_api
+            .given("the content item #{@content_id} is at version 3")
+            .upon_receiving("a publish request for version 3")
+            .with(
+              method: :post,
+              path: "/v2/content/#{@content_id}/publish",
+              body: {
+                update_type: "minor",
+                previous_version: 3,
+              },
+              headers: {
+                "Content-Type" => "application/json",
+              },
+            )
+            .will_respond_with(
+              status: 200,
+            )
+        end
+
+        it "responds with 200 OK" do
+          response = @api_client.publish(@content_id, "minor", previous_version: 3)
+          assert_equal 200, response.code
+        end
+      end
+
+      describe "if the content item has changed in the meantime" do
+        before do
+          publishing_api
+            .given("the content item #{@content_id} is at version 3")
+            .upon_receiving("a publish request for version 2")
+            .with(
+              method: :post,
+              path: "/v2/content/#{@content_id}/publish",
+              body: {
+                update_type: "minor",
+                previous_version: 2,
+              },
+              headers: {
+                "Content-Type" => "application/json",
+              },
+            )
+            .will_respond_with(
+              status: 409,
+              body: {
+                "error" => {
+                  "code" => 409,
+                  "message" => Pact.term(generate: "Conflict", matcher:/\S+/),
+                  "fields" => {
+                    "previous_version" => Pact.each_like("does not match", :min => 1),
+                  },
+                },
+              },
+              headers: {
+                "Content-Type" => "application/json; charset=utf-8"
+              }
+            )
+        end
+
+        it "responds with 409 Conflict" do
+          error = assert_raises GdsApi::HTTPClientError do
+            @api_client.publish(@content_id, "minor", previous_version: 2)
+          end
+          assert_equal 409, error.code
+          assert_equal "Conflict", error.error_details["error"]["message"]
+        end
+      end
+    end
   end
 
   describe "#get_links" do
@@ -662,6 +802,93 @@ describe GdsApi::PublishingApiV2 do
         assert_equal(OpenStruct.new(
           organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
         ), response.links)
+      end
+    end
+
+    describe "optimistic locking" do
+      describe "if the linkset has not change since it was requested" do
+        before do
+          publishing_api
+            .given("the linkset for #{@content_id} is at version 3")
+            .upon_receiving("a request to update the linkset at version 3")
+            .with(
+              method: :put,
+              path: "/v2/links/#{@content_id}",
+              body: {
+                links: {
+                  organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+                },
+                previous_version: 3,
+              },
+              headers: {
+                "Content-Type" => "application/json",
+              },
+            )
+            .will_respond_with(
+              status: 200,
+            )
+        end
+
+        it "responds with 200 OK" do
+          response = @api_client.put_links(@content_id,
+            links: {
+              organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+            },
+            previous_version: 3,
+          )
+
+          assert_equal 200, response.code
+        end
+      end
+
+      describe "if the content item has changed in the meantime" do
+        before do
+          publishing_api
+            .given("the linkset for #{@content_id} is at version 3")
+            .upon_receiving("a request to update the linkset at version 2")
+            .with(
+              method: :put,
+              path: "/v2/links/#{@content_id}",
+              body: {
+                links: {
+                  organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+                },
+                previous_version: 2,
+              },
+              headers: {
+                "Content-Type" => "application/json",
+              },
+            )
+            .will_respond_with(
+              status: 409,
+              body: {
+                "error" => {
+                  "code" => 409,
+                  "message" => Pact.term(generate: "Conflict", matcher:/\S+/),
+                  "fields" => {
+                    "previous_version" => Pact.each_like("does not match", :min => 1),
+                  },
+                },
+              },
+              headers: {
+                "Content-Type" => "application/json; charset=utf-8"
+              }
+            )
+        end
+
+        it "responds with 409 Conflict" do
+          error = assert_raises GdsApi::HTTPClientError do
+            @api_client.put_links(@content_id,
+              links: {
+                organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+              },
+              previous_version: 2,
+            )
+          end
+
+          assert_equal 409, error.code
+          assert_equal "Conflict", error.error_details["error"]["message"]
+        end
       end
     end
   end
