@@ -1,3 +1,7 @@
+# 25.1.0
+
+* Add support for optimistic locking to the v2 publishing API endpoints.
+
 # 25.0.0
 
 * Allow `Mapit#location_for_postcode` to raise if it receives something which doesn't look like a postcode.
