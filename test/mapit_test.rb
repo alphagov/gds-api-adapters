@@ -45,6 +45,14 @@ describe GdsApi::Mapit do
       assert_equal "30UN", response.areas.last.codes['ons']
     end
 
+    it "should strip non-alphanumeric characters apart from a single space from the postcode, and potentially transpose letters for numbers" do
+      mapit_has_a_postcode("SW1A 1AA", [ 51.5010096, -0.141870 ])
+
+      response = @api.location_for_postcode("SWIA-1AA] ")
+      assert_equal 51.5010096, response.lat
+      assert_equal -0.141870, response.lon
+    end
+
     it "should return nil if a postcode doesn't exist" do
       mapit_does_not_have_a_postcode("SW1A 1AA")
 

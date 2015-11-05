@@ -1,9 +1,12 @@
 require_relative 'base'
 require_relative 'exceptions'
+require_relative 'postcode_sanitizer'
+
 
 class GdsApi::Mapit < GdsApi::Base
 
   def location_for_postcode(postcode)
+    postcode = GdsApi::PostcodeSanitizer.sanitize(postcode)
     response = get_json("#{base_url}/postcode/#{CGI.escape postcode}.json")
     Location.new(response) unless response.nil?
   end
