@@ -892,4 +892,38 @@ describe GdsApi::PublishingApiV2 do
       end
     end
   end
+
+  describe "#get_content_items" do
+    it "returns the content items of a certain format" do
+      publishing_api
+        .given("there is content with format 'topic'")
+        .upon_receiving("a get entries request")
+        .with(
+          method: :get,
+          path: "/v2/content",
+          query: "content_format=topic&fields%5B%5D=title&fields%5B%5D=base_path",
+          headers: {
+            "Content-Type" => "application/json",
+          },
+        )
+        .will_respond_with(
+          status: 200,
+          body: [
+            { title: 'Content Item A', base_path: '/a-base-path' },
+            { title: 'Content Item B', base_path: '/another-base-path' },
+          ]
+        )
+
+      response = @api_client.get_content_items(
+        content_format: 'topic',
+        fields: [:title, :base_path],
+      )
+
+      assert_equal 200, response.code
+      assert_equal [
+        { 'title' => 'Content Item A', 'base_path' => '/a-base-path' },
+        { 'title' => 'Content Item B', 'base_path' => '/another-base-path' },
+      ], response.to_a
+    end
+  end
 end
