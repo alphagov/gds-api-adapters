@@ -42,6 +42,11 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     put_json!(links_url(content_id), params)
   end
 
+  def get_content_items(params)
+    query = query_string(params)
+    get_json("#{endpoint}/v2/content#{query}")
+  end
+
 private
 
   def content_url(content_id, params = {})
