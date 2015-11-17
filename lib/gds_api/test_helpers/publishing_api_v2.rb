@@ -18,6 +18,11 @@ module GdsApi
         stub_publishing_api_put(content_id, body, '/links')
       end
 
+      def stub_publishing_api_publish(content_id, body)
+        url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/publish"
+        stub_request(:post, url).with(body: body).to_return(status: 200, body: '{}', headers: {"Content-Type" => "application/json; charset=utf-8"})
+      end
+
       def stub_default_publishing_api_put
         stub_request(:put, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content})
       end
