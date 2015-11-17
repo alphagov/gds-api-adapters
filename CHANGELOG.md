@@ -1,3 +1,7 @@
+# 25.2.0
+
+* Add `PublishingApiV2#get_content_items`.
+
 # 25.1.0
 
 * Add support for optimistic locking to the v2 publishing API endpoints.
