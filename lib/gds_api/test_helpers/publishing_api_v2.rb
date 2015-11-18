@@ -33,16 +33,29 @@ module GdsApi
         stubs
       end
 
-      def stub_default_publishing_api_put
-        stub_request(:put, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content})
+      def stub_any_publishing_api_put_content
+        stub_request(:put, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/})
       end
 
-      def assert_publishing_api_put_item(content_id, attributes_or_matcher = {}, times = 1)
+      def stub_any_publishing_api_put_links
+        stub_request(:put, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/links/})
+      end
+
+      def stub_any_publishing_api_call
+        stub_request(:any, %r{\A#{PUBLISHING_API_V2_ENDPOINT}})
+      end
+
+      def assert_publishing_api_put_content(content_id, attributes_or_matcher = {}, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
-        assert_publishing_api_put(url, attributes_or_matcher, times)
+        assert_publishing_api(:put, url, attributes_or_matcher, times)
       end
 
-      def assert_publishing_api_put(url, attributes_or_matcher = {}, times = 1)
+      def assert_publishing_api_publish(content_id, attributes_or_matcher = {}, times = 1)
+        url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/publish"
+        assert_publishing_api(:post, url, attributes_or_matcher, times)
+      end
+
+      def assert_publishing_api(verb, url, attributes_or_matcher = {}, times = 1)
         if attributes_or_matcher.is_a?(Hash)
           matcher = attributes_or_matcher.empty? ? nil : request_json_matching(attributes_or_matcher)
         else
@@ -50,9 +63,9 @@ module GdsApi
         end
 
         if matcher
-          assert_requested(:put, url, times: times, &matcher)
+          assert_requested(verb, url, times: times, &matcher)
         else
-          assert_requested(:put, url, times: times)
+          assert_requested(verb, url, times: times)
         end
       end
 
