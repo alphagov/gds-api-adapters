@@ -1,3 +1,7 @@
+# 25.3.0
+
+* Add Test Helpers for Publishing API V2 `index` and `get`
+
 # 25.2.0
 
 * Add `PublishingApiV2#get_content_items`.
