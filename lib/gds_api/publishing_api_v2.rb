@@ -1,7 +1,6 @@
 require_relative 'base'
 
 class GdsApi::PublishingApiV2 < GdsApi::Base
-
   def put_content(content_id, payload)
     put_json!(content_url(content_id), payload)
   end
