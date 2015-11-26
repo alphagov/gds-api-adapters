@@ -46,6 +46,10 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json("#{endpoint}/v2/content#{query}")
   end
 
+  def discard_draft(content_id)
+    post_json!(discard_url(content_id), {})
+  end
+
 private
 
   def content_url(content_id, params = {})
@@ -59,6 +63,10 @@ private
 
   def publish_url(content_id)
     "#{endpoint}/v2/content/#{content_id}/publish"
+  end
+
+  def discard_url(content_id)
+    "#{endpoint}/v2/content/#{content_id}/discard-draft"
   end
 
   def merge_optional_keys(params, options, optional_keys)

@@ -23,6 +23,11 @@ module GdsApi
         stub_request(:post, url).with(body: body).to_return(status: 200, body: '{}', headers: {"Content-Type" => "application/json; charset=utf-8"})
       end
 
+      def stub_publishing_api_discard_draft(content_id)
+        url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/discard-draft"
+        stub_request(:post, url).to_return(status: 200, headers: {"Content-Type" => "application/json; charset=utf-8"})
+      end
+
       def stub_publishing_api_put_content_links_and_publish(body, content_id = nil, publish_options = nil)
         content_id ||= body[:content_id]
         publish_options ||= { update_type: { update_type: body[:update_type], locale: body[:locale] } }
