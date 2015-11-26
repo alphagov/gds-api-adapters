@@ -1,3 +1,7 @@
+# 26.0.0
+
+* Flesh out and rename methods in Publishing API v2 test helpers
+
 # 25.3.0
 
 * Add Test Helpers for Publishing API V2 `index` and `get`
