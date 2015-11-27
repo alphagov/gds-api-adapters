@@ -1,3 +1,7 @@
+# 26.1.0
+
+* Add publishing api discard draft endpoint
+
 # 26.0.0
 
 * Flesh out and rename methods in Publishing API v2 test helpers
