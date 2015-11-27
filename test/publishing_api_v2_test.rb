@@ -926,4 +926,59 @@ describe GdsApi::PublishingApiV2 do
       ], response.to_a
     end
   end
+
+  describe "#discard_draft(content_id)" do
+    describe "when the content item exists" do
+      before do
+        @content_item = content_item_for_content_id(@content_id)
+
+        publishing_api
+          .given("a content item exists with content_id: #{@content_id}")
+          .upon_receiving("a request to discard draft content")
+          .with(
+            method: :post,
+            path: "/v2/content/#{@content_id}/discard-draft",
+            body: {},
+            headers: {
+              "Content-Type" => "application/json",
+            },
+          )
+          .will_respond_with(
+            status: 200,
+          )
+      end
+
+      it "responds with 200" do
+        response = @api_client.discard_draft(@content_id)
+        assert_equal 200, response.code
+      end
+    end
+
+    describe "when there is no content with that content_id" do
+      before do
+        publishing_api
+          .given("no content exists")
+          .upon_receiving("a request to discard draft content")
+          .with(
+            method: :post,
+            path: "/v2/content/#{@content_id}/discard-draft",
+            body: {},
+            headers: {
+              "Content-Type" => "application/json",
+            },
+          )
+          .will_respond_with(
+            status: 404,
+          )
+      end
+
+      it "responds with a 404" do
+        error = assert_raises GdsApi::HTTPClientError do
+          @api_client.discard_draft(@content_id)
+        end
+
+        assert_equal 404, error.code
+      end
+    end
+  end
 end
