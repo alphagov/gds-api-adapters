@@ -927,7 +927,7 @@ describe GdsApi::PublishingApiV2 do
     end
   end
 
-  describe "#discard_draft(content_id)" do
+  describe "#discard_draft(content_id, options = {})" do
     describe "when the content item exists" do
       before do
         @content_item = content_item_for_content_id(@content_id)
@@ -950,6 +950,32 @@ describe GdsApi::PublishingApiV2 do
 
       it "responds with 200" do
         response = @api_client.discard_draft(@content_id)
+        assert_equal 200, response.code
+      end
+    end
+
+    describe "when the content item exists and is French" do
+      before do
+        publishing_api
+          .given("a French content item exists with content_id: #{@content_id}")
+          .upon_receiving("a request to discard French draft content")
+          .with(
+            method: :post,
+            path: "/v2/content/#{@content_id}/discard-draft",
+            body: {
+              locale: "fr",
+            },
+            headers: {
+              "Content-Type" => "application/json",
+            },
+          )
+          .will_respond_with(
+            status: 200,
+          )
+      end
+
+      it "responds with 200" do
+        response = @api_client.discard_draft(@content_id, locale: "fr")
         assert_equal 200, response.code
       end
     end
