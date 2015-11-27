@@ -1,3 +1,7 @@
+# 26.2.0
+
+* Support optional locale and previous version for discard_draft publishing API call
+
 # 26.1.0
 
 * Add publishing api discard draft endpoint
