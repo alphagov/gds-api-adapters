@@ -930,8 +930,6 @@ describe GdsApi::PublishingApiV2 do
   describe "#discard_draft(content_id, options = {})" do
     describe "when the content item exists" do
       before do
-        @content_item = content_item_for_content_id(@content_id)
-
         publishing_api
           .given("a content item exists with content_id: #{@content_id}")
           .upon_receiving("a request to discard draft content")
