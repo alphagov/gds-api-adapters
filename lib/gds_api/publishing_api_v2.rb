@@ -27,6 +27,17 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     post_json!(publish_url(content_id), params)
   end
 
+  def discard_draft(content_id, options = {})
+    optional_keys = [
+      :locale,
+      :previous_version,
+    ]
+
+    params = merge_optional_keys({}, options, optional_keys)
+
+    post_json!(discard_url(content_id), params)
+  end
+
   def get_links(content_id)
     get_json(links_url(content_id))
   end
@@ -44,10 +55,6 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   def get_content_items(params)
     query = query_string(params)
     get_json("#{endpoint}/v2/content#{query}")
-  end
-
-  def discard_draft(content_id)
-    post_json!(discard_url(content_id), {})
   end
 
 private
