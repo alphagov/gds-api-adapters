@@ -60,6 +60,11 @@ module GdsApi
         assert_publishing_api(:post, url, attributes_or_matcher, times)
       end
 
+      def assert_publishing_api_discard_draft(content_id, attributes_or_matcher = {}, times = 1)
+        url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/discard-draft"
+        assert_publishing_api(:post, url, attributes_or_matcher, times)
+      end
+
       def assert_publishing_api(verb, url, attributes_or_matcher = {}, times = 1)
         if attributes_or_matcher.is_a?(Hash)
           matcher = attributes_or_matcher.empty? ? nil : request_json_matching(attributes_or_matcher)
