@@ -1,3 +1,7 @@
+# 26.3.0
+
+* Publishing API v2: add stub for 404 responses
+
 # 26.2.0
 
 * Support optional locale and previous version for discard_draft publishing API call
