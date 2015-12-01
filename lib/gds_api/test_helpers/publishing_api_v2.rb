@@ -50,6 +50,11 @@ module GdsApi
         stub_request(:any, %r{\A#{PUBLISHING_API_V2_ENDPOINT}})
       end
 
+      def stub_any_publishing_api_call_to_return_not_found
+        stub_request(:any, %r{\A#{PUBLISHING_API_V2_ENDPOINT}})
+          .to_return(status: 404, headers: {"Content-Type" => "application/json; charset=utf-8"})
+      end
+
       def assert_publishing_api_put_content(content_id, attributes_or_matcher = {}, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
         assert_publishing_api(:put, url, attributes_or_matcher, times)
