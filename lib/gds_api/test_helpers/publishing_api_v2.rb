@@ -30,7 +30,10 @@ module GdsApi
 
       def stub_publishing_api_put_content_links_and_publish(body, content_id = nil, publish_body = nil)
         content_id ||= body[:content_id]
-        publish_body ||= { update_type: body[:update_type], locale: body[:locale] }
+        if publish_body.nil?
+          publish_body = { update_type: body.fetch(:update_type) }
+          publish_body[:locale] = body[:locale] if body[:locale]
+        end
         stubs = []
         stubs << stub_publishing_api_put_content(content_id, body.except(:links))
         stubs << stub_publishing_api_put_links(content_id, body.slice(:links)) unless body.slice(:links).empty?
