@@ -28,13 +28,16 @@ module GdsApi
         stub_request(:post, url).to_return(status: 200, headers: {"Content-Type" => "application/json; charset=utf-8"})
       end
 
-      def stub_publishing_api_put_content_links_and_publish(body, content_id = nil, publish_options = nil)
+      def stub_publishing_api_put_content_links_and_publish(body, content_id = nil, publish_body = nil)
         content_id ||= body[:content_id]
-        publish_options ||= { update_type: { update_type: body[:update_type], locale: body[:locale] } }
+        if publish_body.nil?
+          publish_body = { update_type: body.fetch(:update_type) }
+          publish_body[:locale] = body[:locale] if body[:locale]
+        end
         stubs = []
         stubs << stub_publishing_api_put_content(content_id, body.except(:links))
         stubs << stub_publishing_api_put_links(content_id, body.slice(:links)) unless body.slice(:links).empty?
-        stubs << stub_publishing_api_publish(content_id, publish_options)
+        stubs << stub_publishing_api_publish(content_id, publish_body)
         stubs
       end
 
