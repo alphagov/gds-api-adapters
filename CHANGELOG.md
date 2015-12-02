@@ -1,3 +1,7 @@
+# 26.3.1
+
+* Fix the composite "put and publish" Publishing API v2 stub
+
 # 26.3.0
 
 * Publishing API v2: add stub for 404 responses
