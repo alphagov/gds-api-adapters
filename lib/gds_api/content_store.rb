@@ -13,6 +13,12 @@ class GdsApi::ContentStore < GdsApi::Base
     get_json(content_item_url(base_path))
   end
 
+  def incoming_links!(base_path)
+    get_json!(incoming_links_url(base_path))
+  rescue GdsApi::HTTPNotFound => e
+    raise ItemNotFound.build_from(e)
+  end
+
   def content_item!(base_path)
     get_json!(content_item_url(base_path))
   rescue GdsApi::HTTPNotFound => e
@@ -23,5 +29,9 @@ class GdsApi::ContentStore < GdsApi::Base
 
   def content_item_url(base_path)
     "#{endpoint}/content#{base_path}"
+  end
+
+  def incoming_links_url(base_path)
+    "#{endpoint}/incoming-links#{base_path}"
   end
 end
