@@ -34,6 +34,9 @@ module GdsApi
       def content_store_does_not_have_item(base_path)
         url = CONTENT_STORE_ENDPOINT + "/content" + base_path
         stub_request(:get, url).to_return(status: 404, headers: {})
+
+        url = CONTENT_STORE_ENDPOINT + "/incoming-links" + base_path
+        stub_request(:get, url).to_return(status: 404, headers: {})
       end
 
       def content_store_isnt_available
@@ -42,6 +45,13 @@ module GdsApi
 
       def content_item_for_base_path(base_path)
         super.merge({ "base_path" => base_path })
+      end
+
+      def content_store_has_incoming_links(base_path, links)
+        url = CONTENT_STORE_ENDPOINT + "/incoming-links" + base_path
+        body = links.to_json
+
+        stub_request(:get, url).to_return(body: body)
       end
     end
   end

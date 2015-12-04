@@ -1,3 +1,5 @@
+* Add `ContentStore#incoming_links!`
+
 # 26.3.1
 
 * Fix the composite "put and publish" Publishing API v2 stub
