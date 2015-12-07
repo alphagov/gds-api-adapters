@@ -53,6 +53,8 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   end
 
   def get_content_items(params)
+    params = { publishing_app: app_name }.merge(params)
+    params.delete(:publishing_app) if params[:publishing_app] == 'all'
     query = query_string(params)
     get_json("#{endpoint}/v2/content#{query}")
   end
@@ -80,5 +82,9 @@ private
     optional_keys.each_with_object(params) do |optional_key, hash|
       hash.merge!(optional_key => options[optional_key]) if options[optional_key]
     end
+  end
+
+  def app_name
+    ENV["GOVUK_APP_NAME"]
   end
 end
