@@ -1005,4 +1005,105 @@ describe GdsApi::PublishingApiV2 do
       end
     end
   end
+  describe "#get_linked_items" do
+    describe "if the content item does not exist" do
+      before do
+        publishing_api
+          .given("no content exists")
+          .upon_receiving("a request to return the items linked to it")
+          .with(
+            method: :get,
+            path: "/v2/linked/#{@content_id}",
+            query: "fields%5B%5D=content_id&fields%5B%5D=base_path&link_type=topic",
+          )
+          .will_respond_with(
+            status: 404,
+            body: {
+              "error" => {
+                "code" => 404,
+                "message" => Pact.term(generate: "not found", matcher:/\S+/)
+              },
+            },
+            headers: {
+              "Content-Type" => "application/json; charset=utf-8",
+            },
+          )
+      end
+
+      it "404s" do
+        response = @api_client.get_linked_items(
+          @content_id,
+          {
+            link_type: "topic",
+            fields: ["content_id", "base_path"],
+          }
+        )
+        assert_nil response
+      end
+    end
+
+    describe "there are two documents that link to the wantend document" do
+      before do
+        content_id2 = "08dfd5c3-d935-4e81-88fd-cfe65b78893d"
+        content_id3 = "e2961462-bc37-48e9-bb98-c981ef1a2d59"
+
+        @linked_content_item = content_item_for_content_id("6cb2cf8c-670f-4de3-97d5-6ad9114581c7")
+        @linking_content_item1 = content_item_for_content_id(content_id3,
+          "base_path" => "/item-b",
+          "links" => {
+            "topic" => [ @linked_content_item['content_id1'] ]
+        })
+        @linking_content_item2 = content_item_for_content_id(content_id2,
+          "base_path" => "/item-a",
+          "links" => {
+            "topic" => [ @linked_content_item['content_id1'] ],
+        })
+
+        publishing_api
+          .given("there are two documents with a 'topic' link to another document")
+          .upon_receiving("a get linked request")
+          .with(
+            method: :get,
+            path: "/v2/linked/" + @linked_content_item['content_id'],
+            query: "fields%5B%5D=content_id&fields%5B%5D=base_path&link_type=topic",
+            headers: {
+              "Content-Type" => "application/json",
+            },
+          )
+          .will_respond_with(
+            status: 200,
+            body: [
+              {
+                content_id: @linking_content_item1["content_id"],
+                base_path: @linking_content_item1["base_path"]
+              },
+              {
+                content_id: @linking_content_item2["content_id"],
+                base_path: @linking_content_item2["base_path"]
+              }
+            ]
+          )
+      end
+
+      it "returns the requested fields of linking items" do
+        response = @api_client.get_linked_items(
+          @linked_content_item["content_id"],
+          {
+            link_type: "topic",
+            fields: ["content_id", "base_path"],
+          }
+        )
+        assert_equal 200, response.code
+
+        expected_documents = [
+          { "content_id" => @linking_content_item2["content_id"], "base_path" => "/item-a" },
+          { "content_id" => @linking_content_item1["content_id"], "base_path" => "/item-b" },
+        ]
+
+        expected_documents.each do |document|
+          response.to_a.must_include document
+        end
+      end
+    end
+  end
 end

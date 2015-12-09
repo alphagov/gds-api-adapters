@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add `PublishingApiV2#get_linked_items`.
+
 # 26.5.0
 
 * Changed SpecialRoutePublisher to use v2 of publishing-api

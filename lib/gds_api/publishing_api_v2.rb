@@ -57,6 +57,11 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json("#{endpoint}/v2/content#{query}")
   end
 
+  def get_linked_items(content_id, params = {})
+    query = query_string(params)
+    get_json("#{endpoint}/v2/linked/#{content_id}#{query}")
+  end
+
 private
 
   def content_url(content_id, params = {})
