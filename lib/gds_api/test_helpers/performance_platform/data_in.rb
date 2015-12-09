@@ -35,6 +35,10 @@ module GdsApi
         def stub_pp_isnt_available
           stub_request(:post, /#{PP_DATA_IN_ENDPOINT}\/.*/).to_return(:status => 503)
         end
+
+        def stub_pp_dataset_unavailable
+          stub_request(:any, /#{PP_DATA_IN_ENDPOINT}/).to_return(:status => 404)
+        end
       end
     end
   end
