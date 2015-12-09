@@ -10,9 +10,25 @@ module GdsApi
 
       PUBLISHING_API_V2_ENDPOINT = Plek.current.find('publishing-api') + '/v2'
 
-      def stub_publishing_api_put_content(content_id, body)
-        stub_publishing_api_put(content_id, body, '/content')
+      # stubs a PUT /v2/content/:content_id request with the given content id and request body.
+      # if no response_hash is given, a default response as follows is created:
+      # {status: 200, body: '{}', headers: {"Content-Type" => "application/json; charset=utf-8"}}
+      #
+      # if a response is given, then it will be merged with the default response.
+      # if the given parameter for the response body is a Hash, it will be converted to JSON.
+      #
+      # e.g. The following two examples are equivalent: 
+      #
+      # * stub_publishing_api_put_content(my_content_id, my_request_body, { status: 201, body: {version: 33}.to_json })
+      # * stub_publishing_api_put_content(my_content_id, my_request_body, { status: 201, body: {version: 33} })
+      #
+      def stub_publishing_api_put_content(content_id, body, response_hash = {})
+        stub_publishing_api_put(content_id, body, '/content', response_hash)
       end
+
+      # def stub_publishing_api_put_content_returning(status)
+      #   stub_request(:put, /#{PUBLISHING_API_V2_ENDPOINT}\/content\/.*/).to_return(status: status)
+      # end
 
       def stub_publishing_api_put_links(content_id, body)
         stub_publishing_api_put(content_id, body, '/links')
@@ -27,6 +43,12 @@ module GdsApi
         url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/discard-draft"
         stub_request(:post, url).to_return(status: 200, headers: {"Content-Type" => "application/json; charset=utf-8"})
       end
+
+      def stub_publishing_api_publish_with_version(content_id, version, update_type = 'major')
+        stub_publishing_api_publish(content_id, {update_type: update_type, previous_version: version}.to_json)
+      end
+
+     
 
       def stub_publishing_api_put_content_links_and_publish(body, content_id = nil, publish_body = nil)
         content_id ||= body[:content_id]
@@ -58,6 +80,10 @@ module GdsApi
           .to_return(status: 404, headers: {"Content-Type" => "application/json; charset=utf-8"})
       end
 
+      def publishing_api_isnt_available
+        stub_request(:any, /#{PUBLISHING_API_V2_ENDPOINT}\/.*/).to_return(status: 503)
+      end
+
       def assert_publishing_api_put_content(content_id, attributes_or_matcher = {}, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
         assert_publishing_api(:put, url, attributes_or_matcher, times)
@@ -66,6 +92,11 @@ module GdsApi
       def assert_publishing_api_publish(content_id, attributes_or_matcher = {}, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/publish"
         assert_publishing_api(:post, url, attributes_or_matcher, times)
+      end
+
+      def assert_publishing_api_put_links(content_id, attributes_or_matcher = {}, times = 1)
+        url = PUBLISHING_API_V2_ENDPOINT + "/links/" + content_id
+        assert_publishing_api(:put, url, attributes_or_matcher, times)
       end
 
       def assert_publishing_api_discard_draft(content_id, attributes_or_matcher = {}, times = 1)
@@ -122,9 +153,12 @@ module GdsApi
       end
 
     private
-      def stub_publishing_api_put(content_id, body, resource_path)
+      def stub_publishing_api_put(content_id, body, resource_path, override_response_hash)
+        response_hash = {status: 200, body: '{}', headers: {"Content-Type" => "application/json; charset=utf-8"}}
+        response_hash.merge!(override_response_hash)
+        response_hash[:body] = response_hash[:body].to_json if response_hash[:body].is_a?(Hash)
         url = PUBLISHING_API_V2_ENDPOINT + resource_path + "/" + content_id
-        stub_request(:put, url).with(body: body).to_return(status: 200, body: '{}', headers: {"Content-Type" => "application/json; charset=utf-8"})
+        stub_request(:put, url).with(body: body).to_return(response_hash)
       end
     end
   end

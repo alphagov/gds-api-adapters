@@ -1,3 +1,6 @@
+# 26.4.0
+
+* Performance Platform: add test helper stub for non-existent datasets
 * Add `ContentStore#incoming_links!`
 
 # 26.3.1
