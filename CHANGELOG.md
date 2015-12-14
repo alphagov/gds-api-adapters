@@ -1,3 +1,5 @@
+* Changed SpecialRoutePublisher to use v2 of publishing-api
+
 # 26.4.0
 
 * Performance Platform: add test helper stub for non-existent datasets
