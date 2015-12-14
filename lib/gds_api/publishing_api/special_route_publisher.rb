@@ -1,4 +1,4 @@
-require "gds_api/publishing_api"
+require "gds_api/publishing_api_v2"
 require "time"
 
 module GdsApi
@@ -6,14 +6,14 @@ module GdsApi
     class SpecialRoutePublisher
       def initialize(options = {})
         @logger = options[:logger] || GdsApi::Base.logger
-        @publishing_api = options[:publishing_api] || GdsApi::PublishingApi.new(Plek.find("publishing-api"))
+        @publishing_api = options[:publishing_api] || GdsApi::PublishingApiV2.new(Plek.find("publishing-api"))
       end
 
       def publish(options)
         logger.info("Publishing #{options.fetch(:type)} route #{options.fetch(:base_path)}, routing to #{options.fetch(:rendering_app)}")
 
-        publishing_api.put_content_item(options.fetch(:base_path), {
-          content_id: options.fetch(:content_id),
+        put_content_response = publishing_api.put_content(options.fetch(:content_id), {
+          base_path: options.fetch(:base_path),
           format: "special_route",
           title: options.fetch(:title),
           description: options[:description] || "",
@@ -25,9 +25,10 @@ module GdsApi
           ],
           publishing_app: options.fetch(:publishing_app),
           rendering_app: options.fetch(:rendering_app),
-          update_type: "major",
           public_updated_at: time.now.iso8601,
         })
+        publishing_api.publish(options.fetch(:content_id), 'major')
+        put_content_response
       end
 
     private
