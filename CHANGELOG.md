@@ -1,3 +1,5 @@
+# 26.5.0
+
 * Changed SpecialRoutePublisher to use v2 of publishing-api
 
 # 26.4.0
