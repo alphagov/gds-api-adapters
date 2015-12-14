@@ -1,4 +1,4 @@
-# Unreleased
+# 26.6.0
 
 * Add `PublishingApiV2#get_linked_items`.
 
