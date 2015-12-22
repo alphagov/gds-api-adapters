@@ -132,4 +132,19 @@ describe GdsApi::Rummager do
     assert_requested :get, /order=-public_timestamp/
   end
 
+  it "#delete_content removes a document" do
+    request = stub_request(:delete, "http://example.com/content?link=/foo/bar")
+
+    GdsApi::Rummager.new("http://example.com").delete_content!("/foo/bar")
+
+    assert_requested(request)
+  end
+
+  it "#get_content Retrieves a document" do
+    request = stub_request(:get, "http://example.com/content?link=/foo/bar")
+
+    GdsApi::Rummager.new("http://example.com").get_content!("/foo/bar")
+
+    assert_requested(request)
+  end
 end
