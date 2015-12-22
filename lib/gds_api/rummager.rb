@@ -25,6 +25,33 @@ module GdsApi
       )
     end
 
+    # Deletes a content-document from the index. Content documents are pages
+    # on GOV.UK returned by search index. They don't include best bets and other
+    # "meta" documents that are stored in Rummager.
+    #
+    # @param base_path Base path of the page on GOV.UK.
+    # @see https://github.com/alphagov/rummager/blob/master/docs/content-api.md
+    def delete_content!(base_path)
+      request_url = "#{base_url}/content?link=#{base_path}"
+      delete_json!(request_url)
+    end
+
+    # Retrieves a content-document from the index. Content documents are pages
+    # on GOV.UK returned by search index.
+    #
+    # @param base_path Base path of the page on GOV.UK.
+    # @see https://github.com/alphagov/rummager/blob/master/docs/content-api.md
+    def get_content!(base_path)
+      request_url = "#{base_url}/content?link=#{base_path}"
+      get_json!(request_url)
+    end
+
+    # delete_document(type, id) (DEPRECATED)
+    #
+    # Delete any document from the search index. Unlike `delete_content!` this
+    # needs a type, but can be used to delete non-content documents from the
+    # index.
+    # @deprecated
     def delete_document(type, id)
       delete_json!(
         "#{documents_url}/#{id}",
