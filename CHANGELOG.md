@@ -1,3 +1,7 @@
+# 26.7.0
+
+* Add support for Rummager's `delete_content` & `get_content`.
+
 # 26.6.0
 
 * Add `PublishingApiV2#get_linked_items`.
