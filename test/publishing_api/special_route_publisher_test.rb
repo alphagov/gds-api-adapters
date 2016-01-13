@@ -51,6 +51,18 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
       end
     end
 
+    it "publishes links" do
+      links = {
+        links: {
+          organisations: ['org-content-id']
+        }
+      }
+
+      publisher.publish(special_route.merge(links))
+
+      assert_requested(:put, "#{endpoint}/v2/links/#{content_id}", body: links)
+    end
+
     describe 'Timezone handling' do
       let(:publishing_api) {
         stub(:publishing_api, put_content_item: nil)
