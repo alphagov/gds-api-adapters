@@ -95,9 +95,9 @@ module GdsApi
         assert_publishing_api(:post, url, attributes_or_matcher, times)
       end
 
-      def assert_publishing_api(verb, url, attributes_or_matcher = {}, times = 1)
+      def assert_publishing_api(verb, url, attributes_or_matcher = nil, times = 1)
         if attributes_or_matcher.is_a?(Hash)
-          matcher = attributes_or_matcher.empty? ? nil : request_json_includes(attributes_or_matcher)
+          matcher = request_json_matches(attributes_or_matcher)
         else
           matcher = attributes_or_matcher
         end
