@@ -17,7 +17,7 @@ module GdsApi
       # if a response is given, then it will be merged with the default response.
       # if the given parameter for the response body is a Hash, it will be converted to JSON.
       #
-      # e.g. The following two examples are equivalent: 
+      # e.g. The following two examples are equivalent:
       #
       # * stub_publishing_api_put_content(my_content_id, my_request_body, { status: 201, body: {version: 33}.to_json })
       # * stub_publishing_api_put_content(my_content_id, my_request_body, { status: 201, body: {version: 33} })
@@ -96,7 +96,7 @@ module GdsApi
 
       def assert_publishing_api(verb, url, attributes_or_matcher = {}, times = 1)
         if attributes_or_matcher.is_a?(Hash)
-          matcher = attributes_or_matcher.empty? ? nil : request_json_matching(attributes_or_matcher)
+          matcher = attributes_or_matcher.empty? ? nil : request_json_includes(attributes_or_matcher)
         else
           matcher = attributes_or_matcher
         end
@@ -108,14 +108,14 @@ module GdsApi
         end
       end
 
-      def request_json_matching(required_attributes)
+      def request_json_includes(required_attributes)
         ->(request) do
           data = JSON.parse(request.body)
           required_attributes.to_a.all? { |key, value| data[key.to_s] == value }
         end
       end
 
-      def request_json_including(required_attributes)
+      def request_json_matches(required_attributes)
         ->(request) do
           data = JSON.parse(request.body)
           required_attributes == data
