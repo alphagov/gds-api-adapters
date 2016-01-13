@@ -1,6 +1,7 @@
 require 'gds_api/test_helpers/json_client_helper'
 require 'gds_api/test_helpers/content_item_helpers'
 require 'gds_api/test_helpers/intent_helpers'
+require 'gds_api/core-ext/hash'
 require 'json'
 
 module GdsApi
@@ -111,14 +112,14 @@ module GdsApi
       def request_json_includes(required_attributes)
         ->(request) do
           data = JSON.parse(request.body)
-          required_attributes.to_a.all? { |key, value| data[key.to_s] == value }
+          required_attributes.deep_stringify_keys.to_a.all? { |key, value| data[key.to_s] == value }
         end
       end
 
       def request_json_matches(required_attributes)
         ->(request) do
           data = JSON.parse(request.body)
-          required_attributes == data
+          required_attributes.deep_stringify_keys == data
         end
       end
 
