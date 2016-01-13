@@ -75,6 +75,17 @@ module GdsApi
         stub_request(:any, /#{PUBLISHING_API_V2_ENDPOINT}\/.*/).to_return(status: 503)
       end
 
+      def assert_publishing_api_put_content_links_and_publish(body, content_id = nil, publish_body = nil)
+        content_id ||= body[:content_id]
+        if publish_body.nil?
+          publish_body = { update_type: body.fetch(:update_type) }
+          publish_body[:locale] = body[:locale] if body[:locale]
+        end
+        assert_publishing_api_put_content(content_id, body.except(:links))
+        assert_publishing_api_put_links(content_id, body.slice(:links)) unless body.slice(:links).empty?
+        assert_publishing_api_publish(content_id, publish_body)
+      end
+
       def assert_publishing_api_put_content(content_id, attributes_or_matcher = {}, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
         assert_publishing_api(:put, url, attributes_or_matcher, times)
