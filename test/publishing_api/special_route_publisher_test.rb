@@ -5,7 +5,7 @@ require File.dirname(__FILE__) + '/../../lib/gds_api/test_helpers/publishing_api
 describe GdsApi::PublishingApi::SpecialRoutePublisher do
   include ::GdsApi::TestHelpers::PublishingApiV2
 
-  let(:content_id) { 'a-content-id-of-sorts' }  
+  let(:content_id) { 'a-content-id-of-sorts' }
   let(:special_route) {
     {
       content_id: content_id,
@@ -18,13 +18,19 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
     }
   }
 
+  let(:publisher) { GdsApi::PublishingApi::SpecialRoutePublisher.new }
+  let(:endpoint) { Plek.current.find('publishing-api') }
+
   describe ".publish" do
+    before do
+      stub_any_publishing_api_call
+    end
+
     it "publishes the special routes" do
-      
       Timecop.freeze(Time.now) do
-        publisher = GdsApi::PublishingApi::SpecialRoutePublisher.new
-        endpoint = Plek.current.find('publishing-api')
-        payload = {
+        publisher.publish(special_route)
+
+        expected_payload = {
           base_path: special_route[:base_path],
           format: "special_route",
           title: special_route[:title],
@@ -40,14 +46,8 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
           public_updated_at: Time.now.iso8601,
         }
 
-        stub_any_publishing_api_call
-        
-        publisher.publish(special_route)
-
-        base_path = "#{endpoint}/v2/content/#{content_id}"
-        assert_requested(:put, base_path, body: payload)
-        assert_requested(:post, "#{base_path}/publish", body: { update_type: 'major' })
-
+        assert_requested(:put, "#{endpoint}/v2/content/#{content_id}", body: expected_payload)
+        assert_publishing_api_publish(content_id, update_type: 'major')
       end
     end
 
