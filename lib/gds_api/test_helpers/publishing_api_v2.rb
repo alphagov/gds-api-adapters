@@ -1,7 +1,6 @@
 require 'gds_api/test_helpers/json_client_helper'
 require 'gds_api/test_helpers/content_item_helpers'
 require 'gds_api/test_helpers/intent_helpers'
-require 'gds_api/core-ext/hash'
 require 'json'
 
 module GdsApi
@@ -123,14 +122,15 @@ module GdsApi
       def request_json_includes(required_attributes)
         ->(request) do
           data = JSON.parse(request.body)
-          required_attributes.deep_stringify_keys.to_a.all? { |key, value| data[key.to_s] == value }
+          deep_stringify_keys(required_attributes).
+            to_a.all? { |key, value| data[key] == value }
         end
       end
 
       def request_json_matches(required_attributes)
         ->(request) do
           data = JSON.parse(request.body)
-          required_attributes.deep_stringify_keys == data
+          deep_stringify_keys(required_attributes) == data
         end
       end
 
@@ -161,6 +161,23 @@ module GdsApi
         response_hash[:body] = response_hash[:body].to_json if response_hash[:body].is_a?(Hash)
         url = PUBLISHING_API_V2_ENDPOINT + resource_path + "/" + content_id
         stub_request(:put, url).with(body: body).to_return(response_hash)
+      end
+
+      def deep_stringify_keys(hash)
+        deep_transform_keys(hash) { |key| key.to_s }
+      end
+
+      def deep_transform_keys(object, &block)
+        case object
+        when Hash
+          object.each_with_object({}) do |(key, value), result|
+            result[yield(key)] = deep_transform_keys(value, &block)
+          end
+        when Array
+          object.map{ |item| deep_transform_keys(item, &block) }
+        else
+          object
+        end
       end
     end
   end
