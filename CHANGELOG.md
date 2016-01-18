@@ -1,12 +1,12 @@
 # 27.0.0
 
-* Fix issue within PublishingApiV2 test helpers where
-  `request_json_matching` and `request_json_including` where incorrectly
+* Fix issue within `PublishingApiV2` test helpers where
+  `request_json_matching` and `request_json_including` were incorrectly
   named and had the opposite behaviour.
-* The default behaviour of assert_publishing_api (and the more specific
+* The default behaviour of `assert_publishing_api` (and the more specific
   helpers that use it) is not to match the entire supplied attributes.
   To do partial matching use `request_json_includes`
-* Add support for symbol keys to the PubishingApiV2 test helpers.
+* Add support for symbol keys to the `PubishingApiV2` test helpers.
 
 # 26.7.0
 
