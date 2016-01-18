@@ -894,36 +894,80 @@ describe GdsApi::PublishingApiV2 do
   end
 
   describe "#get_content_items" do
-    it "returns the content items of a certain format" do
-      publishing_api
-        .given("there is content with format 'topic'")
-        .upon_receiving("a get entries request")
-        .with(
-          method: :get,
-          path: "/v2/content",
-          query: "content_format=topic&fields%5B%5D=title&fields%5B%5D=base_path",
-          headers: {
-            "Content-Type" => "application/json",
-          },
-        )
-        .will_respond_with(
-          status: 200,
-          body: [
-            { title: 'Content Item A', base_path: '/a-base-path' },
-            { title: 'Content Item B', base_path: '/another-base-path' },
-          ]
+    describe "filtering by publishing app by default" do
+      before do
+        GdsApi::PublishingApiV2.any_instance.stubs(:app_name).returns("publisher")
+        publishing_api
+          .given("there is content with format 'topic' for multiple publishing apps")
+          .upon_receiving("a get entries request for a single publishing app")
+          .with(
+            method: :get,
+            path: "/v2/content",
+            query: { "publishing_app" => "publisher", "content_format" => "topic", "fields[]" => ["title", "base_path", "publishing_app"] },
+            headers: {
+              "Content-Type" => "application/json",
+            },
+          )
+          .will_respond_with(
+            status: 200,
+            body: [
+              { title: 'Content Item A', base_path: '/a-base-path', publishing_app: 'publisher' },
+              { title: 'Content Item B', base_path: '/another-base-path', publishing_app: 'publisher' },
+            ]
+          )
+      end
+
+      it "returns the content items of a certain format" do
+        response = @api_client.get_content_items(
+          content_format: 'topic',
+          fields: [:title, :base_path, :publishing_app],
         )
 
-      response = @api_client.get_content_items(
-        content_format: 'topic',
-        fields: [:title, :base_path],
-      )
+        assert_equal 200, response.code
+        assert_equal [
+          { 'title' => 'Content Item A', 'base_path' => '/a-base-path', 'publishing_app' => 'publisher' },
+          { 'title' => 'Content Item B', 'base_path' => '/another-base-path', 'publishing_app' => 'publisher' },
+        ], response.to_a
+      end
+    end
 
-      assert_equal 200, response.code
-      assert_equal [
-        { 'title' => 'Content Item A', 'base_path' => '/a-base-path' },
-        { 'title' => 'Content Item B', 'base_path' => '/another-base-path' },
-      ], response.to_a
+    describe "overriding the publishing app filter" do
+      before do
+        publishing_api
+          .given("there is content with format 'topic' for multiple publishing apps")
+          .upon_receiving("a get entries request for all publishing apps")
+          .with(
+            method: :get,
+            path: "/v2/content",
+            query: { "content_format" => "topic", "fields[]" => ["title", "base_path", "publishing_app"] },
+            headers: {
+              "Content-Type" => "application/json",
+            },
+          )
+          .will_respond_with(
+            status: 200,
+            body: [
+              { title: 'Content Item A', base_path: '/a-base-path', publishing_app: 'publisher' },
+              { title: 'Content Item B', base_path: '/another-base-path', publishing_app: 'publisher' },
+              { title: 'Content Item C', base_path: '/yet-another-base-path', publishing_app: 'whitehall' },
+            ]
+          )
+      end
+
+      it "returns content items for all publishing apps" do
+        response = @api_client.get_content_items(
+          content_format: 'topic',
+          fields: [:title, :base_path, :publishing_app],
+          publishing_app: "all"
+        )
+
+        assert_equal 200, response.code
+        assert_equal [
+          { 'title' => 'Content Item A', 'base_path' => '/a-base-path', 'publishing_app' => 'publisher' },
+          { 'title' => 'Content Item B', 'base_path' => '/another-base-path', 'publishing_app' => 'publisher' },
+          { 'title' => 'Content Item C', 'base_path' => '/yet-another-base-path', 'publishing_app' => 'whitehall' },
+        ], response.to_a
+      end
     end
   end
 
