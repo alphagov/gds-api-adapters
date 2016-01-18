@@ -17,7 +17,7 @@ module GdsApi
       # if a response is given, then it will be merged with the default response.
       # if the given parameter for the response body is a Hash, it will be converted to JSON.
       #
-      # e.g. The following two examples are equivalent: 
+      # e.g. The following two examples are equivalent:
       #
       # * stub_publishing_api_put_content(my_content_id, my_request_body, { status: 201, body: {version: 33}.to_json })
       # * stub_publishing_api_put_content(my_content_id, my_request_body, { status: 201, body: {version: 33} })
@@ -74,6 +74,17 @@ module GdsApi
         stub_request(:any, /#{PUBLISHING_API_V2_ENDPOINT}\/.*/).to_return(status: 503)
       end
 
+      def assert_publishing_api_put_content_links_and_publish(body, content_id = nil, publish_body = nil)
+        content_id ||= body[:content_id]
+        if publish_body.nil?
+          publish_body = { update_type: body.fetch(:update_type) }
+          publish_body[:locale] = body[:locale] if body[:locale]
+        end
+        assert_publishing_api_put_content(content_id, body.except(:links))
+        assert_publishing_api_put_links(content_id, body.slice(:links)) unless body.slice(:links).empty?
+        assert_publishing_api_publish(content_id, publish_body)
+      end
+
       def assert_publishing_api_put_content(content_id, attributes_or_matcher = {}, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
         assert_publishing_api(:put, url, attributes_or_matcher, times)
@@ -94,9 +105,9 @@ module GdsApi
         assert_publishing_api(:post, url, attributes_or_matcher, times)
       end
 
-      def assert_publishing_api(verb, url, attributes_or_matcher = {}, times = 1)
+      def assert_publishing_api(verb, url, attributes_or_matcher = nil, times = 1)
         if attributes_or_matcher.is_a?(Hash)
-          matcher = attributes_or_matcher.empty? ? nil : request_json_matching(attributes_or_matcher)
+          matcher = request_json_matches(attributes_or_matcher)
         else
           matcher = attributes_or_matcher
         end
@@ -108,17 +119,18 @@ module GdsApi
         end
       end
 
-      def request_json_matching(required_attributes)
+      def request_json_includes(required_attributes)
         ->(request) do
           data = JSON.parse(request.body)
-          required_attributes.to_a.all? { |key, value| data[key.to_s] == value }
+          deep_stringify_keys(required_attributes).
+            to_a.all? { |key, value| data[key] == value }
         end
       end
 
-      def request_json_including(required_attributes)
+      def request_json_matches(required_attributes)
         ->(request) do
           data = JSON.parse(request.body)
-          required_attributes == data
+          deep_stringify_keys(required_attributes) == data
         end
       end
 
@@ -149,6 +161,23 @@ module GdsApi
         response_hash[:body] = response_hash[:body].to_json if response_hash[:body].is_a?(Hash)
         url = PUBLISHING_API_V2_ENDPOINT + resource_path + "/" + content_id
         stub_request(:put, url).with(body: body).to_return(response_hash)
+      end
+
+      def deep_stringify_keys(hash)
+        deep_transform_keys(hash) { |key| key.to_s }
+      end
+
+      def deep_transform_keys(object, &block)
+        case object
+        when Hash
+          object.each_with_object({}) do |(key, value), result|
+            result[yield(key)] = deep_transform_keys(value, &block)
+          end
+        when Array
+          object.map{ |item| deep_transform_keys(item, &block) }
+        else
+          object
+        end
       end
     end
   end
