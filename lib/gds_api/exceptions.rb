@@ -14,10 +14,11 @@ module GdsApi
   class HTTPErrorResponse < BaseError
     attr_accessor :code, :error_details
 
-    def initialize(code, message = nil, error_details = nil)
+    def initialize(code, message = nil, error_details = nil, request_body = nil)
       super(message)
       @code = code
       @error_details = error_details
+      @request_body = request_body
     end
   end
 
@@ -52,8 +53,8 @@ module GdsApi
       ignoring([HTTPNotFound, HTTPGone], &block)
     end
 
-    def build_specific_http_error(error, url, details = nil)
-      message = "url: #{url}\n#{error.http_body}"
+    def build_specific_http_error(error, url, details = nil, request_body = nil)
+      message = "URL: #{url}\nResponse body:\n#{error.http_body}\n\nRequest body:\n#{request_body}"
       code = error.http_code
 
       case code
