@@ -447,7 +447,7 @@ describe GdsApi::Router do
 
         refute_nil e
         assert_equal 500, e.code
-        assert_equal "url: #{@base_api_url}/routes/commit\nFailed to update all routers", e.message
+        assert_equal "URL: #{@base_api_url}/routes/commit\nResponse body:\nFailed to update all routers\n\nRequest body:\n{}", e.message
       end
     end
   end

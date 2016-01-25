@@ -121,7 +121,7 @@ module GdsApi
     def do_raw_request(method, url, params = nil)
       response = do_request(method, url, params)
     rescue RestClient::Exception => e
-      raise build_specific_http_error(e, url)
+      raise build_specific_http_error(e, url, nil, params)
     end
 
     # method: the symbolic name of the method to use, e.g. :get, :post
@@ -141,7 +141,7 @@ module GdsApi
         rescue JSON::ParserError
           nil
         end
-        raise build_specific_http_error(e, url, error_details)
+        raise build_specific_http_error(e, url, error_details, params)
       end
 
       # If no custom response is given, just instantiate Response

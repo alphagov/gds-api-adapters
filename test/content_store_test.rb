@@ -45,7 +45,7 @@ describe GdsApi::ContentStore do
       end
 
       assert_equal 404, e.code
-      assert_equal "url: #{@base_api_url}/content/non-existent", e.message.strip
+      assert_equal "URL: #{@base_api_url}/content/non-existent\nResponse body:\n\n\nRequest body:", e.message.strip
     end
   end
 
