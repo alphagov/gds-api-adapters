@@ -925,6 +925,102 @@ describe GdsApi::PublishingApiV2 do
         { 'title' => 'Content Item B', 'base_path' => '/another-base-path' },
       ], response.to_a
     end
+
+    it "returns the content items in english locale by default" do
+      publishing_api
+        .given("a content item exists in multiple locales with content_id: #{@content_id}")
+        .upon_receiving("a get entries request")
+        .with(
+          method: :get,
+          path: "/v2/content",
+          query: "content_format=topic&fields%5B%5D=content_id&fields%5B%5D=locale",
+          headers: {
+            "Content-Type" => "application/json",
+          },
+        )
+        .will_respond_with(
+          status: 200,
+          body: [
+            { content_id: @content_id, locale: "en" },
+          ]
+        )
+
+      response = @api_client.get_content_items(
+        content_format: 'topic',
+        fields: [:content_id, :locale],
+      )
+
+      assert_equal 200, response.code
+      assert_equal [
+        { 'content_id' => @content_id, 'locale' => 'en' },
+      ], response.to_a
+    end
+
+    it "returns the content items in a specific locale" do
+      publishing_api
+        .given("a content item exists in multiple locales with content_id: #{@content_id}")
+        .upon_receiving("a get entries request with a specific locale")
+        .with(
+          method: :get,
+          path: "/v2/content",
+          query: "content_format=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=fr",
+          headers: {
+            "Content-Type" => "application/json",
+          },
+        )
+        .will_respond_with(
+          status: 200,
+          body: [
+            { content_id: @content_id, locale: "fr" },
+          ]
+        )
+
+      response = @api_client.get_content_items(
+        content_format: 'topic',
+        fields: [:content_id, :locale],
+        locale: 'fr',
+      )
+
+      assert_equal 200, response.code
+      assert_equal [
+        { 'content_id' => @content_id, 'locale' => 'fr' },
+      ], response.to_a
+    end
+
+    it "returns the content items in all the available locales" do
+      publishing_api
+        .given("a content item exists in multiple locales with content_id: #{@content_id}")
+        .upon_receiving("a get entries request with an 'all' locale")
+        .with(
+          method: :get,
+          path: "/v2/content",
+          query: "content_format=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=all",
+          headers: {
+            "Content-Type" => "application/json",
+          },
+        )
+        .will_respond_with(
+          status: 200,
+          body: [
+            { content_id: @content_id, locale: "en" },
+            { content_id: @content_id, locale: "fr" },
+            { content_id: @content_id, locale: "ar" },
+          ]
+        )
+
+      response = @api_client.get_content_items(
+        content_format: 'topic',
+        fields: [:content_id, :locale],
+        locale: 'all',
+      )
+
+      assert_equal 200, response.code
+      assert_equal [
+        { 'content_id' => @content_id, 'locale' => 'en' },
+        { 'content_id' => @content_id, 'locale' => 'fr' },
+        { 'content_id' => @content_id, 'locale' => 'ar' },
+      ], response.to_a
+    end
   end
 
   describe "#discard_draft(content_id, options = {})" do
