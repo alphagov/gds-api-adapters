@@ -1,3 +1,7 @@
+# 27.1.1
+
+* Pin Plek to >= 1.9.0 because gds-api-adapters depends on Plek.find
+
 # 27.1.0
 
 * Add Plek service discovery for EmailAlertApi test helpers
