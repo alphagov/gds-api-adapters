@@ -1,3 +1,7 @@
+# 27.1.0
+
+* Add Plek service discovery for EmailAlertApi test helpers
+
 # 27.0.0
 
 * Fix issue within `PublishingApiV2` test helpers where
