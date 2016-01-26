@@ -67,6 +67,23 @@ module GdsApi
         {}
       end
 
+      def stub_any_email_alert_api_call
+        stub_request(:any, %r{\A#{EMAIL_ALERT_API_ENDPOINT}})
+      end
+
+      def assert_email_alert_sent(attributes = nil)
+        if attributes
+          matcher = ->(request) do
+            payload = JSON.parse(request.body)
+            payload.select { |k, _| attributes.key?(k) } == attributes
+          end
+        else
+          matcher = nil
+        end
+
+        assert_requested(:post, notifications_url, times: 1, &matcher)
+      end
+
     private
 
       def subscriber_lists_url(query = nil)
