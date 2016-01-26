@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.files        = Dir.glob("lib/**/*") + %w(README.md Rakefile)
   s.test_files   = Dir['test/**/*']
   s.require_path = 'lib'
-  s.add_dependency 'plek'
+  s.add_dependency 'plek', '>= 1.9.0'
   s.add_dependency 'null_logger'
   s.add_dependency 'link_header'
   s.add_dependency 'lrucache', '~> 0.1.1'
