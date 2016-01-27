@@ -1021,6 +1021,36 @@ describe GdsApi::PublishingApiV2 do
         { 'content_id' => @content_id, 'locale' => 'ar' },
       ], response.to_a
     end
+
+    it "returns details hashes" do
+      publishing_api
+        .given("a content item exists with content_id: #{@content_id} and it has details")
+        .upon_receiving("a get entries request with details field")
+        .with(
+          method: :get,
+          path: "/v2/content",
+          query: "content_format=topic&fields%5B%5D=content_id&fields%5B%5D=details",
+          headers: {
+            "Content-Type" => "application/json",
+          },
+        )
+        .will_respond_with(
+          status: 200,
+          body: [
+            { content_id: @content_id, details: {foo: :bar} },
+          ]
+        )
+
+      response = @api_client.get_content_items(
+        content_format: 'topic',
+        fields: [:content_id, :details],
+      )
+
+      assert_equal 200, response.code
+      assert_equal [
+        { 'content_id' => @content_id, 'details' => {"foo"=>"bar"} },
+      ], response.to_a
+    end
   end
 
   describe "#discard_draft(content_id, options = {})" do
