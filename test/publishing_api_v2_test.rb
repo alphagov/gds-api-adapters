@@ -615,14 +615,14 @@ describe GdsApi::PublishingApiV2 do
     end
   end
 
-  describe "#put_links" do
+  describe "#patch_links" do
     describe "when setting links of the same type" do
       before do
         publishing_api
           .given("organisation links exist for content_id #{@content_id}")
-          .upon_receiving("a put organisation links request")
+          .upon_receiving("a patch organisation links request")
           .with(
-            method: :put,
+            method: :patch,
             path: "/v2/links/#{@content_id}",
             body: {
               links: {
@@ -644,7 +644,7 @@ describe GdsApi::PublishingApiV2 do
       end
 
       it "replaces the links and responds with the new links" do
-        response = @api_client.put_links(@content_id, links: {
+        response = @api_client.patch_links(@content_id, links: {
           organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
         })
         assert_equal 200, response.code
@@ -656,9 +656,9 @@ describe GdsApi::PublishingApiV2 do
       before do
         publishing_api
           .given("organisation links exist for content_id #{@content_id}")
-          .upon_receiving("a put topic links request")
+          .upon_receiving("a patch topic links request")
           .with(
-            method: :put,
+            method: :patch,
             path: "/v2/links/#{@content_id}",
             body: {
               links: {
@@ -681,7 +681,7 @@ describe GdsApi::PublishingApiV2 do
       end
 
       it "adds the new type of links and responds with the whole link set" do
-        response = @api_client.put_links(@content_id, links: {
+        response = @api_client.patch_links(@content_id, links: {
           topics: ["225df4a8-2945-4e9b-8799-df7424a90b69"],
         })
 
@@ -697,9 +697,9 @@ describe GdsApi::PublishingApiV2 do
       before do
         publishing_api
           .given("organisation links exist for content_id #{@content_id}")
-          .upon_receiving("a put blank organisation links request")
+          .upon_receiving("a patch blank organisation links request")
           .with(
-            method: :put,
+            method: :patch,
             path: "/v2/links/#{@content_id}",
             body: {
               links: {
@@ -719,7 +719,7 @@ describe GdsApi::PublishingApiV2 do
       end
 
       it "responds with the links" do
-        response = @api_client.put_links(@content_id, links: {
+        response = @api_client.patch_links(@content_id, links: {
           organisations: [],
         })
 
@@ -732,9 +732,9 @@ describe GdsApi::PublishingApiV2 do
       before do
         publishing_api
           .given("no links exist for content_id #{@content_id}")
-          .upon_receiving("a put organisation links request")
+          .upon_receiving("a patch organisation links request")
           .with(
-            method: :put,
+            method: :patch,
             path: "/v2/links/#{@content_id}",
             body: {
               links: {
@@ -756,7 +756,7 @@ describe GdsApi::PublishingApiV2 do
       end
 
       it "responds with the links" do
-        response = @api_client.put_links(@content_id, links: {
+        response = @api_client.patch_links(@content_id, links: {
           organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
         })
 
@@ -774,7 +774,7 @@ describe GdsApi::PublishingApiV2 do
             .given("the linkset for #{@content_id} is at version 3")
             .upon_receiving("a request to update the linkset at version 3")
             .with(
-              method: :put,
+              method: :patch,
               path: "/v2/links/#{@content_id}",
               body: {
                 links: {
@@ -792,7 +792,7 @@ describe GdsApi::PublishingApiV2 do
         end
 
         it "responds with 200 OK" do
-          response = @api_client.put_links(@content_id,
+          response = @api_client.patch_links(@content_id,
             links: {
               organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
             },
@@ -809,7 +809,7 @@ describe GdsApi::PublishingApiV2 do
             .given("the linkset for #{@content_id} is at version 3")
             .upon_receiving("a request to update the linkset at version 2")
             .with(
-              method: :put,
+              method: :patch,
               path: "/v2/links/#{@content_id}",
               body: {
                 links: {
@@ -840,7 +840,7 @@ describe GdsApi::PublishingApiV2 do
 
         it "responds with 409 Conflict" do
           error = assert_raises GdsApi::HTTPClientError do
-            @api_client.put_links(@content_id,
+            @api_client.patch_links(@content_id,
               links: {
                 organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
               },
@@ -1210,8 +1210,8 @@ describe GdsApi::PublishingApiV2 do
       proc { @api_client.put_content(nil, {}) }.must_raise ArgumentError
     end
 
-    it "happens on put_links" do
-      proc { @api_client.put_links(nil, links: {}) }.must_raise ArgumentError
+    it "happens on patch_links" do
+      proc { @api_client.patch_links(nil, links: {}) }.must_raise ArgumentError
     end
   end
 end

@@ -26,7 +26,7 @@ module GdsApi
         stub_publishing_api_put(content_id, body, '/content', response_hash)
       end
 
-      def stub_publishing_api_put_links(content_id, body)
+      def stub_publishing_api_patch_links(content_id, body)
         stub_publishing_api_put(content_id, body, '/links')
       end
 
@@ -48,7 +48,7 @@ module GdsApi
         end
         stubs = []
         stubs << stub_publishing_api_put_content(content_id, body.except(:links))
-        stubs << stub_publishing_api_put_links(content_id, body.slice(:links)) unless body.slice(:links).empty?
+        stubs << stub_publishing_api_patch_links(content_id, body.slice(:links)) unless body.slice(:links).empty?
         stubs << stub_publishing_api_publish(content_id, publish_body)
         stubs
       end
@@ -57,7 +57,7 @@ module GdsApi
         stub_request(:put, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/})
       end
 
-      def stub_any_publishing_api_put_links
+      def stub_any_publishing_api_patch_links
         stub_request(:put, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/links/})
       end
 
@@ -81,7 +81,7 @@ module GdsApi
           publish_body[:locale] = body[:locale] if body[:locale]
         end
         assert_publishing_api_put_content(content_id, body.except(:links))
-        assert_publishing_api_put_links(content_id, body.slice(:links)) unless body.slice(:links).empty?
+        assert_publishing_api_patch_links(content_id, body.slice(:links)) unless body.slice(:links).empty?
         assert_publishing_api_publish(content_id, publish_body)
       end
 
@@ -95,7 +95,7 @@ module GdsApi
         assert_publishing_api(:post, url, attributes_or_matcher, times)
       end
 
-      def assert_publishing_api_put_links(content_id, attributes_or_matcher = nil, times = 1)
+      def assert_publishing_api_patch_links(content_id, attributes_or_matcher = nil, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/links/" + content_id
         assert_publishing_api(:put, url, attributes_or_matcher, times)
       end

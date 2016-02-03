@@ -60,7 +60,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
 
       publisher.publish(special_route.merge(links))
 
-      assert_requested(:put, "#{endpoint}/v2/links/#{content_id}", body: links)
+      assert_requested(:patch, "#{endpoint}/v2/links/#{content_id}", body: links)
     end
 
     describe 'Timezone handling' do
