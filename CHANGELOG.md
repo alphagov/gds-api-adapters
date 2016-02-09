@@ -1,3 +1,7 @@
+# 27.2.1
+
+* `PublishingAPIV2`: prevent clients from using nil `content_id` values
+
 # 27.2.0
 
 * Add some useful test helpers for EmailAlertApi
