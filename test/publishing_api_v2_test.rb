@@ -1232,4 +1232,24 @@ describe GdsApi::PublishingApiV2 do
       end
     end
   end
+
+  describe "content ID validation" do
+    [:get_content, :get_links, :get_linked_items, :discard_draft].each do |method|
+      it "happens on #{method}" do
+        proc { @api_client.send(method, nil) }.must_raise ArgumentError
+      end
+    end
+
+    it "happens on publish" do
+      proc { @api_client.publish(nil, "major") }.must_raise ArgumentError
+    end
+
+    it "happens on put_content" do
+      proc { @api_client.put_content(nil, {}) }.must_raise ArgumentError
+    end
+
+    it "happens on put_links" do
+      proc { @api_client.put_links(nil, links: {}) }.must_raise ArgumentError
+    end
+  end
 end
