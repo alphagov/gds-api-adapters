@@ -702,13 +702,17 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_govuk_headers_are_included_in_requests_if_present
-    GdsApi::GovukHeaders.set_header(:govuk_request_id, "12345") # set by middleware GovukHeaderSniffer
+    # set headers which would be set by middleware GovukHeaderSniffer
+    GdsApi::GovukHeaders.set_header(:govuk_request_id, "12345")
+    GdsApi::GovukHeaders.set_header(:govuk_original_url, "http://example.com")
+
     stub_request(:get, "http://some.other.endpoint/some.json").to_return(:status => 200)
 
     GdsApi::JsonClient.new.get_json("http://some.other.endpoint/some.json")
 
     assert_requested(:get, %r{/some.json}) do |request|
-      request.headers['Govuk-Request-Id'] == '12345'
+      request.headers['Govuk-Request-Id'] == '12345' &&
+      request.headers['Govuk-Original-Url'] == 'http://example.com'
     end
   end
 
