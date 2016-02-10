@@ -1,3 +1,7 @@
+# 27.2.2
+
+* Fix `ContentStore#incoming_links`.
+
 # 27.2.1
 
 * `PublishingAPIV2`: prevent clients from using nil `content_id` values
