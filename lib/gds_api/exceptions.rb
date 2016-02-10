@@ -34,6 +34,9 @@ module GdsApi
   class HTTPGone < HTTPClientError
   end
 
+  class HTTPUnauthorized < HTTPClientError
+  end
+
   class HTTPForbidden < HTTPClientError
   end
 
@@ -61,6 +64,8 @@ module GdsApi
 
     def error_class_for_code(code)
       case code
+      when 401
+        GdsApi::HTTPUnauthorized
       when 403
         GdsApi::HTTPForbidden
       when 404

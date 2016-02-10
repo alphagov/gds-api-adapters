@@ -1,3 +1,5 @@
+* Raise `HTTPUnauthorized` for 401 responses.
+
 # 27.2.2
 
 * Fix `ContentStore#incoming_links`.
