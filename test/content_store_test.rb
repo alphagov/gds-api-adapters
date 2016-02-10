@@ -51,10 +51,10 @@ describe GdsApi::ContentStore do
 
   describe "#incoming_links!" do
     it "returns the item" do
-      base_path = "/test-from-content-store"
+      base_path = "/test-from-content-store?types%5B%5D=a&types%5B%5D=b"
       content_store_has_incoming_links(base_path, [ { title: "Yolo" }])
 
-      response = @api.incoming_links!(base_path)
+      response = @api.incoming_links!('/test-from-content-store', types: [:a, :b])
 
       assert_equal [ { "title" => "Yolo" } ], response.to_hash
     end
