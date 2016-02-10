@@ -1,4 +1,7 @@
-* Raise `HTTPUnauthorized` for 401 responses.
+# 28.0.0
+
+* Drop support for Ruby 1.9.3
+* Raise `HTTPUnauthorized` for 401 responses
 
 # 27.2.2
 
