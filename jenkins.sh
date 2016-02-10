@@ -37,7 +37,7 @@ git clean -fdx
 git merge --no-commit origin/master || git merge --abort
 
 # Bundle and run tests against multiple ruby versions
-for version in 2.2 2.1 1.9.3; do
+for version in 2.3 2.2 2.1; do
   rm -f Gemfile.lock
   export RBENV_VERSION=$version
   echo "Running tests under ruby $version"
