@@ -70,10 +70,10 @@ module GdsApi
         GdsApi::HTTPForbidden
       when 404
         GdsApi::HTTPNotFound
-      when 410
-        GdsApi::HTTPGone
       when 409
         GdsApi::HTTPConflict
+      when 410
+        GdsApi::HTTPGone
       when (400..499)
         GdsApi::HTTPClientError
       when (500..599)
