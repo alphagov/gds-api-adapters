@@ -56,22 +56,25 @@ module GdsApi
     def build_specific_http_error(error, url, details = nil, request_body = nil)
       message = "URL: #{url}\nResponse body:\n#{error.http_body}\n\nRequest body:\n#{request_body}"
       code = error.http_code
+      error_class_for_code(code).new(code, message, details)
+    end
 
+    def error_class_for_code(code)
       case code
       when 403
-        GdsApi::HTTPForbidden.new(code, message, details)
+        GdsApi::HTTPForbidden
       when 404
-        GdsApi::HTTPNotFound.new(code, message, details)
+        GdsApi::HTTPNotFound
       when 410
-        GdsApi::HTTPGone.new(code, message, details)
+        GdsApi::HTTPGone
       when 409
-        GdsApi::HTTPConflict.new(code, message, details)
+        GdsApi::HTTPConflict
       when (400..499)
-        GdsApi::HTTPClientError.new(code, message, details)
+        GdsApi::HTTPClientError
       when (500..599)
-        GdsApi::HTTPServerError.new(code, message, details)
+        GdsApi::HTTPServerError
       else
-        GdsApi::HTTPErrorResponse.new(code, message, details)
+        GdsApi::HTTPErrorResponse
       end
     end
   end
