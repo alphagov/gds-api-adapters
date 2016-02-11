@@ -135,7 +135,7 @@ module GdsApi
       end
 
       def publishing_api_has_fields_for_format(format, items, fields)
-        body = items.map { |item|
+        body = Array(items).map { |item|
           item.with_indifferent_access.slice(*fields)
         }
 
