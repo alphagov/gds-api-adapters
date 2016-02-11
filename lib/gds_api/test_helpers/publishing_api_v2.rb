@@ -85,22 +85,22 @@ module GdsApi
         assert_publishing_api_publish(content_id, publish_body)
       end
 
-      def assert_publishing_api_put_content(content_id, attributes_or_matcher = {}, times = 1)
+      def assert_publishing_api_put_content(content_id, attributes_or_matcher = nil, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
         assert_publishing_api(:put, url, attributes_or_matcher, times)
       end
 
-      def assert_publishing_api_publish(content_id, attributes_or_matcher = {}, times = 1)
+      def assert_publishing_api_publish(content_id, attributes_or_matcher = nil, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/publish"
         assert_publishing_api(:post, url, attributes_or_matcher, times)
       end
 
-      def assert_publishing_api_put_links(content_id, attributes_or_matcher = {}, times = 1)
+      def assert_publishing_api_put_links(content_id, attributes_or_matcher = nil, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/links/" + content_id
         assert_publishing_api(:put, url, attributes_or_matcher, times)
       end
 
-      def assert_publishing_api_discard_draft(content_id, attributes_or_matcher = {}, times = 1)
+      def assert_publishing_api_discard_draft(content_id, attributes_or_matcher = nil, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/discard-draft"
         assert_publishing_api(:post, url, attributes_or_matcher, times)
       end
