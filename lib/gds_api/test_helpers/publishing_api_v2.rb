@@ -154,6 +154,12 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: item.to_json, headers: {})
       end
 
+      def publishing_api_has_links(links)
+        links = links.with_indifferent_access
+        url = PUBLISHING_API_V2_ENDPOINT + "/links/" + links[:content_id]
+        stub_request(:get, url).to_return(status: 200, body: links.to_json, headers: {})
+      end
+
     private
       def stub_publishing_api_put(content_id, body, resource_path, override_response_hash = {})
         response_hash = {status: 200, body: '{}', headers: {"Content-Type" => "application/json; charset=utf-8"}}
