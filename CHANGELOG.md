@@ -1,3 +1,12 @@
+# 28.0.1
+
+* In `TestHelpers::PublishingApiV2` - for methods that accept an optional arg
+  `attributes_or_matcher`, change the default value to nil so that we don't test
+  for request body if the argument is not supplied.
+* In the same class, fix `#publishing_api_has_fields_for_format` so that we
+  always cast the `item` arg to Array. This correctly handles cases where only
+  one item is passed in.
+
 # 28.0.0
 
 * Drop support for Ruby 1.9.3
