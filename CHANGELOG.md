@@ -1,3 +1,9 @@
+# 28.0.2
+
+* `TestHelpers::PublishingApiV2` now has a `publishing_api_has_links` test helper
+  which stubs the Publishing API V2 to return the links payload which is supplied
+  as the arg.
+
 # 28.0.1
 
 * In `TestHelpers::PublishingApiV2` - for methods that accept an optional arg
