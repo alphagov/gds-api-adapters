@@ -5,10 +5,16 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     put_json!(content_url(content_id), payload)
   end
 
-  def get_content(content_id, options = {})
-    params = {}
-    params = params.merge(locale: options[:locale]) if options[:locale]
-
+  # Return a content item
+  #
+  # Returns nil if the content item doesn't exist.
+  #
+  # @param content_id [UUID]
+  # @param params [Hash]
+  # @option params [String] locale The language, defaults to 'en' in publishing-api.
+  #
+  # @return [GdsApi::Response] a content item
+  def get_content(content_id, params = {})
     get_json(content_url(content_id, params))
   end
 
