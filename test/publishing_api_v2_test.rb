@@ -369,44 +369,6 @@ describe GdsApi::PublishingApiV2 do
       end
     end
 
-    describe "if the content item is not publishable" do
-      before do
-        publishing_api
-          .given("a draft content item exists with content_id: #{@content_id} which does not have a publishing_app")
-          .upon_receiving("a publish request")
-          .with(
-            method: :post,
-            path: "/v2/content/#{@content_id}/publish",
-            body: {
-              update_type: "major",
-            },
-            headers: {
-              "Content-Type" => "application/json",
-            },
-          )
-          .will_respond_with(
-            status: 422,
-            body: {
-              "error" => {
-                "code" => 422,
-                "fields" => {
-                  "publishing_app"=>["can't be blank"],
-                },
-              },
-            }
-          )
-      end
-
-      it "responds with 422" do
-        error = assert_raises GdsApi::HTTPClientError do
-          @api_client.publish(@content_id, "major")
-        end
-
-        assert_equal 422, error.code
-        assert_equal ["can't be blank"], error.error_details["error"]["fields"]["publishing_app"]
-      end
-    end
-
     describe "if the update information is invalid" do
       before do
         publishing_api
