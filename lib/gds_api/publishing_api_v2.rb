@@ -18,6 +18,21 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json(content_url(content_id, params))
   end
 
+  # Return a content item
+  #
+  # Raises exception if the item doesn't exist.
+  #
+  # @param content_id [UUID]
+  # @param params [Hash]
+  # @option params [String] locale The language, defaults to 'en' in publishing-api.
+  #
+  # @return [GdsApi::Response] a content item
+  #
+  # @raise [HTTPNotFound] when the content item is not found
+  def get_content!(content_id, params = {})
+    get_json!(content_url(content_id, params))
+  end
+
   def publish(content_id, update_type, options = {})
     params = {
       update_type: update_type
