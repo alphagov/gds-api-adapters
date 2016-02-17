@@ -1,3 +1,7 @@
+# 28.1.0
+
+* Add `PublishingApiV2#get_content!`
+
 # 28.0.2
 
 * `TestHelpers::PublishingApiV2` now has a `publishing_api_has_links` test helper
