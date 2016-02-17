@@ -154,6 +154,11 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: item.to_json, headers: {})
       end
 
+      def publishing_api_does_not_have_item(content_id)
+        url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
+        stub_request(:get, url).to_return(status: 404, body: item_not_found(content_id), headers: {})
+      end
+
       def publishing_api_has_links(links)
         links = links.with_indifferent_access
         url = PUBLISHING_API_V2_ENDPOINT + "/links/" + links[:content_id]
@@ -184,6 +189,15 @@ module GdsApi
         else
           object
         end
+      end
+
+      def item_not_found(content_id)
+        {
+          error: {
+            code: 404,
+            message: "Could not find content item with content_id: #{content_id}",
+          }
+        }
       end
     end
   end
