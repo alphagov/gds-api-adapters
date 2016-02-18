@@ -156,7 +156,7 @@ module GdsApi
 
       def publishing_api_does_not_have_item(content_id)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
-        stub_request(:get, url).to_return(status: 404, body: item_not_found(content_id), headers: {})
+        stub_request(:get, url).to_return(status: 404, body: item_not_found(content_id).to_json, headers: {})
       end
 
       def publishing_api_has_links(links)
