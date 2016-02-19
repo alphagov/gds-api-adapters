@@ -1,3 +1,12 @@
+# unreleased
+
+* Pass the Govuk-Original-Url header on to requests made by gds-api-adapters,
+  similarly to the existing Govuk-Request-Id header.  Rails applications will
+  get this support automatically when using this version of gds-api-adapters.
+  Other applications will need to add an explicit call to `use
+  GdsApi::GovukHeaderSniffer, 'HTTP_GOVUK_ORIGINAL_URL"`, as detailed in the
+  README.
+
 # 28.1.1
 
 * `TestHelpers::PublishingApiV2` now has a `publishing_api_does_not_have_item` test helper

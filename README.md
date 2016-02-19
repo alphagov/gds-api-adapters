@@ -31,15 +31,19 @@ something that actually logs:
 
 ## Middleware for request tracing
 
-We set a unique header at the cache level called `Govuk-Request-Id`. In order
-to serve a user's request, if apps make API requests they should pass on this
-header, so that we can trace a request across the entire GOV.UK stack.
+We set a unique header at the cache level called `Govuk-Request-Id`, and also
+set a header called `Govuk-Original-Url` to identify the original URL
+requested.  If apps make API requests in order to server a user's request, they
+should pass on these headers, so that we can trace requests across the entire
+GOV.UK stack.
 
-`GdsApi::GovukHeaderSniffer` middleware takes care of this. This gem contains
-a railtie that configures this middleware for Rails apps without extra effort.
-Other Rack-based apps should opt-in by adding this line to your `config.ru`:
+The `GdsApi::GovukHeaderSniffer` middleware takes care of this. This gem
+contains a railtie that configures this middleware for Rails apps without extra
+effort.  Other Rack-based apps should opt-in by adding these lines to your
+`config.ru`:
 
     use GdsApi::GovukHeaderSniffer, 'HTTP_GOVUK_REQUEST_ID'
+    use GdsApi::GovukHeaderSniffer, 'HTTP_GOVUK_ORIGINAL_URL'
 
 ## Middleware for identifying authenticated users
 
