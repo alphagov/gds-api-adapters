@@ -156,13 +156,18 @@ module GdsApi
 
       def publishing_api_does_not_have_item(content_id)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
-        stub_request(:get, url).to_return(status: 404, body: item_not_found(content_id).to_json, headers: {})
+        stub_request(:get, url).to_return(status: 404, body: resource_not_found(content_id, "content item").to_json, headers: {})
       end
 
       def publishing_api_has_links(links)
         links = links.with_indifferent_access
         url = PUBLISHING_API_V2_ENDPOINT + "/links/" + links[:content_id]
         stub_request(:get, url).to_return(status: 200, body: links.to_json, headers: {})
+      end
+
+      def publishing_api_does_not_have_links(content_id)
+        url = PUBLISHING_API_V2_ENDPOINT + "/links/" + content_id
+        stub_request(:get, url).to_return(status: 404, body: resource_not_found(content_id, "link set").to_json, headers: {})
       end
 
     private
@@ -191,11 +196,11 @@ module GdsApi
         end
       end
 
-      def item_not_found(content_id)
+      def resource_not_found(content_id, type)
         {
           error: {
             code: 404,
-            message: "Could not find content item with content_id: #{content_id}",
+            message: "Could not find #{type} with content_id: #{content_id}",
           }
         }
       end
