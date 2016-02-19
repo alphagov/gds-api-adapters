@@ -1,4 +1,4 @@
-# unreleased
+# 28.2.0
 
 * Pass the Govuk-Original-Url header on to requests made by gds-api-adapters,
   similarly to the existing Govuk-Request-Id header.  Rails applications will
@@ -12,7 +12,6 @@
 * `TestHelpers::PublishingApiV2` now has a `publishing_api_does_not_have_item` test helper
   which stubs the Publishing API V2 to return the 404 payload for the `content_id` passed
   as the arg.
-
 
 # 28.1.0
 
