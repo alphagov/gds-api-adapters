@@ -1,3 +1,10 @@
+# 28.3.0
+
+* `TestHelpers::Imminence` now has `imminence_has_places_for_postcode` and
+  `stub_imminence_places_request` helper methods. There was previously no helper
+  for the find places with post code tools. It is now possible to stub all requests
+  for places with any status code or payload as required.
+
 # 28.2.1
 
 * `TestHelpers::PublishingApiV2` now has a `publishing_api_does_not_have_links` test helper
