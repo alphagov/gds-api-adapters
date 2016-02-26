@@ -1,3 +1,7 @@
+# 28.3.1
+
+* Fixed `TestHelpers::Imminence` missing `end`.
+
 # 28.3.0
 
 * `TestHelpers::Imminence` now has `imminence_has_places_for_postcode` and
