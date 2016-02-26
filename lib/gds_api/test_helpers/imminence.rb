@@ -21,6 +21,7 @@ module GdsApi
 
         stub_request(:get, %r{\A#{IMMINENCE_API_ENDPOINT}/areas/#{postcode}\.json}).
           to_return(:body => results.to_json)
+      end
 
       def imminence_has_places_for_postcode(places, slug, postcode, limit)
         query_hash = { "postcode" => postcode, "limit" => limit }
