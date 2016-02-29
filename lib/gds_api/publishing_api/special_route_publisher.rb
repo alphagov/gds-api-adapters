@@ -27,7 +27,7 @@ module GdsApi
           rendering_app: options.fetch(:rendering_app),
           public_updated_at: time.now.iso8601,
         })
-        publishing_api.put_links(options.fetch(:content_id), links: options[:links]) if options[:links]
+        publishing_api.patch_links(options.fetch(:content_id), links: options[:links]) if options[:links]
         publishing_api.publish(options.fetch(:content_id), 'major')
         put_content_response
       end

@@ -63,14 +63,14 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json(links_url(content_id))
   end
 
-  def put_links(content_id, payload)
+  def patch_links(content_id, payload)
     params = {
       links: payload.fetch(:links)
     }
 
     params = merge_optional_keys(params, payload, [:previous_version])
 
-    put_json!(links_url(content_id), params)
+    patch_json!(links_url(content_id), params)
   end
 
   def get_content_items(params)

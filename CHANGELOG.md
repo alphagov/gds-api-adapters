@@ -1,3 +1,8 @@
+# 29.0.0 (Unreleased)
+
+* Breaking change: rename `PublishingApiV2`'s `put_links` to `patch_links` to
+  better reflect the behaviour. Also rename related test_helper methods.
+
 # 28.3.1
 
 * Fixed `TestHelpers::Imminence` missing `end`.
