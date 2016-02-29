@@ -1,4 +1,4 @@
-# 29.0.0 (Unreleased)
+# 29.0.0
 
 * Breaking change: rename `PublishingApiV2`'s `put_links` to `patch_links` to
   better reflect the behaviour. Also rename related test_helper methods.
