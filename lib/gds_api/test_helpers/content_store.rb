@@ -7,18 +7,22 @@ module GdsApi
     module ContentStore
       include ContentItemHelpers
 
-      CONTENT_STORE_ENDPOINT = Plek.current.find('content-store')
-
       # Stubs a content item in the content store.
       # The following options can be passed in:
       #
       #   :max_age  will set the max-age of the Cache-Control header in the response. Defaults to 900
       #   :private  if true, the Cache-Control header will include the "private" directive. By default it
       #             will include "public"
+      #   :draft    will point to the draft content store if set to true
+
+      def content_store_endpoint(draft=false)
+        draft ? Plek.current.find('draft-content-store') : Plek.current.find('content-store')
+      end
+
       def content_store_has_item(base_path, body = content_item_for_base_path(base_path), options = {})
         max_age = options.fetch(:max_age, 900)
         visibility = options[:private] ? "private" : "public"
-        url = CONTENT_STORE_ENDPOINT + "/content" + base_path
+        url = content_store_endpoint(options[:draft]) + "/content" + base_path
         body = body.to_json unless body.is_a?(String)
 
         stub_request(:get, url).to_return(
@@ -31,16 +35,16 @@ module GdsApi
         )
       end
 
-      def content_store_does_not_have_item(base_path)
-        url = CONTENT_STORE_ENDPOINT + "/content" + base_path
+      def content_store_does_not_have_item(base_path, options = {})
+        url = content_store_endpoint(options[:draft]) + "/content" + base_path
         stub_request(:get, url).to_return(status: 404, headers: {})
 
-        url = CONTENT_STORE_ENDPOINT + "/incoming-links" + base_path
+        url = content_store_endpoint(options[:draft]) + "/incoming-links" + base_path
         stub_request(:get, url).to_return(status: 404, headers: {})
       end
 
       def content_store_isnt_available
-        stub_request(:any, /#{CONTENT_STORE_ENDPOINT}\/.*/).to_return(:status => 503)
+        stub_request(:any, /#{content_store_endpoint}\/.*/).to_return(:status => 503)
       end
 
       def content_item_for_base_path(base_path)
@@ -48,7 +52,7 @@ module GdsApi
       end
 
       def content_store_has_incoming_links(base_path, links)
-        url = CONTENT_STORE_ENDPOINT + "/incoming-links" + base_path
+        url = content_store_endpoint + "/incoming-links" + base_path
         body = links.to_json
 
         stub_request(:get, url).to_return(body: body)
