@@ -1,3 +1,7 @@
+# 29.1.1
+
+* Fix publishing API `patch_links` test helpers.
+
 # 29.1.0
 
 * Add code and pact tests for the new publishing API `GET /v2/linkables` endpoint.
