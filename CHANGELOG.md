@@ -1,3 +1,7 @@
+# 29.1.0
+
+* Add code and pact tests for the new publishing API `GET /v2/linkables` endpoint.
+
 # 29.0.0
 
 * Breaking change: rename `PublishingApiV2`'s `put_links` to `patch_links` to
