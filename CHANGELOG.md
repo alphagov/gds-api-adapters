@@ -1,3 +1,7 @@
+# 29.2.0
+
+* Enable Draft Content Store testing in test helpers.
+
 # 29.1.1
 
 * Fix publishing API `patch_links` test helpers.
