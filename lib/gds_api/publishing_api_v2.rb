@@ -78,6 +78,10 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json("#{endpoint}/v2/content#{query}")
   end
 
+  def get_linkables(format:)
+    get_json("#{endpoint}/v2/linkables?format=#{format}")
+  end
+
   def get_linked_items(content_id, params = {})
     query = query_string(params)
     validate_content_id(content_id)

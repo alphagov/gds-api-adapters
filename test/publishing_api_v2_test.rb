@@ -855,6 +855,50 @@ describe GdsApi::PublishingApiV2 do
     end
   end
 
+  describe "#get_linkables" do
+    let(:linkables) {
+      [
+        {
+          "title" => "Content Item A",
+          "internal_name" => "an internal name",
+          "content_id" => "aaaaaaaa-aaaa-1aaa-aaaa-aaaaaaaaaaaa",
+          "publication_state" => "draft",
+          "base_path" => "/a-base-path",
+        },
+        {
+          "title" => "Content Item B",
+          "internal_name" => "Content Item B",
+          "content_id" => "bbbbbbbb-bbbb-2bbb-bbbb-bbbbbbbbbbbb",
+          "publication_state" => "live",
+          "base_path" => "/another-base-path",
+        },
+      ]
+    }
+
+    it "returns the content items of a given format" do
+      publishing_api
+        .given("there is content with format 'topic'")
+        .upon_receiving("a get linkables request")
+        .with(
+          method: :get,
+          path: "/v2/linkables",
+          query: "format=topic",
+          headers: {
+            "Content-Type" => "application/json",
+          },
+        )
+        .will_respond_with(
+          status: 200,
+          body: linkables,
+        )
+
+      response = @api_client.get_linkables(format: "topic")
+
+      assert_equal 200, response.code
+      assert_equal linkables, response.to_a
+    end
+  end
+
   describe "#get_content_items" do
     it "returns the content items of a certain format" do
       publishing_api
