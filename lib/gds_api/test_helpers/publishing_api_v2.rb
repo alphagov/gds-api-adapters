@@ -27,7 +27,7 @@ module GdsApi
       end
 
       def stub_publishing_api_patch_links(content_id, body)
-        stub_publishing_api_put(content_id, body, '/links')
+        stub_publishing_api_patch(content_id, body, '/links')
       end
 
       def stub_publishing_api_publish(content_id, body)
@@ -58,7 +58,7 @@ module GdsApi
       end
 
       def stub_any_publishing_api_patch_links
-        stub_request(:put, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/links/})
+        stub_request(:patch, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/links/})
       end
 
       def stub_any_publishing_api_call
@@ -97,7 +97,7 @@ module GdsApi
 
       def assert_publishing_api_patch_links(content_id, attributes_or_matcher = nil, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/links/" + content_id
-        assert_publishing_api(:put, url, attributes_or_matcher, times)
+        assert_publishing_api(:patch, url, attributes_or_matcher, times)
       end
 
       def assert_publishing_api_discard_draft(content_id, attributes_or_matcher = nil, times = 1)
@@ -176,12 +176,20 @@ module GdsApi
       end
 
     private
-      def stub_publishing_api_put(content_id, body, resource_path, override_response_hash = {})
+      def stub_publishing_api_put(*args)
+        stub_publishing_api_postlike_call(:put, *args)
+      end
+
+      def stub_publishing_api_patch(*args)
+        stub_publishing_api_postlike_call(:patch, *args)
+      end
+
+      def stub_publishing_api_postlike_call(method, content_id, body, resource_path, override_response_hash = {})
         response_hash = {status: 200, body: '{}', headers: {"Content-Type" => "application/json; charset=utf-8"}}
         response_hash.merge!(override_response_hash)
         response_hash[:body] = response_hash[:body].to_json if response_hash[:body].is_a?(Hash)
         url = PUBLISHING_API_V2_ENDPOINT + resource_path + "/" + content_id
-        stub_request(:put, url).with(body: body).to_return(response_hash)
+        stub_request(method, url).with(body: body).to_return(response_hash)
       end
 
       def deep_stringify_keys(hash)
