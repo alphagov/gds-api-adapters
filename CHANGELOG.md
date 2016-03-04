@@ -1,3 +1,7 @@
+# 29.3.1
+
+* Fix linkables test helper.
+
 # 29.3.0
 
 * Prefer `document_type` as the arg for `get_linkables`, deprecating `format`.
