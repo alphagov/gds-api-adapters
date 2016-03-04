@@ -1178,7 +1178,7 @@ describe GdsApi::PublishingApiV2 do
       end
     end
 
-    describe "there are two documents that link to the wantend document" do
+    describe "there are two documents that link to the wanted document" do
       before do
         content_id2 = "08dfd5c3-d935-4e81-88fd-cfe65b78893d"
         content_id3 = "e2961462-bc37-48e9-bb98-c981ef1a2d59"
