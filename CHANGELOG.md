@@ -1,3 +1,7 @@
+# 29.3.0
+
+* Prefer `document_type` as the arg for `get_linkables`, deprecating `format`.
+
 # 29.2.0
 
 * Enable Draft Content Store testing in test helpers.
