@@ -148,8 +148,8 @@ module GdsApi
         stub_request(:get, url).to_return(:status => 200, :body => body.to_json, :headers => {})
       end
 
-      def publishing_api_has_linkables(linkables, format:)
-        url = PUBLISHING_API_V2_ENDPOINT + "/linkables?format=#{format}"
+      def publishing_api_has_linkables(linkables, document_type:)
+        url = PUBLISHING_API_V2_ENDPOINT + "/linkables?document_type=#{document_type}"
         stub_request(:get, url).to_return(:status => 200, :body => linkables.to_json, :headers => {})
       end
 
