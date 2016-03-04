@@ -78,8 +78,20 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json("#{endpoint}/v2/content#{query}")
   end
 
-  def get_linkables(format:)
-    get_json("#{endpoint}/v2/linkables?format=#{format}")
+  def get_linkables(document_type: nil, format: nil)
+    if document_type.nil?
+      if format.nil?
+        raise ArgumentError.new("Please provide a `document_type`")
+      else
+        self.class.logger.warn(
+          "Providing `format` to the `get_linkables` method is deprecated and will be removed in a " +
+          "future release.  Please use `document_type` instead."
+        )
+        document_type = format
+      end
+    end
+
+    get_json("#{endpoint}/v2/linkables?document_type=#{document_type}")
   end
 
   def get_linked_items(content_id, params = {})

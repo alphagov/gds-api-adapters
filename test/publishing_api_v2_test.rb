@@ -875,14 +875,14 @@ describe GdsApi::PublishingApiV2 do
       ]
     }
 
-    it "returns the content items of a given format" do
+    it "returns the content items of a given document_type" do
       publishing_api
         .given("there is content with format 'topic'")
         .upon_receiving("a get linkables request")
         .with(
           method: :get,
           path: "/v2/linkables",
-          query: "format=topic",
+          query: "document_type=topic",
           headers: {
             "Content-Type" => "application/json",
           },
@@ -892,8 +892,12 @@ describe GdsApi::PublishingApiV2 do
           body: linkables,
         )
 
-      response = @api_client.get_linkables(format: "topic")
+      response = @api_client.get_linkables(document_type: "topic")
+      assert_equal 200, response.code
+      assert_equal linkables, response.to_a
 
+      # `format` is supported but deprecated for backwards compatibility
+      response = @api_client.get_linkables(format: "topic")
       assert_equal 200, response.code
       assert_equal linkables, response.to_a
     end
@@ -1174,7 +1178,7 @@ describe GdsApi::PublishingApiV2 do
       end
     end
 
-    describe "there are two documents that link to the wantend document" do
+    describe "there are two documents that link to the wanted document" do
       before do
         content_id2 = "08dfd5c3-d935-4e81-88fd-cfe65b78893d"
         content_id3 = "e2961462-bc37-48e9-bb98-c981ef1a2d59"
