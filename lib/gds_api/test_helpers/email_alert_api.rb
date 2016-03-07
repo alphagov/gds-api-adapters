@@ -7,12 +7,7 @@ module GdsApi
       EMAIL_ALERT_API_ENDPOINT = Plek.find("email-alert-api")
 
       def email_alert_api_has_subscriber_list(attributes)
-        title = attributes.fetch("title")
-        tags = attributes.fetch("tags")
-
-        query = Rack::Utils.build_nested_query(tags: tags)
-
-        stub_request(:get, subscriber_lists_url(query))
+        stub_request(:get, subscriber_lists_url(attributes))
           .to_return(
             :status => 200,
             :body => get_subscriber_list_response(attributes).to_json,
@@ -20,9 +15,7 @@ module GdsApi
       end
 
       def email_alert_api_does_not_have_subscriber_list(attributes)
-        query = Rack::Utils.build_nested_query(tags: attributes.fetch("tags"))
-
-        stub_request(:get, subscriber_lists_url(query))
+        stub_request(:get, subscriber_lists_url(attributes))
           .to_return(status: 404)
       end
 
@@ -48,9 +41,6 @@ module GdsApi
             "subscription_url" => "https://stage-public.govdelivery.com/accounts/UKGOVUK/subscriber/new?topic_id=UKGOVUK_1234",
             "gov_delivery_id" => "UKGOVUK_1234",
             "title" => "Some title",
-            "tags" => {
-              "format" => ["some-format"],
-            }
           }.merge(attributes)
         }
       end
@@ -86,7 +76,20 @@ module GdsApi
 
     private
 
-      def subscriber_lists_url(query = nil)
+      def subscriber_lists_url(attributes = nil)
+        if attributes
+          tags = attributes["tags"]
+          links = attributes["links"]
+          document_type = attributes["document_type"]
+
+          params = {}
+          params[:tags] = tags if tags
+          params[:links] = links if links
+          params[:document_type] = document_type if document_type
+
+          query = Rack::Utils.build_nested_query(params)
+        end
+
         url = EMAIL_ALERT_API_ENDPOINT + "/subscriber-lists"
         query ? "#{url}?#{query}" : url
       end
