@@ -96,6 +96,67 @@ describe GdsApi::EmailAlertApi do
           )
         end
       end
+
+      describe "when the optional 'document_type' is provided" do
+        let(:params) {
+          {
+            "title" => title,
+            "tags" => tags,
+            "document_type" => "travel_advice",
+          }
+        }
+
+        before do
+          email_alert_api_has_subscriber_list(
+            "title" => "Some Title",
+            "tags" => tags,
+            "document_type" => "travel_advice",
+            "subscription_url" => expected_subscription_url,
+          )
+        end
+
+        it "returns the subscriber list attributes" do
+          subscriber_list_attrs = api_client.find_or_create_subscriber_list(params)
+            .to_hash
+            .fetch("subscriber_list")
+
+          assert_equal(
+            "travel_advice",
+            subscriber_list_attrs.fetch("document_type")
+          )
+        end
+      end
+
+      describe "when both tags and links are provided" do
+        let(:links) {
+          {
+            "format" => ["some-document-format"]
+          }
+        }
+
+        let(:params) {
+          {
+            "title" => title,
+            "tags" => tags,
+            "links" => links,
+          }
+        }
+
+        before do
+          email_alert_api_has_subscriber_list(
+            "title" => "Some Title",
+            "tags" => tags,
+            "links" => links,
+            "subscription_url" => expected_subscription_url,
+          )
+        end
+
+        it "excludes that attribute from the query string" do
+          assert_raises do
+            api_client.find_or_create_subscriber_list(params)
+          end
+        end
+      end
     end
   end
 end
