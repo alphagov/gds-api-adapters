@@ -1,3 +1,7 @@
+# 29.4.0
+
+Support searching by a `document_type` in email-alert-api
+
 # 29.3.1
 
 * Fix linkables test helper.
