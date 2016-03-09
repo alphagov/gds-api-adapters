@@ -43,6 +43,9 @@ module GdsApi
   class HTTPConflict < HTTPClientError
   end
 
+  class HTTPUnprocessableEntity < HTTPClientError
+  end
+
   class NoBearerToken < BaseError; end
 
   module ExceptionHandling
@@ -74,6 +77,8 @@ module GdsApi
         GdsApi::HTTPConflict
       when 410
         GdsApi::HTTPGone
+      when 422
+        GdsApi::HTTPUnprocessableEntity
       when (400..499)
         GdsApi::HTTPClientError
       when (500..599)
