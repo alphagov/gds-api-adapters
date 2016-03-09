@@ -1,6 +1,10 @@
+# 29.5.0
+
+* Add `GdsApi::HTTPUnprocessableEntity` to represent a 422 error
+
 # 29.4.0
 
-Support searching by a `document_type` in email-alert-api
+* Support searching by a `document_type` in email-alert-api
 
 # 29.3.1
 
