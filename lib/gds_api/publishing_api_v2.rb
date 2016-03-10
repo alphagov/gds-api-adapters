@@ -33,6 +33,39 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json!(content_url(content_id, params))
   end
 
+  # Find the content_ids for a list of base_paths.
+  #
+  # @param base_paths [Array]
+  # @return [Hash] a hash, keyed by `base_path` with `content_id` as value
+  # @example
+  #
+  #   publishing_api.lookup_content_ids(base_paths: ['/foo', '/bar'])
+  #   # => { "/foo" => "51ac4247-fd92-470a-a207-6b852a97f2db", "/bar" => "261bd281-f16c-48d5-82d2-9544019ad9ca" }
+  #
+  def lookup_content_ids(base_paths:)
+    response = post_json!("#{endpoint}/lookup-by-base-path", base_paths: base_paths)
+    response.to_hash
+  end
+
+  # Find the content_id for a base_path.
+  #
+  # Convenience method if you only need to look up one content_id for a
+  # base_path. For multiple base_paths, use {GdsApi::PublishingApiV2#lookup_content_ids}.
+  #
+  # @param base_path [String]
+  #
+  # @return [UUID] the `content_id` for the `base_path`
+  #
+  # @example
+  #
+  #   publishing_api.lookup_content_id(base_path: '/foo')
+  #   # => "51ac4247-fd92-470a-a207-6b852a97f2db"
+  #
+  def lookup_content_id(base_path:)
+    lookups = lookup_content_ids(base_paths: [base_path])
+    lookups[base_path]
+  end
+
   def publish(content_id, update_type, options = {})
     params = {
       update_type: update_type
