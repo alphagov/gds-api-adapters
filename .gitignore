@@ -5,3 +5,4 @@ pkg/
 .bundle
 /spec/pacts
 /log
+.yardoc
