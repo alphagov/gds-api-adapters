@@ -1,3 +1,5 @@
+* Add `GdsApi::PublishingApiV2#lookup_content_id` and `GdsApi::PublishingApiV2#lookup_content_id`
+
 # 29.5.0
 
 * Add `GdsApi::HTTPUnprocessableEntity` to represent a 422 error
