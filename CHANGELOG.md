@@ -1,3 +1,5 @@
+# 29.6.0
+
 * Add `GdsApi::PublishingApiV2#lookup_content_id` and `GdsApi::PublishingApiV2#lookup_content_id`
 * Add `publishing_api_has_lookups` test helpers
 
