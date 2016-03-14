@@ -175,7 +175,24 @@ module GdsApi
         stub_request(:get, url).to_return(status: 404, body: resource_not_found(content_id, "link set").to_json, headers: {})
       end
 
+      # Stub calls to the lookups endpoint
+      #
+      # @param lookup_hash [Hash] Hash with base_path as key, content_id as value.
+      #
+      # @example
+      #
+      #   publishing_api_has_lookups({
+      #     "/foo" => "51ac4247-fd92-470a-a207-6b852a97f2db",
+      #     "/bar" => "261bd281-f16c-48d5-82d2-9544019ad9ca"
+      #   })
+      #
+      def publishing_api_has_lookups(lookup_hash)
+        url = Plek.current.find('publishing-api') + '/lookup-by-base-path'
+        stub_request(:post, url).to_return(body: lookup_hash.to_json)
+      end
+
     private
+
       def stub_publishing_api_put(*args)
         stub_publishing_api_postlike_call(:put, *args)
       end
