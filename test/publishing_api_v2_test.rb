@@ -918,10 +918,19 @@ describe GdsApi::PublishingApiV2 do
         )
         .will_respond_with(
           status: 200,
-          body: [
-            { title: 'Content Item A', base_path: '/a-base-path' },
-            { title: 'Content Item B', base_path: '/another-base-path' },
-          ]
+          body: {
+            total: 2,
+            pages: 1,
+            current_page: 1,
+            links: [{
+              href: "http://example.org/v2/content?content_format=topic&fields[]=title&fields[]=base_path&page=1",
+              rel: "self"
+            }],
+            results: [
+              { public_updated_at: Pact.like("2015-07-30T13:58:11.000Z"), title: 'Content Item A', base_path: '/a-base-path' },
+              { public_updated_at: Pact.like("2015-07-30T13:58:11.000Z"), title: 'Content Item B', base_path: '/another-base-path' },
+            ]
+          }
         )
 
       response = @api_client.get_content_items(
@@ -930,10 +939,15 @@ describe GdsApi::PublishingApiV2 do
       )
 
       assert_equal 200, response.code
+
       assert_equal [
-        { 'title' => 'Content Item A', 'base_path' => '/a-base-path' },
-        { 'title' => 'Content Item B', 'base_path' => '/another-base-path' },
+        ["total", 2],
+        ["pages", 1],
+        ["current_page", 1],
+        ["links", [{"href"=>"http://example.org/v2/content?content_format=topic&fields[]=title&fields[]=base_path&page=1", "rel"=>"self"}]],
+        ["results", [{"public_updated_at"=>"2015-07-30T13:58:11.000Z", "title"=>"Content Item A", "base_path"=>"/a-base-path"}, {"public_updated_at"=>"2015-07-30T13:58:11.000Z", "title"=>"Content Item B", "base_path"=>"/another-base-path"}]]
       ], response.to_a
+
     end
 
     it "returns the content items in english locale by default" do
@@ -950,9 +964,18 @@ describe GdsApi::PublishingApiV2 do
         )
         .will_respond_with(
           status: 200,
-          body: [
-            { content_id: @content_id, locale: "en" },
-          ]
+          body: {
+            total: 1,
+            pages: 1,
+            current_page: 1,
+            links: [{
+              href: "http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=locale&page=1",
+              rel: "self"
+            }],
+            results: [
+              { public_updated_at: Pact.like("2015-07-30T13:58:11.000Z"),  content_id: @content_id, locale: "en" }
+            ]
+          }
         )
 
       response = @api_client.get_content_items(
@@ -961,8 +984,13 @@ describe GdsApi::PublishingApiV2 do
       )
 
       assert_equal 200, response.code
+
       assert_equal [
-        { 'content_id' => @content_id, 'locale' => 'en' },
+        ["total", 1],
+        ["pages", 1],
+        ["current_page", 1],
+        ["links", [{"href"=>"http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=locale&page=1", "rel"=>"self"}]],
+        ["results", [{"public_updated_at"=>"2015-07-30T13:58:11.000Z", "content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"en"}]]
       ], response.to_a
     end
 
@@ -980,9 +1008,18 @@ describe GdsApi::PublishingApiV2 do
         )
         .will_respond_with(
           status: 200,
-          body: [
-            { content_id: @content_id, locale: "fr" },
-          ]
+          body: {
+            total: 1,
+            pages: 1,
+            current_page: 1,
+            links: [{
+              href: "http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=locale&locale=fr&page=1",
+              rel: "self"
+            }],
+            results: [
+              { public_updated_at: Pact.like("2015-07-30T13:58:11.000Z"),  content_id: @content_id, locale: "fr" }
+            ]
+          }
         )
 
       response = @api_client.get_content_items(
@@ -993,7 +1030,11 @@ describe GdsApi::PublishingApiV2 do
 
       assert_equal 200, response.code
       assert_equal [
-        { 'content_id' => @content_id, 'locale' => 'fr' },
+        ["total", 1],
+        ["pages", 1],
+        ["current_page", 1],
+        ["links", [{"href"=>"http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=locale&locale=fr&page=1", "rel"=>"self"}]],
+        ["results", [{"public_updated_at"=>"2015-07-30T13:58:11.000Z", "content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"fr"}]]
       ], response.to_a
     end
 
@@ -1011,11 +1052,20 @@ describe GdsApi::PublishingApiV2 do
         )
         .will_respond_with(
           status: 200,
-          body: [
-            { content_id: @content_id, locale: "en" },
-            { content_id: @content_id, locale: "fr" },
-            { content_id: @content_id, locale: "ar" },
-          ]
+          body: {
+            total: 3,
+            pages: 1,
+            current_page: 1,
+            links: [{
+              href: "http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=locale&locale=all&page=1",
+              rel: "self"
+            }],
+            results: [
+              { public_updated_at: Pact.like("2015-07-30T13:58:11.000Z"),  content_id: @content_id, locale: "en" },
+              { public_updated_at: Pact.like("2015-07-30T13:58:11.000Z"),  content_id: @content_id, locale: "fr" },
+              { public_updated_at: Pact.like("2015-07-30T13:58:11.000Z"),  content_id: @content_id, locale: "ar" },
+            ]
+          }
         )
 
       response = @api_client.get_content_items(
@@ -1026,9 +1076,14 @@ describe GdsApi::PublishingApiV2 do
 
       assert_equal 200, response.code
       assert_equal [
-        { 'content_id' => @content_id, 'locale' => 'en' },
-        { 'content_id' => @content_id, 'locale' => 'fr' },
-        { 'content_id' => @content_id, 'locale' => 'ar' },
+        ["total", 3],
+        ["pages", 1], ["current_page", 1],
+        ["links",
+         [{"href"=>"http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=locale&locale=all&page=1", "rel"=>"self"}]],
+        ["results",
+         [{"public_updated_at"=>"2015-07-30T13:58:11.000Z", "content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"en"},
+          {"public_updated_at"=>"2015-07-30T13:58:11.000Z", "content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"fr"},
+          {"public_updated_at"=>"2015-07-30T13:58:11.000Z", "content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"ar"}]]
       ], response.to_a
     end
 
@@ -1046,9 +1101,18 @@ describe GdsApi::PublishingApiV2 do
         )
         .will_respond_with(
           status: 200,
-          body: [
-            { content_id: @content_id, details: {foo: :bar} },
-          ]
+          body: {
+            total: 1,
+            pages: 1,
+            current_page: 1,
+            links: [{
+              href: "http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=details&page=1",
+              rel: "self"
+            }],
+            results: [
+              { public_updated_at: Pact.like("2015-07-30T13:58:11.000Z"),  content_id: @content_id, details: {foo: :bar} }
+            ]
+          }
         )
 
       response = @api_client.get_content_items(
@@ -1057,8 +1121,13 @@ describe GdsApi::PublishingApiV2 do
       )
 
       assert_equal 200, response.code
+
       assert_equal [
-        { 'content_id' => @content_id, 'details' => {"foo"=>"bar"} },
+        ["total", 1],
+        ["pages", 1],
+        ["current_page", 1],
+        ["links", [{"href"=>"http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=details&page=1", "rel"=>"self"}]],
+        ["results", [{"public_updated_at"=>"2015-07-30T13:58:11.000Z", "content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "details"=>{"foo"=>"bar"}}]]
       ], response.to_a
     end
   end
