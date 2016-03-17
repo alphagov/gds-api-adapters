@@ -1,3 +1,8 @@
+# 30.0.0
+
+* Change test helper
+* Wrap resultant calls to GET /v2/content in meta data
+
 # 29.6.0
 
 * Add `GdsApi::PublishingApiV2#lookup_content_id` and `GdsApi::PublishingApiV2#lookup_content_id`
