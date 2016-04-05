@@ -1,3 +1,7 @@
+# 30.0.1
+
+* Extend publishing API 'stub_publishing_api_publish' test helper to accept a response hash
+
 # 30.0.0
 
 * Change test helper
