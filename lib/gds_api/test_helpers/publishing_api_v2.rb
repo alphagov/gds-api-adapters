@@ -153,6 +153,20 @@ module GdsApi
         stub_request(:get, url).to_return(:status => 200, :body => { results: body }.to_json, :headers => {})
       end
 
+      def publishing_api_has_fields_for_document_with_pagination(format, items, fields, page, per_page)
+        body = Array(items).map { |item|
+          item.with_indifferent_access.slice(*fields)
+        }
+
+        query_params = fields.map { |f|
+          "&fields%5B%5D=#{f}"
+        }
+
+        url = PUBLISHING_API_V2_ENDPOINT + "/content?document_type=#{format}#{query_params.join('')}&page=#{page}&per_page=#{per_page}"
+
+        stub_request(:get, url).to_return(:status => 200, :body => { results: body }.to_json, :headers => {})
+      end
+
       def publishing_api_has_linkables(linkables, document_type:)
         url = PUBLISHING_API_V2_ENDPOINT + "/linkables?document_type=#{document_type}"
         stub_request(:get, url).to_return(:status => 200, :body => linkables.to_json, :headers => {})
