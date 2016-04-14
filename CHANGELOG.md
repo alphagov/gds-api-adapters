@@ -1,3 +1,7 @@
+# 30.1.0
+
+* Add stub for `publishing_api_get_content` in `publishing_api_v2` test helper.
+
 # 30.0.1
 
 * Extend publishing API 'stub_publishing_api_publish' test helper to accept a response hash
