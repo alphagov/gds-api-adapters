@@ -927,8 +927,8 @@ describe GdsApi::PublishingApiV2 do
               rel: "self"
             }],
             results: [
-              { public_updated_at: Pact.like("2015-07-30T13:58:11.000Z"), title: 'Content Item A', base_path: '/a-base-path' },
-              { public_updated_at: Pact.like("2015-07-30T13:58:11.000Z"), title: 'Content Item B', base_path: '/another-base-path' },
+              { title: 'Content Item A', base_path: '/a-base-path' },
+              { title: 'Content Item B', base_path: '/another-base-path' },
             ]
           }
         )
@@ -945,7 +945,7 @@ describe GdsApi::PublishingApiV2 do
         ["pages", 1],
         ["current_page", 1],
         ["links", [{"href"=>"http://example.org/v2/content?content_format=topic&fields[]=title&fields[]=base_path&page=1", "rel"=>"self"}]],
-        ["results", [{"public_updated_at"=>"2015-07-30T13:58:11.000Z", "title"=>"Content Item A", "base_path"=>"/a-base-path"}, {"public_updated_at"=>"2015-07-30T13:58:11.000Z", "title"=>"Content Item B", "base_path"=>"/another-base-path"}]]
+        ["results", [{"title"=>"Content Item A", "base_path"=>"/a-base-path"}, {"title"=>"Content Item B", "base_path"=>"/another-base-path"}]]
       ], response.to_a
 
     end
@@ -973,7 +973,7 @@ describe GdsApi::PublishingApiV2 do
               rel: "self"
             }],
             results: [
-              { public_updated_at: Pact.like("2015-07-30T13:58:11.000Z"),  content_id: @content_id, locale: "en" }
+              { content_id: @content_id, locale: "en" }
             ]
           }
         )
@@ -990,7 +990,7 @@ describe GdsApi::PublishingApiV2 do
         ["pages", 1],
         ["current_page", 1],
         ["links", [{"href"=>"http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=locale&page=1", "rel"=>"self"}]],
-        ["results", [{"public_updated_at"=>"2015-07-30T13:58:11.000Z", "content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"en"}]]
+        ["results", [{"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"en"}]]
       ], response.to_a
     end
 
@@ -1017,7 +1017,7 @@ describe GdsApi::PublishingApiV2 do
               rel: "self"
             }],
             results: [
-              { public_updated_at: Pact.like("2015-07-30T13:58:11.000Z"),  content_id: @content_id, locale: "fr" }
+              { content_id: @content_id, locale: "fr" }
             ]
           }
         )
@@ -1034,7 +1034,7 @@ describe GdsApi::PublishingApiV2 do
         ["pages", 1],
         ["current_page", 1],
         ["links", [{"href"=>"http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=locale&locale=fr&page=1", "rel"=>"self"}]],
-        ["results", [{"public_updated_at"=>"2015-07-30T13:58:11.000Z", "content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"fr"}]]
+        ["results", [{"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"fr"}]]
       ], response.to_a
     end
 
@@ -1061,9 +1061,9 @@ describe GdsApi::PublishingApiV2 do
               rel: "self"
             }],
             results: [
-              { public_updated_at: Pact.like("2015-07-30T13:58:11.000Z"),  content_id: @content_id, locale: "en" },
-              { public_updated_at: Pact.like("2015-07-30T13:58:11.000Z"),  content_id: @content_id, locale: "fr" },
-              { public_updated_at: Pact.like("2015-07-30T13:58:11.000Z"),  content_id: @content_id, locale: "ar" },
+              { content_id: @content_id, locale: "en" },
+              { content_id: @content_id, locale: "fr" },
+              { content_id: @content_id, locale: "ar" },
             ]
           }
         )
@@ -1081,9 +1081,9 @@ describe GdsApi::PublishingApiV2 do
         ["links",
          [{"href"=>"http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=locale&locale=all&page=1", "rel"=>"self"}]],
         ["results",
-         [{"public_updated_at"=>"2015-07-30T13:58:11.000Z", "content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"en"},
-          {"public_updated_at"=>"2015-07-30T13:58:11.000Z", "content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"fr"},
-          {"public_updated_at"=>"2015-07-30T13:58:11.000Z", "content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"ar"}]]
+         [{"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"en"},
+          {"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"fr"},
+          {"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"ar"}]]
       ], response.to_a
     end
 
@@ -1110,7 +1110,7 @@ describe GdsApi::PublishingApiV2 do
               rel: "self"
             }],
             results: [
-              { public_updated_at: Pact.like("2015-07-30T13:58:11.000Z"),  content_id: @content_id, details: {foo: :bar} }
+              { content_id: @content_id, details: {foo: :bar} }
             ]
           }
         )
@@ -1127,7 +1127,7 @@ describe GdsApi::PublishingApiV2 do
         ["pages", 1],
         ["current_page", 1],
         ["links", [{"href"=>"http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=details&page=1", "rel"=>"self"}]],
-        ["results", [{"public_updated_at"=>"2015-07-30T13:58:11.000Z", "content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "details"=>{"foo"=>"bar"}}]]
+        ["results", [{"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "details"=>{"foo"=>"bar"}}]]
       ], response.to_a
     end
   end
