@@ -33,8 +33,8 @@ something that actually logs:
 
 We set a unique header at the cache level called `Govuk-Request-Id`, and also
 set a header called `Govuk-Original-Url` to identify the original URL
-requested.  If apps make API requests in order to server a user's request, they
-should pass on these headers, so that we can trace requests across the entire
+requested.  If apps make API requests in order to serve a user's request, they
+should pass on these headers, so that requests can be traced across the entire
 GOV.UK stack.
 
 The `GdsApi::GovukHeaderSniffer` middleware takes care of this. This gem
