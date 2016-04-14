@@ -139,6 +139,22 @@ module GdsApi
         end
       end
 
+      # Example of use:
+
+      # publishing_api_has_content(
+      #   vehicle_recalls_and_faults,   # this is a variable containing an array of content items
+      #   document_type: described_class.publishing_api_document_type,   #example of a document_type: "vehicle_recalls_and_faults_alert"
+      #   fields: fields,   #example: let(:fields) { %i[base_path content_id public_updated_at title publication_state] }
+      #   page: 1,
+      #   per_page: 50
+      #)
+      def publishing_api_has_content(items, params = {})
+        url = PUBLISHING_API_V2_ENDPOINT + "/content"
+        stub_request(:get, url).with(:query => params).to_return(status: 200, body: { results: items }.to_json, headers: {})
+      end
+
+      # This method has been refactored into publishing_api_has_content (above)
+      # publishing_api_has_content allows for flexible passing in of arguments, please use instead
       def publishing_api_has_fields_for_document(format, items, fields)
         body = Array(items).map { |item|
           item.with_indifferent_access.slice(*fields)
