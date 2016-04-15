@@ -1,3 +1,7 @@
+# 30.2.0
+
+* Add `GdsApi::GovukHeaders.clear_headers`
+
 # 30.1.0
 
 * Add stub for `publishing_api_get_content` in `publishing_api_v2` test helper.
