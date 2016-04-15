@@ -15,4 +15,12 @@ describe GdsApi::GovukHeaders do
       "Content-Type" => "application/pdf",
     }, GdsApi::GovukHeaders.headers)
   end
+
+  it "supports clearing of headers" do
+    GdsApi::GovukHeaders.set_header("GDS-Request-Id", "123-456")
+
+    GdsApi::GovukHeaders.clear_headers
+
+    assert_equal({}, GdsApi::GovukHeaders.headers)
+  end
 end

@@ -9,6 +9,10 @@ module GdsApi
         header_data.select {|k, v| !(v.nil? || v.empty?) }
       end
 
+      def clear_headers
+        Thread.current[:headers] = {}
+      end
+
     private
 
       def header_data
