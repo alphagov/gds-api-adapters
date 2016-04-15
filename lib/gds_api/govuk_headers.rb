@@ -9,13 +9,15 @@ module GdsApi
         header_data.select {|k, v| !(v.nil? || v.empty?) }
       end
 
-      private
+      def clear_headers
+        Thread.current[:headers] = {}
+      end
+
+    private
 
       def header_data
         Thread.current[:headers] ||= {}
       end
-
     end
   end
 end
-
