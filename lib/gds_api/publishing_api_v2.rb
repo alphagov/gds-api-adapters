@@ -1,9 +1,12 @@
 require_relative 'base'
 
+# Adapter for the Publishing API.
+#
+# @see https://github.com/alphagov/publishing-api
+# @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-application-examples.md
+# @see https://github.com/alphagov/publishing-api/blob/master/doc/object-model-explanation.md
 class GdsApi::PublishingApiV2 < GdsApi::Base
   # Put a content item
-  #
-  # This creates a new draft item, which will be sent to the draft content store.
   #
   # @param content_id [UUID]
   # @param payload [Hash] A valid content item

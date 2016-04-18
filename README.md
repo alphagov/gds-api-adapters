@@ -1,15 +1,19 @@
-A set of API adapters to work with the GDS APIs, extracted from the frontend
-app.
+# GDS API Adapters
+
+A set of API adapters to work with the GDS APIs.
 
 Example usage:
 
-    publisher_api = GdsApi::Publisher.new("environment")
-    ostruct_publication = publisher_api.publication_for_slug('my-published-item')
+```ruby
+publishing_api = GdsApi::Publisher.new(Plek.new.find('publishing-api'))
+content_item = publishing_api.get_content(content_id)
+```
 
-    panopticon_api = GdsApi::Panopticon.new("environment")
-    ostruct_metadata = panopticon_api.artefact_for_slug('my-published-item')
+Example adapters for frequently used applications:
 
-Very much still a work in progress.
+- [Publishing API](lib/gds_api/publishing_api_v2.rb) ([docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/PublishingApiV2), [test helper code](https://github.com/alphagov/gds-api-adapters/blob/master/lib/gds_api/test_helpers/publishing_api_v2.rb), [test helper docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/TestHelpers/PublishingApiV2))
+- [Content Store](lib/gds_api/content_store.rb) ([docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/ContentStore), [test helper code](https://github.com/alphagov/gds-api-adapters/blob/master/lib/gds_api/test_helpers/content_store.rb), [test helper docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/TestHelpers/ContentStore))
+- [Rummager](lib/gds_api/publishing_api_v2.rb) ([docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/Rummager), [test helper code](https://github.com/alphagov/gds-api-adapters/blob/master/lib/gds_api/test_helpers/rummager.rb), [test helper docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/TestHelpers/Rummager))
 
 ## Logging
 
