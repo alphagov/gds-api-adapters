@@ -4,17 +4,32 @@ require 'rack/utils'
 module GdsApi
   class Rummager < Base
 
+    # Unified search
+    #
+    # Perform a search
+    #
+    # @param query [Hash] A valid search query. See Rummager documentation for options.
+    #
+    # @see https://github.com/alphagov/rummager/blob/master/docs/unified-search-api.md
     def unified_search(args)
       request_url = "#{base_url}/unified_search.json?#{Rack::Utils.build_nested_query(args)}"
       get_json!(request_url)
     end
 
+    # Advanced search
+    #
+    # @deprecated Only in use by Whitehall. Use the `unified_search` method.
     def advanced_search(args)
       raise ArgumentError.new("Args cannot be blank") if args.nil? || args.empty?
       request_path = "#{base_url}/advanced_search?#{Rack::Utils.build_nested_query(args)}"
       get_json!(request_path)
     end
 
+    # Add a document
+    #
+    # Adds a document to the index
+    #
+    # @see https://github.com/alphagov/rummager/blob/master/docs/documents.md
     def add_document(type, id, document)
       post_json!(
         documents_url,
@@ -39,7 +54,7 @@ module GdsApi
     # Retrieves a content-document from the index. Content documents are pages
     # on GOV.UK returned by search index.
     #
-    # @param base_path Base path of the page on GOV.UK.
+    # @param base_path [String] Base path of the page on GOV.UK.
     # @see https://github.com/alphagov/rummager/blob/master/docs/content-api.md
     def get_content!(base_path)
       request_url = "#{base_url}/content?link=#{base_path}"
@@ -51,7 +66,8 @@ module GdsApi
     # Delete any document from the search index. Unlike `delete_content!` this
     # needs a type, but can be used to delete non-content documents from the
     # index.
-    # @deprecated
+    #
+    # @deprecated Use `delete_content!`
     def delete_document(type, id)
       delete_json!(
         "#{documents_url}/#{id}",
