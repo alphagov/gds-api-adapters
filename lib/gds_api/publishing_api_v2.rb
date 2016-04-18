@@ -1,6 +1,14 @@
 require_relative 'base'
 
 class GdsApi::PublishingApiV2 < GdsApi::Base
+  # Put a content item
+  #
+  # This creates a new draft item, which will be sent to the draft content store.
+  #
+  # @param content_id [UUID]
+  # @param payload [Hash] A valid content item
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#put-v2contentcontent_id
   def put_content(content_id, payload)
     put_json!(content_url(content_id), payload)
   end
@@ -14,6 +22,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # @option params [String] locale The language, defaults to 'en' in publishing-api.
   #
   # @return [GdsApi::Response] a content item
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#get-v2contentcontent_id
   def get_content(content_id, params = {})
     get_json(content_url(content_id, params))
   end
@@ -29,6 +38,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # @return [GdsApi::Response] a content item
   #
   # @raise [HTTPNotFound] when the content item is not found
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#get-v2contentcontent_id
   def get_content!(content_id, params = {})
     get_json!(content_url(content_id, params))
   end
@@ -42,6 +52,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   #   publishing_api.lookup_content_ids(base_paths: ['/foo', '/bar'])
   #   # => { "/foo" => "51ac4247-fd92-470a-a207-6b852a97f2db", "/bar" => "261bd281-f16c-48d5-82d2-9544019ad9ca" }
   #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#post-lookup-by-base-path
   def lookup_content_ids(base_paths:)
     response = post_json!("#{endpoint}/lookup-by-base-path", base_paths: base_paths)
     response.to_hash
@@ -61,11 +72,23 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   #   publishing_api.lookup_content_id(base_path: '/foo')
   #   # => "51ac4247-fd92-470a-a207-6b852a97f2db"
   #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#post-lookup-by-base-path
   def lookup_content_id(base_path:)
     lookups = lookup_content_ids(base_paths: [base_path])
     lookups[base_path]
   end
 
+  # Publish a content item
+  #
+  # The publishing-api will "publish" a draft item, so that it will be visible
+  # on the public site.
+  #
+  # @param content_id [UUID]
+  # @param update_type [String] Either 'major', 'minor' or 'republish'
+  # @param params [Hash]
+  # @option params [String] locale The language, defaults to 'en' in publishing-api.
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#post-v2contentcontent_idpublish
   def publish(content_id, update_type, options = {})
     params = {
       update_type: update_type
@@ -81,6 +104,15 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     post_json!(publish_url(content_id), params)
   end
 
+  # Discard a draft
+  #
+  # Deletes the draft content item.
+  #
+  # @param params [Hash]
+  # @option params [String] locale The language, defaults to 'en' in publishing-api.
+  # @option params [Integer] previous_version used to ensure the request is discarding the latest lock version of the draft
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#post-v2contentcontent_iddiscard-draft
   def discard_draft(content_id, options = {})
     optional_keys = [
       :locale,
@@ -92,10 +124,28 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     post_json!(discard_url(content_id), params)
   end
 
+  # FIXME: Add documentation
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#get-v2linkscontent_id
   def get_links(content_id)
     get_json(links_url(content_id))
   end
 
+  # Patch the links of a content item
+  #
+  # @param content_id [UUID]
+  # @param payload [Hash] A "links hash"
+  # @example
+  #
+  #   publishing_api.patch_links(
+  #     '86963c13-1f57-4005-b119-e7cf3cb92ecf',
+  #     {
+  #       topics: ['d6e1527d-d0c0-40d5-9603-b9f3e6866b8a'],
+  #       mainstream_browse_pages: ['d6e1527d-d0c0-40d5-9603-b9f3e6866b8a'],
+  #     }
+  #   )
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#patch-v2linkscontent_id
   def patch_links(content_id, payload)
     params = {
       links: payload.fetch(:links)
@@ -106,11 +156,17 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     patch_json!(links_url(content_id), params)
   end
 
+  # FIXME: Add documentation
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#get-v2content
   def get_content_items(params)
     query = query_string(params)
     get_json("#{endpoint}/v2/content#{query}")
   end
 
+  # FIXME: Add documentation
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#get-v2linkables
   def get_linkables(document_type: nil, format: nil)
     if document_type.nil?
       if format.nil?
@@ -127,6 +183,9 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json("#{endpoint}/v2/linkables?document_type=#{document_type}")
   end
 
+  # FIXME: Add documentation
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#get-v2linkedcontent_id
   def get_linked_items(content_id, params = {})
     query = query_string(params)
     validate_content_id(content_id)
