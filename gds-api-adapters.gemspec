@@ -27,8 +27,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'gem_publisher', '~> 1.5.0'
   s.add_development_dependency 'mocha', "> 1.0.0"
   s.add_development_dependency "minitest", "> 5.0.0"
-  s.add_development_dependency 'pact'
-  s.add_development_dependency 'pact-consumer-minitest'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rack'
   s.add_development_dependency 'rack-test'
@@ -40,8 +38,11 @@ Gem::Specification.new do |s|
 
   # Webmock 1.24.3 complains that "WebMock does not support matching body for multipart/form-data requests"
   # This is currently breaks existing tests. Revisit this when new version of
-  # webmock is released. 
+  # webmock is released.
   s.add_development_dependency 'webmock', '1.24.2'
 
-  s.add_development_dependency 'pact_broker-client', '~> 1.0.0'
+  s.add_development_dependency 'pact', '1.9.0'
+  s.add_development_dependency 'pact-mock_service', '0.8.1'
+  s.add_development_dependency 'pact-consumer-minitest', '1.0.1'
+  s.add_development_dependency 'pact_broker-client', '1.0.0'
 end
