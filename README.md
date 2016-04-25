@@ -5,8 +5,9 @@ A set of API adapters to work with the GDS APIs.
 Example usage:
 
 ```ruby
-publishing_api = GdsApi::Publisher.new(Plek.new.find('publishing-api'))
-content_item = publishing_api.get_content(content_id)
+require 'gds_api/rummager'
+rummager = GdsApi::Rummager.new(Plek.new.find('rummager'))
+results = rummager.unified_search(q: "taxes")
 ```
 
 Example adapters for frequently used applications:
