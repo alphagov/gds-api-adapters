@@ -1,3 +1,8 @@
+# 30.2.1
+
+* Update README and add documentation. See http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/PublishingApiV2 for example.
+* Remove content-register
+
 # 30.2.0
 
 * Add `GdsApi::GovukHeaders.clear_headers`
