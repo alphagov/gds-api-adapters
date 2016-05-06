@@ -1,8 +1,14 @@
 require_relative 'base'
 require_relative 'exceptions'
 
+# Adapter for the Email Alert API
+#
+# @see https://github.com/alphagov/email-alert-api
 class GdsApi::EmailAlertApi < GdsApi::Base
 
+  # Get or Post subscriber list
+  #
+  # @param attributes [Hash] document_type, links, tags used to search existing subscriber lists
   def find_or_create_subscriber_list(attributes)
     tags = attributes["tags"]
     links = attributes["links"]
@@ -23,8 +29,31 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     create_subscriber_list(attributes)
   end
 
+  # Post notification
+  #
+  # @param publication [Hash] Valid publication attributes
   def send_alert(publication)
     post_json!("#{endpoint}/notifications", publication)
+  end
+
+  # Get notifications
+  #
+  # @option start_at [String] Optional GovDelivery bulletin id to page back through notifications
+  #
+  # @return [Hash] notifications
+  def notifications(start_at=nil)
+    url = "#{endpoint}/notifications"
+    url += "?start_at=#{start_at}" if start_at
+    get_json!(url)
+  end
+
+  # Get notification
+  #
+  # @param id [String] GovDelivery bulletin id
+  #
+  # @return [Hash] notification
+  def notification(id)
+    get_json!("#{endpoint}/notifications/#{id}")
   end
 
 private

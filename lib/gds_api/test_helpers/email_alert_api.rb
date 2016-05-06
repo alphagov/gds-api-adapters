@@ -74,6 +74,27 @@ module GdsApi
         assert_requested(:post, notifications_url, times: 1, &matcher)
       end
 
+      def email_alert_api_has_notifications(notifications, start_at=nil)
+        url = notifications_url
+        url += "?start_at=#{start_at}" if start_at
+        url_regexp = Regexp.new("^#{Regexp.escape(url)}$")
+
+        stub_request(:get, url_regexp)
+          .to_return(
+            status: 200,
+            body: notifications.to_json
+          )
+      end
+
+      def email_alert_api_has_notification(notification)
+        url = "#{notifications_url}/#{notification['web_service_bulletin']['to_param']}"
+
+        stub_request(:get, url).to_return(
+          status: 200,
+          body: notification.to_json
+        )
+      end
+
     private
 
       def subscriber_lists_url(attributes = nil)
