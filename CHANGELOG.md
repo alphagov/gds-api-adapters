@@ -1,3 +1,7 @@
+# 30.3.0
+
+* Add email alert API `GET notifications` and `GET notification` endpoints
+
 # 30.2.1
 
 * Update README and add documentation. See http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/PublishingApiV2 for example.
