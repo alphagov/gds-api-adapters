@@ -107,6 +107,32 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     post_json!(publish_url(content_id), params)
   end
 
+  # Unpublish a content item
+  #
+  # The publishing API will "unpublish" a live item, to remove it from the public
+  # site, or update an existing unpublishing.
+  #
+  # @param content_id [UUID]
+  # @param type [String] Either 'withdrawal', 'gone' or 'redirect'.
+  # @param explanation [String] (optional) Text to show on the page.
+  # @param alternative_path [String] (optional) Alternative path to show on the page or redirect to.
+  # @param discard_drafts [Boolean] (optional) Whether to discard drafts on that item.  Defaults to false.
+  # @param previous_version [Integer] (optional) A lock version number for optimistic locking.
+  #
+  # @see TODO
+  def unpublish(content_id, type:, explanation: nil, alternative_path: nil, discard_drafts: false, previous_version: nil)
+    params = {
+      type: type
+    }
+
+    params.merge!(explanation: explanation) if explanation
+    params.merge!(alternative_path: alternative_path) if alternative_path
+    params.merge!(previous_version: previous_version) if previous_version
+    params.merge!(discard_drafts: discard_drafts) if discard_drafts
+
+    post_json!(unpublish_url(content_id), params)
+  end
+
   # Discard a draft
   #
   # Deletes the draft content item.
@@ -211,6 +237,11 @@ private
   def publish_url(content_id)
     validate_content_id(content_id)
     "#{endpoint}/v2/content/#{content_id}/publish"
+  end
+
+  def unpublish_url(content_id)
+    validate_content_id(content_id)
+    "#{endpoint}/v2/content/#{content_id}/unpublish"
   end
 
   def discard_url(content_id)
