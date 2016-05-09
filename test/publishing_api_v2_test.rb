@@ -141,7 +141,7 @@ describe GdsApi::PublishingApiV2 do
     end
 
     describe "optimistic locking" do
-      describe "if the content item has not change since it was requested" do
+      describe "if the content item has not changed since it was requested" do
         before do
           @content_item = content_item_for_content_id(@content_id, "previous_version" => 3)
 
@@ -471,7 +471,7 @@ describe GdsApi::PublishingApiV2 do
     end
 
     describe "optimistic locking" do
-      describe "if the content item has not change since it was requested" do
+      describe "if the content item has not changed since it was requested" do
         before do
           publishing_api
             .given("the content item #{@content_id} is at version 3")
@@ -534,6 +534,197 @@ describe GdsApi::PublishingApiV2 do
         it "responds with 409 Conflict" do
           error = assert_raises GdsApi::HTTPClientError do
             @api_client.publish(@content_id, "minor", previous_version: 2)
+          end
+          assert_equal 409, error.code
+          assert_equal "Conflict", error.error_details["error"]["message"]
+        end
+      end
+    end
+  end
+
+  describe "#unpublish" do
+    describe "if the unpublish command succeeds" do
+      before do
+        publishing_api
+          .given("a published content item exists with content_id: #{@content_id}")
+          .upon_receiving("an unpublish request")
+          .with(
+            method: :post,
+            path: "/v2/content/#{@content_id}/unpublish",
+            body: {
+              type: "gone",
+            },
+            headers: {
+              "Content-Type" => "application/json",
+            },
+          )
+          .will_respond_with(
+            status: 200
+          )
+      end
+
+      it "responds with 200" do
+        response = @api_client.unpublish(@content_id, type: "gone")
+        assert_equal 200, response.code
+      end
+    end
+
+    describe "if the content item does not exist" do
+      before do
+        publishing_api
+          .given("no content exists")
+          .upon_receiving("an unpublish request")
+          .with(
+            method: :post,
+            path: "/v2/content/#{@content_id}/unpublish",
+            body: {
+              type: "gone",
+            },
+            headers: {
+              "Content-Type" => "application/json",
+            },
+          )
+          .will_respond_with(
+            status: 404
+          )
+      end
+
+      it "responds with 404" do
+        error = assert_raises GdsApi::HTTPClientError do
+          @api_client.unpublish(@content_id, type: "gone")
+        end
+
+        assert_equal 404, error.code
+      end
+    end
+
+    describe "if the type is incorrect" do
+      before do
+        publishing_api
+          .given("a published content item exists with content_id: #{@content_id}")
+          .upon_receiving("an invalid unpublish request")
+          .with(
+            method: :post,
+            path: "/v2/content/#{@content_id}/unpublish",
+            body: {
+              type: "not-a-valid-type",
+            },
+            headers: {
+              "Content-Type" => "application/json",
+            },
+          )
+          .will_respond_with(
+            status: 422,
+            body: {
+              "error" => {
+                "code" => 422,
+                "message" => Pact.term(generate: "not-a-valid-type is not a valid unpublishing type", matcher:/\S+/),
+                "fields" => {},
+              },
+            }
+          )
+      end
+
+      it "responds with 422" do
+        error = assert_raises GdsApi::HTTPClientError do
+          @api_client.unpublish(@content_id, type: "not-a-valid-type")
+        end
+
+        assert_equal 422, error.code
+        assert_equal "not-a-valid-type is not a valid unpublishing type", error.error_details["error"]["message"]
+      end
+    end
+
+    describe "if the content item is already unpublished" do
+      before do
+        publishing_api
+          .given("an unpublished content item exists with content_id: #{@content_id}")
+          .upon_receiving("an unpublish request")
+          .with(
+            method: :post,
+            path: "/v2/content/#{@content_id}/unpublish",
+            body: {
+              type: "gone",
+            },
+            headers: {
+              "Content-Type" => "application/json",
+            },
+          )
+          .will_respond_with(
+            status: 200
+          )
+      end
+
+      it "responds with 200 and updates the unpublishing" do
+        response = @api_client.unpublish(@content_id, type: "gone")
+        assert_equal 200, response.code
+      end
+    end
+
+    describe "optimistic locking" do
+      describe "if the content item has not changed since it was requested" do
+        before do
+          publishing_api
+            .given("the published content item #{@content_id} is at version 3")
+            .upon_receiving("an unpublish request for version 3")
+            .with(
+              method: :post,
+              path: "/v2/content/#{@content_id}/unpublish",
+              body: {
+                type: "gone",
+                previous_version: 3,
+              },
+              headers: {
+                "Content-Type" => "application/json",
+              },
+            )
+            .will_respond_with(
+              status: 200,
+            )
+        end
+
+        it "responds with 200 OK" do
+          response = @api_client.unpublish(@content_id, type: "gone", previous_version: 3)
+          assert_equal 200, response.code
+        end
+      end
+
+      describe "if the content item has changed in the meantime" do
+        before do
+          publishing_api
+            .given("the published content item #{@content_id} is at version 3")
+            .upon_receiving("an unpublish request for version 2")
+            .with(
+              method: :post,
+              path: "/v2/content/#{@content_id}/unpublish",
+              body: {
+                type: "gone",
+                previous_version: 2,
+              },
+              headers: {
+                "Content-Type" => "application/json",
+              },
+            )
+            .will_respond_with(
+              status: 409,
+              body: {
+                "error" => {
+                  "code" => 409,
+                  "message" => Pact.term(generate: "Conflict", matcher:/\S+/),
+                  "fields" => {
+                    "previous_version" => Pact.each_like("does not match", :min => 1),
+                  },
+                },
+              },
+              headers: {
+                "Content-Type" => "application/json; charset=utf-8"
+              }
+            )
+        end
+
+        it "responds with 409 Conflict" do
+          error = assert_raises GdsApi::HTTPClientError do
+            @api_client.unpublish(@content_id, type: "gone", previous_version: 2)
           end
           assert_equal 409, error.code
           assert_equal "Conflict", error.error_details["error"]["message"]
@@ -768,7 +959,7 @@ describe GdsApi::PublishingApiV2 do
     end
 
     describe "optimistic locking" do
-      describe "if the linkset has not change since it was requested" do
+      describe "if the linkset has not changed since it was requested" do
         before do
           publishing_api
             .given("the linkset for #{@content_id} is at version 3")
