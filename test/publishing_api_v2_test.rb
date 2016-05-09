@@ -141,7 +141,7 @@ describe GdsApi::PublishingApiV2 do
     end
 
     describe "optimistic locking" do
-      describe "if the content item has not change since it was requested" do
+      describe "if the content item has not changed since it was requested" do
         before do
           @content_item = content_item_for_content_id(@content_id, "previous_version" => 3)
 
@@ -471,7 +471,7 @@ describe GdsApi::PublishingApiV2 do
     end
 
     describe "optimistic locking" do
-      describe "if the content item has not change since it was requested" do
+      describe "if the content item has not changed since it was requested" do
         before do
           publishing_api
             .given("the content item #{@content_id} is at version 3")
@@ -662,7 +662,7 @@ describe GdsApi::PublishingApiV2 do
     end
 
     describe "optimistic locking" do
-      describe "if the content item has not change since it was requested" do
+      describe "if the content item has not changed since it was requested" do
         before do
           publishing_api
             .given("the published content item #{@content_id} is at version 3")
@@ -959,7 +959,7 @@ describe GdsApi::PublishingApiV2 do
     end
 
     describe "optimistic locking" do
-      describe "if the linkset has not change since it was requested" do
+      describe "if the linkset has not changed since it was requested" do
         before do
           publishing_api
             .given("the linkset for #{@content_id} is at version 3")
