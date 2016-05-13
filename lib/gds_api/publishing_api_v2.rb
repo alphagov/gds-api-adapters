@@ -119,7 +119,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # @param discard_drafts [Boolean] (optional) Whether to discard drafts on that item.  Defaults to false.
   # @param previous_version [Integer] (optional) A lock version number for optimistic locking.
   #
-  # @see TODO
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#post-v2contentcontent_idunpublish
   def unpublish(content_id, type:, explanation: nil, alternative_path: nil, discard_drafts: false, previous_version: nil)
     params = {
       type: type
