@@ -40,6 +40,16 @@ module GdsApi
         stub_request(:post, url).with(body: body).to_return(response)
       end
 
+      def stub_publishing_api_unpublish(content_id, params, response_hash = {})
+        url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/unpublish"
+        response = {
+          status: 200,
+          body: '{}',
+          headers: {"Content-Type" => "application/json; charset=utf-8"}
+        }.merge(response_hash)
+        stub_request(:post, url).with(params).to_return(response)
+      end
+
       def stub_publishing_api_discard_draft(content_id)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/discard-draft"
         stub_request(:post, url).to_return(status: 200, headers: {"Content-Type" => "application/json; charset=utf-8"})
