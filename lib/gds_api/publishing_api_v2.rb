@@ -118,9 +118,10 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # @param alternative_path [String] (optional) Alternative path to show on the page or redirect to.
   # @param discard_drafts [Boolean] (optional) Whether to discard drafts on that item.  Defaults to false.
   # @param previous_version [Integer] (optional) A lock version number for optimistic locking.
+  # @param locale [String] (optional) The content item locale.
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#post-v2contentcontent_idunpublish
-  def unpublish(content_id, type:, explanation: nil, alternative_path: nil, discard_drafts: false, previous_version: nil)
+  def unpublish(content_id, type:, explanation: nil, alternative_path: nil, discard_drafts: false, previous_version: nil, locale: nil)
     params = {
       type: type
     }
@@ -129,6 +130,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     params.merge!(alternative_path: alternative_path) if alternative_path
     params.merge!(previous_version: previous_version) if previous_version
     params.merge!(discard_drafts: discard_drafts) if discard_drafts
+    params.merge!(locale: locale) if locale
 
     post_json!(unpublish_url(content_id), params)
   end
