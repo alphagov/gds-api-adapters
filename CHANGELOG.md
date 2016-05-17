@@ -1,3 +1,8 @@
+# 30.5.0
+
+* Add `locale` parameter to unpublish endpoint.
+* Add publishing-api `stub_publishing_api_unpublish` test helper method.
+
 # 30.4.0
 
 * Add publishing API POST /v2/content/:content_id/unpublish endpoint
