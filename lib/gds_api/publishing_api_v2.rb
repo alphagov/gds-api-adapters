@@ -162,6 +162,36 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json(links_url(content_id))
   end
 
+  # Get expanded links
+  #
+  # Return the expanded links of the item.
+  #
+  # @param content_id [UUID]
+  #
+  # @example
+  #
+  #   publishing_api.get_expanded_links("8157589b-65e2-4df6-92ba-2c91d80006c0").to_h
+  #
+  #   #=> {
+  #     "content_id" => "8157589b-65e2-4df6-92ba-2c91d80006c0",
+  #     "version" => 10,
+  #     "expanded_links" => {
+  #       "organisations" => [
+  #         {
+  #           "content_id" => "21aa83a2-a47f-4189-a252-b02f8c322012",
+  #           ... (and more attributes)
+  #         }
+  #       ]
+  #     }
+  #   }
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#get-v2expanded-linkscontent_id
+  def get_expanded_links(content_id)
+    validate_content_id(content_id)
+    url = "#{endpoint}/v2/expanded-links/#{content_id}"
+    get_json(url)
+  end
+
   # Patch the links of a content item
   #
   # @param content_id [UUID]
