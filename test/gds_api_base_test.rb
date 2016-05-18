@@ -15,6 +15,7 @@ class GdsApiBaseTest < Minitest::Test
   end
 
   def teardown
+    GdsApi::Base.default_options = nil
     GdsApi::JsonClient.cache = @orig_cache
   end
 
