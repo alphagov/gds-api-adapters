@@ -41,7 +41,8 @@ class GdsApi::Base
   def initialize(endpoint_url, options={})
     options[:endpoint_url] = endpoint_url
     raise InvalidAPIURL unless endpoint_url =~ URI::regexp
-    default_options = GdsApi::Base.default_options || {}
+    base_options = { logger: self.class.logger }
+    default_options = base_options.merge(GdsApi::Base.default_options || {})
     @options = default_options.merge(options)
     self.endpoint = options[:endpoint_url]
   end

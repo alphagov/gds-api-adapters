@@ -88,4 +88,24 @@ class GdsApiBaseTest < Minitest::Test
       ConcreteApi.new('invalid-url')
     end.must_raise GdsApi::Base::InvalidAPIURL
   end
+
+  def test_should_set_json_client_logger_to_own_logger_by_default
+    api = ConcreteApi.new("http://bar")
+    assert_same GdsApi::Base.logger, api.client.logger
+  end
+
+  def test_should_set_json_client_logger_to_logger_in_default_options
+    custom_logger = stub('custom-logger')
+    GdsApi::Base.default_options = { logger: custom_logger }
+    api = ConcreteApi.new("http://bar")
+    assert_same custom_logger, api.client.logger
+  end
+
+  def test_should_set_json_client_logger_to_logger_in_options
+    custom_logger = stub('custom-logger')
+    GdsApi::Base.default_options = { logger: custom_logger }
+    another_logger = stub('another-logger')
+    api = ConcreteApi.new("http://bar", logger: another_logger)
+    assert_same another_logger, api.client.logger
+  end
 end
