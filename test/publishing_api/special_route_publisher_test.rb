@@ -32,7 +32,8 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
 
         expected_payload = {
           base_path: special_route[:base_path],
-          format: "special_route",
+          document_type: "special_route",
+          schema_name: "special_route",
           title: special_route[:title],
           description: special_route[:description],
           routes: [
