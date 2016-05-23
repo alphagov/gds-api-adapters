@@ -2,6 +2,7 @@ require_relative 'test_helper'
 require 'gds_api/base'
 require 'gds_api/json_client'
 require 'base64'
+require 'null_logger'
 
 class JsonClientTest < MiniTest::Spec
   def setup
@@ -825,5 +826,15 @@ class JsonClientTest < MiniTest::Spec
     end
   ensure
     ENV['GOVUK_APP_NAME'] = previous_govuk_app_name
+  end
+
+  def test_should_default_to_using_null_logger
+    assert_same @client.logger, NullLogger.instance
+  end
+
+  def test_should_use_custom_logger_specified_in_options
+    custom_logger = stub('custom-logger')
+    client = GdsApi::JsonClient.new(logger: custom_logger)
+    assert_same client.logger, custom_logger
   end
 end

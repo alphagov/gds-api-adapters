@@ -5,6 +5,7 @@ require_relative 'null_cache'
 require_relative 'govuk_headers'
 require 'lrucache'
 require 'rest-client'
+require 'null_logger'
 
 module GdsApi
   class JsonClient
@@ -38,7 +39,7 @@ module GdsApi
         raise "It is no longer possible to disable the timeout."
       end
 
-      @logger = options[:logger] || GdsApi::Base.logger
+      @logger = options[:logger] || NullLogger.instance
 
       if options[:disable_cache] || (options[:cache_size] == 0)
         @cache = NullCache.new
