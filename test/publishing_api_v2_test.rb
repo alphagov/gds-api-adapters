@@ -854,7 +854,8 @@ describe GdsApi::PublishingApiV2 do
             body: {
               links: {
                 topics: ["225df4a8-2945-4e9b-8799-df7424a90b69"],
-              }
+              },
+              locale: "en"
             },
             headers: {
               "Content-Type" => "application/json",
@@ -872,7 +873,7 @@ describe GdsApi::PublishingApiV2 do
       end
 
       it "adds the new type of links and responds with the whole link set" do
-        response = @api_client.patch_links(@content_id, links: {
+        response = @api_client.patch_links(@content_id, locale: "en", links: {
           topics: ["225df4a8-2945-4e9b-8799-df7424a90b69"],
         })
 

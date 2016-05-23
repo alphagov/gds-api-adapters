@@ -180,7 +180,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
       links: payload.fetch(:links)
     }
 
-    params = merge_optional_keys(params, payload, [:previous_version])
+    params = merge_optional_keys(params, payload, [:previous_version, :locale])
 
     patch_json!(links_url(content_id), params)
   end
