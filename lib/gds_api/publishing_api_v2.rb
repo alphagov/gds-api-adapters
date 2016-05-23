@@ -253,6 +253,64 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json("#{endpoint}/v2/linked/#{content_id}#{query}")
   end
 
+  # Get all content items and links grouped by content id.
+  # This can be used to extract data for batch processing tasks.
+  #
+  # The API is provisional and will be changed to return a single content item for
+  # each content id.
+  #
+  # @param last_seen_content_id [UUID] Filter out all items up to and including the item identified by this content id.
+  #
+  # @param page_size [Integer] Override the default page size (10).
+  #
+  # @return [Array] A list of result hashes grouped by and ordered by content id.
+  #
+  # @example
+  #  publishing_api.get_expanded_links(page_size: 2)
+  #
+  #  #=> {
+  #    last_seen_content_id: '9157589b-65e2-4df6-92ba-2c91d80006c0'
+  #    results': [
+  #      {
+  #        content_id: '86963c13-1f57-4005-b119-e7cf3cb92ecf',
+  #        content_items: [
+  #          {
+  #            base_path: "/foo",
+  #            publishing_app: "whitehall",
+  #            format: "guide",
+  #            user_facing_version: "1",
+  #            state: "published"
+  #          }
+  #        ],
+  #        links: {
+  #          topics: ['d6e1527d-d0c0-40d5-9603-b9f3e6866b8a'],
+  #        }
+  #      },
+  #      {
+  #        content_id: '9157589b-65e2-4df6-92ba-2c91d80006c0',
+  #        content_items: [
+  #          {
+  #            base_path: "/bar",
+  #            publishing_app: "whitehall",
+  #            format: "guide",
+  #            user_facing_version: "1",
+  #            state: "published"
+  #          }
+  #        ],
+  #        links: {}
+  #      }
+  #    ]
+  #  }
+  def get_grouped_content_and_links(last_seen_content_id: nil, page_size: nil)
+    params = {}
+    params["last_seen_content_id"] = last_seen_content_id unless last_seen_content_id.nil?
+    params["page_size"] = page_size unless page_size.nil?
+
+    query = query_string(params)
+
+    get_json("#{endpoint}/v2/grouped-content-and-links#{query}")
+  end
+
 private
 
   def content_url(content_id, params = {})
