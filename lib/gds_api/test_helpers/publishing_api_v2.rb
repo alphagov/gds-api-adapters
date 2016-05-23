@@ -101,7 +101,7 @@ module GdsApi
       end
 
       def assert_publishing_api_put_content(content_id, attributes_or_matcher = nil, times = 1)
-        url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
+        url = url_for("content", content_id)
         assert_publishing_api(:put, url, attributes_or_matcher, times)
       end
 
@@ -174,8 +174,7 @@ module GdsApi
           "&fields%5B%5D=#{f}"
         }
 
-        url = PUBLISHING_API_V2_ENDPOINT + "/content?document_type=#{format}#{query_params.join('')}"
-
+        url = url_for("content?document_type=#{format}#{query_params.join('')}")
         stub_request(:get, url).to_return(:status => 200, :body => { results: body }.to_json, :headers => {})
       end
 
@@ -237,6 +236,18 @@ module GdsApi
         stub_publishing_api_postlike_call(:patch, *args)
       end
 
+      def stub_publishing_api_get(*resource_paths, body:, params: {})
+        url = url_for(resource_paths)
+
+        stub_request(:get, url)
+            .with(:query => params)
+            .to_return({
+                status: 200,
+                body: body.to_json,
+                headers: {"Content-Type" => "application/json; charset=utf-8"}
+            })
+      end
+
       def stub_publishing_api_postlike_call(method, content_id, body, resource_path, override_response_hash = {})
         response_hash = {status: 200, body: '{}', headers: {"Content-Type" => "application/json; charset=utf-8"}}
         response_hash.merge!(override_response_hash)
@@ -269,6 +280,10 @@ module GdsApi
             message: "Could not find #{type} with content_id: #{content_id}",
           }
         }
+      end
+
+      def url_for(*resource_paths)
+          resource_paths.unshift(PUBLISHING_API_V2_ENDPOINT).join("/")
       end
     end
   end
