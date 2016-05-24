@@ -1,3 +1,14 @@
+# Unreleased
+
+Please use this place to add information of work that hasn't been released,
+and specify if that is backwards-compatible.
+
+# 30.6.0
+
+* Use `document_type` & `schema_name` in special routes
+* Remove implicit dependency between JsonClient and GdsApi::Base
+* Add support for get_expanded_links endpoint
+
 # 30.5.0
 
 * Add `locale` parameter to unpublish endpoint.
