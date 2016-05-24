@@ -101,7 +101,7 @@ module GdsApi
       end
 
       def assert_publishing_api_put_content(content_id, attributes_or_matcher = nil, times = 1)
-        url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
+        url = url_for("content", content_id)
         assert_publishing_api(:put, url, attributes_or_matcher, times)
       end
 
@@ -159,7 +159,7 @@ module GdsApi
       #   per_page: 50
       #)
       def publishing_api_has_content(items, params = {})
-        url = PUBLISHING_API_V2_ENDPOINT + "/content"
+        url = url_for("content")
         stub_request(:get, url).with(:query => params).to_return(status: 200, body: { results: items }.to_json, headers: {})
       end
 
@@ -174,41 +174,49 @@ module GdsApi
           "&fields%5B%5D=#{f}"
         }
 
-        url = PUBLISHING_API_V2_ENDPOINT + "/content?document_type=#{format}#{query_params.join('')}"
-
+        url = url_for("content?document_type=#{format}#{query_params.join('')}")
         stub_request(:get, url).to_return(:status => 200, :body => { results: body }.to_json, :headers => {})
       end
 
       def publishing_api_has_linkables(linkables, document_type:)
-        url = PUBLISHING_API_V2_ENDPOINT + "/linkables?document_type=#{document_type}"
+        url = url_for("linkables?document_type=#{document_type}")
         stub_request(:get, url).to_return(:status => 200, :body => linkables.to_json, :headers => {})
       end
 
       def publishing_api_has_item(item)
         item = item.with_indifferent_access
-        url = PUBLISHING_API_V2_ENDPOINT + "/content/" + item[:content_id]
+        url = url_for("content", item[:content_id])
         stub_request(:get, url).to_return(status: 200, body: item.to_json, headers: {})
       end
 
       def publishing_api_does_not_have_item(content_id)
-        url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
+        url = url_for("content" + content_id)
         stub_request(:get, url).to_return(status: 404, body: resource_not_found(content_id, "content item").to_json, headers: {})
       end
 
       def publishing_api_has_links(links)
         links = links.with_indifferent_access
-        url = PUBLISHING_API_V2_ENDPOINT + "/links/" + links[:content_id]
+        url = url_for("links", links[:content_id])
         stub_request(:get, url).to_return(status: 200, body: links.to_json, headers: {})
       end
 
       def publishing_api_has_expanded_links(links)
-        url = PUBLISHING_API_V2_ENDPOINT + "/expanded-links/" + links[:content_id]
+        url = url_for("expanded-links", links[:content_id])
         stub_request(:get, url).to_return(status: 200, body: links.to_json, headers: {})
       end
 
       def publishing_api_does_not_have_links(content_id)
-        url = PUBLISHING_API_V2_ENDPOINT + "/links/" + content_id
+        url = url_for("links", content_id)
         stub_request(:get, url).to_return(status: 404, body: resource_not_found(content_id, "link set").to_json, headers: {})
+      end
+
+      def publishing_api_has_grouped_content_and_links(groups, params: {})
+        body = {
+          results: groups,
+          last_seen_content_id: groups.last["content_id"]
+        }
+
+        stub_publishing_api_get("grouped-content-and-links", body: body, params: params)
       end
 
       # Stub calls to the lookups endpoint
@@ -235,6 +243,18 @@ module GdsApi
 
       def stub_publishing_api_patch(*args)
         stub_publishing_api_postlike_call(:patch, *args)
+      end
+
+      def stub_publishing_api_get(*resource_paths, body:, params: {})
+        url = url_for(resource_paths)
+
+        stub_request(:get, url)
+          .with(:query => params)
+          .to_return({
+            status: 200,
+            body: body.to_json,
+            headers: { "Content-Type" => "application/json; charset=utf-8" }
+          })
       end
 
       def stub_publishing_api_postlike_call(method, content_id, body, resource_path, override_response_hash = {})
@@ -269,6 +289,10 @@ module GdsApi
             message: "Could not find #{type} with content_id: #{content_id}",
           }
         }
+      end
+
+      def url_for(*resource_paths)
+        resource_paths.unshift(PUBLISHING_API_V2_ENDPOINT).join("/")
       end
     end
   end
