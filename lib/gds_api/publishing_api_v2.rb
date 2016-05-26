@@ -195,26 +195,31 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # Patch the links of a content item
   #
   # @param content_id [UUID]
-  # @param payload [Hash] A "links hash"
+  # @param params [Hash]
+  # @option params [Hash] links A "links hash"
+  # @option params [Integer] previous_version The previous version (returned by `get_links`). If this version is not the current version, the publishing-api will reject the change and return 409 Conflict. (optional)
+  # @option params [Boolean] bulk_publishing Set to true to indicate that this is part of a mass-republish. Allows the publishing-api to prioritise human-initiated publishing (optional, default false)
   # @example
   #
   #   publishing_api.patch_links(
   #     '86963c13-1f57-4005-b119-e7cf3cb92ecf',
-  #     {
+  #     links: {
   #       topics: ['d6e1527d-d0c0-40d5-9603-b9f3e6866b8a'],
   #       mainstream_browse_pages: ['d6e1527d-d0c0-40d5-9603-b9f3e6866b8a'],
-  #     }
+  #     },
+  #     previous_version: 10,
+  #     bulk_publishing: true
   #   )
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#patch-v2linkscontent_id
-  def patch_links(content_id, payload)
-    params = {
-      links: payload.fetch(:links)
+  def patch_links(content_id, params)
+    payload = {
+      links: params.fetch(:links)
     }
 
-    params = merge_optional_keys(params, payload, [:previous_version, :bulk_publishing])
+    payload = merge_optional_keys(payload, params, [:previous_version, :bulk_publishing])
 
-    patch_json!(links_url(content_id), params)
+    patch_json!(links_url(content_id), payload)
   end
 
   # FIXME: Add documentation
