@@ -21,6 +21,14 @@ module GdsApi
         stub_request(:get, "#{ASSET_MANAGER_ENDPOINT}/assets/#{id}")
           .to_return(:body => response.to_json, :status => 404)
       end
+
+      def asset_manager_receives_an_asset(response_url)
+        stub_request(:post, "#{ASSET_MANAGER_ENDPOINT}/assets").to_return(body: { file_url: response_url }.to_json, status: 200)
+      end
+
+      def asset_manager_upload_failure
+        stub_request(:post, "#{ASSET_MANAGER_ENDPOINT}/assets").to_return(status: 500)
+      end
     end
   end
 end
