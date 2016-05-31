@@ -61,25 +61,26 @@ describe GdsApi::Mapit do
   end
   describe "areas_for_type" do
     before do
-       mapit_has_areas('EUR', {
-        "123" => { "name" => "Eastern", "id" => "123", "country_name" => "England" },
-        "234" => { "name" => "North West", "id" => "234", "country_name" => "England" },
-        "345" => { "name" => "Scotland", "id" => "345", "country_name" => "Scotland" }
-      })
+       mapit_has_areas('EUR', [
+          { "name" => "Eastern", "id" => "123", "country_name" => "England", 'ons' => '123' },
+          { "name" => "North West", "id" => "234", "country_name" => "England", 'ons' => '456' },
+          { "name" => "Scotland", "id" => "345", "country_name" => "Scotland", 'ons' => '789' },
+        ]
+      )
       mapit_does_not_have_areas('FOO')
     end
     it "should return areas of a type" do
       areas = @api.areas_for_type('EUR').to_hash
 
       assert_equal 3, areas.size
-      assert_equal "Eastern", areas["123"]["name"]
-      assert_equal "England", areas["123"]["country_name"]
-      assert_equal "North West", areas["234"]["name"]
-      assert_equal "England", areas["234"]["country_name"]
-      assert_equal "Scotland", areas["345"]["name"]
-      assert_equal "Scotland", areas["345"]["country_name"]
+      assert_equal "Eastern", areas["0"]["name"]
+      assert_equal "123", areas["0"]["codes"]["ons"]
+      assert_equal "North West", areas["1"]["name"]
+      assert_equal "456", areas["1"]["codes"]["ons"]
+      assert_equal "Scotland", areas["2"]["name"]
+      assert_equal "789", areas["2"]["codes"]["ons"]
     end
-    it "should return and empty result for an unknown area type" do
+    it "should return an empty result for an unknown area type" do
       response = @api.areas_for_type('FOO')
 
       assert_empty response
