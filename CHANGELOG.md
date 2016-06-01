@@ -3,6 +3,10 @@
 Please use this place to add information of work that hasn't been released,
 and specify if that is backwards-compatible.
 
+# 30.8.0
+
+* Stubs successful and failing attachment uploads to asset manager.
+
 # 30.7.0
 
 * Allow `bulk_publishing` flag for `PublishingApiV2#patch_links`
