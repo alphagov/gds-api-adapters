@@ -110,6 +110,11 @@ module GdsApi
         assert_publishing_api(:post, url, attributes_or_matcher, times)
       end
 
+      def assert_publishing_api_unpublish(content_id, attributes_or_matcher = nil, times = 1)
+        url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/unpublish"
+        assert_publishing_api(:post, url, attributes_or_matcher, times)
+      end
+
       def assert_publishing_api_patch_links(content_id, attributes_or_matcher = nil, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/links/" + content_id
         assert_publishing_api(:patch, url, attributes_or_matcher, times)
