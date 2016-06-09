@@ -226,7 +226,8 @@ describe GdsApi::PublishingApiV2 do
             status: 200,
             body: {
               "content_id" => @content_id,
-              "format" => Pact.like("special_route"),
+              "document_type" => Pact.like("special_route"),
+              "schema_name" => Pact.like("special_route"),
               "publishing_app" => Pact.like("publisher"),
               "rendering_app" => Pact.like("frontend"),
               "locale" => Pact.like("en"),
@@ -243,7 +244,7 @@ describe GdsApi::PublishingApiV2 do
       it "responds with 200 and the content item" do
         response = @api_client.get_content(@content_id)
         assert_equal 200, response.code
-        assert_equal @content_item["format"], response["format"]
+        assert_equal @content_item["format"], response["document_type"]
       end
     end
 
@@ -263,7 +264,8 @@ describe GdsApi::PublishingApiV2 do
             status: 200,
             body: {
               "content_id" => @content_id,
-              "format" => Pact.like("special_route"),
+              "document_type" => Pact.like("special_route"),
+              "schema_name" => Pact.like("special_route"),
               "publishing_app" => Pact.like("publisher"),
               "rendering_app" => Pact.like("frontend"),
               "locale" => "fr",
