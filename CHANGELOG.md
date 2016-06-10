@@ -3,6 +3,10 @@
 Please use this place to add information of work that hasn't been released,
 and specify if that is backwards-compatible.
 
+# 31.0.0
+
+* Remove `format` from expected results in Pact tests.
+
 # 30.9.0
 
 * Add `assert_publishing_api_unpublish` test-helper
