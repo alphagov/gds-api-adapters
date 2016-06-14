@@ -32,7 +32,24 @@ By default we log to a NullLogger since we don't want to pollute your test
 results or logs. To log output you'll want to set `GdsApi::Base.logger` to
 something that actually logs:
 
-    GdsApi::Base.logger = Logger.new("/path/to/file.log")
+```ruby
+GdsApi::Base.logger = Logger.new("/path/to/file.log")
+```
+
+## Setting the timeout
+
+By default the JsonClient timeout is set to 4 seconds. If this is exceeded a
+`GdsApi::TimedOutException` will be raised. Individual clients may decide to
+override this timeout. Alternatively, you can override this in the application
+that uses the adapter with:
+
+```ruby
+Services.publishing_api.client.options[:timeout] = number_of_seconds
+```
+
+In most cases, there is an upper-limit of 30 seconds imposed by the app server
+or Nginx. If your requests are taking this long, you should probably be looking
+into other options to lower the response time.
 
 ## Middleware for request tracing
 
