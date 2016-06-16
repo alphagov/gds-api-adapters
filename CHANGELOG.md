@@ -3,6 +3,10 @@
 Please use this place to add information of work that hasn't been released,
 and specify if that is backwards-compatible.
 
+# 31.1.0
+
+* Add a `stub_any_publishing_api_publish` test helper
+
 # 31.0.0
 
 * Remove `format` from expected results in Pact tests.
