@@ -76,6 +76,10 @@ module GdsApi
         stub_request(:patch, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/links/})
       end
 
+      def stub_any_publishing_api_publish
+        stub_request(:post, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/.*/publish})
+      end
+
       def stub_any_publishing_api_call
         stub_request(:any, %r{\A#{PUBLISHING_API_V2_ENDPOINT}})
       end
