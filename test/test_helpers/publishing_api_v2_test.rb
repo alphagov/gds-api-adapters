@@ -51,4 +51,12 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
       }, response.to_h)
     end
   end
+
+  describe "stub_any_publishing_api_publish" do
+    it "stubs any publish request to the publishing api" do
+      stub_any_publishing_api_publish
+      publishing_api.publish("some-content-id", "major")
+      assert_publishing_api_publish("some-content-id")
+    end
+  end
 end
