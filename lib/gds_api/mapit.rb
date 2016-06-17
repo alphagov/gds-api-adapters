@@ -12,6 +12,10 @@ class GdsApi::Mapit < GdsApi::Base
     get_json("#{base_url}/areas/#{type}.json")
   end
 
+  def area_for_code(code_type, code)
+    get_json("#{base_url}/code/#{code_type}/#{code}.json")
+  end
+
   class Location
     attr_reader :response
 
