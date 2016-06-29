@@ -18,20 +18,6 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
 
   # Return a content item
   #
-  # Returns nil if the content item doesn't exist.
-  #
-  # @param content_id [UUID]
-  # @param params [Hash]
-  # @option params [String] locale The language, defaults to 'en' in publishing-api.
-  #
-  # @return [GdsApi::Response] a content item
-  # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#get-v2contentcontent_id
-  def get_content(content_id, params = {})
-    get_json(content_url(content_id, params))
-  end
-
-  # Return a content item
-  #
   # Raises exception if the item doesn't exist.
   #
   # @param content_id [UUID]
@@ -42,7 +28,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   #
   # @raise [HTTPNotFound] when the content item is not found
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#get-v2contentcontent_id
-  def get_content!(content_id, params = {})
+  def get_content(content_id, params = {})
     get_json!(content_url(content_id, params))
   end
 
@@ -157,9 +143,11 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
 
   # FIXME: Add documentation
   #
+  # Raises exception if the item doesn't exist.
+  #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#get-v2linkscontent_id
   def get_links(content_id)
-    get_json(links_url(content_id))
+    get_json!(links_url(content_id))
   end
 
   # Get expanded links
@@ -189,7 +177,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   def get_expanded_links(content_id)
     validate_content_id(content_id)
     url = "#{endpoint}/v2/expanded-links/#{content_id}"
-    get_json(url)
+    get_json!(url)
   end
 
   # Patch the links of a content item
@@ -227,7 +215,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#get-v2content
   def get_content_items(params)
     query = query_string(params)
-    get_json("#{endpoint}/v2/content#{query}")
+    get_json!("#{endpoint}/v2/content#{query}")
   end
 
   # FIXME: Add documentation
@@ -246,7 +234,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
       end
     end
 
-    get_json("#{endpoint}/v2/linkables?document_type=#{document_type}")
+    get_json!("#{endpoint}/v2/linkables?document_type=#{document_type}")
   end
 
   # FIXME: Add documentation
@@ -255,7 +243,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   def get_linked_items(content_id, params = {})
     query = query_string(params)
     validate_content_id(content_id)
-    get_json("#{endpoint}/v2/linked/#{content_id}#{query}")
+    get_json!("#{endpoint}/v2/linked/#{content_id}#{query}")
   end
 
 private
@@ -294,5 +282,9 @@ private
 
   def validate_content_id(content_id)
     raise ArgumentError, "content_id cannot be nil" unless content_id
+  end
+
+  def get_json(*)
+    raise "Use `get_json!()` instead"
   end
 end

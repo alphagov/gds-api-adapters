@@ -20,28 +20,11 @@ describe GdsApi::ContentStore do
       assert_equal base_path, response["base_path"]
     end
 
-    it "returns nil if the item doesn't exist" do
-      content_store_does_not_have_item("/non-existent")
-
-      assert_nil @api.content_item("/non-existent")
-    end
-  end
-
-  describe "#content_item!" do
-    it "returns the item" do
-      base_path = "/test-from-content-store"
-      content_store_has_item(base_path)
-
-      response = @api.content_item!(base_path)
-
-      assert_equal base_path, response["base_path"]
-    end
-
     it "raises if the item doesn't exist" do
       content_store_does_not_have_item("/non-existent")
 
       e = assert_raises GdsApi::ContentStore::ItemNotFound do
-        @api.content_item!("/non-existent")
+        @api.content_item("/non-existent")
       end
 
       assert_equal 404, e.code
