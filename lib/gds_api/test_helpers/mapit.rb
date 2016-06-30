@@ -28,7 +28,8 @@ module GdsApi
           [i, {
             'codes' => {
               'ons' => area['ons'],
-              'gss' => area['gss']
+              'gss' => area['gss'],
+              'govuk_slug' => area['govuk_slug']
             },
             'name' => area['name'],
             'type' => area['type']
@@ -59,6 +60,16 @@ module GdsApi
       def mapit_does_not_have_areas(area_type)
         stub_request(:get, "#{MAPIT_ENDPOINT}/areas/" + area_type + ".json")
           .to_return(:body => [].to_json, :status => 200)
+      end
+
+      def mapit_has_area_for_code(code_type, code, area)
+        stub_request(:get, "#{MAPIT_ENDPOINT}/code/#{code_type}/#{code}.json")
+          .to_return(:body => area.to_json, :status => 200)
+      end
+
+      def mapit_does_not_have_area_for_code(code_type, code)
+        stub_request(:get, "#{MAPIT_ENDPOINT}/code/#{code_type}/#{code}.json")
+        .to_return(:body => { "code" => 404, "error" => "No areas were found that matched code #{code_type} = #{code}." }.to_json, :status => 404)
       end
     end
   end

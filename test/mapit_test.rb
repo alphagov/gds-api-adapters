@@ -59,6 +59,7 @@ describe GdsApi::Mapit do
       end
     end
   end
+
   describe "areas_for_type" do
     before do
        mapit_has_areas('EUR', {
@@ -83,6 +84,32 @@ describe GdsApi::Mapit do
       response = @api.areas_for_type('FOO')
 
       assert_empty response
+    end
+  end
+
+  describe "area_for_code" do
+    before do
+      south_ribble_area = {
+        name: "South Ribble Borough Council",
+        codes: {
+          ons: "30UN",
+          gss: "E07000126",
+          unit_id: "4834"
+        },
+        type: "DIS"
+      }
+      mapit_has_area_for_code('ons', '30UN', south_ribble_area)
+      mapit_does_not_have_area_for_code('govuk_slug', 'neverland')
+    end
+
+    it "should return area for a code type" do
+      area = @api.area_for_code('ons', '30UN')
+
+      assert_equal "South Ribble Borough Council", area["name"]
+    end
+
+    it "should return 404 for a missing area of a certain code type" do
+      assert_nil @api.area_for_code('govuk_slug', 'neverland')
     end
   end
 end
