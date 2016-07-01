@@ -65,7 +65,7 @@ describe GdsApi::PublishingApiV2 do
       assert_equal({}, response.to_h['expanded_links'])
     end
 
-    it "responds with 404 if there's no link set entry" do
+    it "raises if there's no link set entry" do
       publishing_api
         .given("no links exist for content_id #{@content_id}")
         .upon_receiving("a get-expanded-links request")
@@ -77,9 +77,9 @@ describe GdsApi::PublishingApiV2 do
           status: 404
         )
 
-      response = @api_client.get_expanded_links(@content_id)
-
-      assert_nil response
+      assert_raises GdsApi::HTTPNotFound do
+        @api_client.get_expanded_links(@content_id)
+      end
     end
   end
 end

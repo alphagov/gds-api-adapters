@@ -3,6 +3,8 @@
 Please use this place to add information of work that hasn't been released,
 and specify if that is backwards-compatible.
 
+* Publishing API client always raises when it encounters a 404. *NOT BACKWARDS COMPATIBLE*
+
 # 31.2.0
 
 * Add an `area_for_code` method to the MapIt API adapter.

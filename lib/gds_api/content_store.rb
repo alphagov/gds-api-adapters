@@ -9,10 +9,6 @@ class GdsApi::ContentStore < GdsApi::Base
     end
   end
 
-  def content_item(base_path)
-    get_json(content_item_url(base_path))
-  end
-
   def incoming_links!(base_path, params = {})
     query = query_string(params)
     get_json!("#{endpoint}/incoming-links#{base_path}#{query}")
@@ -20,7 +16,7 @@ class GdsApi::ContentStore < GdsApi::Base
     raise ItemNotFound.build_from(e)
   end
 
-  def content_item!(base_path)
+  def content_item(base_path)
     get_json!(content_item_url(base_path))
   rescue GdsApi::HTTPNotFound => e
     raise ItemNotFound.build_from(e)
@@ -30,5 +26,9 @@ class GdsApi::ContentStore < GdsApi::Base
 
   def content_item_url(base_path)
     "#{endpoint}/content#{base_path}"
+  end
+
+  def get_json(*)
+    raise "Use `get_json!()` instead"
   end
 end
