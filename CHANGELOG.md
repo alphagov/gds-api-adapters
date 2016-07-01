@@ -3,6 +3,10 @@
 Please use this place to add information of work that hasn't been released,
 and specify if that is backwards-compatible.
 
+# 31.3.0
+
+* Add `stub_any_rummager_delete_content` and `assert_rummager_deleted_content`
+
 # 31.2.0
 
 * Add an `area_for_code` method to the MapIt API adapter.

@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'mocha', "> 1.0.0"
   s.add_development_dependency "minitest", "> 5.0.0"
   s.add_development_dependency 'pry'
-  s.add_development_dependency 'rack'
+  s.add_development_dependency 'rack', '~> 1.6.4'
   s.add_development_dependency 'rack-test'
   s.add_development_dependency 'rake', '~> 0.9.2.2'
   s.add_development_dependency 'yard', '0.8.7.6'
