@@ -1,5 +1,7 @@
 # Unreleased
 
+- Provide a warning message for rummager deprecated stubs
+
 Please use this place to add information of work that hasn't been released,
 and specify if that is backwards-compatible.
 
