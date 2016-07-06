@@ -4,17 +4,19 @@ require 'gds_api/test_helpers/json_client_helper'
 module GdsApi
   module TestHelpers
     module Rummager
+      RUMMAGER_ENDPOINT = Plek.current.find('rummager')
+
       def stub_any_rummager_post
-        stub_request(:post, %r{#{Plek.new.find('search')}/documents})
+        stub_request(:post, %r{#{RUMMAGER_ENDPOINT}/documents})
       end
 
       def stub_any_rummager_post_with_queueing_enabled
-        stub_request(:post, %r{#{Plek.new.find('search')}/documents}) \
+        stub_request(:post, %r{#{RUMMAGER_ENDPOINT}/documents}) \
           .to_return(status: [202, "Accepted"])
       end
 
       def assert_rummager_posted_item(attributes)
-        url = Plek.new.find('search') + "/documents"
+        url = RUMMAGER_ENDPOINT + "/documents"
         assert_requested(:post, url) do |req|
           data = JSON.parse(req.body)
           attributes.to_a.all? do |key, value|
@@ -26,11 +28,11 @@ module GdsApi
       # @deprecated Rummager.delete_docment is deprecated, so is this stub!  Use `stub_any_rummager_delete_content`
       def stub_any_rummager_delete
         warn "stub_any_rummager_delete is deprecated, instead use: stub_any_rummager_delete_content"
-        stub_request(:delete, %r{#{Plek.new.find('search')}/documents/.*})
+        stub_request(:delete, %r{#{RUMMAGER_ENDPOINT}/documents/.*})
       end
 
       def stub_any_rummager_delete_content
-        stub_request(:delete, %r{#{Plek.new.find('search')}/content.*})
+        stub_request(:delete, %r{#{RUMMAGER_ENDPOINT}/content.*})
       end
 
       # @deprecated Rummager.delete_docment is deprecated, so is this stub!  Use `assert_rummager_deleted_content`
@@ -40,11 +42,11 @@ module GdsApi
         if id =~ %r{^/}
           raise ArgumentError, 'Rummager id must not start with a slash'
         end
-        assert_requested(:delete, %r{#{Plek.new.find('search')}/documents/#{id}})
+        assert_requested(:delete, %r{#{RUMMAGER_ENDPOINT}/documents/#{id}})
       end
 
       def assert_rummager_deleted_content(base_path)
-        assert_requested(:delete, %r{#{Plek.new.find('search')}/content.*#{base_path}})
+        assert_requested(:delete, %r{#{RUMMAGER_ENDPOINT}/content.*#{base_path}})
       end
 
       def rummager_has_services_and_info_data_for_organisation
