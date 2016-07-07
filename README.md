@@ -14,7 +14,7 @@ Example adapters for frequently used applications:
 
 - [Publishing API](lib/gds_api/publishing_api_v2.rb) ([docs](http://www.rubydoc.info/github/alphagov/gds-api-adapters/master/GdsApi/PublishingApiV2), [test helper code](https://github.com/alphagov/gds-api-adapters/blob/master/lib/gds_api/test_helpers/publishing_api_v2.rb), [test helper docs](http://www.rubydoc.info/github/alphagov/gds-api-adapters/master/GdsApi/TestHelpers/PublishingApiV2))
 - [Content Store](lib/gds_api/content_store.rb) ([docs](http://www.rubydoc.info/github/alphagov/gds-api-adapters/master/GdsApi/ContentStore), [test helper code](https://github.com/alphagov/gds-api-adapters/blob/master/lib/gds_api/test_helpers/content_store.rb), [test helper docs](http://www.rubydoc.info/github/alphagov/gds-api-adapters/master/GdsApi/TestHelpers/ContentStore))
-- [Rummager](lib/gds_api/publishing_api_v2.rb) ([docs](http://www.rubydoc.info/github/alphagov/gds-api-adapters/master/GdsApi/Rummager), [test helper code](https://github.com/alphagov/gds-api-adapters/blob/master/lib/gds_api/test_helpers/rummager.rb), [test helper docs](http://www.rubydoc.info/github/alphagov/gds-api-adapters/master/GdsApi/TestHelpers/Rummager))
+- [Rummager](lib/gds_api/rummager.rb) ([docs](http://www.rubydoc.info/github/alphagov/gds-api-adapters/master/GdsApi/Rummager), [test helper code](https://github.com/alphagov/gds-api-adapters/blob/master/lib/gds_api/test_helpers/rummager.rb), [test helper docs](http://www.rubydoc.info/github/alphagov/gds-api-adapters/master/GdsApi/TestHelpers/Rummager))
 
 ## Logging
 
