@@ -25,6 +25,7 @@ module GdsApi
 
       # @deprecated Rummager.delete_docment is deprecated, so is this stub!  Use `stub_any_rummager_delete_content`
       def stub_any_rummager_delete
+        warn "stub_any_rummager_delete is deprecated, instead use: stub_any_rummager_delete_content"
         stub_request(:delete, %r{#{Plek.new.find('search')}/documents/.*})
       end
 
@@ -34,6 +35,8 @@ module GdsApi
 
       # @deprecated Rummager.delete_docment is deprecated, so is this stub!  Use `assert_rummager_deleted_content`
       def assert_rummager_deleted_item(id)
+        warn "assert_rummager_deleted_item stub is deprecated, instead use: assert_rummager_deleted_content"
+
         if id =~ %r{^/}
           raise ArgumentError, 'Rummager id must not start with a slash'
         end
