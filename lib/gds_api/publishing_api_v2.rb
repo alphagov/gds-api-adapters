@@ -48,8 +48,9 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
 
   # Find the content_ids for a list of base_paths.
   #
-  # @param base_paths [Array]
-  # @param state String
+  # @param base_paths [Array] A list of base_paths to look up
+  # @param state String an (optional) single state to filter by, e.g. 'draft', 'published'
+  #
   # @return [Hash] a hash, keyed by `base_path` with `content_id` as value
   # @example
   #
@@ -70,7 +71,8 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # Convenience method if you only need to look up one content_id for a
   # base_path. For multiple base_paths, use {GdsApi::PublishingApiV2#lookup_content_ids}.
   #
-  # @param base_path [String]
+  # @param base_path [Array] A base path to look up
+  # @param state String an (optional) single state to filter by, e.g. 'draft', 'published'
   #
   # @return [UUID] the `content_id` for the `base_path`
   #
