@@ -1,9 +1,13 @@
 # Unreleased
 
-- Provide a warning message for rummager deprecated stubs
-
 Please use this place to add information of work that hasn't been released,
 and specify if that is backwards-compatible.
+
+* Provide a warning message for rummager deprecated stubs
+* Modify Rummager test helper to use `rummager` vhost instead of `search`.
+  **This is a breaking change**, which means applications currently using the
+  helper will need to ensure they are using the `rummager` vhost when creating
+  the adapter.
 
 # 31.4.0
 
