@@ -6,6 +6,10 @@ describe GdsApi::GovukHeaders do
     Thread.current[:headers] = nil if Thread.current[:headers]
   end
 
+  after :each do
+    GdsApi::GovukHeaders.clear_headers
+  end
+
   it "supports read/write of headers" do
     GdsApi::GovukHeaders.set_header("GDS-Request-Id", "123-456")
     GdsApi::GovukHeaders.set_header("Content-Type", "application/pdf")
