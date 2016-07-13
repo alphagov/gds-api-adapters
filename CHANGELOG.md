@@ -1,8 +1,6 @@
-# Unreleased
+# 32.0.0
 
-Please use this place to add information of work that hasn't been released,
-and specify if that is backwards-compatible.
-
+* Allow publishing apps to request a specific version of content.
 * Provide a warning message for rummager deprecated stubs
 * Modify Rummager test helper to use `rummager` vhost instead of `search`.
   **This is a breaking change**, which means applications currently using the
