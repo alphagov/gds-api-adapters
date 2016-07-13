@@ -286,6 +286,124 @@ describe GdsApi::PublishingApiV2 do
       end
     end
 
+    describe "when a content item exists in with a superseded version" do
+      describe "when requesting the superseded version" do
+        before do
+          @content_item = content_item_for_content_id(@content_id)
+
+          publishing_api
+            .given("a content item exists in with a superseded version with content_id: #{@content_id}")
+            .upon_receiving("a request to return the superseded content item")
+            .with(
+              method: :get,
+              path: "/v2/content/#{@content_id}",
+              query: "version=1",
+            )
+            .will_respond_with(
+              status: 200,
+              body: {
+                "content_id" => @content_id,
+                "document_type" => Pact.like("special_route"),
+                "schema_name" => Pact.like("special_route"),
+                "publishing_app" => Pact.like("publisher"),
+                "rendering_app" => Pact.like("frontend"),
+                "locale" => Pact.like("en"),
+                "routes" => Pact.like([{}]),
+                "public_updated_at" => Pact.like("2015-07-30T13:58:11.000Z"),
+                "details" => Pact.like({}),
+                "publication_state" => "superseded"
+              },
+              headers: {
+                "Content-Type" => "application/json; charset=utf-8",
+              },
+            )
+        end
+
+        it "responds with 200 and the superseded content item" do
+          response = @api_client.get_content(@content_id, version: 1)
+          assert_equal 200, response.code
+          assert_equal response["publication_state"], "superseded"
+        end
+      end
+
+      describe "when requesting the published version" do
+        before do
+          @content_item = content_item_for_content_id(@content_id)
+
+          publishing_api
+            .given("a content item exists in with a superseded version with content_id: #{@content_id}")
+            .upon_receiving("a request to return the published content item")
+            .with(
+              method: :get,
+              path: "/v2/content/#{@content_id}",
+              query: "version=2",
+            )
+            .will_respond_with(
+              status: 200,
+              body: {
+                "content_id" => @content_id,
+                "document_type" => Pact.like("special_route"),
+                "schema_name" => Pact.like("special_route"),
+                "publishing_app" => Pact.like("publisher"),
+                "rendering_app" => Pact.like("frontend"),
+                "locale" => Pact.like("en"),
+                "routes" => Pact.like([{}]),
+                "public_updated_at" => Pact.like("2015-07-30T13:58:11.000Z"),
+                "details" => Pact.like({}),
+                "publication_state" => "live"
+              },
+              headers: {
+                "Content-Type" => "application/json; charset=utf-8",
+              },
+            )
+        end
+
+        it "responds with 200 and the published content item" do
+          response = @api_client.get_content(@content_id, version: 2)
+          assert_equal 200, response.code
+          assert_equal response["publication_state"], "live"
+        end
+      end
+
+      describe "when requesting no specific version" do
+        before do
+          @content_item = content_item_for_content_id(@content_id)
+
+          publishing_api
+            .given("a content item exists in with a superseded version with content_id: #{@content_id}")
+            .upon_receiving("a request to return the content item")
+            .with(
+              method: :get,
+              path: "/v2/content/#{@content_id}",
+            )
+            .will_respond_with(
+              status: 200,
+              body: {
+                "content_id" => @content_id,
+                "document_type" => Pact.like("special_route"),
+                "schema_name" => Pact.like("special_route"),
+                "publishing_app" => Pact.like("publisher"),
+                "rendering_app" => Pact.like("frontend"),
+                "locale" => Pact.like("en"),
+                "routes" => Pact.like([{}]),
+                "public_updated_at" => Pact.like("2015-07-30T13:58:11.000Z"),
+                "details" => Pact.like({}),
+                "publication_state" => "live"
+              },
+              headers: {
+                "Content-Type" => "application/json; charset=utf-8",
+              },
+            )
+        end
+
+        it "responds with 200 and the published content item" do
+          response = @api_client.get_content(@content_id)
+          assert_equal 200, response.code
+          assert_equal response["publication_state"], "live"
+        end
+      end
+    end
+
     describe "a non-existent item" do
       before do
         publishing_api
