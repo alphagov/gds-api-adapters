@@ -199,6 +199,19 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: item.to_json, headers: {})
       end
 
+      def publishing_api_has_item_in_sequence(content_id, items)
+        items = items.map(&:with_indifferent_access)
+        url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
+        calls = -1
+
+        stub_request(:get, url).to_return do |request|
+          calls += 1
+          item = items[calls] || items.last
+
+          { status: 200, body: item.to_json, headers: {} }
+        end
+      end
+
       def publishing_api_does_not_have_item(content_id)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
         stub_request(:get, url).to_return(status: 404, body: resource_not_found(content_id, "content item").to_json, headers: {})
