@@ -1,3 +1,7 @@
+# 32.1.0
+
+* Add `publishing_api_has_item_in_sequence` test helper
+
 # 32.0.0
 
 * Allow publishing apps to request a specific version of content.
