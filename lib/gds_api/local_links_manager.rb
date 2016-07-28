@@ -6,4 +6,9 @@ class GdsApi::LocalLinksManager < GdsApi::Base
     url += "&lgil=#{lgil}" if lgil
     get_json(url)
   end
+
+  def local_authority(authority_slug)
+    url = "#{endpoint}/api/local_authority?authority_slug=#{authority_slug}"
+    get_json(url)    
+  end
 end
