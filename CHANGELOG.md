@@ -1,3 +1,7 @@
+# 32.2.0
+
+* Add LocalLinksManager `local_link` adapter.
+
 # 32.1.0
 
 * Add `publishing_api_has_item_in_sequence` test helper
