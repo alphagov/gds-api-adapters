@@ -25,6 +25,22 @@ describe GdsApi::ContentStore do
 
       assert_nil @api.content_item("/non-existent")
     end
+
+    it "raises if the item doesn't exist and `always_raise_for_not_found` enabled" do
+      GdsApi.configure do |config|
+        config.always_raise_for_not_found = true
+      end
+
+      content_store_does_not_have_item("/non-existent")
+
+      assert_raises GdsApi::HTTPNotFound do
+        @api.content_item("/non-existent")
+      end
+
+      GdsApi.configure do |config|
+        config.always_raise_for_not_found = false
+      end
+    end
   end
 
   describe "#content_item!" do

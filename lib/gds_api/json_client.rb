@@ -82,8 +82,12 @@ module GdsApi
     [:get, :post, :put, :patch, :delete].each do |http_method|
       method_name = "#{http_method}_json"
       define_method method_name do |url, *args, &block|
-        ignoring_missing do
+        if GdsApi.config.always_raise_for_not_found
           send (method_name + "!"), url, *args, &block
+        else
+          ignoring_missing do
+            send (method_name + "!"), url, *args, &block
+          end
         end
       end
     end
