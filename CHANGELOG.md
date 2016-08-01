@@ -1,3 +1,7 @@
+# 32.2.1
+
+* Fix LocalLinksManager test URLs
+
 # 32.2.0
 
 * Add LocalLinksManager `local_link` adapter.
