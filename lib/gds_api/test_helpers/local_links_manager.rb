@@ -4,7 +4,7 @@ module GdsApi
   module TestHelpers
     module LocalLinksManager
 
-      LOCAL_LINKS_MANAGER_ENDPOINT = Plek.current.find('local_links_manager')
+      LOCAL_LINKS_MANAGER_ENDPOINT = Plek.current.find('local-links-manager')
 
       def local_links_manager_has_a_link(authority_slug:, lgsl:, lgil:, url:)
         response = {
