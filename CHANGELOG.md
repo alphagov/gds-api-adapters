@@ -1,3 +1,5 @@
+* Add option to always raise for 404 and 410.
+
 # 32.2.1
 
 * Fix LocalLinksManager test URLs
