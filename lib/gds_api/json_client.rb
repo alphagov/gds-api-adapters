@@ -85,6 +85,16 @@ module GdsApi
         if GdsApi.config.always_raise_for_not_found
           send (method_name + "!"), url, *args, &block
         else
+          warn <<-doc
+            DEPRECATION NOTICE: You are making requests that will potentially
+            return nil. Please set `GdsApi.config.always_raise_for_not_found = true`
+            to make sure all responses with 404 or 410 raise an exception.
+
+            Raising exceptions will be the default behaviour from October 1st, 2016.
+
+            Called from: #{caller[2]}
+          doc
+
           ignoring_missing do
             send (method_name + "!"), url, *args, &block
           end
