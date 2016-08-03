@@ -1,7 +1,6 @@
 require "test_helper"
 require "gds_api/local_links_manager"
 require "gds_api/test_helpers/local_links_manager"
-require 'pry'
 
 describe GdsApi::LocalLinksManager do
   include GdsApi::TestHelpers::LocalLinksManager
@@ -164,6 +163,70 @@ describe GdsApi::LocalLinksManager do
         local_links_manager_does_not_have_required_objects("blackburn", 2, 9)
 
         response = @api.local_link("blackburn", 2, 9)
+        assert_equal nil, response
+      end
+    end
+  end
+
+  describe '#local_authority' do
+    describe 'when making a request for a local authority with a parent' do
+      it 'should return the local authority and its parent' do
+        local_links_manager_has_a_district_and_county_local_authority('blackburn', 'rochester')
+
+        expected_response = {
+          "local_authorities" => [
+            {
+              "name" => 'Blackburn',
+              "homepage_url" => "http://blackburn.example.com",
+              "tier" => "district"
+            },
+            {
+              "name" => 'Rochester',
+              "homepage_url" => "http://rochester.example.com",
+              "tier" => "county"
+            }
+          ]
+        }
+
+        response = @api.local_authority('blackburn')
+        assert_equal expected_response, response.to_hash
+      end
+    end
+
+    describe 'when making a request for a local authority without a parent' do
+      it 'should return the local authority' do
+        local_links_manager_has_a_local_authority('blackburn')
+
+        expected_response = {
+          "local_authorities" => [
+            {
+              "name" => 'Blackburn',
+              "homepage_url" => "http://blackburn.example.com",
+              "tier" => "unitary"
+            }
+          ]
+        }
+
+        response = @api.local_authority('blackburn')
+        assert_equal expected_response, response.to_hash
+      end
+    end
+
+    describe 'when making a request without the required parameters' do
+      it "raises HTTPClientError when authority_slug is missing" do
+        local_links_manager_request_without_local_authority_slug
+
+        assert_raises GdsApi::HTTPClientError do
+          @api.local_authority(nil)
+        end
+      end
+    end
+
+    describe 'when making a request with invalid required parameters' do
+      it "returns nil when authority_slug is invalid" do
+        local_links_manager_does_not_have_an_authority("hogwarts")
+
+        response = @api.local_authority("hogwarts")
         assert_equal nil, response
       end
     end
