@@ -108,6 +108,71 @@ module GdsApi
           .with(query: params)
           .to_return(body: {}.to_json, status: 404)
       end
+
+      def local_links_manager_has_a_local_authority(authority_slug)
+        response = {
+          "local_authorities" => [
+            {
+              "name" => authority_slug.capitalize,
+              "homepage_url" => "http://#{authority_slug}.example.com",
+              "tier" => "unitary"
+            }
+          ]
+        }
+
+        stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
+          .with(query: {authority_slug: authority_slug})
+          .to_return(body: response.to_json, status: 200)
+      end
+
+      def local_links_manager_has_a_district_and_county_local_authority(district_slug, county_slug)
+        response = {
+          "local_authorities" => [
+            {
+              "name" => district_slug.capitalize,
+              "homepage_url" => "http://#{district_slug}.example.com",
+              "tier" => "district"
+            },
+            {
+              "name" => county_slug.capitalize,
+              "homepage_url" => "http://#{county_slug}.example.com",
+              "tier" => "county"
+            }
+          ]
+        }
+
+        stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
+          .with(query: {authority_slug: district_slug})
+          .to_return(body: response.to_json, status: 200)
+      end
+
+      def local_links_manager_request_without_local_authority_slug
+        stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
+        .with(query: {authority_slug: ''})
+        .to_return(body: {}.to_json, status: 400)
+      end
+
+      def local_links_manager_does_not_have_an_authority(authority_slug)
+        stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
+        .with(query: {authority_slug: authority_slug})
+        .to_return(body: {}.to_json, status: 404)
+      end
+
+      def local_links_manager_has_a_local_authority_without_homepage(authority_slug)
+        response = {
+          "local_authorities" => [
+            {
+              "name" => authority_slug.capitalize,
+              "homepage_url" => "",
+              "tier" => "unitary"
+            }
+          ]
+        }
+
+        stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
+          .with(query: {authority_slug: authority_slug})
+          .to_return(body: response.to_json, status: 200)
+      end
     end
   end
 end
