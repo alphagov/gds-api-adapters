@@ -608,6 +608,25 @@ class JsonClientTest < MiniTest::Spec
     assert_equal 2, response.a.b
   end
 
+  def test_cant_access_attributes_of_response_directly_if_hash_only
+    url = "http://some.endpoint/some.json"
+    payload = {a: 1}
+    stub_request(:put, url).with(body: payload.to_json).to_return(:body => '{"a":{"b":2}}', :status => 200)
+    response = @client.put_json(url, payload)
+
+    GdsApi.configure do |config|
+      config.hash_response_for_requests = true
+    end
+
+    assert_raises NoMethodError do
+      response.a.b
+    end
+
+    GdsApi.configure do |config|
+      config.hash_response_for_requests = false
+    end
+  end
+
   def test_accessing_non_existent_attribute_of_response_returns_nil
     url = "http://some.endpoint/some.json"
     stub_request(:put, url).to_return(:body => '{"a":1}', :status => 200)

@@ -1,4 +1,5 @@
 * Add option to always raise for 404 and 410.
+* Add option to make `GdsApi::Response` just behave like a hash, not an OpenStruct  
 
 # 32.2.1
 

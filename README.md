@@ -16,6 +16,22 @@ Example adapters for frequently used applications:
 - [Content Store](lib/gds_api/content_store.rb) ([docs](http://www.rubydoc.info/github/alphagov/gds-api-adapters/master/GdsApi/ContentStore), [test helper code](https://github.com/alphagov/gds-api-adapters/blob/master/lib/gds_api/test_helpers/content_store.rb), [test helper docs](http://www.rubydoc.info/github/alphagov/gds-api-adapters/master/GdsApi/TestHelpers/ContentStore))
 - [Rummager](lib/gds_api/rummager.rb) ([docs](http://www.rubydoc.info/github/alphagov/gds-api-adapters/master/GdsApi/Rummager), [test helper code](https://github.com/alphagov/gds-api-adapters/blob/master/lib/gds_api/test_helpers/rummager.rb), [test helper docs](http://www.rubydoc.info/github/alphagov/gds-api-adapters/master/GdsApi/TestHelpers/Rummager))
 
+## Configuration
+
+We're currently deprecating some behaviour of this gem. You can opt-in to the
+new behaviour now by adding configuration like this:
+
+```ruby
+# config/initializers/gds_api_adapters.rb
+GdsApi.configure do |config|
+  # Never return nil when a server responds with 404 or 410.
+  config.always_raise_for_not_found = true
+
+  # Return a hash, not an OpenStruct from a request.
+  config.hash_response_for_requests = true
+end
+```
+
 ## Logging
 
 Each HTTP request can be logged as JSON. Example:

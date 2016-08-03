@@ -75,14 +75,17 @@ module GdsApi
     end
 
     def to_ostruct
+      raise NoMethodError if GdsApi.config.hash_response_for_requests
       @ostruct ||= self.class.build_ostruct_recursively(to_hash)
     end
 
     def method_missing(method_sym, *arguments, &block)
+      super if GdsApi.config.hash_response_for_requests
       to_ostruct.public_send(method_sym, *arguments, &block)
     end
 
     def respond_to_missing?(method, include_private)
+      super if GdsApi.config.hash_response_for_requests
       to_ostruct.respond_to?(method, include_private)
     end
 
