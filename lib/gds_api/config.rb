@@ -17,5 +17,13 @@ module GdsApi
     # behaviour now. We'll change this to default to true on October 1st, 2016
     # and remove the option entirely on December 1st, 2016.
     attr_accessor :always_raise_for_not_found
+
+    # Set to true to make `GdsApi::Response` behave like a simple hash, instead
+    # of an OpenStruct. This will prevent nil-errors.
+    #
+    # This configuration allows some time to upgrade - you should opt-in to this
+    # behaviour now. We'll change this to default to true on October 1st, 2016
+    # and remove the option entirely on December 1st, 2016.
+    attr_accessor :hash_response_for_requests
   end
 end
