@@ -1,5 +1,8 @@
+# 32.3.0
+
 * Add option to always raise for 404 and 410.
 * Add option to make `GdsApi::Response` just behave like a hash, not an OpenStruct  
+* Add local links manager local authority endpoint
 
 # 32.2.1
 
