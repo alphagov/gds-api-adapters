@@ -1,3 +1,7 @@
+# 33.0.0
+
+* Simplify state name presentation (live to published)
+
 # 32.3.0
 
 * Add option to always raise for 404 and 410.
