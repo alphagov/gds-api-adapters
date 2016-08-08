@@ -350,7 +350,7 @@ describe GdsApi::PublishingApiV2 do
                 "routes" => Pact.like([{}]),
                 "public_updated_at" => Pact.like("2015-07-30T13:58:11.000Z"),
                 "details" => Pact.like({}),
-                "publication_state" => "live"
+                "publication_state" => "published"
               },
               headers: {
                 "Content-Type" => "application/json; charset=utf-8",
@@ -361,7 +361,7 @@ describe GdsApi::PublishingApiV2 do
         it "responds with 200 and the published content item" do
           response = @api_client.get_content(@content_id, version: 2)
           assert_equal 200, response.code
-          assert_equal response["publication_state"], "live"
+          assert_equal response["publication_state"], "published"
         end
       end
 
@@ -388,7 +388,7 @@ describe GdsApi::PublishingApiV2 do
                 "routes" => Pact.like([{}]),
                 "public_updated_at" => Pact.like("2015-07-30T13:58:11.000Z"),
                 "details" => Pact.like({}),
-                "publication_state" => "live"
+                "publication_state" => "published"
               },
               headers: {
                 "Content-Type" => "application/json; charset=utf-8",
@@ -399,7 +399,7 @@ describe GdsApi::PublishingApiV2 do
         it "responds with 200 and the published content item" do
           response = @api_client.get_content(@content_id)
           assert_equal 200, response.code
-          assert_equal response["publication_state"], "live"
+          assert_equal response["publication_state"], "published"
         end
       end
     end
@@ -1107,7 +1107,7 @@ describe GdsApi::PublishingApiV2 do
           "title" => "Content Item B",
           "internal_name" => "Content Item B",
           "content_id" => "bbbbbbbb-bbbb-2bbb-bbbb-bbbbbbbbbbbb",
-          "publication_state" => "live",
+          "publication_state" => "published",
           "base_path" => "/another-base-path",
         },
       ]
