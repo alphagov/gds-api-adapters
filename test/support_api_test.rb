@@ -112,6 +112,16 @@ describe GdsApi::SupportApi do
       assert_requested(stub_post)
     end
   end
+  
+  describe "POST /anonymous-feedback/global-export-requests" do
+    it "makes a POST request to the support API" do
+      params = {from_date: "1 June 2016", to_date: "8 June 2016", notification_email: "foo@example.com"}
+      stub_post = stub_support_global_export_request_creation(params)
+
+      @api.create_global_export_request(params)
+      assert_requested(stub_post)
+    end
+  end
 
   describe "GET /anonymous-feedback/export-requests/:id" do
     it "fetches the export request details from the API" do
