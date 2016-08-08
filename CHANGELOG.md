@@ -1,3 +1,7 @@
+# 33.1.0
+
+* Add support-api global export endpoint
+
 # 33.0.0
 
 * Simplify state name presentation (live to published)
