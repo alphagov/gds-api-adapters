@@ -17,6 +17,10 @@ class GdsApi::SupportApi < GdsApi::Base
     post_json!("#{endpoint}/anonymous-feedback/export-requests", export_request: request_details)
   end
 
+  def create_global_export_request(request_details)
+    post_json!("#{endpoint}/anonymous-feedback/global-export-requests", global_export_request: request_details)
+  end
+
   def problem_report_daily_totals_for(date)
     date_string = date.strftime("%Y-%m-%d")
     get_json!("#{endpoint}/anonymous-feedback/problem-reports/#{date_string}/totals")
