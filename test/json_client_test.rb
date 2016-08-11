@@ -768,7 +768,10 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_post_multipart_responses
     url = "http://some.endpoint/some.json"
     stub_request(:post, url).
-      with(:body => %r{Content\-Disposition: form\-data; name="a"\r\n\r\n123}, :headers => {'Content-Type' => %r{multipart/form-data; boundary=\d+}}).
+      with(:body => %r{------RubyFormBoundary\w+\r\nContent-Disposition: form-data; name="a"\r\n\r\n123\r\n------RubyFormBoundary\w+--\r\n},
+           :headers => {
+             'Content-Type' => %r{multipart/form-data; boundary=----RubyFormBoundary\w+}
+           }).
       to_return(:body => '{"b": "1"}', :status => 200)
 
     response = @client.post_multipart("http://some.endpoint/some.json", {"a" => "123"})
@@ -797,7 +800,10 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_put_multipart_responses
     url = "http://some.endpoint/some.json"
     stub_request(:put, url).
-      with(:body => %r{Content\-Disposition: form\-data; name="a"\r\n\r\n123}, :headers => {'Content-Type' => %r{multipart/form-data; boundary=\d+}}).
+      with(:body => %r{------RubyFormBoundary\w+\r\nContent-Disposition: form-data; name="a"\r\n\r\n123\r\n------RubyFormBoundary\w+--\r\n},
+           :headers => {
+             'Content-Type' => %r{multipart/form-data; boundary=----RubyFormBoundary\w+}
+           }).
       to_return(:body => '{"b": "1"}', :status => 200)
 
     response = @client.put_multipart("http://some.endpoint/some.json", {"a" => "123"})
