@@ -477,7 +477,7 @@ class JsonClientTest < MiniTest::Spec
     failure = lambda { |request| flunk("Request called too many times") }
     stub_request(:get, url).to_return(redirect).times(11).then.to_return(failure)
 
-    assert_raises GdsApi::TooManyRedirects do
+    assert_raises GdsApi::HTTPErrorResponse do
       @client.get_json(url)
     end
   end
@@ -502,7 +502,7 @@ class JsonClientTest < MiniTest::Spec
     stub_request(:get, first_url).to_return(first_redirect).times(6).then.to_return(failure)
     stub_request(:get, second_url).to_return(second_redirect).times(6).then.to_return(failure)
 
-    assert_raises GdsApi::TooManyRedirects do
+    assert_raises GdsApi::HTTPErrorResponse do
       @client.get_json(first_url)
     end
   end
@@ -768,7 +768,10 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_post_multipart_responses
     url = "http://some.endpoint/some.json"
     stub_request(:post, url).
-      with(:body => %r{Content\-Disposition: form\-data; name="a"\r\n\r\n123}, :headers => {'Content-Type' => %r{multipart/form-data; boundary=\d+}}).
+      with(:body => %r{------RubyFormBoundary\w+\r\nContent-Disposition: form-data; name="a"\r\n\r\n123\r\n------RubyFormBoundary\w+--\r\n},
+           :headers => {
+             'Content-Type' => %r{multipart/form-data; boundary=----RubyFormBoundary\w+}
+           }).
       to_return(:body => '{"b": "1"}', :status => 200)
 
     response = @client.post_multipart("http://some.endpoint/some.json", {"a" => "123"})
@@ -797,7 +800,10 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_put_multipart_responses
     url = "http://some.endpoint/some.json"
     stub_request(:put, url).
-      with(:body => %r{Content\-Disposition: form\-data; name="a"\r\n\r\n123}, :headers => {'Content-Type' => %r{multipart/form-data; boundary=\d+}}).
+      with(:body => %r{------RubyFormBoundary\w+\r\nContent-Disposition: form-data; name="a"\r\n\r\n123\r\n------RubyFormBoundary\w+--\r\n},
+           :headers => {
+             'Content-Type' => %r{multipart/form-data; boundary=----RubyFormBoundary\w+}
+           }).
       to_return(:body => '{"b": "1"}', :status => 200)
 
     response = @client.put_multipart("http://some.endpoint/some.json", {"a" => "123"})
