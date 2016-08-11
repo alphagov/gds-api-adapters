@@ -477,7 +477,7 @@ class JsonClientTest < MiniTest::Spec
     failure = lambda { |request| flunk("Request called too many times") }
     stub_request(:get, url).to_return(redirect).times(11).then.to_return(failure)
 
-    assert_raises GdsApi::TooManyRedirects do
+    assert_raises GdsApi::HTTPErrorResponse do
       @client.get_json(url)
     end
   end
@@ -502,7 +502,7 @@ class JsonClientTest < MiniTest::Spec
     stub_request(:get, first_url).to_return(first_redirect).times(6).then.to_return(failure)
     stub_request(:get, second_url).to_return(second_redirect).times(6).then.to_return(failure)
 
-    assert_raises GdsApi::TooManyRedirects do
+    assert_raises GdsApi::HTTPErrorResponse do
       @client.get_json(first_url)
     end
   end
