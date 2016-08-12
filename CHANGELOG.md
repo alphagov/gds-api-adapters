@@ -1,3 +1,7 @@
+# 33.2.0
+
+* Update RestClient version to 2.0.0
+
 # 33.1.0
 
 * Add support-api global export endpoint
