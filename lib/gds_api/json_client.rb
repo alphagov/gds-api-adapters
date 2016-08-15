@@ -69,8 +69,22 @@ module GdsApi
     end
 
     def get_raw(url)
-      ignoring_missing do
+      if GdsApi.config.always_raise_for_not_found
         get_raw!(url)
+      else
+        warn <<-doc
+          DEPRECATION NOTICE: You are making requests that will potentially
+          return nil. Please set `GdsApi.config.always_raise_for_not_found = true`
+          to make sure all responses with 404 or 410 raise an exception.
+
+          Raising exceptions will be the default behaviour from October 1st, 2016.
+
+          Called from: #{caller[2]}
+        doc
+
+        ignoring_missing do
+          get_raw!(url)
+        end
       end
     end
 

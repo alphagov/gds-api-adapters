@@ -1,3 +1,5 @@
+* Extend option to always raise for 404 and 410 to `get_raw`.
+
 # 33.2.0
 
 * Update RestClient version to 2.0.0

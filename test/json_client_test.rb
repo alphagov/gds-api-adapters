@@ -442,6 +442,66 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  def test_get_raw_should_be_nil_if_404_returned_from_endpoint_and_always_raise_for_not_found_is_disabled
+    @old_always_raise = GdsApi.config.always_raise_for_not_found
+    GdsApi.configure do |config|
+      config.always_raise_for_not_found = false
+    end
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_return(:body => "{}", :status => 404)
+    assert_nil @client.get_raw(url)
+  ensure
+    GdsApi.configure do |config|
+      config.always_raise_for_not_found = @old_always_raise
+    end
+  end
+
+  def test_get_raw_should_be_nil_if_410_returned_from_endpoint_and_always_raise_for_not_found_is_disabled
+    @old_always_raise = GdsApi.config.always_raise_for_not_found
+    GdsApi.configure do |config|
+      config.always_raise_for_not_found = false
+    end
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_return(:body => "{}", :status => 410)
+    assert_nil @client.get_raw(url)
+  ensure
+    GdsApi.configure do |config|
+      config.always_raise_for_not_found = @old_always_raise
+    end
+  end
+
+  def test_get_raw_should_be_nil_if_404_returned_from_endpoint_and_always_raise_for_not_found_is_enabled
+    @old_always_raise = GdsApi.config.always_raise_for_not_found
+    GdsApi.configure do |config|
+      config.always_raise_for_not_found = true
+    end
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_return(:body => "{}", :status => 404)
+    assert_raises GdsApi::HTTPNotFound do
+      @client.get_raw(url)
+    end
+  ensure
+    GdsApi.configure do |config|
+      config.always_raise_for_not_found = @old_always_raise
+    end
+  end
+
+  def test_get_raw_should_be_nil_if_410_returned_from_endpoint_and_always_raise_for_not_found_is_enabled
+    @old_always_raise = GdsApi.config.always_raise_for_not_found
+    GdsApi.configure do |config|
+      config.always_raise_for_not_found = true
+    end
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_return(:body => "{}", :status => 410)
+    assert_raises GdsApi::HTTPGone do
+      @client.get_raw(url)
+    end
+  ensure
+    GdsApi.configure do |config|
+      config.always_raise_for_not_found = @old_always_raise
+    end
+  end
+
   def test_get_should_raise_error_if_non_404_non_410_error_code_returned_from_endpoint
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(:body => "{}", :status => 500)
