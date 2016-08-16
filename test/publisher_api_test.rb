@@ -106,13 +106,4 @@ describe GdsApi::Publisher do
       to_return(:status => 200, :body => '{"snac": "12345"}', :headers => {})
     assert_equal '12345', api.council_for_slug('fake-transaction', [12345])
   end
-
-  describe "#reindex_topic_editions(slug)" do
-    it "posts to the reindex URL" do
-      api.expects(:post_json!)
-        .with("#{PUBLISHER_ENDPOINT}/api/reindex-topic-editions/oil-and-gas/licensing")
-
-      api.reindex_topic_editions("oil-and-gas/licensing")
-    end
-  end
 end
