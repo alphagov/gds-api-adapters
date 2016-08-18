@@ -6,18 +6,31 @@ module GdsApi
     module Rummager
       RUMMAGER_ENDPOINT = Plek.current.find('rummager')
 
-      def stub_any_rummager_post
-        stub_request(:post, %r{#{RUMMAGER_ENDPOINT}/documents})
+      def stub_any_rummager_post(index: nil)
+        if index
+          stub_request(:post, %r{#{RUMMAGER_ENDPOINT}/#{index}/documents})
+            .to_return(status: [202, "Accepted"])
+        else
+          stub_request(:post, %r{#{RUMMAGER_ENDPOINT}/documents})
+            .to_return(status: [202, "Accepted"])
+        end
       end
 
       def stub_any_rummager_post_with_queueing_enabled
+        warn "stub_any_rummager_post_with_queueing_enabled is deprecated: use stub_any_rummager_post instead"
+
         stub_request(:post, %r{#{RUMMAGER_ENDPOINT}/documents}) \
           .to_return(status: [202, "Accepted"])
       end
 
-      def assert_rummager_posted_item(attributes)
-        url = RUMMAGER_ENDPOINT + "/documents"
-        assert_requested(:post, url) do |req|
+      def assert_rummager_posted_item(attributes, index: nil, **options)
+        if index
+          url = RUMMAGER_ENDPOINT + "/#{index}/documents"
+        else
+          url = RUMMAGER_ENDPOINT + "/documents"
+        end
+
+        assert_requested(:post, url, **options) do |req|
           data = JSON.parse(req.body)
           attributes.to_a.all? do |key, value|
             data[key.to_s] == value
@@ -25,28 +38,44 @@ module GdsApi
         end
       end
 
-      # @deprecated Rummager.delete_docment is deprecated, so is this stub!  Use `stub_any_rummager_delete_content`
-      def stub_any_rummager_delete
-        warn "stub_any_rummager_delete is deprecated, instead use: stub_any_rummager_delete_content"
-        stub_request(:delete, %r{#{RUMMAGER_ENDPOINT}/documents/.*})
+      def stub_any_rummager_delete(index: nil)
+        if index
+          stub_request(:delete, %r{#{RUMMAGER_ENDPOINT}/#{index}/documents/.*})
+        else
+          # use rummager's default index
+          stub_request(:delete, %r{#{RUMMAGER_ENDPOINT}/documents/.*})
+        end
       end
 
       def stub_any_rummager_delete_content
         stub_request(:delete, %r{#{RUMMAGER_ENDPOINT}/content.*})
       end
 
-      # @deprecated Rummager.delete_docment is deprecated, so is this stub!  Use `assert_rummager_deleted_content`
-      def assert_rummager_deleted_item(id)
-        warn "assert_rummager_deleted_item stub is deprecated, instead use: assert_rummager_deleted_content"
-
+      def assert_rummager_deleted_item(id, index: nil, **options)
         if id =~ %r{^/}
           raise ArgumentError, 'Rummager id must not start with a slash'
         end
-        assert_requested(:delete, %r{#{RUMMAGER_ENDPOINT}/documents/#{id}})
+        if index
+          assert_requested(
+            :delete,
+            %r{#{RUMMAGER_ENDPOINT}/#{index}/documents/#{id}},
+            **options
+          )
+        else
+          assert_requested(
+            :delete,
+            %r{#{RUMMAGER_ENDPOINT}/documents/#{id}},
+            **options
+          )
+        end
       end
 
-      def assert_rummager_deleted_content(base_path)
-        assert_requested(:delete, %r{#{RUMMAGER_ENDPOINT}/content.*#{base_path}})
+      def assert_rummager_deleted_content(base_path, **options)
+        assert_requested(
+          :delete,
+          %r{#{RUMMAGER_ENDPOINT}/content.*#{base_path}},
+          **options
+        )
       end
 
       def rummager_has_services_and_info_data_for_organisation
