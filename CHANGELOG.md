@@ -1,3 +1,6 @@
+# 33.2.1
+
+* Send correct headers for GET and DELETE requests.
 * Extend option to always raise for 404 and 410 to `get_raw`.
 
 # 33.2.0
