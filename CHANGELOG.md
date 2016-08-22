@@ -1,3 +1,7 @@
+# 33.2.2
+
+* Fix JsonClient not explicitly requiring the config
+
 # 33.2.1
 
 * Send correct headers for GET and DELETE requests.
