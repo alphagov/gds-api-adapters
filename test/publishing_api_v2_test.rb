@@ -1121,9 +1121,7 @@ describe GdsApi::PublishingApiV2 do
           method: :get,
           path: "/v2/linkables",
           query: "document_type=topic",
-          headers: {
-            "Content-Type" => "application/json",
-          },
+          headers: {},
         )
         .will_respond_with(
           status: 200,
@@ -1150,9 +1148,7 @@ describe GdsApi::PublishingApiV2 do
           method: :get,
           path: "/v2/content",
           query: "content_format=topic&fields%5B%5D=title&fields%5B%5D=base_path",
-          headers: {
-            "Content-Type" => "application/json",
-          },
+          headers: {},
         )
         .will_respond_with(
           status: 200,
@@ -1196,9 +1192,7 @@ describe GdsApi::PublishingApiV2 do
           method: :get,
           path: "/v2/content",
           query: "content_format=topic&fields%5B%5D=content_id&fields%5B%5D=locale",
-          headers: {
-            "Content-Type" => "application/json",
-          },
+          headers: {},
         )
         .will_respond_with(
           status: 200,
@@ -1240,9 +1234,7 @@ describe GdsApi::PublishingApiV2 do
           method: :get,
           path: "/v2/content",
           query: "content_format=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=fr",
-          headers: {
-            "Content-Type" => "application/json",
-          },
+          headers: {},
         )
         .will_respond_with(
           status: 200,
@@ -1284,9 +1276,7 @@ describe GdsApi::PublishingApiV2 do
           method: :get,
           path: "/v2/content",
           query: "content_format=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=all",
-          headers: {
-            "Content-Type" => "application/json",
-          },
+          headers: {},
         )
         .will_respond_with(
           status: 200,
@@ -1333,9 +1323,7 @@ describe GdsApi::PublishingApiV2 do
           method: :get,
           path: "/v2/content",
           query: "content_format=topic&fields%5B%5D=content_id&fields%5B%5D=details",
-          headers: {
-            "Content-Type" => "application/json",
-          },
+          headers: {},
         )
         .will_respond_with(
           status: 200,
@@ -1509,9 +1497,7 @@ describe GdsApi::PublishingApiV2 do
             method: :get,
             path: "/v2/linked/" + @linked_content_item['content_id'],
             query: "fields%5B%5D=content_id&fields%5B%5D=base_path&link_type=topic",
-            headers: {
-              "Content-Type" => "application/json",
-            },
+            headers: {},
           )
           .will_respond_with(
             status: 200,

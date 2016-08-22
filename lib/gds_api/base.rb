@@ -22,7 +22,7 @@ class GdsApi::Base
                           :post_json, :post_json!,
                           :put_json, :put_json!,
                           :patch_json, :patch_json!,
-                          :delete_json, :delete_json!,
+                          :delete_json, :delete_json!, :delete_json_with_params!,
                           :get_raw, :get_raw!,
                           :put_multipart,
                           :post_multipart
