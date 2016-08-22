@@ -15,6 +15,8 @@ class JsonClientTest < MiniTest::Spec
     GdsApi::JsonClient.cache = nil
 
     @client = GdsApi::JsonClient.new
+
+    WebMock.disable_net_connect!
   end
 
   def teardown
@@ -770,7 +772,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_client_can_use_bearer_token
     client = GdsApi::JsonClient.new(bearer_token: 'SOME_BEARER_TOKEN')
-    expected_headers = GdsApi::JsonClient.default_request_headers.
+    expected_headers = GdsApi::JsonClient.default_request_with_json_body_headers.
       merge('Authorization' => 'Bearer SOME_BEARER_TOKEN')
 
     stub_request(:put, "http://some.other.endpoint/some.json").
@@ -820,7 +822,7 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_set_custom_headers_on_deletes
     stub_request(:delete, "http://some.other.endpoint/some.json").to_return(:status => 200)
 
-    response = GdsApi::JsonClient.new.delete_json("http://some.other.endpoint/some.json", {},
+    response = GdsApi::JsonClient.new.delete_json("http://some.other.endpoint/some.json",
                                                   { "HEADER-A" => "B", "HEADER-C" => "D" })
 
     assert_requested(:delete, %r{/some.json}) do |request|
@@ -969,5 +971,22 @@ class JsonClientTest < MiniTest::Spec
     custom_logger = stub('custom-logger')
     client = GdsApi::JsonClient.new(logger: custom_logger)
     assert_same client.logger, custom_logger
+  end
+
+  def test_should_avoid_content_type_header_on_get_without_body
+    url = "http://some.endpoint/some.json"
+    stub_request(:any, url)
+
+    @client.get_json!(url)
+    assert_requested(:get, url, headers: GdsApi::JsonClient.default_request_headers)
+
+    @client.delete_json!(url)
+    assert_requested(:delete, url, headers: GdsApi::JsonClient.default_request_headers)
+
+    @client.post_json!(url, test: "123")
+    assert_requested(:post, url, headers: GdsApi::JsonClient.default_request_with_json_body_headers)
+
+    @client.put_json!(url, test: "123")
+    assert_requested(:put, url, headers: GdsApi::JsonClient.default_request_with_json_body_headers)
   end
 end

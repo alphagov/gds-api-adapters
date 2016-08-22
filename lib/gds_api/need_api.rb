@@ -42,7 +42,8 @@ class GdsApi::NeedApi < GdsApi::Base
 
   def reopen(need_id, author)
     # author params: { "author" => { ... } }"
-    delete_json!("#{endpoint}/needs/#{CGI.escape(need_id.to_s)}/closed", author)
+    # NB: This should really be a POST
+    delete_json_with_params!("#{endpoint}/needs/#{CGI.escape(need_id.to_s)}/closed", author)
   end
 
   def create_note(note)

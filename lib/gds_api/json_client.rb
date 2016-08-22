@@ -54,10 +54,15 @@ module GdsApi
     def self.default_request_headers
       {
         'Accept' => 'application/json',
-        'Content-Type' => 'application/json',
         # GOVUK_APP_NAME is set for all apps by Puppet
         'User-Agent' => "gds-api-adapters/#{GdsApi::VERSION} (#{ENV["GOVUK_APP_NAME"]})"
       }
+    end
+
+    def self.default_request_with_json_body_headers
+      self.default_request_headers.merge(
+        'Content-Type' => 'application/json',
+      )
     end
 
     DEFAULT_TIMEOUT_IN_SECONDS = 4
@@ -132,7 +137,19 @@ module GdsApi
       do_json_request(:patch, url, params, additional_headers)
     end
 
-    def delete_json!(url, params = nil, additional_headers = {})
+    def delete_json!(url, additional_headers = {})
+      do_json_request(:delete, url, nil, additional_headers)
+    end
+
+    def delete_json_with_params!(url, params, additional_headers = {})
+      warn <<-doc
+        DEPRECATION NOTICE: Delete requests should not include parameters.
+
+        Do not use this method as the ability to do this will be removed.
+
+        Called from: #{caller[2]}
+      doc
+
       do_json_request(:delete, url, params, additional_headers)
     end
 
@@ -209,10 +226,12 @@ module GdsApi
       )
     end
 
-    def with_headers(method_params, headers)
-      headers = headers.merge(GdsApi::GovukHeaders.headers)
+    def with_headers(method_params, default_headers, additional_headers)
       method_params.merge(
-        headers: method_params[:headers].merge(headers)
+        headers: default_headers
+          .merge(method_params[:headers] || {})
+          .merge(GdsApi::GovukHeaders.headers)
+          .merge(additional_headers)
       )
     end
 
@@ -270,12 +289,19 @@ module GdsApi
       method_params = {
         method: method,
         url: url,
-        headers: self.class.default_request_headers
       }
+
+      case method
+      when :get, :delete
+        default_headers = self.class.default_request_headers
+      else
+        default_headers = self.class.default_request_with_json_body_headers
+      end
+
       method_params[:payload] = params
-      method_params = with_auth_options(method_params)
       method_params = with_timeout(method_params)
-      method_params = with_headers(method_params, additional_headers)
+      method_params = with_headers(method_params, default_headers, additional_headers)
+      method_params = with_auth_options(method_params)
       if URI.parse(url).is_a? URI::HTTPS
         method_params = with_ssl_options(method_params)
       end
