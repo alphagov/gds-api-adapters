@@ -4,9 +4,7 @@ require 'rack/utils'
 module GdsApi
   class Rummager < Base
 
-    # Unified search
-    #
-    # Perform a search
+    # Perform a search.
     #
     # @param query [Hash] A valid search query. See Rummager documentation for options.
     #
@@ -16,7 +14,7 @@ module GdsApi
       get_json!(request_url)
     end
 
-    # Advanced search
+    # Advanced search.
     #
     # @deprecated Only in use by Whitehall. Use the `unified_search` method.
     def advanced_search(args)
@@ -25,9 +23,12 @@ module GdsApi
       get_json!(request_path)
     end
 
-    # Add a document
+    # Add a document to the search index.
     #
-    # Adds a document to the index
+    # @param type [String] The rummager/elasticsearch document type.
+    # @param id [String] The rummager/elasticsearch id. Typically the same as the `link` field, but this is not strictly enforced.
+    # @param document [Hash] The document to add. Must match the rummager schema matchin the `type` parameter and contain a `link` field.
+    # @return [GdsApi::Response] A status code of 202 indicates the document has been successfully queued.
     #
     # @see https://github.com/alphagov/rummager/blob/master/docs/documents.md
     def add_document(type, id, document)
@@ -40,9 +41,11 @@ module GdsApi
       )
     end
 
-    # Deletes a content-document from the index. Content documents are pages
-    # on GOV.UK returned by search index. They don't include best bets and other
-    # "meta" documents that are stored in Rummager.
+    # Delete a content-document from the index by base path.
+    #
+    # Content documents are pages on GOV.UK that have a base path and are
+    # returned in searches. This excludes best bets, recommended-links,
+    # and contacts, which may be deleted with `delete_document`.
     #
     # @param base_path Base path of the page on GOV.UK.
     # @see https://github.com/alphagov/rummager/blob/master/docs/content-api.md
@@ -51,8 +54,11 @@ module GdsApi
       delete_json!(request_url)
     end
 
-    # Retrieves a content-document from the index. Content documents are pages
-    # on GOV.UK returned by search index.
+    # Retrieve a content-document from the index.
+    #
+    # Content documents are pages on GOV.UK that have a base path and are
+    # returned in searches. This excludes best bets, recommended-links,
+    # and contacts.
     #
     # @param base_path [String] Base path of the page on GOV.UK.
     # @see https://github.com/alphagov/rummager/blob/master/docs/content-api.md
@@ -61,13 +67,12 @@ module GdsApi
       get_json!(request_url)
     end
 
-    # delete_document(type, id) (DEPRECATED)
+    # Delete a non-content document from the search index.
     #
-    # Delete any document from the search index. Unlike `delete_content!` this
-    # needs a type, but can be used to delete non-content documents from the
-    # index.
+    # For example, best bets, recommended links, or contacts.
     #
-    # @deprecated Use `delete_content!`
+    # @param type [String] The rummager/elasticsearch document type.
+    # @param id [String] The rummager/elasticsearch id. Typically the same as the `link` field.
     def delete_document(type, id)
       delete_json!(
         "#{documents_url}/#{id}",
