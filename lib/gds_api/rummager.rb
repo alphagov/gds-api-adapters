@@ -6,6 +6,7 @@ module GdsApi
 
     # Perform a search.
     #
+    # @deprecated Alias for `#search`.
     # @param query [Hash] A valid search query. See Rummager documentation for options.
     #
     # @see https://github.com/alphagov/rummager/blob/master/docs/unified-search-api.md
@@ -14,9 +15,19 @@ module GdsApi
       get_json!(request_url)
     end
 
+    # Perform a search.
+    #
+    # @param query [Hash] A valid search query. See Rummager documentation for options.
+    #
+    # @see https://github.com/alphagov/rummager/blob/master/docs/unified-search-api.md
+    def search(args)
+      request_url = "#{base_url}/search.json?#{Rack::Utils.build_nested_query(args)}"
+      get_json!(request_url)
+    end
+
     # Advanced search.
     #
-    # @deprecated Only in use by Whitehall. Use the `unified_search` method.
+    # @deprecated Only in use by Whitehall. Use the `#search` method.
     def advanced_search(args)
       raise ArgumentError.new("Args cannot be blank") if args.nil? || args.empty?
       request_path = "#{base_url}/advanced_search?#{Rack::Utils.build_nested_query(args)}"
