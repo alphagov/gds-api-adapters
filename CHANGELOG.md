@@ -1,3 +1,18 @@
+# 34.1.0
+
+* Deprecate `GdsApi::Rummager#unified_search`. The `/unified_search` endpoint
+  has been deprecated in rummager in favor of `/search`.
+
+# 34.0.0
+
+* De-deprecate `delete_document` helpers, because the endpoint is still useful.
+* Allow `/document/` helpers to take an optional index parameter, mirroring the API.
+* Allow all assert methods to pass through additional webmock options
+* Change `stub_any_rummager_post` to behave the same as
+  `stub_any_rummager_post_with_queueing_enabled`: rummager always returns 202 and
+  so should our stubs.
+* Deprecate `stub_any_rummager_post_with_queueing_enabled` as it is now redundant.
+
 # 33.2.2
 
 * Fix JsonClient not explicitly requiring the config
