@@ -94,27 +94,27 @@ module GdsApi
       end
 
       def rummager_has_no_policies_for_any_type
-        stub_request(:get, %r{/unified_search.json})
+        stub_request(:get, %r{/search.json})
           .to_return(body: no_search_results_found)
       end
 
       def rummager_has_policies_for_every_type(options = {})
         if count = options[:count]
-          stub_request(:get, %r{/unified_search.json.*count=#{count}.*})
+          stub_request(:get, %r{/search.json.*count=#{count}.*})
             .to_return(body: first_n_results(new_policies_results, n: count))
         else
-          stub_request(:get, %r{/unified_search.json})
+          stub_request(:get, %r{/search.json})
             .to_return(body: new_policies_results)
         end
       end
 
     private
       def stub_request_for(result_set)
-        stub_request(:get, /example.com\/unified_search/).to_return(body: result_set)
+        stub_request(:get, /example.com\/search/).to_return(body: result_set)
       end
 
       def run_example_query
-        client.unified_search(example_query)
+        client.search(example_query)
       end
 
       def search_results_found

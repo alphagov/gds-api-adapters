@@ -7,7 +7,7 @@ Example usage:
 ```ruby
 require 'gds_api/rummager'
 rummager = GdsApi::Rummager.new(Plek.new.find('rummager'))
-results = rummager.unified_search(q: "taxes")
+results = rummager.search(q: "taxes")
 ```
 
 Example adapters for frequently used applications:
