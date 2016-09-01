@@ -41,6 +41,28 @@ describe GdsApi::ContentStore do
         config.always_raise_for_not_found = false
       end
     end
+
+    it "returns nil if the item is gone" do
+      content_store_has_gone_item("/it-is-gone")
+
+      assert_nil @api.content_item("/it-is-gone")
+    end
+
+    it "raises if the item is gone and `always_raise_for_not_found` enabled" do
+      GdsApi.configure do |config|
+        config.always_raise_for_not_found = true
+      end
+
+      content_store_has_gone_item("/it-is-gone")
+
+      assert_raises GdsApi::HTTPGone do
+        @api.content_item("/it-is-gone")
+      end
+
+      GdsApi.configure do |config|
+        config.always_raise_for_not_found = false
+      end
+    end
   end
 
   describe "#content_item!" do

@@ -18,6 +18,19 @@ module GdsApi
         }
       end
 
+      def gone_content_item_for_base_path(base_path)
+        {
+          "title" => nil,
+          "description" => nil,
+          "format" => "gone",
+          "schema_name" => "gone",
+          "public_updated_at" => nil,
+          "base_path" => base_path,
+          "withdrawn_notice" => {},
+          "details" => {}
+        }
+      end
+
       def titleize_base_path(base_path, options = {})
         if options[:title_case]
           base_path.gsub("-", " ").gsub(/\b./) {|m| m.upcase }
