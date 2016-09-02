@@ -343,25 +343,6 @@ describe GdsApi::ContentApi do
       assert_equal "#{@base_api_url}/tags/genres/indie%2Findie-rock.json", first_section.id
     end
 
-    it "returns artefacts given a section" do
-      content_api_has_artefacts_in_a_section("crime-and-justice", ["complain-about-a-claims-company"])
-      response = @api.with_tag("crime-and-justice")
-
-      # Old dictionary-style access
-      subsection = response["results"][0]
-      assert_equal "Complain about a claims company", subsection["title"]
-
-      # Attribute access
-      assert_equal "Complain about a claims company", response.first.title
-    end
-
-    it "returns artefacts given a tag and tag type" do
-      content_api_has_artefacts_with_a_tag("genre", "reggae", ["three-little-birds"])
-      response = @api.with_tag("reggae", "genre")
-
-      assert_equal "Three little birds", response.first.title
-    end
-
     it "returns tag information for a section" do
       content_api_has_section("crime-and-justice")
       response = @api.tag("crime-and-justice", "section")
@@ -374,58 +355,6 @@ describe GdsApi::ContentApi do
       response = @api.tag("reggae", "genre")
 
       assert_equal "Reggae", response['title']
-    end
-
-    it "returns artefacts in curated list order for a section" do
-      content_api_has_artefacts_in_a_section("crime-and-justice", ["complain-about-a-claims-company"])
-      response = @api.curated_list("crime-and-justice")
-
-      assert_equal "Complain about a claims company", response.first.title
-    end
-
-    it "returns artefacts in curated list order for a tag and tag type" do
-      content_api_has_artefacts_with_a_tag("genre", "reggae", ["buffalo-soldier"])
-      response = @api.curated_list("reggae", "genre")
-
-      assert_equal "Buffalo soldier", response.first.title
-    end
-
-    it "returns artefacts for a tag in a given sort order" do
-      content_api_has_artefacts_in_a_section("crime-and-justice", ["complain-about-a-claims-company"])
-      response = @api.sorted_by("crime-and-justice", "alphabetical")
-
-      assert_equal "Complain about a claims company", response.first.title
-    end
-
-    it "returns artefacts in a given sort order for a tag and tag type" do
-      content_api_has_sorted_artefacts_with_a_tag("genre", "reggae", "foo", ["is-this-love"])
-      response = @api.sorted_by("reggae", "foo", "genre")
-
-      assert_equal "Is this love", response.first.title
-    end
-
-    it "returns artefacts in groups for a tag and tag type" do
-      content_api_has_grouped_artefacts_with_a_tag(
-        "genre",
-        "reggae",
-        "format",
-        {
-          "Tracks" => ["is-this-love", "three-little-birds"],
-          "Albums" => ["kaya", "exodus"],
-        }
-      )
-      response = @api.with_tag("reggae", "genre", group_by: "format")
-
-      # expect two groups to be returned
-      assert_equal 2, response.results.size
-
-      assert_equal 2, response.results[0].items.size
-      assert_equal "Is this love", response.results[0].items[0].title
-      assert_equal "Three little birds", response.results[0].items[1].title
-
-      assert_equal 2, response.results[1].items.size
-      assert_equal "Kaya", response.results[1].items[0].title
-      assert_equal "Exodus", response.results[1].items[1].title
     end
 
     it "permits cache busting" do

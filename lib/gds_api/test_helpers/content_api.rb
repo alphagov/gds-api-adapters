@@ -29,10 +29,6 @@ module GdsApi
         content_api_has_child_tags("section", parent_slug_or_hash, subsection_slugs)
       end
 
-      def content_api_has_artefacts_in_a_section(slug, artefact_slugs=nil)
-        content_api_has_artefacts_with_a_tag("section", slug, artefact_slugs)
-      end
-
       def artefact_for_slug_in_a_section(slug, section_slug)
         artefact_for_slug_with_a_tag("section", slug, section_slug)
       end
@@ -40,7 +36,6 @@ module GdsApi
       def artefact_for_slug_in_a_subsection(slug, subsection_slug)
         artefact_for_slug_with_a_child_tag("section", slug, subsection_slug)
       end
-
 
       # Takes an array of slugs, or hashes with section details (including a slug).
       # Will stub out content_api calls for tags of type section to return these sections
@@ -152,106 +147,6 @@ module GdsApi
 
         url = "#{CONTENT_API_ENDPOINT}/tags.json?parent_id=#{CGI.escape(parent_tag[:slug])}&sort=#{sort_order}&type=#{tag_type}"
         stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
-      end
-
-      def content_api_has_artefacts_with_a_tag(tag_type, slug, artefact_slugs=[], options={tag: {}, artefact: {}})
-        if options.has_key?(:draft)
-          puts "Passing a key of :draft outside of the 'tag' options hash is being deprecated. Please use tag: { draft: bool }"
-        end
-
-        draft = options[:draft] || (options[:tag] && options[:tag][:draft])
-
-        body = plural_response_base.merge(
-          "results" => artefact_slugs.map do |artefact_slug|
-            artefact_for_slug(artefact_slug, options.fetch(:artefact, {}))
-          end
-        )
-
-        endpoint = "#{CONTENT_API_ENDPOINT}/with_tag.json"
-        resp = { status: 200, body: body.to_json, headers: {} }
-
-        unless draft
-          stub_request(:get, endpoint)
-            .with(:query => { tag_type => slug })
-            .to_return(resp)
-
-          if tag_type == "section"
-            stub_request(:get, endpoint)
-              .with(:query => { "tag" => slug })
-              .to_return(resp)
-          end
-        end
-
-        stub_request(:get, endpoint)
-          .with(:query => { tag_type => slug, "draft" => "true" })
-          .to_return(resp)
-
-        if tag_type == "section"
-          stub_request(:get, endpoint)
-            .with(:query => { "tag" => slug, "draft" => "true" })
-            .to_return(resp)
-        end
-
-        sort_orders = ["alphabetical", "curated"]
-        sort_orders.each do |order|
-          unless draft
-            stub_request(:get, endpoint)
-              .with(:query => { tag_type => slug, "sort" => order })
-              .to_return(resp)
-
-            if tag_type == "section"
-              stub_request(:get, endpoint)
-                .with(:query => { "tag" => slug, "sort" => order })
-                .to_return(resp)
-            end
-          end
-
-          stub_request(:get, endpoint)
-            .with(:query => { tag_type => slug, "sort" => order, "draft" => "true" })
-            .to_return(resp)
-
-          if tag_type == "section"
-            stub_request(:get, endpoint)
-              .with(:query => { "tag" => slug, "sort" => order, "draft" => "true" })
-              .to_return(resp)
-          end
-        end
-      end
-
-      def content_api_has_artefacts_with_a_draft_tag(tag_type, slug, artefact_slugs=[])
-        content_api_has_artefacts_with_a_tag(tag_type, slug, artefact_slugs, tag: {draft: true})
-      end
-
-      def content_api_has_sorted_artefacts_with_a_tag(tag_type, slug, sort_order, artefact_slugs=[])
-        body = plural_response_base.merge(
-          "results" => artefact_slugs.map do |artefact_slug|
-            artefact_for_slug(artefact_slug)
-          end
-        )
-
-        endpoint = "#{CONTENT_API_ENDPOINT}/with_tag.json"
-        stub_request(:get, endpoint)
-          .with(:query => { tag_type => slug, "sort" => sort_order })
-          .to_return(status: 200, body: body.to_json, headers: {})
-      end
-
-      def content_api_has_grouped_artefacts_with_a_tag(tag_type, tag_id, group_by, grouped_artefact_slugs={})
-        body = plural_response_base.merge(
-          "grouped_results" => grouped_artefact_slugs.map {|name,artefact_slugs|
-            {
-              "name" => name,
-              "formats" => [name.downcase],
-              "items" => artefact_slugs.map {|artefact_slug|
-                artefact_for_slug(artefact_slug)
-              }
-            }
-          }
-        )
-
-        endpoint = "#{CONTENT_API_ENDPOINT}/with_tag.json"
-        stub_request(:get, endpoint)
-          .with(:query => { tag_type => tag_id, "group_by" => group_by })
-          .to_return(status: 200, body: body.to_json, headers: {})
       end
 
       def content_api_has_an_artefact(slug, body = artefact_for_slug(slug))
