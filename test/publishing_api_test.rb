@@ -8,7 +8,7 @@ describe GdsApi::PublishingApi do
 
   before do
     @base_api_url = Plek.current.find("publishing-api")
-    @api_client = GdsApi::PublishingApi.new('http://localhost:3093')
+    @api_client = GdsApi::PublishingApi.new(publishing_api_host)
   end
 
   describe "#put_content_item" do

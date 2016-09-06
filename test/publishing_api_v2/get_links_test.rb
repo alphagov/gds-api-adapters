@@ -6,7 +6,7 @@ describe GdsApi::PublishingApiV2 do
   include PactTest
 
   before do
-    @api_client = GdsApi::PublishingApiV2.new('http://localhost:3093')
+    @api_client = GdsApi::PublishingApiV2.new(publishing_api_host)
     @content_id = "bed722e6-db68-43e5-9079-063f623335a7"
   end
 
