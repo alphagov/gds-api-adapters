@@ -25,6 +25,47 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
 
       assert_equal([{ "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" }], response)
     end
+
+    it 'allows params' do
+      publishing_api_has_content(
+        [{
+          "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504"
+        }],
+        document_type: 'document_collection',
+        query: 'query',
+      )
+
+      response = publishing_api.get_content_items(
+        document_type: 'document_collection',
+        query: 'query'
+      )['results']
+
+      assert_equal(
+        [{ "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" }],
+        response
+      )
+    end
+
+    it 'returns pagination results' do
+      publishing_api_has_content(
+        [
+          { "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" },
+          { "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd505" },
+          { "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd506" },
+          { "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd507" },
+        ],
+        {
+          page: 1,
+          per_page: 2
+        }
+      )
+
+      response = publishing_api.get_content_items({ page: 1, per_page: 2 })
+
+      assert_equal(response['total'], 4)
+      assert_equal(response['pages'], 2)
+      assert_equal(response['current_page'], 1)
+    end
   end
 
   describe "#publishing_api_has_expanded_links" do

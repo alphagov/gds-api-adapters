@@ -169,7 +169,20 @@ module GdsApi
       #)
       def publishing_api_has_content(items, params = {})
         url = PUBLISHING_API_V2_ENDPOINT + "/content"
-        stub_request(:get, url).with(:query => params).to_return(status: 200, body: { results: items }.to_json, headers: {})
+        per_page = params.fetch(:per_page, 50)
+        page = params.fetch(:page, 1)
+        number_of_pages = items.count < per_page ? 1 : items.count / per_page
+
+        body = {
+          results: items,
+          total: items.count,
+          pages: number_of_pages,
+          current_page: page
+        }
+
+        stub_request(:get, url)
+          .with(query: params)
+          .to_return(status: 200, body: body.to_json, headers: {})
       end
 
       # This method has been refactored into publishing_api_has_content (above)
