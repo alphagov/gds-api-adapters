@@ -1,3 +1,10 @@
+# 35.0.1
+
+* Fix issue where Pact would hit the Publishing API in development if the
+  service was running on the same port `3093`;
+* Return pagination information from `publishing_api_has_content` in order to
+  reflect what would happen in a real request.
+
 # 35.0.0
 
 * Remove methods for `with_tag` endpoint for content api. These methods are not
@@ -43,7 +50,7 @@
 # 32.3.0
 
 * Add option to always raise for 404 and 410.
-* Add option to make `GdsApi::Response` just behave like a hash, not an OpenStruct  
+* Add option to make `GdsApi::Response` just behave like a hash, not an OpenStruct
 * Add local links manager local authority endpoint
 
 # 32.2.1
