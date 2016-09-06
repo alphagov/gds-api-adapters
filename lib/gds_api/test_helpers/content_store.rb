@@ -43,6 +43,41 @@ module GdsApi
         stub_request(:get, url).to_return(status: 404, headers: {})
       end
 
+      # Content store has gone item
+      #
+      # Stubs a content item in the content store to respond with 410 HTTP Status Code and response body with 'format' set to 'gone'.
+      #
+      # @param base_path [String]
+      # @param body [Hash]
+      # @param options [Hash]
+      # @option options [String] draft Will point to the draft content store if set to true
+      #
+      # @example
+      #
+      #   content_store.content_store_has_gone_item('/sample-slug')
+      #
+      #   # Will return HTTP Status Code 410 and the following response body:
+      #   {
+      #     "title" => nil,
+      #     "description" => nil,
+      #     "format" => "gone",
+      #     "schema_name" => "gone",
+      #     "public_updated_at" => nil,
+      #     "base_path" => "/sample-slug",
+      #     "withdrawn_notice" => {},
+      #     "details" => {}
+      #   }
+      def content_store_has_gone_item(base_path, body = gone_content_item_for_base_path(base_path), options = {})
+        url = content_store_endpoint(options[:draft]) + "/content" + base_path
+        body = body.to_json unless body.is_a?(String)
+
+        stub_request(:get, url).to_return(
+          status: 410,
+          body: body,
+          headers: {}
+        )
+      end
+
       def content_store_isnt_available
         stub_request(:any, /#{content_store_endpoint}\/.*/).to_return(:status => 503)
       end
