@@ -1,3 +1,9 @@
+# 35.0.0
+
+* Remove methods for `with_tag` endpoint for content api. These methods are not
+  used by any client. The endpoint is scheduled to be removed soon.
+* Add test helper for Gone items in content store
+
 # 34.1.0
 
 * Deprecate `GdsApi::Rummager#unified_search`. The `/unified_search` endpoint
