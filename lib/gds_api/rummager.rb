@@ -6,17 +6,6 @@ module GdsApi
 
     # Perform a search.
     #
-    # @deprecated Alias for `#search`.
-    # @param query [Hash] A valid search query. See Rummager documentation for options.
-    #
-    # @see https://github.com/alphagov/rummager/blob/master/docs/unified-search-api.md
-    def unified_search(args)
-      request_url = "#{base_url}/unified_search.json?#{Rack::Utils.build_nested_query(args)}"
-      get_json!(request_url)
-    end
-
-    # Perform a search.
-    #
     # @param query [Hash] A valid search query. See Rummager documentation for options.
     #
     # @see https://github.com/alphagov/rummager/blob/master/docs/unified-search-api.md
