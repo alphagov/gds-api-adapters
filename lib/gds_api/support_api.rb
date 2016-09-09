@@ -47,4 +47,50 @@ class GdsApi::SupportApi < GdsApi::Base
   def feedback_export_request(id)
     get_json!("#{endpoint}/anonymous-feedback/export-requests/#{id}")
   end
+
+  # Fetch a list of problem reports.
+  #
+  # Makes a +GET+ request.
+  #
+  # If no options are supplied, the first page of unreviewed feedback is returned.
+  #
+  # The results are ordered date descending.
+  #
+  # # ==== Options [+Hash+]
+  #
+  # * +:from_date+ - from date for list of reports.
+  # * +:to_date+ - to date for list of reports.
+  # * +:page+ - page number for reports.
+  # * +:include_reviewed+ - if true, includes reviewed reports in the list.
+  #
+  # # @example
+  #
+  #  support_api.problem_reports({ from_date: '2016-12-12', to_date: '2016-12-13', page: 1, include_reviewed: true }).to_h
+  #
+  #  #=> {
+  #    results: [
+  #      {
+  #        id: 1,
+  #        type: "problem-report",
+  #        what_wrong: "Yeti",
+  #        what_doing: "Skiing",
+  #        url: "http://www.dev.gov.uk/skiing",
+  #        referrer: "https://www.gov.uk/browse",
+  #        user_agent: "Safari",
+  #        path: "/skiing",
+  #        marked_as_spam: false,
+  #        reviewed: true,
+  #        created_at: "2015-01-01T16:00:00.000Z"
+  #      },
+  #      ...
+  #    ]
+  #    total_count: 1000,
+  #    current_page: 1,
+  #    pages: 50,
+  #    page_size: 50
+  #  }
+  def problem_reports(options = {})
+    uri = "#{endpoint}/anonymous-feedback/problem-reports" + query_string(options)
+    get_json!(uri)
+  end
 end

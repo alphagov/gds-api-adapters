@@ -44,6 +44,12 @@ module GdsApi
         get_stub.to_return(response)
       end
 
+      def stub_support_problem_reports(params, response_body = {})
+        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/problem-reports").
+          with(query: params).
+          to_return(status: 200, body: response_body.to_json)
+      end
+
       def support_api_isnt_available
         stub_request(:post, /#{SUPPORT_API_ENDPOINT}\/.*/).to_return(:status => 503)
       end

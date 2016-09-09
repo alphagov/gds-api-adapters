@@ -71,7 +71,7 @@ describe GdsApi::SupportApi do
         page: 55,
       )
 
-      result = @api.anonymous_feedback(
+      @api.anonymous_feedback(
         path_prefix: "/vat-rates",
         page: 55,
       )
@@ -112,7 +112,7 @@ describe GdsApi::SupportApi do
       assert_requested(stub_post)
     end
   end
-  
+
   describe "POST /anonymous-feedback/global-export-requests" do
     it "makes a POST request to the support API" do
       params = {from_date: "1 June 2016", to_date: "8 June 2016", notification_email: "foo@example.com"}
@@ -148,6 +148,17 @@ describe GdsApi::SupportApi do
       stub_get = stub_organisation("foo")
 
       @api.organisation("foo")
+
+      assert_requested(stub_get)
+    end
+  end
+
+  describe "GET /anonymous-feedback/problem-reports" do
+    it "fetches a list of problem reports" do
+      params = { from_date: '2016-12-12', to_date: '2016-12-13', page: 1, exclude_reviewed: true }
+      stub_get = stub_support_problem_reports(params)
+
+      @api.problem_reports(params)
 
       assert_requested(stub_get)
     end
