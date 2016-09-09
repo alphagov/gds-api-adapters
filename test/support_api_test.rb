@@ -163,4 +163,16 @@ describe GdsApi::SupportApi do
       assert_requested(stub_get)
     end
   end
+
+  describe "POST /anonymous-feedback/problem-reports/mark-reviewed-for-spam" do
+    it "makes a PUT request to the support API" do
+      params = { "1" => true, "2" => true }
+
+      stub_post = stub_support_mark_reviewed_for_spam(params)
+
+      @api.mark_reviewed_for_spam(params)
+
+      assert_requested(stub_post)
+    end
+  end
 end

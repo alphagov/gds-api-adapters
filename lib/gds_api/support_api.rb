@@ -93,4 +93,29 @@ class GdsApi::SupportApi < GdsApi::Base
     uri = "#{endpoint}/anonymous-feedback/problem-reports" + query_string(options)
     get_json!(uri)
   end
+
+  # Update multiple problem reports as reviewed for spam.
+  #
+  # Makes a +PUT+ request.
+  #
+  # @param request_details [Hash] Containing keys that match IDs of Problem
+  #                               Reports mapped to a boolean value - true if
+  #                               that report is to be marked as spam, or false otherwise.
+  #
+  # # @example
+  #
+  #  support_api.mark_reviewed_for_spam({ "1" => false, "2" => true }).to_h
+  #
+  # #=> { "success" => true } (status: 200)
+  #
+  # # @example
+  #
+  # Where there is no problem report with ID of 1.
+  #
+  #  support_api.mark_reviewed_for_spam({ "1" => true }).to_h
+  #
+  # #=> { "success" =>  false} (status: 400)
+  def mark_reviewed_for_spam(request_details)
+    put_json!("#{endpoint}/anonymous-feedback/problem-reports/mark-reviewed-for-spam", { reviewed_problem_report_ids: request_details })
+  end
 end
