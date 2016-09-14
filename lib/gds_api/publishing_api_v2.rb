@@ -156,9 +156,27 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     post_json!(discard_url(content_id), params)
   end
 
-  # FIXME: Add documentation
+  # Get the link set for the given content_id.
   #
-  # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#get-v2linkscontent_id
+  # Given a Content ID, it fetchs the existing link set and their version.
+  #
+  # @param content_id [String]
+  #
+  # @return [GdsApi::Response] A response containing `links` and `version`.
+  #
+  # @example
+  #
+  #   publishing_api.get_links("a-content-id")
+  #   # => {
+  #     "content_id" => "a-content-id",
+  #     "links" => [
+  #       "organisation" => "organisation-content-id",
+  #       "document_collection" => "document-collection-content-id"
+  #     ],
+  #     "version" => 17
+  #   }
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2linkscontent_id
   def get_links(content_id)
     get_json(links_url(content_id))
   end
