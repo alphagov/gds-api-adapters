@@ -8,7 +8,7 @@ module GdsApi
     #
     # @param query [Hash] A valid search query. See Rummager documentation for options.
     #
-    # @see https://github.com/alphagov/rummager/blob/master/docs/unified-search-api.md
+    # @see https://github.com/alphagov/rummager/blob/master/docs/search-api.md
     def search(args)
       request_url = "#{base_url}/search.json?#{Rack::Utils.build_nested_query(args)}"
       get_json!(request_url)

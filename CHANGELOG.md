@@ -1,3 +1,10 @@
+# 36.0.0
+
+* Remove `GdsApi::Rummager#unified_search`. The `/unified_search` endpoint
+  has been removed in rummager in favor of `/search`.
+  **This is a breaking change**, which means applications currently using
+  `#unified_search` need to migrate to `#search`.
+
 # 35.0.1
 
 * Fix issue where Pact would hit the Publishing API in development if the
