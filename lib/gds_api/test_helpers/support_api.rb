@@ -102,6 +102,10 @@ module GdsApi
         stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/export-requests/#{id}").
           to_return(status: 200, body: response_body.to_json)
       end
+
+      def stub_any_support_api_call
+        stub_request(:any, %r{\A#{SUPPORT_API_ENDPOINT}})
+      end
     end
   end
 end
