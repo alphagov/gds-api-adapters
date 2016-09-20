@@ -22,6 +22,14 @@ describe GdsApi::AssetManager do
     }
   }
 
+  before do
+    GdsApi.config.always_raise_for_not_found = true
+  end
+
+  after do
+    GdsApi.config.always_raise_for_not_found = false
+  end
+
   it "creates an asset with a file" do
     req = stub_request(:post, "#{base_api_url}/assets").
       with(:body => %r{Content\-Disposition: form\-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent\-Type: text/plain}).
@@ -33,10 +41,12 @@ describe GdsApi::AssetManager do
     assert_requested(req)
   end
 
-  it "returns nil when an asset does not exist" do
+  it "returns not found when an asset does not exist" do
     asset_manager_does_not_have_an_asset("not-really-here")
 
-    assert_nil api.asset("not-really-here")
+    assert_raises GdsApi::HTTPNotFound do
+      api.asset("not-really-here")
+    end
   end
 
   describe "an asset exists" do
