@@ -214,5 +214,35 @@ describe GdsApi::PublishingApi do
       end
       assert_equal "Unprocessable", error.error_details["error"]["message"]
     end
+
+    it "returns 200 if an existing path was overridden" do
+      base_path = "/test-item"
+      payload = {
+        publishing_app: "whitehall",
+        override_existing: "true",
+      }
+
+      publishing_api
+        .given("/test-item has been reserved by the Publisher application")
+        .upon_receiving("a request to change publishing app with override_existing set")
+        .with(
+          method: :put,
+          path: "/paths#{base_path}",
+          body: payload,
+          headers: {
+            "Content-Type" => "application/json"
+          },
+        )
+        .will_respond_with(
+          status: 200,
+          body: {},
+          headers: {
+            "Content-Type" => "application/json; charset=utf-8"
+          }
+        )
+
+      response = @api_client.put_path(base_path, payload)
+      assert_equal 200, response.code
+    end
   end
 end
