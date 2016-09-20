@@ -69,4 +69,14 @@ describe GdsApi::AssetManager do
       assert_equal "http://fooey.gov.uk/media/photo.jpg", asset.file_url
     end
   end
+
+  it "deletes an asset for the given id" do
+    req = stub_request(:delete, "#{base_api_url}/assets/#{asset_id}").
+      to_return(:body => JSON.dump(asset_manager_response), :status => 200)
+
+    response = api.delete_asset(asset_id)
+
+    assert_equal "#{base_api_url}/assets/#{asset_id}", response.asset.id
+    assert_requested(req)
+  end
 end
