@@ -26,7 +26,11 @@ module GdsApi
       # support group_by results from the content api by checking if there is a
       # grouped_results key present first. if it's not, then fallback to the
       # results key
-      to_ostruct.grouped_results || to_ostruct.results
+      if GdsApi.config.hash_response_for_requests
+        to_hash["grouped_results"] || to_hash["results"]
+      else
+        to_ostruct.grouped_results || to_ostruct.results
+      end
     end
 
     def has_next_page?
