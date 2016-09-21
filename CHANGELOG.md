@@ -1,3 +1,7 @@
+# 36.0.1
+
+* Add option to return results as a hash in `GdsApi::ListResponse`.
+
 # 36.0.0
 
 * Remove `GdsApi::Rummager#unified_search`. The `/unified_search` endpoint
