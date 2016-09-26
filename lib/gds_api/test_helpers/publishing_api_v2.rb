@@ -230,12 +230,93 @@ module GdsApi
         stub_request(:get, url).to_return(status: 404, body: resource_not_found(content_id, "content item").to_json, headers: {})
       end
 
+      # Stubs a request to links endpoint
+      #
+      # @param [Hash] links the structure of the links hash
+      #
+      # @example
+      #
+      #  publishing_api_has_links(
+      #    {
+      #      "content_id" => "64aadc14-9bca-40d9-abb6-4f21f9792a05",
+      #      "links" => {
+      #        "mainstream_browse_pages" => ["df2e7a3e-2078-45de-a75a-fd37d027427e"],
+      #        "parent" => ["df2e7a3e-2078-45de-a75a-fd37d027427e"],
+      #        "organisations" => ["569a9ee5-c195-4b7f-b9dc-edc17a09113f", "5c54ae52-341b-499e-a6dd-67f04633b8cf"]
+      #      },
+      #      "version" => 6
+      #    }
+      #  )
+      #
+      # Services.publishing_api.get_links("64aadc14-9bca-40d9-abb6-4f21f9792a05")
+      # => {
+      #      "content_id" => "64aadc14-9bca-40d9-abb6-4f21f9792a05",
+      #      "links" => {
+      #        "mainstream_browse_pages" => ["df2e7a3e-2078-45de-a75a-fd37d027427e"],
+      #        "parent" => ["df2e7a3e-2078-45de-a75a-fd37d027427e"],
+      #        "organisations" => ["569a9ee5-c195-4b7f-b9dc-edc17a09113f", "5c54ae52-341b-499e-a6dd-67f04633b8cf"]
+      #      },
+      #      "version" => 6
+      #    }
       def publishing_api_has_links(links)
         links = links.with_indifferent_access
         url = PUBLISHING_API_V2_ENDPOINT + "/links/" + links[:content_id]
         stub_request(:get, url).to_return(status: 200, body: links.to_json, headers: {})
       end
 
+      # Stubs a request to expanded links endpoint
+      #
+      # @param [Hash] links the structure of the links hash
+      #
+      # @example
+      #   publishing_api_has_expanded_links(
+      #     {
+      #       "content_id" => "64aadc14-9bca-40d9-abb4-4f21f9792a05",
+      #       "expanded_links" => {
+      #         "mainstream_browse_pages" => [
+      #           {
+      #             "content_id" => "df2e7a3e-2078-45de-a76a-fd37d027427a",
+      #             "base_path" => "/a/base/path",
+      #             "document_type" => "mainstream_browse_page",
+      #             "locale" => "en",
+      #             "links" => {},
+      #             ...
+      #           }
+      #         ],
+      #         "parent" => [
+      #           {
+      #             "content_id" => "df2e7a3e-2028-45de-a75a-fd37d027427e",
+      #             "document_type" => "mainstream_browse_page",
+      #             ...
+      #           },
+      #         ]
+      #       }
+      #     }
+      #   )
+      #
+      # Services.publishing_api.expanded_links("64aadc14-9bca-40d9-abb4-4f21f9792a05")
+      # =>  {
+      #       "content_id" => "64aadc14-9bca-40d9-abb4-4f21f9792a05",
+      #       "expanded_links" => {
+      #         "mainstream_browse_pages" => [
+      #           {
+      #             "content_id" => "df2e7a3e-2078-45de-a76a-fd37d027427a",
+      #             "base_path" => "/a/base/path",
+      #             "document_type" => "mainstream_browse_page",
+      #             "locale" => "en",
+      #             "links" => {},
+      #             ...
+      #           }
+      #         ],
+      #         "parent" => [
+      #           {
+      #             "content_id" => "df2e7a3e-2028-45de-a75a-fd37d027427e",
+      #             "document_type" => "mainstream_browse_page",
+      #             ...
+      #           },
+      #         ]
+      #       }
+      #     }
       def publishing_api_has_expanded_links(links)
         url = PUBLISHING_API_V2_ENDPOINT + "/expanded-links/" + links[:content_id]
         stub_request(:get, url).to_return(status: 200, body: links.to_json, headers: {})
