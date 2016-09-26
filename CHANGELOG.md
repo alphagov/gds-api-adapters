@@ -1,3 +1,8 @@
+# 36.1.0
+
+* Add helpers for the support-api for fetching problem reports and
+  for marking problem reports as spam.
+
 # 36.0.1
 
 * Add option to return results as a hash in `GdsApi::ListResponse`.
