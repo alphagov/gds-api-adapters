@@ -44,6 +44,18 @@ module GdsApi
         get_stub.to_return(response)
       end
 
+      def stub_support_problem_reports(params, response_body = {})
+        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/problem-reports").
+          with(query: params).
+          to_return(status: 200, body: response_body.to_json)
+      end
+
+      def stub_support_mark_reviewed_for_spam(request_details = nil, response_body = {})
+        post_stub = stub_http_request(:put, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/problem-reports/mark-reviewed-for-spam")
+        post_stub.with(:body => { reviewed_problem_report_ids: request_details}) unless request_details.nil?
+        post_stub.to_return(status: 200, body: response_body.to_json)
+      end
+
       def support_api_isnt_available
         stub_request(:post, /#{SUPPORT_API_ENDPOINT}\/.*/).to_return(:status => 503)
       end
