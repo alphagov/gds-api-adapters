@@ -141,7 +141,7 @@
 # 30.4.0
 
 * Add publishing API POST /v2/content/:content_id/unpublish endpoint
-  See docs for more info: https://github.com/alphagov/publishing-api/blob/master/doc/publishing-api-syntactic-usage.md#post-v2contentcontent_idunpublish
+  See docs for more info: https://github.com/alphagov/publishing-api/blob/master/doc/api.md#post-v2contentcontent_idunpublish
 
 # 30.3.0
 
