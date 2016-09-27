@@ -1,3 +1,8 @@
+# 36.2.0
+
+* Add delete_asset method, to support the new delete asset functionality now supported by asset manager.
+* Fix issue where rspec style matchers would cause issues, since they do not implement the fetch method.
+
 # 36.1.0
 
 * Add helpers for the support-api for fetching problem reports and
