@@ -4,7 +4,7 @@ require_relative 'base'
 #
 # @see https://github.com/alphagov/publishing-api
 # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-application-examples.md
-# @see https://github.com/alphagov/publishing-api/blob/master/doc/object-model-explanation.md
+# @see https://github.com/alphagov/publishing-api/blob/master/doc/model.md
 class GdsApi::PublishingApiV2 < GdsApi::Base
   # Put a content item
   #
