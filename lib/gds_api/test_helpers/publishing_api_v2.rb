@@ -169,8 +169,13 @@ module GdsApi
       #)
       def publishing_api_has_content(items, params = {})
         url = PUBLISHING_API_V2_ENDPOINT + "/content"
-        per_page = params.fetch(:per_page, 50)
-        page = params.fetch(:page, 1)
+        if params.respond_to? :fetch
+          per_page = params.fetch(:per_page, 50)
+          page = params.fetch(:page, 1)
+        else
+          per_page = 50
+          page = 1
+        end
         number_of_pages = items.count < per_page ? 1 : items.count / per_page
 
         body = {
