@@ -1,11 +1,20 @@
+## TL; DR ##
+
+When you open a Pull Request we expect you to deliver the following:
+
+- Readable code
+- Documented endpoints
+- Changes added to [CHANGELOG.md](CHANGELOG.md)
+
 ## Git workflow ##
 
 - Pull requests must contain a succinct, clear summary of what the user need is driving this feature change.
 - Follow our [Git styleguide](https://github.com/alphagov/styleguides/blob/master/git.md)
 - Make a feature branch
 - Ensure your branch contains logical atomic commits before sending a pull request - follow our [Git styleguide](https://github.com/alphagov/styleguides/blob/master/git.md)
-- Pull requests are automatically integration tested, where applicable using [Travis CI](https://travis-ci.org/), which will report back on whether the tests still pass on your branch
-- You *may* rebase your branch after feedback if it's to include relevant updates from the master branch. We prefer a rebase here to a merge commit as we prefer a clean and straight history on master with discrete merge commits for features
+- Pull requests are automatically integration tested, which will report back on whether the tests still pass on your branch
+- You *may* rebase your branch after feedback if it's to include relevant updates from the master branch.
+- We prefer a rebase here to a merge commit as we prefer a clean and straight history on master with discrete merge commits for features
 
 ## Copy ##
 
@@ -15,6 +24,8 @@
 ## Code ##
 
 - Must be readable with meaningful naming, eg no short hand single character variable names
+- Must be documented, e.g: https://github.com/alphagov/gds-api-adapters/blob/a406cbdb123fc9c418430792f17a476296542e20/lib/gds_api/publishing_api_v2.rb#L110-L123
+- You must add your changes to [CHANGELOG.md](CHANGELOG.md)
 - Follow our [Ruby style guide](https://github.com/alphagov/styleguides/blob/master/ruby.md)
 
 ## Testing ##

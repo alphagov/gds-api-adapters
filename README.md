@@ -140,6 +140,10 @@ To run a Yard server locally to preview documentation, run:
 
     $ bundle exec yard server --reload
 
+### Contribution
+
+See [CONTRIBUTNG.md](CONTRIBUTNG.md).
+
 ## Licence
 
 Released under the MIT Licence, a copy of which can be found in the file
