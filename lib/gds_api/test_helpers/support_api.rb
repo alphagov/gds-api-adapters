@@ -36,6 +36,12 @@ module GdsApi
         post_stub.to_return(:status => 202)
       end
 
+      def stub_create_page_improvement(params)
+        post_stub = stub_http_request(:post, "#{SUPPORT_API_ENDPOINT}/page-improvements")
+        post_stub.with(:body => params)
+        post_stub.to_return(:status => 201)
+      end
+
       def stub_problem_report_daily_totals_for(date, expected_results = nil)
         date_string = date.strftime("%Y-%m-%d")
         get_stub = stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/problem-reports/#{date_string}/totals")
@@ -107,6 +113,10 @@ module GdsApi
 
         stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/export-requests/#{id}").
           to_return(status: 200, body: response_body.to_json)
+      end
+
+      def stub_any_support_api_call
+        stub_request(:any, %r{\A#{SUPPORT_API_ENDPOINT}})
       end
     end
   end

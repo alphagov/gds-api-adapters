@@ -123,6 +123,17 @@ describe GdsApi::SupportApi do
     end
   end
 
+  describe "POST /page-improvements" do
+    it "makes a POST request to the support API" do
+      params = {description: "The title could be better."}
+      stub_post = stub_create_page_improvement(params)
+
+      @api.create_page_improvement(params)
+
+      assert_requested(stub_post)
+    end
+  end
+
   describe "GET /anonymous-feedback/export-requests/:id" do
     it "fetches the export request details from the API" do
       stub_get = stub_support_feedback_export_request(123)
