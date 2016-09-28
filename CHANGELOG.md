@@ -1,3 +1,7 @@
+# 36.3.0
+
+* Add a support-api endpoint for creating 'Page Improvements'.
+
 # 36.2.0
 
 * Add delete_asset method, to support the new delete asset functionality now supported by asset manager.
