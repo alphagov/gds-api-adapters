@@ -1,3 +1,8 @@
+# 36.4.0
+
+* Remove search-related fields from Panopticon Registerer now that these fields
+  are no longer sent by client apps.
+
 # 36.3.0
 
 * Add a support-api endpoint for creating 'Page Improvements'.
