@@ -64,9 +64,6 @@ describe GdsApi::Panopticon::Registerer do
       description: '5 tips for keeping your beard in check',
       state: 'draft',
       need_ids: ["100001", "100002"],
-      primary_section: "tax/vat",
-      sections: ["tax/vat", "tax/capital-gains"],
-      specialist_sectors: ["oil-and-gas/wells", "oil-and-gas/licensing"],
       public_timestamp: "2014-01-01T12:00:00+00:00",
       latest_change_note: 'Added more stubble',
       content_id: 'f47b4fab-46fa-4020-97a2-3413a5d75402'
@@ -102,7 +99,6 @@ describe GdsApi::Panopticon::Registerer do
       name: 'A guide to beards',
       description: '5 tips for keeping your beard in check',
       state: 'draft',
-      section: "tax/vat",
     )
 
     GdsApi::Panopticon::Registerer.new(
@@ -114,7 +110,6 @@ describe GdsApi::Panopticon::Registerer do
         title: 'A guide to beards',
         description: '5 tips for keeping your beard in check',
         state: 'draft',
-        section: "tax/vat",
       )
     )
 

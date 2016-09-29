@@ -33,16 +33,9 @@ module GdsApi
           :need_id,
           :need_ids,
 
-          :section,
-          :primary_section,
-          :sections,
-
           :paths,
           :prefixes,
 
-          :specialist_sectors,
-          :organisation_ids,
-          :indexable_content,
           :public_timestamp,
           :latest_change_note,
 
