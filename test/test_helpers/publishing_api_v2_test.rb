@@ -52,7 +52,6 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
           { "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" },
           { "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd505" },
           { "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd506" },
-          { "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd507" },
         ],
         {
           page: 1,
@@ -62,7 +61,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
 
       response = publishing_api.get_content_items({ page: 1, per_page: 2 })
 
-      assert_equal(response['total'], 4)
+      assert_equal(response['total'], 3)
       assert_equal(response['pages'], 2)
       assert_equal(response['current_page'], 1)
     end
