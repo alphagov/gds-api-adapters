@@ -339,6 +339,49 @@ describe GdsApi::PublishingApiV2 do
         end
       end
 
+      describe "when a content item cannot be published because of a path conflict" do
+        before do
+          @content_item = content_item_for_content_id(@content_id)
+
+          publishing_api
+            .given("a draft content item exists with content_id #{@content_id} with a blocking live item at the same path")
+            .upon_receiving("a request to return the draft content item")
+            .with(
+              method: :get,
+              path: "/v2/content/#{@content_id}",
+              headers: GdsApi::JsonClient.default_request_headers.merge(
+                "Authorization" => "Bearer #{@bearer_token}"
+              ),
+            )
+            .will_respond_with(
+              status: 200,
+              body: {
+                "warnings" => Pact.like({"content_item_blocking_publish" => "message"}),
+                "content_id" => @content_id,
+                "document_type" => Pact.like("special_route"),
+                "schema_name" => Pact.like("special_route"),
+                "publishing_app" => Pact.like("publisher"),
+                "rendering_app" => Pact.like("frontend"),
+                "locale" => Pact.like("en"),
+                "routes" => Pact.like([{}]),
+                "public_updated_at" => Pact.like("2015-07-30T13:58:11.000Z"),
+                "details" => Pact.like({}),
+                "publication_state" => "draft"
+              },
+              headers: {
+                "Content-Type" => "application/json; charset=utf-8",
+              },
+            )
+        end
+
+        it "responds with 200 and the draft content item containing a warning" do
+          response = @api_client.get_content(@content_id, version: 2)
+          assert_equal 200, response.code
+          assert_equal hash_including("content_item_blocking_publish"), response["warnings"]
+        end
+
+      end
+
       describe "when requesting the published version" do
         before do
           @content_item = content_item_for_content_id(@content_id)
