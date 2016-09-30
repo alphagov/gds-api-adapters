@@ -1,3 +1,10 @@
+# 36.4.1
+
+* Fix bug where the total number of pages was being calculated incorrectly on
+  `publishing_api_has_content`;
+* Return only the expected items based on the pagination parameters on
+  `publishing_api_has_content`.
+
 # 36.4.0
 
 * Remove search-related fields from Panopticon Registerer now that these fields
