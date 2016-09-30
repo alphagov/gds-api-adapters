@@ -46,12 +46,16 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
       )
     end
 
-    it 'returns pagination results' do
+    it 'returns paginated results' do
+      content_id_1 = "2878337b-bed9-4e7f-85b6-10ed2cbcd504"
+      content_id_2 = "2878337b-bed9-4e7f-85b6-10ed2cbcd505"
+      content_id_3 = "2878337b-bed9-4e7f-85b6-10ed2cbcd506"
+
       publishing_api_has_content(
         [
-          { "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" },
-          { "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd505" },
-          { "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd506" },
+          { "content_id" => content_id_1 },
+          { "content_id" => content_id_2 },
+          { "content_id" => content_id_3 },
         ],
         {
           page: 1,
@@ -60,10 +64,36 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
       )
 
       response = publishing_api.get_content_items({ page: 1, per_page: 2 })
+      records = response['results']
 
       assert_equal(response['total'], 3)
       assert_equal(response['pages'], 2)
       assert_equal(response['current_page'], 1)
+
+      assert_equal(records.length, 2)
+      assert_equal(records.first['content_id'], content_id_1)
+      assert_equal(records.last['content_id'], content_id_2)
+    end
+
+    it 'returns an empty list of results for out-of-bound queries' do
+      content_id_1 = "2878337b-bed9-4e7f-85b6-10ed2cbcd504"
+      content_id_2 = "2878337b-bed9-4e7f-85b6-10ed2cbcd505"
+
+      publishing_api_has_content(
+        [
+          { "content_id" => content_id_1 },
+          { "content_id" => content_id_2 },
+        ],
+        {
+          page: 10,
+          per_page: 2
+        }
+      )
+
+      response = publishing_api.get_content_items({ page: 10, per_page: 2 })
+      records = response['results']
+
+      assert_equal(records, [])
     end
   end
 

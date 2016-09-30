@@ -178,6 +178,9 @@ module GdsApi
           page = 1
         end
 
+        start_position = (page-1) * per_page
+        page_items = items.slice(start_position, per_page) || []
+
         number_of_pages =
           if items.count < per_page
             1
@@ -186,7 +189,7 @@ module GdsApi
           end
 
         body = {
-          results: items,
+          results: page_items,
           total: items.count,
           pages: number_of_pages,
           current_page: page
