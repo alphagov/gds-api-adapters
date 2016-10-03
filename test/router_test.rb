@@ -22,12 +22,13 @@ describe GdsApi::Router do
         assert_requested(req)
       end
 
-      it "should return nil for a non-existend backend" do
+      it "raises for a non-existend backend" do
         req = WebMock.stub_request(:get, "#{@base_api_url}/backends/foo").
           to_return(:status => 404)
 
-        response = @api.get_backend("foo")
-        assert_nil response
+        assert_raises(GdsApi::HTTPNotFound) do
+          @api.get_backend("foo")
+        end
 
         assert_requested(req)
       end
@@ -36,8 +37,9 @@ describe GdsApi::Router do
         req = WebMock.stub_request(:get, "#{@base_api_url}/backends/foo+bar").
           to_return(:status => 404)
 
-        response = @api.get_backend("foo bar")
-        assert_nil response
+        assert_raises(GdsApi::HTTPNotFound) do
+          @api.get_backend("foo bar")
+        end
 
         assert_requested(req)
       end
@@ -160,13 +162,14 @@ describe GdsApi::Router do
         assert_not_requested(@commit_req)
       end
 
-      it "should return nil if nothing found" do
+      it "should raise if nothing found" do
         req = WebMock.stub_request(:get, "#{@base_api_url}/routes").
           with(:query => {"incoming_path" => "/foo"}).
           to_return(:status => 404)
 
-        response = @api.get_route("/foo")
-        assert_nil response
+        assert_raises(GdsApi::HTTPNotFound) do
+          @api.get_route("/foo")
+        end
 
         assert_requested(req)
         assert_not_requested(@commit_req)
@@ -179,8 +182,9 @@ describe GdsApi::Router do
           with(:query => {"incoming_path" => "/foo bar"}).
           to_return(:status => 404)
 
-        response = @api.get_route("/foo bar")
-        assert_nil response
+        assert_raises(GdsApi::HTTPNotFound) do
+          @api.get_route("/foo bar")
+        end
 
         assert_requested(req)
         assert_not_requested(@commit_req)

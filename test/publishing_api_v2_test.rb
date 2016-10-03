@@ -493,7 +493,9 @@ describe GdsApi::PublishingApiV2 do
       end
 
       it "responds with 404" do
-        assert_nil @api_client.get_content(@content_id)
+        assert_raises(GdsApi::HTTPNotFound) do
+          @api_client.get_content(@content_id)
+        end
       end
     end
   end
@@ -1542,14 +1544,13 @@ describe GdsApi::PublishingApiV2 do
       end
 
       it "404s" do
-        response = @api_client.get_linked_items(
-          @content_id,
-          {
+        assert_raises(GdsApi::HTTPNotFound) do
+          @api_client.get_linked_items(
+            @content_id,
             link_type: "topic",
-            fields: ["content_id", "base_path"],
-          }
-        )
-        assert_nil response
+            fields: %w(content_id base_path),
+          )
+        end
       end
     end
 

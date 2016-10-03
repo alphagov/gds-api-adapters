@@ -411,14 +411,16 @@ describe GdsApi::ContentApi do
   end
 
   describe "local authorities" do
-    it "should return nil if no local authority found" do
+    it "should raise if no local authority found" do
       stub_request(:get, "#{@base_api_url}/local_authorities/does-not-exist.json").
         with(:headers => GdsApi::JsonClient.default_request_headers).
         to_return(:status => 404,
                   :body => {"_response_info" => {"status" => "ok"}}.to_json,
                   :headers => {})
 
-      assert_nil @api.local_authority("does-not-exist")
+      assert_raises(GdsApi::HTTPNotFound) do
+        @api.local_authority("does-not-exist")
+      end
     end
 
     it "should produce a LocalAuthority hash for an existing snac code" do

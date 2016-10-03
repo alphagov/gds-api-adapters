@@ -44,10 +44,12 @@ describe GdsApi::Worldwide do
       assert_equal 'Rohan', response.title
     end
 
-    it "should return nil for a non-existent location" do
+    it "raises for a non-existent location" do
       worldwide_api_does_not_have_location('non-existent')
 
-      assert_nil @api.world_location('non-existent')
+      assert_raises(GdsApi::HTTPNotFound) do
+        @api.world_location('non-existent')
+      end
     end
   end
 

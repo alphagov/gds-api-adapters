@@ -72,10 +72,12 @@ EOS
     assert_nil api.details_for_licence(nil)
   end
 
-  def test_should_return_nil_if_licence_is_unrecognised
+  def test_should_raise_if_licence_is_unrecognised
     licence_does_not_exist('bloop')
 
-    assert_nil api.details_for_licence("bloop")
+    assert_raises(GdsApi::HTTPNotFound) do
+      api.details_for_licence("bloop")
+    end
   end
 
   def test_should_provide_full_licence_details_for_canonical_id
@@ -90,16 +92,20 @@ EOS
     assert_equal expected, api.details_for_licence("590001").to_hash
   end
 
-  def test_should_return_nil_for_bad_snac_code_entry
+  def test_should_raise_for_bad_snac_code_entry
     licence_does_not_exist('590001/bleep')
 
-    assert_nil api.details_for_licence("590001", "bleep")
+    assert_raises(GdsApi::HTTPNotFound) do
+      api.details_for_licence("590001", "bleep")
+    end
   end
 
-  def test_should_return_nil_for_bad_licence_id_and_snac_code
+  def test_should_raise_for_bad_licence_id_and_snac_code
     licence_does_not_exist('bloop/bleep')
 
-    assert_nil api.details_for_licence("bloop", "bleep")
+    assert_raises(GdsApi::HTTPNotFound) do
+      api.details_for_licence("bloop", "bleep")
+    end
   end
 
   def test_should_return_error_message_to_pick_a_relevant_snac_code_for_the_provided_licence_id
@@ -108,7 +114,9 @@ EOS
       to_return(status: 404,
                 body: "{\"error\": \"No authorities found for the licence 590001 and for the snacCode sw10\"}")
 
-    assert_nil api.details_for_licence("590001", "sw10")
+    assert_raises(GdsApi::HTTPNotFound) do
+      api.details_for_licence("590001", "sw10")
+    end
   end
 
   def test_should_return_full_licence_details_with_location_specific_information

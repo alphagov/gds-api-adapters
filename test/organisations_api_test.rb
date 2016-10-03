@@ -44,10 +44,12 @@ describe GdsApi::Organisations do
       assert_equal 'Ministry Of Fun', response.title
     end
 
-    it "should return nil for a non-existent organisation" do
+    it "should raise for a non-existent organisation" do
       organisations_api_does_not_have_organisation('non-existent')
 
-      assert_nil @api.organisation('non-existent')
+      assert_raises(GdsApi::HTTPNotFound) do
+        @api.organisation('non-existent')
+      end
     end
   end
 end

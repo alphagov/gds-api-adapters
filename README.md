@@ -32,6 +32,10 @@ GdsApi.configure do |config|
 end
 ```
 
+By default, `always_raise_for_not_found` will be true, so there is no need to
+configure it. By December 1st, 2016 this configuration option will no longer
+exist, defaulting to always raising exceptions for 404s and 410s.
+
 ## Logging
 
 Each HTTP request can be logged as JSON. Example:

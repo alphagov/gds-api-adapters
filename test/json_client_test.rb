@@ -384,6 +384,8 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  # TODO: always_raise_for_not_found will be gone by December 1st, 2016. We will
+  # need to remove it from this test.
   def test_get_should_be_nil_if_404_returned_from_endpoint_and_always_raise_for_not_found_is_disabled
     @old_always_raise = GdsApi.config.always_raise_for_not_found
     GdsApi.configure do |config|
@@ -391,6 +393,7 @@ class JsonClientTest < MiniTest::Spec
     end
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(:body => "{}", :status => 404)
+
     assert_nil @client.get_json(url)
   ensure
     GdsApi.configure do |config|
@@ -398,6 +401,8 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  # TODO: always_raise_for_not_found will be gone by December 1st, 2016. We will
+  # need to remove it from this test.
   def test_get_should_be_nil_if_410_returned_from_endpoint_and_always_raise_for_not_found_is_disabled
     @old_always_raise = GdsApi.config.always_raise_for_not_found
     GdsApi.configure do |config|
@@ -412,38 +417,24 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
-  def test_get_should_be_nil_if_404_returned_from_endpoint_and_always_raise_for_not_found_is_enabled
-    @old_always_raise = GdsApi.config.always_raise_for_not_found
-    GdsApi.configure do |config|
-      config.always_raise_for_not_found = true
-    end
+  def test_get_should_raise_if_404_returned_from_endpoint
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(:body => "{}", :status => 404)
     assert_raises GdsApi::HTTPNotFound do
       @client.get_json(url)
     end
-  ensure
-    GdsApi.configure do |config|
-      config.always_raise_for_not_found = @old_always_raise
-    end
   end
 
-  def test_get_should_be_nil_if_410_returned_from_endpoint_and_always_raise_for_not_found_is_enabled
-    @old_always_raise = GdsApi.config.always_raise_for_not_found
-    GdsApi.configure do |config|
-      config.always_raise_for_not_found = true
-    end
+  def test_get_should_raise_if_410_returned_from_endpoint
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(:body => "{}", :status => 410)
     assert_raises GdsApi::HTTPGone do
       @client.get_json(url)
     end
-  ensure
-    GdsApi.configure do |config|
-      config.always_raise_for_not_found = @old_always_raise
-    end
   end
 
+  # TODO: always_raise_for_not_found will be gone by December 1st, 2016. We will
+  # need to remove it from this test.
   def test_get_raw_should_be_nil_if_404_returned_from_endpoint_and_always_raise_for_not_found_is_disabled
     @old_always_raise = GdsApi.config.always_raise_for_not_found
     GdsApi.configure do |config|
@@ -458,6 +449,8 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  # TODO: always_raise_for_not_found will be gone by December 1st, 2016. We will
+  # need to remove it from this test.
   def test_get_raw_should_be_nil_if_410_returned_from_endpoint_and_always_raise_for_not_found_is_disabled
     @old_always_raise = GdsApi.config.always_raise_for_not_found
     GdsApi.configure do |config|
@@ -472,35 +465,19 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
-  def test_get_raw_should_be_nil_if_404_returned_from_endpoint_and_always_raise_for_not_found_is_enabled
-    @old_always_raise = GdsApi.config.always_raise_for_not_found
-    GdsApi.configure do |config|
-      config.always_raise_for_not_found = true
-    end
+  def test_get_raw_should_raise_if_404_returned_from_endpoint
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(:body => "{}", :status => 404)
     assert_raises GdsApi::HTTPNotFound do
       @client.get_raw(url)
     end
-  ensure
-    GdsApi.configure do |config|
-      config.always_raise_for_not_found = @old_always_raise
-    end
   end
 
-  def test_get_raw_should_be_nil_if_410_returned_from_endpoint_and_always_raise_for_not_found_is_enabled
-    @old_always_raise = GdsApi.config.always_raise_for_not_found
-    GdsApi.configure do |config|
-      config.always_raise_for_not_found = true
-    end
+  def test_get_raw_should_be_nil_if_410_returned_from_endpoint
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(:body => "{}", :status => 410)
     assert_raises GdsApi::HTTPGone do
       @client.get_raw(url)
-    end
-  ensure
-    GdsApi.configure do |config|
-      config.always_raise_for_not_found = @old_always_raise
     end
   end
 
@@ -617,10 +594,12 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
-  def test_post_should_be_nil_if_404_returned_from_endpoint
+  def test_post_should_be_raise_if_404_returned_from_endpoint
     url = "http://some.endpoint/some.json"
     stub_request(:post, url).to_return(:body => "{}", :status => 404)
-    assert_nil @client.post_json(url, {})
+    assert_raises(GdsApi::HTTPNotFound) do
+      @client.post_json(url, {})
+    end
   end
 
   def test_post_should_raise_error_if_non_404_error_code_returned_from_endpoint
@@ -644,10 +623,13 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
-  def test_put_should_be_nil_if_404_returned_from_endpoint
+  def test_put_should_be_raise_if_404_returned_from_endpoint
     url = "http://some.endpoint/some.json"
     stub_request(:put, url).to_return(:body => "{}", :status => 404)
-    assert_nil @client.put_json(url, {})
+
+    assert_raises(GdsApi::HTTPNotFound) do
+      @client.put_json(url, {})
+    end
   end
 
   def test_put_should_raise_error_if_non_404_error_code_returned_from_endpoint
@@ -685,12 +667,13 @@ class JsonClientTest < MiniTest::Spec
     assert_equal "Hello there!", response
   end
 
-  def test_responds_with_nil_on_custom_response_404
+  def test_raises_on_custom_response_404
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(:body => "", :status => 404)
 
-    response = @client.get_json(url) { |http_response| http_response.body }
-    assert_nil response
+    assert_raises(GdsApi::HTTPNotFound) do
+      @client.get_json(url, &:body)
+    end
   end
 
   def test_can_build_custom_response_object_in_bang_method

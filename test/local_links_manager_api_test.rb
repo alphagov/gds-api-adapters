@@ -145,25 +145,28 @@ describe GdsApi::LocalLinksManager do
     end
 
     describe "when making request with invalid required parameters" do
-      it "returns nil when authority_slug is invalid" do
+      it "raises when authority_slug is invalid" do
         local_links_manager_does_not_have_required_objects("hogwarts", 2)
 
-        response = @api.local_link("hogwarts", 2)
-        assert_equal nil, response
+        assert_raises(GdsApi::HTTPNotFound) do
+          @api.local_link("hogwarts", 2)
+        end
       end
 
-      it "returns nil when LGSL is invalid" do
+      it "raises when LGSL is invalid" do
         local_links_manager_does_not_have_required_objects("blackburn", 999)
 
-        response = @api.local_link("blackburn", 999)
-        assert_equal nil, response
+        assert_raises(GdsApi::HTTPNotFound) do
+          @api.local_link("blackburn", 999)
+        end
       end
 
-      it "returns nil when the LGSL and LGIL combination is invalid" do
+      it "raises when the LGSL and LGIL combination is invalid" do
         local_links_manager_does_not_have_required_objects("blackburn", 2, 9)
 
-        response = @api.local_link("blackburn", 2, 9)
-        assert_equal nil, response
+        assert_raises(GdsApi::HTTPNotFound) do
+          @api.local_link("blackburn", 2, 9)
+        end
       end
     end
   end
@@ -223,11 +226,10 @@ describe GdsApi::LocalLinksManager do
     end
 
     describe 'when making a request with invalid required parameters' do
-      it "returns nil when authority_slug is invalid" do
+      it "raises when authority_slug is invalid" do
         local_links_manager_does_not_have_an_authority("hogwarts")
 
-        response = @api.local_authority("hogwarts")
-        assert_equal nil, response
+        assert_raises(GdsApi::HTTPNotFound) { @api.local_authority("hogwarts") }
       end
     end
   end

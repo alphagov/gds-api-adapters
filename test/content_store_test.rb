@@ -20,47 +20,35 @@ describe GdsApi::ContentStore do
       assert_equal base_path, response["base_path"]
     end
 
-    it "returns nil if the item doesn't exist" do
+    it "raises if the item doesn't exist" do
       content_store_does_not_have_item("/non-existent")
 
-      assert_nil @api.content_item("/non-existent")
+      assert_raises(GdsApi::HTTPNotFound) do
+        @api.content_item("/non-existent")
+      end
     end
 
-    it "raises if the item doesn't exist and `always_raise_for_not_found` enabled" do
-      GdsApi.configure do |config|
-        config.always_raise_for_not_found = true
-      end
-
+    it "raises if the item doesn't exist" do
       content_store_does_not_have_item("/non-existent")
 
       assert_raises GdsApi::HTTPNotFound do
         @api.content_item("/non-existent")
       end
-
-      GdsApi.configure do |config|
-        config.always_raise_for_not_found = false
-      end
     end
 
-    it "returns nil if the item is gone" do
+    it "raises if the item is gone" do
       content_store_has_gone_item("/it-is-gone")
 
-      assert_nil @api.content_item("/it-is-gone")
+      assert_raises(GdsApi::HTTPGone) do
+        @api.content_item("/it-is-gone")
+      end
     end
 
-    it "raises if the item is gone and `always_raise_for_not_found` enabled" do
-      GdsApi.configure do |config|
-        config.always_raise_for_not_found = true
-      end
-
+    it "raises if the item is gone" do
       content_store_has_gone_item("/it-is-gone")
 
       assert_raises GdsApi::HTTPGone do
         @api.content_item("/it-is-gone")
-      end
-
-      GdsApi.configure do |config|
-        config.always_raise_for_not_found = false
       end
     end
   end

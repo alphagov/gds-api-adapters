@@ -192,9 +192,12 @@ describe GdsApi::NeedApi do
       assert_equal "good things", need_response.benefit
     end
 
-    it "should return nil for a missing need" do
+    it "should raise for a missing need" do
       need_api_has_no_need(100600)
-      assert_nil @api.need(100600)
+
+      assert_raises(GdsApi::HTTPNotFound) do
+        @api.need(100600)
+      end
     end
   end
 
