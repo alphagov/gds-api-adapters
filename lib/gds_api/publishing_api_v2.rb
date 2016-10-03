@@ -243,9 +243,9 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
 
   # Get a list of content items from the Publishing API.
   #
-  # The required keys in the params hash are either document_type or content_format. These will be used to filter down the content items being returned by the API. Other allowed options can be seen from the link below.
+  # The only required key in the params hash is `document_type`. These will be used to filter down the content items being returned by the API. Other allowed options can be seen from the link below.
   #
-  # @param params [Hash] At minimum, this hash has to include the `document_type` or the `content_format` of the content items we wish to see. All other optional keys are documented above.
+  # @param params [Hash] At minimum, this hash has to include the `document_type` of the content items we wish to see. All other optional keys are documented above.
   #
   # @example
   #
