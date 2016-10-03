@@ -241,7 +241,24 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     patch_json!(links_url(content_id), payload)
   end
 
-  # FIXME: Add documentation
+  # Get a list of content items from the Publishing API.
+  #
+  # The required keys in the params hash are either document_type or content_format. These will be used to filter down the content items being returned by the API. Other allowed options can be seen from the link below.
+  #
+  # @param params [Hash] At minimum, this hash has to include the `document_type` or the `content_format` of the content items we wish to see. All other optional keys are documented above.
+  #
+  # @example
+  #
+  #   publishing_api.get_content_items(
+  #     document_type: 'taxon',
+  #     q: 'Driving',
+  #     page: 1,
+  #     per_page: 50,
+  #     publishing_app: 'content-tagger',
+  #     fields: ['title', 'description', 'public_updated_at'],
+  #     locale: 'en',
+  #     order: '-public_updated_at'
+  #   )
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2content
   def get_content_items(params)
