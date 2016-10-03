@@ -953,7 +953,10 @@ describe GdsApi::PublishingApiV2 do
           organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
         })
         assert_equal 200, response.code
-        assert_equal ["591436ab-c2ae-416f-a3c5-1901d633fbfb"], response.links.organisations
+        assert_equal(
+          ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+          response['links']['organisations']
+        )
       end
     end
 
@@ -991,10 +994,13 @@ describe GdsApi::PublishingApiV2 do
         })
 
         assert_equal 200, response.code
-        assert_equal(OpenStruct.new(
-          topics: ["225df4a8-2945-4e9b-8799-df7424a90b69"],
-          organisations: ["20583132-1619-4c68-af24-77583172c070"],
-        ), response.links)
+        assert_equal(
+          {
+            'topics' => ["225df4a8-2945-4e9b-8799-df7424a90b69"],
+            'organisations' => ["20583132-1619-4c68-af24-77583172c070"],
+          },
+          response['links']
+        )
       end
     end
 
@@ -1029,7 +1035,7 @@ describe GdsApi::PublishingApiV2 do
         })
 
         assert_equal 200, response.code
-        assert_equal OpenStruct.new({}), response.links
+        assert_equal({}, response['links'])
       end
     end
 
@@ -1066,9 +1072,12 @@ describe GdsApi::PublishingApiV2 do
         })
 
         assert_equal 200, response.code
-        assert_equal(OpenStruct.new(
-          organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
-        ), response.links)
+        assert_equal(
+          {
+            'organisations' => ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+          },
+          response['links']
+        )
       end
     end
 

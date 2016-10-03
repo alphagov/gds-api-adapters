@@ -85,7 +85,7 @@ describe GdsApi::Mapit do
     it "should return and empty result for an unknown area type" do
       response = @api.areas_for_type('FOO')
 
-      assert_empty response
+      assert_empty response.parsed_content
     end
   end
 

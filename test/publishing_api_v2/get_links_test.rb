@@ -33,7 +33,10 @@ describe GdsApi::PublishingApiV2 do
       it "responds with the links" do
         response = @api_client.get_links(@content_id)
         assert_equal 200, response.code
-        assert_equal ["20583132-1619-4c68-af24-77583172c070"], response.links.organisations
+        assert_equal(
+          ["20583132-1619-4c68-af24-77583172c070"],
+          response['links']['organisations']
+        )
       end
     end
 
@@ -58,7 +61,7 @@ describe GdsApi::PublishingApiV2 do
       it "responds with the empty link set" do
         response = @api_client.get_links(@content_id)
         assert_equal 200, response.code
-        assert_equal OpenStruct.new({}), response.links
+        assert_equal({}, response['links'])
       end
     end
 

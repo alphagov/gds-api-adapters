@@ -1,12 +1,12 @@
 module GdsApi::PartMethods
 
   def part_index(slug)
-    parts.index { |p| p.slug == slug }
+    parsed_content['parts'].index { |p| p['slug'] == slug }
   end
 
   def find_part(slug)
     return nil unless index = part_index(slug)
-    parts[index]
+    parsed_content['parts'][index]
   end
 
   def has_parts?(part)
@@ -14,13 +14,13 @@ module GdsApi::PartMethods
   end
 
   def has_previous_part?(part)
-    index = part_index(part.slug)
+    index = part_index(part['slug'])
     !! (index && index > 0)
   end
 
   def has_next_part?(part)
-    index = part_index(part.slug)
-    !! (index && (index + 1) < parts.length)
+    index = part_index(part['slug'])
+    !! (index && (index + 1) < parsed_content['parts'].length)
   end
 
   def part_after(part)
@@ -33,9 +33,12 @@ module GdsApi::PartMethods
 
 private
   def part_at(part, relative_offset)
-    return nil unless current_index = part_index(part.slug)
+    current_index = part_index(part['slug'])
+    return nil unless current_index
+
     other_index = current_index + relative_offset
-    return nil unless (0 ... parts.length).include?(other_index)
-    parts[other_index]
+    return nil unless (0...parsed_content['parts'].length).cover?(other_index)
+
+    parsed_content['parts'][other_index]
   end
 end

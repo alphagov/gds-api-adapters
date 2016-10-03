@@ -32,10 +32,13 @@ describe GdsApi::ContentApi do
       content_api_has_an_artefact("bank-holidays", artefact_response)
       artefact = @api.artefact("bank-holidays")
 
-      assert_equal "Bank holidays", artefact.title
-      assert_equal "/bank-holidays", artefact.web_url
+      assert_equal "Bank holidays", artefact['title']
+      assert_equal "/bank-holidays", artefact['web_url']
 
-      assert_equal "/browse/cheese", artefact.tags[0].content_with_tag.web_url
+      assert_equal(
+        "/browse/cheese",
+        artefact['tags'][0]['content_with_tag']['web_url']
+      )
     end
 
     it "should use relative URLs for tag listings" do
@@ -44,7 +47,7 @@ describe GdsApi::ContentApi do
 
       assert_equal 3, tags.count
       tags.each do |tag|
-        web_url = tag.content_with_tag.web_url
+        web_url = tag['content_with_tag']['web_url']
         assert web_url.start_with?("/browse/"), web_url
       end
     end
@@ -60,12 +63,15 @@ describe GdsApi::ContentApi do
         artefact_response["web_url"] = "http://www.test.gov.uk/bank-holidays"
         content_api_has_an_artefact("bank-holidays", artefact_response)
 
-        assert_equal "/bank-holidays", @api.artefact("bank-holidays").web_url
+        assert_equal "/bank-holidays", @api.artefact("bank-holidays")['web_url']
 
         clean_api = GdsApi::ContentApi.new(@base_api_url)
         clean_artefact = clean_api.artefact("bank-holidays")
 
-        assert_equal "http://www.test.gov.uk/bank-holidays", clean_artefact.web_url
+        assert_equal(
+          "http://www.test.gov.uk/bank-holidays",
+          clean_artefact['web_url']
+        )
       end
 
       after do
@@ -85,7 +91,10 @@ describe GdsApi::ContentApi do
 
       # Also check attribute access
       first_section = response.first
-      assert_equal "#{@base_api_url}/tags/sections/crime.json", first_section.id
+      assert_equal(
+        "#{@base_api_url}/tags/sections/crime.json",
+        first_section['id']
+      )
     end
 
     def section_page_url(page_parameter)
@@ -134,7 +143,10 @@ describe GdsApi::ContentApi do
 
       sections = @api.sections
       assert_equal 20, sections.with_subsequent_pages.count
-      assert_equal "Section 20", sections.with_subsequent_pages.to_a.last.title
+      assert_equal(
+        "Section 20",
+        sections.with_subsequent_pages.to_a.last['title']
+      )
     end
 
     it "should iterate across three or more pages" do
@@ -144,7 +156,10 @@ describe GdsApi::ContentApi do
 
       sections = @api.sections
       assert_equal 30, sections.with_subsequent_pages.count
-      assert_equal "Section 30", sections.with_subsequent_pages.to_a.last.title
+      assert_equal(
+        "Section 30",
+        sections.with_subsequent_pages.to_a.last['title']
+      )
     end
 
     it "should not load a page multiple times" do
@@ -225,7 +240,10 @@ describe GdsApi::ContentApi do
 
       response = @api.artefacts
       assert_equal 4, response.count
-      assert_equal %w(answer local_transaction place guide), response.map(&:format)
+      assert_equal(
+        %w(answer local_transaction place guide),
+        response.map { |item| item['format'] }
+      )
     end
 
     it "should work with a paginated response" do
@@ -257,7 +275,10 @@ describe GdsApi::ContentApi do
         )
       response = @api.artefacts
       assert_equal 7, response.with_subsequent_pages.count
-      assert_equal "http://www.test.gov.uk/vat2", response.with_subsequent_pages.to_a.last.web_url
+      assert_equal(
+        "http://www.test.gov.uk/vat2",
+        response.with_subsequent_pages.to_a.last['web_url']
+      )
     end
   end
 
@@ -272,8 +293,18 @@ describe GdsApi::ContentApi do
       response = @api.for_need(100123)
 
       assert_equal 3, response.count
-      assert_equal ["http://www.gov.uk/burrito", "http://www.gov.uk/burrito-standard", "http://www.gov.uk/local-burrito-place" ], response.map(&:web_url)
-      assert_equal ["answer", "guide", "transaction" ], response.map(&:format)
+      assert_equal(
+        [
+          "http://www.gov.uk/burrito",
+          "http://www.gov.uk/burrito-standard",
+          "http://www.gov.uk/local-burrito-place"
+        ],
+        response.map { |item| item['web_url'] }
+      )
+      assert_equal(
+        %w(answer guide transaction),
+        response.map { |item| item['format'] }
+      )
     end
   end
 
@@ -288,7 +319,10 @@ describe GdsApi::ContentApi do
 
       # Also check attribute access
       first_section = response.first
-      assert_equal "#{@base_api_url}/tags/authors/justin-thyme.json", first_section.id
+      assert_equal(
+        "#{@base_api_url}/tags/authors/justin-thyme.json",
+        first_section['id']
+      )
     end
 
     it "returns a sorted list of tags of a given type" do
@@ -296,17 +330,29 @@ describe GdsApi::ContentApi do
       response = @api.tags("author", sort: "alphabetical")
 
       first_section = response.first
-      assert_equal "#{@base_api_url}/tags/authors/justin-thyme.json", first_section.id
+      assert_equal(
+        "#{@base_api_url}/tags/authors/justin-thyme.json",
+        first_section['id']
+      )
     end
 
     it "returns draft tags if requested" do
       content_api_has_draft_and_live_tags(type: "specialist", draft: ["draft-tag-1"], live: ["live-tag-1"])
 
       all_tags = @api.tags("specialist", draft: true)
-      assert_equal [["draft-tag-1", "draft"], ["live-tag-1", "live"]].to_set, all_tags.map {|t| [t.slug, t.state] }.to_set
+      assert_equal(
+        [
+          ["draft-tag-1", "draft"],
+          ["live-tag-1", "live"]
+        ].to_set,
+        all_tags.map { |t| [t['slug'], t['state']] }.to_set
+      )
 
       live_tags = @api.tags("specialist")
-      assert_equal [["live-tag-1", "live"]], live_tags.map {|t| [t.slug, t.state] }
+      assert_equal(
+        [["live-tag-1", "live"]],
+        live_tags.map { |t| [t['slug'], t['state']] }
+      )
     end
 
     it "returns a list of root tags of a given type" do
@@ -319,7 +365,10 @@ describe GdsApi::ContentApi do
 
       # Also check attribute access
       first_section = response.first
-      assert_equal "#{@base_api_url}/tags/authors/oliver-sudden.json", first_section.id
+      assert_equal(
+        "#{@base_api_url}/tags/authors/oliver-sudden.json",
+        first_section['id']
+      )
     end
 
     it "returns a list of child tags of a given type" do
@@ -332,7 +381,10 @@ describe GdsApi::ContentApi do
 
       # Also check attribute access
       first_section = response.first
-      assert_equal "#{@base_api_url}/tags/genres/indie%2Findie-rock.json", first_section.id
+      assert_equal(
+        "#{@base_api_url}/tags/genres/indie%2Findie-rock.json",
+        first_section['id']
+      )
     end
 
     it "returns a sorted list of child tags of a given type" do
@@ -340,7 +392,10 @@ describe GdsApi::ContentApi do
       response = @api.child_tags("genre", "indie", sort: "alphabetical")
 
       first_section = response.first
-      assert_equal "#{@base_api_url}/tags/genres/indie%2Findie-rock.json", first_section.id
+      assert_equal(
+        "#{@base_api_url}/tags/genres/indie%2Findie-rock.json",
+        first_section['id']
+      )
     end
 
     it "returns tag information for a section" do
@@ -604,19 +659,37 @@ describe GdsApi::ContentApi do
       content_api_has_licence :licence_identifier => "AB1234", :title => 'Test Licence 3', :slug => 'test-licence-3',
         :licence_short_description => 'A short description'
 
-      results = @api.licences_for_ids([1234, 'AB1234', 'something']).to_ostruct.results
+      results = @api.licences_for_ids([1234, 'AB1234', 'something'])['results']
       assert_equal 2, results.size
-      assert_equal ['1234', 'AB1234'], results.map { |r| r.details.licence_identifier }
-      assert_equal ['Test Licence 1', 'Test Licence 3'], results.map(&:title).sort
-      assert_equal ['http://www.test.gov.uk/test-licence-1', 'http://www.test.gov.uk/test-licence-3'], results.map(&:web_url).sort
-      assert_equal 'A short description', results[0].details.licence_short_description
-      assert_equal 'A short description', results[1].details.licence_short_description
+      assert_equal(
+        %w(1234 AB1234),
+        results.map { |r| r['details']['licence_identifier'] }
+      )
+      assert_equal(
+        ['Test Licence 1', 'Test Licence 3'],
+        results.map { |item| item['title'] }.sort
+      )
+      assert_equal(
+        [
+          'http://www.test.gov.uk/test-licence-1',
+          'http://www.test.gov.uk/test-licence-3'
+        ],
+        results.map { |item| item['web_url'] }.sort
+      )
+      assert_equal(
+        'A short description',
+        results[0]['details']['licence_short_description']
+      )
+      assert_equal(
+        'A short description',
+        results[1]['details']['licence_short_description']
+      )
     end
 
     it "should return empty array with no licences" do
       setup_content_api_licences_stubs
 
-      assert_equal [], @api.licences_for_ids([123,124]).to_ostruct.results
+      assert_equal [], @api.licences_for_ids([123, 124])['results']
     end
 
     it "should raise an error if publisher returns an error" do
@@ -624,7 +697,7 @@ describe GdsApi::ContentApi do
         to_return(:status => [503, "Service temporarily unabailable"])
 
       assert_raises GdsApi::HTTPServerError do
-        @api.licences_for_ids([123,124])
+        @api.licences_for_ids([123, 124])
       end
     end
   end

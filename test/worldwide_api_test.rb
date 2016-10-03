@@ -16,8 +16,8 @@ describe GdsApi::Worldwide do
       worldwide_api_has_locations(country_slugs)
 
       response = @api.world_locations
-      assert_equal country_slugs, response.map {|r| r.details.slug }
-      assert_equal "Rohan", response.results[2].title
+      assert_equal country_slugs, response.map { |r| r['details']['slug'] }
+      assert_equal "Rohan", response['results'][2]['title']
     end
 
     it "should handle the pagination" do
@@ -25,7 +25,10 @@ describe GdsApi::Worldwide do
       worldwide_api_has_locations(country_slugs)
 
       response = @api.world_locations
-      assert_equal country_slugs, response.with_subsequent_pages.map {|r| r.details.slug }
+      assert_equal(
+        country_slugs,
+        response.with_subsequent_pages.map { |r| r['details']['slug'] }
+      )
     end
 
     it "should raise error if endpoint 404s" do
@@ -41,7 +44,7 @@ describe GdsApi::Worldwide do
       worldwide_api_has_location('rohan')
 
       response = @api.world_location('rohan')
-      assert_equal 'Rohan', response.title
+      assert_equal 'Rohan', response['title']
     end
 
     it "raises for a non-existent location" do
@@ -60,7 +63,13 @@ describe GdsApi::Worldwide do
 
       response = @api.organisations_for_world_location('australia')
       assert response.is_a?(GdsApi::ListResponse)
-      assert_equal ["UK Trade & Investment Australia", "British High Commission Canberra"], response.map(&:title)
+      assert_equal(
+        [
+          "UK Trade & Investment Australia",
+          "British High Commission Canberra"
+        ],
+        response.map { |item| item['title'] }
+      )
     end
 
     it "should raise error on 404" do

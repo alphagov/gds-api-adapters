@@ -36,7 +36,7 @@ describe GdsApi::GovUkDelivery do
   end
 
   it "can get a subscription URL" do
-    expected_payload = { feed_url: 'http://example.com/feed'}
+    expected_payload = { feed_url: 'http://example.com/feed' }
     stub = stub_gov_uk_delivery_get_request('list-url', expected_payload).to_return(created_response_json_hash({list_url: 'thing'}))
 
     assert @api.signup_url('http://example.com/feed')

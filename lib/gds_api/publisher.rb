@@ -7,8 +7,8 @@ class GdsApi::Publisher < GdsApi::Base
 
     response = get_json(url_for_slug(slug, options))
     if response
-      container = response.to_ostruct
-      container.extend(GdsApi::PartMethods) if container.parts
+      container = response.dup
+      container.extend(GdsApi::PartMethods) if container['parts']
       convert_updated_date(container)
       container
     else
@@ -39,8 +39,9 @@ class GdsApi::Publisher < GdsApi::Base
 
 private
   def convert_updated_date(container)
-    if container.updated_at && container.updated_at.class == String
-      container.updated_at = Time.parse(container.updated_at)
+    if container['updated_at'] && container['updated_at'].is_a?(String)
+      container.parsed_content['updated_at'] =
+        Time.parse(container['updated_at'])
     end
   end
 

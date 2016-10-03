@@ -39,7 +39,7 @@ describe GdsApi::Panopticon do
     panopticon_has_metadata(basic_artefact)
 
     artefact = api.artefact_for_slug(basic_artefact[:slug])
-    assert_equal 'An artefact', artefact.name
+    assert_equal 'An artefact', artefact['name']
   end
 
   it 'fetches an artefact as a hash given a slug' do
@@ -72,8 +72,14 @@ describe GdsApi::Panopticon do
     panopticon_has_metadata(artefact_with_contact)
 
     artefact = api.artefact_for_slug(artefact_with_contact[:slug])
-    assert_equal 'Department for Environment, Food and Rural Affairs (Defra)', artefact.contact.name
-    assert_equal 'helpline@defra.gsi.gov.uk', artefact.contact.email_address
+    assert_equal(
+      'Department for Environment, Food and Rural Affairs (Defra)',
+      artefact['contact']['name']
+    )
+    assert_equal(
+      'helpline@defra.gsi.gov.uk',
+      artefact['contact']['email_address']
+    )
   end
 
   it 'creates a new artefact' do

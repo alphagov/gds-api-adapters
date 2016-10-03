@@ -80,12 +80,27 @@ describe GdsApi::ListResponse do
           ]
         }
       }
-      @p1_response = stub(:body => page_1.to_json, :status => 200, 
-         :headers => {:link => '<http://www.example.com/1>; rel="self", <http://www.example.com/2>; rel="next"'})
-      @p2_response = stub(:body => page_2.to_json, :status => 200, 
-         :headers => {:link => '<http://www.example.com/2>; rel="self", <http://www.example.com/3>; rel="next", <http://www.example.com/1>; rel="previous"'})
-      @p3_response = stub(:body => page_3.to_json, :status => 200, 
-         :headers => {:link => '<http://www.example.com/3>; rel="self", <http://www.example.com/1>; rel="previous"'})
+      @p1_response = stub(
+        body: page_1.to_json,
+        status: 200,
+        headers: {
+          link: '<http://www.example.com/1>; rel="self", <http://www.example.com/2>; rel="next"'
+        }
+      )
+      @p2_response = stub(
+        body: page_2.to_json,
+        status: 200,
+        headers: {
+          link: '<http://www.example.com/2>; rel="self", <http://www.example.com/3>; rel="next", <http://www.example.com/1>; rel="previous"'
+        }
+      )
+      @p3_response = stub(
+        body: page_3.to_json,
+        status: 200,
+        headers: {
+          link: '<http://www.example.com/3>; rel="self", <http://www.example.com/1>; rel="previous"'
+        }
+      )
 
       @client = stub()
       @client.stubs(:get_list!).with("http://www.example.com/1").returns(GdsApi::ListResponse.new(@p1_response, @client))
@@ -97,7 +112,7 @@ describe GdsApi::ListResponse do
       it "should allow accessing the next page" do
         resp = GdsApi::ListResponse.new(@p1_response, @client)
         assert resp.has_next_page?
-        assert_equal %w(foo2 bar2), resp.next_page.results
+        assert_equal %w(foo2 bar2), resp.next_page['results']
       end
 
       it "should return nil with no next page" do
@@ -121,7 +136,7 @@ describe GdsApi::ListResponse do
       it "should allow accessing the previous page" do
         resp = GdsApi::ListResponse.new(@p2_response, @client)
         assert resp.has_previous_page?
-        assert_equal %w(foo1 bar1), resp.previous_page.results
+        assert_equal %w(foo1 bar1), resp.previous_page['results']
       end
 
       it "should return nil with no previous page" do

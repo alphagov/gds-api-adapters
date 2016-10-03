@@ -22,7 +22,7 @@ class GdsApi::GovUkDelivery < GdsApi::Base
 
   def signup_url(feed_url)
     if response = get_json("#{base_url}/list-url?feed_url=#{CGI.escape(feed_url)}")
-      response.list_url
+      response['list_url']
     end
   end
 
