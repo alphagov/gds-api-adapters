@@ -1214,7 +1214,7 @@ describe GdsApi::PublishingApiV2 do
         .with(
           method: :get,
           path: "/v2/content",
-          query: "content_format=topic&fields%5B%5D=title&fields%5B%5D=base_path",
+          query: "document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path",
           headers: GdsApi::JsonClient.default_request_headers.merge(
             "Authorization" => "Bearer #{@bearer_token}"
           ),
@@ -1226,7 +1226,7 @@ describe GdsApi::PublishingApiV2 do
             pages: 1,
             current_page: 1,
             links: [{
-              href: "http://example.org/v2/content?content_format=topic&fields[]=title&fields[]=base_path&page=1",
+              href: "http://example.org/v2/content?document_type=topic&fields[]=title&fields[]=base_path&page=1",
               rel: "self"
             }],
             results: [
@@ -1237,7 +1237,7 @@ describe GdsApi::PublishingApiV2 do
         )
 
       response = @api_client.get_content_items(
-        content_format: 'topic',
+        document_type: 'topic',
         fields: [:title, :base_path],
       )
 
@@ -1247,7 +1247,7 @@ describe GdsApi::PublishingApiV2 do
         ["total", 2],
         ["pages", 1],
         ["current_page", 1],
-        ["links", [{"href"=>"http://example.org/v2/content?content_format=topic&fields[]=title&fields[]=base_path&page=1", "rel"=>"self"}]],
+        ["links", [{"href"=>"http://example.org/v2/content?document_type=topic&fields[]=title&fields[]=base_path&page=1", "rel"=>"self"}]],
         ["results", [{"title"=>"Content Item A", "base_path"=>"/a-base-path"}, {"title"=>"Content Item B", "base_path"=>"/another-base-path"}]]
       ], response.to_a
 
@@ -1260,7 +1260,7 @@ describe GdsApi::PublishingApiV2 do
         .with(
           method: :get,
           path: "/v2/content",
-          query: "content_format=topic&fields%5B%5D=content_id&fields%5B%5D=locale",
+          query: "document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale",
           headers: GdsApi::JsonClient.default_request_headers.merge(
             "Authorization" => "Bearer #{@bearer_token}"
           ),
@@ -1272,7 +1272,7 @@ describe GdsApi::PublishingApiV2 do
             pages: 1,
             current_page: 1,
             links: [{
-              href: "http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=locale&page=1",
+              href: "http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&page=1",
               rel: "self"
             }],
             results: [
@@ -1282,7 +1282,7 @@ describe GdsApi::PublishingApiV2 do
         )
 
       response = @api_client.get_content_items(
-        content_format: 'topic',
+        document_type: 'topic',
         fields: [:content_id, :locale],
       )
 
@@ -1292,7 +1292,7 @@ describe GdsApi::PublishingApiV2 do
         ["total", 1],
         ["pages", 1],
         ["current_page", 1],
-        ["links", [{"href"=>"http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=locale&page=1", "rel"=>"self"}]],
+        ["links", [{"href"=>"http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&page=1", "rel"=>"self"}]],
         ["results", [{"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"en"}]]
       ], response.to_a
     end
@@ -1304,7 +1304,7 @@ describe GdsApi::PublishingApiV2 do
         .with(
           method: :get,
           path: "/v2/content",
-          query: "content_format=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=fr",
+          query: "document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=fr",
           headers: GdsApi::JsonClient.default_request_headers.merge(
             "Authorization" => "Bearer #{@bearer_token}"
           ),
@@ -1316,7 +1316,7 @@ describe GdsApi::PublishingApiV2 do
             pages: 1,
             current_page: 1,
             links: [{
-              href: "http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=locale&locale=fr&page=1",
+              href: "http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&locale=fr&page=1",
               rel: "self"
             }],
             results: [
@@ -1326,7 +1326,7 @@ describe GdsApi::PublishingApiV2 do
         )
 
       response = @api_client.get_content_items(
-        content_format: 'topic',
+        document_type: 'topic',
         fields: [:content_id, :locale],
         locale: 'fr',
       )
@@ -1336,7 +1336,7 @@ describe GdsApi::PublishingApiV2 do
         ["total", 1],
         ["pages", 1],
         ["current_page", 1],
-        ["links", [{"href"=>"http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=locale&locale=fr&page=1", "rel"=>"self"}]],
+        ["links", [{"href"=>"http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&locale=fr&page=1", "rel"=>"self"}]],
         ["results", [{"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"fr"}]]
       ], response.to_a
     end
@@ -1348,7 +1348,7 @@ describe GdsApi::PublishingApiV2 do
         .with(
           method: :get,
           path: "/v2/content",
-          query: "content_format=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=all",
+          query: "document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=all",
           headers: GdsApi::JsonClient.default_request_headers.merge(
             "Authorization" => "Bearer #{@bearer_token}"
           ),
@@ -1360,7 +1360,7 @@ describe GdsApi::PublishingApiV2 do
             pages: 1,
             current_page: 1,
             links: [{
-              href: "http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=locale&locale=all&page=1",
+              href: "http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&locale=all&page=1",
               rel: "self"
             }],
             results: [
@@ -1372,7 +1372,7 @@ describe GdsApi::PublishingApiV2 do
         )
 
       response = @api_client.get_content_items(
-        content_format: 'topic',
+        document_type: 'topic',
         fields: [:content_id, :locale],
         locale: 'all',
       )
@@ -1382,7 +1382,7 @@ describe GdsApi::PublishingApiV2 do
         ["total", 3],
         ["pages", 1], ["current_page", 1],
         ["links",
-         [{"href"=>"http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=locale&locale=all&page=1", "rel"=>"self"}]],
+         [{"href"=>"http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&locale=all&page=1", "rel"=>"self"}]],
         ["results",
          [{"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"en"},
           {"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"fr"},
@@ -1397,7 +1397,7 @@ describe GdsApi::PublishingApiV2 do
         .with(
           method: :get,
           path: "/v2/content",
-          query: "content_format=topic&fields%5B%5D=content_id&fields%5B%5D=details",
+          query: "document_type=topic&fields%5B%5D=content_id&fields%5B%5D=details",
           headers: GdsApi::JsonClient.default_request_headers.merge(
             "Authorization" => "Bearer #{@bearer_token}"
           ),
@@ -1409,7 +1409,7 @@ describe GdsApi::PublishingApiV2 do
             pages: 1,
             current_page: 1,
             links: [{
-              href: "http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=details&page=1",
+              href: "http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=details&page=1",
               rel: "self"
             }],
             results: [
@@ -1419,7 +1419,7 @@ describe GdsApi::PublishingApiV2 do
         )
 
       response = @api_client.get_content_items(
-        content_format: 'topic',
+        document_type: 'topic',
         fields: [:content_id, :details],
       )
 
@@ -1429,7 +1429,7 @@ describe GdsApi::PublishingApiV2 do
         ["total", 1],
         ["pages", 1],
         ["current_page", 1],
-        ["links", [{"href"=>"http://example.org/v2/content?content_format=topic&fields[]=content_id&fields[]=details&page=1", "rel"=>"self"}]],
+        ["links", [{"href"=>"http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=details&page=1", "rel"=>"self"}]],
         ["results", [{"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "details"=>{"foo"=>"bar"}}]]
       ], response.to_a
     end
