@@ -1,3 +1,21 @@
+# 37.0.0
+
+* Default `always_raise_for_not_found` to true when not configured and add
+  deprecation warning for when a client app uses the setter to change the value.
+  From December 1st, 2016 it won't be possible to configure this option anymore
+  and therefore all responses will raise a `GdsApi::HTTPNotFound` for 404s and
+  `GdsApi::HTTPGone` for 410s;
+* Default `hash_response_for_requests` to true when not configured and add
+  deprecation warning for when a client app uses the setter to change the value.
+  From December 1st, 2016 it won't be possible to configure this option anymore
+  and therefore all responses will behave like a `Hash` instead of an
+  `OpenStruct`;
+* Add helper methods to stub and assert Rummager searches;
+* Stop using `content_format` in the Publishing API tests;
+* Documentation added to `get_content_items`;
+* Ruby version upgraded to `2.3.1`;
+* Added `govuk-lint` to the project.
+
 # 36.4.1
 
 * Fix bug where the total number of pages was being calculated incorrectly on
