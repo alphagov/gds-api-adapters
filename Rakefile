@@ -36,6 +36,11 @@ PactBroker::Client::PublicationTask.new("released_version") do | task |
   configure_pact_broker_location(task)
 end
 
+desc "Run the linter against changed files"
+task :lint do
+  sh "bundle exec govuk-lint-ruby --diff --cached --format clang"
+end
+
 require "gem_publisher"
 desc "Publish gem to rubygems.org if necessary"
 task :publish_gem do |t|
