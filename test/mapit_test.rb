@@ -45,10 +45,12 @@ describe GdsApi::Mapit do
       assert_equal "30UN", response.areas.last.codes['ons']
     end
 
-    it "should return nil if a postcode doesn't exist" do
+    it "should raise if a postcode doesn't exist" do
       mapit_does_not_have_a_postcode("SW1A 1AA")
 
-      assert_nil @api.location_for_postcode("SW1A 1AA")
+      assert_raises(GdsApi::HTTPNotFound) do
+        @api.location_for_postcode("SW1A 1AA")
+      end
     end
 
     it "should return 400 for an invalid postcode" do
@@ -83,7 +85,7 @@ describe GdsApi::Mapit do
     it "should return and empty result for an unknown area type" do
       response = @api.areas_for_type('FOO')
 
-      assert_empty response
+      assert_empty response.parsed_content
     end
   end
 
@@ -109,7 +111,9 @@ describe GdsApi::Mapit do
     end
 
     it "should return 404 for a missing area of a certain code type" do
-      assert_nil @api.area_for_code('govuk_slug', 'neverland')
+      assert_raises(GdsApi::HTTPNotFound) do
+        @api.area_for_code('govuk_slug', 'neverland')
+      end
     end
   end
 end

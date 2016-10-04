@@ -22,14 +22,6 @@ describe GdsApi::AssetManager do
     }
   }
 
-  before do
-    GdsApi.config.always_raise_for_not_found = true
-  end
-
-  after do
-    GdsApi.config.always_raise_for_not_found = false
-  end
-
   it "creates an asset with a file" do
     req = stub_request(:post, "#{base_api_url}/assets").
       with(:body => %r{Content\-Disposition: form\-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent\-Type: text/plain}).
@@ -37,7 +29,7 @@ describe GdsApi::AssetManager do
 
     response = api.create_asset(:file => file_fixture)
 
-    assert_equal asset_url, response.asset.id
+    assert_equal asset_url, response['asset']['id']
     assert_requested(req)
   end
 
@@ -67,16 +59,16 @@ describe GdsApi::AssetManager do
 
       response = api.update_asset(asset_id, :file => file_fixture)
 
-      assert_equal "#{base_api_url}/assets/#{asset_id}", response.asset.id
+      assert_equal "#{base_api_url}/assets/#{asset_id}", response['asset']['id']
       assert_requested(req)
     end
 
     it "retrieves an asset" do
       asset = api.asset(asset_id)
 
-      assert_equal "photo.jpg", asset.name
-      assert_equal "image/jpeg", asset.content_type
-      assert_equal "http://fooey.gov.uk/media/photo.jpg", asset.file_url
+      assert_equal "photo.jpg", asset['name']
+      assert_equal "image/jpeg", asset['content_type']
+      assert_equal "http://fooey.gov.uk/media/photo.jpg", asset['file_url']
     end
   end
 
@@ -86,7 +78,7 @@ describe GdsApi::AssetManager do
 
     response = api.delete_asset(asset_id)
 
-    assert_equal "#{base_api_url}/assets/#{asset_id}", response.asset.id
+    assert_equal "#{base_api_url}/assets/#{asset_id}", response['asset']['id']
     assert_requested(req)
   end
 end

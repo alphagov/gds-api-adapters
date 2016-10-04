@@ -19,7 +19,7 @@ module GdsApi
   # Example:
   #
   #   r = Response.new(response, web_urls_relative_to: "https://www.gov.uk")
-  #   r.results[0].web_url
+  #   r['results'][0]['web_url']
   #   => "/bank-holidays"
   class Response
     extend Forwardable
@@ -71,12 +71,16 @@ module GdsApi
     end
 
     def to_hash
-      @parsed ||= transform_parsed(JSON.parse(@http_response.body))
+      parsed_content
+    end
+
+    def parsed_content
+      @parsed_content ||= transform_parsed(JSON.parse(@http_response.body))
     end
 
     def to_ostruct
       raise NoMethodError if GdsApi.config.hash_response_for_requests
-      @ostruct ||= self.class.build_ostruct_recursively(to_hash)
+      @ostruct ||= self.class.build_ostruct_recursively(parsed_content)
     end
 
     def method_missing(method_sym, *arguments, &block)

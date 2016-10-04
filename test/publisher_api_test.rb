@@ -59,7 +59,7 @@ describe GdsApi::Publisher do
     publication_exists(basic_answer)
     pub = api.publication_for_slug(basic_answer['slug'])
 
-    assert_equal "Something", pub.body
+    assert_equal "Something", pub['body']
   end
 
   it "should optionally accept an edition id" do
@@ -84,8 +84,8 @@ describe GdsApi::Publisher do
   it "should deserialise parts into whole objects" do
     publication_exists(publication_with_parts)
     pub = api.publication_for_slug(publication_with_parts['slug'])
-    assert_equal 3, pub.parts.size
-    assert_equal "introduction", pub.parts.first.slug
+    assert_equal 3, pub['parts'].size
+    assert_equal "introduction", pub['parts'].first['slug']
   end
 
   it "should have part specific methods for a publication with parts" do
@@ -97,7 +97,7 @@ describe GdsApi::Publisher do
   it "should deserialise updated at as a time" do
     publication_exists(publication_with_parts)
     pub = api.publication_for_slug(publication_with_parts['slug'])
-    assert_equal Time, pub.updated_at.class
+    assert_equal Time, pub['updated_at'].class
   end
 
   it "should be able to retrieve local transaction details" do

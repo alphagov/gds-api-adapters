@@ -77,9 +77,9 @@ describe GdsApi::PublishingApiV2 do
           status: 404
         )
 
-      response = @api_client.get_expanded_links(@content_id)
-
-      assert_nil response
+      assert_raises(GdsApi::HTTPNotFound) do
+        @api_client.get_expanded_links(@content_id)
+      end
     end
   end
 end

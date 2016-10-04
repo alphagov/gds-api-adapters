@@ -110,7 +110,7 @@ describe GdsApi::Response do
       body = {
         "web_url" => "https://www.gov.uk/test"
       }.to_json
-      assert_equal "/test", build_response(body).web_url
+      assert_equal "/test", build_response(body)['web_url']
     end
 
     it "should leave other properties alone" do
@@ -119,8 +119,8 @@ describe GdsApi::Response do
         "description" => "Description"
       }.to_json
       response = build_response(body)
-      assert_equal "Title", response.title
-      assert_equal "Description", response.description
+      assert_equal "Title", response['title']
+      assert_equal "Description", response['description']
     end
 
     it "should traverse into hashes" do
@@ -132,7 +132,7 @@ describe GdsApi::Response do
       }.to_json
 
       response = build_response(body)
-      assert_equal "/left", response.details.web_url
+      assert_equal "/left", response['details']['web_url']
     end
 
     it "should traverse into arrays" do
@@ -144,15 +144,15 @@ describe GdsApi::Response do
       }.to_json
 
       response = build_response(body)
-      assert_equal "/pies", response.other_urls[0].web_url
-      assert_equal "/cheese", response.other_urls[1].web_url
+      assert_equal "/pies", response['other_urls'][0]['web_url']
+      assert_equal "/cheese", response['other_urls'][1]['web_url']
     end
 
     it "should handle nil values" do
       body = {"web_url" => nil}.to_json
 
       response = build_response(body)
-      assert_nil response.web_url
+      assert_nil response['web_url']
     end
 
     it "should handle query parameters" do
@@ -161,7 +161,7 @@ describe GdsApi::Response do
       }.to_json
 
       response = build_response(body)
-      assert_equal "/thing?does=stuff", response.web_url
+      assert_equal "/thing?does=stuff", response['web_url']
     end
 
     it "should handle fragments" do
@@ -170,7 +170,7 @@ describe GdsApi::Response do
       }.to_json
 
       response = build_response(body)
-      assert_equal "/thing#part-2", response.web_url
+      assert_equal "/thing#part-2", response['web_url']
     end
 
     it "should keep URLs from other domains absolute" do
@@ -179,7 +179,7 @@ describe GdsApi::Response do
       }.to_json
 
       response = build_response(body)
-      assert_equal "https://www.example.com/example", response.web_url
+      assert_equal "https://www.example.com/example", response['web_url']
     end
 
     it "should keep URLs with other schemes absolute" do
@@ -188,7 +188,7 @@ describe GdsApi::Response do
       }.to_json
 
       response = build_response(body)
-      assert_equal "http://www.example.com/example", response.web_url
+      assert_equal "http://www.example.com/example", response['web_url']
     end
   end
 
@@ -238,36 +238,65 @@ describe GdsApi::Response do
       end
     end
 
+    # TODO: When we remove `GdsApi.config.hash_response_for_requests`, this
+    # describe block no longer makes sense and it should be removed.
     describe "behaving like a read-only openstruct" do
+      def with_hash_response_for_requests_disabled
+        @old_hash_response_for_requests = GdsApi.config.hash_response_for_requests
+        GdsApi.configure do |config|
+          config.hash_response_for_requests = false
+        end
+
+        yield
+
+        GdsApi.configure do |config|
+          config.hash_response_for_requests = @old_hash_response_for_requests
+        end
+      end
+
       it "should allow accessing members using methods" do
-        assert_equal "VAT rates", @response.title
+        with_hash_response_for_requests_disabled do
+          assert_equal "VAT rates", @response.title
+        end
       end
 
       it "should allow accessing nested values" do
-        assert_equal "1870", @response.details.need_id
+        with_hash_response_for_requests_disabled do
+          assert_equal "1870", @response.details.need_id
+        end
       end
 
       it "should allow accessing values nested within arrays" do
-        assert_equal "bar", @response.tags[1].slug
+        with_hash_response_for_requests_disabled do
+          assert_equal "bar", @response.tags[1].slug
+        end
       end
 
       it "should return nil for a non-existent key" do
-        assert_equal nil, @response.foo
+        with_hash_response_for_requests_disabled do
+          assert_equal nil, @response.foo
+        end
       end
 
       it "should memoize the generated openstruct" do
-        @response.id
-        GdsApi::Response.expects(:build_ostruct_recursively).never
-        assert_equal "VAT rates", @response.title
+        with_hash_response_for_requests_disabled do
+          @response.id
+          GdsApi::Response.expects(:build_ostruct_recursively).never
+          assert_equal "VAT rates", @response.title
+        end
       end
 
       describe "handling respond_to?" do
         it "should respond_to methods for keys that exist" do
-          assert @response.respond_to?(:title)
+          with_hash_response_for_requests_disabled do
+            assert @response.respond_to?(:title)
+          end
         end
 
         it "should not respond_to keys that don't exist" do
-          assert ! @response.respond_to?(:foo)
+          with_hash_response_for_requests_disabled do
+            assert ! @response.respond_to?(:foo)
+          end
         end
       end
     end

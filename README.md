@@ -18,19 +18,14 @@ Example adapters for frequently used applications:
 
 ## Configuration
 
-We're currently deprecating some behaviour of this gem. You can opt-in to the
-new behaviour now by adding configuration like this:
+From December 1st, 2016 it won't be possible to use the following configuration
+options:
 
-```ruby
-# config/initializers/gds_api_adapters.rb
-GdsApi.configure do |config|
-  # Never return nil when a server responds with 404 or 410.
-  config.always_raise_for_not_found = true
+- `always_raise_for_not_found`
+- `hash_response_for_requests`
 
-  # Return a hash, not an OpenStruct from a request.
-  config.hash_response_for_requests = true
-end
-```
+Please remove these configuration options from your client application and
+migrate to the new behaviour as soon as possible.
 
 ## Logging
 

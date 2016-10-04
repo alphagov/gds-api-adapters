@@ -493,7 +493,9 @@ describe GdsApi::PublishingApiV2 do
       end
 
       it "responds with 404" do
-        assert_nil @api_client.get_content(@content_id)
+        assert_raises(GdsApi::HTTPNotFound) do
+          @api_client.get_content(@content_id)
+        end
       end
     end
   end
@@ -951,7 +953,10 @@ describe GdsApi::PublishingApiV2 do
           organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
         })
         assert_equal 200, response.code
-        assert_equal ["591436ab-c2ae-416f-a3c5-1901d633fbfb"], response.links.organisations
+        assert_equal(
+          ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+          response['links']['organisations']
+        )
       end
     end
 
@@ -989,10 +994,13 @@ describe GdsApi::PublishingApiV2 do
         })
 
         assert_equal 200, response.code
-        assert_equal(OpenStruct.new(
-          topics: ["225df4a8-2945-4e9b-8799-df7424a90b69"],
-          organisations: ["20583132-1619-4c68-af24-77583172c070"],
-        ), response.links)
+        assert_equal(
+          {
+            'topics' => ["225df4a8-2945-4e9b-8799-df7424a90b69"],
+            'organisations' => ["20583132-1619-4c68-af24-77583172c070"],
+          },
+          response['links']
+        )
       end
     end
 
@@ -1027,7 +1035,7 @@ describe GdsApi::PublishingApiV2 do
         })
 
         assert_equal 200, response.code
-        assert_equal OpenStruct.new({}), response.links
+        assert_equal({}, response['links'])
       end
     end
 
@@ -1064,9 +1072,12 @@ describe GdsApi::PublishingApiV2 do
         })
 
         assert_equal 200, response.code
-        assert_equal(OpenStruct.new(
-          organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
-        ), response.links)
+        assert_equal(
+          {
+            'organisations' => ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+          },
+          response['links']
+        )
       end
     end
 
@@ -1542,14 +1553,13 @@ describe GdsApi::PublishingApiV2 do
       end
 
       it "404s" do
-        response = @api_client.get_linked_items(
-          @content_id,
-          {
+        assert_raises(GdsApi::HTTPNotFound) do
+          @api_client.get_linked_items(
+            @content_id,
             link_type: "topic",
-            fields: ["content_id", "base_path"],
-          }
-        )
-        assert_nil response
+            fields: %w(content_id base_path),
+          )
+        end
       end
     end
 

@@ -16,8 +16,8 @@ describe GdsApi::Organisations do
       organisations_api_has_organisations(organisation_slugs)
 
       response = @api.organisations
-      assert_equal organisation_slugs, response.map {|r| r.details.slug }
-      assert_equal "Tea Agency", response.results[1].title
+      assert_equal organisation_slugs, response.map { |r| r['details']['slug'] }
+      assert_equal "Tea Agency", response['results'][1]['title']
     end
 
     it "should handle the pagination" do
@@ -25,7 +25,10 @@ describe GdsApi::Organisations do
       organisations_api_has_organisations(organisation_slugs)
 
       response = @api.organisations
-      assert_equal organisation_slugs, response.with_subsequent_pages.map {|r| r.details.slug }
+      assert_equal(
+        organisation_slugs,
+        response.with_subsequent_pages.map { |r| r['details']['slug'] }
+      )
     end
 
     it "should raise error if endpoint 404s" do
@@ -41,13 +44,15 @@ describe GdsApi::Organisations do
       organisations_api_has_organisation('ministry-of-fun')
 
       response = @api.organisation('ministry-of-fun')
-      assert_equal 'Ministry Of Fun', response.title
+      assert_equal 'Ministry Of Fun', response['title']
     end
 
-    it "should return nil for a non-existent organisation" do
+    it "should raise for a non-existent organisation" do
       organisations_api_does_not_have_organisation('non-existent')
 
-      assert_nil @api.organisation('non-existent')
+      assert_raises(GdsApi::HTTPNotFound) do
+        @api.organisation('non-existent')
+      end
     end
   end
 end

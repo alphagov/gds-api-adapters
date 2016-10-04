@@ -38,24 +38,24 @@ describe GdsApi::NeedApi do
       needs = @api.needs_by_id(1,2,3)
 
       assert_equal 3, needs.count
-      assert_equal %w(1 2 3), needs.map(&:id)
-      assert_equal "apply for a primary school place", needs.results[0].goal
-      assert_equal "find out about becoming a British citizen", needs.results[1].goal
-      assert_equal "find out about unemployment benefits", needs.results[2].goal
+      assert_equal %w(1 2 3), needs.map { |need| need['id'] }
+      assert_equal "apply for a primary school place", needs['results'][0]['goal']
+      assert_equal "find out about becoming a British citizen", needs['results'][1]['goal']
+      assert_equal "find out about unemployment benefits", needs['results'][2]['goal']
     end
 
     it "makes the same request regardless of the order of the IDs" do
       needs = @api.needs_by_id(2,1,3)
 
       assert_equal 3, needs.count
-      assert_equal %w(1 2 3), needs.map(&:id)
+      assert_equal %w(1 2 3), needs.map { |need| need['id'] }
     end
 
     it "correctly sorts IDs requested as strings" do
       needs = @api.needs_by_id(%w(02 3 1))
 
       assert_equal 3, needs.count
-      assert_equal %w(1 2 3), needs.map(&:id)
+      assert_equal %w(1 2 3), needs.map { |need| need['id'] }
     end
   end
 
@@ -109,12 +109,30 @@ describe GdsApi::NeedApi do
       assert_requested(req)
       assert_equal 2, needs.count
 
-      assert_equal ["parent", "user"], needs.map(&:role)
-      assert_equal ["apply for a primary school place", "find out about becoming a British citizen"], needs.map(&:goal)
-      assert_equal ["my child can start school", "i can take the correct steps to apply for citizenship"], needs.map(&:benefit)
+      assert_equal %w(parent user), needs.map { |need| need['role'] }
+      assert_equal(
+        [
+          "apply for a primary school place",
+          "find out about becoming a British citizen"
+        ],
+        needs.map { |need| need['goal'] }
+      )
+      assert_equal(
+        [
+          "my child can start school",
+          "i can take the correct steps to apply for citizenship"
+        ],
+        needs.map { |need| need['benefit'] }
+      )
 
-      assert_equal "department-for-education", needs.first.organisations.first.id
-      assert_equal "Department for Education", needs.first.organisations.first.name
+      assert_equal(
+        "department-for-education",
+        needs.first['organisations'].first['id']
+      )
+      assert_equal(
+        "Department for Education",
+        needs.first['organisations'].first['name']
+      )
     end
   end
 
@@ -189,12 +207,15 @@ describe GdsApi::NeedApi do
       need_api_has_need(need)
 
       need_response = @api.need(100500)
-      assert_equal "good things", need_response.benefit
+      assert_equal "good things", need_response['benefit']
     end
 
-    it "should return nil for a missing need" do
+    it "should raise for a missing need" do
       need_api_has_no_need(100600)
-      assert_nil @api.need(100600)
+
+      assert_raises(GdsApi::HTTPNotFound) do
+        @api.need(100600)
+      end
     end
   end
 

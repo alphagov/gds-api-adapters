@@ -31,8 +31,8 @@ class GdsApi::AssetManager < GdsApi::Base
   #
   # @example Upload a file from disk
   #   response = asset_manager.create_asset(file: File.new('image.jpg', 'r'))
-  #   response.id           #=> "http://asset-manager.dev.gov.uk/assets/576bbc52759b74196b000012"
-  #   response.content_type #=> "image/jpeg"
+  #   response['id']           #=> "http://asset-manager.dev.gov.uk/assets/576bbc52759b74196b000012"
+  #   response['content_type'] #=> "image/jpeg"
   # @example Upload a file from a Rails param, (typically a multipart wrapper)
   #    params[:file] #=> #<ActionDispatch::Http::UploadedFile:0x007fc60b43c5c8
   #                      # @content_type="application/foofle",
@@ -42,7 +42,7 @@ class GdsApi::AssetManager < GdsApi::Base
   #    # Though we sent a file with a +content_type+ of 'application/foofle',
   #    # this was ignored
   #    response = asset_manager.create_asset(file: params[:file])
-  #    response.content_type #=> "image/jpeg"
+  #    response['content_type'] #=> "image/jpeg"
   def create_asset(asset)
     post_multipart("#{base_url}/assets", { :asset => asset })
   end
