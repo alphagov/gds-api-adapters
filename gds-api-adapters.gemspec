@@ -45,4 +45,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'pact-mock_service', '0.8.1'
   s.add_development_dependency 'pact-consumer-minitest', '1.0.1'
   s.add_development_dependency 'pact_broker-client', '1.0.0'
+  s.add_development_dependency 'govuk-lint', '1.2.1'
 end
