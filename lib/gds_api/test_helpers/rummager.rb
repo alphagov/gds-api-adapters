@@ -38,6 +38,18 @@ module GdsApi
         end
       end
 
+      def stub_any_rummager_search
+        stub_request(:get, %r{#{RUMMAGER_ENDPOINT}/search.json})
+      end
+
+      def stub_any_rummager_search_to_return_no_results
+        stub_any_rummager_search.to_return(body: { results: [] }.to_json)
+      end
+
+      def assert_rummager_search(options)
+        assert_requested :get, "#{RUMMAGER_ENDPOINT}/search.json", **options
+      end
+
       def stub_any_rummager_delete(index: nil)
         if index
           stub_request(:delete, %r{#{RUMMAGER_ENDPOINT}/#{index}/documents/.*})
