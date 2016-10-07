@@ -114,6 +114,29 @@ class GdsApi::AssetManager < GdsApi::Base
     delete_json("#{base_url}/assets/#{id}")
   end
 
+  # Restores an asset given an id
+  #
+  # Makes a +POST+ request to the asset manager api to restore an asset.
+  #
+  # @param id [String] The asset identifier (a UUID).
+  # @return [GdsApi::Response] The wrapped http response from the api. Behaves
+  #   both as a +Hash+ and an +OpenStruct+, and responds to the following:
+  #     :id           the URL of the asset
+  #     :name         the filename of the asset that will be served
+  #     :content_type the content_type of the asset
+  #     :file_url     the URL from which the asset will be served when it has
+  #                   passed a virus scan
+  #     :state        One of 'unscanned', 'clean', or 'infected'. Unless the state is
+  #                   'clean' the asset at the :file_url will 404
+  #
+  # @raise [HTTPErrorResponse] if the request returns an error
+  # @example Restore a deleted file
+  #   uuid = '594602dd-75b3-4e6f-b5d1-cacf8c4d4164'
+  #   asset_manager.restore_asset(uuid)
+  def restore_asset(id)
+    post_json("#{base_url}/assets/#{id}/restore")
+  end
+
   private
     def base_url
       endpoint
