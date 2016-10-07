@@ -1,3 +1,7 @@
+# 37.1.0
+
+* Add `restore_asset` method to allow the restoration of deleted assets.
+
 # 37.0.0
 
 * Default `always_raise_for_not_found` to true when not configured and add
