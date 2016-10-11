@@ -358,6 +358,43 @@ module GdsApi
         stub_request(:post, url).to_return(body: lookup_hash.to_json)
       end
 
+      #
+      # Stub calls to the get linked items endpoint
+      #
+      # @param items [Array] The linked items we wish to return
+      # @param params [Hash] A hash of parameters
+      #
+      # @example
+      #
+      #   publishing_api_has_linked_items(
+      #     [ item_1, item_2 ],
+      #     {
+      #       content_id: "51ac4247-fd92-470a-a207-6b852a97f2db",
+      #       link_type: "taxons",
+      #       fields: ["title", "description", "base_path"]
+      #     }
+      #   )
+      #
+      def publishing_api_has_linked_items(items, params = {})
+        content_id = params.fetch(:content_id)
+        link_type = params.fetch(:link_type)
+        fields = params.fetch(:fields, %w(base_path content_id document_type title))
+
+        url = Plek.current.find('publishing-api') + "/v2/linked/#{content_id}"
+
+        request_parmeters = {
+          "fields" => fields,
+          "link_type" => link_type,
+        }
+
+        stub_request(:get, url)
+          .with(query: request_parmeters)
+          .and_return(
+            body: items.to_json,
+            status: 200
+          )
+      end
+
     private
 
       def stub_publishing_api_put(*args)
