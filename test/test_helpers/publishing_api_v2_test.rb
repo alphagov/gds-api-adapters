@@ -6,6 +6,32 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
   include GdsApi::TestHelpers::PublishingApiV2
   let(:publishing_api) { GdsApi::PublishingApiV2.new(Plek.current.find("publishing-api")) }
 
+  describe '#publishing_api_has_linked_items' do
+    it "stubs the get linked items api call" do
+      links = [
+        { 'content_id' => 'id-1', 'title' => 'title 1', 'link_type' => 'taxons' },
+        { 'content_id' => 'id-2', 'title' => 'title 2', 'link_type' => 'taxons' },
+      ]
+      publishing_api_has_linked_items(
+        links,
+        content_id: 'content-id',
+        link_type: 'taxons',
+        fields: [:title]
+      )
+
+      api_response = publishing_api.get_linked_items(
+        'content-id',
+        link_type: 'taxons',
+        fields: [:title]
+      )
+
+      assert_equal(
+        api_response.to_hash,
+        links
+      )
+    end
+  end
+
   describe "#publishing_api_has_lookups" do
     it "stubs the lookup for content items" do
       lookup_hash = { "/foo" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" }
