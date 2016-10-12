@@ -1,3 +1,8 @@
+# 37.2.0
+
+* Add test helper method `publishing_api_has_linked_items` for the Publishing
+  API V2 method `get_linked_items`.
+
 # 37.1.0
 
 * Add `restore_asset` method to allow the restoration of deleted assets.
