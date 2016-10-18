@@ -80,6 +80,14 @@ module GdsApi
         stub_request(:post, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/.*/publish})
       end
 
+      def stub_any_publishing_api_unpublish
+        stub_request(:post, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/.*/unpublish})
+      end
+
+      def stub_any_publishing_api_discard_draft
+        stub_request(:post, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/.*/discard-draft})
+      end
+
       def stub_any_publishing_api_call
         stub_request(:any, %r{\A#{PUBLISHING_API_V2_ENDPOINT}})
       end
