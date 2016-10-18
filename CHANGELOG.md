@@ -1,3 +1,8 @@
+# 37.3.0
+
+* Add a helper method for extracting service feedback from the performance
+  platform.
+
 # 37.2.0
 
 * Add test helper method `publishing_api_has_linked_items` for the Publishing
