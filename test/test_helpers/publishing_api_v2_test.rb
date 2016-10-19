@@ -155,4 +155,20 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
       assert_publishing_api_publish("some-content-id")
     end
   end
+
+  describe "stub_any_publishing_api_unpublish" do
+    it "stubs any unpublish request to the publishing api" do
+      stub_any_publishing_api_unpublish
+      publishing_api.unpublish("some-content-id", type: :gone)
+      assert_publishing_api_unpublish("some-content-id")
+    end
+  end
+
+  describe "stub_any_publishing_api_discard_draft" do
+    it "stubs any discard draft request to the publishing api" do
+      stub_any_publishing_api_discard_draft
+      publishing_api.discard_draft("some-content-id")
+      assert_publishing_api_discard_draft("some-content-id")
+    end
+  end
 end
