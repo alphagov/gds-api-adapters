@@ -1,3 +1,8 @@
+# 37.4.0
+
+* Add test helper methods to stub any unpublish or discard draft requests to
+  Publishing API V2.
+
 # 37.3.0
 
 * Add a helper method for extracting service feedback from the performance
