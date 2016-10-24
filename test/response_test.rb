@@ -236,6 +236,11 @@ describe GdsApi::Response do
         JSON.expects(:parse).never
         assert_equal "VAT rates", @response["title"]
       end
+
+      it "should allow using dig to access nested keys" do
+        skip unless RUBY_VERSION > "2.3"
+        assert_equal "1870", @response.dig("details", "need_id")
+      end
     end
 
     # TODO: When we remove `GdsApi.config.hash_response_for_requests`, this
