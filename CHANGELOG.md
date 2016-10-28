@@ -1,3 +1,7 @@
+# 37.5.0
+
+* Support `unpublished_at` field for `PublishingApiV2#unpublish`
+
 # 37.4.0
 
 * Add test helper methods to stub any unpublish or discard draft requests to
