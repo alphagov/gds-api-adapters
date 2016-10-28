@@ -127,13 +127,13 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
       type: type
     }
 
-    params.merge!(explanation: explanation) if explanation
-    params.merge!(alternative_path: alternative_path) if alternative_path
-    params.merge!(previous_version: previous_version) if previous_version
-    params.merge!(discard_drafts: discard_drafts) if discard_drafts
-    params.merge!(allow_draft: allow_draft) if allow_draft
-    params.merge!(locale: locale) if locale
-    params.merge!(unpublished_at: unpublished_at.utc.iso8601) if unpublished_at
+    params[:explanation] = explanation if explanation
+    params[:alternative_path] = alternative_path if alternative_path
+    params[:previous_version] = previous_version if previous_version
+    params[:discard_drafts] = discard_drafts if discard_drafts
+    params[:allow_draft] = allow_draft if allow_draft
+    params[:locale] = locale if locale
+    params[:unpublished_at] = unpublished_at.utc.iso8601 if unpublished_at
 
     post_json!(unpublish_url(content_id), params)
   end
