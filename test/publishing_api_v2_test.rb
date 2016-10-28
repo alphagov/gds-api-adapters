@@ -142,7 +142,14 @@ describe GdsApi::PublishingApiV2 do
     describe "optimistic locking" do
       describe "if the content item has not changed since it was requested" do
         before do
-          @content_item = content_item_for_content_id(@content_id, "previous_version" => 3)
+          @content_item = content_item_for_content_id(@content_id,
+            "document_type" => "manual",
+            "schema_name" => "manual",
+            "locale" => "en",
+            "details" => { "body" => [] },
+            "previous_version" => "3"
+          )
+          @content_item.delete("format")
 
           publishing_api
             .given("the content item #{@content_id} is at version 3")
@@ -168,7 +175,14 @@ describe GdsApi::PublishingApiV2 do
 
       describe "if the content item has changed in the meantime" do
         before do
-          @content_item = content_item_for_content_id(@content_id, "previous_version" => 2)
+          @content_item = content_item_for_content_id(@content_id,
+            "document_type" => "manual",
+            "schema_name" => "manual",
+            "locale" => "en",
+            "details" => { "body" => [] },
+            "previous_version" => "2"
+          )
+          @content_item.delete("format")
 
           publishing_api
             .given("the content item #{@content_id} is at version 3")
