@@ -120,15 +120,12 @@ describe GdsApi::PublishingApiV2 do
           )
           .will_respond_with(
             status: 422,
-            body: {
-              "error" => {
-                "code" => 422,
-                "message" => Pact.term(generate: "Unprocessable entity", matcher:/\S+/),
-                "fields" => {
-                  "base_path" => Pact.each_like("is invalid", :min => 1),
-                },
-              },
-            },
+            body: [
+              {
+                fragment: "#/base_path",
+                failed_attribute: "Pattern"
+              }
+            ],
             headers: {
               "Content-Type" => "application/json; charset=utf-8"
             }
@@ -136,11 +133,9 @@ describe GdsApi::PublishingApiV2 do
       end
 
       it "responds with 422 Unprocessable Entity" do
-        error = assert_raises GdsApi::HTTPClientError do
+        assert_raises GdsApi::HTTPClientError do
           @api_client.put_content(@content_id, @content_item)
         end
-        assert_equal 422, error.code
-        assert_equal "Unprocessable entity", error.error_details["error"]["message"]
       end
     end
 
