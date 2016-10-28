@@ -119,9 +119,10 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # @param discard_drafts [Boolean] (optional) Whether to discard drafts on that item.  Defaults to false.
   # @param previous_version [Integer] (optional) A lock version number for optimistic locking.
   # @param locale [String] (optional) The content item locale.
+  # @param unpublished_at [Time] (optional) The time the content was withdrawn. Ignored for types other than withdrawn
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#post-v2contentcontent_idunpublish
-  def unpublish(content_id, type:, explanation: nil, alternative_path: nil, discard_drafts: false, allow_draft: false, previous_version: nil, locale: nil)
+  def unpublish(content_id, type:, explanation: nil, alternative_path: nil, discard_drafts: false, allow_draft: false, previous_version: nil, locale: nil, unpublished_at: nil)
     params = {
       type: type
     }
@@ -132,6 +133,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     params.merge!(discard_drafts: discard_drafts) if discard_drafts
     params.merge!(allow_draft: allow_draft) if allow_draft
     params.merge!(locale: locale) if locale
+    params.merge!(unpublished_at: unpublished_at.utc.iso8601) if unpublished_at
 
     post_json!(unpublish_url(content_id), params)
   end
