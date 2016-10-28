@@ -1,3 +1,7 @@
+# 37.5.1
+
+* Allow #dig on Response.
+
 # 37.5.0
 
 * Support `unpublished_at` field for `PublishingApiV2#unpublish`
