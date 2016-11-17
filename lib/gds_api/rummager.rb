@@ -2,11 +2,12 @@ require 'gds_api/base'
 require 'rack/utils'
 
 module GdsApi
+  # @api documented
   class Rummager < Base
 
     # Perform a search.
     #
-    # @param query [Hash] A valid search query. See Rummager documentation for options.
+    # @param args [Hash] A valid search query. See Rummager documentation for options.
     #
     # @see https://github.com/alphagov/rummager/blob/master/docs/search-api.md
     def search(args)

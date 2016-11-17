@@ -1,5 +1,6 @@
 require_relative 'base'
 
+# @api documented
 class GdsApi::SupportApi < GdsApi::Base
   def create_problem_report(request_details)
     post_json!("#{endpoint}/anonymous-feedback/problem-reports", { :problem_report => request_details })
