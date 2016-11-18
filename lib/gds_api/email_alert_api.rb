@@ -4,6 +4,7 @@ require_relative 'exceptions'
 # Adapter for the Email Alert API
 #
 # @see https://github.com/alphagov/email-alert-api
+# @api documented
 class GdsApi::EmailAlertApi < GdsApi::Base
 
   # Get or Post subscriber list

@@ -1,6 +1,7 @@
 require_relative 'base'
 require_relative 'exceptions'
 
+# @api documented
 class GdsApi::AssetManager < GdsApi::Base
 
   # Creates an asset given a hash with one +file+ attribute

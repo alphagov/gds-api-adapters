@@ -5,6 +5,7 @@ require_relative 'base'
 # @see https://github.com/alphagov/publishing-api
 # @see https://github.com/alphagov/publishing-api/blob/master/doc/publishing-application-examples.md
 # @see https://github.com/alphagov/publishing-api/blob/master/doc/model.md
+# @api documented
 class GdsApi::PublishingApiV2 < GdsApi::Base
   # Put a content item
   #
@@ -88,8 +89,8 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   #
   # @param content_id [UUID]
   # @param update_type [String] Either 'major', 'minor' or 'republish'
-  # @param params [Hash]
-  # @option params [String] locale The language, defaults to 'en' in publishing-api.
+  # @param options [Hash]
+  # @option options [String] locale The language, defaults to 'en' in publishing-api.
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#post-v2contentcontent_idpublish
   def publish(content_id, update_type, options = {})
@@ -142,9 +143,9 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   #
   # Deletes the draft content item.
   #
-  # @param params [Hash]
-  # @option params [String] locale The language, defaults to 'en' in publishing-api.
-  # @option params [Integer] previous_version used to ensure the request is discarding the latest lock version of the draft
+  # @param options [Hash]
+  # @option options [String] locale The language, defaults to 'en' in publishing-api.
+  # @option options [Integer] previous_version used to ensure the request is discarding the latest lock version of the draft
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#post-v2contentcontent_iddiscard-draft
   def discard_draft(content_id, options = {})
