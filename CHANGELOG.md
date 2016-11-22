@@ -1,6 +1,7 @@
 # Unreleased
 
 * Removed `GdsApi::Publisher`
+* Removed `GdsApi::ExternalLinkTracker`
 
 # 37.5.1
 
