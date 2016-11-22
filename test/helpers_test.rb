@@ -13,7 +13,6 @@ describe GdsApi::Helpers do
     refute_nil test_with_helpers.business_support_api
     refute_nil test_with_helpers.content_api
     refute_nil test_with_helpers.content_store
-    refute_nil test_with_helpers.publisher_api
     refute_nil test_with_helpers.imminence_api
     refute_nil test_with_helpers.licence_application_api
     refute_nil test_with_helpers.need_api

@@ -1,3 +1,7 @@
+# Unreleased
+
+* Removed `GdsApi::Publisher`
+
 # 37.5.1
 
 * Allow #dig on Response.
