@@ -6,7 +6,6 @@ require 'gds_api/imminence'
 require 'gds_api/licence_application'
 require 'gds_api/need_api'
 require 'gds_api/panopticon'
-require 'gds_api/publisher'
 require 'gds_api/worldwide'
 require 'gds_api/email_alert_api'
 
@@ -26,10 +25,6 @@ module GdsApi
 
     def content_store(options = {})
       @content_store ||= GdsApi::ContentStore.new(Plek.current.find("content-store"), options)
-    end
-
-    def publisher_api(options = {})
-      @api ||= GdsApi::Publisher.new(Plek.current.find("publisher"), options)
     end
 
     def imminence_api(options = {})
@@ -62,7 +57,7 @@ module GdsApi
 
     def self.included(klass)
       if klass.respond_to?(:helper_method)
-        klass.helper_method :publisher_api, :panopticon_api, :imminence_api, :content_api, :licence_application_api
+        klass.helper_method :panopticon_api, :imminence_api, :content_api, :licence_application_api
       end
     end
   end

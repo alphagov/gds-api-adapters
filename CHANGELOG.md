@@ -1,3 +1,8 @@
+# Unreleased
+
+* Removed `GdsApi::Publisher`
+* Removed `GdsApi::ExternalLinkTracker`
+
 # 37.5.1
 
 * Allow #dig on Response.
