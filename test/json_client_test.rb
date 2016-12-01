@@ -28,21 +28,6 @@ class JsonClientTest < MiniTest::Spec
     {}
   end
 
-  # TODO: When we remove `GdsApi.config.hash_response_for_requests`, this helper
-  # method no longer makes sense and it should be deleted.
-  def with_hash_response_for_requests_disabled
-    @old_hash_response_for_requests = GdsApi.config.hash_response_for_requests
-    GdsApi.configure do |config|
-      config.hash_response_for_requests = false
-    end
-
-    yield
-
-    GdsApi.configure do |config|
-      config.hash_response_for_requests = @old_hash_response_for_requests
-    end
-  end
-
   def test_long_get_requests_timeout
     url = "http://www.example.com/timeout.json"
     stub_request(:get, url).to_timeout
@@ -700,67 +685,12 @@ class JsonClientTest < MiniTest::Spec
     assert_equal "Hello there!", response
   end
 
-  # TODO: When we remove `GdsApi.config.hash_response_for_requests`, this test
-  # no longer makes sense and it should be deleted.
-  def test_can_convert_response_to_ostruct
-    with_hash_response_for_requests_disabled do
-      url = "http://some.endpoint/some.json"
-      payload = { a: 1 }
-      stub_request(:put, url).with(body: payload.to_json).to_return(body: '{"a":1}', status: 200)
-      response = @client.put_json(url, payload)
-      assert_equal(OpenStruct.new(a: 1), response.to_ostruct)
-    end
-  end
-
   def test_can_access_attributes_of_response_directly
     url = "http://some.endpoint/some.json"
     payload = { a: 1 }
     stub_request(:put, url).with(body: payload.to_json).to_return(body: '{"a":{"b":2}}', status: 200)
     response = @client.put_json(url, payload)
     assert_equal 2, response['a']['b']
-  end
-
-  def test_cant_access_attributes_of_response_directly_if_hash_only
-    url = "http://some.endpoint/some.json"
-    payload = { a: 1 }
-    stub_request(:put, url).with(body: payload.to_json).to_return(body: '{"a":{"b":2}}', status: 200)
-    response = @client.put_json(url, payload)
-
-    @old_hash_response_for_requests = GdsApi.config.hash_response_for_requests
-    GdsApi.configure do |config|
-      config.hash_response_for_requests = true
-    end
-
-    assert_raises NoMethodError do
-      response.a.b
-    end
-
-    GdsApi.configure do |config|
-      config.hash_response_for_requests = @old_hash_response_for_requests
-    end
-  end
-
-  # TODO: When we remove `GdsApi.config.hash_response_for_requests`, this test
-  # no longer makes sense and it should be deleted.
-  def test_accessing_non_existent_attribute_of_response_returns_nil
-    with_hash_response_for_requests_disabled do
-      url = "http://some.endpoint/some.json"
-      stub_request(:put, url).to_return(body: '{"a":1}', status: 200)
-      response = @client.put_json(url, {})
-      assert_equal nil, response.does_not_exist
-    end
-  end
-
-  # TODO: When we remove `GdsApi.config.hash_response_for_requests`, this test
-  # no longer makes sense and it should be deleted.
-  def test_response_does_not_claim_to_respond_to_methods_corresponding_to_non_existent_attributes
-    with_hash_response_for_requests_disabled do
-      # This mimics the behaviour of OpenStruct
-      url = "http://some.endpoint/some.json"
-      stub_request(:put, url).to_return(body: '{"a":1}', status: 200)
-      response = @client.put_json(url, {})
-      assert ! response.respond_to?(:does_not_exist)
-    end
   end
 
   def test_a_response_is_always_considered_present_and_not_blank

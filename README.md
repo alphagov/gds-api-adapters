@@ -22,7 +22,6 @@ From December 1st, 2016 it won't be possible to use the following configuration
 options:
 
 - `always_raise_for_not_found`
-- `hash_response_for_requests`
 
 Please remove these configuration options from your client application and
 migrate to the new behaviour as soon as possible.
