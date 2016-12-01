@@ -1,4 +1,3 @@
-require_relative 'config'
 require_relative 'response'
 require_relative 'exceptions'
 require_relative 'version'
@@ -75,13 +74,7 @@ module GdsApi
     end
 
     def get_raw(url)
-      if GdsApi.config.always_raise_for_not_found
-        get_raw!(url)
-      else
-        ignoring_missing do
-          get_raw!(url)
-        end
-      end
+      get_raw!(url)
     end
 
     # Define "safe" methods for each supported HTTP method
@@ -92,13 +85,7 @@ module GdsApi
     [:get, :post, :put, :patch, :delete].each do |http_method|
       method_name = "#{http_method}_json"
       define_method method_name do |url, *args, &block|
-        if GdsApi.config.always_raise_for_not_found
-          send (method_name + "!"), url, *args, &block
-        else
-          ignoring_missing do
-            send (method_name + "!"), url, *args, &block
-          end
-        end
+        send (method_name + "!"), url, *args, &block
       end
     end
 

@@ -16,16 +16,6 @@ Example adapters for frequently used applications:
 - [Content Store](lib/gds_api/content_store.rb) ([docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/ContentStore), [test helper code](https://github.com/alphagov/gds-api-adapters/blob/master/lib/gds_api/test_helpers/content_store.rb), [test helper docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/TestHelpers/ContentStore))
 - [Rummager](lib/gds_api/rummager.rb) ([docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/Rummager), [test helper code](https://github.com/alphagov/gds-api-adapters/blob/master/lib/gds_api/test_helpers/rummager.rb), [test helper docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/TestHelpers/Rummager))
 
-## Configuration
-
-From December 1st, 2016 it won't be possible to use the following configuration
-options:
-
-- `always_raise_for_not_found`
-
-Please remove these configuration options from your client application and
-migrate to the new behaviour as soon as possible.
-
 ## Logging
 
 Each HTTP request can be logged as JSON. Example:
