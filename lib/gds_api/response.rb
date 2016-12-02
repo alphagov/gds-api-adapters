@@ -78,21 +78,6 @@ module GdsApi
       @parsed_content ||= transform_parsed(JSON.parse(@http_response.body))
     end
 
-    def to_ostruct
-      raise NoMethodError if GdsApi.config.hash_response_for_requests
-      @ostruct ||= self.class.build_ostruct_recursively(parsed_content)
-    end
-
-    def method_missing(method_sym, *arguments, &block)
-      super if GdsApi.config.hash_response_for_requests
-      to_ostruct.public_send(method_sym, *arguments, &block)
-    end
-
-    def respond_to_missing?(method, include_private)
-      super if GdsApi.config.hash_response_for_requests
-      to_ostruct.respond_to?(method, include_private)
-    end
-
     def present?; true; end
     def blank?; false; end
 
@@ -119,17 +104,6 @@ module GdsApi
         }]
       when Array
         value.map { |v| transform_parsed(v) }
-      else
-        value
-      end
-    end
-
-    def self.build_ostruct_recursively(value)
-      case value
-      when Hash
-        OpenStruct.new(Hash[value.map { |k, v| [k, build_ostruct_recursively(v)] }])
-      when Array
-        value.map { |v| build_ostruct_recursively(v) }
       else
         value
       end
