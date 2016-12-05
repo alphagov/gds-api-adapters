@@ -737,6 +737,61 @@ describe GdsApi::PublishingApiV2 do
     end
   end
 
+  describe "#import" do
+    describe "if the import command succeeds" do
+      let(:content_id) { SecureRandom.uuid }
+      let(:content_item) {
+        content_item_for_content_id(content_id,
+          state: "superseded"
+        )
+      }
+
+      let(:content_items) {
+        [
+          {
+            action: "PutContent",
+            payload: content_item,
+          },
+          {
+            action: "PutContent",
+            payload: content_item.merge(
+              state: "draft",
+              base_path: "/foo", routes: [{ path: "/foo", type: "exact" }],
+            ),
+          },
+          {
+            action: "Publish",
+            payload: content_item.merge(state: "published", update_type: "major"),
+          },
+        ]
+      }
+
+      before do
+        publishing_api
+          .given("no content exists")
+          .upon_receiving("an import request")
+          .with(
+            method: :post,
+            path: "/v2/content/#{content_id}/import",
+            body: {
+              content_items: content_items,
+            },
+            headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
+              "Authorization" => "Bearer #{@bearer_token}"
+            ),
+          )
+          .will_respond_with(
+            status: 200
+          )
+      end
+
+      it "responds with 200 if the publish command succeeds" do
+        response = @api_client.import(content_id, content_items)
+        assert_equal 200, response.code
+      end
+    end
+  end
+
   describe "#unpublish" do
     describe "if the unpublish command succeeds" do
       before do
