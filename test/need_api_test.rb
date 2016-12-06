@@ -219,6 +219,22 @@ describe GdsApi::NeedApi do
     end
   end
 
+  describe "viewing content_ids for needs" do
+    it "should return the content_id for a need_id" do
+      need = {
+        id: 100700,
+        content_id: "abcdef-12345",
+        role: "need",
+        goal: "needy",
+        benefit: "needless"
+      }
+      need_api_has_content_id_for_need(need)
+
+      need_response = @api.content_id(100700)
+      assert_equal 'abcdef-12345', need_response.body
+    end
+  end
+
   describe "updating needs" do
     it "should send a PUT request" do
       updated_fields = {

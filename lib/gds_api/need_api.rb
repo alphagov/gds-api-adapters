@@ -8,6 +8,10 @@ class GdsApi::NeedApi < GdsApi::Base
     get_list!("#{endpoint}/needs#{query}")
   end
 
+  def content_id(need_id)
+    get_raw("#{endpoint}/needs/#{CGI.escape(need_id.to_s)}/content_id")
+  end
+
   def needs_by_id(*ids)
     ids_string = ids.flatten.map(&:to_i).sort.join(',')
     query = query_string(ids: ids_string)
