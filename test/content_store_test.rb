@@ -74,25 +74,4 @@ describe GdsApi::ContentStore do
       assert_equal "URL: #{@base_api_url}/content/non-existent\nResponse body:\n\n\nRequest body:", e.message.strip
     end
   end
-
-  describe "#incoming_links!" do
-    it "returns the item" do
-      base_path = "/test-from-content-store?types%5B%5D=a&types%5B%5D=b"
-      content_store_has_incoming_links(base_path, [ { title: "Yolo" }])
-
-      response = @api.incoming_links!('/test-from-content-store', types: [:a, :b])
-
-      assert_equal [ { "title" => "Yolo" } ], response.to_hash
-    end
-
-    it "raises if the item doesn't exist" do
-      content_store_does_not_have_item("/non-existent")
-
-      e = assert_raises GdsApi::ContentStore::ItemNotFound do
-        response = @api.incoming_links!("/non-existent")
-      end
-
-      assert_equal 404, e.code
-    end
-  end
 end
