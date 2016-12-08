@@ -2,6 +2,8 @@
 
 * Removed `GdsApi::Publisher`
 * Removed `GdsApi::ExternalLinkTracker`
+* Remove deprecated `PublishingApi` endpoints (`put_content_item` and
+  `put_draft_content_item`).
 
 # 37.5.1
 
