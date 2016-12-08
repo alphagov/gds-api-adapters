@@ -21,7 +21,7 @@ module GdsApi
         content_api_has_root_tags("section", slugs_or_sections)
       end
 
-      def content_api_has_section(slug_or_hash, parent_slug=nil)
+      def content_api_has_section(slug_or_hash, parent_slug = nil)
         content_api_has_tag("section", slug_or_hash, parent_slug)
       end
 
@@ -51,7 +51,7 @@ module GdsApi
         end
       end
 
-      def content_api_has_tag(tag_type, slug_or_hash, parent_tag_id=nil)
+      def content_api_has_tag(tag_type, slug_or_hash, parent_tag_id = nil)
         tag = tag_hash(slug_or_hash, tag_type).merge(parent: parent_tag_id)
         body = tag_result(tag)
 
@@ -83,16 +83,16 @@ module GdsApi
 
         body = plural_response_base.merge("results" => live_tags)
         stub_request(:get, "#{CONTENT_API_ENDPOINT}/tags.json")
-          .with(query: hash_including({"type" => type}))
+          .with(query: hash_including("type" => type))
           .to_return(status: 200, body: body.to_json, headers: {})
 
         body = plural_response_base.merge("results" => (live_tags + draft_tags))
         stub_request(:get, "#{CONTENT_API_ENDPOINT}/tags.json")
-          .with(query: hash_including({"type" => type, "draft" => "true"}))
+          .with(query: hash_including("type" => type, "draft" => "true"))
           .to_return(status: 200, body: body.to_json, headers: {})
       end
 
-      def content_api_does_not_have_tags(tag_type, slugs)
+      def content_api_does_not_have_tags(tag_type, _slugs)
         body = {
           "_response_info" => {
             "status" => "not found"
@@ -100,7 +100,7 @@ module GdsApi
         }
 
         stub_request(:get, "#{CONTENT_API_ENDPOINT}/tags.json")
-          .with(query: hash_including({"type" => tag_type}))
+          .with(query: hash_including("type" => tag_type))
           .to_return(status: 404, body: body.to_json, headers: {})
       end
 
@@ -110,7 +110,7 @@ module GdsApi
         )
 
         stub_request(:get, "#{CONTENT_API_ENDPOINT}/tags.json")
-          .with(query: hash_including({"type" => tag_type}))
+          .with(query: hash_including("type" => tag_type))
           .to_return(status: 200, body: body.to_json, headers: {})
       end
 
@@ -120,7 +120,7 @@ module GdsApi
         )
 
         stub_request(:get, "#{CONTENT_API_ENDPOINT}/tags.json")
-          .with(query: hash_including({"type" => tag_type, "sort" => sort_order}))
+          .with(query: hash_including("type" => tag_type, "sort" => sort_order))
           .to_return(status: 200, body: body.to_json, headers: {})
       end
 
@@ -196,7 +196,7 @@ module GdsApi
       def stub_content_api_default_artefact
         stub_request(:get, %r{\A#{CONTENT_API_ENDPOINT}/[a-z0-9-]+\.json}).to_return { |request|
           slug = request.uri.path.split('/').last.chomp('.json')
-          {:body => artefact_for_slug(slug).to_json}
+          { body: artefact_for_slug(slug).to_json }
         }
       end
 
@@ -257,14 +257,14 @@ module GdsApi
           child_tag_id.split('/').inject(nil) do |parent_tag, child_tag|
             child_tag = [parent_tag, child_tag].join('/') if parent_tag
             next_level_tag = tag_for_slug(child_tag, tag_type)
-            if tag_tree
+            tag_tree = if tag_tree
               # Because tags are nested within one another, this makes
               # the current part the top, and the rest we've seen the
               # ancestors
-              tag_tree = next_level_tag.merge("parent" => tag_tree)
-            else
-              tag_tree = next_level_tag
-            end
+                         next_level_tag.merge("parent" => tag_tree)
+                       else
+                         next_level_tag
+                       end
 
             # This becomes the parent tag in the next iteration of the block
             child_tag
@@ -288,9 +288,9 @@ module GdsApi
         artefact
       end
 
-      def tag_for_slug(slug, tag_type, parent_slug=nil)
-        parent = if parent_slug
-          tag_for_slug(parent_slug, tag_type)
+      def tag_for_slug(slug, tag_type, parent_slug = nil)
+        if parent_slug
+          parent = tag_for_slug(parent_slug, tag_type)
         end
 
         tag_result(slug: slug, type: tag_type, parent: parent)
@@ -353,14 +353,14 @@ module GdsApi
 
       def content_api_has_default_business_support_schemes
         empty_results = {
-          "_response_info" => {"status" => "ok"},
+          "_response_info" => { "status" => "ok" },
           "description" => "Business Support Schemes!",
           "total" => 0, "startIndex" => 1, "pageSize" => 0, "currentPage" => 1, "pages" => 1,
           "results" => []
         }
 
         stub_request(:get, %r{\A#{CONTENT_API_ENDPOINT}/business_support_schemes\.json}).
-          to_return(:body => empty_results.to_json)
+          to_return(body: empty_results.to_json)
       end
 
       def content_api_licence_hash(licence_identifier, options = {})
@@ -374,7 +374,7 @@ module GdsApi
         {
           "title" => details[:title],
           "id" => "http://example.org/#{details[:slug]}.json",
-          "web_url" =>  "http://www.test.gov.uk/#{details[:slug]}",
+          "web_url" => "http://www.test.gov.uk/#{details[:slug]}",
           "format" => "licence",
           "details" => {
             "need_ids" => [],
@@ -396,18 +396,18 @@ module GdsApi
       def setup_content_api_licences_stubs
         @stubbed_content_api_licences = []
         stub_request(:get, %r{\A#{CONTENT_API_ENDPOINT}/licences}).to_return do |request|
-          if request.uri.query_values and request.uri.query_values["ids"]
+          if request.uri.query_values && request.uri.query_values["ids"]
             ids = request.uri.query_values["ids"].split(',')
             valid_licences = @stubbed_content_api_licences.select { |l| ids.include? l[:licence_identifier] }
             {
-              :body => {
+              body: {
                 'results' => valid_licences.map { |licence|
                   content_api_licence_hash(licence[:licence_identifier], licence)
                 }
               }.to_json
             }
           else
-            {:body => {'results' => []}.to_json}
+            { body: { 'results' => [] }.to_json }
           end
         end
       end

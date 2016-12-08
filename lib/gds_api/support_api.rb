@@ -3,15 +3,15 @@ require_relative 'base'
 # @api documented
 class GdsApi::SupportApi < GdsApi::Base
   def create_problem_report(request_details)
-    post_json!("#{endpoint}/anonymous-feedback/problem-reports", { :problem_report => request_details })
+    post_json!("#{endpoint}/anonymous-feedback/problem-reports", problem_report: request_details)
   end
 
   def create_service_feedback(request_details)
-    post_json!("#{endpoint}/anonymous-feedback/service-feedback", { :service_feedback => request_details })
+    post_json!("#{endpoint}/anonymous-feedback/service-feedback", service_feedback: request_details)
   end
 
   def create_anonymous_long_form_contact(request_details)
-    post_json!("#{endpoint}/anonymous-feedback/long-form-contacts", { :long_form_contact => request_details })
+    post_json!("#{endpoint}/anonymous-feedback/long-form-contacts", long_form_contact: request_details)
   end
 
   def create_feedback_export_request(request_details)
@@ -137,6 +137,6 @@ class GdsApi::SupportApi < GdsApi::Base
   #
   # #=> { "success" =>  false} (status: 400)
   def mark_reviewed_for_spam(request_details)
-    put_json!("#{endpoint}/anonymous-feedback/problem-reports/mark-reviewed-for-spam", { reviewed_problem_report_ids: request_details })
+    put_json!("#{endpoint}/anonymous-feedback/problem-reports/mark-reviewed-for-spam", reviewed_problem_report_ids: request_details)
   end
 end

@@ -12,7 +12,7 @@ module GdsApi
       @app.call(env)
     end
 
-    private
+  private
 
     def readable_name
       @header_name.sub(/^HTTP_/, "").downcase.to_sym

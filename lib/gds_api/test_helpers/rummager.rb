@@ -100,7 +100,7 @@ module GdsApi
         run_example_query
       end
 
-      def rummager_has_specialist_sector_organisations(sub_sector)
+      def rummager_has_specialist_sector_organisations(_sub_sector)
         stub_request_for(sub_sector_organisations_results)
         run_example_query
       end
@@ -111,9 +111,9 @@ module GdsApi
       end
 
       def rummager_has_policies_for_every_type(options = {})
-        if count = options[:count]
-          stub_request(:get, %r{/search.json.*count=#{count}.*})
-            .to_return(body: first_n_results(new_policies_results, n: count))
+        if options[:count]
+          stub_request(:get, %r{/search.json.*count=#{options[:count]}.*})
+            .to_return(body: first_n_results(new_policies_results, n: options[:count]))
         else
           stub_request(:get, %r{/search.json})
             .to_return(body: new_policies_results)
@@ -121,6 +121,7 @@ module GdsApi
       end
 
     private
+
       def stub_request_for(result_set)
         stub_request(:get, /example.com\/search/).to_return(body: result_set)
       end

@@ -12,10 +12,10 @@ module GdsApi
       end
 
       def stub_router_backend_registration(backend_id, backend_url)
-        backend = { "backend" => { "backend_url" => backend_url }}
+        backend = { "backend" => { "backend_url" => backend_url } }
         stub_http_request(:put, "#{ROUTER_API_ENDPOINT}/backends/#{backend_id}")
-            .with(:body => backend.to_json)
-            .to_return(:status => 201)
+            .with(body: backend.to_json)
+            .to_return(status: 201)
       end
 
       def stub_route_registration(path, type, backend_id)
@@ -66,8 +66,8 @@ module GdsApi
 
       def stub_route_put(route)
         stub_http_request(:put, "#{ROUTER_API_ENDPOINT}/routes")
-            .with(:body => route.to_json)
-            .to_return(:status => 201)
+            .with(body: route.to_json)
+            .to_return(status: 201)
       end
     end
   end

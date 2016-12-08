@@ -51,7 +51,7 @@ module GdsApi
       end
 
       def need_api_has_need_ids(needs)
-        ids = needs.map {|need| (need["id"] || need[:id]).to_i }.sort.join(',')
+        ids = needs.map { |need| (need["id"] || need[:id]).to_i }.sort.join(',')
         url = NEED_API_ENDPOINT + "/needs?ids=#{ids}"
 
         body = response_base.merge(
@@ -85,7 +85,7 @@ module GdsApi
       def need_api_has_no_need(need_id)
         url = NEED_API_ENDPOINT + "/needs/#{need_id}"
         not_found_body = {
-          "_response_info" => {"status" => "not_found"},
+          "_response_info" => { "status" => "not_found" },
           "error" => "No need exists with this ID"
         }
         stub_request(:get, url).to_return(
@@ -97,8 +97,8 @@ module GdsApi
 
       def stub_create_note(note_details = nil)
         post_stub = stub_request(:post, NEED_API_ENDPOINT + "/notes")
-        post_stub.with(:body => note_details.to_json) unless note_details.nil?
-        post_stub.to_return(:status => 201)
+        post_stub.with(body: note_details.to_json) unless note_details.nil?
+        post_stub.to_return(status: 201)
       end
     end
   end

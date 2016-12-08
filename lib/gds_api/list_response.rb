@@ -3,14 +3,12 @@ require "gds_api/response"
 require "link_header"
 
 module GdsApi
-
   # Response class for lists of multiple items.
   #
   # This expects responses to be in a common format, with the list of results
   # contained under the `results` key. The response may also have previous and
   # subsequent pages, indicated by entries in the response's `Link` header.
   class ListResponse < Response
-
     # The ListResponse is instantiated with a reference back to the API client,
     # so it can make requests for the subsequent pages
     def initialize(response, api_client, options = {})
@@ -39,10 +37,8 @@ module GdsApi
       # allow the data to change once it's already been loaded, so long as we
       # retain a reference to any one page in the sequence
       @next_page ||= if has_next_page?
-        @api_client.get_list! page_link("next").href
-      else
-        nil
-      end
+                       @api_client.get_list! page_link("next").href
+                     end
     end
 
     def has_previous_page?
@@ -51,10 +47,10 @@ module GdsApi
 
     def previous_page
       # See the note in `next_page` for why this is memoised
-      @previous_page ||= if has_previous_page?
-        @api_client.get_list! page_link("previous").href
-      else
-        nil
+      @previous_page ||= begin
+        if has_previous_page?
+          @api_client.get_list!(page_link("previous").href)
+        end
       end
     end
 
@@ -86,6 +82,7 @@ module GdsApi
     end
 
   private
+
     def link_header
       @link_header ||= LinkHeader.parse @http_response.headers[:link]
     end

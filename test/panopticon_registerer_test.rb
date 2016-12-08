@@ -11,7 +11,7 @@ describe GdsApi::Panopticon::Registerer do
       it "should create an instance using the current Plek environment as the platform by default" do
         Plek.stubs(:current).returns(stub(find: "http://thisplace"))
 
-        GdsApi::Panopticon.expects(:new).with("http://thisplace", anything()).returns(:panopticon_instance)
+        GdsApi::Panopticon.expects(:new).with("http://thisplace", anything).returns(:panopticon_instance)
         r = GdsApi::Panopticon::Registerer.new({})
         assert_equal :panopticon_instance, r.send(:panopticon)
       end
@@ -19,28 +19,28 @@ describe GdsApi::Panopticon::Registerer do
       it "should pass through the endpoint url" do
         Plek.stubs(:current).returns(stub(find: "http://thisplace"))
 
-        GdsApi::Panopticon.expects(:new).with("http://otherplace", anything()).returns(:panopticon_instance)
-        r = GdsApi::Panopticon::Registerer.new({endpoint_url: "http://otherplace"})
+        GdsApi::Panopticon.expects(:new).with("http://otherplace", anything).returns(:panopticon_instance)
+        r = GdsApi::Panopticon::Registerer.new(endpoint_url: "http://otherplace")
         assert_equal :panopticon_instance, r.send(:panopticon)
       end
     end
 
     describe "setting other options" do
       it "should create an instance with a default timeout of 10 seconds" do
-        GdsApi::Panopticon.expects(:new).with(anything(), {timeout: 10}).returns(:panopticon_instance)
+        GdsApi::Panopticon.expects(:new).with(anything, timeout: 10).returns(:panopticon_instance)
         r = GdsApi::Panopticon::Registerer.new({})
         assert_equal :panopticon_instance, r.send(:panopticon)
       end
 
       it "should allow overriding the timeout" do
-        GdsApi::Panopticon.expects(:new).with(anything(), {timeout: 15}).returns(:panopticon_instance)
-        r = GdsApi::Panopticon::Registerer.new({timeout: 15})
+        GdsApi::Panopticon.expects(:new).with(anything, timeout: 15).returns(:panopticon_instance)
+        r = GdsApi::Panopticon::Registerer.new(timeout: 15)
         assert_equal :panopticon_instance, r.send(:panopticon)
       end
 
       it "shoule merge in the api credentials" do
-        GdsApi::Panopticon::Registerer.any_instance.stubs(:panopticon_api_credentials).returns({foo: "Bar", baz: "kablooie"})
-        GdsApi::Panopticon.expects(:new).with(anything(), {timeout: 10, foo: "Bar", baz: "kablooie"}).returns(:panopticon_instance)
+        GdsApi::Panopticon::Registerer.any_instance.stubs(:panopticon_api_credentials).returns(foo: "Bar", baz: "kablooie")
+        GdsApi::Panopticon.expects(:new).with(anything, timeout: 10, foo: "Bar", baz: "kablooie").returns(:panopticon_instance)
         r = GdsApi::Panopticon::Registerer.new({})
         assert_equal :panopticon_instance, r.send(:panopticon)
       end
@@ -63,7 +63,7 @@ describe GdsApi::Panopticon::Registerer do
       name: 'A guide to beards',
       description: '5 tips for keeping your beard in check',
       state: 'draft',
-      need_ids: ["100001", "100002"],
+      need_ids: %w(100001 100002),
       public_timestamp: "2014-01-01T12:00:00+00:00",
       latest_change_note: 'Added more stubble',
       content_id: 'f47b4fab-46fa-4020-97a2-3413a5d75402'
@@ -78,7 +78,7 @@ describe GdsApi::Panopticon::Registerer do
         title: 'A guide to beards',
         description: '5 tips for keeping your beard in check',
         state: 'draft',
-        need_ids: ["100001", "100002"],
+        need_ids: %w(100001 100002),
         primary_section: "tax/vat",
         sections: ["tax/vat", "tax/capital-gains"],
         specialist_sectors: ["oil-and-gas/wells", "oil-and-gas/licensing"],

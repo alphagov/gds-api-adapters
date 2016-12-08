@@ -2,7 +2,6 @@
 module GdsApi
   module TestHelpers
     module ContentItemHelpers
-
       def content_item_for_base_path(base_path)
         {
           "title" => titleize_base_path(base_path),
@@ -33,7 +32,7 @@ module GdsApi
 
       def titleize_base_path(base_path, options = {})
         if options[:title_case]
-          base_path.gsub("-", " ").gsub(/\b./) {|m| m.upcase }
+          base_path.tr("-", " ").gsub(/\b./, &:upcase)
         else
           base_path.gsub(%r{[-/]}, " ").strip.capitalize
         end

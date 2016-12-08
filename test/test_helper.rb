@@ -45,7 +45,7 @@ module PactTest
 end
 
 def load_fixture_file(filename)
-  File.open( File.join( File.dirname(__FILE__), "fixtures", filename ), :encoding => 'utf-8' )
+  File.open(File.join(File.dirname(__FILE__), "fixtures", filename), encoding: 'utf-8')
 end
 
 require 'webmock/minitest'

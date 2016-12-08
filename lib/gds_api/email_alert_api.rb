@@ -6,7 +6,6 @@ require_relative 'exceptions'
 # @see https://github.com/alphagov/email-alert-api
 # @api documented
 class GdsApi::EmailAlertApi < GdsApi::Base
-
   # Get or Post subscriber list
   #
   # @param attributes [Hash] document_type, links, tags used to search existing subscriber lists
@@ -42,7 +41,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   # @option start_at [String] Optional GovDelivery bulletin id to page back through notifications
   #
   # @return [Hash] notifications
-  def notifications(start_at=nil)
+  def notifications(start_at = nil)
     url = "#{endpoint}/notifications"
     url += "?start_at=#{start_at}" if start_at
     get_json!(url)

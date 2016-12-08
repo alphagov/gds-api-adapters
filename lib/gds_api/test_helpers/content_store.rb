@@ -15,7 +15,7 @@ module GdsApi
       #             will include "public"
       #   :draft    will point to the draft content store if set to true
 
-      def content_store_endpoint(draft=false)
+      def content_store_endpoint(draft = false)
         draft ? Plek.current.find('draft-content-store') : Plek.current.find('content-store')
       end
 
@@ -79,11 +79,11 @@ module GdsApi
       end
 
       def content_store_isnt_available
-        stub_request(:any, /#{content_store_endpoint}\/.*/).to_return(:status => 503)
+        stub_request(:any, /#{content_store_endpoint}\/.*/).to_return(status: 503)
       end
 
       def content_item_for_base_path(base_path)
-        super.merge({ "base_path" => base_path })
+        super.merge("base_path" => base_path)
       end
 
       def content_store_has_incoming_links(base_path, links)

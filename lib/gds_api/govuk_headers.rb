@@ -6,7 +6,7 @@ module GdsApi
       end
 
       def headers
-        header_data.select {|k, v| !(v.nil? || v.empty?) }
+        header_data.select { |_k, v| !(v.nil? || v.empty?) }
       end
 
       def clear_headers

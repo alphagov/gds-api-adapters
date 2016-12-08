@@ -1,4 +1,4 @@
-PUBLISHING_API_PORT=3001
+PUBLISHING_API_PORT = 3001
 
 def publishing_api_host
   "http://localhost:#{PUBLISHING_API_PORT}"

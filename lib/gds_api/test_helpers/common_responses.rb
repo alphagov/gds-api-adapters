@@ -3,16 +3,16 @@ module GdsApi
     module CommonResponses
       def titleize_slug(slug, options = {})
         if options[:title_case]
-          slug.gsub("-", " ").gsub(/\b./) {|m| m.upcase }
+          slug.tr("-", " ").gsub(/\b./, &:upcase)
         else
-          slug.gsub("-", " ").capitalize
+          slug.tr("-", " ").capitalize
         end
       end
 
       # expects a slug like "ministry-of-funk"
       # returns an acronym like "MOF"
       def acronymize_slug(slug)
-        initials = slug.gsub(/\b\w+/) {|m| m[0] }.gsub("-", "")
+        initials = slug.gsub(/\b\w+/) { |m| m[0] }.delete("-")
         initials.upcase
       end
 
@@ -27,15 +27,13 @@ module GdsApi
 
       def plural_response_base
         response_base.merge(
-          {
-            "description" => "Tags!",
-            "total" => 100,
-            "start_index" => 1,
-            "page_size" => 100,
-            "current_page" => 1,
-            "pages" => 1,
-            "results" => []
-          }
+          "description" => "Tags!",
+          "total" => 100,
+          "start_index" => 1,
+          "page_size" => 100,
+          "current_page" => 1,
+          "pages" => 1,
+          "results" => []
         )
       end
     end

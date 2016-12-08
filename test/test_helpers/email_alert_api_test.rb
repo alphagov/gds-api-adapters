@@ -12,13 +12,13 @@ describe GdsApi::TestHelpers::EmailAlertApi do
     before { stub_any_email_alert_api_call }
 
     it "matches a post request with any empty attributes by default" do
-      email_alert_api.send_alert({ "foo" => "bar" })
+      email_alert_api.send_alert("foo" => "bar")
       assert_email_alert_sent
     end
 
     it "matches a post request subset of attributes" do
-      email_alert_api.send_alert({ "foo" => "bar", "baz" => "qux" })
-      assert_email_alert_sent({ "foo" => "bar" })
+      email_alert_api.send_alert("foo" => "bar", "baz" => "qux")
+      assert_email_alert_sent("foo" => "bar")
     end
   end
 end

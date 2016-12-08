@@ -21,7 +21,7 @@ describe GdsApi::Organisations do
     end
 
     it "should handle the pagination" do
-      organisation_slugs = (1..50).map {|n| "organisation-#{n}" }
+      organisation_slugs = (1..50).map { |n| "organisation-#{n}" }
       organisations_api_has_organisations(organisation_slugs)
 
       response = @api.organisations
@@ -32,7 +32,7 @@ describe GdsApi::Organisations do
     end
 
     it "should raise error if endpoint 404s" do
-      stub_request(:get, "#{@base_api_url}/api/organisations").to_return(:status => 404)
+      stub_request(:get, "#{@base_api_url}/api/organisations").to_return(status: 404)
       assert_raises GdsApi::HTTPNotFound do
         @api.organisations
       end

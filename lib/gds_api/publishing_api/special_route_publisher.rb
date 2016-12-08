@@ -12,7 +12,8 @@ module GdsApi
       def publish(options)
         logger.info("Publishing #{options.fetch(:type)} route #{options.fetch(:base_path)}, routing to #{options.fetch(:rendering_app)}")
 
-        put_content_response = publishing_api.put_content(options.fetch(:content_id), {
+        put_content_response = publishing_api.put_content(
+          options.fetch(:content_id),
           base_path: options.fetch(:base_path),
           document_type: "special_route",
           schema_name: "special_route",
@@ -26,14 +27,15 @@ module GdsApi
           ],
           publishing_app: options.fetch(:publishing_app),
           rendering_app: options.fetch(:rendering_app),
-          public_updated_at: time.now.iso8601,
-        })
+          public_updated_at: time.now.iso8601)
+
         publishing_api.patch_links(options.fetch(:content_id), links: options[:links]) if options[:links]
         publishing_api.publish(options.fetch(:content_id), 'major')
         put_content_response
       end
 
     private
+
       attr_reader :logger, :publishing_api
 
       def time

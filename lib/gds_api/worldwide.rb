@@ -1,7 +1,6 @@
 require_relative 'base'
 
 class GdsApi::Worldwide < GdsApi::Base
-
   def world_locations
     get_list! "#{base_url}/world-locations"
   end
@@ -15,6 +14,7 @@ class GdsApi::Worldwide < GdsApi::Base
   end
 
 private
+
   def base_url
     "#{endpoint}/api"
   end

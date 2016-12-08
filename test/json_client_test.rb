@@ -85,7 +85,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_should_cache_multiple_requests_to_same_url_across_instances
     url = "http://some.endpoint/some.json"
-    result = {"foo" => "bar"}
+    result = { "foo" => "bar" }
     stub_request(:get, url).to_return(body: JSON.dump(result), status: 200)
     response_a = GdsApi::JsonClient.new.get_json(url)
     response_b = GdsApi::JsonClient.new.get_json(url)
@@ -99,12 +99,12 @@ class JsonClientTest < MiniTest::Spec
     GdsApi::JsonClient.cache = nil
 
     url = "http://some.endpoint/"
-    result = {"foo" => "bar"}
+
     stub_request(:get, %r{\A#{url}}).to_return do |request|
       { body: { "url" => request.uri }.to_json, status: 200 }
     end
 
-    response_a = GdsApi::JsonClient.new(:cache_size => 5).get_json("#{url}/first.json")
+    response_a = GdsApi::JsonClient.new(cache_size: 5).get_json("#{url}/first.json")
     response_b = GdsApi::JsonClient.new.get_json("#{url}/second.json")
     4.times { |n| GdsApi::JsonClient.new.get_json("#{url}/#{n}.json") }
 
@@ -119,7 +119,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_should_cache_requests_for_15_mins_by_default
     url = "http://some.endpoint/some.json"
-    result = {"foo" => "bar"}
+    result = { "foo" => "bar" }
     stub_request(:get, url).to_return(body: JSON.dump(result), status: 200)
     response_a = GdsApi::JsonClient.new.get_json(url)
     response_b = GdsApi::JsonClient.new.get_json(url)
@@ -127,14 +127,14 @@ class JsonClientTest < MiniTest::Spec
     assert_requested :get, url, times: 1
     assert_equal response_a.to_hash, response_b.to_hash
 
-    Timecop.travel( 15 * 60 - 30) do # now + 14 mins 30 secs
+    Timecop.travel(15 * 60 - 30) do # now + 14 mins 30 secs
       response_c = GdsApi::JsonClient.new.get_json(url)
 
       assert_requested :get, url, times: 1
       assert_equal response_a.to_hash, response_c.to_hash
     end
 
-    Timecop.travel( 15 * 60 + 30) do # now + 15 mins 30 secs
+    Timecop.travel(15 * 60 + 30) do # now + 15 mins 30 secs
       response_d = GdsApi::JsonClient.new.get_json(url)
 
       assert_requested :get, url, times: 2
@@ -148,22 +148,22 @@ class JsonClientTest < MiniTest::Spec
     GdsApi::JsonClient.cache = nil
 
     url = "http://some.endpoint/some.json"
-    result = {"foo" => "bar"}
+    result = { "foo" => "bar" }
     stub_request(:get, url).to_return(body: JSON.dump(result), status: 200)
-    response_a = GdsApi::JsonClient.new(:cache_ttl => 5 * 60).get_json(url)
+    response_a = GdsApi::JsonClient.new(cache_ttl: 5 * 60).get_json(url)
     response_b = GdsApi::JsonClient.new.get_json(url)
 
     assert_requested :get, url, times: 1
     assert_equal response_a.to_hash, response_b.to_hash
 
-    Timecop.travel( 5 * 60 - 30) do # now + 4 mins 30 secs
+    Timecop.travel(5 * 60 - 30) do # now + 4 mins 30 secs
       response_c = GdsApi::JsonClient.new.get_json(url)
 
       assert_requested :get, url, times: 1
       assert_equal response_a.to_hash, response_c.to_hash
     end
 
-    Timecop.travel( 5 * 60 + 30) do # now + 5 mins 30 secs
+    Timecop.travel(5 * 60 + 30) do # now + 5 mins 30 secs
       response_d = GdsApi::JsonClient.new.get_json(url)
 
       assert_requested :get, url, times: 2
@@ -173,7 +173,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_should_allow_disabling_caching
     url = "http://some.endpoint/some.json"
-    result = {"foo" => "bar"}
+    result = { "foo" => "bar" }
     stub_request(:get, url).to_return(body: JSON.dump(result), status: 200)
 
     client = GdsApi::JsonClient.new(disable_cache: true)
@@ -190,7 +190,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_should_respect_expiry_headers
     url = "http://some.endpoint/some.json"
-    result = {"foo" => "bar"}
+    result = { "foo" => "bar" }
     stub_request(:get, url).to_return(
       body: JSON.dump(result),
       status: 200,
@@ -199,14 +199,14 @@ class JsonClientTest < MiniTest::Spec
 
     response_a = GdsApi::JsonClient.new.get_json(url)
 
-    Timecop.travel( 7 * 60 - 30) do # now + 6 mins 30 secs
+    Timecop.travel(7 * 60 - 30) do # now + 6 mins 30 secs
       response_b = GdsApi::JsonClient.new.get_json(url)
 
       assert_requested :get, url, times: 1
       assert_equal response_a.to_hash, response_b.to_hash
     end
 
-    Timecop.travel( 7 * 60 + 30) do # now + 7 mins 30 secs
+    Timecop.travel(7 * 60 + 30) do # now + 7 mins 30 secs
       response_c = GdsApi::JsonClient.new.get_json(url)
 
       assert_requested :get, url, times: 2
@@ -216,7 +216,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_should_respect_cache_control_headers_with_max_age
     url = "http://some.endpoint/max_age.json"
-    result = {"foo" => "bar"}
+    result = { "foo" => "bar" }
     stub_request(:get, url).to_return(
       body: JSON.dump(result),
       status: 200,
@@ -225,14 +225,14 @@ class JsonClientTest < MiniTest::Spec
 
     response_a = GdsApi::JsonClient.new.get_json(url)
 
-    Timecop.travel( 7 * 60 - 30) do # now + 6 mins 30 secs
+    Timecop.travel(7 * 60 - 30) do # now + 6 mins 30 secs
       response_b = GdsApi::JsonClient.new.get_json(url)
 
       assert_requested :get, url, times: 1
       assert_equal response_a.to_hash, response_b.to_hash
     end
 
-    Timecop.travel( 7 * 60 + 30) do # now + 7 mins 30 secs
+    Timecop.travel(7 * 60 + 30) do # now + 7 mins 30 secs
       response_c = GdsApi::JsonClient.new.get_json(url)
 
       assert_requested :get, url, times: 2
@@ -242,7 +242,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_should_respect_cache_control_headers_with_no_cache
     url = "http://some.endpoint/no_cache.json"
-    result = {"foo" => "bar"}
+    result = { "foo" => "bar" }
     stub_request(:get, url).to_return(
       body: JSON.dump(result),
       status: 200,
@@ -251,7 +251,7 @@ class JsonClientTest < MiniTest::Spec
 
     response_a = GdsApi::JsonClient.new.get_json(url)
 
-    Timecop.travel( 7 * 60 - 30) do # now + 6 mins 30 secs
+    Timecop.travel(7 * 60 - 30) do # now + 6 mins 30 secs
       response_b = GdsApi::JsonClient.new.get_json(url)
 
       assert_requested :get, url, times: 2
@@ -261,7 +261,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_does_not_cache_responses_with_cache_control_private
     url = "http://some.endpoint/private.json"
-    result = {"foo" => "bar"}
+    result = { "foo" => "bar" }
     stub_request(:get, url).to_return(
       body: JSON.dump(result),
       status: 200,
@@ -270,7 +270,7 @@ class JsonClientTest < MiniTest::Spec
 
     response_a = GdsApi::JsonClient.new.get_json(url)
 
-    Timecop.travel( 7 * 60 - 30) do # now + 6 mins 30 secs
+    Timecop.travel(7 * 60 - 30) do # now + 6 mins 30 secs
       response_b = GdsApi::JsonClient.new.get_json(url)
 
       assert_requested :get, url, times: 2
@@ -280,7 +280,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_does_not_cache_responses_with_cache_control_no_store
     url = "http://some.endpoint/private.json"
-    result = {"foo" => "bar"}
+    result = { "foo" => "bar" }
     stub_request(:get, url).to_return(
       body: JSON.dump(result),
       status: 200,
@@ -289,7 +289,7 @@ class JsonClientTest < MiniTest::Spec
 
     response_a = GdsApi::JsonClient.new.get_json(url)
 
-    Timecop.travel( 7 * 60 - 30) do # now + 6 mins 30 secs
+    Timecop.travel(7 * 60 - 30) do # now + 6 mins 30 secs
       response_b = GdsApi::JsonClient.new.get_json(url)
 
       assert_requested :get, url, times: 2
@@ -299,7 +299,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_should_respect_cache_control_headers_with_no_cache_and_max_age
     url = "http://some.endpoint/no_cache_and_max_age.json"
-    result = {"foo" => "bar"}
+    result = { "foo" => "bar" }
     stub_request(:get, url).to_return(
       body: JSON.dump(result),
       status: 200,
@@ -308,7 +308,7 @@ class JsonClientTest < MiniTest::Spec
 
     response_a = GdsApi::JsonClient.new.get_json(url)
 
-    Timecop.travel( 7 * 60 - 30) do # now + 6 mins 30 secs
+    Timecop.travel(7 * 60 - 30) do # now + 6 mins 30 secs
       response_b = GdsApi::JsonClient.new.get_json(url)
 
       assert_requested :get, url, times: 2
@@ -318,7 +318,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_should_use_cache_control_headers_over_expires_headers
     url = "http://some.endpoint/url.json"
-    result = {"foo" => "bar"}
+    result = { "foo" => "bar" }
     stub_request(:get, url).to_return(
       body: JSON.dump(result),
       status: 200,
@@ -330,7 +330,7 @@ class JsonClientTest < MiniTest::Spec
 
     response_a = GdsApi::JsonClient.new.get_json(url)
 
-    Timecop.travel( 7 * 60 - 30) do # now + 6 mins 30 secs
+    Timecop.travel(7 * 60 - 30) do # now + 6 mins 30 secs
       response_b = GdsApi::JsonClient.new.get_json(url)
 
       assert_requested :get, url, times: 2
@@ -340,7 +340,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_should_fallback_to_expires_headers_if_cache_control_is_malformed
     url = "http://some.endpoint/url.json"
-    result = {"foo" => "bar"}
+    result = { "foo" => "bar" }
     stub_request(:get, url).to_return(
       body: JSON.dump(result),
       status: 200,
@@ -352,7 +352,7 @@ class JsonClientTest < MiniTest::Spec
 
     response_a = GdsApi::JsonClient.new.get_json(url)
 
-    Timecop.travel( 7 * 60 - 30) do # now + 6 mins 30 secs
+    Timecop.travel(7 * 60 - 30) do # now + 6 mins 30 secs
       response_b = GdsApi::JsonClient.new.get_json(url)
 
       assert_requested :get, url, times: 1
@@ -496,7 +496,7 @@ class JsonClientTest < MiniTest::Spec
     # with a redirect to the same URL, but we'd risk getting the test code into
     # an infinite loop if the code didn't do what it was supposed to. The
     # failure response block aborts the test if we have too many requests.
-    failure = lambda { |request| flunk("Request called too many times") }
+    failure = lambda { |_request| flunk("Request called too many times") }
     stub_request(:get, url).to_return(redirect).times(11).then.to_return(failure)
 
     assert_raises GdsApi::HTTPErrorResponse do
@@ -520,7 +520,7 @@ class JsonClientTest < MiniTest::Spec
     }
 
     # See the comment in the above test for an explanation of this
-    failure = lambda { |request| flunk("Request called too many times") }
+    failure = lambda { |_request| flunk("Request called too many times") }
     stub_request(:get, first_url).to_return(first_redirect).times(6).then.to_return(failure)
     stub_request(:get, second_url).to_return(second_redirect).times(6).then.to_return(failure)
 
@@ -582,7 +582,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_put_json_does_put_with_json_encoded_packet
     url = "http://some.endpoint/some.json"
-    payload = {a: 1}
+    payload = { a: 1 }
     stub_request(:put, url).with(body: payload.to_json).to_return(body: "{}", status: 200)
     assert_equal({}, @client.put_json(url, payload).to_hash)
   end
@@ -597,7 +597,7 @@ class JsonClientTest < MiniTest::Spec
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(body: "Hello there!")
 
-    response = @client.get_json(url) { |http_response| http_response.body }
+    response = @client.get_json(url, &:body)
     assert response.is_a? String
     assert_equal "Hello there!", response
   end
@@ -615,7 +615,7 @@ class JsonClientTest < MiniTest::Spec
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(body: "Hello there!")
 
-    response = @client.get_json!(url) { |http_response| http_response.body }
+    response = @client.get_json!(url, &:body)
     assert response.is_a? String
     assert_equal "Hello there!", response
   end
@@ -637,7 +637,7 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_client_can_use_basic_auth
-    client = GdsApi::JsonClient.new(basic_auth: {user: 'user', password: 'password'})
+    client = GdsApi::JsonClient.new(basic_auth: { user: 'user', password: 'password' })
 
     stub_request(:put, "http://user:password@some.endpoint/some.json").
       to_return(body: '{"a":1}', status: 200)
@@ -662,11 +662,11 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_set_custom_headers_on_gets
     stub_request(:get, "http://some.other.endpoint/some.json").to_return(status: 200)
 
-    response = GdsApi::JsonClient.new.get_json("http://some.other.endpoint/some.json",
-                                               { "HEADER-A" => "B", "HEADER-C" => "D" })
+    GdsApi::JsonClient.new.get_json("http://some.other.endpoint/some.json",
+                                               "HEADER-A" => "B", "HEADER-C" => "D")
 
     assert_requested(:get, %r{/some.json}) do |request|
-      headers_with_uppercase_names = Hash[request.headers.collect {|key, value| [key.upcase, value] }]
+      headers_with_uppercase_names = Hash[request.headers.collect { |key, value| [key.upcase, value] }]
       headers_with_uppercase_names["HEADER-A"] == "B" && headers_with_uppercase_names["HEADER-C"] == "D"
     end
   end
@@ -674,11 +674,11 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_set_custom_headers_on_posts
     stub_request(:post, "http://some.other.endpoint/some.json").to_return(status: 200)
 
-    response = GdsApi::JsonClient.new.post_json("http://some.other.endpoint/some.json", {},
-                                                { "HEADER-A" => "B", "HEADER-C" => "D" })
+    GdsApi::JsonClient.new.post_json("http://some.other.endpoint/some.json", {},
+                                                "HEADER-A" => "B", "HEADER-C" => "D")
 
     assert_requested(:post, %r{/some.json}) do |request|
-      headers_with_uppercase_names = Hash[request.headers.collect {|key, value| [key.upcase, value] }]
+      headers_with_uppercase_names = Hash[request.headers.collect { |key, value| [key.upcase, value] }]
       headers_with_uppercase_names["HEADER-A"] == "B" && headers_with_uppercase_names["HEADER-C"] == "D"
     end
   end
@@ -686,11 +686,11 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_set_custom_headers_on_puts
     stub_request(:put, "http://some.other.endpoint/some.json").to_return(status: 200)
 
-    response = GdsApi::JsonClient.new.put_json("http://some.other.endpoint/some.json", {},
-                                               { "HEADER-A" => "B", "HEADER-C" => "D" })
+    GdsApi::JsonClient.new.put_json("http://some.other.endpoint/some.json", {},
+                                               "HEADER-A" => "B", "HEADER-C" => "D")
 
     assert_requested(:put, %r{/some.json}) do |request|
-      headers_with_uppercase_names = Hash[request.headers.collect {|key, value| [key.upcase, value] }]
+      headers_with_uppercase_names = Hash[request.headers.collect { |key, value| [key.upcase, value] }]
       headers_with_uppercase_names["HEADER-A"] == "B" && headers_with_uppercase_names["HEADER-C"] == "D"
     end
   end
@@ -698,11 +698,11 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_set_custom_headers_on_deletes
     stub_request(:delete, "http://some.other.endpoint/some.json").to_return(status: 200)
 
-    response = GdsApi::JsonClient.new.delete_json("http://some.other.endpoint/some.json",
-                                                  { "HEADER-A" => "B", "HEADER-C" => "D" })
+    GdsApi::JsonClient.new.delete_json("http://some.other.endpoint/some.json",
+                                                  "HEADER-A" => "B", "HEADER-C" => "D")
 
     assert_requested(:delete, %r{/some.json}) do |request|
-      headers_with_uppercase_names = Hash[request.headers.collect {|key, value| [key.upcase, value] }]
+      headers_with_uppercase_names = Hash[request.headers.collect { |key, value| [key.upcase, value] }]
       headers_with_uppercase_names["HEADER-A"] == "B" && headers_with_uppercase_names["HEADER-C"] == "D"
     end
   end
@@ -718,7 +718,7 @@ class JsonClientTest < MiniTest::Spec
 
     assert_requested(:get, %r{/some.json}) do |request|
       request.headers['Govuk-Request-Id'] == '12345' &&
-      request.headers['Govuk-Original-Url'] == 'http://example.com'
+        request.headers['Govuk-Original-Url'] == 'http://example.com'
     end
   end
 
@@ -764,7 +764,7 @@ class JsonClientTest < MiniTest::Spec
            }).
       to_return(body: '{"b": "1"}', status: 200)
 
-    response = @client.post_multipart("http://some.endpoint/some.json", {"a" => "123"})
+    response = @client.post_multipart("http://some.endpoint/some.json", "a" => "123")
     assert_equal "1", response["b"]
   end
 
@@ -773,7 +773,7 @@ class JsonClientTest < MiniTest::Spec
     stub_request(:post, url).to_return(body: '', status: 404)
 
     assert_raises GdsApi::HTTPNotFound do
-      @client.post_multipart("http://some.endpoint/some.json", {"a" => "123"})
+      @client.post_multipart("http://some.endpoint/some.json", "a" => "123")
     end
   end
 
@@ -782,7 +782,7 @@ class JsonClientTest < MiniTest::Spec
     stub_request(:post, url).to_return(body: '', status: 500)
 
     assert_raises GdsApi::HTTPServerError do
-      @client.post_multipart("http://some.endpoint/some.json", {"a" => "123"})
+      @client.post_multipart("http://some.endpoint/some.json", "a" => "123")
     end
   end
 
@@ -796,7 +796,7 @@ class JsonClientTest < MiniTest::Spec
            }).
       to_return(body: '{"b": "1"}', status: 200)
 
-    response = @client.put_multipart("http://some.endpoint/some.json", {"a" => "123"})
+    response = @client.put_multipart("http://some.endpoint/some.json", "a" => "123")
     assert_equal "1", response["b"]
   end
 
@@ -805,7 +805,7 @@ class JsonClientTest < MiniTest::Spec
     stub_request(:put, url).to_return(body: '', status: 404)
 
     assert_raises GdsApi::HTTPNotFound do
-      @client.put_multipart("http://some.endpoint/some.json", {"a" => "123"})
+      @client.put_multipart("http://some.endpoint/some.json", "a" => "123")
     end
   end
 
@@ -814,16 +814,16 @@ class JsonClientTest < MiniTest::Spec
     stub_request(:put, url).to_return(body: '', status: 500)
 
     assert_raises GdsApi::HTTPServerError do
-      @client.put_multipart("http://some.endpoint/some.json", {"a" => "123"})
+      @client.put_multipart("http://some.endpoint/some.json", "a" => "123")
     end
   end
 
   def test_should_raise_error_if_attempting_to_disable_timeout
     assert_raises RuntimeError do
-      GdsApi::JsonClient.new(:disable_timeout => true)
+      GdsApi::JsonClient.new(disable_timeout: true)
     end
     assert_raises RuntimeError do
-      GdsApi::JsonClient.new(:timeout => -1)
+      GdsApi::JsonClient.new(timeout: -1)
     end
   end
 

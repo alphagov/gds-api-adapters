@@ -16,7 +16,7 @@ module GdsApi
           @response_body = artefact_for_slug(slug)
           @response_status = 200
         end
-        
+
         def with_query_parameters(hash)
           @query_parameters = hash
           self
@@ -38,19 +38,20 @@ module GdsApi
               .with(query: hash_including(comparable_query_params))
               .to_return(status: @response_status, body: @response_body.to_json)
         end
-        
-        private
-          def url_without_query
-            "#{CONTENT_API_ENDPOINT}/#{CGI.escape(slug)}.json"
-          end
 
-          # Ensure that all keys and values are strings 
-          # because Webmock doesn't handle symbols
-          def comparable_query_params
-            @query_parameters.each_with_object({}) do |(k,v),hash| 
-              hash[k.to_s] = v.nil? ? v : v.to_s
-            end
+      private
+
+        def url_without_query
+          "#{CONTENT_API_ENDPOINT}/#{CGI.escape(slug)}.json"
+        end
+
+        # Ensure that all keys and values are strings
+        # because Webmock doesn't handle symbols
+        def comparable_query_params
+          @query_parameters.each_with_object({}) do |(k, v), hash|
+            hash[k.to_s] = v.nil? ? v : v.to_s
           end
+        end
       end
     end
   end

@@ -1,7 +1,6 @@
 module GdsApi
   module TestHelpers
     module IntentHelpers
-
       def intent_for_base_path(base_path)
         {
           "base_path" => base_path,
@@ -11,4 +10,3 @@ module GdsApi
     end
   end
 end
-

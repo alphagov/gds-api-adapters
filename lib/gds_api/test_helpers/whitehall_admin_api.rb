@@ -1,7 +1,7 @@
 module GdsApi
   module TestHelpers
     module WhitehallAdminApi
-      WHITEHALL_ADMIN_API_ENDPOINT = "#{Plek.current.find("whitehall-admin")}/government/admin/api"
+      WHITEHALL_ADMIN_API_ENDPOINT = "#{Plek.current.find('whitehall-admin')}/government/admin/api".freeze
 
       def stub_all_whitehall_admin_api_requests
         stub_request(:any, %r|^#{WHITEHALL_ADMIN_API_ENDPOINT}|)

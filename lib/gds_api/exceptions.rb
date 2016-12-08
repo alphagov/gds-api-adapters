@@ -49,10 +49,11 @@ module GdsApi
   class NoBearerToken < BaseError; end
 
   module ExceptionHandling
-    def ignoring(exception_or_exceptions, &block)
+    def ignoring(exception_or_exceptions)
       yield
     rescue *exception_or_exceptions
       # Discard the exception
+      nil
     end
 
     def ignoring_missing(&block)

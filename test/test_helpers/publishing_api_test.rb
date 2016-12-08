@@ -9,7 +9,7 @@ describe GdsApi::TestHelpers::PublishingApi do
 
   describe '#request_json_matching predicate' do
     describe "nested required attribute" do
-      let(:matcher) { request_json_matching({"a" => {"b" => 1}}) }
+      let(:matcher) { request_json_matching("a" => { "b" => 1 }) }
 
       it "matches a body with exact same nested hash strucure" do
         assert matcher.call(stub("request", body: '{"a": {"b": 1}}'))
@@ -33,7 +33,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
 
     describe "hash to match uses symbol keys" do
-      let(:matcher) { request_json_matching({a: 1}) }
+      let(:matcher) { request_json_matching(a: 1) }
 
       it "matches a json body" do
         assert matcher.call(stub("request", body: '{"a": 1}'))
@@ -55,7 +55,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
 
     describe "one required attribute" do
-      let(:matcher) { request_json_including({"a" => 1}) }
+      let(:matcher) { request_json_including("a" => 1) }
 
       it "does not match an empty body" do
         refute matcher.call(stub("request", body: "{}"))
@@ -75,7 +75,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
 
     describe "nested required attribute" do
-      let(:matcher) { request_json_including({"a" => {"b" => 1}}) }
+      let(:matcher) { request_json_including("a" => { "b" => 1 }) }
 
       it "matches a body with exact same nested hash strucure" do
         assert matcher.call(stub("request", body: '{"a": {"b": 1}}'))
@@ -95,7 +95,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
 
     describe "hash to match uses symbol keys" do
-      let(:matcher) { request_json_including({a: {b: 1}}) }
+      let(:matcher) { request_json_including(a: { b: 1 }) }
 
       it "matches a json body" do
         assert matcher.call(stub("request", body: '{"a": {"b": 1}}'))
@@ -103,7 +103,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
 
     describe "nested arrays" do
-      let(:matcher) { request_json_including({"a" => [1]}) }
+      let(:matcher) { request_json_including("a" => [1]) }
 
       it "matches a body with exact same inner array" do
         assert matcher.call(stub("request", body: '{"a": [1]}'))
@@ -115,7 +115,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
 
     describe "hashes in nested arrays" do
-      let(:matcher) { request_json_including({"a" => [{"b" => 1}, 2]}) }
+      let(:matcher) { request_json_including("a" => [{ "b" => 1 }, 2]) }
 
       it "matches a body with exact same inner array" do
         assert matcher.call(stub("request", body: '{"a": [{"b": 1}, 2]}'))

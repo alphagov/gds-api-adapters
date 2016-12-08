@@ -8,38 +8,38 @@ module GdsApi
 
       def stub_support_api_problem_report_creation(request_details = nil)
         post_stub = stub_http_request(:post, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/problem-reports")
-        post_stub.with(:body => { problem_report: request_details }) unless request_details.nil?
-        post_stub.to_return(:status => 202)
+        post_stub.with(body: { problem_report: request_details }) unless request_details.nil?
+        post_stub.to_return(status: 202)
       end
 
       def stub_support_api_service_feedback_creation(feedback_details = nil)
         post_stub = stub_http_request(:post, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/service-feedback")
-        post_stub.with(:body => { service_feedback: feedback_details }) unless feedback_details.nil?
-        post_stub.to_return(:status => 201)
+        post_stub.with(body: { service_feedback: feedback_details }) unless feedback_details.nil?
+        post_stub.to_return(status: 201)
       end
 
       def stub_support_long_form_anonymous_contact_creation(request_details = nil)
         post_stub = stub_http_request(:post, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/long-form-contacts")
-        post_stub.with(:body => { long_form_contact: request_details }) unless request_details.nil?
-        post_stub.to_return(:status => 202)
+        post_stub.with(body: { long_form_contact: request_details }) unless request_details.nil?
+        post_stub.to_return(status: 202)
       end
 
       def stub_support_feedback_export_request_creation(request_details = nil)
         post_stub = stub_http_request(:post, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/export-requests")
-        post_stub.with(:body => { export_request: request_details }) unless request_details.nil?
-        post_stub.to_return(:status => 202)
+        post_stub.with(body: { export_request: request_details }) unless request_details.nil?
+        post_stub.to_return(status: 202)
       end
 
       def stub_support_global_export_request_creation(request_details = nil)
         post_stub = stub_http_request(:post, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/global-export-requests")
-        post_stub.with(:body => { global_export_request: request_details }) unless request_details.nil?
-        post_stub.to_return(:status => 202)
+        post_stub.with(body: { global_export_request: request_details }) unless request_details.nil?
+        post_stub.to_return(status: 202)
       end
 
       def stub_create_page_improvement(params)
         post_stub = stub_http_request(:post, "#{SUPPORT_API_ENDPOINT}/page-improvements")
-        post_stub.with(:body => params)
-        post_stub.to_return(:status => 201)
+        post_stub.with(body: params)
+        post_stub.to_return(status: 201)
       end
 
       def stub_problem_report_daily_totals_for(date, expected_results = nil)
@@ -58,12 +58,12 @@ module GdsApi
 
       def stub_support_mark_reviewed_for_spam(request_details = nil, response_body = {})
         post_stub = stub_http_request(:put, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/problem-reports/mark-reviewed-for-spam")
-        post_stub.with(:body => { reviewed_problem_report_ids: request_details}) unless request_details.nil?
+        post_stub.with(body: { reviewed_problem_report_ids: request_details }) unless request_details.nil?
         post_stub.to_return(status: 200, body: response_body.to_json)
       end
 
       def support_api_isnt_available
-        stub_request(:post, /#{SUPPORT_API_ENDPOINT}\/.*/).to_return(:status => 503)
+        stub_request(:post, /#{SUPPORT_API_ENDPOINT}\/.*/).to_return(status: 503)
       end
 
       def stub_anonymous_feedback(params, response_body = {})

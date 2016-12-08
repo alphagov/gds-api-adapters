@@ -11,11 +11,11 @@ describe GdsApi::SupportApi do
   end
 
   it "can report a problem" do
-    request_details = {certain: "details"}
+    request_details = { certain: "details" }
 
     stub_post = stub_request(:post, "#{@base_api_url}/anonymous-feedback/problem-reports").
-      with(:body => {"problem_report" => request_details}.to_json).
-      to_return(:status => 201)
+      with(body: { "problem_report" => request_details }.to_json).
+      to_return(status: 201)
 
     @api.create_problem_report(request_details)
 
@@ -23,11 +23,11 @@ describe GdsApi::SupportApi do
   end
 
   it "can pass service feedback" do
-    request_details = {"transaction-completed-values"=>"1", "details"=>"abc"}
+    request_details = { "transaction-completed-values" => "1", "details" => "abc" }
 
     stub_post = stub_request(:post, "#{@base_api_url}/anonymous-feedback/service-feedback").
-      with(:body => {"service_feedback" => request_details}.to_json).
-      to_return(:status => 201)
+      with(body: { "service_feedback" => request_details }.to_json).
+      to_return(status: 201)
 
     @api.create_service_feedback(request_details)
 
@@ -35,11 +35,11 @@ describe GdsApi::SupportApi do
   end
 
   it "can submit long-form anonymous feedback" do
-    request_details = {certain: "details"}
+    request_details = { certain: "details" }
 
     stub_post = stub_request(:post, "#{@base_api_url}/anonymous-feedback/long-form-contacts").
-      with(:body => {"long_form_contact" => request_details}.to_json).
-      to_return(:status => 201)
+      with(body: { "long_form_contact" => request_details }.to_json).
+      to_return(status: 201)
 
     @api.create_anonymous_long_form_contact(request_details)
 
@@ -47,10 +47,10 @@ describe GdsApi::SupportApi do
   end
 
   it "fetches problem report daily totals" do
-    response_body = {"data" => ["results"]}
+    response_body = { "data" => ["results"] }
 
     stub_get = stub_request(:get, "#{@base_api_url}/anonymous-feedback/problem-reports/2014-07-12/totals").
-      to_return(:status => 200, body: response_body.to_json)
+      to_return(status: 200, body: response_body.to_json)
 
     result = @api.problem_report_daily_totals_for(Date.new(2014, 7, 12))
 
@@ -115,7 +115,7 @@ describe GdsApi::SupportApi do
 
   describe "POST /anonymous-feedback/global-export-requests" do
     it "makes a POST request to the support API" do
-      params = {from_date: "1 June 2016", to_date: "8 June 2016", notification_email: "foo@example.com"}
+      params = { from_date: "1 June 2016", to_date: "8 June 2016", notification_email: "foo@example.com" }
       stub_post = stub_support_global_export_request_creation(params)
 
       @api.create_global_export_request(params)
@@ -125,7 +125,7 @@ describe GdsApi::SupportApi do
 
   describe "POST /page-improvements" do
     it "makes a POST request to the support API" do
-      params = {description: "The title could be better."}
+      params = { description: "The title could be better." }
       stub_post = stub_create_page_improvement(params)
 
       @api.create_page_improvement(params)

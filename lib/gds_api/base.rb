@@ -38,7 +38,7 @@ class GdsApi::Base
     @logger ||= NullLogger.instance
   end
 
-  def initialize(endpoint_url, options={})
+  def initialize(endpoint_url, options = {})
     options[:endpoint_url] = endpoint_url
     raise InvalidAPIURL unless endpoint_url =~ URI::regexp
     base_options = { logger: self.class.logger }
@@ -47,7 +47,7 @@ class GdsApi::Base
     self.endpoint = options[:endpoint_url]
   end
 
-  def url_for_slug(slug, options={})
+  def url_for_slug(slug, options = {})
     "#{base_url}/#{slug}.json#{query_string(options)}"
   end
 
@@ -58,6 +58,7 @@ class GdsApi::Base
   end
 
 private
+
   attr_accessor :endpoint
 
   def query_string(params)
@@ -67,13 +68,13 @@ private
       case value
       when Array
         value.map { |v|
-          "#{CGI.escape(key.to_s+'[]')}=#{CGI.escape(v.to_s)}"
+          "#{CGI.escape(key.to_s + '[]')}=#{CGI.escape(v.to_s)}"
         }
       else
         "#{CGI.escape(key.to_s)}=#{CGI.escape(value.to_s)}"
       end
     }.flatten
 
-    "?#{param_pairs.join("&")}"
+    "?#{param_pairs.join('&')}"
   end
 end

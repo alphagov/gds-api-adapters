@@ -132,7 +132,7 @@ describe GdsApi::ContentApi do
       stub_request(:get, url).to_return(
         status: 200,
         body: body.to_json,
-        headers: {"Link" => links.join(",")}
+        headers: { "Link" => links.join(",") }
       )
     end
 
@@ -192,7 +192,7 @@ describe GdsApi::ContentApi do
     end
 
     it "should be able to fetch unpublished editions when authenticated" do
-      api = GdsApi::ContentApi.new(@base_api_url, { bearer_token: 'MY_BEARER_TOKEN' })
+      api = GdsApi::ContentApi.new(@base_api_url, bearer_token: 'MY_BEARER_TOKEN')
       content_api_has_unpublished_artefact("devolution-uk", 3)
       response = api.artefact("devolution-uk", edition: 3)
       assert_equal "#{@base_api_url}/devolution-uk.json", response["id"]
@@ -227,14 +227,14 @@ describe GdsApi::ContentApi do
 
     it "should return a listresponse for the artefacts" do
       WebMock.stub_request(:get, @artefacts_endpoint).
-        to_return(:body => {
-          "_response_info" => {"status" => "ok"},
+        to_return(body: {
+          "_response_info" => { "status" => "ok" },
           "total" => 4,
           "results" => [
-            {"format" => "answer", "web_url" => "http://www.test.gov.uk/foo"},
-            {"format" => "local_transaction", "web_url" => "http://www.test.gov.uk/bar/baz"},
-            {"format" => "place", "web_url" => "http://www.test.gov.uk/somewhere"},
-            {"format" => "guide", "web_url" => "http://www.test.gov.uk/vat"},
+            { "format" => "answer", "web_url" => "http://www.test.gov.uk/foo" },
+            { "format" => "local_transaction", "web_url" => "http://www.test.gov.uk/bar/baz" },
+            { "format" => "place", "web_url" => "http://www.test.gov.uk/somewhere" },
+            { "format" => "guide", "web_url" => "http://www.test.gov.uk/vat" },
           ]
         }.to_json)
 
@@ -249,27 +249,27 @@ describe GdsApi::ContentApi do
     it "should work with a paginated response" do
       WebMock.stub_request(:get, @artefacts_endpoint).
         to_return(
-          :body => {
-            "_response_info" => {"status" => "ok"},
+          body: {
+            "_response_info" => { "status" => "ok" },
             "total" => 4,
             "results" => [
-              {"format" => "answer", "web_url" => "http://www.test.gov.uk/foo"},
-              {"format" => "local_transaction", "web_url" => "http://www.test.gov.uk/bar/baz"},
-              {"format" => "place", "web_url" => "http://www.test.gov.uk/somewhere"},
-              {"format" => "guide", "web_url" => "http://www.test.gov.uk/vat"},
+              { "format" => "answer", "web_url" => "http://www.test.gov.uk/foo" },
+              { "format" => "local_transaction", "web_url" => "http://www.test.gov.uk/bar/baz" },
+              { "format" => "place", "web_url" => "http://www.test.gov.uk/somewhere" },
+              { "format" => "guide", "web_url" => "http://www.test.gov.uk/vat" },
             ]
           }.to_json,
-          :headers => {"Link" => "<#{@artefacts_endpoint}?page=2>; rel=\"next\""}
+          headers: { "Link" => "<#{@artefacts_endpoint}?page=2>; rel=\"next\"" }
         )
       WebMock.stub_request(:get, "#{@artefacts_endpoint}?page=2").
         to_return(
-          :body => {
-            "_response_info" => {"status" => "ok"},
+          body: {
+            "_response_info" => { "status" => "ok" },
             "total" => 3,
             "results" => [
-              {"format" => "answer", "web_url" => "http://www.test.gov.uk/foo2"},
-              {"format" => "local_transaction", "web_url" => "http://www.test.gov.uk/bar/baz2"},
-              {"format" => "guide", "web_url" => "http://www.test.gov.uk/vat2"},
+              { "format" => "answer", "web_url" => "http://www.test.gov.uk/foo2" },
+              { "format" => "local_transaction", "web_url" => "http://www.test.gov.uk/bar/baz2" },
+              { "format" => "guide", "web_url" => "http://www.test.gov.uk/vat2" },
             ]
           }.to_json
         )
@@ -425,28 +425,26 @@ describe GdsApi::ContentApi do
 
   describe "licence" do
     it "should return an artefact with licence for a snac code" do
-      response = content_api_has_an_artefact_with_snac_code("licence-example", '1234', {
-        "title" => "Licence Example",
+      content_api_has_an_artefact_with_snac_code("licence-example", '1234', "title" => "Licence Example",
         "slug" => "licence-example",
         "details" => {
           "licence" => {
             "location_specific" => false,
-            "availability" => [ "England", "Wales" ],
-            "authorities" => [ ]
+            "availability" => %w(England Wales),
+            "authorities" => []
           }
-        }
-      })
+        })
       response = @api.artefact('licence-example', snac: '1234')
 
       assert_equal "Licence Example", response["title"]
-      assert_equal [ "England", "Wales" ], response["details"]["licence"]["availability"]
+      assert_equal %w(England Wales), response["details"]["licence"]["availability"]
     end
 
     it "should escape snac code when searching for licence" do
       stub_request(:get, "#{@base_api_url}/licence-example.json?snac=snacks%21").
-        to_return(:status => 200,
-                  :body => {"test" => "ing"}.to_json,
-                  :headers => {})
+        to_return(status: 200,
+                  body: { "test" => "ing" }.to_json,
+                  headers: {})
 
       @api.artefact("licence-example", snac: "snacks!")
 
@@ -458,7 +456,7 @@ describe GdsApi::ContentApi do
       url = "#{@base_api_url}/licence-example.json?snac=1234&edition=1"
       stub_request(:get, url).to_return(status: 200, body: body.to_json)
 
-      api = GdsApi::ContentApi.new(@base_api_url, { bearer_token: 'MY_BEARER_TOKEN' })
+      api = GdsApi::ContentApi.new(@base_api_url, bearer_token: 'MY_BEARER_TOKEN')
       response = api.artefact('licence-example', snac: '1234', edition: '1')
 
       assert_equal "Licence example", response["title"]
@@ -468,10 +466,10 @@ describe GdsApi::ContentApi do
   describe "local authorities" do
     it "should raise if no local authority found" do
       stub_request(:get, "#{@base_api_url}/local_authorities/does-not-exist.json").
-        with(:headers => GdsApi::JsonClient.default_request_headers).
-        to_return(:status => 404,
-                  :body => {"_response_info" => {"status" => "ok"}}.to_json,
-                  :headers => {})
+        with(headers: GdsApi::JsonClient.default_request_headers).
+        to_return(status: 404,
+                  body: { "_response_info" => { "status" => "ok" } }.to_json,
+                  headers: {})
 
       assert_raises(GdsApi::HTTPNotFound) do
         @api.local_authority("does-not-exist")
@@ -483,14 +481,14 @@ describe GdsApi::ContentApi do
         "name" => "Solihull Metropolitan Borough Council",
         "snac_code" => "00CT",
         "id" => "#{@base_api_url}/local_authorities/00CT.json",
-        "_response_info" => {"status" => "ok"}
+        "_response_info" => { "status" => "ok" }
       }
 
       stub_request(:get, "#{@base_api_url}/local_authorities/00CT.json").
-        with(:headers => GdsApi::JsonClient.default_request_headers).
-        to_return(:status => 200,
-                  :body => body_response.to_json,
-                  :headers => {})
+        with(headers: GdsApi::JsonClient.default_request_headers).
+        to_return(status: 200,
+                  body: body_response.to_json,
+                  headers: {})
 
       response = @api.local_authority("00CT").to_hash
 
@@ -499,17 +497,17 @@ describe GdsApi::ContentApi do
 
     it "should return an empty result set if name not found" do
       body_response = {
-        "_response_info" => {"status" => "ok"},
+        "_response_info" => { "status" => "ok" },
         "description" => "Local Authorities",
         "total" => 0,
         "results" => []
       }.to_json
 
       stub_request(:get, "#{@base_api_url}/local_authorities.json?name=Swansalona").
-        with(:headers => GdsApi::JsonClient.default_request_headers).
-        to_return(:status => 200,
-                  :body => body_response,
-                  :headers => {})
+        with(headers: GdsApi::JsonClient.default_request_headers).
+        to_return(status: 200,
+                  body: body_response,
+                  headers: {})
 
       response = @api.local_authorities_by_name("Swansalona")
 
@@ -519,17 +517,17 @@ describe GdsApi::ContentApi do
 
     it "should return an empty result set if snac code not found" do
       body_response = {
-        "_response_info" => {"status" => "ok"},
+        "_response_info" => { "status" => "ok" },
         "description" => "Local Authorities",
         "total" => 0,
         "results" => []
       }.to_json
 
       stub_request(:get, "#{@base_api_url}/local_authorities.json?snac_code=SNACKS").
-        with(:headers => GdsApi::JsonClient.default_request_headers).
-        to_return(:status => 200,
-                  :body => body_response,
-                  :headers => {})
+        with(headers: GdsApi::JsonClient.default_request_headers).
+        to_return(status: 200,
+                  body: body_response,
+                  headers: {})
 
       response = @api.local_authorities_by_snac_code("SNACKS")
 
@@ -539,7 +537,7 @@ describe GdsApi::ContentApi do
 
     it "should have an array of results for a name search" do
       body_response = {
-        "_response_info" => {"status" => "ok"},
+        "_response_info" => { "status" => "ok" },
         "description" => "Local Authorities",
         "total" => 2,
         "results" => [{
@@ -555,10 +553,10 @@ describe GdsApi::ContentApi do
       }.to_json
 
       stub_request(:get, "#{@base_api_url}/local_authorities.json?name=Swans").
-        with(:headers => GdsApi::JsonClient.default_request_headers).
-        to_return(:status => 200,
-                  :body => body_response,
-                  :headers => {})
+        with(headers: GdsApi::JsonClient.default_request_headers).
+        to_return(status: 200,
+                  body: body_response,
+                  headers: {})
 
       response = @api.local_authorities_by_name("Swans")
 
@@ -568,9 +566,9 @@ describe GdsApi::ContentApi do
 
     it "should escape snac code when calling unique a local authority" do
       stub_request(:get, "#{@base_api_url}/local_authorities/escape%21.json").
-        to_return(:status => 200,
-                  :body => {"test" => "ing"}.to_json,
-                  :headers => {})
+        to_return(status: 200,
+                  body: { "test" => "ing" }.to_json,
+                  headers: {})
 
       @api.local_authority("escape!")
 
@@ -579,9 +577,9 @@ describe GdsApi::ContentApi do
 
     it "should escape name when searching for local authorities" do
       stub_request(:get, "#{@base_api_url}/local_authorities.json?name=name%21").
-        to_return(:status => 200,
-                  :body => {"test" => "ing"}.to_json,
-                  :headers => {})
+        to_return(status: 200,
+                  body: { "test" => "ing" }.to_json,
+                  headers: {})
 
       @api.local_authorities_by_name("name!")
 
@@ -590,9 +588,9 @@ describe GdsApi::ContentApi do
 
     it "should escape snac code when searching for local authorities" do
       stub_request(:get, "#{@base_api_url}/local_authorities.json?snac_code=snacks%21").
-        to_return(:status => 200,
-                  :body => {"test" => "ing"}.to_json,
-                  :headers => {})
+        to_return(status: 200,
+                  body: { "test" => "ing" }.to_json,
+                  headers: {})
 
       @api.local_authorities_by_snac_code("snacks!")
 
@@ -603,29 +601,29 @@ describe GdsApi::ContentApi do
   describe "business support schemes" do
     it "should query content_api for business_support_schemes" do
       stub_request(:get, %r{\A#{@base_api_url}/business_support_schemes.json}).
-        to_return(:status => 200, :body => {"foo" => "bar"}.to_json)
+        to_return(status: 200, body: { "foo" => "bar" }.to_json)
 
-      response = @api.business_support_schemes(:drink => "coffee")
+      response = @api.business_support_schemes(drink: "coffee")
 
-      assert_equal({"foo" => "bar"}, response.to_hash)
-      assert_requested :get, "#{@base_api_url}/business_support_schemes.json?drink=coffee", :times => 1
+      assert_equal({ "foo" => "bar" }, response.to_hash)
+      assert_requested :get, "#{@base_api_url}/business_support_schemes.json?drink=coffee", times: 1
     end
 
     it "should raise an error if content_api returns 404" do
       stub_request(:get, %r{\A#{@base_api_url}/business_support_schemes.json}).
-        to_return(:status => 404, :body => "Not Found")
+        to_return(status: 404, body: "Not Found")
 
       assert_raises GdsApi::HTTPNotFound do
-        @api.business_support_schemes(['foo', 'bar'])
+        @api.business_support_schemes(%w(foo bar))
       end
     end
 
     it "should raise an error if content_api returns a 50x error" do
       stub_request(:get, %r{\A#{@base_api_url}/business_support_schemes.json}).
-        to_return(:status => 503, :body => "Gateway timeout")
+        to_return(status: 503, body: "Gateway timeout")
 
       assert_raises GdsApi::HTTPServerError do
-        @api.business_support_schemes(['foo', 'bar'])
+        @api.business_support_schemes(%w(foo bar))
       end
     end
 
@@ -633,13 +631,13 @@ describe GdsApi::ContentApi do
       it "should have representative test helpers" do
         setup_content_api_business_support_schemes_stubs
         s1 = { "title" => "Scheme 1", "format" => "business_support" }
-        content_api_has_business_support_scheme(s1, :locations => "england", :sectors => "farming")
+        content_api_has_business_support_scheme(s1, locations: "england", sectors: "farming")
         s2 = { "title" => "Scheme 2", "format" => "business_support" }
-        content_api_has_business_support_scheme(s2, :sectors => "farming")
+        content_api_has_business_support_scheme(s2, sectors: "farming")
         s3 = { "title" => "Scheme 3", "format" => "business_support" }
-        content_api_has_business_support_scheme(s3, :locations => "england", :sectors => "farming")
+        content_api_has_business_support_scheme(s3, locations: "england", sectors: "farming")
 
-        response = @api.business_support_schemes(:locations => "england", :sectors => "farming").to_hash
+        response = @api.business_support_schemes(locations: "england", sectors: "farming").to_hash
 
         assert_equal 2, response["total"]
         assert_equal s1["title"], response["results"].first["title"]
@@ -652,12 +650,12 @@ describe GdsApi::ContentApi do
     it "should get licence details" do
       setup_content_api_licences_stubs
 
-      content_api_has_licence :licence_identifier => "1234", :title => 'Test Licence 1', :slug => 'test-licence-1',
-        :licence_short_description => 'A short description'
-      content_api_has_licence :licence_identifier => "1235", :title => 'Test Licence 2', :slug => 'test-licence-2',
-        :licence_short_description => 'A short description'
-      content_api_has_licence :licence_identifier => "AB1234", :title => 'Test Licence 3', :slug => 'test-licence-3',
-        :licence_short_description => 'A short description'
+      content_api_has_licence licence_identifier: "1234", title: 'Test Licence 1', slug: 'test-licence-1',
+        licence_short_description: 'A short description'
+      content_api_has_licence licence_identifier: "1235", title: 'Test Licence 2', slug: 'test-licence-2',
+        licence_short_description: 'A short description'
+      content_api_has_licence licence_identifier: "AB1234", title: 'Test Licence 3', slug: 'test-licence-3',
+        licence_short_description: 'A short description'
 
       results = @api.licences_for_ids([1234, 'AB1234', 'something'])['results']
       assert_equal 2, results.size
@@ -694,7 +692,7 @@ describe GdsApi::ContentApi do
 
     it "should raise an error if publisher returns an error" do
       stub_request(:get, %r[\A#{@base_api_url}/licences]).
-        to_return(:status => [503, "Service temporarily unabailable"])
+        to_return(status: [503, "Service temporarily unabailable"])
 
       assert_raises GdsApi::HTTPServerError do
         @api.licences_for_ids([123, 124])

@@ -45,7 +45,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
 
   describe "#publishing_api_has_content" do
     it "stubs the call to get content items" do
-      publishing_api_has_content([{"content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504"}])
+      publishing_api_has_content([{ "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" }])
 
       response = publishing_api.get_content_items({})['results']
 
@@ -83,13 +83,11 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
           { "content_id" => content_id_2 },
           { "content_id" => content_id_3 },
         ],
-        {
-          page: 1,
+                  page: 1,
           per_page: 2
-        }
       )
 
-      response = publishing_api.get_content_items({ page: 1, per_page: 2 })
+      response = publishing_api.get_content_items(page: 1, per_page: 2)
       records = response['results']
 
       assert_equal(response['total'], 3)
@@ -110,13 +108,11 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
           { "content_id" => content_id_1 },
           { "content_id" => content_id_2 },
         ],
-        {
-          page: 10,
+                  page: 10,
           per_page: 2
-        }
       )
 
-      response = publishing_api.get_content_items({ page: 10, per_page: 2 })
+      response = publishing_api.get_content_items(page: 10, per_page: 2)
       records = response['results']
 
       assert_equal(records, [])

@@ -35,7 +35,7 @@ module GdsApi
         response = {
           status: 200,
           body: '{}',
-          headers: {"Content-Type" => "application/json; charset=utf-8"}
+          headers: { "Content-Type" => "application/json; charset=utf-8" }
         }.merge(response_hash)
         stub_request(:post, url).with(body: body).to_return(response)
       end
@@ -45,14 +45,14 @@ module GdsApi
         response = {
           status: 200,
           body: '{}',
-          headers: {"Content-Type" => "application/json; charset=utf-8"}
+          headers: { "Content-Type" => "application/json; charset=utf-8" }
         }.merge(response_hash)
         stub_request(:post, url).with(params).to_return(response)
       end
 
       def stub_publishing_api_discard_draft(content_id)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/discard-draft"
-        stub_request(:post, url).to_return(status: 200, headers: {"Content-Type" => "application/json; charset=utf-8"})
+        stub_request(:post, url).to_return(status: 200, headers: { "Content-Type" => "application/json; charset=utf-8" })
       end
 
       def stub_publishing_api_put_content_links_and_publish(body, content_id = nil, publish_body = nil)
@@ -94,7 +94,7 @@ module GdsApi
 
       def stub_any_publishing_api_call_to_return_not_found
         stub_request(:any, %r{\A#{PUBLISHING_API_V2_ENDPOINT}})
-          .to_return(status: 404, headers: {"Content-Type" => "application/json; charset=utf-8"})
+          .to_return(status: 404, headers: { "Content-Type" => "application/json; charset=utf-8" })
       end
 
       def publishing_api_isnt_available
@@ -186,7 +186,7 @@ module GdsApi
           page = 1
         end
 
-        start_position = (page-1) * per_page
+        start_position = (page - 1) * per_page
         page_items = items.slice(start_position, per_page) || []
 
         number_of_pages =
@@ -221,12 +221,12 @@ module GdsApi
 
         url = PUBLISHING_API_V2_ENDPOINT + "/content?document_type=#{format}#{query_params.join('')}"
 
-        stub_request(:get, url).to_return(:status => 200, :body => { results: body }.to_json, :headers => {})
+        stub_request(:get, url).to_return(status: 200, body: { results: body }.to_json, headers: {})
       end
 
       def publishing_api_has_linkables(linkables, document_type:)
         url = PUBLISHING_API_V2_ENDPOINT + "/linkables?document_type=#{document_type}"
-        stub_request(:get, url).to_return(:status => 200, :body => linkables.to_json, :headers => {})
+        stub_request(:get, url).to_return(status: 200, body: linkables.to_json, headers: {})
       end
 
       def publishing_api_has_item(item)
@@ -240,7 +240,7 @@ module GdsApi
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
         calls = -1
 
-        stub_request(:get, url).to_return do |request|
+        stub_request(:get, url).to_return do |_request|
           calls += 1
           item = items[calls] || items.last
 
@@ -414,7 +414,7 @@ module GdsApi
       end
 
       def stub_publishing_api_postlike_call(method, content_id, body, resource_path, override_response_hash = {})
-        response_hash = {status: 200, body: '{}', headers: {"Content-Type" => "application/json; charset=utf-8"}}
+        response_hash = { status: 200, body: '{}', headers: { "Content-Type" => "application/json; charset=utf-8" } }
         response_hash.merge!(override_response_hash)
         response_hash[:body] = response_hash[:body].to_json if response_hash[:body].is_a?(Hash)
         url = PUBLISHING_API_V2_ENDPOINT + resource_path + "/" + content_id
@@ -422,7 +422,7 @@ module GdsApi
       end
 
       def deep_stringify_keys(hash)
-        deep_transform_keys(hash) { |key| key.to_s }
+        deep_transform_keys(hash, &:to_s)
       end
 
       def deep_transform_keys(object, &block)
@@ -432,7 +432,7 @@ module GdsApi
             result[yield(key)] = deep_transform_keys(value, &block)
           end
         when Array
-          object.map{ |item| deep_transform_keys(item, &block) }
+          object.map { |item| deep_transform_keys(item, &block) }
         else
           object
         end

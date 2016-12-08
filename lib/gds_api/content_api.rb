@@ -3,7 +3,6 @@ require_relative 'exceptions'
 require_relative 'list_response'
 
 class GdsApi::ContentApi < GdsApi::Base
-
   def initialize(endpoint_url, options = {})
     # If the `web_urls_relative_to` option is given, the adapter will convert
     # any `web_url` values to relative URLs if they are from the same host.
@@ -26,7 +25,7 @@ class GdsApi::ContentApi < GdsApi::Base
     child_tags("section", parent_tag)
   end
 
-  def tags(tag_type, options={})
+  def tags(tag_type, options = {})
     params = [
       "type=#{CGI.escape(tag_type)}"
     ]
@@ -41,7 +40,7 @@ class GdsApi::ContentApi < GdsApi::Base
     get_list!("#{base_url}/tags.json?type=#{CGI.escape(tag_type)}&root_sections=true")
   end
 
-  def child_tags(tag_type, parent_tag, options={})
+  def child_tags(tag_type, parent_tag, options = {})
     params = [
       "type=#{CGI.escape(tag_type)}",
       "parent_id=#{CGI.escape(parent_tag)}",
@@ -51,7 +50,7 @@ class GdsApi::ContentApi < GdsApi::Base
     get_list!("#{base_url}/tags.json?#{params.join('&')}")
   end
 
-  def tag(tag, tag_type=nil)
+  def tag(tag, tag_type = nil)
     if tag_type.nil?
       raise "Requests for tags without a tag_type are no longer supported. You probably want a tag_type of 'section'. See https://github.com/alphagov/govuk_content_api/blob/f4c0102a1ae4970be6a440707b89798442f768b9/govuk_content_api.rb#L241-L250"
     end
@@ -64,11 +63,11 @@ class GdsApi::ContentApi < GdsApi::Base
     get_list("#{base_url}/for_need/#{CGI.escape(need_id.to_s)}.json")
   end
 
-  def artefact(slug, params={})
+  def artefact(slug, params = {})
     get_json(artefact_url(slug, params))
   end
 
-  def artefact!(slug, params={})
+  def artefact!(slug, params = {})
     get_json!(artefact_url(slug, params))
   end
 
@@ -95,9 +94,9 @@ class GdsApi::ContentApi < GdsApi::Base
 
   def business_support_schemes(facets)
     url = "#{base_url}/business_support_schemes.json"
-    query = facets.map { |k,v| "#{k}=#{v}" }
+    query = facets.map { |k, v| "#{k}=#{v}" }
     if query.any?
-      url += "?#{query.join("&")}"
+      url += "?#{query.join('&')}"
     end
 
     get_json!(url)
@@ -129,25 +128,26 @@ class GdsApi::ContentApi < GdsApi::Base
     super(url, &create_response)
   end
 
-  private
-    def base_url
-      endpoint
+private
+
+  def base_url
+    endpoint
+  end
+
+  def key_for_tag_type(tag_type)
+    tag_type.nil? ? "tag" : CGI.escape(tag_type)
+  end
+
+  def artefact_url(slug, params)
+    url = "#{base_url}/#{CGI.escape(slug)}.json"
+    query = params.map { |k, v| "#{k}=#{v}" }
+    if query.any?
+      url += "?#{query.join('&')}"
     end
 
-    def key_for_tag_type(tag_type)
-      tag_type.nil? ? "tag" : CGI.escape(tag_type)
+    if params[:edition] && ! options.include?(:bearer_token)
+      raise GdsApi::NoBearerToken
     end
-
-    def artefact_url(slug, params)
-      url = "#{base_url}/#{CGI.escape(slug)}.json"
-      query = params.map { |k,v| "#{k}=#{v}" }
-      if query.any?
-        url += "?#{query.join("&")}"
-      end
-
-      if params[:edition] && ! options.include?(:bearer_token)
-        raise GdsApi::NoBearerToken
-      end
-      url
-    end
+    url
+  end
 end

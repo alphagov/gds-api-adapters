@@ -5,7 +5,6 @@ require 'rack/cache'
 require_relative 'core-ext/openstruct'
 
 module GdsApi
-
   # This wraps an HTTP response with a JSON body, and presents this as
   # an object that has the read behaviour of both a Hash and an OpenStruct
   #
@@ -79,6 +78,7 @@ module GdsApi
     end
 
     def present?; true; end
+
     def blank?; false; end
 
   private

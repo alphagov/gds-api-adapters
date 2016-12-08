@@ -1,2 +1,10 @@
 AllCops:
   TargetRubyVersion: 2.3
+
+# Running autocorrect with this cop enabled breaks the code.
+Performance/RedundantBlockCall:
+  Enabled: false
+
+# This cop sometimes leads to ugly indentation.
+Style/ConditionalAssignment:
+  Enabled: false
