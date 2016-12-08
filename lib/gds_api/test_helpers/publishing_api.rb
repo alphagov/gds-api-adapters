@@ -11,15 +11,6 @@ module GdsApi
 
       PUBLISHING_API_ENDPOINT = Plek.current.find('publishing-api')
 
-      def stub_publishing_api_put_draft_item(base_path, body = content_item_for_publishing_api(base_path))
-        stub_publishing_api_put_item(base_path, body, '/draft-content')
-      end
-
-      def stub_publishing_api_put_item(base_path, body = content_item_for_publishing_api(base_path), resource_path = '/content')
-        url = PUBLISHING_API_ENDPOINT + resource_path + base_path
-        stub_request(:put, url).with(body: body).to_return(status: 200, body: '{}', headers: {"Content-Type" => "application/json; charset=utf-8"})
-      end
-
       def stub_publishing_api_put_intent(base_path, body = intent_for_publishing_api(base_path))
         url = PUBLISHING_API_ENDPOINT + "/publish-intent" + base_path
         body = body.to_json unless body.is_a?(String)
@@ -31,26 +22,8 @@ module GdsApi
         stub_request(:delete, url).to_return(status: 200, body: '{}', headers: {"Content-Type" => "application/json; charset=utf-8"})
       end
 
-      def stub_default_publishing_api_put()
-        stub_request(:put, %r{\A#{PUBLISHING_API_ENDPOINT}/content})
-      end
-
-      def stub_default_publishing_api_put_draft()
-        stub_request(:put, %r{\A#{PUBLISHING_API_ENDPOINT}/draft-content})
-      end
-
       def stub_default_publishing_api_put_intent()
         stub_request(:put, %r{\A#{PUBLISHING_API_ENDPOINT}/publish-intent})
-      end
-
-      def assert_publishing_api_put_item(base_path, attributes_or_matcher = {}, times = 1)
-        url = PUBLISHING_API_ENDPOINT + "/content" + base_path
-        assert_publishing_api_put(url, attributes_or_matcher, times)
-      end
-
-      def assert_publishing_api_put_draft_item(base_path, attributes_or_matcher = {}, times = 1)
-        url = PUBLISHING_API_ENDPOINT + "/draft-content" + base_path
-        assert_publishing_api_put(url, attributes_or_matcher, times)
       end
 
       def assert_publishing_api_put_intent(base_path, attributes_or_matcher = {}, times = 1)

@@ -11,64 +11,6 @@ describe GdsApi::PublishingApi do
     @api_client = GdsApi::PublishingApi.new(publishing_api_host)
   end
 
-  describe "#put_content_item" do
-    it "responds with 200 OK if the entry is valid" do
-      base_path = "/test-content-item"
-      content_item = content_item_for_publishing_api(base_path).merge("update_type" => "major")
-
-      publishing_api
-        .given("no content exists")
-        .upon_receiving("a request to create a content item")
-        .with(
-          method: :put,
-          path: "/content#{base_path}",
-          body: content_item,
-          headers: {
-            "Content-Type" => "application/json"
-          },
-        )
-        .will_respond_with(
-          status: 200,
-          body: content_item,
-          headers: {
-            "Content-Type" => "application/json; charset=utf-8"
-          },
-        )
-
-      response = @api_client.put_content_item(base_path, content_item)
-      assert_equal 200, response.code
-    end
-  end
-
-  describe "#put_draft_content_item" do
-    it "responds with 200 OK if the entry is valid" do
-      base_path = "/test-draft-content-item"
-      content_item = content_item_for_publishing_api(base_path).merge("update_type" => "major")
-
-      publishing_api
-        .given("no content exists")
-        .upon_receiving("a request to create a draft content item")
-        .with(
-          method: :put,
-          path: "/draft-content#{base_path}",
-          body: content_item,
-          headers: {
-            "Content-Type" => "application/json"
-          },
-        )
-        .will_respond_with(
-          status: 200,
-          body: content_item,
-          headers: {
-            "Content-Type" => "application/json; charset=utf-8"
-          },
-        )
-
-      response = @api_client.put_draft_content_item(base_path, content_item)
-      assert_equal 200, response.code
-    end
-  end
-
   describe "#put_intent" do
     it "responds with 200 OK if publish intent is valid" do
       base_path = "/test-intent"
