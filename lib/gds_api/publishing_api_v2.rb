@@ -19,20 +19,6 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
 
   # Return a content item
   #
-  # Returns nil if the content item doesn't exist.
-  #
-  # @param content_id [UUID]
-  # @param params [Hash]
-  # @option params [String] locale The language, defaults to 'en' in publishing-api.
-  #
-  # @return [GdsApi::Response] a content item
-  # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2contentcontent_id
-  def get_content(content_id, params = {})
-    get_json(content_url(content_id, params))
-  end
-
-  # Return a content item
-  #
   # Raises exception if the item doesn't exist.
   #
   # @param content_id [UUID]
@@ -43,8 +29,13 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   #
   # @raise [HTTPNotFound] when the content item is not found
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2contentcontent_id
-  def get_content!(content_id, params = {})
-    get_json!(content_url(content_id, params))
+  def get_content(content_id, params = {})
+    get_json(content_url(content_id, params))
+  end
+
+  # @private
+  def get_content!(*)
+    raise "`PublishingApiV2#delete_content!` is deprecated. Use `PublishingApiV2#delete_content`"
   end
 
   # Find the content_ids for a list of base_paths.

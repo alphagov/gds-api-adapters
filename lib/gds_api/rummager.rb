@@ -50,9 +50,14 @@ module GdsApi
     #
     # @param base_path Base path of the page on GOV.UK.
     # @see https://github.com/alphagov/rummager/blob/master/docs/content-api.md
-    def delete_content!(base_path)
+    def delete_content(base_path)
       request_url = "#{base_url}/content?link=#{base_path}"
       delete_json!(request_url)
+    end
+
+    # @private
+    def delete_content!(*)
+      raise "`Rummager#delete_content!` is deprecated. Use `Rummager#delete_content`"
     end
 
     # Retrieve a content-document from the index.
@@ -63,9 +68,14 @@ module GdsApi
     #
     # @param base_path [String] Base path of the page on GOV.UK.
     # @see https://github.com/alphagov/rummager/blob/master/docs/content-api.md
-    def get_content!(base_path)
+    def get_content(base_path)
       request_url = "#{base_url}/content?link=#{base_path}"
       get_json!(request_url)
+    end
+
+    # @private
+    def get_content!(*)
+      raise "`Rummager#get_content!` is deprecated. Use `Rummager#get_content`"
     end
 
     # Delete a non-content document from the search index.

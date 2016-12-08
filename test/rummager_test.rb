@@ -135,7 +135,7 @@ describe GdsApi::Rummager do
   it "#delete_content removes a document" do
     request = stub_request(:delete, "http://example.com/content?link=/foo/bar")
 
-    GdsApi::Rummager.new("http://example.com").delete_content!("/foo/bar")
+    GdsApi::Rummager.new("http://example.com").delete_content("/foo/bar")
 
     assert_requested(request)
   end
@@ -143,7 +143,7 @@ describe GdsApi::Rummager do
   it "#get_content Retrieves a document" do
     request = stub_request(:get, "http://example.com/content?link=/foo/bar")
 
-    GdsApi::Rummager.new("http://example.com").get_content!("/foo/bar")
+    GdsApi::Rummager.new("http://example.com").get_content("/foo/bar")
 
     assert_requested(request)
   end
