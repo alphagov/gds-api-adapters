@@ -10,13 +10,13 @@ class GdsApi::ContentStore < GdsApi::Base
   end
 
   def content_item(base_path)
-    get_json(content_item_url(base_path))
-  end
-
-  def content_item!(base_path)
     get_json!(content_item_url(base_path))
   rescue GdsApi::HTTPNotFound => e
     raise ItemNotFound.build_from(e)
+  end
+
+  def content_item!(_)
+    raise "`ContentStore#content_item!` is deprecated. Use `ContentStore#content_item` instead"
   end
 
   private

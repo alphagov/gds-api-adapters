@@ -5,6 +5,10 @@
 * Removed deprecated `PublishingApi` endpoints (`put_content_item` and
   `put_draft_content_item`).
 * Removed `ContentStore#incoming_links!`
+* Removed `ContentStore#content_item!`
+* Removed `PublishingApiV2#get_content!`
+* Renamed `Rummager#delete_content!` to `Rummager#delete_content`
+* Renamed `Rummager#get_content!` to `Rummager#get_content`
 
 # 37.5.1
 
