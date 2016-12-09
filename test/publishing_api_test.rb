@@ -44,8 +44,6 @@ describe GdsApi::PublishingApi do
     it "returns 200 OK if intent existed and was deleted" do
       base_path = "/test-intent"
 
-      publish_intent = intent_for_publishing_api(base_path)
-
       publishing_api
         .given("a publish intent exists at /test-intent")
         .upon_receiving("a request to delete a publish intent")
@@ -67,8 +65,6 @@ describe GdsApi::PublishingApi do
 
     it "returns 404 Not found if the intent does not exist" do
       base_path = "/test-intent"
-
-      publish_intent = intent_for_publishing_api(base_path)
 
       publishing_api
         .given("no content exists")
@@ -143,9 +139,9 @@ describe GdsApi::PublishingApi do
           body: {
             "error" => {
               "code" => 422,
-              "message" => Pact.term(generate: "Unprocessable", matcher:/\S+/),
+              "message" => Pact.term(generate: "Unprocessable", matcher: /\S+/),
               "fields" => {
-                "base_path" => Pact.each_like("has been reserved", :min => 1),
+                "base_path" => Pact.each_like("has been reserved", min: 1),
               },
             },
           },

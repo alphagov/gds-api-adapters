@@ -2,7 +2,6 @@ require_relative 'base'
 require_relative 'exceptions'
 
 class GdsApi::Mapit < GdsApi::Base
-
   def location_for_postcode(postcode)
     response = get_json("#{base_url}/postcode/#{CGI.escape postcode}.json")
     Location.new(response) unless response.nil?
@@ -32,7 +31,7 @@ class GdsApi::Mapit < GdsApi::Base
     end
 
     def areas
-      @response['areas'].map {|i, area| OpenStruct.new(area) }
+      @response['areas'].map { |_i, area| OpenStruct.new(area) }
     end
 
     def postcode
@@ -40,9 +39,9 @@ class GdsApi::Mapit < GdsApi::Base
     end
   end
 
-  private
-    def base_url
-      endpoint
-    end
+private
 
+  def base_url
+    endpoint
+  end
 end

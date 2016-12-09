@@ -35,7 +35,7 @@ describe GdsApi::NeedApi do
     end
 
     it "returns a list of needs matching the IDs" do
-      needs = @api.needs_by_id(1,2,3)
+      needs = @api.needs_by_id(1, 2, 3)
 
       assert_equal 3, needs.count
       assert_equal %w(1 2 3), needs.map { |need| need['id'] }
@@ -45,7 +45,7 @@ describe GdsApi::NeedApi do
     end
 
     it "makes the same request regardless of the order of the IDs" do
-      needs = @api.needs_by_id(2,1,3)
+      needs = @api.needs_by_id(2, 1, 3)
 
       assert_equal 3, needs.count
       assert_equal %w(1 2 3), needs.map { |need| need['id'] }
@@ -139,9 +139,9 @@ describe GdsApi::NeedApi do
   describe "creating needs" do
     it "should post to the right endpoint" do
       request_stub = stub_request(:post, @base_api_url + "/needs").with(
-        :body => '{"goal":"I wanna sammich!"}'
+        body: '{"goal":"I wanna sammich!"}'
       )
-      @api.create_need({"goal" => "I wanna sammich!"})
+      @api.create_need("goal" => "I wanna sammich!")
       assert_requested(request_stub)
     end
   end
@@ -278,10 +278,10 @@ describe GdsApi::NeedApi do
 
     it "should return organisations with abbreviations if present" do
       request_stub = need_api_has_organisations(
-        "committee-on-climate-change" => {"name" => "Committee on Climate Change",
-                                          "abbreviation" => "CCC"},
-        "competition-commission" => {"name" => "Competition Commission",
-                                     "abbreviation" => "CC"}
+        "committee-on-climate-change" => { "name" => "Committee on Climate Change",
+                                          "abbreviation" => "CCC" },
+        "competition-commission" => { "name" => "Competition Commission",
+                                     "abbreviation" => "CC" }
       )
       orgs = @api.organisations
 

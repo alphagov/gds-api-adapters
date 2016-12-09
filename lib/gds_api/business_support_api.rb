@@ -3,7 +3,6 @@ require_relative 'exceptions'
 require_relative 'list_response'
 
 class GdsApi::BusinessSupportApi < GdsApi::Base
-
   def schemes(options = {})
     get_list!(url_for_slug('business-support-schemes', options))
   end
@@ -12,7 +11,7 @@ class GdsApi::BusinessSupportApi < GdsApi::Base
     get_json!(url_for_slug("business-support-schemes/#{slug}"))
   end
 
-  private
+private
 
   def base_url
     endpoint

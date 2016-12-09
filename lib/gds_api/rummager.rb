@@ -4,7 +4,6 @@ require 'rack/utils'
 module GdsApi
   # @api documented
   class Rummager < Base
-
     # Perform a search.
     #
     # @param args [Hash] A valid search query. See Rummager documentation for options.

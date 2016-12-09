@@ -23,20 +23,20 @@ module GdsApi
         urls << "#{PANOPTICON_ENDPOINT}/artefacts/#{metadata['id']}.json" if metadata['id']
         urls << "#{PANOPTICON_ENDPOINT}/artefacts/#{metadata['slug']}.json" if metadata['slug']
 
-        urls.each { |url| stub_request(:get, url).to_return(:status => 200, :body => json, :headers => {}) }
+        urls.each { |url| stub_request(:get, url).to_return(status: 200, body: json, headers: {}) }
 
-        return urls.first
+        urls.first
       end
 
       def panopticon_has_no_metadata_for(slug)
         url = "#{PANOPTICON_ENDPOINT}/artefacts/#{slug}.json"
-        stub_request(:get, url).to_return(:status => 404, :body => "", :headers => {})
+        stub_request(:get, url).to_return(status: 404, body: "", headers: {})
       end
 
       def stub_panopticon_default_artefact
         stub_request(:get, %r{\A#{PANOPTICON_ENDPOINT}/artefacts}).to_return { |request|
           # return a response with only a slug, and set that slug to match the requested artefact slug
-          {:body => JSON.dump("slug" => request.uri.path.split('/').last.chomp('.json'))}
+          { body: JSON.dump("slug" => request.uri.path.split('/').last.chomp('.json')) }
         }
       end
 
@@ -45,10 +45,10 @@ module GdsApi
 
         if request_details
           request_details = request_details.to_json unless custom_matcher
-          stub.with(:body => request_details) 
+          stub.with(body: request_details)
         end
 
-        stub.to_return(:status => 201)
+        stub.to_return(status: 201)
       end
 
       def stub_panopticon_tag_creation(attributes)

@@ -9,7 +9,6 @@ require 'null_logger'
 
 module GdsApi
   class JsonClient
-
     include GdsApi::ExceptionHandling
 
     # Cache TTL will be overridden for a given request/response by the Expires
@@ -17,7 +16,7 @@ module GdsApi
     #
     # LRUCache doesn't respect a cache size of 0, and instead effectively
     # creates a cache with a size of 1.
-    def self.cache(size=DEFAULT_CACHE_SIZE, ttl=DEFAULT_CACHE_TTL)
+    def self.cache(size = DEFAULT_CACHE_SIZE, ttl = DEFAULT_CACHE_TTL)
       @cache ||= LRUCache.new(max_size: size, ttl: ttl)
     end
 
@@ -28,14 +27,14 @@ module GdsApi
     #   []=(key, value)
     #   store(key, value, expiry_time=nil) - or a Ruby Time object
     #
-    def self.cache=(c)
-      @cache = c
+    class << self
+      attr_writer :cache
     end
 
     attr_accessor :logger, :options, :cache
 
     def initialize(options = {})
-      if options[:disable_timeout] or options[:timeout].to_i < 0
+      if options[:disable_timeout] || options[:timeout].to_i < 0
         raise "It is no longer possible to disable the timeout."
       end
 
@@ -55,7 +54,7 @@ module GdsApi
       {
         'Accept' => 'application/json',
         # GOVUK_APP_NAME is set for all apps by Puppet
-        'User-Agent' => "gds-api-adapters/#{GdsApi::VERSION} (#{ENV["GOVUK_APP_NAME"]})"
+        'User-Agent' => "gds-api-adapters/#{GdsApi::VERSION} (#{ENV['GOVUK_APP_NAME']})"
       }
     end
 
@@ -122,22 +121,19 @@ module GdsApi
     end
 
     def post_multipart(url, params)
-      r = do_raw_request(:post, url, params.merge({
-        :multipart => true
-      }))
+      r = do_raw_request(:post, url, params.merge(multipart: true))
       Response.new(r)
     end
 
     def put_multipart(url, params)
-      r = do_raw_request(:put, url, params.merge({
-        :multipart => true
-      }))
+      r = do_raw_request(:put, url, params.merge(multipart: true))
       Response.new(r)
     end
 
-    private
+  private
+
     def do_raw_request(method, url, params = nil)
-      response = do_request(method, url, params)
+      do_request(method, url, params)
     rescue RestClient::Exception => e
       raise build_specific_http_error(e, url, nil, params)
     end
@@ -149,7 +145,6 @@ module GdsApi
     # create_response: optional block to instantiate a custom response object
     #                  from the Net::HTTPResponse
     def do_json_request(method, url, params = nil, additional_headers = {}, &create_response)
-
       begin
         response = do_request_with_cache(method, url, (params.to_json if params), additional_headers)
       rescue RestClient::Exception => e
@@ -173,7 +168,7 @@ module GdsApi
       if @options[:bearer_token]
         headers = method_params[:headers] || {}
         method_params.merge(headers: headers.merge(
-          {"Authorization" => "Bearer #{@options[:bearer_token]}"}
+          "Authorization" => "Bearer #{@options[:bearer_token]}"
         ))
       elsif @options[:basic_auth]
         method_params.merge(
@@ -250,7 +245,7 @@ module GdsApi
     end
 
     def do_request(method, url, params = nil, additional_headers = {})
-      loggable = {request_uri: url, start_time: Time.now.to_f}
+      loggable = { request_uri: url, start_time: Time.now.to_f }
       start_logging = loggable.merge(action: 'start')
       logger.debug start_logging.to_json
 

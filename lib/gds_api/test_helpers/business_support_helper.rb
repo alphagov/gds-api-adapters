@@ -15,28 +15,29 @@ module GdsApi
           else
             results = @stubbed_business_supports
           end
-          {:body => plural_response_base.merge("results" => results, "total" => results.size).to_json}
+          { body: plural_response_base.merge("results" => results, "total" => results.size).to_json }
         end
-
       end
 
-      def api_has_business_support(business_support, facets={})
+      def api_has_business_support(business_support, facets = {})
         facets = sanitise_facets(facets)
+
         if business_support.is_a?(Symbol)
-          bs_with_facets = facets.merge(:title => business_support)
+          bs_with_facets = facets.merge(title: business_support)
         else
           bs_with_facets = facets.merge(business_support)
         end
+
         @stubbed_business_supports << bs_with_facets unless @stubbed_business_supports.include?(bs_with_facets)
       end
 
-      private
+    private
 
       def stubs_for_facets(facets)
         @stubbed_business_supports.select do |bs|
           facet_matches = 0
-          facets.each do |k,v|
-            if bs[k] and (v & bs[k]).any?
+          facets.each do |k, v|
+            if bs[k] && (v & bs[k]).any?
               facet_matches += 1
             end
           end
@@ -45,7 +46,7 @@ module GdsApi
       end
 
       def sanitise_facets(facets)
-        Hash[facets.map{ |k, v|
+        Hash[facets.map { |k, v|
           v = v.split(',') if v.is_a?(String)
           [k.to_sym, v]
         }]

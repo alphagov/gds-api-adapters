@@ -10,7 +10,7 @@ describe GdsApi::TestHelpers::Panopticon do
 
     assert(
       WebMock::StubRegistry.instance.registered_request?(expected_signature),
-      "Stub is not registered:\n\t#{expected_signature.to_s}"
+      "Stub is not registered:\n\t#{expected_signature}"
     )
   end
 

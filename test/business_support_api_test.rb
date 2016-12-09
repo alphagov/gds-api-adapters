@@ -15,27 +15,26 @@ describe GdsApi::BusinessSupportApi do
     it "should return all schemes when called with no facets" do
       business_support_api_has_schemes([:scheme1, :scheme2, :scheme3])
       response = @api.schemes
-      assert_equal [{"title" => "scheme1"}, {"title" => "scheme2"}, {"title" => "scheme3"}], response['results']
+      assert_equal [{ "title" => "scheme1" }, { "title" => "scheme2" }, { "title" => "scheme3" }], response['results']
     end
-    it "should return schemes for applicable facets"  do
-      business_support_api_has_scheme(:scottish_manufacturing, {locations: 'scotland', sectors: 'manufacturing', support_types: 'grant,loan'})
-      response = @api.schemes({locations: 'scotland', sectors: 'manufacturing', support_types: 'grant,loan'})
+    it "should return schemes for applicable facets" do
+      business_support_api_has_scheme(:scottish_manufacturing, locations: 'scotland', sectors: 'manufacturing', support_types: 'grant,loan')
+      response = @api.schemes(locations: 'scotland', sectors: 'manufacturing', support_types: 'grant,loan')
       assert_equal 1, response["results"].size
       assert_equal "scottish_manufacturing", response["results"].first["title"]
     end
     it "should return an empty result when facets are not applicable" do
-      business_support_api_has_scheme(:super_secret, {locations: 'the moon', sectors: 'espionage'})
-      response = @api.schemes({locations: 'earth', sectors: 'espionage'})
+      business_support_api_has_scheme(:super_secret, locations: 'the moon', sectors: 'espionage')
+      response = @api.schemes(locations: 'earth', sectors: 'espionage')
       assert_empty response["results"]
     end
   end
 
   describe "finding a scheme by slug" do
     it "should give the scheme details" do
-      business_support_api_has_a_scheme('superbiz-wunderfundz', {
-        :title => 'Superbiz wunderfundz',
-        :short_description => 'Wunderfundz for your superbiz',
-        :body => 'Do you run or work for a Superbiz? Well we have the Wunderfundz.'})
+      business_support_api_has_a_scheme('superbiz-wunderfundz', title: 'Superbiz wunderfundz',
+        short_description: 'Wunderfundz for your superbiz',
+        body: 'Do you run or work for a Superbiz? Well we have the Wunderfundz.')
       response = @api.scheme('superbiz-wunderfundz')
       assert_equal 'business_support', response['format']
       assert_equal 'Superbiz wunderfundz', response['title']

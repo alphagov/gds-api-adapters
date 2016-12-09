@@ -11,11 +11,11 @@ describe GdsApi::Support do
   end
 
   it "can create an FOI request" do
-    request_details = {"foi_request"=>{"requester"=>{"name"=>"A", "email"=>"a@b.com"}, "details"=>"abc"}}
+    request_details = { "foi_request" => { "requester" => { "name" => "A", "email" => "a@b.com" }, "details" => "abc" } }
 
     stub_post = stub_request(:post, "#{@base_api_url}/foi_requests").
-      with(:body => {"foi_request" => request_details}.to_json).
-      to_return(:status => 201)
+      with(body: { "foi_request" => request_details }.to_json).
+      to_return(status: 201)
 
     @api.create_foi_request(request_details)
 
@@ -29,11 +29,11 @@ describe GdsApi::Support do
   end
 
   it "can report a problem" do
-    request_details = {certain: "details"}
+    request_details = { certain: "details" }
 
     stub_post = stub_request(:post, "#{@base_api_url}/anonymous_feedback/problem_reports").
-      with(:body => {"problem_report" => request_details}.to_json).
-      to_return(:status => 201)
+      with(body: { "problem_report" => request_details }.to_json).
+      to_return(status: 201)
 
     @api.create_problem_report(request_details)
 
@@ -41,11 +41,11 @@ describe GdsApi::Support do
   end
 
   it "can submit long-form anonymous feedback" do
-    request_details = {certain: "details"}
+    request_details = { certain: "details" }
 
     stub_post = stub_request(:post, "#{@base_api_url}/anonymous_feedback/long_form_contacts").
-      with(:body => {"long_form_contact" => request_details}.to_json).
-      to_return(:status => 201)
+      with(body: { "long_form_contact" => request_details }.to_json).
+      to_return(status: 201)
 
     @api.create_anonymous_long_form_contact(request_details)
 
@@ -53,11 +53,11 @@ describe GdsApi::Support do
   end
 
   it "can create a named contact" do
-    request_details = {certain: "details"}
+    request_details = { certain: "details" }
 
     stub_post = stub_request(:post, "#{@base_api_url}/named_contacts").
-      with(:body => {"named_contact" => request_details}.to_json).
-      to_return(:status => 201)
+      with(body: { "named_contact" => request_details }.to_json).
+      to_return(status: 201)
 
     @api.create_named_contact(request_details)
 
@@ -71,11 +71,11 @@ describe GdsApi::Support do
   end
 
   it "can pass service feedback" do
-    request_details = {"transaction-completed-values"=>"1", "details"=>"abc"}
+    request_details = { "transaction-completed-values" => "1", "details" => "abc" }
 
     stub_post = stub_request(:post, "#{@base_api_url}/anonymous_feedback/service_feedback").
-      with(:body => {"service_feedback" => request_details}.to_json).
-      to_return(:status => 201)
+      with(body: { "service_feedback" => request_details }.to_json).
+      to_return(status: 201)
 
     @api.create_service_feedback(request_details)
 
@@ -91,6 +91,5 @@ describe GdsApi::Support do
   it "gets the correct feedback URL" do
     assert_equal("#{@base_api_url}/anonymous_feedback?path=foo",
                  @api.feedback_url('foo'))
-
   end
 end

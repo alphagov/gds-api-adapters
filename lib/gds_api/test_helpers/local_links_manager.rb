@@ -3,7 +3,6 @@ require 'gds_api/test_helpers/json_client_helper'
 module GdsApi
   module TestHelpers
     module LocalLinksManager
-
       LOCAL_LINKS_MANAGER_ENDPOINT = Plek.current.find('local-links-manager')
 
       def local_links_manager_has_a_link(authority_slug:, lgsl:, lgil:, url:)
@@ -22,7 +21,7 @@ module GdsApi
         }
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-          .with(query: {authority_slug: authority_slug, lgsl: lgsl, lgil: lgil})
+          .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
           .to_return(body: response.to_json, status: 200)
       end
 
@@ -37,7 +36,7 @@ module GdsApi
         }
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-          .with(query: {authority_slug: authority_slug, lgsl: lgsl, lgil: lgil})
+          .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
           .to_return(body: response.to_json, status: 200)
       end
 
@@ -52,7 +51,7 @@ module GdsApi
         }
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-          .with(query: {authority_slug: authority_slug, lgsl: lgsl, lgil: lgil})
+          .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
           .to_return(body: response.to_json, status: 200)
       end
 
@@ -72,7 +71,7 @@ module GdsApi
         }
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-          .with(query: {authority_slug: authority_slug, lgsl: lgsl})
+          .with(query: { authority_slug: authority_slug, lgsl: lgsl })
           .to_return(body: response.to_json, status: 200)
       end
 
@@ -87,7 +86,7 @@ module GdsApi
         }
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-          .with(query: {authority_slug: authority_slug, lgsl: lgsl})
+          .with(query: { authority_slug: authority_slug, lgsl: lgsl })
           .to_return(body: response.to_json, status: 200)
       end
 
@@ -100,9 +99,9 @@ module GdsApi
           .to_return(body: {}.to_json, status: 400)
       end
 
-      def local_links_manager_does_not_have_required_objects(authority_slug, lgsl, lgil=nil)
+      def local_links_manager_does_not_have_required_objects(authority_slug, lgsl, lgil = nil)
         params = { authority_slug: authority_slug, lgsl: lgsl }
-        params.merge!(lgil: lgil) if lgil
+        params[:lgil] = lgil if lgil
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
           .with(query: params)
@@ -121,7 +120,7 @@ module GdsApi
         }
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
-          .with(query: {authority_slug: authority_slug})
+          .with(query: { authority_slug: authority_slug })
           .to_return(body: response.to_json, status: 200)
       end
 
@@ -142,19 +141,19 @@ module GdsApi
         }
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
-          .with(query: {authority_slug: district_slug})
+          .with(query: { authority_slug: district_slug })
           .to_return(body: response.to_json, status: 200)
       end
 
       def local_links_manager_request_without_local_authority_slug
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
-        .with(query: {authority_slug: ''})
+        .with(query: { authority_slug: '' })
         .to_return(body: {}.to_json, status: 400)
       end
 
       def local_links_manager_does_not_have_an_authority(authority_slug)
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
-        .with(query: {authority_slug: authority_slug})
+        .with(query: { authority_slug: authority_slug })
         .to_return(body: {}.to_json, status: 404)
       end
 
@@ -170,7 +169,7 @@ module GdsApi
         }
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
-          .with(query: {authority_slug: authority_slug})
+          .with(query: { authority_slug: authority_slug })
           .to_return(body: response.to_json, status: 200)
       end
     end

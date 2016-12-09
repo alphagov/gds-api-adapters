@@ -2,8 +2,7 @@ require "test_helper"
 require "gds_api/imminence"
 
 class ImminenceApiTest < Minitest::Test
-
-  ROOT = "https://imminence.test.alphagov.co.uk"
+  ROOT = "https://imminence.test.alphagov.co.uk".freeze
   LATITUDE = 52.1327584352089
   LONGITUDE = -0.4702813074674147
 
@@ -87,7 +86,7 @@ class ImminenceApiTest < Minitest::Test
     c = api_client
     url = "#{ROOT}/places/wibble.json?limit=5&lat=52&lng=0"
     place_info = dummy_place.merge(
-      "location" => {"longitude" => LONGITUDE, "latitude" => LATITUDE}
+      "location" => { "longitude" => LONGITUDE, "latitude" => LATITUDE }
     )
     c.expects(:get_json).with(url).returns([place_info])
     places = c.places("wibble", 52, 0)
@@ -139,7 +138,7 @@ EOS
 
     stub_request(:get, "#{ROOT}/places/test.kml").
       with(headers: GdsApi::JsonClient.default_request_headers).
-      to_return(status: 200, body: kml_body )
+      to_return(status: 200, body: kml_body)
 
     response_body = api_client.places_kml("test")
     assert_equal kml_body, response_body
@@ -151,14 +150,14 @@ EOS
       { "id" => 66, "type" => "EUR", "name" => "London", "country_name" => "England" }
     ]
     results = {
-      "_response_info" => {"status" => "ok"},
+      "_response_info" => { "status" => "ok" },
       "total" => areas.size, "startIndex" => 1, "pageSize" => areas.size,
       "currentPage" => 1, "pages" => 1, "results" => areas
     }
 
     stub_request(:get, "#{ROOT}/areas/WC2B%206SE.json").
       with(headers: GdsApi::JsonClient.default_request_headers).
-      to_return(status: 200, body: results.to_json )
+      to_return(status: 200, body: results.to_json)
 
     response = api_client.areas_for_postcode("WC2B 6SE")
 
@@ -175,14 +174,14 @@ EOS
       { "id" => 665, "type" => "EUR", "name" => "London", "country_name" => "England" }
     ]
     results = {
-      "_response_info" => {"status" => "ok"},
+      "_response_info" => { "status" => "ok" },
       "total" => areas.size, "startIndex" => 1, "pageSize" => areas.size,
       "currentPage" => 1, "pages" => 1, "results" => areas
     }
 
     stub_request(:get, "#{ROOT}/areas/EUR.json").
       with(headers: GdsApi::JsonClient.default_request_headers).
-      to_return(status: 200, body: results.to_json )
+      to_return(status: 200, body: results.to_json)
 
     response = api_client.areas_for_type("EUR")
 
@@ -194,5 +193,4 @@ EOS
     assert_equal 122, areas_from_response.first["id"]
     assert_equal 665, areas_from_response.last["id"]
   end
-
 end

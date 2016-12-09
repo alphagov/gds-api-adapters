@@ -14,38 +14,36 @@ module GdsApi
       # This also sets up the individual endpoints for each slug
       # by calling worldwide_api_has_location below
       def worldwide_api_has_locations(location_slugs)
-        location_slugs.each {|s| worldwide_api_has_location(s) }
+        location_slugs.each { |s| worldwide_api_has_location(s) }
         pages = []
         location_slugs.each_slice(20) do |slugs|
-          pages << slugs.map {|s| world_location_details_for_slug(s) }
+          pages << slugs.map { |s| world_location_details_for_slug(s) }
         end
 
         pages.each_with_index do |page, i|
-          page_details = plural_response_base.merge({
-            "results" => page,
+          page_details = plural_response_base.merge("results" => page,
             "total" => location_slugs.size,
             "pages" => pages.size,
             "current_page" => i + 1,
             "page_size" => 20,
-            "start_index" => i * 20 + 1,
-          })
+            "start_index" => i * 20 + 1)
 
-          links = {:self => "#{WORLDWIDE_API_ENDPOINT}/api/world-locations?page=#{i + 1}" }
-          links[:next] = "#{WORLDWIDE_API_ENDPOINT}/api/world-locations?page=#{i + 2}" if pages[i+1]
+          links = { self: "#{WORLDWIDE_API_ENDPOINT}/api/world-locations?page=#{i + 1}" }
+          links[:next] = "#{WORLDWIDE_API_ENDPOINT}/api/world-locations?page=#{i + 2}" if pages[i + 1]
           links[:previous] = "#{WORLDWIDE_API_ENDPOINT}/api/world-locations?page=#{i}" unless i == 0
           page_details["_response_info"]["links"] = []
           link_headers = []
           links.each do |rel, href|
-            page_details["_response_info"]["links"] << {"rel" => rel, "href" => href}
+            page_details["_response_info"]["links"] << { "rel" => rel, "href" => href }
             link_headers << "<#{href}>; rel=\"#{rel}\""
           end
 
           stub_request(:get, links[:self]).
-            to_return(:status => 200, :body => page_details.to_json, :headers => {"Link" => link_headers.join(", ")})
+            to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
           if i == 0
             # First page exists at URL with and without page param
             stub_request(:get, links[:self].sub(/\?page=1/, '')).
-              to_return(:status => 200, :body => page_details.to_json, :headers => {"Link" => link_headers.join(", ")})
+              to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
           end
         end
       end
@@ -61,28 +59,28 @@ module GdsApi
         )
       end
 
-      def worldwide_api_has_location(location_slug, details=nil)
+      def worldwide_api_has_location(location_slug, details = nil)
         details ||= world_location_for_slug(location_slug)
         stub_request(:get, "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}").
-          to_return(:status => 200, :body => details.to_json)
+          to_return(status: 200, body: details.to_json)
       end
 
       def worldwide_api_does_not_have_location(location_slug)
-        stub_request(:get, "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}").to_return(:status => 404)
+        stub_request(:get, "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}").to_return(status: 404)
       end
 
       def worldwide_api_has_organisations_for_location(location_slug, json_or_hash)
         json = json_or_hash.is_a?(Hash) ? json_or_hash.to_json : json_or_hash
         url = "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}/organisations"
         stub_request(:get, url).
-          to_return(:status => 200, :body => json, :headers => {"Link" => "<#{url}; rel\"self\""})
+          to_return(status: 200, body: json, headers: { "Link" => "<#{url}; rel\"self\"" })
       end
 
       def worldwide_api_has_no_organisations_for_location(location_slug)
-        details = {"results" => [], "total" => 0, "_response_info" => { "status" => "ok" } }
+        details = { "results" => [], "total" => 0, "_response_info" => { "status" => "ok" } }
         url = "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}/organisations"
         stub_request(:get, url).
-          to_return(:status => 200, :body => details.to_json, :headers => {"Link" => "<#{url}; rel\"self\""})
+          to_return(status: 200, body: details.to_json, headers: { "Link" => "<#{url}; rel\"self\"" })
       end
 
       def world_location_for_slug(slug)
@@ -96,7 +94,7 @@ module GdsApi
       def world_location_details_for_slug(slug)
         {
           "id" => "https://www.gov.uk/api/world-locations/#{slug}",
-          "title" => titleize_slug(slug, :title_case => true),
+          "title" => titleize_slug(slug, title_case: true),
           "format" => (slug =~ /(delegation|mission)/ ? "International delegation" : "World location"),
           "updated_at" => "2013-03-25T13:06:42+00:00",
           "web_url" => "https://www.gov.uk/government/world/#{slug}",
@@ -110,7 +108,6 @@ module GdsApi
           },
         }
       end
-
     end
   end
 end

@@ -3,7 +3,6 @@ require_relative 'panopticon/registerer'
 require_relative 'exceptions'
 
 class GdsApi::Panopticon < GdsApi::Base
-
   include GdsApi::ExceptionHandling
 
   def all
@@ -12,8 +11,8 @@ class GdsApi::Panopticon < GdsApi::Base
     to_ostruct json
   end
 
-  def artefact_for_slug(slug, opts = {})
-    return nil if slug.nil? or slug == ''
+  def artefact_for_slug(slug, _opts = {})
+    return nil if slug.nil? || slug == ''
     get_json(url_for_slug(slug))
   end
 
@@ -65,16 +64,17 @@ class GdsApi::Panopticon < GdsApi::Base
       tag_url(tag_type, tag_id, '/publish'),
       # we don't need to send any more data along with the publish request,
       # but a body is still required, so sending an empty JSON hash instead
-      { }
+      {}
     )
   end
 
 private
+
   def base_url
     "#{endpoint}/artefacts"
   end
 
-  def tag_url(tag_type, tag_id, action='')
+  def tag_url(tag_type, tag_id, action = '')
     "#{endpoint}/tags/#{tag_type}/#{tag_id}#{action}.json"
   end
 end

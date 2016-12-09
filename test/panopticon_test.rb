@@ -44,13 +44,13 @@ describe GdsApi::Panopticon do
 
   it 'fetches an artefact as a hash given a slug' do
     panopticon_has_metadata(basic_artefact)
-    artefact = api.artefact_for_slug(basic_artefact[:slug], :as_hash => true)
+    artefact = api.artefact_for_slug(basic_artefact[:slug], as_hash: true)
     assert_equal basic_artefact[:name], artefact['name']
   end
 
   it 'fetches and parses JSON into a hash' do
     url = "#{base_api_endpoint}/some.json"
-    stub_request(:get, url).to_return(body: {a:1}.to_json)
+    stub_request(:get, url).to_return(body: { a: 1 }.to_json)
 
     assert_equal 1, api.get_json(url)['a']
   end
@@ -110,7 +110,7 @@ describe GdsApi::Panopticon do
   end
 
   it 'uses basic auth' do
-    credentials = {user: 'fred', password: 'secret'}
+    credentials = { user: 'fred', password: 'secret' }
     api = GdsApi::Panopticon.new('http://some.url', basic_auth: credentials)
     url = "http://#{credentials[:user]}:#{credentials[:password]}@some.url/artefacts/1.json"
     stub_request(:put, url)
@@ -121,7 +121,7 @@ describe GdsApi::Panopticon do
 
   it 'registers new artefacts en masse' do
     r = GdsApi::Panopticon::Registerer.new(endpoint_url: base_api_endpoint, owning_app: 'my-app')
-    artefact = registerable_artefact()
+    artefact = registerable_artefact
     panopticon_has_no_metadata_for('foo')
 
     stub_request(:put, "#{base_api_endpoint}/artefacts/foo.json")
@@ -138,7 +138,7 @@ describe GdsApi::Panopticon do
   end
 
   it 'registers existing artefacts en masse' do
-    artefact = registerable_artefact()
+    artefact = registerable_artefact
     r = GdsApi::Panopticon::Registerer.new(endpoint_url: base_api_endpoint, owning_app: 'my-app')
 
     panopticon_has_metadata(artefact)

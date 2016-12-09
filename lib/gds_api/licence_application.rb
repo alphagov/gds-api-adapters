@@ -10,7 +10,7 @@ class GdsApi::LicenceApplication < GdsApi::Base
     get_json(build_licence_url(id, snac_code))
   end
 
-  private
+private
 
   def build_licence_url(id, snac_code)
     if snac_code

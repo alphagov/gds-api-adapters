@@ -21,7 +21,7 @@ describe GdsApi::Worldwide do
     end
 
     it "should handle the pagination" do
-      country_slugs = (1..50).map {|n| "country-#{n}" }
+      country_slugs = (1..50).map { |n| "country-#{n}" }
       worldwide_api_has_locations(country_slugs)
 
       response = @api.world_locations
@@ -32,7 +32,7 @@ describe GdsApi::Worldwide do
     end
 
     it "should raise error if endpoint 404s" do
-      stub_request(:get, "#{@base_api_url}/api/world-locations").to_return(:status => 404)
+      stub_request(:get, "#{@base_api_url}/api/world-locations").to_return(status: 404)
       assert_raises GdsApi::HTTPNotFound do
         @api.world_locations
       end
@@ -73,7 +73,7 @@ describe GdsApi::Worldwide do
     end
 
     it "should raise error on 404" do
-      stub_request(:get, "#{@base_api_url}/api/world-locations/non-existent/organisations").to_return(:status => 404)
+      stub_request(:get, "#{@base_api_url}/api/world-locations/non-existent/organisations").to_return(status: 404)
       assert_raises GdsApi::HTTPNotFound do
         @api.organisations_for_world_location('non-existent')
       end

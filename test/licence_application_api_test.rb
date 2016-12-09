@@ -20,8 +20,8 @@ class LicenceApplicationApiTest < Minitest::Test
   def test_should_return_list_of_licences
     stub_request(:get, "#{@core_url}/api/licences").
       with(headers: GdsApi::JsonClient.default_request_headers).
-      to_return(:status => 200,
-                :body => <<-EOS
+      to_return(status: 200,
+                body: <<-EOS
 [
    {
       "code":"1324-5-1",
@@ -81,11 +81,11 @@ EOS
   end
 
   def test_should_provide_full_licence_details_for_canonical_id
-    licence_exists('590001', {"isLocationSpecific" => true, "geographicalAvailability" => ["England","Wales"], "issuingAuthorities" => []})
+    licence_exists('590001', "isLocationSpecific" => true, "geographicalAvailability" => %w(England Wales), "issuingAuthorities" => [])
 
     expected = {
       "isLocationSpecific" => true,
-      "geographicalAvailability" => ["England", "Wales"],
+      "geographicalAvailability" => %w(England Wales),
       "issuingAuthorities" => []
     }
 
@@ -172,12 +172,10 @@ EOS
 
     assert_equal true, response["isLocationSpecific"]
 
-    assert_includes response["issuingAuthorities"][0]["authorityInteractions"]["apply"], {
-      "url" => "https://www.gov.uk/motor-salvage-operator-registration/city-of-london/apply-1",
+    assert_includes response["issuingAuthorities"][0]["authorityInteractions"]["apply"], "url" => "https://www.gov.uk/motor-salvage-operator-registration/city-of-london/apply-1",
       "usesLicensify" => true,
       "description" => "Application to register as a motor salvage operator",
       "payment" => "none"
-    }
   end
 
   def test_should_raise_exception_on_timeout

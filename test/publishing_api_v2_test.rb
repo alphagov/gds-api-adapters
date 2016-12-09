@@ -83,9 +83,9 @@ describe GdsApi::PublishingApiV2 do
             body: {
               "error" => {
                 "code" => 422,
-                "message" => Pact.term(generate: "Conflict", matcher:/\S+/),
+                "message" => Pact.term(generate: "Conflict", matcher: /\S+/),
                 "fields" => {
-                  "base_path" => Pact.each_like("is already in use by the 'publisher' app", :min => 1),
+                  "base_path" => Pact.each_like("is already in use by the 'publisher' app", min: 1),
                 },
               },
             },
@@ -200,9 +200,9 @@ describe GdsApi::PublishingApiV2 do
               body: {
                 "error" => {
                   "code" => 409,
-                  "message" => Pact.term(generate: "Conflict", matcher:/\S+/),
+                  "message" => Pact.term(generate: "Conflict", matcher: /\S+/),
                   "fields" => {
-                    "previous_version" => Pact.each_like("does not match", :min => 1),
+                    "previous_version" => Pact.each_like("does not match", min: 1),
                   },
                 },
               },
@@ -365,7 +365,7 @@ describe GdsApi::PublishingApiV2 do
             .will_respond_with(
               status: 200,
               body: {
-                "warnings" => Pact.like({"content_item_blocking_publish" => "message"}),
+                "warnings" => Pact.like("content_item_blocking_publish" => "message"),
                 "content_id" => @content_id,
                 "document_type" => Pact.like("special_route"),
                 "schema_name" => Pact.like("special_route"),
@@ -388,7 +388,6 @@ describe GdsApi::PublishingApiV2 do
           assert_equal 200, response.code
           assert_equal hash_including("content_item_blocking_publish"), response["warnings"]
         end
-
       end
 
       describe "when requesting the published version" do
@@ -492,7 +491,7 @@ describe GdsApi::PublishingApiV2 do
             body: {
               "error" => {
                 "code" => 404,
-                "message" => Pact.term(generate: "not found", matcher:/\S+/)
+                "message" => Pact.term(generate: "not found", matcher: /\S+/)
               },
             },
             headers: {
@@ -585,9 +584,9 @@ describe GdsApi::PublishingApiV2 do
             body: {
               "error" => {
                 "code" => 422,
-                "message" => Pact.term(generate: "Unprocessable entity", matcher:/\S+/),
+                "message" => Pact.term(generate: "Unprocessable entity", matcher: /\S+/),
                 "fields" => {
-                  "update_type" => Pact.each_like("is required", :min => 1),
+                  "update_type" => Pact.each_like("is required", min: 1),
                 },
               },
             }
@@ -623,7 +622,7 @@ describe GdsApi::PublishingApiV2 do
             status: 400,
             body: {
               "error" => {
-                "code" => 400, "message" => Pact.term(generate: "Cannot publish an already published content item", matcher:/\S+/),
+                "code" => 400, "message" => Pact.term(generate: "Cannot publish an already published content item", matcher: /\S+/),
               },
             }
           )
@@ -715,9 +714,9 @@ describe GdsApi::PublishingApiV2 do
               body: {
                 "error" => {
                   "code" => 409,
-                  "message" => Pact.term(generate: "Conflict", matcher:/\S+/),
+                  "message" => Pact.term(generate: "Conflict", matcher: /\S+/),
                   "fields" => {
-                    "previous_version" => Pact.each_like("does not match", :min => 1),
+                    "previous_version" => Pact.each_like("does not match", min: 1),
                   },
                 },
               },
@@ -814,7 +813,7 @@ describe GdsApi::PublishingApiV2 do
             body: {
               "error" => {
                 "code" => 422,
-                "message" => Pact.term(generate: "not-a-valid-type is not a valid unpublishing type", matcher:/\S+/),
+                "message" => Pact.term(generate: "not-a-valid-type is not a valid unpublishing type", matcher: /\S+/),
                 "fields" => {},
               },
             }
@@ -906,9 +905,9 @@ describe GdsApi::PublishingApiV2 do
               body: {
                 "error" => {
                   "code" => 409,
-                  "message" => Pact.term(generate: "Conflict", matcher:/\S+/),
+                  "message" => Pact.term(generate: "Conflict", matcher: /\S+/),
                   "fields" => {
-                    "previous_version" => Pact.each_like("does not match", :min => 1),
+                    "previous_version" => Pact.each_like("does not match", min: 1),
                   },
                 },
               },
@@ -1149,9 +1148,9 @@ describe GdsApi::PublishingApiV2 do
               body: {
                 "error" => {
                   "code" => 409,
-                  "message" => Pact.term(generate: "Conflict", matcher:/\S+/),
+                  "message" => Pact.term(generate: "Conflict", matcher: /\S+/),
                   "fields" => {
-                    "previous_version" => Pact.each_like("does not match", :min => 1),
+                    "previous_version" => Pact.each_like("does not match", min: 1),
                   },
                 },
               },
@@ -1267,10 +1266,9 @@ describe GdsApi::PublishingApiV2 do
         ["total", 2],
         ["pages", 1],
         ["current_page", 1],
-        ["links", [{"href"=>"http://example.org/v2/content?document_type=topic&fields[]=title&fields[]=base_path&page=1", "rel"=>"self"}]],
-        ["results", [{"title"=>"Content Item A", "base_path"=>"/a-base-path"}, {"title"=>"Content Item B", "base_path"=>"/another-base-path"}]]
+        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields[]=title&fields[]=base_path&page=1", "rel" => "self" }]],
+        ["results", [{ "title" => "Content Item A", "base_path" => "/a-base-path" }, { "title" => "Content Item B", "base_path" => "/another-base-path" }]]
       ], response.to_a
-
     end
 
     it "returns the content items in english locale by default" do
@@ -1312,8 +1310,8 @@ describe GdsApi::PublishingApiV2 do
         ["total", 1],
         ["pages", 1],
         ["current_page", 1],
-        ["links", [{"href"=>"http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&page=1", "rel"=>"self"}]],
-        ["results", [{"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"en"}]]
+        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&page=1", "rel" => "self" }]],
+        ["results", [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "en" }]]
       ], response.to_a
     end
 
@@ -1356,8 +1354,8 @@ describe GdsApi::PublishingApiV2 do
         ["total", 1],
         ["pages", 1],
         ["current_page", 1],
-        ["links", [{"href"=>"http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&locale=fr&page=1", "rel"=>"self"}]],
-        ["results", [{"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"fr"}]]
+        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&locale=fr&page=1", "rel" => "self" }]],
+        ["results", [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "fr" }]]
       ], response.to_a
     end
 
@@ -1402,11 +1400,11 @@ describe GdsApi::PublishingApiV2 do
         ["total", 3],
         ["pages", 1], ["current_page", 1],
         ["links",
-         [{"href"=>"http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&locale=all&page=1", "rel"=>"self"}]],
+         [{ "href" => "http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&locale=all&page=1", "rel" => "self" }]],
         ["results",
-         [{"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"en"},
-          {"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"fr"},
-          {"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "locale"=>"ar"}]]
+         [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "en" },
+          { "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "fr" },
+          { "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "ar" }]]
       ], response.to_a
     end
 
@@ -1433,7 +1431,7 @@ describe GdsApi::PublishingApiV2 do
               rel: "self"
             }],
             results: [
-              { content_id: @content_id, details: {foo: :bar} }
+              { content_id: @content_id, details: { foo: :bar } }
             ]
           }
         )
@@ -1449,8 +1447,8 @@ describe GdsApi::PublishingApiV2 do
         ["total", 1],
         ["pages", 1],
         ["current_page", 1],
-        ["links", [{"href"=>"http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=details&page=1", "rel"=>"self"}]],
-        ["results", [{"content_id"=>"bed722e6-db68-43e5-9079-063f623335a7", "details"=>{"foo"=>"bar"}}]]
+        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=details&page=1", "rel" => "self" }]],
+        ["results", [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "details" => { "foo" => "bar" } }]]
       ], response.to_a
     end
   end
@@ -1552,7 +1550,7 @@ describe GdsApi::PublishingApiV2 do
             body: {
               "error" => {
                 "code" => 404,
-                "message" => Pact.term(generate: "not found", matcher:/\S+/)
+                "message" => Pact.term(generate: "not found", matcher: /\S+/)
               },
             },
             headers: {
@@ -1581,12 +1579,12 @@ describe GdsApi::PublishingApiV2 do
         @linking_content_item1 = content_item_for_content_id(content_id3,
           "base_path" => "/item-b",
           "links" => {
-            "topic" => [ @linked_content_item['content_id1'] ]
+            "topic" => [@linked_content_item['content_id1']]
         })
         @linking_content_item2 = content_item_for_content_id(content_id2,
           "base_path" => "/item-a",
           "links" => {
-            "topic" => [ @linked_content_item['content_id1'] ],
+            "topic" => [@linked_content_item['content_id1']],
         })
 
         publishing_api
@@ -1618,10 +1616,8 @@ describe GdsApi::PublishingApiV2 do
       it "returns the requested fields of linking items" do
         response = @api_client.get_linked_items(
           @linked_content_item["content_id"],
-          {
-            link_type: "topic",
-            fields: ["content_id", "base_path"],
-          }
+                      link_type: "topic",
+            fields: %w(content_id base_path)
         )
         assert_equal 200, response.code
 

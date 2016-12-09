@@ -9,8 +9,8 @@ module GdsApi
       def email_alert_api_has_subscriber_list(attributes)
         stub_request(:get, subscriber_lists_url(attributes))
           .to_return(
-            :status => 200,
-            :body => get_subscriber_list_response(attributes).to_json,
+            status: 200,
+            body: get_subscriber_list_response(attributes).to_json,
           )
       end
 
@@ -22,15 +22,15 @@ module GdsApi
       def email_alert_api_creates_subscriber_list(attributes)
         stub_request(:post, subscriber_lists_url)
           .to_return(
-            :status => 201,
-            :body => get_subscriber_list_response(attributes).to_json,
+            status: 201,
+            body: get_subscriber_list_response(attributes).to_json,
           )
       end
 
       def email_alert_api_refuses_to_create_subscriber_list
         stub_request(:post, subscriber_lists_url)
           .to_return(
-            :status => 422,
+            status: 422,
           )
       end
 
@@ -48,8 +48,8 @@ module GdsApi
       def email_alert_api_accepts_alert
         stub_request(:post, notifications_url)
           .to_return(
-            :status => 202,
-            :body => {}.to_json,
+            status: 202,
+            body: {}.to_json,
           )
       end
 
@@ -67,14 +67,12 @@ module GdsApi
             payload = JSON.parse(request.body)
             payload.select { |k, _| attributes.key?(k) } == attributes
           end
-        else
-          matcher = nil
         end
 
         assert_requested(:post, notifications_url, times: 1, &matcher)
       end
 
-      def email_alert_api_has_notifications(notifications, start_at=nil)
+      def email_alert_api_has_notifications(notifications, start_at = nil)
         url = notifications_url
         url += "?start_at=#{start_at}" if start_at
         url_regexp = Regexp.new("^#{Regexp.escape(url)}$")
