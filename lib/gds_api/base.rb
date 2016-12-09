@@ -18,11 +18,12 @@ class GdsApi::Base
     GdsApi::JsonClient.new(options)
   end
 
-  def_delegators :client, :get_json, :get_json!,
-                          :post_json, :post_json!,
-                          :put_json, :put_json!,
-                          :patch_json, :patch_json!,
-                          :delete_json, :delete_json!, :delete_json_with_params!,
+  def_delegators :client, :get_json,
+                          :post_json,
+                          :put_json,
+                          :patch_json,
+                          :delete_json,
+                          :delete_json_with_params!,
                           :get_raw, :get_raw!,
                           :put_multipart,
                           :post_multipart
@@ -51,8 +52,8 @@ class GdsApi::Base
     "#{base_url}/#{slug}.json#{query_string(options)}"
   end
 
-  def get_list!(url)
-    get_json!(url) do |r|
+  def get_list(url)
+    get_json(url) do |r|
       GdsApi::ListResponse.new(r, self)
     end
   end

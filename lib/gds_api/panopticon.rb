@@ -23,7 +23,7 @@ class GdsApi::Panopticon < GdsApi::Base
   end
 
   def create_artefact!(artefact)
-    post_json!(base_url + ".json", artefact)
+    post_json(base_url + ".json", artefact)
   end
 
   def put_artefact(id_or_slug, artefact)
@@ -33,7 +33,7 @@ class GdsApi::Panopticon < GdsApi::Base
   end
 
   def put_artefact!(id_or_slug, artefact)
-    put_json!("#{base_url}/#{id_or_slug}.json", artefact)
+    put_json("#{base_url}/#{id_or_slug}.json", artefact)
   end
 
   def update_artefact(id_or_slug, artefact)
@@ -45,22 +45,22 @@ class GdsApi::Panopticon < GdsApi::Base
   end
 
   def delete_artefact!(id_or_slug)
-    delete_json!("#{base_url}/#{id_or_slug}.json")
+    delete_json("#{base_url}/#{id_or_slug}.json")
   end
 
   def create_tag(attributes)
-    post_json!("#{endpoint}/tags.json", attributes)
+    post_json("#{endpoint}/tags.json", attributes)
   end
 
   def put_tag(tag_type, tag_id, attributes)
-    put_json!(
+    put_json(
       tag_url(tag_type, tag_id),
       attributes
     )
   end
 
   def publish_tag(tag_type, tag_id)
-    post_json!(
+    post_json(
       tag_url(tag_type, tag_id, '/publish'),
       # we don't need to send any more data along with the publish request,
       # but a body is still required, so sending an empty JSON hash instead

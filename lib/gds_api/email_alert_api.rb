@@ -33,7 +33,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   #
   # @param publication [Hash] Valid publication attributes
   def send_alert(publication)
-    post_json!("#{endpoint}/notifications", publication)
+    post_json("#{endpoint}/notifications", publication)
   end
 
   # Get notifications
@@ -44,7 +44,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   def notifications(start_at = nil)
     url = "#{endpoint}/notifications"
     url += "?start_at=#{start_at}" if start_at
-    get_json!(url)
+    get_json(url)
   end
 
   # Get notification
@@ -53,18 +53,18 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   #
   # @return [Hash] notification
   def notification(id)
-    get_json!("#{endpoint}/notifications/#{id}")
+    get_json("#{endpoint}/notifications/#{id}")
   end
 
 private
 
   def search_subscriber_list(params)
     query_string = nested_query_string(params)
-    get_json!("#{endpoint}/subscriber-lists?" + query_string)
+    get_json("#{endpoint}/subscriber-lists?" + query_string)
   end
 
   def create_subscriber_list(attributes)
-    post_json!("#{endpoint}/subscriber-lists", attributes)
+    post_json("#{endpoint}/subscriber-lists", attributes)
   end
 
   def nested_query_string(params)

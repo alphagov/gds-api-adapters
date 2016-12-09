@@ -41,7 +41,7 @@ module GdsApi
       #   ...
       #  }
       def service_feedback(transaction_page_slug)
-        get_json!("#{endpoint}/data/#{transaction_page_slug}/customer-satisfaction")
+        get_json("#{endpoint}/data/#{transaction_page_slug}/customer-satisfaction")
       end
     end
   end
