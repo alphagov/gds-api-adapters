@@ -1,5 +1,6 @@
-# Unreleased
+# 38.0.0
 
+* Added an adapter for the import endpoint of the Need API.
 * Removed `GdsApi::Publisher`
 * Removed `GdsApi::ExternalLinkTracker`
 * Removed deprecated `PublishingApi` endpoints (`put_content_item` and
