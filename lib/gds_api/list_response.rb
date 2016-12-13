@@ -37,7 +37,7 @@ module GdsApi
       # allow the data to change once it's already been loaded, so long as we
       # retain a reference to any one page in the sequence
       @next_page ||= if has_next_page?
-                       @api_client.get_list! page_link("next").href
+                       @api_client.get_list page_link("next").href
                      end
     end
 
@@ -49,7 +49,7 @@ module GdsApi
       # See the note in `next_page` for why this is memoised
       @previous_page ||= begin
         if has_previous_page?
-          @api_client.get_list!(page_link("previous").href)
+          @api_client.get_list(page_link("previous").href)
         end
       end
     end

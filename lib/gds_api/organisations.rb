@@ -2,7 +2,7 @@ require_relative 'base'
 
 class GdsApi::Organisations < GdsApi::Base
   def organisations
-    get_list! "#{base_url}/organisations"
+    get_list "#{base_url}/organisations"
   end
 
   def organisation(organisation_slug)

@@ -98,9 +98,9 @@ describe GdsApi::ListResponse do
       )
 
       @client = stub
-      @client.stubs(:get_list!).with("http://www.example.com/1").returns(GdsApi::ListResponse.new(@p1_response, @client))
-      @client.stubs(:get_list!).with("http://www.example.com/2").returns(GdsApi::ListResponse.new(@p2_response, @client))
-      @client.stubs(:get_list!).with("http://www.example.com/3").returns(GdsApi::ListResponse.new(@p3_response, @client))
+      @client.stubs(:get_list).with("http://www.example.com/1").returns(GdsApi::ListResponse.new(@p1_response, @client))
+      @client.stubs(:get_list).with("http://www.example.com/2").returns(GdsApi::ListResponse.new(@p2_response, @client))
+      @client.stubs(:get_list).with("http://www.example.com/3").returns(GdsApi::ListResponse.new(@p3_response, @client))
     end
 
     describe "accessing next page" do
@@ -120,8 +120,8 @@ describe GdsApi::ListResponse do
         resp = GdsApi::ListResponse.new(@p1_response, @client)
         first_call = resp.next_page
 
-        @client.unstub(:get_list!) # Necessary because of https://github.com/freerange/mocha/issues/44
-        @client.expects(:get_list!).never
+        @client.unstub(:get_list) # Necessary because of https://github.com/freerange/mocha/issues/44
+        @client.expects(:get_list).never
         second_call = resp.next_page
         assert_equal first_call, second_call
       end
@@ -144,8 +144,8 @@ describe GdsApi::ListResponse do
         resp = GdsApi::ListResponse.new(@p3_response, @client)
         first_call = resp.previous_page
 
-        @client.unstub(:get_list!) # Necessary because of https://github.com/freerange/mocha/issues/44
-        @client.expects(:get_list!).never
+        @client.unstub(:get_list) # Necessary because of https://github.com/freerange/mocha/issues/44
+        @client.expects(:get_list).never
         second_call = resp.previous_page
         assert_equal first_call, second_call
       end
@@ -163,9 +163,9 @@ describe GdsApi::ListResponse do
       end
 
       it "should not load a page multiple times" do
-        @client.unstub(:get_list!) # Necessary because of https://github.com/freerange/mocha/issues/44
-        @client.expects(:get_list!).with("http://www.example.com/2").once.returns(GdsApi::ListResponse.new(@p2_response, @client))
-        @client.expects(:get_list!).with("http://www.example.com/3").once.returns(GdsApi::ListResponse.new(@p3_response, @client))
+        @client.unstub(:get_list) # Necessary because of https://github.com/freerange/mocha/issues/44
+        @client.expects(:get_list).with("http://www.example.com/2").once.returns(GdsApi::ListResponse.new(@p2_response, @client))
+        @client.expects(:get_list).with("http://www.example.com/3").once.returns(GdsApi::ListResponse.new(@p3_response, @client))
 
         3.times do
           @response.with_subsequent_pages.to_a

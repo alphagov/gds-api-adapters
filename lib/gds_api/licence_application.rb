@@ -2,7 +2,7 @@ require_relative "base"
 
 class GdsApi::LicenceApplication < GdsApi::Base
   def all_licences
-    get_json!("#{@endpoint}/api/licences")
+    get_json("#{@endpoint}/api/licences")
   end
 
   def details_for_licence(id, snac_code = nil)

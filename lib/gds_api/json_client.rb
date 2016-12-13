@@ -76,35 +76,23 @@ module GdsApi
       get_raw!(url)
     end
 
-    # Define "safe" methods for each supported HTTP method
-    #
-    # Each "bang method" tries to make a request, but raises an exception if
-    # the response is not successful. These methods discard the HTTPNotFound
-    # exceptions (and return nil), and pass through all other exceptions.
-    [:get, :post, :put, :patch, :delete].each do |http_method|
-      method_name = "#{http_method}_json"
-      define_method method_name do |url, *args, &block|
-        send (method_name + "!"), url, *args, &block
-      end
-    end
-
-    def get_json!(url, additional_headers = {}, &create_response)
+    def get_json(url, additional_headers = {}, &create_response)
       do_json_request(:get, url, nil, additional_headers, &create_response)
     end
 
-    def post_json!(url, params = {}, additional_headers = {})
+    def post_json(url, params = {}, additional_headers = {})
       do_json_request(:post, url, params, additional_headers)
     end
 
-    def put_json!(url, params, additional_headers = {})
+    def put_json(url, params, additional_headers = {})
       do_json_request(:put, url, params, additional_headers)
     end
 
-    def patch_json!(url, params, additional_headers = {})
+    def patch_json(url, params, additional_headers = {})
       do_json_request(:patch, url, params, additional_headers)
     end
 
-    def delete_json!(url, additional_headers = {})
+    def delete_json(url, additional_headers = {})
       do_json_request(:delete, url, nil, additional_headers)
     end
 

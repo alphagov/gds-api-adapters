@@ -9,7 +9,7 @@ class GdsApi::ContentStore < GdsApi::Base
   end
 
   def content_item(base_path)
-    get_json!(content_item_url(base_path))
+    get_json(content_item_url(base_path))
   rescue GdsApi::HTTPNotFound => e
     raise ItemNotFound.build_from(e)
   end

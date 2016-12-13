@@ -364,7 +364,7 @@ class JsonClientTest < MiniTest::Spec
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(body: "{}", status: 404)
     assert_raises GdsApi::HTTPNotFound do
-      @client.get_json!(url)
+      @client.get_json(url)
     end
   end
 
@@ -372,7 +372,7 @@ class JsonClientTest < MiniTest::Spec
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(body: "{}", status: 410)
     assert_raises GdsApi::HTTPGone do
-      @client.get_json!(url)
+      @client.get_json(url)
     end
   end
 
@@ -380,7 +380,7 @@ class JsonClientTest < MiniTest::Spec
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(body: "{}", status: 403)
     assert_raises GdsApi::HTTPForbidden do
-      @client.get_json!(url)
+      @client.get_json(url)
     end
   end
 
@@ -428,7 +428,7 @@ class JsonClientTest < MiniTest::Spec
     url = "http://some.endpoint/some.json"
     stub_request(:delete, url).to_return(body: "{}", status: 409)
     assert_raises GdsApi::HTTPConflict do
-      @client.delete_json!(url)
+      @client.delete_json(url)
     end
   end
 
@@ -615,7 +615,7 @@ class JsonClientTest < MiniTest::Spec
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(body: "Hello there!")
 
-    response = @client.get_json!(url, &:body)
+    response = @client.get_json(url, &:body)
     assert response.is_a? String
     assert_equal "Hello there!", response
   end
@@ -857,16 +857,16 @@ class JsonClientTest < MiniTest::Spec
     url = "http://some.endpoint/some.json"
     stub_request(:any, url)
 
-    @client.get_json!(url)
+    @client.get_json(url)
     assert_requested(:get, url, headers: GdsApi::JsonClient.default_request_headers)
 
-    @client.delete_json!(url)
+    @client.delete_json(url)
     assert_requested(:delete, url, headers: GdsApi::JsonClient.default_request_headers)
 
-    @client.post_json!(url, test: "123")
+    @client.post_json(url, test: "123")
     assert_requested(:post, url, headers: GdsApi::JsonClient.default_request_with_json_body_headers)
 
-    @client.put_json!(url, test: "123")
+    @client.put_json(url, test: "123")
     assert_requested(:put, url, headers: GdsApi::JsonClient.default_request_with_json_body_headers)
   end
 end

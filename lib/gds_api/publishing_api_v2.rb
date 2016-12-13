@@ -14,7 +14,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#put-v2contentcontent_id
   def put_content(content_id, payload)
-    put_json!(content_url(content_id), payload)
+    put_json(content_url(content_id), payload)
   end
 
   # Return a content item
@@ -49,7 +49,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#post-lookup-by-base-path
   def lookup_content_ids(base_paths:)
-    response = post_json!("#{endpoint}/lookup-by-base-path", base_paths: base_paths)
+    response = post_json("#{endpoint}/lookup-by-base-path", base_paths: base_paths)
     response.to_hash
   end
 
@@ -96,7 +96,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
 
     params = merge_optional_keys(params, options, optional_keys)
 
-    post_json!(publish_url(content_id), params)
+    post_json(publish_url(content_id), params)
   end
 
   # Unpublish a content item
@@ -127,7 +127,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     params[:locale] = locale if locale
     params[:unpublished_at] = unpublished_at.utc.iso8601 if unpublished_at
 
-    post_json!(unpublish_url(content_id), params)
+    post_json(unpublish_url(content_id), params)
   end
 
   # Discard a draft
@@ -147,7 +147,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
 
     params = merge_optional_keys({}, options, optional_keys)
 
-    post_json!(discard_url(content_id), params)
+    post_json(discard_url(content_id), params)
   end
 
   # Get the link set for the given content_id.
@@ -232,7 +232,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
 
     payload = merge_optional_keys(payload, params, [:previous_version, :bulk_publishing])
 
-    patch_json!(links_url(content_id), payload)
+    patch_json(links_url(content_id), payload)
   end
 
   # Get a list of content items from the Publishing API.

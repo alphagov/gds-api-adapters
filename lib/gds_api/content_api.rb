@@ -33,11 +33,11 @@ class GdsApi::ContentApi < GdsApi::Base
     params << "draft=true" if options[:draft]
     params << "cachebust=#{Time.now.utc.to_i}#{rand(1000)}" if options[:bust_cache]
 
-    get_list!("#{base_url}/tags.json?#{params.join('&')}")
+    get_list("#{base_url}/tags.json?#{params.join('&')}")
   end
 
   def root_tags(tag_type)
-    get_list!("#{base_url}/tags.json?type=#{CGI.escape(tag_type)}&root_sections=true")
+    get_list("#{base_url}/tags.json?type=#{CGI.escape(tag_type)}&root_sections=true")
   end
 
   def child_tags(tag_type, parent_tag, options = {})
@@ -47,7 +47,7 @@ class GdsApi::ContentApi < GdsApi::Base
     ]
     params << "sort=#{options[:sort]}" if options.has_key?(:sort)
 
-    get_list!("#{base_url}/tags.json?#{params.join('&')}")
+    get_list("#{base_url}/tags.json?#{params.join('&')}")
   end
 
   def tag(tag, tag_type = nil)
@@ -68,11 +68,11 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def artefact!(slug, params = {})
-    get_json!(artefact_url(slug, params))
+    get_json(artefact_url(slug, params))
   end
 
   def artefacts
-    get_list!("#{base_url}/artefacts.json")
+    get_list("#{base_url}/artefacts.json")
   end
 
   def local_authority(snac_code)
@@ -80,11 +80,11 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def local_authorities_by_name(name)
-    get_json!("#{base_url}/local_authorities.json?name=#{CGI.escape(name)}")
+    get_json("#{base_url}/local_authorities.json?name=#{CGI.escape(name)}")
   end
 
   def local_authorities_by_snac_code(snac_code)
-    get_json!("#{base_url}/local_authorities.json?snac_code=#{CGI.escape(snac_code)}")
+    get_json("#{base_url}/local_authorities.json?snac_code=#{CGI.escape(snac_code)}")
   end
 
   def licences_for_ids(ids)
@@ -99,13 +99,7 @@ class GdsApi::ContentApi < GdsApi::Base
       url += "?#{query.join('&')}"
     end
 
-    get_json!(url)
-  end
-
-  def get_list!(url)
-    get_json!(url) { |r|
-      GdsApi::ListResponse.new(r, self, web_urls_relative_to: @web_urls_relative_to)
-    }
+    get_json(url)
   end
 
   def get_list(url)
@@ -115,13 +109,6 @@ class GdsApi::ContentApi < GdsApi::Base
   end
 
   def get_json(url, &create_response)
-    create_response = create_response || Proc.new { |r|
-      GdsApi::Response.new(r, web_urls_relative_to: @web_urls_relative_to)
-    }
-    super(url, &create_response)
-  end
-
-  def get_json!(url, &create_response)
     create_response = create_response || Proc.new { |r|
       GdsApi::Response.new(r, web_urls_relative_to: @web_urls_relative_to)
     }
