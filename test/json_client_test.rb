@@ -60,6 +60,13 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  def test_request_an_invalid_url
+    url = "http://www.example.com/there-is-a-space-in-this-slug /"
+    assert_raises GdsApi::InvalidUrl do
+      @client.get_json(url)
+    end
+  end
+
   def test_get_should_raise_endpoint_not_found_if_connection_refused
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_raise(Errno::ECONNREFUSED)

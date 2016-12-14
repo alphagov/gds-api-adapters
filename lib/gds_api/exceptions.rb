@@ -46,6 +46,8 @@ module GdsApi
   class HTTPUnprocessableEntity < HTTPClientError
   end
 
+  class InvalidUrl < BaseError; end
+
   class NoBearerToken < BaseError; end
 
   module ExceptionHandling
