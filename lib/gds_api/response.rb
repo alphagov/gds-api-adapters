@@ -1,12 +1,9 @@
 require 'json'
-require 'ostruct'
 require 'forwardable'
 require 'rack/cache'
-require_relative 'core-ext/openstruct'
 
 module GdsApi
-  # This wraps an HTTP response with a JSON body, and presents this as
-  # an object that has the read behaviour of both a Hash and an OpenStruct
+  # This wraps an HTTP response with a JSON body.
   #
   # Responses can be configured to use relative URLs for `web_url` properties.
   # API endpoints should return absolute URLs so that they make sense outside of the
