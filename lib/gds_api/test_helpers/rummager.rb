@@ -95,6 +95,11 @@ module GdsApi
         run_example_query
       end
 
+      def rummager_has_services_and_info_data_with_missing_keys_for_organisation
+        stub_request_for(search_results_found_with_missing_keys)
+        run_example_query
+      end
+
       def rummager_has_no_services_and_info_data_for_organisation
         stub_request_for(no_search_results_found)
         run_example_query
@@ -134,6 +139,15 @@ module GdsApi
         File.read(
           File.expand_path(
             "../../../../test/fixtures/services_and_info_fixture.json",
+            __FILE__
+          )
+        )
+      end
+
+      def search_results_found_with_missing_keys
+        File.read(
+          File.expand_path(
+            "../../../../test/fixtures/services_and_info_missing_keys_fixture.json",
             __FILE__
           )
         )
