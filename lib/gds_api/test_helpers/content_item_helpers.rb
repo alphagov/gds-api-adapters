@@ -6,7 +6,8 @@ module GdsApi
         {
           "title" => titleize_base_path(base_path),
           "description" => "Description for #{base_path}",
-          "format" => "guide",
+          "schema_name" => "guide",
+          "document_type" => "guide",
           "need_ids" => ["100001"],
           "public_updated_at" => "2014-05-06T12:01:00+00:00",
           # base_path is added in as necessary (ie for content-store GET responses)
@@ -21,7 +22,7 @@ module GdsApi
         {
           "title" => nil,
           "description" => nil,
-          "format" => "gone",
+          "document_type" => "gone",
           "schema_name" => "gone",
           "public_updated_at" => nil,
           "base_path" => base_path,

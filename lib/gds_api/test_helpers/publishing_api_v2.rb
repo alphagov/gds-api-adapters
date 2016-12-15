@@ -210,7 +210,7 @@ module GdsApi
 
       # This method has been refactored into publishing_api_has_content (above)
       # publishing_api_has_content allows for flexible passing in of arguments, please use instead
-      def publishing_api_has_fields_for_document(format, items, fields)
+      def publishing_api_has_fields_for_document(document_type, items, fields)
         body = Array(items).map { |item|
           item.with_indifferent_access.slice(*fields)
         }
@@ -219,7 +219,7 @@ module GdsApi
           "&fields%5B%5D=#{f}"
         }
 
-        url = PUBLISHING_API_V2_ENDPOINT + "/content?document_type=#{format}#{query_params.join('')}"
+        url = PUBLISHING_API_V2_ENDPOINT + "/content?document_type=#{document_type}#{query_params.join('')}"
 
         stub_request(:get, url).to_return(status: 200, body: { results: body }.to_json, headers: {})
       end

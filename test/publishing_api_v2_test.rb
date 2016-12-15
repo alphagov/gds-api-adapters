@@ -11,7 +11,8 @@ describe GdsApi::PublishingApiV2 do
       "content_id" => content_id,
       "title" => "Instructions for crawler robots",
       "description" => "robots.txt provides rules for which parts of GOV.UK are permitted to be crawled by different bots.",
-      "format" => "special_route",
+      "schema_name" => "special_route",
+      "document_type" => "different_to_special_route",
       "public_updated_at" => "2015-07-30T13:58:11.000Z",
       "publishing_app" => "static",
       "rendering_app" => "static",
@@ -149,7 +150,6 @@ describe GdsApi::PublishingApiV2 do
             "details" => { "body" => [] },
             "previous_version" => "3"
           )
-          @content_item.delete("format")
 
           publishing_api
             .given("the content item #{@content_id} is at version 3")
@@ -182,7 +182,6 @@ describe GdsApi::PublishingApiV2 do
             "details" => { "body" => [] },
             "previous_version" => "2"
           )
-          @content_item.delete("format")
 
           publishing_api
             .given("the content item #{@content_id} is at version 3")
@@ -242,7 +241,7 @@ describe GdsApi::PublishingApiV2 do
             status: 200,
             body: {
               "content_id" => @content_id,
-              "document_type" => Pact.like("special_route"),
+              "document_type" => Pact.like("different_to_special_route"),
               "schema_name" => Pact.like("special_route"),
               "publishing_app" => Pact.like("publisher"),
               "rendering_app" => Pact.like("frontend"),
@@ -260,7 +259,7 @@ describe GdsApi::PublishingApiV2 do
       it "responds with 200 and the content item" do
         response = @api_client.get_content(@content_id)
         assert_equal 200, response.code
-        assert_equal @content_item["format"], response["document_type"]
+        assert_equal @content_item["document_type"], response["document_type"]
       end
     end
 
@@ -1199,7 +1198,7 @@ describe GdsApi::PublishingApiV2 do
 
     it "returns the content items of a given document_type" do
       publishing_api
-        .given("there is content with format 'topic'")
+        .given("there is content with document_type 'topic'")
         .upon_receiving("a get linkables request")
         .with(
           method: :get,
@@ -1217,18 +1216,13 @@ describe GdsApi::PublishingApiV2 do
       response = @api_client.get_linkables(document_type: "topic")
       assert_equal 200, response.code
       assert_equal linkables, response.to_a
-
-      # `format` is supported but deprecated for backwards compatibility
-      response = @api_client.get_linkables(format: "topic")
-      assert_equal 200, response.code
-      assert_equal linkables, response.to_a
     end
   end
 
   describe "#get_content_items" do
-    it "returns the content items of a certain format" do
+    it "returns the content items of a certain document_type" do
       publishing_api
-        .given("there is content with format 'topic'")
+        .given("there is content with document_type 'topic'")
         .upon_receiving("a get entries request")
         .with(
           method: :get,
