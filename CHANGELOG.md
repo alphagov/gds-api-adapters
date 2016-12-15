@@ -1,3 +1,7 @@
+# Unreleased
+
+* Removed tests for the deprecated `format` field in the Publishing API.
+
 # 38.0.0
 
 * Added an adapter for the import endpoint of the Need API.

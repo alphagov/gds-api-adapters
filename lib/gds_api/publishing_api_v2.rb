@@ -280,17 +280,9 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # FIXME: Add documentation
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2linkables
-  def get_linkables(document_type: nil, format: nil)
+  def get_linkables(document_type: nil)
     if document_type.nil?
-      if format.nil?
-        raise ArgumentError.new("Please provide a `document_type`")
-      else
-        self.class.logger.warn(
-          "Providing `format` to the `get_linkables` method is deprecated and will be removed in a " +
-          "future release.  Please use `document_type` instead."
-        )
-        document_type = format
-      end
+      raise ArgumentError.new("Please provide a `document_type`")
     end
 
     get_json("#{endpoint}/v2/linkables?document_type=#{document_type}")
