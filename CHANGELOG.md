@@ -1,5 +1,6 @@
-# Unreleased
+# 38.1.0
 
+* Handle URI::InvalidURIError exceptions with GdsApi::InvalidUrl
 * Removed tests for the deprecated `format` field in the Publishing API.
 
 # 38.0.0
