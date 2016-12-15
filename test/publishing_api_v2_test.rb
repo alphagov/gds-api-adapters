@@ -12,7 +12,7 @@ describe GdsApi::PublishingApiV2 do
       "title" => "Instructions for crawler robots",
       "description" => "robots.txt provides rules for which parts of GOV.UK are permitted to be crawled by different bots.",
       "schema_name" => "special_route",
-      "document_type" => "different_to_special_route",
+      "document_type" => "special_route",
       "public_updated_at" => "2015-07-30T13:58:11.000Z",
       "publishing_app" => "static",
       "rendering_app" => "static",
@@ -241,7 +241,7 @@ describe GdsApi::PublishingApiV2 do
             status: 200,
             body: {
               "content_id" => @content_id,
-              "document_type" => Pact.like("different_to_special_route"),
+              "document_type" => Pact.like("special_route"),
               "schema_name" => Pact.like("special_route"),
               "publishing_app" => Pact.like("publisher"),
               "rendering_app" => Pact.like("frontend"),
