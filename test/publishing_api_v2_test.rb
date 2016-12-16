@@ -121,12 +121,17 @@ describe GdsApi::PublishingApiV2 do
           )
           .will_respond_with(
             status: 422,
-            body: [
-              {
-                fragment: "#/base_path",
-                failed_attribute: "Pattern"
+            body: {
+              error: {
+                code: 422,
+                message: "Base path is not a valid absolute URL path",
+                fields: {
+                  base_path: [
+                    "is not a valid absolute URL path",
+                  ]
+                }
               }
-            ],
+            },
             headers: {
               "Content-Type" => "application/json; charset=utf-8"
             }
