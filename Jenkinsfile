@@ -127,7 +127,6 @@ node {
 
         stage("Publish gem") {
           echo 'Publishing gem'
-          bundleApp()
           sh("bundle exec rake publish_gem --trace")
         }
       }
