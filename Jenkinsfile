@@ -25,7 +25,7 @@ node {
           userRemoteConfigs: [
             [
               credentialsId: 'github-token-govuk-ci-username',
-              name: 'gds-api-adapters',
+              name: 'origin',
               url: 'https://github.com/alphagov/gds-api-adapters.git'
             ]
           ]
