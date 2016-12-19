@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export PACT_BROKER_BASE_URL=${PACT_BROKER_BASE_URL:-"https://pact-broker.dev.publishing.service.gov.uk"}
-
 # Cleanup anything left from previous test runs
 git clean -fdx
 
@@ -30,12 +28,3 @@ for version in 2.3 2.2 2.1; do
   bundle exec rake ${TEST_TASK:-"default"}
 done
 unset RBENV_VERSION
-
-if [ -n "$PACT_TARGET_BRANCH" ]; then
-  bundle exec rake pact:publish:branch
-fi
-
-if [[ -n "$PUBLISH_GEM" ]]; then
-  bundle install --path "${HOME}/bundles/${JOB_NAME}"
-  bundle exec rake publish_gem --trace
-fi
