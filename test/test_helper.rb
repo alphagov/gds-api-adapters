@@ -1,21 +1,22 @@
 require 'bundler'
 Bundler.setup :default, :development, :test
 
-require 'minitest/autorun'
-require 'rack/utils'
-require 'rack/test'
 require 'simplecov'
 require 'simplecov-rcov'
-require 'mocha/mini_test'
-require 'timecop'
-require 'gds-api-adapters'
-require 'govuk-content-schema-test-helpers'
 
 SimpleCov.start do
   add_filter "/test/"
   add_group "Test Helpers", "lib/gds_api/test_helpers"
   formatter SimpleCov::Formatter::RcovFormatter
 end
+
+require 'minitest/autorun'
+require 'rack/utils'
+require 'rack/test'
+require 'mocha/mini_test'
+require 'timecop'
+require 'gds-api-adapters'
+require 'govuk-content-schema-test-helpers'
 
 class Minitest::Test
   def teardown
