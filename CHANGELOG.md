@@ -1,3 +1,7 @@
+# 39.0.0
+
+* Remove the `need_api_has_organisations` test helper.
+
 # 38.1.0
 
 * Handle URI::InvalidURIError exceptions with GdsApi::InvalidUrl
