@@ -261,39 +261,6 @@ describe GdsApi::NeedApi do
     end
   end
 
-  describe "viewing organisations" do
-    it "should return a list of organisations" do
-      request_stub = need_api_has_organisations(
-        "committee-on-climate-change" => "Committee on Climate Change",
-        "competition-commission" => "Competition Commission"
-      )
-
-      orgs = @api.organisations
-
-      assert_requested(request_stub)
-      assert_equal "Committee on Climate Change", orgs[0]["name"]
-      assert_equal "Competition Commission", orgs[1]["name"]
-      assert_equal 2, orgs.size
-    end
-
-    it "should return organisations with abbreviations if present" do
-      request_stub = need_api_has_organisations(
-        "committee-on-climate-change" => { "name" => "Committee on Climate Change",
-                                          "abbreviation" => "CCC" },
-        "competition-commission" => { "name" => "Competition Commission",
-                                     "abbreviation" => "CC" }
-      )
-      orgs = @api.organisations
-
-      assert_requested(request_stub)
-      assert_equal "Committee on Climate Change", orgs[0]["name"]
-      assert_equal "Competition Commission", orgs[1]["name"]
-      assert_equal "CCC", orgs[0]["abbreviation"]
-      assert_equal "CC", orgs[1]["abbreviation"]
-      assert_equal 2, orgs.size
-    end
-  end
-
   describe "closing needs as duplicates" do
     it "should send a PUT request" do
       fields = {

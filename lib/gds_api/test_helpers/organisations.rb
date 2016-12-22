@@ -59,6 +59,11 @@ module GdsApi
               to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
           end
         end
+
+        if pages.empty?
+          # If there are no pages - and so no organisations specified - then stub /api/organisations.
+          stub_request(:get, "#{ORGANISATIONS_API_ENDPOINT}/api/organisations").to_return(status: 200, body: plural_response_base.to_json, headers: {})
+        end
       end
 
       def organisations_api_has_organisation(organisation_slug, details = nil)

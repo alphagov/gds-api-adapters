@@ -8,21 +8,6 @@ module GdsApi
 
       NEED_API_ENDPOINT = Plek.current.find('need-api')
 
-      def need_api_has_organisations(organisations)
-        url = NEED_API_ENDPOINT + "/organisations"
-
-        body = response_base.merge(
-          "organisations" => organisations.map {|id, attrs|
-            if attrs.is_a? String
-              { "id" => id }.merge("name" => attrs)
-            else
-              { "id" => id }.merge(attrs)
-            end
-          }
-        )
-        stub_request(:get, url).to_return(status: 200, body: body.to_json, headers: {})
-      end
-
       def need_api_has_needs_for_organisation(organisation, needs)
         url = NEED_API_ENDPOINT + "/needs?organisation_id=#{organisation}"
 
