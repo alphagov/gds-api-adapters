@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Cleanup anything left from previous test runs
 git clean -fdx
