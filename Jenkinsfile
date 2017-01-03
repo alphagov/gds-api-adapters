@@ -98,6 +98,11 @@ node {
           ]
         ]
       ])
+
+      dir("publishing-api") {
+        govuk.contentSchemaDependency('deployed-to-production')
+        govuk.setEnvar("GOVUK_CONTENT_SCHEMAS_PATH", "tmp/govuk-content-schemas")
+      }
     }
 
     stage("Run publishing-api pact") {
