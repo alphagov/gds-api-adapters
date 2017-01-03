@@ -121,17 +121,14 @@ describe GdsApi::PublishingApiV2 do
           )
           .will_respond_with(
             status: 422,
-            body: {
-              error: {
-                code: 422,
-                message: "Base path is not a valid absolute URL path",
-                fields: {
-                  base_path: [
-                    "is not a valid absolute URL path",
-                  ]
-                }
+            body: [
+              {
+                schema: Pact.like({}),
+                fragment: "#/base_path",
+                message: Pact.like("The property '#/base_path' value \"not a url path\" did not match the regex '^/(([a-zA-Z0-9._~!$&'()*+,;=:@-]|%[0-9a-fA-F]{2})+(/([a-zA-Z0-9._~!$&'()*+,;=:@-]|%[0-9a-fA-F]{2})*)*)?$' in schema 729a13d6-8ddb-5ba8-b116-3b7604dc3d3d#"),
+                failed_attribute: "Pattern"
               }
-            },
+            ],
             headers: {
               "Content-Type" => "application/json; charset=utf-8"
             }
