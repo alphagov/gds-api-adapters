@@ -113,6 +113,7 @@ node {
             passwordVariable: 'PACT_BROKER_PASSWORD'
           ]
         ]) {
+          govuk.runRakeTask("db:reset")
           govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
         }
       }
