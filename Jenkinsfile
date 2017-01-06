@@ -133,7 +133,13 @@ node {
 
         stage("Publish gem") {
           echo 'Publishing gem'
-          sh("bundle exec rake publish_gem --trace")
+          withCredentials([
+            [
+              credentialsId: 'github-token-govuk-ci-username',
+            ]
+          ]) {
+            govuk.runRakeTask("publish_gem --trace")
+          }
         }
       }
     }
