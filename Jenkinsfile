@@ -98,6 +98,11 @@ node {
           ]
         ]
       ])
+
+      dir("publishing-api") {
+        govuk.contentSchemaDependency('deployed-to-production')
+        govuk.setEnvar("GOVUK_CONTENT_SCHEMAS_PATH", "tmp/govuk-content-schemas")
+      }
     }
 
     stage("Run publishing-api pact") {
@@ -113,6 +118,7 @@ node {
             passwordVariable: 'PACT_BROKER_PASSWORD'
           ]
         ]) {
+          govuk.runRakeTask("db:reset")
           govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
         }
       }
