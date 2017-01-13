@@ -5,31 +5,46 @@ require 'json'
 
 module GdsApi
   module TestHelpers
+    # @api documented
     module PublishingApiV2
       include ContentItemHelpers
 
       PUBLISHING_API_V2_ENDPOINT = Plek.current.find('publishing-api') + '/v2'
 
-      # stubs a PUT /v2/content/:content_id request with the given content id and request body.
+      # Stub a PUT /v2/content/:content_id request with the given content id and request body.
       # if no response_hash is given, a default response as follows is created:
       # {status: 200, body: '{}', headers: {"Content-Type" => "application/json; charset=utf-8"}}
       #
       # if a response is given, then it will be merged with the default response.
       # if the given parameter for the response body is a Hash, it will be converted to JSON.
       #
-      # e.g. The following two examples are equivalent:
+      # The following two examples are equivalent:
+      # @example
+      #   stub_publishing_api_put_content(my_content_id, my_request_body, { status: 201, body: {version: 33}.to_json })
       #
-      # * stub_publishing_api_put_content(my_content_id, my_request_body, { status: 201, body: {version: 33}.to_json })
-      # * stub_publishing_api_put_content(my_content_id, my_request_body, { status: 201, body: {version: 33} })
+      # @example
+      #   stub_publishing_api_put_content(my_content_id, my_request_body, { status: 201, body: {version: 33} })
       #
+      # @param content_id [UUID]
+      # @param body  [String]
+      # @param response_hash [Hash]
       def stub_publishing_api_put_content(content_id, body, response_hash = {})
         stub_publishing_api_put(content_id, body, '/content', response_hash)
       end
 
+      # Stub a PATCH /v2/links/:content_id request
+      #
+      # @param content_id [UUID]
+      # @param body  [String]
       def stub_publishing_api_patch_links(content_id, body)
         stub_publishing_api_patch(content_id, body, '/links')
       end
 
+      # Stub a POST /v2/content/:content_id/publish request
+      #
+      # @param content_id [UUID]
+      # @param body  [String]
+      # @param response_hash [Hash]
       def stub_publishing_api_publish(content_id, body, response_hash = {})
         url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/publish"
         response = {
@@ -40,6 +55,11 @@ module GdsApi
         stub_request(:post, url).with(body: body).to_return(response)
       end
 
+      # Stub a POST /v2/content/:content_id/unpublish request
+      #
+      # @param content_id [UUID]
+      # @param params [Hash]
+      # @param body  [String]
       def stub_publishing_api_unpublish(content_id, params, response_hash = {})
         url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/unpublish"
         response = {
@@ -50,11 +70,22 @@ module GdsApi
         stub_request(:post, url).with(params).to_return(response)
       end
 
+      # Stub a POST /v2/content/:content_id/discard-draft request
+      #
+      # @param content_id [UUID]
       def stub_publishing_api_discard_draft(content_id)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/discard-draft"
         stub_request(:post, url).to_return(status: 200, headers: { "Content-Type" => "application/json; charset=utf-8" })
       end
 
+      # Stub requests issued when publishing a new draft.
+      # - PUT /v2/content/:content_id
+      # - POST /v2/content/:content_id/publish
+      # - PATCH /v2/links/:content_id
+      #
+      # @param body  [String]
+      # @param content_id [UUID]
+      # @param publish_body [Hash]
       def stub_publishing_api_put_content_links_and_publish(body, content_id = nil, publish_body = nil)
         content_id ||= body[:content_id]
         if publish_body.nil?
@@ -68,39 +99,55 @@ module GdsApi
         stubs
       end
 
+      # Stub any PUT /v2/content/* request
       def stub_any_publishing_api_put_content
         stub_request(:put, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/})
       end
 
+      # Stub any PATCH /v2/links/* request
       def stub_any_publishing_api_patch_links
         stub_request(:patch, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/links/})
       end
 
+      # Stub any POST /v2/content/*/publish request
       def stub_any_publishing_api_publish
         stub_request(:post, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/.*/publish})
       end
 
+      # Stub any POST /v2/content/*/unpublish request
       def stub_any_publishing_api_unpublish
         stub_request(:post, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/.*/unpublish})
       end
 
+      # Stub any POST /v2/content/*/discard-draft request
       def stub_any_publishing_api_discard_draft
         stub_request(:post, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/.*/discard-draft})
       end
 
+      # Stub any version 2 request to the publishing API
       def stub_any_publishing_api_call
         stub_request(:any, %r{\A#{PUBLISHING_API_V2_ENDPOINT}})
       end
 
+      # Stub any version 2 request to the publishing API to return a 404 response
       def stub_any_publishing_api_call_to_return_not_found
         stub_request(:any, %r{\A#{PUBLISHING_API_V2_ENDPOINT}})
           .to_return(status: 404, headers: { "Content-Type" => "application/json; charset=utf-8" })
       end
 
+      # Stub any version 2 request to the publishing API to return a 503 response
       def publishing_api_isnt_available
         stub_request(:any, /#{PUBLISHING_API_V2_ENDPOINT}\/.*/).to_return(status: 503)
       end
 
+      # Assert that a draft was saved and published, and links were updated.
+      # - PUT /v2/content/:content_id
+      # - POST /v2/content/:content_id/publish
+      # - PATCH /v2/links/:content_id
+      #
+      # @param body  [String]
+      # @param content_id [UUID]
+      # @param publish_body [Hash]
       def assert_publishing_api_put_content_links_and_publish(body, content_id = nil, publish_body = nil)
         content_id ||= body[:content_id]
         if publish_body.nil?
@@ -112,31 +159,62 @@ module GdsApi
         assert_publishing_api_publish(content_id, publish_body)
       end
 
+      # Assert that content was saved (PUT /v2/content/:content_id)
+      #
+      # @param content_id [UUID]
+      # @param attributes_or_matcher [Object]
+      # @param times [Integer]
       def assert_publishing_api_put_content(content_id, attributes_or_matcher = nil, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
         assert_publishing_api(:put, url, attributes_or_matcher, times)
       end
 
+      # Assert that content was published (POST /v2/content/:content_id/publish)
+      #
+      # @param content_id [UUID]
+      # @param attributes_or_matcher [Object]
+      # @param times [Integer]
       def assert_publishing_api_publish(content_id, attributes_or_matcher = nil, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/publish"
         assert_publishing_api(:post, url, attributes_or_matcher, times)
       end
 
+      # Assert that content was unpublished (POST /v2/content/:content_id/unpublish)
+      #
+      # @param content_id [UUID]
+      # @param attributes_or_matcher [Object]
+      # @param times [Integer]
       def assert_publishing_api_unpublish(content_id, attributes_or_matcher = nil, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/unpublish"
         assert_publishing_api(:post, url, attributes_or_matcher, times)
       end
 
+      # Assert that links were updated (PATCH /v2/links/:content_id)
+      #
+      # @param content_id [UUID]
+      # @param attributes_or_matcher [Object]
+      # @param times [Integer]
       def assert_publishing_api_patch_links(content_id, attributes_or_matcher = nil, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/links/" + content_id
         assert_publishing_api(:patch, url, attributes_or_matcher, times)
       end
 
+      # Assert that a draft was discarded (POST /v2/content/:content_id/discard-draft)
+      #
+      # @param content_id [UUID]
+      # @param attributes_or_matcher [Object]
+      # @param times [Integer]
       def assert_publishing_api_discard_draft(content_id, attributes_or_matcher = nil, times = 1)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/discard-draft"
         assert_publishing_api(:post, url, attributes_or_matcher, times)
       end
 
+      # Assert that a request was made to the publishing API
+      #
+      # @param verb [String]
+      # @param url [String]
+      # @param attributes_or_matcher [Object]
+      # @param times [Integer]
       def assert_publishing_api(verb, url, attributes_or_matcher = nil, times = 1)
         if attributes_or_matcher.is_a?(Hash)
           matcher = request_json_matches(attributes_or_matcher)
@@ -151,6 +229,7 @@ module GdsApi
         end
       end
 
+      # Get a request matcher that checks if a JSON request includes a set of attributes
       def request_json_includes(required_attributes)
         ->(request) do
           data = JSON.parse(request.body)
@@ -159,6 +238,7 @@ module GdsApi
         end
       end
 
+      # Get a request matcher that checks if a JSON request matches a hash
       def request_json_matches(required_attributes)
         ->(request) do
           data = JSON.parse(request.body)
@@ -166,15 +246,19 @@ module GdsApi
         end
       end
 
-      # Example of use:
-
-      # publishing_api_has_content(
-      #   vehicle_recalls_and_faults,   # this is a variable containing an array of content items
-      #   document_type: described_class.publishing_api_document_type,   #example of a document_type: "vehicle_recalls_and_faults_alert"
-      #   fields: fields,   #example: let(:fields) { %i[base_path content_id public_updated_at title publication_state] }
-      #   page: 1,
-      #   per_page: 50
-      #)
+      # Stub GET /v2/content/ to return a set of content items
+      #
+      # @example
+      #
+      #   publishing_api_has_content(
+      #     vehicle_recalls_and_faults,   # this is a variable containing an array of content items
+      #     document_type: described_class.publishing_api_document_type,   #example of a document_type: "vehicle_recalls_and_faults_alert"
+      #     fields: fields,   #example: let(:fields) { %i[base_path content_id public_updated_at title publication_state] }
+      #     page: 1,
+      #     per_page: 50
+      #   )
+      # @param items [Array]
+      # @param params [Hash]
       def publishing_api_has_content(items, params = {})
         url = PUBLISHING_API_V2_ENDPOINT + "/content"
 
@@ -224,17 +308,26 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: { results: body }.to_json, headers: {})
       end
 
+      # Stub GET /v2/linkables to return a set of content items with a specific document type
+      #
+      # @param linkables [Array]
       def publishing_api_has_linkables(linkables, document_type:)
         url = PUBLISHING_API_V2_ENDPOINT + "/linkables?document_type=#{document_type}"
         stub_request(:get, url).to_return(status: 200, body: linkables.to_json, headers: {})
       end
 
+      # Stub GET /v2/content/:content_id to return a specific content item hash
+      #
+      # @param item [Hash]
       def publishing_api_has_item(item)
         item = item.with_indifferent_access
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + item[:content_id]
         stub_request(:get, url).to_return(status: 200, body: item.to_json, headers: {})
       end
 
+      # Stub GET /v2/content/:content_id to progress through a series of responses.
+      #
+      # @param items [Array]
       def publishing_api_has_item_in_sequence(content_id, items)
         items = items.map(&:with_indifferent_access)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
@@ -248,12 +341,15 @@ module GdsApi
         end
       end
 
+      # Stub GET /v2/content/:content_id to return a 404 response
+      #
+      # @param content_id [UUID]
       def publishing_api_does_not_have_item(content_id)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
         stub_request(:get, url).to_return(status: 404, body: resource_not_found(content_id, "content item").to_json, headers: {})
       end
 
-      # Stubs a request to links endpoint
+      # Stub a request to links endpoint
       #
       # @param [Hash] links the structure of the links hash
       #
@@ -271,23 +367,25 @@ module GdsApi
       #    }
       #  )
       #
-      # Services.publishing_api.get_links("64aadc14-9bca-40d9-abb6-4f21f9792a05")
-      # => {
-      #      "content_id" => "64aadc14-9bca-40d9-abb6-4f21f9792a05",
-      #      "links" => {
-      #        "mainstream_browse_pages" => ["df2e7a3e-2078-45de-a75a-fd37d027427e"],
-      #        "parent" => ["df2e7a3e-2078-45de-a75a-fd37d027427e"],
-      #        "organisations" => ["569a9ee5-c195-4b7f-b9dc-edc17a09113f", "5c54ae52-341b-499e-a6dd-67f04633b8cf"]
-      #      },
-      #      "version" => 6
-      #    }
+      # @example
+      #
+      #   Services.publishing_api.get_links("64aadc14-9bca-40d9-abb6-4f21f9792a05")
+      #   => {
+      #        "content_id" => "64aadc14-9bca-40d9-abb6-4f21f9792a05",
+      #        "links" => {
+      #          "mainstream_browse_pages" => ["df2e7a3e-2078-45de-a75a-fd37d027427e"],
+      #          "parent" => ["df2e7a3e-2078-45de-a75a-fd37d027427e"],
+      #          "organisations" => ["569a9ee5-c195-4b7f-b9dc-edc17a09113f", "5c54ae52-341b-499e-a6dd-67f04633b8cf"]
+      #        },
+      #        "version" => 6
+      #      }
       def publishing_api_has_links(links)
         links = links.with_indifferent_access
         url = PUBLISHING_API_V2_ENDPOINT + "/links/" + links[:content_id]
         stub_request(:get, url).to_return(status: 200, body: links.to_json, headers: {})
       end
 
-      # Stubs a request to expanded links endpoint
+      # Stub a request to the expanded links endpoint
       #
       # @param [Hash] links the structure of the links hash
       #
@@ -303,48 +401,52 @@ module GdsApi
       #             "document_type" => "mainstream_browse_page",
       #             "locale" => "en",
       #             "links" => {},
-      #             ...
+      #             # ...
       #           }
       #         ],
       #         "parent" => [
       #           {
       #             "content_id" => "df2e7a3e-2028-45de-a75a-fd37d027427e",
       #             "document_type" => "mainstream_browse_page",
-      #             ...
+      #             # ...
       #           },
       #         ]
       #       }
       #     }
       #   )
       #
-      # Services.publishing_api.expanded_links("64aadc14-9bca-40d9-abb4-4f21f9792a05")
-      # =>  {
-      #       "content_id" => "64aadc14-9bca-40d9-abb4-4f21f9792a05",
-      #       "expanded_links" => {
-      #         "mainstream_browse_pages" => [
-      #           {
-      #             "content_id" => "df2e7a3e-2078-45de-a76a-fd37d027427a",
-      #             "base_path" => "/a/base/path",
-      #             "document_type" => "mainstream_browse_page",
-      #             "locale" => "en",
-      #             "links" => {},
-      #             ...
-      #           }
-      #         ],
-      #         "parent" => [
-      #           {
-      #             "content_id" => "df2e7a3e-2028-45de-a75a-fd37d027427e",
-      #             "document_type" => "mainstream_browse_page",
-      #             ...
-      #           },
-      #         ]
+      # @example
+      #   Services.publishing_api.expanded_links("64aadc14-9bca-40d9-abb4-4f21f9792a05")
+      #   =>  {
+      #         "content_id" => "64aadc14-9bca-40d9-abb4-4f21f9792a05",
+      #         "expanded_links" => {
+      #           "mainstream_browse_pages" => [
+      #             {
+      #               "content_id" => "df2e7a3e-2078-45de-a76a-fd37d027427a",
+      #               "base_path" => "/a/base/path",
+      #               "document_type" => "mainstream_browse_page",
+      #               "locale" => "en",
+      #               "links" => {},
+      #               ...
+      #             }
+      #           ],
+      #           "parent" => [
+      #             {
+      #               "content_id" => "df2e7a3e-2028-45de-a75a-fd37d027427e",
+      #               "document_type" => "mainstream_browse_page",
+      #               ...
+      #             },
+      #           ]
+      #         }
       #       }
-      #     }
       def publishing_api_has_expanded_links(links)
         url = PUBLISHING_API_V2_ENDPOINT + "/expanded-links/" + links[:content_id]
         stub_request(:get, url).to_return(status: 200, body: links.to_json, headers: {})
       end
 
+      # Stub GET /v2/links/:content_id to return a 404 response
+      #
+      # @param content_id [UUID]
       def publishing_api_does_not_have_links(content_id)
         url = PUBLISHING_API_V2_ENDPOINT + "/links/" + content_id
         stub_request(:get, url).to_return(status: 404, body: resource_not_found(content_id, "link set").to_json, headers: {})
