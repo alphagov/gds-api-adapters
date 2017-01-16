@@ -16,5 +16,10 @@ module GdsApi
       Rails.logger.info "Using middleware GdsApi::GovukHeaderSniffer to sniff for X-GOVUK-Authenticated-User header"
       app.middleware.use GdsApi::GovukHeaderSniffer, 'HTTP_X_GOVUK_AUTHENTICATED_USER'
     end
+
+    initializer "gds_api.initialize_govuk_content_id_sniffer" do |app|
+      Rails.logger.info "Using middleware GdsApi::GovukHeaderSniffer to sniff for GOVUK-Fact-Check-Id header"
+      app.middleware.use GdsApi::GovukHeaderSniffer, 'HTTP_GOVUK_FACT_CHECK_ID'
+    end
   end
 end
