@@ -1,3 +1,10 @@
+# 39.1.0
+
+* Pass through GOVUK_FACT_CHECK_ID header. This will be added by
+  authenticating-proxy when a draft item is requested with a valid JWT token;
+  the value itself will be checked by content-store against the value stored
+  in the content item.
+
 # 39.0.0
 
 * Remove the `need_api_has_organisations` test helper.
