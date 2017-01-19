@@ -135,6 +135,7 @@ node {
           echo 'Publishing gem'
           withCredentials([
             [
+              $class: 'UsernamePasswordMultiBinding',
               credentialsId: 'github-token-govuk-ci-username',
             ]
           ]) {
