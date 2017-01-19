@@ -319,10 +319,12 @@ module GdsApi
       # Stub GET /v2/content/:content_id to return a specific content item hash
       #
       # @param item [Hash]
-      def publishing_api_has_item(item)
+      def publishing_api_has_item(item, params = {})
         item = deep_transform_keys(item, &:to_sym)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + item[:content_id]
-        stub_request(:get, url).to_return(status: 200, body: item.to_json, headers: {})
+        stub_request(:get, url)
+          .with(query: hash_including(params))
+          .to_return(status: 200, body: item.to_json, headers: {})
       end
 
       # Stub GET /v2/content/:content_id to progress through a series of responses.
