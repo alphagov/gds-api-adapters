@@ -296,7 +296,7 @@ module GdsApi
       # publishing_api_has_content allows for flexible passing in of arguments, please use instead
       def publishing_api_has_fields_for_document(document_type, items, fields)
         body = Array(items).map { |item|
-          item.with_indifferent_access.slice(*fields)
+          deep_stringify_keys(item).slice(*fields)
         }
 
         query_params = fields.map { |f|
@@ -319,17 +319,19 @@ module GdsApi
       # Stub GET /v2/content/:content_id to return a specific content item hash
       #
       # @param item [Hash]
-      def publishing_api_has_item(item)
-        item = item.with_indifferent_access
+      def publishing_api_has_item(item, params = {})
+        item = deep_transform_keys(item, &:to_sym)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + item[:content_id]
-        stub_request(:get, url).to_return(status: 200, body: item.to_json, headers: {})
+        stub_request(:get, url)
+          .with(query: hash_including(params))
+          .to_return(status: 200, body: item.to_json, headers: {})
       end
 
       # Stub GET /v2/content/:content_id to progress through a series of responses.
       #
       # @param items [Array]
       def publishing_api_has_item_in_sequence(content_id, items)
-        items = items.map(&:with_indifferent_access)
+        items = items.each { |item| deep_transform_keys(item, &:to_sym) }
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
         calls = -1
 
@@ -380,7 +382,7 @@ module GdsApi
       #        "version" => 6
       #      }
       def publishing_api_has_links(links)
-        links = links.with_indifferent_access
+        links = deep_transform_keys(links, &:to_sym)
         url = PUBLISHING_API_V2_ENDPOINT + "/links/" + links[:content_id]
         stub_request(:get, url).to_return(status: 200, body: links.to_json, headers: {})
       end
