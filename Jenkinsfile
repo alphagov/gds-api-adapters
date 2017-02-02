@@ -50,7 +50,7 @@ node {
       }
     }
 
-    stage("Publish pact") {
+    stage("Publish branch pact") {
       dir("gds-api-adapters") {
         withCredentials([
           [
@@ -129,6 +129,25 @@ node {
         stage("Push release tag") {
           echo 'Pushing tag'
           govuk.pushTag(REPOSITORY, env.BRANCH_NAME, 'release_' + env.BUILD_NUMBER)
+        }
+
+        stage("Publish released version pact") {
+          echo 'Publishing pact'
+          withCredentials([
+            [
+              $class: 'UsernamePasswordMultiBinding',
+              credentialsId: 'pact-broker-ci-dev',
+              usernameVariable: 'PACT_BROKER_USERNAME',
+              passwordVariable: 'PACT_BROKER_PASSWORD'
+            ]
+          ]) {
+            withEnv([
+              "PACT_TARGET_BRANCH=branch-${env.BRANCH_NAME}",
+              "PACT_BROKER_BASE_URL=https://pact-broker.dev.publishing.service.gov.uk"
+            ]) {
+              govuk.runRakeTask("pact:publish:released_version")
+            }
+          }
         }
 
         stage("Publish gem") {
