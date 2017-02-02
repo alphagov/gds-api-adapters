@@ -45,9 +45,5 @@ require "gem_publisher"
 desc "Publish gem to rubygems.org if necessary"
 task :publish_gem do |_t|
   gem = GemPublisher.publish_if_updated("gds-api-adapters.gemspec", :rubygems)
-  if gem
-    puts "Published #{gem}"
-
-    Rake::Task["pact:publish:released_version"].invoke
-  end
+  puts "Published #{gem}" if gem
 end
