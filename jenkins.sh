@@ -1,14 +1,6 @@
 #!/bin/bash
 set -e
 
-# Cleanup anything left from previous test runs
-git clean -fdx
-
-# Try to merge master into the current branch, and abort if it doesn't exit
-# cleanly (ie there are conflicts). This will be a noop if the current branch
-# is master.
-git merge --no-commit origin/master || git merge --abort
-
 # Bundle and run tests against multiple ruby versions
 for version in 2.3 2.2 2.1; do
   rm -f Gemfile.lock

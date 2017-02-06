@@ -4,39 +4,42 @@ REPOSITORY = 'gds-api-adapters'
 
 node {
   def govuk = load '/var/lib/jenkins/groovy_scripts/govuk_jenkinslib.groovy'
+  properties([
+    parameters([
+      stringParam(
+        defaultValue: 'master',
+        description: 'Branch of publishing-api to run pacts against',
+        name: 'PUBLISHING_API_BRANCH'
+      ),
+    ])
+  ])
 
   try {
+    govuk.initializeParameters([
+      'PUBLISHING_API_BRANCH': 'master',
+    ])
+    def pact_branch = (env.BRANCH_NAME == 'master' ? 'master' : "branch-${env.BRANCH_NAME}")
+    govuk.setEnvar("PACT_TARGET_BRANCH", pact_branch)
+    govuk.setEnvar("PACT_BROKER_BASE_URL", "https://pact-broker.dev.publishing.service.gov.uk")
+
     stage("Checkout gds-api-adapters") {
-      echo "Checkout gds-api-adapters branch: ${env.BRANCH_NAME}"
       checkout([
-        changelog: false,
-        poll: false,
-        scm: [
-          $class: 'GitSCM',
-          branches: [[name: '*/master']],
-          doGenerateSubmoduleConfigurations: false,
-          extensions: [
-            [
-              $class: 'RelativeTargetDirectory',
-              relativeTargetDir: 'gds-api-adapters'
-            ],
-          ],
-          submoduleCfg: [],
-          userRemoteConfigs: [
-            [
-              credentialsId: 'github-token-govuk-ci-username',
-              name: 'origin',
-              url: 'https://github.com/alphagov/gds-api-adapters.git'
-            ]
-          ]
-        ]
+        $class: 'GitSCM',
+        branches: scm.branches,
+        extensions: [
+          [$class: 'RelativeTargetDirectory',
+           relativeTargetDir: 'gds-api-adapters'],
+          [$class: 'CleanCheckout'],
+        ],
+        userRemoteConfigs: scm.userRemoteConfigs
       ])
+      dir('gds-api-adapters') {
+        govuk.mergeMasterBranch()
+      }
     }
 
     stage("Build") {
       dir("gds-api-adapters") {
-        // TODO: I gave up trying to get Jenkins to do this, but maybe it can?
-        sh "git checkout ${env.BRANCH_NAME}"
         sh "${WORKSPACE}/gds-api-adapters/jenkins.sh"
 
         publishHTML(target: [
@@ -60,12 +63,7 @@ node {
             passwordVariable: 'PACT_BROKER_PASSWORD'
           ]
         ]) {
-          withEnv([
-            "PACT_TARGET_BRANCH=branch-${env.BRANCH_NAME}",
-            "PACT_BROKER_BASE_URL=https://pact-broker.dev.publishing.service.gov.uk"
-          ]) {
-            govuk.runRakeTask("pact:publish:branch")
-          }
+          govuk.runRakeTask("pact:publish:branch")
         }
       }
     }
@@ -78,7 +76,7 @@ node {
           $class: 'GitSCM',
           branches: [
             [
-              name: '*/master'
+              name: PUBLISHING_API_BRANCH
             ]
           ],
           doGenerateSubmoduleConfigurations: false,
@@ -91,8 +89,6 @@ node {
           submoduleCfg: [],
           userRemoteConfigs: [
             [
-              credentialsId: 'github-token-govuk-ci-username',
-              name: 'publishing-api',
               url: 'https://github.com/alphagov/publishing-api.git'
             ]
           ]
@@ -141,18 +137,13 @@ node {
               passwordVariable: 'PACT_BROKER_PASSWORD'
             ]
           ]) {
-            withEnv([
-              "PACT_TARGET_BRANCH=branch-${env.BRANCH_NAME}",
-              "PACT_BROKER_BASE_URL=https://pact-broker.dev.publishing.service.gov.uk"
-            ]) {
-              govuk.runRakeTask("pact:publish:released_version")
-            }
+            govuk.runRakeTask("pact:publish:released_version")
           }
         }
 
         stage("Publish gem") {
           echo 'Publishing gem'
-          sh("bundle exec rake publish_gem --trace")
+          govuk.runRakeTask("publish_gem --trace")
         }
       }
     }
