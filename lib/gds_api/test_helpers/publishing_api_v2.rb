@@ -442,6 +442,7 @@ module GdsApi
       #         }
       #       }
       def publishing_api_has_expanded_links(links)
+        links = deep_transform_keys(links, &:to_sym)
         url = PUBLISHING_API_V2_ENDPOINT + "/expanded-links/" + links[:content_id]
         stub_request(:get, url).to_return(status: 200, body: links.to_json, headers: {})
       end
