@@ -1,3 +1,11 @@
+# 39.2.0
+
+* Add support for the import endpoint for the Publishing API.
+* The `publishing_api_has_item` test helper can now take a hash of
+  params to match the request against.
+* Remove Rails specific features from the implementation of some
+  Publishing API test helpers.
+
 # 39.1.0
 
 * Pass through GOVUK_FACT_CHECK_ID header. This will be added by
