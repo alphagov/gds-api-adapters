@@ -1447,6 +1447,52 @@ describe GdsApi::PublishingApiV2 do
         ["results", [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "details" => { "foo" => "bar" } }]]
       ], response.to_a
     end
+
+    it "returns the items matching a query" do
+      publishing_api
+        .given("there is content with document_type 'topic'")
+        .upon_receiving("a get entries request with search_in and q parameters")
+        .with(
+          method: :get,
+          path: "/v2/content",
+          query: "document_type=topic&fields%5B%5D=content_id&q=an+internal+name&search_in=details.internal_name",
+          headers: GdsApi::JsonClient.default_request_headers.merge(
+            "Authorization" => "Bearer #{@bearer_token}"
+          ),
+        )
+        .will_respond_with(
+          status: 200,
+          body: {
+            total: 1,
+            pages: 1,
+            current_page: 1,
+            links: [{
+              href: "http://example.org/v2/content?document_type=topic&fields[]=content_id&q=an+internal+name&search_in=details.internal_name&page=1",
+              rel: "self"
+            }],
+            results: [
+              { content_id:  "aaaaaaaa-aaaa-1aaa-aaaa-aaaaaaaaaaaa" }
+            ]
+          }
+        )
+
+      response = @api_client.get_content_items(
+        document_type: 'topic',
+        fields: [:content_id],
+        q: "an internal name",
+        search_in: "details.internal_name"
+      )
+
+      assert_equal 200, response.code
+
+      assert_equal [
+        ["total", 1],
+        ["pages", 1],
+        ["current_page", 1],
+        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields[]=content_id&q=an+internal+name&search_in=details.internal_name&page=1", "rel" => "self" }]],
+        ["results", [{ "content_id" => "aaaaaaaa-aaaa-1aaa-aaaa-aaaaaaaaaaaa" }]]
+      ], response.to_a
+    end
   end
 
   describe "#discard_draft(content_id, options = {})" do
