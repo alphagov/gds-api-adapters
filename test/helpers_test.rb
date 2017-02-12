@@ -16,7 +16,6 @@ describe GdsApi::Helpers do
     refute_nil test_with_helpers.imminence_api
     refute_nil test_with_helpers.licence_application_api
     refute_nil test_with_helpers.need_api
-    refute_nil test_with_helpers.panopticon_api
     refute_nil test_with_helpers.worldwide_api
     refute_nil test_with_helpers.email_alert_api
   end

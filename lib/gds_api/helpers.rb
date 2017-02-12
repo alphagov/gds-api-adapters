@@ -5,7 +5,6 @@ require 'gds_api/content_store'
 require 'gds_api/imminence'
 require 'gds_api/licence_application'
 require 'gds_api/need_api'
-require 'gds_api/panopticon'
 require 'gds_api/worldwide'
 require 'gds_api/email_alert_api'
 
@@ -39,14 +38,6 @@ module GdsApi
       @need_api ||= GdsApi::NeedApi.new(Plek.current.find("needapi"), options)
     end
 
-    def panopticon_api(options = {})
-      @panopticon_api ||= GdsApi::Panopticon.new(Plek.current.find("panopticon"), panopticon_api_credentials.merge(options))
-    end
-
-    def panopticon_api_credentials
-      Object::const_defined?(:PANOPTICON_API_CREDENTIALS) ? PANOPTICON_API_CREDENTIALS : {}
-    end
-
     def worldwide_api(options = {})
       @worldwide_api ||= GdsApi::Worldwide.new(Plek.current.find("whitehall-admin"), options)
     end
@@ -57,7 +48,7 @@ module GdsApi
 
     def self.included(klass)
       if klass.respond_to?(:helper_method)
-        klass.helper_method :panopticon_api, :imminence_api, :content_api, :licence_application_api
+        klass.helper_method :imminence_api, :content_api, :licence_application_api
       end
     end
   end
