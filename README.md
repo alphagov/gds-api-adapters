@@ -79,33 +79,11 @@ downstream service can optionally use the identifier to perform authorisation
 on the request. This will be used by content-store as a mechanism to only
 return access-limited content to authenticated and authorised users.
 
-## App-level Authentication
-
-The API Adapters currently support either HTTP Basic or OAuth2 (bearer token)
-authentication. This allows an application to identify itself to another where
-required. This is currently used by the `GdsApi::Panopticon::Registerer`
-adapter, which  expects a constant called `PANOPTICON_API_CREDENTIALS` to be
-defined that identifies the calling application to Panopticon:
-
-    PANOPTICON_API_CREDENTIALS = { bearer_token: 'MY_BEARER_TOKEN' }
-
 ## Test Helpers
 
 There are also test helpers for stubbing various requests in other apps.
-Example usage of the panopticon helper:
 
-In `test_helper.rb`:
-
-    require 'gds_api/test_helpers/panopticon'
-
-    class ActiveSupport::TestCase
-      include GdsApi::TestHelpers::Panopticon
-    end
-
-In the test:
-
-    panopticon_has_metadata('id' => 12345, 'need_ids' => [need.id],
-      'slug' => 'my_slug')
+See [all the test helpers in lib/gds_api/test_helpers](/lib/gds_api/test_helpers).
 
 ### Dependencies
 

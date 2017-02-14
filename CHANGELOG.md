@@ -1,3 +1,7 @@
+# Unreleased
+
+* Remove Panopticon API
+
 # 39.2.0
 
 * Add support for the import endpoint for the Publishing API.
