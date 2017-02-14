@@ -1455,7 +1455,7 @@ describe GdsApi::PublishingApiV2 do
         .with(
           method: :get,
           path: "/v2/content",
-          query: "document_type=topic&fields%5B%5D=content_id&q=an+internal+name&search_in=details.internal_name",
+          query: "document_type=topic&fields%5B%5D=content_id&q=an+internal+name&search_in%5B%5D=details.internal_name",
           headers: GdsApi::JsonClient.default_request_headers.merge(
             "Authorization" => "Bearer #{@bearer_token}"
           ),
@@ -1467,7 +1467,7 @@ describe GdsApi::PublishingApiV2 do
             pages: 1,
             current_page: 1,
             links: [{
-              href: "http://example.org/v2/content?document_type=topic&fields[]=content_id&q=an+internal+name&search_in=details.internal_name&page=1",
+              href: "http://example.org/v2/content?document_type=topic&fields[]=content_id&q=an+internal+name&search_in[]=details.internal_name&page=1",
               rel: "self"
             }],
             results: [
@@ -1480,7 +1480,7 @@ describe GdsApi::PublishingApiV2 do
         document_type: 'topic',
         fields: [:content_id],
         q: "an internal name",
-        search_in: "details.internal_name"
+        search_in: ["details.internal_name"]
       )
 
       assert_equal 200, response.code
@@ -1489,7 +1489,7 @@ describe GdsApi::PublishingApiV2 do
         ["total", 1],
         ["pages", 1],
         ["current_page", 1],
-        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields[]=content_id&q=an+internal+name&search_in=details.internal_name&page=1", "rel" => "self" }]],
+        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields[]=content_id&q=an+internal+name&search_in[]=details.internal_name&page=1", "rel" => "self" }]],
         ["results", [{ "content_id" => "aaaaaaaa-aaaa-1aaa-aaaa-aaaaaaaaaaaa" }]]
       ], response.to_a
     end
