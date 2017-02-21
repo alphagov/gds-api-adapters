@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.homepage     = "http://github.com/alphagov/gds-api-adapters"
   s.description  = "A set of adapters providing easy access to the GDS GOV.UK APIs"
 
-  s.files        = Dir.glob("lib/**/*") + %w(README.md Rakefile)
+  s.files        = Dir.glob("lib/**/*") + Dir.glob("test/fixtures/**/*") + %w(README.md Rakefile)
   s.require_path = 'lib'
   s.add_dependency 'plek', '>= 1.9.0'
   s.add_dependency 'null_logger'
