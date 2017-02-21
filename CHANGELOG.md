@@ -1,5 +1,7 @@
 # Unreleased
 
+# 40.0.0
+
 * Remove Panopticon API
 * Include the files within the test/fixtures directory, this fixes
   some test helpers that would have been broken since 39.0.0.
