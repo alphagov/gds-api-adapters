@@ -1,5 +1,7 @@
 # Unreleased
 
+* Add a redirects option to the Unpublish adapter in Publishing API
+
 # 40.0.0
 
 * Remove Panopticon API
