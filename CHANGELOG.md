@@ -1,5 +1,7 @@
 # Unreleased
 
+# 40.1.0
+
 * Add a redirects option to the Unpublish adapter in Publishing API
 
 # 40.0.0
