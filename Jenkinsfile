@@ -143,7 +143,7 @@ node {
 
         stage("Publish gem") {
           echo 'Publishing gem'
-          govuk.runRakeTask("publish_gem --trace")
+          govuk.publishGem(REPOSITORY, env.BRANCH_NAME)
         }
       }
     }
