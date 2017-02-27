@@ -27,10 +27,10 @@ describe GdsApi::GovUkDelivery do
   end
 
   it "can post a notification" do
-    expected_payload = { feed_urls: ['http://example.com/feed'], subject: 'Test', body: '<p>Something</p>' }
+    expected_payload = { feed_urls: ['http://example.com/feed'], subject: 'Test', body: '<p>Something</p>', logging_params: { content_id: 'aaaaaa-11111' } }
     stub = stub_gov_uk_delivery_post_request('notifications', expected_payload).to_return(created_response_hash)
 
-    assert @api.notify(['http://example.com/feed'], 'Test', '<p>Something</p>')
+    assert @api.notify(['http://example.com/feed'], 'Test', '<p>Something</p>', content_id: 'aaaaaa-11111')
     assert_requested stub
   end
 
