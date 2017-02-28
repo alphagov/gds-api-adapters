@@ -26,8 +26,8 @@ class GdsApi::GovUkDelivery < GdsApi::Base
     end
   end
 
-  def notify(feed_urls, subject, body)
-    data = { feed_urls: feed_urls, subject: subject, body: body }
+  def notify(feed_urls, subject, body, logging_params = {})
+    data = { feed_urls: feed_urls, subject: subject, body: body, logging_params: logging_params }
     url = "#{base_url}/notifications"
     post_url(url, data)
   end
