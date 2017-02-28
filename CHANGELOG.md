@@ -1,5 +1,7 @@
 # Unreleased
 
+# 40.2.0
+
 * Add support for passing logging parameters through to Gov Uk Delivery.
 
 # 40.1.0
