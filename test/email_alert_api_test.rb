@@ -38,6 +38,14 @@ describe GdsApi::EmailAlertApi do
     it "returns the an empty response" do
       assert api_client.send_alert(publication_params).to_hash.empty?
     end
+
+    describe "when custom headers are passed in" do
+      it "posts a new alert with the custom headers" do
+        assert api_client.send_alert(publication_params, govuk_request_id: 'aaaaaaa-1111111')
+
+        assert_requested(:post, "#{base_url}/notifications", body: publication_params.to_json, headers: { 'Govuk-Request-Id' => 'aaaaaaa-1111111' })
+      end
+    end
   end
 
   describe "subscriber lists" do

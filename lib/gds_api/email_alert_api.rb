@@ -32,8 +32,8 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   # Post notification
   #
   # @param publication [Hash] Valid publication attributes
-  def send_alert(publication)
-    post_json("#{endpoint}/notifications", publication)
+  def send_alert(publication, headers = {})
+    post_json("#{endpoint}/notifications", publication, headers)
   end
 
   # Get notifications
