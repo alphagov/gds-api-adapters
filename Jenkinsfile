@@ -20,7 +20,7 @@ node {
     ])
     def pact_branch = (env.BRANCH_NAME == 'master' ? 'master' : "branch-${env.BRANCH_NAME}")
     govuk.setEnvar("PACT_TARGET_BRANCH", pact_branch)
-    govuk.setEnvar("PACT_BROKER_BASE_URL", "https://pact-broker.dev.publishing.service.gov.uk")
+    govuk.setEnvar("PACT_BROKER_BASE_URL", "https://pact-broker.cloudapps.digital")
 
     stage("Checkout gds-api-adapters") {
       checkout([
@@ -53,20 +53,20 @@ node {
       }
     }
 
-    // stage("Publish branch pact") {
-    //   dir("gds-api-adapters") {
-    //     withCredentials([
-    //       [
-    //         $class: 'UsernamePasswordMultiBinding',
-    //         credentialsId: 'pact-broker-ci-dev',
-    //         usernameVariable: 'PACT_BROKER_USERNAME',
-    //         passwordVariable: 'PACT_BROKER_PASSWORD'
-    //       ]
-    //     ]) {
-    //       govuk.runRakeTask("pact:publish:branch")
-    //     }
-    //   }
-    // }
+    stage("Publish branch pact") {
+      dir("gds-api-adapters") {
+        withCredentials([
+          [
+            $class: 'UsernamePasswordMultiBinding',
+            credentialsId: 'pact-broker-ci-dev',
+            usernameVariable: 'PACT_BROKER_USERNAME',
+            passwordVariable: 'PACT_BROKER_PASSWORD'
+          ]
+        ]) {
+          govuk.runRakeTask("pact:publish:branch")
+        }
+      }
+    }
 
     stage("Checkout publishing-api") {
       checkout([
@@ -101,24 +101,24 @@ node {
       }
     }
 
-    // stage("Run publishing-api pact") {
-    //   dir("publishing-api") {
-    //     withEnv(["JOB_NAME=publishing-api"]) { // TODO: This environment is a hack
-    //       govuk.bundleApp()
-    //     }
-    //     withCredentials([
-    //       [
-    //         $class: 'UsernamePasswordMultiBinding',
-    //         credentialsId: 'pact-broker-ci-dev',
-    //         usernameVariable: 'PACT_BROKER_USERNAME',
-    //         passwordVariable: 'PACT_BROKER_PASSWORD'
-    //       ]
-    //     ]) {
-    //       govuk.runRakeTask("db:reset")
-    //       govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
-    //     }
-    //   }
-    // }
+    stage("Run publishing-api pact") {
+      dir("publishing-api") {
+        withEnv(["JOB_NAME=publishing-api"]) { // TODO: This environment is a hack
+          govuk.bundleApp()
+        }
+        withCredentials([
+          [
+            $class: 'UsernamePasswordMultiBinding',
+            credentialsId: 'pact-broker-ci-dev',
+            usernameVariable: 'PACT_BROKER_USERNAME',
+            passwordVariable: 'PACT_BROKER_PASSWORD'
+          ]
+        ]) {
+          govuk.runRakeTask("db:reset")
+          govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
+        }
+      }
+    }
 
     if (env.BRANCH_NAME == 'master') {
       dir("gds-api-adapters") {
@@ -127,19 +127,19 @@ node {
           govuk.pushTag(REPOSITORY, env.BRANCH_NAME, 'release_' + env.BUILD_NUMBER)
         }
 
-        // stage("Publish released version pact") {
-        //   echo 'Publishing pact'
-        //   withCredentials([
-        //     [
-        //       $class: 'UsernamePasswordMultiBinding',
-        //       credentialsId: 'pact-broker-ci-dev',
-        //       usernameVariable: 'PACT_BROKER_USERNAME',
-        //       passwordVariable: 'PACT_BROKER_PASSWORD'
-        //     ]
-        //   ]) {
-        //     govuk.runRakeTask("pact:publish:released_version")
-        //   }
-        // }
+        stage("Publish released version pact") {
+          echo 'Publishing pact'
+          withCredentials([
+            [
+              $class: 'UsernamePasswordMultiBinding',
+              credentialsId: 'pact-broker-ci-dev',
+              usernameVariable: 'PACT_BROKER_USERNAME',
+              passwordVariable: 'PACT_BROKER_PASSWORD'
+            ]
+          ]) {
+            govuk.runRakeTask("pact:publish:released_version")
+          }
+        }
 
         stage("Publish gem") {
           echo 'Publishing gem'
