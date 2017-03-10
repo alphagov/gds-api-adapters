@@ -1,5 +1,13 @@
 # Unreleased
 
+# 40.3.0
+
+* Allow headers to be passed into `EmailAlertApi.send_alert`. This change is
+  needed to pass the `govuk_request_id` when email alert service processes
+  messages off rabbit mq.
+* Comment out pact broker jenkins tasks as the service is currently offline. This
+  change will be reverted once pact broker is working again.
+
 # 40.2.0
 
 * Add support for passing logging parameters through to Gov Uk Delivery.
