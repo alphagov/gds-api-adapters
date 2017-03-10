@@ -199,10 +199,11 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # Return the expanded links of the item.
   #
   # @param content_id [UUID]
+  # @param with_drafts [Bool] Whether links to draft-only editions are returned, defaulting to `true`.
   #
   # @example
   #
-  #   publishing_api.get_expanded_links("8157589b-65e2-4df6-92ba-2c91d80006c0").to_h
+  #   publishing_api.get_expanded_links("8157589b-65e2-4df6-92ba-2c91d80006c0", with_drafts: false).to_h
   #
   #   #=> {
   #     "content_id" => "8157589b-65e2-4df6-92ba-2c91d80006c0",
@@ -218,10 +219,11 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   #   }
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2expanded-linkscontent_id
-  def get_expanded_links(content_id)
+  def get_expanded_links(content_id, with_drafts: true)
+    params = with_drafts ? {} : { with_drafts: "false" }
+    query = query_string(params)
     validate_content_id(content_id)
-    url = "#{endpoint}/v2/expanded-links/#{content_id}"
-    get_json(url)
+    get_json("#{endpoint}/v2/expanded-links/#{content_id}#{query}")
   end
 
   # Patch the links of a content item
