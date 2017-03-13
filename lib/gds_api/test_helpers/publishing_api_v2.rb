@@ -471,6 +471,40 @@ module GdsApi
         stub_request(:post, url).to_return(body: lookup_hash.to_json)
       end
 
+      # Stub calls to /v2/lookup-by-base-path
+      #
+      # @param lookup_hash [Hash] /v2/lookup-by-base-path response
+      #
+      # @example
+      #
+      #  publishing_api_has_lookups(
+      #    {
+      #      "/foo" => {
+      #        "draft" => {"content_id" => "51ac4247-fd92-470a-a207-6b852a97f2db", "locale" => "en"}},
+      #        "live" => {"content_id" => "51ac4247-fd92-470a-a207-6b852a97f2db", "locale" => "en"}},
+      #      },
+      #      "/bar" => nil,
+      #    },
+      #    method: :post,
+      #  )
+      #
+      def publishing_api_has_v2_lookups(lookup_hash)
+        url = Plek.current.find('publishing-api') + '/v2/lookup-by-base-path'
+        base_paths = lookup_hash.keys
+
+        if base_paths.size == 1
+          method = :get
+          request_params = { query: { base_paths: base_paths } }
+        else
+          method = :post
+          request_params = { body: { base_paths: base_paths } }
+        end
+
+        stub_request(method, url)
+          .with(request_params)
+          .to_return(body: lookup_hash.to_json)
+      end
+
       #
       # Stub calls to the get linked items endpoint
       #

@@ -14,6 +14,7 @@ require 'simplecov-rcov'
 require 'mocha/mini_test'
 require 'timecop'
 require 'gds-api-adapters'
+require 'pry-byebug'
 
 SimpleCov.start do
   add_filter "/test/"
