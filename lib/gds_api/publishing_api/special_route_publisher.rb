@@ -15,7 +15,7 @@ module GdsApi
         put_content_response = publishing_api.put_content(
           options.fetch(:content_id),
           base_path: options.fetch(:base_path),
-          document_type: "special_route",
+          document_type: options[:document_type] || "special_route",
           schema_name: "special_route",
           title: options.fetch(:title),
           description: options[:description] || "",
