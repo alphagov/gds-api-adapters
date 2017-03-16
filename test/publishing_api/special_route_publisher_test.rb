@@ -52,6 +52,15 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
       end
     end
 
+    it "publishes customized document type" do
+      publisher.publish(special_route.merge(document_type: "other_document_type"))
+
+      assert_requested(:put, "#{endpoint}/v2/content/#{content_id}") do |req|
+        JSON.parse(req.body)["document_type"] == "other_document_type"
+      end
+      assert_publishing_api_publish(content_id, update_type: 'major')
+    end
+
     it "publishes links" do
       links = {
         links: {

@@ -227,7 +227,7 @@ describe GdsApi::Response do
       end
 
       it "should return nil for a non-existent key" do
-        assert_equal nil, @response["foo"]
+        assert_nil @response["foo"]
       end
 
       it "should memoize the parsed hash" do
