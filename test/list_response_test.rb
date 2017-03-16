@@ -113,7 +113,7 @@ describe GdsApi::ListResponse do
       it "should return nil with no next page" do
         resp = GdsApi::ListResponse.new(@p3_response, @client)
         assert ! resp.has_next_page?
-        assert_equal nil, resp.next_page
+        assert_nil resp.next_page
       end
 
       it "should memoize the next_page" do
@@ -137,7 +137,7 @@ describe GdsApi::ListResponse do
       it "should return nil with no previous page" do
         resp = GdsApi::ListResponse.new(@p1_response, @client)
         assert ! resp.has_previous_page?
-        assert_equal nil, resp.previous_page
+        assert_nil resp.previous_page
       end
 
       it "should memoize the previous_page" do
