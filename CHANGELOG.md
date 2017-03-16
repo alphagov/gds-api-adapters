@@ -1,5 +1,10 @@
 # Unreleased
 
+# 40.4.0
+
+* Add support for a customized `document_type` when publishing a special route,
+  but keep the default `document_type` of `special_route`.
+
 # 40.3.0
 
 * Allow headers to be passed into `EmailAlertApi.send_alert`. This change is
