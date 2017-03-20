@@ -1,5 +1,7 @@
 # Unreleased
 
+* Rename GOVUK_FACT_CHECK_ID header to GOVUK_AUTH_BYPASS_ID header
+
 # 40.5.0
 
 * Add support to request expanded links from publishing api with or without drafts
