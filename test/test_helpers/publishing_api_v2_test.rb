@@ -193,6 +193,29 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
         ]
       }, response.to_h)
     end
+
+    it "stubs with query parameters" do
+      payload = {
+        "content_id" => "2e20294a-d694-4083-985e-d8bedefc2354",
+        organisations: [
+          {
+            content_id: ["a8a09822-1729-48a7-8a68-d08300de9d1e"]
+          }
+        ]
+      }
+
+      publishing_api_has_expanded_links(payload, with_drafts: false)
+      response = publishing_api.get_expanded_links("2e20294a-d694-4083-985e-d8bedefc2354", with_drafts: false)
+
+      assert_equal({
+        "content_id" => "2e20294a-d694-4083-985e-d8bedefc2354",
+        "organisations" => [
+          {
+            "content_id" => ["a8a09822-1729-48a7-8a68-d08300de9d1e"]
+          }
+        ]
+      }, response.to_h)
+    end
   end
 
   describe "stub_any_publishing_api_publish" do
