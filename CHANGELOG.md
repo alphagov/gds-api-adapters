@@ -1,5 +1,12 @@
 # Unreleased
 
+# 40.5.0
+
+* Add support to request expanded links from publishing api with or without drafts
+  - The default is false, for backward compatibility
+  - https://github.com/alphagov/gds-api-adapters/pull/676
+  - https://github.com/alphagov/publishing-api/blob/master/doc/api.md#query-string-parameters-2
+
 # 40.4.0
 
 * Add support for a customized `document_type` when publishing a special route,
