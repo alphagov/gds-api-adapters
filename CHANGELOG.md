@@ -1,5 +1,7 @@
 # Unreleased
 
+# 41.0.0
+
 * Rename GOVUK_FACT_CHECK_ID header to GOVUK_AUTH_BYPASS_ID header
 
 # 40.5.0
