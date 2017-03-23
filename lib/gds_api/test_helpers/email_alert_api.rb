@@ -100,11 +100,17 @@ module GdsApi
           tags = attributes["tags"]
           links = attributes["links"]
           document_type = attributes["document_type"]
+          email_document_supertype = attributes["email_document_supertype"]
+          government_document_supertype = attributes["government_document_supertype"]
+          gov_delivery_id = attributes["gov_delivery_id"]
 
           params = {}
           params[:tags] = tags if tags
           params[:links] = links if links
           params[:document_type] = document_type if document_type
+          params[:email_document_supertype] = email_document_supertype if email_document_supertype
+          params[:government_document_supertype] = government_document_supertype if government_document_supertype
+          params[:gov_delivery_id] = gov_delivery_id if gov_delivery_id
 
           query = Rack::Utils.build_nested_query(params)
         end

@@ -13,6 +13,9 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     tags = attributes["tags"]
     links = attributes["links"]
     document_type = attributes["document_type"]
+    email_document_supertype = attributes["email_document_supertype"]
+    government_document_supertype = attributes["government_document_supertype"]
+    gov_delivery_id = attributes["gov_delivery_id"]
 
     if tags && links
       message = "please provide either tags or links (or neither), but not both"
@@ -23,6 +26,9 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     params[:tags] = tags if tags
     params[:links] = links if links
     params[:document_type] = document_type if document_type
+    params[:email_document_supertype] = email_document_supertype if email_document_supertype
+    params[:government_document_supertype] = government_document_supertype if government_document_supertype
+    params[:gov_delivery_id] = gov_delivery_id if gov_delivery_id
 
     search_subscriber_list(params)
   rescue GdsApi::HTTPNotFound
