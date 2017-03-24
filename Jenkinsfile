@@ -44,6 +44,11 @@ node {
       }
     }
 
+    stage("Set up content schema dependency") {
+      govuk.contentSchemaDependency('deployed-to-production')
+      govuk.setEnvar("GOVUK_CONTENT_SCHEMAS_PATH", "${pwd()}/tmp/govuk-content-schemas")
+    }
+
     for (rubyVersion in rubyVersions) {
       stage("Test with ruby $rubyVersion") {
         dir("gds-api-adapters") {
@@ -109,11 +114,6 @@ node {
           ]
         ]
       ])
-
-      dir("publishing-api") {
-        govuk.contentSchemaDependency('deployed-to-production')
-        govuk.setEnvar("GOVUK_CONTENT_SCHEMAS_PATH", "tmp/govuk-content-schemas")
-      }
     }
 
     stage("Run publishing-api pact") {
