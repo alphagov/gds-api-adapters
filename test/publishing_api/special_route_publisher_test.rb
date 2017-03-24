@@ -1,5 +1,6 @@
 require 'test_helper'
 require "gds_api/publishing_api/special_route_publisher"
+require "govuk-content-schema-test-helpers"
 require File.dirname(__FILE__) + '/../../lib/gds_api/test_helpers/publishing_api_v2'
 
 describe GdsApi::PublishingApi::SpecialRoutePublisher do
@@ -13,8 +14,8 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
       description: "A description",
       base_path: "/favicon.ico",
       type: "exact",
-      publishing_app: "static-publisher",
-      rendering_app: "static-frontend",
+      publishing_app: "static",
+      rendering_app: "static",
     }
   }
 
@@ -26,7 +27,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
       stub_any_publishing_api_call
     end
 
-    it "publishes the special routes" do
+    it "publishes valid special routes" do
       Timecop.freeze(Time.now) do
         publisher.publish(special_route)
 
@@ -48,6 +49,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
         }
 
         assert_requested(:put, "#{endpoint}/v2/content/#{content_id}", body: expected_payload)
+        assert_valid_special_route(expected_payload)
         assert_publishing_api_publish(content_id, update_type: 'major')
       end
     end
@@ -109,5 +111,15 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
         end
       end
     end
+  end
+
+  def assert_valid_special_route(payload)
+    validator = GovukContentSchemaTestHelpers::Validator.new(
+      "special_route",
+      "schema",
+      payload
+    )
+
+    assert validator.valid?, validator.errors.join("\n")
   end
 end
