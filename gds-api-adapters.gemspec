@@ -8,8 +8,7 @@ Gem::Specification.new do |s|
   s.name         = "gds-api-adapters"
   s.version      = GdsApi::VERSION
   s.platform     = Gem::Platform::RUBY
-  s.authors      = ["James Stewart"]
-  s.email        = ["jystewart@gmail.com"]
+  s.authors      = ["Government Digital Service"]
   s.summary      = "Adapters to work with GDS APIs"
   s.homepage     = "http://github.com/alphagov/gds-api-adapters"
   s.description  = "A set of adapters providing easy access to the GDS GOV.UK APIs"
