@@ -33,13 +33,47 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
   end
 
   describe "#publishing_api_has_lookups" do
-    it "stubs the lookup for content items" do
+    it "stubs the lookup for content ids" do
       lookup_hash = { "/foo" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" }
 
       publishing_api_has_lookups(lookup_hash)
 
       assert_equal publishing_api.lookup_content_ids(base_paths: ["/foo"]), lookup_hash
       assert_equal publishing_api.lookup_content_id(base_path: "/foo"), "2878337b-bed9-4e7f-85b6-10ed2cbcd504"
+    end
+  end
+
+  describe "#publishing_api_has_v2_lookups" do
+    let(:editions) do
+      {
+        "draft" => { "content_id" => "51ac4247-fd92-470a-a207-6b852a97f2db", "locale" => "en", "document_type" => "publication" },
+        "live" => { "content_id" => "51ac4247-fd92-470a-a207-6b852a97f2db", "locale" => "en", "document_type" => "publication" },
+      }
+    end
+
+    it "stubs the lookup for multiple base paths" do
+      lookup_hash = {
+        "/foo" => editions,
+        "/bar" => nil,
+      }
+
+      publishing_api_has_v2_lookups(
+        lookup_hash
+      )
+
+      assert_equal(
+        publishing_api.lookup_by_base_paths(["/foo", "/bar"]),
+        lookup_hash
+      )
+    end
+
+    it "stubs the lookup for a single base path" do
+      publishing_api_has_v2_lookups("/foo" => editions)
+
+      assert_equal(
+        publishing_api.lookup_by_base_path("/foo"),
+        editions
+      )
     end
   end
 

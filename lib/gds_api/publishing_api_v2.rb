@@ -53,6 +53,42 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     response.to_hash
   end
 
+  # Get the current draft and/or the current live edition matching a set of base paths.
+  # "draft" and "live" refer to the content store the content is in.
+  # The live edition contains an `unpublishing` hash if the edition is unpublished.
+  # An unpublishing hash has `type` and `redirect` keys matching the unpublish request.
+  #
+  # The request accepts both GET/POST. We use POST here to avoid long URIs.
+  # @param base_paths [Array]
+  # @return [Hash] a hash keyed by `base_path`. The value is nil if the base path is not used or belongs to an access limited draft.
+  # @example
+  #
+  #   publishing_api.lookup_by_base_paths(['/pay-vat', '/nothing'])
+  #   # => {"/pay-vat"=>{"live"=>{"content_id"=>"a484eaea-eeb6-48fa-92a7-b67c6cd414f6", "locale"=>"en", "document_type"=>"guide"}}, "/nothing"=>nil}
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2lookup-by-base-path
+  def lookup_by_base_paths(base_paths)
+    response = post_json("#{endpoint}/v2/lookup-by-base-path", base_paths: base_paths)
+    response.to_hash
+  end
+
+  # Get the current draft and/or the current live edition matching a base path.
+  # Equivalent to lookup_by_base_paths([base_path])[base_path]
+  #
+  # @param base_path [String]
+  # @return [Hash] A hash keyed by content store state, or nil if not found.
+  # @example
+  #
+  #   publishing_api.lookup_by_base_path('/register-to-vote')
+  #   # => {"draft"=>{"content_id"=>"834a7921-260b-4061-9de1-edda3e998c68", "locale"=>"en", "document_type"=>"transaction"}, "live"=>{"content_id"=>"834a7921-260b-4061-9de1-edda3e998c68", "locale"=>"en", "document_type"=>"transaction"}}
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2lookup-by-base-path
+  def lookup_by_base_path(base_path)
+    query = query_string(base_paths: [base_path])
+    response = get_json("#{endpoint}/v2/lookup-by-base-path#{query}")
+    response.to_hash[base_path]
+  end
+
   # Find the content_id for a base_path.
   #
   # Convenience method if you only need to look up one content_id for a
@@ -122,7 +158,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # site, or update an existing unpublishing.
   #
   # @param content_id [UUID]
-  # @param type [String] Either 'withdrawal', 'gone' or 'redirect'.
+  # @param type [String] Either 'withdrawal', 'gone', 'redirect' or 'vanish'.
   # @param explanation [String] (optional) Text to show on the page.
   # @param alternative_path [String] (optional) Alternative path to show on the page or redirect to.
   # @param discard_drafts [Boolean] (optional) Whether to discard drafts on that item.  Defaults to false.
