@@ -1,9 +1,12 @@
 # Unreleased
 
+# 41.1.0
+
 * Add new fields to 'find_or_create_subscriber_list' to support whitehall migration
   - email_document_supertype
   - government_document_supertype
   - gov_delivery_id
+* Port all jenkins.sh steps to Jenkinsfile
 
 # 41.0.0
 
