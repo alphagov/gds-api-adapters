@@ -2,6 +2,12 @@
 
 REPOSITORY = 'gds-api-adapters'
 
+def rubyVersions = [
+  '2.1',
+  '2.2',
+  '2.3',
+]
+
 node {
   def govuk = load '/var/lib/jenkins/groovy_scripts/govuk_jenkinslib.groovy'
   properties([
@@ -38,20 +44,29 @@ node {
       }
     }
 
-    stage("Build") {
-      dir("gds-api-adapters") {
-        sh "${WORKSPACE}/gds-api-adapters/jenkins.sh"
+    for (rubyVersion in rubyVersions) {
+      stage("Test with ruby $rubyVersion") {
+        dir("gds-api-adapters") {
+          sh "rm -f Gemfile.lock"
+          govuk.setEnvar("RBENV_VERSION", rubyVersion)
+          govuk.bundleGem()
 
-        publishHTML(target: [
-          allowMissing: false,
-          alwaysLinkToLastBuild: false,
-          keepAll: true,
-          reportDir: 'coverage/rcov',
-          reportFiles: 'index.html',
-          reportName: 'RCov Report'
-        ])
+          govuk.rubyLinter("lib spec test")
+
+          govuk.runTests()
+
+          publishHTML(target: [
+            allowMissing: false,
+            alwaysLinkToLastBuild: false,
+            keepAll: true,
+            reportDir: 'coverage/rcov',
+            reportFiles: 'index.html',
+            reportName: 'RCov Report'
+          ])
+        }
       }
     }
+    sh "unset RBENV_VERSION"
 
     stage("Publish branch pact") {
       dir("gds-api-adapters") {
