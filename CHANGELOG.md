@@ -1,5 +1,10 @@
 # Unreleased
 
+* Add new fields to 'find_or_create_subscriber_list' to support whitehall migration
+  - email_document_supertype
+  - government_document_supertype
+  - gov_delivery_id
+
 # 41.0.0
 
 * Rename GOVUK_FACT_CHECK_ID header to GOVUK_AUTH_BYPASS_ID header

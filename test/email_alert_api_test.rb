@@ -135,6 +135,72 @@ describe GdsApi::EmailAlertApi do
         end
       end
 
+      describe "when the optional 'email_document_supertype' and 'government_document_supertype' are provided" do
+        let(:params) {
+          {
+            "title" => title,
+            "tags" => tags,
+            "email_document_supertype" => "publications",
+            "government_document_supertype" => "travel_advice",
+          }
+        }
+
+        before do
+          email_alert_api_has_subscriber_list(
+            "title" => "Some Title",
+            "tags" => tags,
+            "email_document_supertype" => "publications",
+            "government_document_supertype" => "travel_advice",
+            "subscription_url" => expected_subscription_url,
+          )
+        end
+
+        it "returns the subscriber list attributes" do
+          subscriber_list_attrs = api_client.find_or_create_subscriber_list(params)
+            .to_hash
+            .fetch("subscriber_list")
+
+          assert_equal(
+            "publications",
+            subscriber_list_attrs.fetch("email_document_supertype")
+          )
+          assert_equal(
+            "travel_advice",
+            subscriber_list_attrs.fetch("government_document_supertype")
+          )
+        end
+      end
+
+      describe "when the optional 'gov_delivery_id' is provided" do
+        let(:params) {
+          {
+            "title" => title,
+            "tags" => tags,
+            "gov_delivery_id" => "TOPIC-A",
+          }
+        }
+
+        before do
+          email_alert_api_has_subscriber_list(
+            "title" => "Some Title",
+            "tags" => tags,
+            "gov_delivery_id" => "TOPIC-A",
+            "subscription_url" => expected_subscription_url,
+          )
+        end
+
+        it "returns the subscriber list attributes" do
+          subscriber_list_attrs = api_client.find_or_create_subscriber_list(params)
+            .to_hash
+            .fetch("subscriber_list")
+
+          assert_equal(
+            "TOPIC-A",
+            subscriber_list_attrs.fetch("gov_delivery_id")
+          )
+        end
+      end
+
       describe "when both tags and links are provided" do
         let(:links) {
           {
@@ -167,6 +233,7 @@ describe GdsApi::EmailAlertApi do
       end
     end
   end
+
   describe "notifications" do
     it "retrieves notifications" do
       stubbed_request = email_alert_api_has_notifications([
