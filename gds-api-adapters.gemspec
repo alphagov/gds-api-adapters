@@ -34,11 +34,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'simplecov', '~> 0.5.4'
   s.add_development_dependency 'simplecov-rcov'
   s.add_development_dependency 'timecop', '~> 0.5.1'
-
-  # Webmock 1.24.3 complains that "WebMock does not support matching body for multipart/form-data requests"
-  # This is currently breaks existing tests. Revisit this when new version of
-  # webmock is released.
-  s.add_development_dependency 'webmock', '1.24.2'
+  s.add_development_dependency 'webmock', '~> 1.24.6'
 
   s.add_development_dependency 'pact', '1.9.0'
   s.add_development_dependency 'pact-mock_service', '0.8.1'
