@@ -118,7 +118,7 @@ node {
 
     stage("Run publishing-api pact") {
       dir("publishing-api") {
-        withEnv(["JOB_NAME=publishing-api"]) { // TODO: This environment is a hack
+        withEnv(["JOB_NAME=publishing-api", "USE_LOCAL_PACT=true"]) { // TODO: This environment is a hack
           govuk.bundleApp()
         }
         withCredentials([
