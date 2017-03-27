@@ -14,6 +14,7 @@ require 'simplecov-rcov'
 require 'mocha/mini_test'
 require 'timecop'
 require 'gds-api-adapters'
+require 'govuk-content-schema-test-helpers'
 
 SimpleCov.start do
   add_filter "/test/"
@@ -53,3 +54,8 @@ WebMock.disable_net_connect!
 
 require 'gds_api/test_helpers/json_client_helper'
 require 'test_helpers/pact_helper'
+
+GovukContentSchemaTestHelpers.configure do |config|
+  config.schema_type = 'publisher_v2'
+  config.project_root = File.absolute_path(File.join(File.basename(__FILE__), '..'))
+end
