@@ -16,13 +16,15 @@ describe GdsApi::PublishingApiV2 do
       "public_updated_at" => "2015-07-30T13:58:11.000Z",
       "publishing_app" => "static",
       "rendering_app" => "static",
+      "locale" => "en",
       "routes" => [
         {
           "path" => attrs["base_path"] || "/robots.txt",
           "type" => "exact"
         }
       ],
-      "update_type" => "major"
+      "update_type" => "major",
+      "details" => {},
     }.merge(attrs)
   end
 

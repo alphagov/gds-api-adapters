@@ -43,6 +43,8 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
               type: special_route[:type],
             }
           ],
+          locale: "en",
+          details: {},
           publishing_app: special_route[:publishing_app],
           rendering_app: special_route[:rendering_app],
           public_updated_at: Time.now.iso8601,
