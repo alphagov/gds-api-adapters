@@ -19,6 +19,8 @@ module GdsApi
           schema_name: "special_route",
           title: options.fetch(:title),
           description: options[:description] || "",
+          locale: "en",
+          details: {},
           routes: [
             {
               path: options.fetch(:base_path),
