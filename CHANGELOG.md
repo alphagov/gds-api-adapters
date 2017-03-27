@@ -1,5 +1,10 @@
 # Unreleased
 
+# 41.2.0
+
+* Update webmock gem dependency
+* Add new `locale` and `details` fields to special routes
+
 # 41.1.0
 
 * Add new fields to 'find_or_create_subscriber_list' to support whitehall migration
