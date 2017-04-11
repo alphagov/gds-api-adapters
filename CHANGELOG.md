@@ -1,5 +1,7 @@
 # Unreleased
 
+# 41.3.0
+
 * Add support for the `link-checker-api`.
 
 # 41.2.0
