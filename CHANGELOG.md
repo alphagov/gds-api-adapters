@@ -1,5 +1,7 @@
 # Unreleased
 
+* Add support for the `link-checker-api`.
+
 # 41.2.0
 
 * Update webmock gem dependency
