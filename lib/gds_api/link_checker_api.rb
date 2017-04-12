@@ -40,6 +40,7 @@ class GdsApi::LinkCheckerApi < GdsApi::Base
   # @param checked_within [Fixnum] The number of seconds the last check should
   #   be within before doing another check. (optional)
   # @param webhook_uri [String] The URI to be called when the batch finishes. (optional)
+  # @param webhook_secret_token [String] A secret token that the API will use to generate a signature of the request. (optional)
   # @return [BatchReport] A +SimpleDelegator+ of the +GdsApi::Response+ which
   #   responds to:
   #     :id            the ID of the batch
@@ -49,11 +50,12 @@ class GdsApi::LinkCheckerApi < GdsApi::Base
   #     :completed_at  a date when the batch was completed
   #
   # @raise [HTTPErrorResponse] if the request returns an error
-  def create_batch(uris, checked_within: nil, webhook_uri: nil)
+  def create_batch(uris, checked_within: nil, webhook_uri: nil, webhook_secret_token: nil)
     payload = {
       uris: uris,
       checked_within: checked_within,
-      webhook_uri: webhook_uri
+      webhook_uri: webhook_uri,
+      webhook_secret_token: webhook_secret_token,
     }
 
     response = post_json(
@@ -71,7 +73,7 @@ class GdsApi::LinkCheckerApi < GdsApi::Base
   # @return [BatchReport] A +SimpleDelegator+ of the +GdsApi::Response+ which
   #   responds to:
   #     :id            the ID of the batch
-  #     :status        the status of the check, one of: complete or in_progress
+  #     :status        the status of the check, one of: completed or in_progress
   #     :links         an array of link reports
   #     :totals        an +OpenStruct+ of total information, fields: links, ok, caution, broken, pending
   #     :completed_at  a date when the batch was completed
