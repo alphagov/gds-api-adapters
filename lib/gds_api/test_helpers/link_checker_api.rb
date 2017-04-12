@@ -44,17 +44,22 @@ module GdsApi
           .to_return(body: body, status: 200, headers: { "Content-Type" => "application/json" })
       end
 
-      def link_checker_api_create_batch(uris:, checked_within: nil, webhook_uri: nil, id: 0, status: :in_progress, links: nil, totals: {}, completed_at: nil)
+      def link_checker_api_create_batch(uris:, checked_within: nil, webhook_uri: nil, webhook_secret_token: nil, id: 0, status: :in_progress, links: nil, totals: {}, completed_at: nil)
         links = uris.map { |uri| { uri: uri } } if links.nil?
 
         response_body = link_checker_api_batch_report_hash(
-          id: id, status: status, links: links, totals: totals, completed_at: completed_at
+          id: id,
+          status: status,
+          links: links,
+          totals: totals,
+          completed_at: completed_at
         ).to_json
 
         request_body = {
           uris: uris,
           checked_within: checked_within,
           webhook_uri: webhook_uri,
+          webhook_secret_token: webhook_secret_token,
         }.delete_if { |_, v| v.nil? }.to_json
 
         stub_request(:post, "#{LINK_CHECKER_API_ENDPOINT}/batch")
