@@ -1,5 +1,9 @@
 # Unreleased
 
+# 41.4.0
+
+* Add support for the secure webhooks of the `link-checker-api`.
+
 # 41.3.0
 
 * Add support for the `link-checker-api`.
