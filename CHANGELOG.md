@@ -1,5 +1,7 @@
 # Unreleased
 
+* Make `lgil` mandatory when requesting links from Local Links Manager
+
 # 41.5.0
 
 * Add missing `link-checker-api` test helpers from the previous release.

@@ -11,7 +11,7 @@ describe GdsApi::LocalLinksManager do
   end
 
   describe "#link" do
-    describe "when making request for specific LGIL" do
+    describe "when making a request" do
       it "returns the local authority and local interaction details if link present" do
         local_links_manager_has_a_link(
           authority_slug: "blackburn",
@@ -79,85 +79,46 @@ describe GdsApi::LocalLinksManager do
       end
     end
 
-    describe "when making request without LGIL" do
-      it "returns the local authority and local interaction details if link present" do
-        local_links_manager_has_a_fallback_link(
-          authority_slug: "blackburn",
-          lgsl: 2,
-          lgil: 3,
-          url: "http://blackburn.example.com/abandoned-shopping-trolleys/report"
-        )
-
-        expected_response = {
-          "local_authority" => {
-            "name" => "Blackburn",
-              "snac" => "00AG",
-              "tier" => "unitary",
-              "homepage_url" => "http://blackburn.example.com",
-          },
-          "local_interaction" => {
-            "lgsl_code" => 2,
-            "lgil_code" => 3,
-            "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/report",
-          }
-        }
-
-        response = @api.local_link("blackburn", 2)
-        assert_equal expected_response, response.to_hash
-      end
-
-      it "returns the local authority and local interaction details if no link present" do
-        local_links_manager_has_no_fallback_link(
-          authority_slug: "blackburn",
-          lgsl: 2
-        )
-
-        expected_response = {
-          "local_authority" => {
-            "name" => "Blackburn",
-              "snac" => "00AG",
-              "tier" => "unitary",
-              "homepage_url" => "http://blackburn.example.com",
-          },
-        }
-
-        response = @api.local_link("blackburn", 2)
-        assert_equal expected_response, response.to_hash
-      end
-    end
-
     describe "when making request with missing required parameters" do
       it "raises HTTPClientError when authority_slug is missing" do
-        local_links_manager_request_with_missing_parameters(nil, 2)
+        local_links_manager_request_with_missing_parameters(nil, 2, 8)
 
         assert_raises GdsApi::HTTPClientError do
-          @api.local_link(nil, 2)
+          @api.local_link(nil, 2, 8)
         end
       end
 
       it "raises HTTPClientError when LGSL is missing" do
-        local_links_manager_request_with_missing_parameters('blackburn', nil)
+        local_links_manager_request_with_missing_parameters('blackburn', nil, 8)
 
         assert_raises GdsApi::HTTPClientError do
-          @api.local_link('blackburn', nil)
+          @api.local_link('blackburn', nil, 8)
+        end
+      end
+
+      it "raises HTTPClientError when LGIL is missing" do
+        local_links_manager_request_with_missing_parameters('blackburn', 2, nil)
+
+        assert_raises GdsApi::HTTPClientError do
+          @api.local_link('blackburn', 2, nil)
         end
       end
     end
 
     describe "when making request with invalid required parameters" do
       it "raises when authority_slug is invalid" do
-        local_links_manager_does_not_have_required_objects("hogwarts", 2)
+        local_links_manager_does_not_have_required_objects("hogwarts", 2, 8)
 
         assert_raises(GdsApi::HTTPNotFound) do
-          @api.local_link("hogwarts", 2)
+          @api.local_link("hogwarts", 2, 8)
         end
       end
 
       it "raises when LGSL is invalid" do
-        local_links_manager_does_not_have_required_objects("blackburn", 999)
+        local_links_manager_does_not_have_required_objects("blackburn", 999, 8)
 
         assert_raises(GdsApi::HTTPNotFound) do
-          @api.local_link("blackburn", 999)
+          @api.local_link("blackburn", 999, 8)
         end
       end
 
