@@ -1,5 +1,7 @@
 # Unreleased
 
+* Set the `update_type` to major in all of the Publishing API pact tests.
+
 # 42.0.0
 
 * Make `lgil` mandatory when requesting links from Local Links Manager
