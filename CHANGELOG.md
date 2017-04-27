@@ -1,6 +1,7 @@
 # Unreleased
 
 * Set the `update_type` to major in all of the Publishing API pact tests.
+* Remove support for `business_support_schemes`
 
 # 42.0.0
 

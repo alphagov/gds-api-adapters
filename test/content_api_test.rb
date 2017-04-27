@@ -598,54 +598,6 @@ describe GdsApi::ContentApi do
     end
   end
 
-  describe "business support schemes" do
-    it "should query content_api for business_support_schemes" do
-      stub_request(:get, %r{\A#{@base_api_url}/business_support_schemes.json}).
-        to_return(status: 200, body: { "foo" => "bar" }.to_json)
-
-      response = @api.business_support_schemes(drink: "coffee")
-
-      assert_equal({ "foo" => "bar" }, response.to_hash)
-      assert_requested :get, "#{@base_api_url}/business_support_schemes.json?drink=coffee", times: 1
-    end
-
-    it "should raise an error if content_api returns 404" do
-      stub_request(:get, %r{\A#{@base_api_url}/business_support_schemes.json}).
-        to_return(status: 404, body: "Not Found")
-
-      assert_raises GdsApi::HTTPNotFound do
-        @api.business_support_schemes(%w(foo bar))
-      end
-    end
-
-    it "should raise an error if content_api returns a 50x error" do
-      stub_request(:get, %r{\A#{@base_api_url}/business_support_schemes.json}).
-        to_return(status: 503, body: "Gateway timeout")
-
-      assert_raises GdsApi::HTTPServerError do
-        @api.business_support_schemes(%w(foo bar))
-      end
-    end
-
-    describe "test helpers" do
-      it "should have representative test helpers" do
-        setup_content_api_business_support_schemes_stubs
-        s1 = { "title" => "Scheme 1", "format" => "business_support" }
-        content_api_has_business_support_scheme(s1, locations: "england", sectors: "farming")
-        s2 = { "title" => "Scheme 2", "format" => "business_support" }
-        content_api_has_business_support_scheme(s2, sectors: "farming")
-        s3 = { "title" => "Scheme 3", "format" => "business_support" }
-        content_api_has_business_support_scheme(s3, locations: "england", sectors: "farming")
-
-        response = @api.business_support_schemes(locations: "england", sectors: "farming").to_hash
-
-        assert_equal 2, response["total"]
-        assert_equal s1["title"], response["results"].first["title"]
-        assert_equal s3["title"], response["results"].last["title"]
-      end
-    end
-  end
-
   describe "getting licence details" do
     it "should get licence details" do
       setup_content_api_licences_stubs

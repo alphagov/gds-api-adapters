@@ -92,16 +92,6 @@ class GdsApi::ContentApi < GdsApi::Base
     get_json("#{@endpoint}/licences.json?ids=#{ids}")
   end
 
-  def business_support_schemes(facets)
-    url = "#{base_url}/business_support_schemes.json"
-    query = facets.map { |k, v| "#{k}=#{v}" }
-    if query.any?
-      url += "?#{query.join('&')}"
-    end
-
-    get_json(url)
-  end
-
   def get_list(url)
     get_json(url) { |r|
       GdsApi::ListResponse.new(r, self, web_urls_relative_to: @web_urls_relative_to)

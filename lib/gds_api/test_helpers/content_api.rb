@@ -343,26 +343,6 @@ module GdsApi
         end
       end
 
-      def setup_content_api_business_support_schemes_stubs
-        setup_business_support_stubs(CONTENT_API_ENDPOINT, 'business_support_schemes')
-      end
-
-      def content_api_has_business_support_scheme(scheme, facets)
-        api_has_business_support(scheme, facets)
-      end
-
-      def content_api_has_default_business_support_schemes
-        empty_results = {
-          "_response_info" => { "status" => "ok" },
-          "description" => "Business Support Schemes!",
-          "total" => 0, "startIndex" => 1, "pageSize" => 0, "currentPage" => 1, "pages" => 1,
-          "results" => []
-        }
-
-        stub_request(:get, %r{\A#{CONTENT_API_ENDPOINT}/business_support_schemes\.json}).
-          to_return(body: empty_results.to_json)
-      end
-
       def content_api_licence_hash(licence_identifier, options = {})
         details = {
           title: "Publisher title",
