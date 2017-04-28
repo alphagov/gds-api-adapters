@@ -2,6 +2,7 @@
 
 * Set the `update_type` to major in all of the Publishing API pact tests.
 * Remove support for `business_support_schemes`
+* Support custom schemas in the SpecialRoutePublisher
 
 # 42.0.0
 
