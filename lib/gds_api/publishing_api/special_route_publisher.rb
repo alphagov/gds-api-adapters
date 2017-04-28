@@ -16,7 +16,7 @@ module GdsApi
           options.fetch(:content_id),
           base_path: options.fetch(:base_path),
           document_type: options.fetch(:document_type, "special_route"),
-          schema_name: "special_route",
+          schema_name: options.fetch(:schema_name, "special_route"),
           title: options.fetch(:title),
           description: options.fetch(:description, ""),
           locale: "en",
