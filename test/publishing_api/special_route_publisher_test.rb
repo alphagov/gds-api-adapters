@@ -65,6 +65,14 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
       assert_publishing_api_publish(content_id, update_type: 'major')
     end
 
+    it "publishes customized schema_name" do
+      publisher.publish(special_route.merge(schema_name: "dummy_schema"))
+
+      assert_requested(:put, "#{endpoint}/v2/content/#{content_id}") do |req|
+        JSON.parse(req.body)["schema_name"] == "dummy_schema"
+      end
+    end
+
     it "publishes links" do
       links = {
         links: {
