@@ -1,3 +1,7 @@
+# Unreleased
+
+* Revert changes made to `update_type` in the Publishing API pact tests in release 43.0.0.
+
 # 43.0.0
 
 * Set the `update_type` to major in all of the Publishing API pact tests.

@@ -678,7 +678,7 @@ describe GdsApi::PublishingApiV2 do
               method: :post,
               path: "/v2/content/#{@content_id}/publish",
               body: {
-                update_type: "major",
+                update_type: "minor",
                 previous_version: 3,
               },
               headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
@@ -691,7 +691,7 @@ describe GdsApi::PublishingApiV2 do
         end
 
         it "responds with 200 OK" do
-          response = @api_client.publish(@content_id, "major", previous_version: 3)
+          response = @api_client.publish(@content_id, "minor", previous_version: 3)
           assert_equal 200, response.code
         end
       end
@@ -705,7 +705,7 @@ describe GdsApi::PublishingApiV2 do
               method: :post,
               path: "/v2/content/#{@content_id}/publish",
               body: {
-                update_type: "major",
+                update_type: "minor",
                 previous_version: 2,
               },
               headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
@@ -731,7 +731,7 @@ describe GdsApi::PublishingApiV2 do
 
         it "responds with 409 Conflict" do
           error = assert_raises GdsApi::HTTPClientError do
-            @api_client.publish(@content_id, "major", previous_version: 2)
+            @api_client.publish(@content_id, "minor", previous_version: 2)
           end
           assert_equal 409, error.code
           assert_equal "Conflict", error.error_details["error"]["message"]
