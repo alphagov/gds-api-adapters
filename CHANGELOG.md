@@ -1,4 +1,4 @@
-# Unreleased
+# 44.0.0
 
 * Revert changes made to `update_type` in the Publishing API pact tests in release 43.0.0
 * Remove support for the `business-support-api`
