@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add api adapter for the bank-holidays json provided by calendars
+
 # 44.0.0
 
 * Revert changes made to `update_type` in the Publishing API pact tests in release 43.0.0
