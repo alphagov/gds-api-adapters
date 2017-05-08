@@ -1,13 +1,11 @@
 require 'gds_api/test_helpers/json_client_helper'
 require 'cgi'
 require 'gds_api/test_helpers/common_responses'
-require 'gds_api/test_helpers/business_support_helper'
 
 module GdsApi
   module TestHelpers
     module ContentApi
       include GdsApi::TestHelpers::CommonResponses
-      include GdsApi::TestHelpers::BusinessSupportHelper
       # Generally true. If you are initializing the client differently,
       # you could redefine/override the constant or stub directly.
       CONTENT_API_ENDPOINT = Plek.current.find('contentapi')

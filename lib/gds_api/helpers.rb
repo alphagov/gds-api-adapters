@@ -1,5 +1,4 @@
 require 'gds_api/asset_manager'
-require 'gds_api/business_support_api'
 require 'gds_api/content_api'
 require 'gds_api/content_store'
 require 'gds_api/imminence'
@@ -12,10 +11,6 @@ module GdsApi
   module Helpers
     def asset_manager_api(options = {})
       @asset_manager_api ||= GdsApi::AssetManager.new(Plek.current.find('asset-manager'), options)
-    end
-
-    def business_support_api(options = {})
-      @business_support_api ||= GdsApi::BusinessSupportApi.new(Plek.current.find("business-support-api"), options)
     end
 
     def content_api(options = {})
