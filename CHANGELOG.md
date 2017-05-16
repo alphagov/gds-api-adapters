@@ -1,3 +1,7 @@
+# Unreleased
+
+* Drop dead endpoints from support adapter
+
 # 45.0.0
 
 * Add api adapter for the bank-holidays json provided by calendars
