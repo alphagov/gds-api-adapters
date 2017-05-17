@@ -87,11 +87,6 @@ class GdsApi::ContentApi < GdsApi::Base
     get_json("#{base_url}/local_authorities.json?snac_code=#{CGI.escape(snac_code)}")
   end
 
-  def licences_for_ids(ids)
-    ids = ids.map(&:to_s).sort.join(',')
-    get_json("#{@endpoint}/licences.json?ids=#{ids}")
-  end
-
   def get_list(url)
     get_json(url) { |r|
       GdsApi::ListResponse.new(r, self, web_urls_relative_to: @web_urls_relative_to)
