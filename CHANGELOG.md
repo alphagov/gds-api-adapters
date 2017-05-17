@@ -1,3 +1,8 @@
+# Unreleased
+
+* Drop dead endpoints from support adapter
+* Rename test helpers for support-api to make it clearer they stub requests to support-api
+
 # 45.0.0
 
 * Add api adapter for the bank-holidays json provided by calendars
