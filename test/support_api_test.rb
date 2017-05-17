@@ -13,9 +13,7 @@ describe GdsApi::SupportApi do
   it "can report a problem" do
     request_details = { certain: "details" }
 
-    stub_post = stub_request(:post, "#{@base_api_url}/anonymous-feedback/problem-reports").
-      with(body: { "problem_report" => request_details }.to_json).
-      to_return(status: 201)
+    stub_post = stub_support_api_problem_report_creation(request_details)
 
     @api.create_problem_report(request_details)
 
@@ -25,9 +23,7 @@ describe GdsApi::SupportApi do
   it "can pass service feedback" do
     request_details = { "transaction-completed-values" => "1", "details" => "abc" }
 
-    stub_post = stub_request(:post, "#{@base_api_url}/anonymous-feedback/service-feedback").
-      with(body: { "service_feedback" => request_details }.to_json).
-      to_return(status: 201)
+    stub_post = stub_support_api_service_feedback_creation(request_details)
 
     @api.create_service_feedback(request_details)
 
@@ -37,9 +33,7 @@ describe GdsApi::SupportApi do
   it "can submit long-form anonymous feedback" do
     request_details = { certain: "details" }
 
-    stub_post = stub_request(:post, "#{@base_api_url}/anonymous-feedback/long-form-contacts").
-      with(body: { "long_form_contact" => request_details }.to_json).
-      to_return(status: 201)
+    stub_post = stub_support_api_long_form_anonymous_contact_creation(request_details)
 
     @api.create_anonymous_long_form_contact(request_details)
 
@@ -48,11 +42,11 @@ describe GdsApi::SupportApi do
 
   it "fetches problem report daily totals" do
     response_body = { "data" => ["results"] }
+    request_date = Date.new(2014, 7, 12)
 
-    stub_get = stub_request(:get, "#{@base_api_url}/anonymous-feedback/problem-reports/2014-07-12/totals").
-      to_return(status: 200, body: response_body.to_json)
+    stub_get = stub_support_api_problem_report_daily_totals_for(request_date, response_body.to_json)
 
-    result = @api.problem_report_daily_totals_for(Date.new(2014, 7, 12))
+    result = @api.problem_report_daily_totals_for(request_date)
 
     assert_requested(stub_get)
     assert_equal response_body, result.to_hash
@@ -66,7 +60,7 @@ describe GdsApi::SupportApi do
 
   describe "GET /anonymous-feedback" do
     it "fetches anonymous feedback" do
-      stub_get = stub_anonymous_feedback(
+      stub_get = stub_support_api_anonymous_feedback(
         path_prefix: "/vat-rates",
         page: 55,
       )
@@ -84,7 +78,7 @@ describe GdsApi::SupportApi do
     it "fetches organisation summary" do
       slug = "hm-revenue-customs"
 
-      stub_get = stub_anonymous_feedback_organisation_summary(slug)
+      stub_get = stub_support_api_anonymous_feedback_organisation_summary(slug)
 
       @api.organisation_summary(slug)
 
@@ -95,7 +89,7 @@ describe GdsApi::SupportApi do
       slug = "hm-revenue-customs"
       ordering = "last_30_days"
 
-      stub_get = stub_anonymous_feedback_organisation_summary(slug, ordering)
+      stub_get = stub_support_api_anonymous_feedback_organisation_summary(slug, ordering)
 
       @api.organisation_summary(slug, ordering: ordering)
 
@@ -105,7 +99,7 @@ describe GdsApi::SupportApi do
 
   describe "POST /anonymous-feedback/export-requests" do
     it "makes a POST request to the support api" do
-      stub_post = stub_support_feedback_export_request_creation(notification_email: "foo@example.com")
+      stub_post = stub_support_api_feedback_export_request_creation(notification_email: "foo@example.com")
 
       @api.create_feedback_export_request(notification_email: "foo@example.com")
 
@@ -116,7 +110,7 @@ describe GdsApi::SupportApi do
   describe "POST /anonymous-feedback/global-export-requests" do
     it "makes a POST request to the support API" do
       params = { from_date: "1 June 2016", to_date: "8 June 2016", notification_email: "foo@example.com" }
-      stub_post = stub_support_global_export_request_creation(params)
+      stub_post = stub_support_api_global_export_request_creation(params)
 
       @api.create_global_export_request(params)
       assert_requested(stub_post)
@@ -126,7 +120,7 @@ describe GdsApi::SupportApi do
   describe "POST /page-improvements" do
     it "makes a POST request to the support API" do
       params = { description: "The title could be better." }
-      stub_post = stub_create_page_improvement(params)
+      stub_post = stub_support_api_create_page_improvement(params)
 
       @api.create_page_improvement(params)
 
@@ -136,7 +130,7 @@ describe GdsApi::SupportApi do
 
   describe "GET /anonymous-feedback/export-requests/:id" do
     it "fetches the export request details from the API" do
-      stub_get = stub_support_feedback_export_request(123)
+      stub_get = stub_support_api_feedback_export_request(123)
 
       @api.feedback_export_request(123)
 
@@ -146,7 +140,7 @@ describe GdsApi::SupportApi do
 
   describe "GET /organisations" do
     it "fetches a list of organisations" do
-      stub_get = stub_organisations_list
+      stub_get = stub_support_api_organisations_list
 
       @api.organisations_list
 
@@ -156,7 +150,7 @@ describe GdsApi::SupportApi do
 
   describe "GET /organisations/:slug" do
     it "fetches a list of organisations" do
-      stub_get = stub_organisation("foo")
+      stub_get = stub_support_api_organisation("foo")
 
       @api.organisation("foo")
 
@@ -167,7 +161,7 @@ describe GdsApi::SupportApi do
   describe "GET /anonymous-feedback/problem-reports" do
     it "fetches a list of problem reports" do
       params = { from_date: '2016-12-12', to_date: '2016-12-13', page: 1, exclude_reviewed: true }
-      stub_get = stub_support_problem_reports(params)
+      stub_get = stub_support_api_problem_reports(params)
 
       @api.problem_reports(params)
 
@@ -179,7 +173,7 @@ describe GdsApi::SupportApi do
     it "makes a PUT request to the support API" do
       params = { "1" => true, "2" => true }
 
-      stub_post = stub_support_mark_reviewed_for_spam(params)
+      stub_post = stub_support_api_mark_reviewed_for_spam(params)
 
       @api.mark_reviewed_for_spam(params)
 
