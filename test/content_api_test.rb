@@ -598,60 +598,6 @@ describe GdsApi::ContentApi do
     end
   end
 
-  describe "getting licence details" do
-    it "should get licence details" do
-      setup_content_api_licences_stubs
-
-      content_api_has_licence licence_identifier: "1234", title: 'Test Licence 1', slug: 'test-licence-1',
-        licence_short_description: 'A short description'
-      content_api_has_licence licence_identifier: "1235", title: 'Test Licence 2', slug: 'test-licence-2',
-        licence_short_description: 'A short description'
-      content_api_has_licence licence_identifier: "AB1234", title: 'Test Licence 3', slug: 'test-licence-3',
-        licence_short_description: 'A short description'
-
-      results = @api.licences_for_ids([1234, 'AB1234', 'something'])['results']
-      assert_equal 2, results.size
-      assert_equal(
-        %w(1234 AB1234),
-        results.map { |r| r['details']['licence_identifier'] }
-      )
-      assert_equal(
-        ['Test Licence 1', 'Test Licence 3'],
-        results.map { |item| item['title'] }.sort
-      )
-      assert_equal(
-        [
-          'http://www.test.gov.uk/test-licence-1',
-          'http://www.test.gov.uk/test-licence-3'
-        ],
-        results.map { |item| item['web_url'] }.sort
-      )
-      assert_equal(
-        'A short description',
-        results[0]['details']['licence_short_description']
-      )
-      assert_equal(
-        'A short description',
-        results[1]['details']['licence_short_description']
-      )
-    end
-
-    it "should return empty array with no licences" do
-      setup_content_api_licences_stubs
-
-      assert_equal [], @api.licences_for_ids([123, 124])['results']
-    end
-
-    it "should raise an error if publisher returns an error" do
-      stub_request(:get, %r[\A#{@base_api_url}/licences]).
-        to_return(status: [503, "Service temporarily unabailable"])
-
-      assert_raises GdsApi::HTTPServerError do
-        @api.licences_for_ids([123, 124])
-      end
-    end
-  end
-
   def api_response_for_results(results)
     {
       "_response_info" => {

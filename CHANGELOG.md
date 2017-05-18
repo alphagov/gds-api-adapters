@@ -2,6 +2,9 @@
 
 * Drop dead endpoints from support adapter
 * Rename test helpers for support-api to make it clearer they stub requests to support-api
+* Delete methods no longer needed by `licence-finder`: `licences_for_ids`,
+  `content_api_licence_hash`, `setup_content_api_licences_stubs` and
+  `content_api_has_licence`.
 
 # 45.0.0
 
