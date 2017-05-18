@@ -1,4 +1,4 @@
-# Unreleased
+# 46.0.0
 
 * Drop dead endpoints from support adapter
 * Rename test helpers for support-api to make it clearer they stub requests to support-api
