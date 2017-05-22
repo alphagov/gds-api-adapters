@@ -1,5 +1,4 @@
 require 'gds_api/asset_manager'
-require 'gds_api/content_api'
 require 'gds_api/content_store'
 require 'gds_api/imminence'
 require 'gds_api/licence_application'
@@ -11,10 +10,6 @@ module GdsApi
   module Helpers
     def asset_manager_api(options = {})
       @asset_manager_api ||= GdsApi::AssetManager.new(Plek.current.find('asset-manager'), options)
-    end
-
-    def content_api(options = {})
-      @content_api ||= GdsApi::ContentApi.new(Plek.current.find("contentapi"), options)
     end
 
     def content_store(options = {})
@@ -43,7 +38,7 @@ module GdsApi
 
     def self.included(klass)
       if klass.respond_to?(:helper_method)
-        klass.helper_method :imminence_api, :content_api, :licence_application_api
+        klass.helper_method :imminence_api, :licence_application_api
       end
     end
   end

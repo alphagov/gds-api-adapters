@@ -21,10 +21,7 @@ module GdsApi
     def_delegators :results, :each, :to_ary
 
     def results
-      # support group_by results from the content api by checking if there is a
-      # grouped_results key present first. if it's not, then fallback to the
-      # results key
-      to_hash["grouped_results"] || to_hash["results"]
+      to_hash["results"]
     end
 
     def has_next_page?

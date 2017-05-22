@@ -1,3 +1,7 @@
+# NEXT RELEASE
+
+* Remove support for `content-api`
+
 # 46.0.0
 
 * Drop dead endpoints from support adapter
