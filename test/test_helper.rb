@@ -1,8 +1,3 @@
-# Ensure that in tests, we get a consistent domain back from Plek < 1.0.0
-# Without this, content API tests re chunking of requests with long URLs would
-# pass/fail in dev/CI.
-ENV['RACK_ENV'] = "test"
-
 require 'bundler'
 Bundler.setup :default, :development, :test
 
