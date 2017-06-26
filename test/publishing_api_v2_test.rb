@@ -99,7 +99,7 @@ describe GdsApi::PublishingApiV2 do
       end
 
       it "responds with 422 Unprocessable Entity" do
-        error = assert_raises GdsApi::HTTPClientError do
+        error = assert_raises GdsApi::HTTPUnprocessableEntity do
           @api_client.put_content(@content_id, @content_item)
         end
         assert_equal "Conflict", error.error_details["error"]["message"]
@@ -138,7 +138,7 @@ describe GdsApi::PublishingApiV2 do
       end
 
       it "responds with 422 Unprocessable Entity" do
-        assert_raises GdsApi::HTTPClientError do
+        assert_raises GdsApi::HTTPUnprocessableEntity do
           @api_client.put_content(@content_id, @content_item)
         end
       end
@@ -597,7 +597,7 @@ describe GdsApi::PublishingApiV2 do
       end
 
       it "responds with 422" do
-        error = assert_raises GdsApi::HTTPClientError do
+        error = assert_raises GdsApi::HTTPUnprocessableEntity do
           @api_client.publish(@content_id, "")
         end
 
@@ -824,7 +824,7 @@ describe GdsApi::PublishingApiV2 do
       end
 
       it "responds with 422" do
-        error = assert_raises GdsApi::HTTPClientError do
+        error = assert_raises GdsApi::HTTPUnprocessableEntity do
           @api_client.unpublish(@content_id, type: "not-a-valid-type")
         end
 
