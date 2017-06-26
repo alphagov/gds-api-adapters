@@ -147,7 +147,7 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      error = assert_raises GdsApi::HTTPClientError do
+      error = assert_raises GdsApi::HTTPUnprocessableEntity do
         @api_client.put_path(base_path, payload)
       end
       assert_equal "Unprocessable", error.error_details["error"]["message"]

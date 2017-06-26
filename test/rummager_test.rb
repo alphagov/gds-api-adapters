@@ -95,7 +95,7 @@ describe GdsApi::Rummager do
       status: [422, "Bad Request"],
       body: '"error":"Filtering by \"coffee\" is not allowed"',
     )
-    assert_raises(GdsApi::HTTPClientError) do
+    assert_raises(GdsApi::HTTPUnprocessableEntity) do
       GdsApi::Rummager.new("http://example.com").search(q: "query", filter_coffee: "tea")
     end
   end
