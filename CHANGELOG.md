@@ -1,8 +1,12 @@
+# Next release
+
+* Update `link-checker-api` class to support new message format.
+
 # 47.0.0
 
 * Remove support for `content-api`
 * Add `HTTPUnprocessableEntity` exceptions
-* Introduce 4 new endpoints for `backdrop read API` to be used by `info-frontend`. 
+* Introduce 4 new endpoints for `backdrop read API` to be used by `info-frontend`.
 
 # 46.0.0
 
