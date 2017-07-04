@@ -71,7 +71,7 @@ module GdsApi
       def search_terms(slug)
         options = {
             slug: slug,
-            transaction: 'searchTerms',
+            transaction: 'search-terms',
             group_by: 'searchKeyword',
             collect: 'searchUniques:sum'
         }
@@ -81,7 +81,7 @@ module GdsApi
       def searches(slug, is_multipart)
         options = {
             slug: slug,
-            transaction: 'searchTerms',
+            transaction: 'search-terms',
             group_by: 'pagePath',
             collect: 'searchUniques:sum'
         }
