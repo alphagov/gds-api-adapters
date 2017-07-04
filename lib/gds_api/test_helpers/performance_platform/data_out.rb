@@ -2,7 +2,7 @@ module GdsApi
   module TestHelpers
     module PerformancePlatform
       module DataOut
-        PP_DATA_OUT_ENDPOINT = "http://www.performance.service.gov.uk".freeze
+        PP_DATA_OUT_ENDPOINT = "https://www.performance.service.gov.uk".freeze
 
         def stub_service_feedback(slug, response_body = {})
           stub_http_request(:get, "#{PP_DATA_OUT_ENDPOINT}/data/#{slug}/customer-satisfaction").
@@ -21,7 +21,7 @@ module GdsApi
         def stub_search_terms(slug, response_body = {})
           options = {
               slug: slug,
-              transaction: 'searchTerms',
+              transaction: 'search-terms',
               group_by: 'searchKeyword',
               collect: 'searchUniques:sum'
           }
@@ -31,7 +31,7 @@ module GdsApi
         def stub_searches(slug, is_multipart, response_body = {})
           options = {
               slug: slug,
-              transaction: 'searchTerms',
+              transaction: 'search-terms',
               group_by: 'pagePath',
               collect: 'searchUniques:sum'
           }
@@ -76,7 +76,7 @@ module GdsApi
         end
 
         def stub_search_404(slug)
-          stub_request(:get, "#{PP_DATA_OUT_ENDPOINT}/data/govuk-info/searchTerms").
+          stub_request(:get, "#{PP_DATA_OUT_ENDPOINT}/data/govuk-info/search-terms").
               with(query: hash_including(filter_by: slug)).
               to_return(status: 404, headers: { content_type: "application/json" })
         end
