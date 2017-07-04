@@ -1,3 +1,7 @@
+# 47.1.1
+
+* Fixes url used for fetching search metrics from `backdrop read API`
+
 # 47.1.0
 
 * Update `link-checker-api` class to support new message format.
