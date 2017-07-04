@@ -1,4 +1,4 @@
-# Next release
+# 47.1.0
 
 * Update `link-checker-api` class to support new message format.
 
