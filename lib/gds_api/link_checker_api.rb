@@ -11,11 +11,13 @@ class GdsApi::LinkCheckerApi < GdsApi::Base
   #   be within before doing another check. (optional)
   # @return [LinkReport] A +SimpleDelegator+ of the +GdsApi::Response+ which
   #   responds to:
-  #     :uri           the URI of the link
-  #     :status        the status of the link, one of: ok, pending, broken, caution
-  #     :checked       the date the link was checked
-  #     :errors        a hash mapping short descriptions to arrays of long descriptions
-  #     :warnings      a hash mapping short descriptions to arrays of long descriptions
+  #     :uri              the URI of the link
+  #     :status           the status of the link, one of: ok, pending, broken, caution
+  #     :checked          the date the link was checked
+  #     :errors           a list of error descriptions
+  #     :warnings         a list of warning descriptions
+  #     :problem_summary  a short description of the most critical problem with the link
+  #     :suggested_fix    where possible, this provides a potential fix for the problem
   #
   # @raise [HTTPErrorResponse] if the request returns an error
   def check(uri, synchronous: nil, checked_within: nil)
@@ -100,12 +102,20 @@ class GdsApi::LinkCheckerApi < GdsApi::Base
       Time.iso8601(self["checked"])
     end
 
+    def problem_summary
+      self["problem_summary"]
+    end
+
+    def suggested_fix
+      self["suggested_fix"]
+    end
+
     def errors
-      self["errors"].each_with_object({}) { |(k, v), hash| hash[k.to_sym] = v }
+      self["errors"]
     end
 
     def warnings
-      self["warnings"].each_with_object({}) { |(k, v), hash| hash[k.to_sym] = v }
+      self["warnings"]
     end
   end
 
