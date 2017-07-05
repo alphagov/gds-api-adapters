@@ -1,3 +1,8 @@
+# Unreleased
+
+* Fix Publishing API lookup_content_id and lookup_content_ids to send
+  exclude_unpublishing_types rather than exclude_publishing_types.
+
 # 47.1.2
 
 * Pass exclude_document_types and exclude_publishing_types fields to to pubslishing APi
