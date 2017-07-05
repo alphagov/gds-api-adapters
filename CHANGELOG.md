@@ -1,3 +1,8 @@
+# 47.1.2
+
+* Pass exclude_document_types and exclude_publishing_types fields to to pubslishing APi
+  when calling `lookup_content_id`
+
 # 47.1.1
 
 * Fixes url used for fetching search metrics from `backdrop read API`

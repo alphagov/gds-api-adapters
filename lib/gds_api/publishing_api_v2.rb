@@ -41,6 +41,8 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # Find the content_ids for a list of base_paths.
   #
   # @param base_paths [Array]
+  # @param exclude_document_types [Array] (optional)
+  # @param exclude_publishing_types [Array] (optional)
   # @return [Hash] a hash, keyed by `base_path` with `content_id` as value
   # @example
   #
@@ -48,8 +50,11 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   #   # => { "/foo" => "51ac4247-fd92-470a-a207-6b852a97f2db", "/bar" => "261bd281-f16c-48d5-82d2-9544019ad9ca" }
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#post-lookup-by-base-path
-  def lookup_content_ids(base_paths:)
-    response = post_json("#{endpoint}/lookup-by-base-path", base_paths: base_paths)
+  def lookup_content_ids(base_paths:, exclude_document_types: nil, exclude_publishing_types: nil)
+    options = { base_paths: base_paths }
+    options[:exclude_document_types] = exclude_document_types if exclude_document_types
+    options[:exclude_publishing_types] = exclude_publishing_types if exclude_publishing_types
+    response = post_json("#{endpoint}/lookup-by-base-path", options)
     response.to_hash
   end
 
@@ -59,6 +64,8 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # base_path. For multiple base_paths, use {GdsApi::PublishingApiV2#lookup_content_ids}.
   #
   # @param base_path [String]
+  # @param exclude_document_types [Array] (optional)
+  # @param exclude_publishing_types [Array] (optional)
   #
   # @return [UUID] the `content_id` for the `base_path`
   #
@@ -68,8 +75,12 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   #   # => "51ac4247-fd92-470a-a207-6b852a97f2db"
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#post-lookup-by-base-path
-  def lookup_content_id(base_path:)
-    lookups = lookup_content_ids(base_paths: [base_path])
+  def lookup_content_id(base_path:, exclude_document_types: nil, exclude_publishing_types: nil)
+    lookups = lookup_content_ids(
+      base_paths: [base_path],
+      exclude_document_types: exclude_document_types,
+      exclude_publishing_types: exclude_publishing_types
+    )
     lookups[base_path]
   end
 
