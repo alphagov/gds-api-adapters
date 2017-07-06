@@ -1,4 +1,4 @@
-# Unreleased
+# 47.1.3
 
 * Fix Publishing API lookup_content_id and lookup_content_ids to send
   exclude_unpublishing_types rather than exclude_publishing_types.
