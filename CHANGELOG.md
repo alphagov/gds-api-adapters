@@ -1,4 +1,4 @@
-# Unreleased
+# 47.2.0
 
 * Make passing the `update_type` to the Publishing API on a publish optional.
 
