@@ -95,7 +95,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # @option options [String] locale The language, defaults to 'en' in publishing-api.
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#post-v2contentcontent_idpublish
-  def publish(content_id, update_type, options = {})
+  def publish(content_id, update_type = nil, options = {})
     params = {
       update_type: update_type
     }

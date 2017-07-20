@@ -1,3 +1,7 @@
+# Unreleased
+
+* Make passing the `update_type` to the Publishing API on a publish optional.
+
 # 47.1.3
 
 * Fix Publishing API lookup_content_id and lookup_content_ids to send
