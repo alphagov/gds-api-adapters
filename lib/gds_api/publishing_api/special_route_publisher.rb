@@ -29,10 +29,12 @@ module GdsApi
           ],
           publishing_app: options.fetch(:publishing_app),
           rendering_app: options.fetch(:rendering_app),
-          public_updated_at: time.now.iso8601)
+          public_updated_at: time.now.iso8601,
+          update_type: options.fetch(:update_type, "major")
+        )
 
         publishing_api.patch_links(options.fetch(:content_id), links: options[:links]) if options[:links]
-        publishing_api.publish(options.fetch(:content_id), 'major')
+        publishing_api.publish(options.fetch(:content_id))
         put_content_response
       end
 
