@@ -1,3 +1,7 @@
+# Unreleased
+
+* Send the update_type of special routes on put content rather than publish
+
 # 47.2.0
 
 * Make passing the `update_type` to the Publishing API on a publish optional.

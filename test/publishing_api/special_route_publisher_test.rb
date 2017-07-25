@@ -48,11 +48,12 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
           publishing_app: special_route[:publishing_app],
           rendering_app: special_route[:rendering_app],
           public_updated_at: Time.now.iso8601,
+          update_type: "major",
         }
 
         assert_requested(:put, "#{endpoint}/v2/content/#{content_id}", body: expected_payload)
         assert_valid_special_route(expected_payload)
-        assert_publishing_api_publish(content_id, update_type: 'major')
+        assert_publishing_api_publish(content_id)
       end
     end
 
@@ -62,7 +63,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
       assert_requested(:put, "#{endpoint}/v2/content/#{content_id}") do |req|
         JSON.parse(req.body)["document_type"] == "other_document_type"
       end
-      assert_publishing_api_publish(content_id, update_type: 'major')
+      assert_publishing_api_publish(content_id)
     end
 
     it "publishes customized schema_name" do
