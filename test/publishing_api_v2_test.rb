@@ -622,21 +622,21 @@ describe GdsApi::PublishingApiV2 do
             ),
           )
           .will_respond_with(
-            status: 400,
+            status: 409,
             body: {
               "error" => {
-                "code" => 400, "message" => Pact.term(generate: "Cannot publish an already published content item", matcher: /\S+/),
+                "code" => 409, "message" => Pact.term(generate: "Cannot publish an already published content item", matcher: /\S+/),
               },
             }
           )
       end
 
-      it "responds with 400" do
+      it "responds with 409" do
         error = assert_raises GdsApi::HTTPClientError do
           @api_client.publish(@content_id, "major")
         end
 
-        assert_equal 400, error.code
+        assert_equal 409, error.code
         assert_equal "Cannot publish an already published content item", error.error_details["error"]["message"]
       end
     end
