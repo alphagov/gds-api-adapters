@@ -1,4 +1,4 @@
-# Unreleased
+# 47.2.1
 
 * Send the update_type of special routes on put content rather than publish
 
