@@ -1,6 +1,7 @@
 # Unreleased
 
-* Send the update_type of special routes on put content rather than publish
+* Send the update_type of special routes on put content rather than publish.
+* Update `publishing-api` class to support the new get editions endpoint.
 
 # 47.2.0
 

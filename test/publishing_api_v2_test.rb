@@ -3,6 +3,7 @@ require 'gds_api/publishing_api_v2'
 require 'json'
 
 describe GdsApi::PublishingApiV2 do
+  include GdsApi::TestHelpers::PublishingApiV2
   include PactTest
 
   def content_item_for_content_id(content_id, attrs = {})
@@ -1673,6 +1674,41 @@ describe GdsApi::PublishingApiV2 do
         expected_documents.each do |document|
           response.to_a.must_include document
         end
+      end
+    end
+  end
+
+  describe "#get_editions" do
+    describe "there are editions available to paginate over" do
+      before do
+        publishing_api
+          .given("there are live content items with base_paths /foo and /bar")
+          .upon_receiving("a get editions request")
+          .with(
+            method: :get,
+            path: "/v2/editions",
+            query: "fields%5B%5D=content_id",
+            headers: GdsApi::JsonClient.default_request_headers.merge(
+              "Authorization" => "Bearer #{@bearer_token}"
+            ),
+          )
+          .will_respond_with(
+            status: 200,
+            body: {
+              results: [
+                { content_id: "08f86d00-e95f-492f-af1d-470c5ba4752e" },
+                { content_id: "ca6c58a6-fb9d-479d-b3e6-74908781cb18" },
+              ],
+              links: [
+                { href: "http://example.org/v2/editions?fields[]=content_id", rel: "self" },
+              ],
+            }
+          )
+      end
+
+      it "will response correctly" do
+        response = @api_client.get_editions(fields: %w(content_id))
+        assert_equal response["results"].length, 2
       end
     end
   end
