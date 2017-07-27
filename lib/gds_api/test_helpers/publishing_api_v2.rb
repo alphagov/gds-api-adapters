@@ -509,6 +509,40 @@ module GdsApi
           )
       end
 
+      # Stub GET /v2/editions to return a set of editions
+      #
+      # @example
+      #
+      #   publishing_api_get_editions(
+      #     vehicle_recalls_and_faults,   # this is a variable containing an array of editions
+      #     fields: fields,   #example: let(:fields) { %i[base_path content_id public_updated_at title publication_state] }
+      #     per_page: 50
+      #   )
+      # @param items [Array]
+      # @param params [Hash]
+      def publishing_api_get_editions(editions, params = {})
+        url = PUBLISHING_API_V2_ENDPOINT + "/editions"
+
+        results = editions.map do |edition|
+          next edition unless params[:fields]
+          edition.select { |k| params[:fields].include?(k) }
+        end
+
+        per_page = (params[:per_page] || 100).to_i
+        results = results.take(per_page)
+
+        body = {
+          results: results,
+          links: [
+            { rel: "self", href: "#{PUBLISHING_API_V2_ENDPOINT}/editions" },
+          ],
+        }
+
+        stub_request(:get, url)
+          .with(query: params)
+          .to_return(status: 200, body: body.to_json, headers: {})
+      end
+
     private
 
       def stub_publishing_api_put(*args)

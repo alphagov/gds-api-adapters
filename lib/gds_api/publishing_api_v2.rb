@@ -312,6 +312,18 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json("#{endpoint}/v2/linked/#{content_id}#{query}")
   end
 
+  # Returns a paginated list of editions for the provided query string
+  # parameters.
+  #
+  # @param params [Hash]
+  #
+  # @return [GdsApi::Response] a paginated list of editions
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2editions
+  def get_editions(params = {})
+    get_json(get_editions_url(params))
+  end
+
 private
 
   def content_url(content_id, params = {})
@@ -338,6 +350,11 @@ private
   def discard_url(content_id)
     validate_content_id(content_id)
     "#{endpoint}/v2/content/#{content_id}/discard-draft"
+  end
+
+  def get_editions_url(params)
+    query = query_string(params)
+    "#{endpoint}/v2/editions#{query}"
   end
 
   def merge_optional_keys(params, options, optional_keys)

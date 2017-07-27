@@ -241,4 +241,25 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
       assert_publishing_api_discard_draft("some-content-id")
     end
   end
+
+  describe '#publishing_api_get_editions' do
+    it "stubs the get editions api call" do
+      editions = [
+        { "content_id" => "id-1", "title" => "title 1" },
+        { "content_id" => "id-2", "title" => "title 2" },
+      ]
+
+      publishing_api_get_editions(
+        editions,
+        fields: ["title"]
+      )
+
+      api_response = publishing_api.get_editions(fields: [:title])
+
+      assert_equal(
+        api_response["results"],
+        [{ "title" => "title 1" }, { "title" => "title 2" }]
+      )
+    end
+  end
 end
