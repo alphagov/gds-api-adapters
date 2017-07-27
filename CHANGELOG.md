@@ -1,3 +1,8 @@
+# Unreleased
+
+* Add a `get_paged_editions` endpoint, which returns a lazy enumerator that pages
+  through results from the editions endpoint.
+
 # 47.3.0
 
 * Update `publishing-api` class to support the new get editions endpoint.

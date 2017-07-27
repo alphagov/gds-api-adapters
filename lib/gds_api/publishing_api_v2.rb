@@ -324,6 +324,27 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json(get_editions_url(params))
   end
 
+  # Returns an Enumerator of Response objects for each page of results of
+  # editions for the provided query string parameters.
+  #
+  # @param params [Hash]
+  #
+  # @return [Enumerator] an enumerator of editions responses
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2editions
+  def get_paged_editions(params = {})
+    Enumerator.new do |yielder|
+      next_link = get_editions_url(params)
+      while next_link
+        yielder.yield begin
+          response = get_json(next_link)
+        end
+        next_link_info = response['links'].select { |link| link['rel'] == 'next' }.first
+        next_link = next_link_info && next_link_info['href']
+      end
+    end
+  end
+
 private
 
   def content_url(content_id, params = {})
