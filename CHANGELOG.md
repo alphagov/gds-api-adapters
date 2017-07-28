@@ -1,4 +1,4 @@
-# Unreleased
+# 47.4.0
 
 * Add a `get_paged_editions` endpoint, which returns a lazy enumerator that pages
   through results from the editions endpoint.
