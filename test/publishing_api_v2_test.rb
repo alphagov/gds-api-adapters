@@ -1700,7 +1700,7 @@ describe GdsApi::PublishingApiV2 do
                 { content_id: "ca6c58a6-fb9d-479d-b3e6-74908781cb18" },
               ],
               links: [
-                { href: "http://example.org/v2/editions?fields[]=content_id", rel: "self" },
+                { href: "http://example.org/v2/editions?fields%5B%5D=content_id", rel: "self" },
               ],
             }
           )
