@@ -1,4 +1,4 @@
-# Unreleased
+# 47.5.0
 
 * Add `enable_list` and `disable_list` endpoints for govuk-delivery.
 
