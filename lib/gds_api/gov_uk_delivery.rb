@@ -32,6 +32,18 @@ class GdsApi::GovUkDelivery < GdsApi::Base
     post_url(url, data)
   end
 
+  def enable_list(gov_delivery_id)
+    data = { gov_delivery_id: gov_delivery_id }
+    url = "#{base_url}/lists/enable"
+    post_url(url, data)
+  end
+
+  def disable_list(gov_delivery_id)
+    data = { gov_delivery_id: gov_delivery_id }
+    url = "#{base_url}/lists/disable"
+    post_url(url, data)
+  end
+
 private
 
   def base_url
