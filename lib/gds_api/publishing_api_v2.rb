@@ -35,7 +35,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
 
   # @private
   def get_content!(*)
-    raise "`PublishingApiV2#delete_content!` is deprecated. Use `PublishingApiV2#delete_content`"
+    raise "`PublishingApiV2#get_content!` is deprecated. Use `PublishingApiV2#get_content`"
   end
 
   # Find the content_ids for a list of base_paths.
