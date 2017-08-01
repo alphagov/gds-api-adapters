@@ -42,6 +42,22 @@ describe GdsApi::GovUkDelivery do
     assert_requested stub
   end
 
+  it "can enable a list" do
+    expected_payload = { gov_delivery_id: 'TOPIC_1234' }
+    stub = stub_gov_uk_delivery_post_request('lists/enable', expected_payload).to_return(list_enabled_disabled_hash(enabled: true))
+
+    assert @api.enable_list('TOPIC_1234')
+    assert_requested stub
+  end
+
+  it "can disable a list" do
+    expected_payload = { gov_delivery_id: 'TOPIC_1234' }
+    stub = stub_gov_uk_delivery_post_request('lists/disable', expected_payload).to_return(list_enabled_disabled_hash(enabled: false))
+
+    assert @api.disable_list('TOPIC_1234')
+    assert_requested stub
+  end
+
   it "raises if the API 404s" do
     expected_payload = { feed_url: 'http://example.com/feed' }
     stub_gov_uk_delivery_get_request('list-url', expected_payload).to_return(not_found_hash)
@@ -63,5 +79,10 @@ describe GdsApi::GovUkDelivery do
 
   def created_response_json_hash(data)
     { body: data.to_json, status: 201 }
+  end
+
+  def list_enabled_disabled_hash(enabled:)
+    body = { success: true, topic_id: 'TOPIC_1234', url: '', disabled: !enabled }.to_json
+    { body: body, status: 200 }
   end
 end

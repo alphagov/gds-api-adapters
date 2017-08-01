@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add `enable_list` and `disable_list` endpoints for govuk-delivery.
+
 # 47.4.0
 
 * Add a `get_paged_editions` endpoint, which returns a lazy enumerator that pages
