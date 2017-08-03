@@ -1,3 +1,7 @@
+# 47.6.0
+
+* Add `generate` option for Publishing API expanded links endpoint
+
 # 47.5.0
 
 * Add `enable_list` and `disable_list` endpoints for govuk-delivery.
