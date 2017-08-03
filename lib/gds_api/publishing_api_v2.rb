@@ -35,7 +35,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
 
   # @private
   def get_content!(*)
-    raise "`PublishingApiV2#delete_content!` is deprecated. Use `PublishingApiV2#delete_content`"
+    raise "`PublishingApiV2#get_content!` is deprecated. Use `PublishingApiV2#get_content`"
   end
 
   # Find the content_ids for a list of base_paths.
@@ -211,14 +211,14 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   #
   # @param content_id [UUID]
   # @param with_drafts [Bool] Whether links to draft-only editions are returned, defaulting to `true`.
+  # @param generate [Bool] Whether to require publishing-api to generate the expanded links, which may be slow. Defaults to `false`.
   #
   # @example
   #
   #   publishing_api.get_expanded_links("8157589b-65e2-4df6-92ba-2c91d80006c0", with_drafts: false).to_h
   #
   #   #=> {
-  #     "content_id" => "8157589b-65e2-4df6-92ba-2c91d80006c0",
-  #     "version" => 10,
+  #     "generated" => "2017-08-01T10:42:49Z",
   #     "expanded_links" => {
   #       "organisations" => [
   #         {
@@ -230,8 +230,10 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   #   }
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2expanded-linkscontent_id
-  def get_expanded_links(content_id, with_drafts: true)
-    params = with_drafts ? {} : { with_drafts: "false" }
+  def get_expanded_links(content_id, with_drafts: true, generate: false)
+    params = {}
+    params[:with_drafts] = "false" unless with_drafts
+    params[:generate] = "true" if generate
     query = query_string(params)
     validate_content_id(content_id)
     get_json("#{endpoint}/v2/expanded-links/#{content_id}#{query}")
