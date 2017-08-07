@@ -10,6 +10,15 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   #
   # @param attributes [Hash] document_type, links, tags used to search existing subscriber lists
   def find_or_create_subscriber_list(attributes)
+    find_subscriber_list(attributes)
+  rescue GdsApi::HTTPNotFound
+    create_subscriber_list(attributes)
+  end
+
+  # Get a subscriber list
+  #
+  # @param attributes [Hash] document_type, links, tags used to search existing subscriber lists
+  def find_subscriber_list(attributes)
     tags = attributes["tags"]
     links = attributes["links"]
     document_type = attributes["document_type"]
@@ -30,9 +39,15 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     params[:government_document_supertype] = government_document_supertype if government_document_supertype
     params[:gov_delivery_id] = gov_delivery_id if gov_delivery_id
 
-    search_subscriber_list(params)
-  rescue GdsApi::HTTPNotFound
-    create_subscriber_list(attributes)
+    query_string = nested_query_string(params)
+    get_json("#{endpoint}/subscriber-lists?" + query_string)
+  end
+
+  # Post a subscriber list
+  #
+  # @param attributes [Hash] document_type, links, tags used to search existing subscriber lists
+  def create_subscriber_list(attributes)
+    post_json("#{endpoint}/subscriber-lists", attributes)
   end
 
   # Post notification
@@ -63,15 +78,6 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   end
 
 private
-
-  def search_subscriber_list(params)
-    query_string = nested_query_string(params)
-    get_json("#{endpoint}/subscriber-lists?" + query_string)
-  end
-
-  def create_subscriber_list(attributes)
-    post_json("#{endpoint}/subscriber-lists", attributes)
-  end
 
   def nested_query_string(params)
     Rack::Utils.build_nested_query(params)
