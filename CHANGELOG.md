@@ -1,3 +1,8 @@
+# 47.7.0
+
+* Separate `find_or_create_subscriber_list` so that individual `find` or
+  `create` methods can be called in email-alert-api.
+
 # 47.6.0
 
 * Add `generate` option for Publishing API expanded links endpoint
