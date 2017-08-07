@@ -1,3 +1,7 @@
+# 47.8.0
+
+* Add `email_alert_api.topic_matches`
+
 # 47.7.0
 
 * Separate `find_or_create_subscriber_list` so that individual `find` or
