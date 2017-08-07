@@ -77,6 +77,17 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     get_json("#{endpoint}/notifications/#{id}")
   end
 
+  # Get topic matches
+  #
+  # @param attributes [Hash] tags, links, document_type,
+  # email_document_supertype, government_document_supertype
+  #
+  # @return [Hash] topics, enabled, disabled
+  def topic_matches(attributes)
+    query_string = nested_query_string(attributes)
+    get_json("#{endpoint}/topic-matches.json?#{query_string}")
+  end
+
 private
 
   def nested_query_string(params)
