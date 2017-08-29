@@ -1,4 +1,5 @@
 module GdsApi
+  # Abstract error class
   class BaseError < StandardError
   end
 
@@ -11,6 +12,7 @@ module GdsApi
   class TooManyRedirects < BaseError
   end
 
+  # Superclass for all 4XX and 5XX errors
   class HTTPErrorResponse < BaseError
     attr_accessor :code, :error_details
 
