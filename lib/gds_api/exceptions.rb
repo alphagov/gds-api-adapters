@@ -64,17 +64,6 @@ module GdsApi
   class NoBearerToken < BaseError; end
 
   module ExceptionHandling
-    def ignoring(exception_or_exceptions)
-      yield
-    rescue *exception_or_exceptions
-      # Discard the exception
-      nil
-    end
-
-    def ignoring_missing(&block)
-      ignoring([HTTPNotFound, HTTPGone], &block)
-    end
-
     def build_specific_http_error(error, url, details = nil, request_body = nil)
       message = "URL: #{url}\nResponse body:\n#{error.http_body}\n\nRequest body:\n#{request_body}"
       code = error.http_code
