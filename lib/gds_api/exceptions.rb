@@ -22,10 +22,24 @@ module GdsApi
     end
   end
 
+  # Superclass & fallback for all 4XX errors
   class HTTPClientError < HTTPErrorResponse
   end
 
+  # Superclass & fallback for all 5XX errors
   class HTTPServerError < HTTPErrorResponse
+  end
+
+  class HTTPInternalServerError < HTTPServerError
+  end
+
+  class HTTPBadGateway < HTTPServerError
+  end
+
+  class HTTPUnavailable < HTTPServerError
+  end
+
+  class HTTPGatewayTimeout < HTTPServerError
   end
 
   class HTTPNotFound < HTTPClientError
@@ -84,6 +98,14 @@ module GdsApi
         GdsApi::HTTPUnprocessableEntity
       when (400..499)
         GdsApi::HTTPClientError
+      when 500
+        GdsApi::HTTPInternalServerError
+      when 502
+        GdsApi::HTTPBadGateway
+      when 503
+        GdsApi::HTTPUnavailable
+      when 504
+        GdsApi::HTTPGatewayTimeout
       when (500..599)
         GdsApi::HTTPServerError
       else
