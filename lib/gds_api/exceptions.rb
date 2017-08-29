@@ -61,8 +61,6 @@ module GdsApi
 
   class InvalidUrl < BaseError; end
 
-  class NoBearerToken < BaseError; end
-
   module ExceptionHandling
     def build_specific_http_error(error, url, details = nil, request_body = nil)
       message = "URL: #{url}\nResponse body:\n#{error.http_body}\n\nRequest body:\n#{request_body}"
