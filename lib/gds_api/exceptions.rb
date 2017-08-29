@@ -1,16 +1,12 @@
 module GdsApi
-  class BaseError < StandardError
-  end
+  # Abstract error class
+  class BaseError < StandardError; end
 
-  class EndpointNotFound < BaseError
-  end
+  class EndpointNotFound < BaseError; end
+  class TimedOutException < BaseError; end
+  class InvalidUrl < BaseError; end
 
-  class TimedOutException < BaseError
-  end
-
-  class TooManyRedirects < BaseError
-  end
-
+  # Superclass for all 4XX and 5XX errors
   class HTTPErrorResponse < BaseError
     attr_accessor :code, :error_details
 
@@ -22,46 +18,25 @@ module GdsApi
     end
   end
 
-  class HTTPClientError < HTTPErrorResponse
-  end
+  # Superclass & fallback for all 4XX errors
+  class HTTPClientError < HTTPErrorResponse; end
 
-  class HTTPServerError < HTTPErrorResponse
-  end
+  class HTTPNotFound < HTTPClientError; end
+  class HTTPGone < HTTPClientError; end
+  class HTTPUnauthorized < HTTPClientError; end
+  class HTTPForbidden < HTTPClientError; end
+  class HTTPConflict < HTTPClientError; end
+  class HTTPUnprocessableEntity < HTTPClientError; end
 
-  class HTTPNotFound < HTTPClientError
-  end
+  # Superclass & fallback for all 5XX errors
+  class HTTPServerError < HTTPErrorResponse; end
 
-  class HTTPGone < HTTPClientError
-  end
-
-  class HTTPUnauthorized < HTTPClientError
-  end
-
-  class HTTPForbidden < HTTPClientError
-  end
-
-  class HTTPConflict < HTTPClientError
-  end
-
-  class HTTPUnprocessableEntity < HTTPClientError
-  end
-
-  class InvalidUrl < BaseError; end
-
-  class NoBearerToken < BaseError; end
+  class HTTPInternalServerError < HTTPServerError; end
+  class HTTPBadGateway < HTTPServerError; end
+  class HTTPUnavailable < HTTPServerError; end
+  class HTTPGatewayTimeout < HTTPServerError; end
 
   module ExceptionHandling
-    def ignoring(exception_or_exceptions)
-      yield
-    rescue *exception_or_exceptions
-      # Discard the exception
-      nil
-    end
-
-    def ignoring_missing(&block)
-      ignoring([HTTPNotFound, HTTPGone], &block)
-    end
-
     def build_specific_http_error(error, url, details = nil, request_body = nil)
       message = "URL: #{url}\nResponse body:\n#{error.http_body}\n\nRequest body:\n#{request_body}"
       code = error.http_code
@@ -84,6 +59,14 @@ module GdsApi
         GdsApi::HTTPUnprocessableEntity
       when (400..499)
         GdsApi::HTTPClientError
+      when 500
+        GdsApi::HTTPInternalServerError
+      when 502
+        GdsApi::HTTPBadGateway
+      when 503
+        GdsApi::HTTPUnavailable
+      when 504
+        GdsApi::HTTPGatewayTimeout
       when (500..599)
         GdsApi::HTTPServerError
       else

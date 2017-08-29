@@ -1,3 +1,5 @@
+* Add more specific exceptions for HTTPInternalServerError (500), HTTPBadGateway (502), HTTPUnavailable (503), HTTPGatewayTimeout (504) exceptions.
+
 # 47.8.0
 
 * Add `email_alert_api.topic_matches`
