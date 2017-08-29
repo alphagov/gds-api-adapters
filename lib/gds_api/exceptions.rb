@@ -9,6 +9,9 @@ module GdsApi
   class TimedOutException < BaseError
   end
 
+  class InvalidUrl < BaseError
+  end
+
   # Superclass for all 4XX and 5XX errors
   class HTTPErrorResponse < BaseError
     attr_accessor :code, :error_details
@@ -23,22 +26,6 @@ module GdsApi
 
   # Superclass & fallback for all 4XX errors
   class HTTPClientError < HTTPErrorResponse
-  end
-
-  # Superclass & fallback for all 5XX errors
-  class HTTPServerError < HTTPErrorResponse
-  end
-
-  class HTTPInternalServerError < HTTPServerError
-  end
-
-  class HTTPBadGateway < HTTPServerError
-  end
-
-  class HTTPUnavailable < HTTPServerError
-  end
-
-  class HTTPGatewayTimeout < HTTPServerError
   end
 
   class HTTPNotFound < HTTPClientError
@@ -59,7 +46,21 @@ module GdsApi
   class HTTPUnprocessableEntity < HTTPClientError
   end
 
-  class InvalidUrl < BaseError; end
+  # Superclass & fallback for all 5XX errors
+  class HTTPServerError < HTTPErrorResponse
+  end
+
+  class HTTPInternalServerError < HTTPServerError
+  end
+
+  class HTTPBadGateway < HTTPServerError
+  end
+
+  class HTTPUnavailable < HTTPServerError
+  end
+
+  class HTTPGatewayTimeout < HTTPServerError
+  end
 
   module ExceptionHandling
     def build_specific_http_error(error, url, details = nil, request_body = nil)
