@@ -1,3 +1,5 @@
+# 47.9.0
+
 * Add the HTTPPayloadTooLarge exception
 
 * Add `get_links_for_content_ids` endpoint to Publishing API
