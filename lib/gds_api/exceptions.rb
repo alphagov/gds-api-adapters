@@ -23,6 +23,7 @@ module GdsApi
 
   class HTTPNotFound < HTTPClientError; end
   class HTTPGone < HTTPClientError; end
+  class HTTPPayloadTooLarge < HTTPClientError; end
   class HTTPUnauthorized < HTTPClientError; end
   class HTTPForbidden < HTTPClientError; end
   class HTTPConflict < HTTPClientError; end
@@ -55,6 +56,8 @@ module GdsApi
         GdsApi::HTTPConflict
       when 410
         GdsApi::HTTPGone
+      when 413
+        GdsApi::HTTPPayloadTooLarge
       when 422
         GdsApi::HTTPUnprocessableEntity
       when (400..499)
