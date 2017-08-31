@@ -347,6 +347,32 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     end
   end
 
+  # Returns a mapping of content_ids => links hashes
+  #
+  # @param content_ids [Array]
+  #
+  # @return [Hash] a mapping of content_id => links
+  #
+  # @example
+  #
+  #   publishing_api.get_links_for_content_ids([
+  #     "e1067450-7d13-45ff-ada4-5e3dd4025fb7",
+  #     "72ed754c-4c82-415f-914a-ab6760454cb4"
+  #   ])
+  #
+  #   #=> {
+  #     "e1067450-7d13-45ff-ada4-5e3dd4025fb7" => {
+  #       links: {
+  #         taxons: ["13bba81c-b2b1-4b13-a3de-b24748977198"]},
+  #         ... (and more attributes)
+  #       version: 10},
+  #     "72ed754c-4c82-415f-914a-ab6760454cb4" => { ..etc }
+  #   }
+  #
+  def get_links_for_content_ids(content_ids)
+    post_json("#{endpoint}/v2/links/by-content-id", content_ids: content_ids).to_hash
+  end
+
 private
 
   def content_url(content_id, params = {})

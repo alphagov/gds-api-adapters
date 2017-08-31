@@ -1,3 +1,7 @@
+* Add the HTTPPayloadTooLarge exception
+
+* Add `get_links_for_content_ids` endpoint to Publishing API
+
 * Add more specific exceptions for HTTPInternalServerError (500), HTTPBadGateway (502), HTTPUnavailable (503), HTTPGatewayTimeout (504) exceptions.
 
 # 47.8.0
