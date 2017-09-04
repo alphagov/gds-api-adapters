@@ -1,5 +1,6 @@
 require 'test_helper'
 require 'gds_api/publishing_api_v2'
+require 'gds_api/test_helpers/publishing_api_v2'
 require 'json'
 
 describe GdsApi::PublishingApiV2 do
