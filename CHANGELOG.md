@@ -1,3 +1,5 @@
+# 47.9.1
+
 * Group Sentry errors by exception type
 
 # 47.9.0
