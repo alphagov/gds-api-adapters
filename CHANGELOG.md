@@ -1,3 +1,5 @@
+* Group Sentry errors by exception type
+
 # 47.9.0
 
 * Add the HTTPPayloadTooLarge exception
