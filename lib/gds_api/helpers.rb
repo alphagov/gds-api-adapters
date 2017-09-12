@@ -2,7 +2,6 @@ require 'gds_api/asset_manager'
 require 'gds_api/content_store'
 require 'gds_api/imminence'
 require 'gds_api/licence_application'
-require 'gds_api/need_api'
 require 'gds_api/worldwide'
 require 'gds_api/email_alert_api'
 
@@ -22,10 +21,6 @@ module GdsApi
 
     def licence_application_api(options = {})
       @licence_application_api ||= GdsApi::LicenceApplication.new(Plek.current.find("licensify"), options)
-    end
-
-    def need_api(options = {})
-      @need_api ||= GdsApi::NeedApi.new(Plek.current.find("needapi"), options)
     end
 
     def worldwide_api(options = {})
