@@ -1,3 +1,8 @@
+# Unreleased
+
+* Remove need-api helper
+  Need API is being retired
+
 # 47.9.1
 
 * Group Sentry errors by exception type
