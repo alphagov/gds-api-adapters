@@ -45,4 +45,9 @@ describe GdsApi::Support do
 
     assert_raises(GdsApi::HTTPServerError) { @api.create_named_contact({}) }
   end
+
+  it "gets the correct feedback URL" do
+    assert_equal("#{@base_api_url}/anonymous_feedback?path=foo",
+                 @api.feedback_url('foo'))
+  end
 end

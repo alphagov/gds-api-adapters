@@ -1,5 +1,6 @@
 # Unreleased
 
+* Resurrect `feedback_url` for Support (removed in 46.0.0)
 * Remove need-api helper
   Need API is being retired
 
