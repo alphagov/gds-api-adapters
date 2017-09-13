@@ -1,4 +1,4 @@
-# Unreleased
+# 48.0.0
 
 * Remove need-api helper
   Need API is being retired
