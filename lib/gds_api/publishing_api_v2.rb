@@ -205,6 +205,27 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json(links_url(content_id))
   end
 
+  # Returns an array of changes to links.
+  #
+  # The link changes can be filtered by link_type, source content_id,
+  # target content_id and user. A maximum of 250 changes will be
+  # returned.
+  #
+  # @param link_types [Array] Array of link_types to filter by.
+  # @param source_content_ids [Array] Array of source content ids to filter by.
+  # @param target_content_ids [Array] Array of target content ids to filter by.
+  # @param users [Array] User UIDs to filter by.
+  # @example
+  #
+  #   publishing_api.get_links_changes(
+  #     link_types: ['taxons'],
+  #     target_content_ids: ['a544d48b-1e9e-47fb-b427-7a987c658c14']
+  #   )
+  #
+  def get_links_changes(params)
+    get_json(links_changes_url(params))
+  end
+
   # Get expanded links
   #
   # Return the expanded links of the item.
@@ -384,6 +405,11 @@ private
   def links_url(content_id)
     validate_content_id(content_id)
     "#{endpoint}/v2/links/#{content_id}"
+  end
+
+  def links_changes_url(params = {})
+    query = query_string(params)
+    "#{endpoint}/v2/links/changes/#{query}"
   end
 
   def publish_url(content_id)
