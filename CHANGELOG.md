@@ -1,3 +1,9 @@
+# 49.0.0
+
+* Remove `GdsApi::GovUkDelivery` and helpers as `govuk-delivery` has been 
+retired in favour of `email-alert-api`
+* Add get_link_changes endpoint for publishing-api
+
 # 48.0.0
 
 * Resurrect `feedback_url` for Support (removed in 46.0.0)
