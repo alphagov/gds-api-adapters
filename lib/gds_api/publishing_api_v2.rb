@@ -409,7 +409,7 @@ private
 
   def links_changes_url(params = {})
     query = query_string(params)
-    "#{endpoint}/v2/links/changes/#{query}"
+    "#{endpoint}/v2/links/changes#{query}"
   end
 
   def publish_url(content_id)
