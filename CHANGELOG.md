@@ -1,4 +1,5 @@
-# Unreleased
+# 49.1.0
+
 * Remove trailing slash in call to get_link_changes
 
 # 49.0.0
