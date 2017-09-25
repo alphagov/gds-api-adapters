@@ -34,6 +34,18 @@ describe GdsApi::AssetManager do
     assert_requested(req)
   end
 
+  it "creates a Whitehall asset with a file" do
+    req = stub_request(:post, "#{base_api_url}/whitehall_assets").
+      with { |request|
+        request.body =~ %r{Content\-Disposition: form\-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent\-Type: text/plain}
+      }.to_return(body: JSON.dump(asset_manager_response), status: 201)
+
+    response = api.create_whitehall_asset(file: file_fixture, legacy_url_path: '/government/uploads/path/to/hello.txt')
+
+    assert_equal asset_url, response['asset']['id']
+    assert_requested(req)
+  end
+
   it "returns not found when an asset does not exist" do
     asset_manager_does_not_have_an_asset("not-really-here")
 
