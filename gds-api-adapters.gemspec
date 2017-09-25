@@ -23,7 +23,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'rest-client', '~> 2.0'
   s.add_dependency 'rack-cache'
 
-  s.add_development_dependency 'gem_publisher', '~> 1.5.0'
   s.add_development_dependency 'govuk-content-schema-test-helpers', '~> 1.5'
   s.add_development_dependency 'mocha', "> 1.0.0"
   s.add_development_dependency "minitest", "> 5.0.0"

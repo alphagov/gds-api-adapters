@@ -41,9 +41,3 @@ task :lint do
   sh "bundle exec govuk-lint-ruby --diff --cached --format clang"
 end
 
-require "gem_publisher"
-desc "Publish gem to rubygems.org if necessary"
-task :publish_gem do |_t|
-  gem = GemPublisher.publish_if_updated("gds-api-adapters.gemspec", :rubygems)
-  puts "Published #{gem}" if gem
-end
