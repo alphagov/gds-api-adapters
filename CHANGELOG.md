@@ -1,10 +1,14 @@
+# 49.2.0
+
+* Add GdsApi::AssetManager#create_whitehall_asset method (#752)
+
 # 49.1.0
 
 * Remove trailing slash in call to get_link_changes
 
 # 49.0.0
 
-* Remove `GdsApi::GovUkDelivery` and helpers as `govuk-delivery` has been 
+* Remove `GdsApi::GovUkDelivery` and helpers as `govuk-delivery` has been
 retired in favour of `email-alert-api`
 * Add get_link_changes endpoint for publishing-api
 
