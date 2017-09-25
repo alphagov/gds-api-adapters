@@ -1,3 +1,8 @@
+# Unreleased
+
+* Use 1.5.0 minimum of [govuk-content-schema-test-helpers](https://github.com/alphagov/govuk-content-schema-test-helpers)
+* Remove gem_publisher dependency since rake task is no longer used to publish gem
+
 # 49.2.0
 
 * Add GdsApi::AssetManager#create_whitehall_asset method (#752)
