@@ -1,3 +1,7 @@
+# Unreleased
+
+* Avoid the following warning: Overriding "Content-Type" header "application/json" with "multipart/form-data; boundary=----RubyFormBoundaryX7Na6WDQqG3kLfD7" due to payload
+
 # 49.3.0
 
 * Use 1.5.0 minimum of [govuk-content-schema-test-helpers](https://github.com/alphagov/govuk-content-schema-test-helpers)

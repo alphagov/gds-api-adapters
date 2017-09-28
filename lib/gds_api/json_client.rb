@@ -59,9 +59,13 @@ module GdsApi
     end
 
     def self.default_request_with_json_body_headers
-      self.default_request_headers.merge(
+      self.default_request_headers.merge(self.json_body_headers)
+    end
+
+    def self.json_body_headers
+      {
         'Content-Type' => 'application/json',
-      )
+      }
     end
 
     DEFAULT_TIMEOUT_IN_SECONDS = 4
@@ -134,6 +138,9 @@ module GdsApi
     #                  from the Net::HTTPResponse
     def do_json_request(method, url, params = nil, additional_headers = {}, &create_response)
       begin
+        if params
+          additional_headers.merge!(self.class.json_body_headers)
+        end
         response = do_request_with_cache(method, url, (params.to_json if params), additional_headers)
       rescue RestClient::Exception => e
         # Attempt to parse the body as JSON if possible
@@ -242,16 +249,9 @@ module GdsApi
         url: url,
       }
 
-      case method
-      when :get, :delete
-        default_headers = self.class.default_request_headers
-      else
-        default_headers = self.class.default_request_with_json_body_headers
-      end
-
       method_params[:payload] = params
       method_params = with_timeout(method_params)
-      method_params = with_headers(method_params, default_headers, additional_headers)
+      method_params = with_headers(method_params, self.class.default_request_headers, additional_headers)
       method_params = with_auth_options(method_params)
       if URI.parse(url).is_a? URI::HTTPS
         method_params = with_ssl_options(method_params)

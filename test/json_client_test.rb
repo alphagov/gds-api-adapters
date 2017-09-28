@@ -762,6 +762,22 @@ class JsonClientTest < MiniTest::Spec
     assert_equal "hello", response["test"]
   end
 
+  def test_client_does_not_send_content_type_header_for_multipart_post
+    RestClient::Request.expects(:execute).with do |args|
+      args[:headers]['Content-Type'].nil?
+    end
+
+    @client.post_multipart('http://example.com', {})
+  end
+
+  def test_client_does_not_send_content_type_header_for_multipart_put
+    RestClient::Request.expects(:execute).with do |args|
+      args[:headers]['Content-Type'].nil?
+    end
+
+    @client.put_multipart('http://example.com', {})
+  end
+
   def test_client_can_post_multipart_responses
     url = "http://some.endpoint/some.json"
     stub_request(:post, url).
