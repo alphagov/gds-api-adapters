@@ -246,7 +246,11 @@ module GdsApi
       when :get, :delete
         default_headers = self.class.default_request_headers
       else
-        default_headers = self.class.default_request_with_json_body_headers
+        if params.respond_to?(:has_key?) && params[:multipart] == true
+          default_headers = self.class.default_request_headers
+        else
+          default_headers = self.class.default_request_with_json_body_headers
+        end
       end
 
       method_params[:payload] = params
