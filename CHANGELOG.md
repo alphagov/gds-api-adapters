@@ -1,3 +1,9 @@
+# Unreleased
+
+* Document new optional `legacy_etag` & `legacy_last_modified` attributes that
+can be passed into `GdsApi::AssetManager#create_whitehall_asset` within the
+`asset` Hash
+
 # 49.3.1
 
 * Avoid the following warning: Overriding "Content-Type" header "application/json" with "multipart/form-data; boundary=----RubyFormBoundaryX7Na6WDQqG3kLfD7" due to payload
