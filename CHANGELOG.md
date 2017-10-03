@@ -1,4 +1,4 @@
-# Unreleased
+# 49.3.2
 
 * Document new optional `legacy_etag` & `legacy_last_modified` attributes that
 can be passed into `GdsApi::AssetManager#create_whitehall_asset` within the
