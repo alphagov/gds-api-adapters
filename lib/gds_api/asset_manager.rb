@@ -48,7 +48,7 @@ class GdsApi::AssetManager < GdsApi::Base
   end
 
   # Creates a Whitehall asset given a hash with +file+ & +legacy_url_path+
-  # attributes
+  # (required) and +legacy_etag+ & +legacy_last_modified+ (optional) attributes
   #
   # Makes a +POST+ request to the asset manager api to create a Whitehall asset.
   #
@@ -73,12 +73,22 @@ class GdsApi::AssetManager < GdsApi::Base
   # supplied path is not valid, a `GdsApi::HTTPUnprocessableEntity` exception
   # will be raised.
   #
+  # The optional +legacy_etag+ & +legacy_last_modified+ attributes allow the
+  # client to specify the values that should be used in the `ETag` &
+  # `Last-Modified` response headers when the asset is requested via its public
+  # URL. They are only intended to be used for migrating existing Whitehall
+  # assets to Asset Manager so that we can avoid wholesale cache invalidation.
+  # New Whitehall assets should not specify values for these attributes; Asset
+  # Manager will generate suitable values.
+  #
   # Note: this endpoint should only be used by the Whitehall Admin app and not
   # by any other publishing apps.
   #
   # @param asset [Hash] The attributes for the asset to send to the api. Must
   #   contain +file+, which behaves like a +File+, and +legacy_url_path+, a
-  #   +String+. All other attributes will be ignored.
+  #   +String+. May contain +legacy_etag+, a +String+, and
+  #   +legacy_last_modified+, a +Time+ object. All other attributes will be
+  #   ignored.
   #
   # @return [GdsApi::Response] The wrapped http response from the api. Behaves
   #   both as a +Hash+ and an +OpenStruct+, and responds to the following:
