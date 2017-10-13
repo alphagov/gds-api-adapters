@@ -54,6 +54,14 @@ describe GdsApi::AssetManager do
     end
   end
 
+  it "raises not found when a Whitehall asset does not exist" do
+    asset_manager_does_not_have_a_whitehall_asset("/path/to/non-existent-asset.png")
+
+    assert_raises GdsApi::HTTPNotFound do
+      api.whitehall_asset("/path/to/non-existent-asset.png")
+    end
+  end
+
   describe "an asset exists" do
     before do
       asset_manager_has_an_asset(
@@ -82,6 +90,21 @@ describe GdsApi::AssetManager do
       assert_equal "photo.jpg", asset['name']
       assert_equal "image/jpeg", asset['content_type']
       assert_equal "http://fooey.gov.uk/media/photo.jpg", asset['file_url']
+    end
+  end
+
+  describe "a Whitehall asset exists" do
+    before do
+      asset_manager_has_a_whitehall_asset(
+        "/government/uploads/photo.jpg",
+        "id" => "asset-id"
+      )
+    end
+
+    it "retrieves an asset" do
+      asset = api.whitehall_asset("/government/uploads/photo.jpg")
+
+      assert_equal "asset-id", asset['id']
     end
   end
 
