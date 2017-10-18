@@ -1,3 +1,7 @@
+# 49.6.0
+
+* Add GdsApi::AssetManager#whitehall_asset method for retrieving Whitehall assets from Asset Manager.
+
 # 49.5.0
 
 * Allow rummager search to pass additional headers
