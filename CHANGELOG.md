@@ -1,3 +1,7 @@
+# 49.5.0
+
+* Allow rummager search to pass additional headers
+
 # 49.4.0
 
 * Document new optional `legacy_etag` & `legacy_last_modified` attributes that
