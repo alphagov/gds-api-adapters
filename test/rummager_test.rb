@@ -132,6 +132,12 @@ describe GdsApi::Rummager do
     assert_requested :get, /order=-public_timestamp/
   end
 
+  it "#search can pass additional headers" do
+    GdsApi::Rummager.new("http://example.com").search({ q: "query" }, "authorization" => "token")
+
+    assert_requested :get, /.*/, headers: { "authorization" => "token" }
+  end
+
   it "#delete_content removes a document" do
     request = stub_request(:delete, "http://example.com/content?link=/foo/bar")
 
