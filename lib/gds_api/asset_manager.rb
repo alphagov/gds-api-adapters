@@ -127,6 +127,18 @@ class GdsApi::AssetManager < GdsApi::Base
     post_multipart("#{base_url}/whitehall_assets", asset: asset)
   end
 
+  # Fetches a Whitehall asset given the legacy URL path
+  #
+  # @param legacy_url_path [String] The Whitehall asset identifier.
+  # @return [GdsApi::Response] A response object containing the parsed JSON
+  #   response. If the asset cannot be found, +GdsApi::HTTPNotFound+ will be
+  #   raised.
+  #
+  # @raise [HTTPErrorResponse] if the request returns an error
+  def whitehall_asset(legacy_url_path)
+    get_json("#{base_url}/whitehall_assets/#{legacy_url_path}")
+  end
+
   # Updates an asset given a hash with one +file+ attribute
   #
   # Makes a +PUT+ request to the asset manager api to update an asset.
