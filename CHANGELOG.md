@@ -1,3 +1,4 @@
+# 49.7.0
 
 * Add GdsApi::LinkCheckerApi#upsert_resource_monitor method for creating/updating a collection of monitored links for an application.
 
