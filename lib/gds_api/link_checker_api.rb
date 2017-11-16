@@ -89,6 +89,37 @@ class GdsApi::LinkCheckerApi < GdsApi::Base
     )
   end
 
+  # Update or create a set of links to be monitored for a resource.
+  #
+  # Makes a +POST+ request to the link checker api to create a resource monitor.
+  #
+  # @param links [Array] A list of URIs to monitor.
+  # @param reference [String] A unique id for the resource being monitored
+  # @param app [String] The name of the service the call originated e.g. 'whitehall'
+  # @return [MonitorReport] A +SimpleDelegator+ of the +GdsApi::Response+ which
+  #   responds to:
+  #     :id            the ID of the created resource monitor
+  #
+  # @raise [HTTPErrorResponse] if the request returns an error
+
+  def upsert_resource_monitor(links, app, reference)
+    payload = {
+      links: links,
+      app: app,
+      reference: reference
+    }
+
+    response = post_json("#{endpoint}/monitor", payload)
+
+    MonitorReport.new(response.to_hash)
+  end
+
+  class MonitorReport < SimpleDelegator
+    def id
+      self["id"]
+    end
+  end
+
   class LinkReport < SimpleDelegator
     def uri
       self["uri"]
