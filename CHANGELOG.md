@@ -1,3 +1,8 @@
+# Unreleased
+
+* Change GdsApi::Router.delete\_route to take an optional hard\_delete
+  argument, removing support for the deprecated type argument.
+
 # 49.8.0
 * Add GdsApi::Rummager#search_enum method to expose search results as an enumerator.
 

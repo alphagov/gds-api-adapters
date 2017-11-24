@@ -53,15 +53,12 @@ class GdsApi::Router < GdsApi::Base
     response
   end
 
-  def delete_route(path, options_or_deprecated_type = {}, deprecated_options = {})
-    if options_or_deprecated_type.is_a?(String)
-      $stderr.puts "DEPRECATION WARNING: passing type to GdsApi::Router#delete_route is deprecated and will be removed in a future version. Caller: #{caller[0]}"
-      options = deprecated_options
-    else
-      options = options_or_deprecated_type
-    end
-    response = delete_json("#{endpoint}/routes?incoming_path=#{CGI.escape(path)}")
-    commit_routes if options[:commit]
+  def delete_route(path, hard_delete: false, commit: false)
+    url = "#{endpoint}/routes?incoming_path=#{CGI.escape(path)}"
+    url += "&hard_delete=true" if hard_delete
+
+    response = delete_json(url)
+    commit_routes if commit
     response
   end
 
