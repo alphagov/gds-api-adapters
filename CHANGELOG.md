@@ -1,3 +1,6 @@
+# 49.8.0
+* Add GdsApi::Rummager#search_enum method to expose search results as an enumerator.
+
 # 49.7.0
 
 * Add GdsApi::LinkCheckerApi#upsert_resource_monitor method for creating/updating a collection of monitored links for an application.
