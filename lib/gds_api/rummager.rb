@@ -14,6 +14,30 @@ module GdsApi
       get_json(request_url, additional_headers)
     end
 
+    # Perform a search, returning the results as an enumerator.
+    #
+    # The enumerator abstracts away rummager's pagination and fetches new pages when
+    # necessary.
+    #
+    # @param args [Hash] A valid search query. See Rummager documentation for options.
+    # @param page_size [Integer] Number of results in each page.
+    #
+    # @see https://github.com/alphagov/rummager/blob/master/docs/search-api.md
+    def search_enum(args, page_size: 100, additional_headers: {})
+      Enumerator.new do |yielder|
+        (0..Float::INFINITY).step(page_size).each do |index|
+          search_params = args.merge(start: index.to_i, count: page_size)
+          results = search(search_params, additional_headers).to_h.fetch('results', [])
+          results.each do |result|
+            yielder << result
+          end
+          if results.count < page_size
+            break
+          end
+        end
+      end
+    end
+
     # Advanced search.
     #
     # @deprecated Only in use by Whitehall. Use the `#search` method.
