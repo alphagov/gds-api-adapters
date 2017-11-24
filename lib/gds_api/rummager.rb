@@ -8,7 +8,7 @@ module GdsApi
     #
     # @param args [Hash] A valid search query. See Rummager documentation for options.
     #
-    # @see https://github.com/alphagov/rummager/blob/master/docs/search-api.md
+    # @see https://github.com/alphagov/rummager/blob/master/doc/search-api.md
     def search(args, additional_headers = {})
       request_url = "#{base_url}/search.json?#{Rack::Utils.build_nested_query(args)}"
       get_json(request_url, additional_headers)
@@ -22,7 +22,7 @@ module GdsApi
     # @param args [Hash] A valid search query. See Rummager documentation for options.
     # @param page_size [Integer] Number of results in each page.
     #
-    # @see https://github.com/alphagov/rummager/blob/master/docs/search-api.md
+    # @see https://github.com/alphagov/rummager/blob/master/doc/search-api.md
     def search_enum(args, page_size: 100, additional_headers: {})
       Enumerator.new do |yielder|
         (0..Float::INFINITY).step(page_size).each do |index|
@@ -54,7 +54,7 @@ module GdsApi
     # @param document [Hash] The document to add. Must match the rummager schema matchin the `type` parameter and contain a `link` field.
     # @return [GdsApi::Response] A status code of 202 indicates the document has been successfully queued.
     #
-    # @see https://github.com/alphagov/rummager/blob/master/docs/documents.md
+    # @see https://github.com/alphagov/rummager/blob/master/doc/documents.md
     def add_document(type, id, document)
       post_json(
         documents_url,
@@ -72,7 +72,7 @@ module GdsApi
     # and contacts, which may be deleted with `delete_document`.
     #
     # @param base_path Base path of the page on GOV.UK.
-    # @see https://github.com/alphagov/rummager/blob/master/docs/content-api.md
+    # @see https://github.com/alphagov/rummager/blob/master/doc/content-api.md
     def delete_content(base_path)
       request_url = "#{base_url}/content?link=#{base_path}"
       delete_json(request_url)
@@ -90,7 +90,7 @@ module GdsApi
     # and contacts.
     #
     # @param base_path [String] Base path of the page on GOV.UK.
-    # @see https://github.com/alphagov/rummager/blob/master/docs/content-api.md
+    # @see https://github.com/alphagov/rummager/blob/master/doc/content-api.md
     def get_content(base_path)
       request_url = "#{base_url}/content?link=#{base_path}"
       get_json(request_url)
