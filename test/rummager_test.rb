@@ -138,6 +138,39 @@ describe GdsApi::Rummager do
     assert_requested :get, /.*/, headers: { "authorization" => "token" }
   end
 
+  # tests for search_enum
+  it "#search_enum returns two pages - last page is half full" do
+    stub_request(:get, /example.com\/search/)
+      .with(query: hash_including(start: '0', count: '2'))
+      .to_return(body: { 'results' => [{ 'title' => 't1' }, { 'title' => 't2' }] }.to_json)
+
+    stub_request(:get, /example.com\/search/)
+      .with(query: hash_including(start: '2', count: '2'))
+      .to_return(body: { 'results' => [{ 'title' => 't3' }] }.to_json)
+
+    search_results = [{ 'title' => 't1' }, { 'title' => 't2' }, { 'title' => 't3' }]
+    results = GdsApi::Rummager.new("http://example.com").search_enum({}, page_size: 2)
+    assert_equal search_results, results.to_a
+  end
+
+  it "#search_enum returns two pages - last page is full" do
+    stub_request(:get, /example.com\/search/)
+      .with(query: hash_including(start: '0', count: '2'))
+      .to_return(body: { 'results' => [{ 'title' => 't1' }, { 'title' => 't2' }] }.to_json)
+
+    stub_request(:get, /example.com\/search/)
+      .with(query: hash_including(start: '2', count: '2'))
+      .to_return(body: { 'results' => [{ 'title' => 't3' }, { 'title' => 't4' }] }.to_json)
+
+    stub_request(:get, /example.com\/search/)
+      .with(query: { start: '4', count: '2' })
+      .to_return(body: { 'results' => [] }.to_json)
+
+    search_results = [{ 'title' => 't1' }, { 'title' => 't2' }, { 'title' => 't3' }, { 'title' => 't4' }]
+    results = GdsApi::Rummager.new("http://example.com").search_enum({}, page_size: 2)
+    assert_equal search_results, results.to_a
+  end
+
   it "#delete_content removes a document" do
     request = stub_request(:delete, "http://example.com/content?link=/foo/bar")
 
