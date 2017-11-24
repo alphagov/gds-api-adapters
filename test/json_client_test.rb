@@ -646,7 +646,8 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_use_basic_auth
     client = GdsApi::JsonClient.new(basic_auth: { user: 'user', password: 'password' })
 
-    stub_request(:put, "http://user:password@some.endpoint/some.json").
+    stub_request(:put, "http://some.endpoint/some.json").
+      with(basic_auth: %w{user password}).
       to_return(body: '{"a":1}', status: 200)
 
     response = client.put_json("http://some.endpoint/some.json", {})
