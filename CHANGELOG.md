@@ -1,4 +1,4 @@
-# Unreleased
+# 50.0.0
 
 * Remove GdsApi::NeedApi
 * Change GdsApi::Router.delete\_route to take an optional hard\_delete
