@@ -261,4 +261,30 @@ describe GdsApi::EmailAlertApi do
       assert_requested(@stubbed_request)
     end
   end
+
+  describe "unsubscribing" do
+    describe "with an existing subscription" do
+      it "returns a 204" do
+        uuid = SecureRandom.uuid
+        email_alert_api_unsubscribes_a_subscription(uuid)
+        api_response = api_client.unsubscribe(uuid)
+
+        assert_equal(
+          api_response.code,
+          204
+        )
+      end
+    end
+
+    describe "without an existing subscription" do
+      it "returns a 404" do
+        uuid = SecureRandom.uuid
+        email_alert_api_has_no_subscription_for_uuid(uuid)
+
+        assert_raises GdsApi::HTTPNotFound do
+          api_client.unsubscribe(uuid)
+        end
+      end
+    end
+  end
 end

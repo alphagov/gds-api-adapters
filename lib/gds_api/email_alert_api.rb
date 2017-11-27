@@ -88,6 +88,15 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     get_json("#{endpoint}/topic-matches.json?#{query_string}")
   end
 
+  # Unsubscribe
+  # #
+  # @param uuid Subscription uuid
+  #
+  # @return [Hash] deleted
+  def unsubscribe(uuid)
+    post_json("#{endpoint}/unsubscribe/#{uuid}")
+  end
+
 private
 
   def nested_query_string(params)

@@ -93,6 +93,22 @@ module GdsApi
         )
       end
 
+      def email_alert_api_unsubscribes_a_subscription(uuid)
+        stub_request(:post, unsubscribe_url(uuid))
+          .with(body: "{}")
+          .to_return(status: 204)
+      end
+
+      def email_alert_api_has_no_subscription_for_uuid(uuid)
+        stub_request(:post, unsubscribe_url(uuid))
+          .with(body: "{}")
+          .to_return(status: 404)
+      end
+
+      def assert_unsubscribed(uuid)
+        assert_requested(:post, unsubscribe_url(uuid), times: 1)
+      end
+
     private
 
       def subscriber_lists_url(attributes = nil)
@@ -121,6 +137,10 @@ module GdsApi
 
       def notifications_url
         EMAIL_ALERT_API_ENDPOINT + "/notifications"
+      end
+
+      def unsubscribe_url(uuid)
+        EMAIL_ALERT_API_ENDPOINT + "/unsubscribe/#{uuid}"
       end
     end
   end
