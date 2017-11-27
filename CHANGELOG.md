@@ -1,5 +1,6 @@
 # Unreleased
 
+* Remove GdsApi::NeedApi
 * Change GdsApi::Router.delete\_route to take an optional hard\_delete
   argument, removing support for the deprecated type argument.
 
