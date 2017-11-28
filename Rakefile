@@ -40,4 +40,3 @@ desc "Run the linter against changed files"
 task :lint do
   sh "bundle exec govuk-lint-ruby --diff --cached --format clang"
 end
-
