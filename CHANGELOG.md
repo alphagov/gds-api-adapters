@@ -1,3 +1,7 @@
+# 50.1.0
+
+* Add GdsApi::EmailAlertApi#unsubscribe to allow users to unsubscribe from emails.
+
 # 50.0.0
 
 * Remove GdsApi::NeedApi
