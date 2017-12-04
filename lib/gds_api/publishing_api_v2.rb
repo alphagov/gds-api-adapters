@@ -315,6 +315,28 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json("#{endpoint}/v2/content#{query}")
   end
 
+  # Returns an Enumerator of content items for the provided
+  # query string parameters.
+  #
+  # @param params [Hash]
+  #
+  # @return [Enumerator] an enumerator of content items
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2content
+  def get_content_items_enum(params)
+    Enumerator.new do |yielder|
+      (1..Float::INFINITY).each do |index|
+        merged_params = params.merge(page: index)
+        page = get_content_items(merged_params).to_h
+        results = page.fetch('results', [])
+        results.each do |result|
+          yielder << result
+        end
+        break if page.fetch('pages') <= index
+      end
+    end
+  end
+
   # FIXME: Add documentation
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2linkables
