@@ -287,4 +287,38 @@ describe GdsApi::EmailAlertApi do
       end
     end
   end
+
+  describe "subscribing and a subscription is created" do
+    it "returns a 201 and the subscription id" do
+      subscribable_id = 5
+      address = "test@test.com"
+      created_subscription_id = 1
+
+      email_alert_api_creates_a_subscription(
+        subscribable_id,
+        address,
+        created_subscription_id
+      )
+      api_response = api_client.subscribe(subscribable_id: subscribable_id, address: address)
+      assert_equal(201, api_response.code)
+      assert_equal({ "subscription_id" => 1 }, api_response.to_h)
+    end
+  end
+
+  describe "subscribing and a subscription already exists" do
+    it "returns a 200 and the subscription id" do
+      subscribable_id = 5
+      address = "test@test.com"
+      existing_subscription_id = 1
+
+      email_alert_api_creates_an_existing_subscription(
+        subscribable_id,
+        address,
+        existing_subscription_id
+      )
+      api_response = api_client.subscribe(subscribable_id: subscribable_id, address: address)
+      assert_equal(200, api_response.code)
+      assert_equal({ "subscription_id" => 1 }, api_response.to_h)
+    end
+  end
 end

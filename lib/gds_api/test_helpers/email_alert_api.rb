@@ -105,8 +105,31 @@ module GdsApi
           .to_return(status: 404)
       end
 
+      def email_alert_api_creates_a_subscription(subscribable_id, address, returned_subscription_id)
+        stub_request(:post, subscribe_url)
+          .with(
+            body: { subscribable_id: subscribable_id, address: address }.to_json
+        ).to_return(status: 201, body: { subscription_id: returned_subscription_id }.to_json)
+      end
+
+      def email_alert_api_creates_an_existing_subscription(subscribable_id, address, returned_subscription_id)
+        stub_request(:post, subscribe_url)
+          .with(
+            body: { subscribable_id: subscribable_id, address: address }.to_json
+        ).to_return(status: 200, body: { subscription_id: returned_subscription_id }.to_json)
+      end
+
       def assert_unsubscribed(uuid)
         assert_requested(:post, unsubscribe_url(uuid), times: 1)
+      end
+
+      def assert_subscribed(subscribable_id, address)
+        assert_requested(:post, subscribe_url) do |req|
+          JSON.parse(req.body).symbolize_keys == {
+            subscribable_id: subscribable_id,
+            address: address
+          }
+        end
       end
 
     private
@@ -141,6 +164,10 @@ module GdsApi
 
       def unsubscribe_url(uuid)
         EMAIL_ALERT_API_ENDPOINT + "/unsubscribe/#{uuid}"
+      end
+
+      def subscribe_url
+        EMAIL_ALERT_API_ENDPOINT + "/subscriptions"
       end
     end
   end
