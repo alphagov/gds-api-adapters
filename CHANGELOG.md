@@ -1,3 +1,7 @@
+# 50.3.0
+
+* Add GdsApi::PublishingApiV2#get_content_items_enum to enumerate content items
+
 # 50.2.0
 
 * Add GdsApi::EmailAlertApi#subscribe to allow users to subscribe to emails
