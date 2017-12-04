@@ -1,4 +1,4 @@
-Unreleased
+# 50.2.0
 
 * Add GdsApi::EmailAlertApi#subscribe to allow users to subscribe to emails
 
