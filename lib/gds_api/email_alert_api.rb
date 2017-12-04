@@ -97,6 +97,17 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     post_json("#{endpoint}/unsubscribe/#{uuid}")
   end
 
+  # Subscribe
+  #
+  # @return [Hash] subscription_id
+  def subscribe(subscribable_id:, address:)
+    post_json(
+      "#{endpoint}/subscriptions",
+      subscribable_id: subscribable_id,
+      address: address,
+    )
+  end
+
 private
 
   def nested_query_string(params)
