@@ -65,6 +65,15 @@ class GdsApi::SupportApi < GdsApi::Base
     get_json("#{endpoint}/organisations/#{organisation_slug}")
   end
 
+  def document_type_list
+    get_json("#{endpoint}/anonymous-feedback/document-types")
+  end
+
+  def document_type_summary(document_type, options = {})
+    uri = "#{endpoint}/anonymous-feedback/document-types/#{document_type}" + query_string(options)
+    get_json(uri)
+  end
+
   def feedback_export_request(id)
     get_json("#{endpoint}/anonymous-feedback/export-requests/#{id}")
   end

@@ -61,12 +61,12 @@ describe GdsApi::SupportApi do
   describe "GET /anonymous-feedback" do
     it "fetches anonymous feedback" do
       stub_get = stub_support_api_anonymous_feedback(
-        path_prefix: "/vat-rates",
+        path_prefixes: ["/vat-rates"],
         page: 55,
       )
 
       @api.anonymous_feedback(
-        path_prefix: "/vat-rates",
+        path_prefixes: ["/vat-rates"],
         page: 55,
       )
 
@@ -153,6 +153,39 @@ describe GdsApi::SupportApi do
       stub_get = stub_support_api_organisation("foo")
 
       @api.organisation("foo")
+
+      assert_requested(stub_get)
+    end
+  end
+
+  describe "GET /anonymous-feedback/document-types" do
+    it "fetches a list of document types" do
+      stub_get = stub_support_api_document_type_list
+
+      @api.document_type_list
+
+      assert_requested(stub_get)
+    end
+  end
+
+  describe "GET /anonymous-feedback/document-types/:document_type" do
+    it "fetches document type summary" do
+      document_type = "smart_answer"
+
+      stub_get = stub_support_api_anonymous_feedback_doc_type_summary(document_type)
+
+      @api.document_type_summary(document_type)
+
+      assert_requested(stub_get)
+    end
+
+    it "accepts an ordering parameter" do
+      document_type = "smart_answer"
+      ordering = "last_30_days"
+
+      stub_get = stub_support_api_anonymous_feedback_doc_type_summary(document_type, ordering)
+
+      @api.document_type_summary(document_type, ordering: ordering)
 
       assert_requested(stub_get)
     end
