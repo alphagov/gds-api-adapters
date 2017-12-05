@@ -321,4 +321,30 @@ describe GdsApi::EmailAlertApi do
       assert_equal({ "subscription_id" => 1 }, api_response.to_h)
     end
   end
+
+  describe "get_subscribable when one exists" do
+    it "returns it" do
+      email_alert_api_has_subscribable(
+        reference: "test123",
+        returned_attributes: {
+          id: 1,
+          gov_delivery_id: "test123",
+        }
+      )
+      api_response = api_client.get_subscribable(reference: "test123")
+      assert_equal(200, api_response.code)
+      parsed_body = api_response.to_h
+      assert_equal(1, parsed_body["subscribable"]["id"])
+    end
+  end
+
+  describe "get_subscribable when one doesn't exist" do
+    it "returns 404" do
+      email_alert_api_does_not_have_subscribable(reference: "test123")
+
+      assert_raises GdsApi::HTTPNotFound do
+        api_client.get_subscribable(reference: "test123")
+      end
+    end
+  end
 end

@@ -108,6 +108,27 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     )
   end
 
+  # Get a Subscribable
+  #
+  # @return [Hash] subscribable: {
+  #  id
+  #  title
+  #  gov_delivery_id
+  #  created_at
+  #  updated_at
+  #  document_type
+  #  tags
+  #  links
+  #  email_document_supertype
+  #  government_document_supertype
+  #  subscriber_count
+  # }
+  def get_subscribable(reference:)
+    get_json(
+      "#{endpoint}/subscribables/#{reference}"
+    )
+  end
+
 private
 
   def nested_query_string(params)

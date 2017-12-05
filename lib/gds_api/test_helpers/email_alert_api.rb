@@ -132,6 +132,21 @@ module GdsApi
         end
       end
 
+      def email_alert_api_has_subscribable(reference:, returned_attributes:)
+        stub_request(:get, subscribable_url(reference))
+          .to_return(
+            status: 200,
+            body: {
+              subscribable: returned_attributes
+            }.to_json
+        )
+      end
+
+      def email_alert_api_does_not_have_subscribable(reference:)
+        stub_request(:get, subscribable_url(reference))
+          .to_return(status: 404)
+      end
+
     private
 
       def subscriber_lists_url(attributes = nil)
@@ -168,6 +183,10 @@ module GdsApi
 
       def subscribe_url
         EMAIL_ALERT_API_ENDPOINT + "/subscriptions"
+      end
+
+      def subscribable_url(reference)
+        EMAIL_ALERT_API_ENDPOINT + "/subscribables/#{reference}"
       end
     end
   end
