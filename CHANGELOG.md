@@ -1,4 +1,4 @@
-## Unreleased
+# 50.4.0
 
 * Add GdsApi::EmailAlertApi#get_subscribable to retrieve subscribable 
   (currently SubscriberList in the api) by `gov_delivery_id` 
