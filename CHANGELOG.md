@@ -1,3 +1,9 @@
+## Unreleased
+
+* Add GdsApi::EmailAlertApi#get_subscribable to retrieve subscribable 
+  (currently SubscriberList in the api) by `gov_delivery_id` 
+  (called `reference:` here as we will be renaming it in the API)
+
 # 50.3.0
 
 * Add GdsApi::PublishingApiV2#get_content_items_enum to enumerate content items
