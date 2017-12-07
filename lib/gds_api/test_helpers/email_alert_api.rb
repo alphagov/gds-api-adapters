@@ -119,6 +119,13 @@ module GdsApi
         ).to_return(status: 200, body: { subscription_id: returned_subscription_id }.to_json)
       end
 
+      def email_alert_api_refuses_to_create_subscription(subscribable_id, address)
+        stub_request(:post, subscribe_url)
+          .with(
+            body: { subscribable_id: subscribable_id, address: address }.to_json
+        ).to_return(status: 422)
+      end
+
       def assert_unsubscribed(uuid)
         assert_requested(:post, unsubscribe_url(uuid), times: 1)
       end

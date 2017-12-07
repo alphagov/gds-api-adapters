@@ -322,6 +322,16 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
+  describe "subscribing with an invalid address" do
+    it "raises an unprocessable entity error" do
+      email_alert_api_refuses_to_create_subscription(123, "invalid")
+
+      assert_raises GdsApi::HTTPUnprocessableEntity do
+        api_client.subscribe(subscribable_id: 123, address: "invalid")
+      end
+    end
+  end
+
   describe "get_subscribable when one exists" do
     it "returns it" do
       email_alert_api_has_subscribable(
