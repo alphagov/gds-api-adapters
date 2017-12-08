@@ -1,7 +1,13 @@
+# 50.5.0
+
+* Add #email_alert_api_refuses_to_create_subscription test helper for
+  email-alert-api to simulate an error condition when trying to create
+  a subscription.
+
 # 50.4.0
 
-* Add GdsApi::EmailAlertApi#get_subscribable to retrieve subscribable 
-  (currently SubscriberList in the api) by `gov_delivery_id` 
+* Add GdsApi::EmailAlertApi#get_subscribable to retrieve subscribable
+  (currently SubscriberList in the api) by `gov_delivery_id`
   (called `reference:` here as we will be renaming it in the API)
 
 # 50.3.0
