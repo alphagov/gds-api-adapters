@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add `with_drafts` optional parameter to GdsApi::PublishingApiV2#lookup_content_ids and GdsApi::PublishingApiV2#lookup_content_id
+
 # 50.5.0
 
 * Add #email_alert_api_refuses_to_create_subscription test helper for
