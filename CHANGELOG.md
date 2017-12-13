@@ -1,4 +1,4 @@
-# Unreleased
+# 50.6.0
 
 * Add `with_drafts` optional parameter to GdsApi::PublishingApiV2#lookup_content_ids and GdsApi::PublishingApiV2#lookup_content_id
 
