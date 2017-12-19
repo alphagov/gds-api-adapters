@@ -1,4 +1,4 @@
-# Unreleased
+# 50.7.0
 
 * Add GdsApi::SupportApi#document_type_list to retrieve list of formats for content items
 * Add GdsApi::SupportApi#document_type_summary to retrieve feedback associated with content items of a certain format.
