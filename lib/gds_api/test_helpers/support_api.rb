@@ -80,13 +80,22 @@ module GdsApi
       end
 
       def stub_support_api_organisations_list(response_body = nil)
-        response_body ||= [{
-          slug: "cabinet-office",
-          web_url: "https://www.gov.uk/government/organisations/cabinet-office",
-          title: "Cabinet Office",
-          acronym: "CO",
-          govuk_status: "live"
-        }]
+        response_body ||= [
+          {
+            slug: "cabinet-office",
+            web_url: "https://www.gov.uk/government/organisations/cabinet-office",
+            title: "Cabinet Office",
+            acronym: "CO",
+            govuk_status: "live"
+          },
+          {
+            slug: "gds",
+            web_url: "https://www.gov.uk/government/organisations/gds",
+            title: "Government Digital Service",
+            acronym: "GDS",
+            govuk_status: "live"
+          }
+        ]
 
         stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/organisations").
           to_return(status: 200, body: response_body.to_json)
@@ -103,6 +112,20 @@ module GdsApi
 
         stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/organisations/#{slug}").
           to_return(status: 200, body: response_body.to_json)
+      end
+
+      def stub_support_api_document_type_list(response_body = nil)
+        response_body ||= %w(case_study detailed_guide smart_answer)
+
+        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/document-types").
+            to_return(status: 200, body: response_body.to_json)
+      end
+
+      def stub_support_api_anonymous_feedback_doc_type_summary(document_type, ordering = nil, response_body = nil)
+        uri = "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/document-types/#{document_type}"
+        uri << "?ordering=#{ordering}" if ordering
+        stub_http_request(:get, uri).
+            to_return(status: 200, body: response_body.to_json)
       end
 
       def stub_support_api_feedback_export_request(id, response_body = nil)

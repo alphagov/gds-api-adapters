@@ -1,3 +1,8 @@
+# Unreleased
+
+* Add GdsApi::SupportApi#document_type_list to retrieve list of formats for content items
+* Add GdsApi::SupportApi#document_type_summary to retrieve feedback associated with content items of a certain format.
+
 # 50.6.0
 
 * Add `with_drafts` optional parameter to GdsApi::PublishingApiV2#lookup_content_ids and GdsApi::PublishingApiV2#lookup_content_id
