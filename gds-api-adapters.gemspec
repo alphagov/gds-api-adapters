@@ -35,6 +35,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'simplecov-rcov'
   s.add_development_dependency 'timecop', '~> 0.9.1'
   s.add_development_dependency 'webmock', '~> 3.1.1'
+  # Versions of webrick > 1.3.1 only work with ruby >= 2.3.
+  # We specify webrick to be 1.3.1 here because in our CI builds we are testing with ruby versions 2.1 and 2.2.
+  s.add_development_dependency 'webrick', '1.3.1'
 
   s.add_development_dependency 'pact', '1.19.2'
   s.add_development_dependency 'pact-mock_service', '2.6.2'
