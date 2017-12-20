@@ -4,6 +4,66 @@ require 'rack/utils'
 module GdsApi
   # @api documented
   class Rummager < Base
+    # @api documented
+    class V1 < SimpleDelegator
+      def add_document(type, id, document)
+        post_json(
+          documents_url,
+          document.merge(
+            _type: type,
+            _id: id,
+          )
+        )
+      end
+
+      def delete_document(type, id)
+        delete_json(
+          "#{documents_url}/#{id}",
+          _type: type,
+        )
+      end
+    end
+
+    # @api documented
+    class V2 < SimpleDelegator
+      class InvalidIndex < StandardError; end
+
+      def add_document(type, id, document, index_name)
+        raise(InvalidIndex, index_name) unless index_name == 'metasearch'
+        post_json(
+          "#{base_url}/v2/metasearch/documents",
+          document.merge(
+            _type: type,
+            _id: id,
+          )
+        )
+      end
+
+      def delete_document(type, id, index_name)
+        raise(InvalidIndex, index_name) unless index_name == 'metasearch'
+        delete_json(
+          "#{base_url}/v2/metasearch/documents/#{id}",
+          _type: type,
+        )
+      end
+    end
+
+    DEFAULT_API_VERSION = 'V1'.freeze
+    API_VERSIONS = {
+      'V1' => GdsApi::Rummager::V1,
+      'V2' => GdsApi::Rummager::V2,
+    }.freeze
+    class UnknownAPIVersion < StandardError; end
+
+    def initialize(endpoint_url, options = {})
+      super
+      # The API version provides a simple wrapper around this base class so that we
+      # can still access the shared methods present in this class.
+      version = options.fetch(:api_version, DEFAULT_API_VERSION)
+      api_class = API_VERSIONS[version] || raise(UnknownAPIVersion)
+      @api = api_class.new(self)
+    end
+
     # Perform a search.
     #
     # @param args [Hash] A valid search query. See Rummager documentation for options.
@@ -52,17 +112,13 @@ module GdsApi
     # @param type [String] The rummager/elasticsearch document type.
     # @param id [String] The rummager/elasticsearch id. Typically the same as the `link` field, but this is not strictly enforced.
     # @param document [Hash] The document to add. Must match the rummager schema matchin the `type` parameter and contain a `link` field.
+    # @param index_name (V2 only) Name of the index to be deleted from on
+    #   GOV.UK - we only allow deletion from metasearch
     # @return [GdsApi::Response] A status code of 202 indicates the document has been successfully queued.
     #
     # @see https://github.com/alphagov/rummager/blob/master/doc/documents.md
-    def add_document(type, id, document)
-      post_json(
-        documents_url,
-        document.merge(
-          _type: type,
-          _id: id,
-        )
-      )
+    def add_document(*args)
+      @api.add_document(*args)
     end
 
     # Delete a content-document from the index by base path.
@@ -107,14 +163,11 @@ module GdsApi
     #
     # @param type [String] The rummager/elasticsearch document type.
     # @param id [String] The rummager/elasticsearch id. Typically the same as the `link` field.
-    def delete_document(type, id)
-      delete_json(
-        "#{documents_url}/#{id}",
-        _type: type,
-      )
+    # @param index_name (V2 only) Name of the index to be deleted from on
+    #   GOV.UK - we only allow deletion from metasearch
+    def delete_document(*args)
+      @api.delete_document(*args)
     end
-
-  private
 
     def base_url
       endpoint

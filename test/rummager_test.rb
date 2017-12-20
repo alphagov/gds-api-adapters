@@ -186,4 +186,54 @@ describe GdsApi::Rummager do
 
     assert_requested(request)
   end
+
+  it "#delete_document using V1 API" do
+    request = stub_request(:delete, "http://example.com/documents/123")
+
+    GdsApi::Rummager.new("http://example.com").delete_document("edition", 123)
+
+    assert_requested(request)
+  end
+
+  it "#delete_document using V2 API" do
+    request = stub_request(:delete, "http://example.com/v2/metasearch/documents/123")
+
+    GdsApi::Rummager.new("http://example.com", api_version: "V2").delete_document("edition", 123, "metasearch")
+
+    assert_requested(request)
+  end
+
+  it "#delete_document using V2 API - can't delete from non-metasearch index" do
+    assert_raises GdsApi::Rummager::V2::InvalidIndex do
+      GdsApi::Rummager.new("http://example.com", api_version: "V2").delete_document("edition", 123, "government")
+    end
+  end
+
+  it "can't use an unknown api version" do
+    assert_raises GdsApi::Rummager::UnknownAPIVersion do
+      GdsApi::Rummager.new("http://example.com", api_version: "V0")
+    end
+  end
+
+  it "#add_document using V1 API" do
+    request = stub_request(:post, "http://example.com/documents")
+
+    GdsApi::Rummager.new("http://example.com").add_document("edition", 123, {})
+
+    assert_requested(request)
+  end
+
+  it "#add_document using V2 API" do
+    request = stub_request(:post, "http://example.com/v2/metasearch/documents")
+
+    GdsApi::Rummager.new("http://example.com", api_version: "V2").add_document("edition", 123, {}, "metasearch")
+
+    assert_requested(request)
+  end
+
+  it "#add_document using V2 API - can't insert into non-metasearch index" do
+    assert_raises GdsApi::Rummager::V2::InvalidIndex do
+      GdsApi::Rummager.new("http://example.com", api_version: "V2").add_document("edition", 123, {}, "government")
+    end
+  end
 end
