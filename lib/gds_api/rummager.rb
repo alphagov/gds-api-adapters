@@ -28,23 +28,19 @@ module GdsApi
     class V2 < SimpleDelegator
       class InvalidIndex < StandardError; end
 
-      def add_document(type, id, document, index_name)
+      def add_document(id, document, index_name)
         raise(InvalidIndex, index_name) unless index_name == 'metasearch'
         post_json(
           "#{base_url}/v2/metasearch/documents",
           document.merge(
-            _type: type,
             _id: id,
           )
         )
       end
 
-      def delete_document(type, id, index_name)
+      def delete_document(id, index_name)
         raise(InvalidIndex, index_name) unless index_name == 'metasearch'
-        delete_json(
-          "#{base_url}/v2/metasearch/documents/#{id}",
-          _type: type,
-        )
+        delete_json("#{base_url}/v2/metasearch/documents/#{id}")
       end
     end
 
