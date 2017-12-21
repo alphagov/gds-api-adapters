@@ -1,3 +1,8 @@
+# 50.8.0
+
+* Add V2 api endpoints for GdsAPI::Rummager#delete_document
+* Add V2 api endpoints for GdsAPI::Rummager#insert_document
+
 # 50.7.0
 
 * Add GdsApi::SupportApi#document_type_list to retrieve list of formats for content items
