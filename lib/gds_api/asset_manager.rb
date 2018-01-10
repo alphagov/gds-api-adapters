@@ -136,7 +136,7 @@ class GdsApi::AssetManager < GdsApi::Base
   #
   # @raise [HTTPErrorResponse] if the request returns an error
   def whitehall_asset(legacy_url_path)
-    get_json("#{base_url}/whitehall_assets/#{legacy_url_path}")
+    get_json("#{base_url}/whitehall_assets/#{Addressable::URI.encode(legacy_url_path)}")
   end
 
   # Updates an asset given a hash with one +file+ attribute

@@ -108,6 +108,21 @@ describe GdsApi::AssetManager do
     end
   end
 
+  describe "a Whitehall asset with a legacy_url_path containing non-ascii characters exists" do
+    before do
+      asset_manager_has_a_whitehall_asset(
+        "/government/uploads/phot%C3%B8.jpg",
+        "id" => "asset-id"
+      )
+    end
+
+    it "retrieves an asset" do
+      asset = api.whitehall_asset("/government/uploads/photø.jpg")
+
+      assert_equal "asset-id", asset['id']
+    end
+  end
+
   it "deletes an asset for the given id" do
     req = stub_request(:delete, "#{base_api_url}/assets/#{asset_id}").
       to_return(body: JSON.dump(asset_manager_response), status: 200)
