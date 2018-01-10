@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add Environment variable which can disable caching of JSON API requests, `DISABLE_JSON_API_CACHE`
+
 # 50.8.0
 
 * Add V2 api endpoints for GdsAPI::Rummager#delete_document

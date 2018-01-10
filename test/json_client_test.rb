@@ -195,6 +195,26 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  def test_should_allow_disabling_caching_via_environment_variable
+    url = "http://some.endpoint/some.json"
+    result = { "foo" => "bar" }
+    stub_request(:get, url).to_return(body: JSON.dump(result), status: 200)
+    ENV["DISABLE_JSON_API_CACHE"] = "true"
+
+    client = GdsApi::JsonClient.new
+
+    response_a = client.get_json(url)
+    response_b = client.get_json(url)
+
+    assert_requested :get, url, times: 2
+
+    [response_a, response_b].each do |r|
+      assert_equal result, r.to_hash
+    end
+  ensure
+    ENV.delete("DISABLE_JSON_API_CACHE")
+  end
+
   def test_should_respect_expiry_headers
     url = "http://some.endpoint/some.json"
     result = { "foo" => "bar" }
