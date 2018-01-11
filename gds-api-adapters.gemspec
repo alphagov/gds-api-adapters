@@ -26,24 +26,21 @@ Gem::Specification.new do |s|
   s.add_dependency 'addressable'
 
   s.add_development_dependency 'govuk-content-schema-test-helpers', '~> 1.5'
-  s.add_development_dependency 'mocha', "~> 1.3.0"
-  s.add_development_dependency "minitest", "~> 5.10.3"
+  s.add_development_dependency 'mocha', "~> 1.3"
+  s.add_development_dependency "minitest", "~> 5.10"
   s.add_development_dependency 'pry'
-  s.add_development_dependency 'rack', '~> 2.0.3'
+  s.add_development_dependency 'rack', '~> 2.0'
   s.add_development_dependency 'rack-test'
-  s.add_development_dependency 'rake', '~> 12.3.0'
+  s.add_development_dependency 'rake', '~> 12.3'
   s.add_development_dependency 'yard', '~> 0.9.11'
   s.add_development_dependency 'simplecov', '~> 0.15.1'
   s.add_development_dependency 'simplecov-rcov'
   s.add_development_dependency 'timecop', '~> 0.9.1'
-  s.add_development_dependency 'webmock', '~> 3.1.1'
-  # Versions of webrick > 1.3.1 only work with ruby >= 2.3.
-  # We specify webrick to be 1.3.1 here because in our CI builds we are testing with ruby versions 2.1 and 2.2.
-  s.add_development_dependency 'webrick', '1.3.1'
-
-  s.add_development_dependency 'pact', '1.19.2'
-  s.add_development_dependency 'pact-mock_service', '2.6.2'
-  s.add_development_dependency 'pact-consumer-minitest', '1.0.1'
-  s.add_development_dependency 'pact_broker-client', '1.13.1'
-  s.add_development_dependency 'govuk-lint', '3.3.1'
+  s.add_development_dependency 'webmock', '~> 3.1'
+  s.add_development_dependency 'webrick', '~> 1.3'
+  s.add_development_dependency 'pact', '~> 1.19'
+  s.add_development_dependency 'pact-mock_service', '~> 2.6'
+  s.add_development_dependency 'pact-consumer-minitest', '~> 1.0'
+  s.add_development_dependency 'pact_broker-client', '~> 1.13'
+  s.add_development_dependency 'govuk-lint', '~> 3.3'
 end
