@@ -41,7 +41,7 @@ module GdsApi
       @logger = options[:logger] || NullLogger.instance
       disable_cache = options[:disable_cache] || ENV.fetch("GDS_API_DISABLE_CACHE", false)
 
-      if disable_cache || options[:cache_size] == 0 # rubocop:disable Style/NumericPredicate
+      if disable_cache || options[:cache_size]&.zero?
         @cache = NullCache.new
       else
         cache_size = options[:cache_size] || DEFAULT_CACHE_SIZE
