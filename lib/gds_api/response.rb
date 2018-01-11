@@ -25,7 +25,7 @@ module GdsApi
 
     def initialize(http_response, options = {})
       @http_response = http_response
-      @web_urls_relative_to = URI.parse(options[:web_urls_relative_to]) if options[:web_urls_relative_to]
+      @web_urls_relative_to = options[:web_urls_relative_to] ? URI.parse(options[:web_urls_relative_to]) : nil
     end
 
     def raw_response_body
