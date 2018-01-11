@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'lrucache', '~> 0.1.1'
   s.add_dependency 'rest-client', '~> 2.0'
   s.add_dependency 'rack-cache'
+  s.add_dependency 'addressable'
 
   s.add_development_dependency 'govuk-content-schema-test-helpers', '~> 1.5'
   s.add_development_dependency 'mocha', "~> 1.3.0"
