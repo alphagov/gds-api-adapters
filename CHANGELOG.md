@@ -1,4 +1,4 @@
-# Unreleased
+# 50.9.0
 
 * Add Environment variable which can disable caching of JSON API requests, `DISABLE_JSON_API_CACHE`
 
