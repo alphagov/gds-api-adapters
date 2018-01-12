@@ -1,3 +1,7 @@
+# Unreleased
+
+* Change name of `DISABLE_JSON_API_CACHE` environment variable to `GDS_API_DISABLE_CACHE`
+
 # 50.9.1
 
 * Percent encode URLs when requesting Whitehall assets from Asset Manager API
