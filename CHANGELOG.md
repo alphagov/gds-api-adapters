@@ -1,5 +1,6 @@
 # Unreleased
 
+* **Breaking Change:** Require a minimum of Ruby 2.3
 * Change name of `DISABLE_JSON_API_CACHE` environment variable to `GDS_API_DISABLE_CACHE`
 
 # 50.9.1
