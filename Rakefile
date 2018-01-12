@@ -9,7 +9,6 @@ RDoc::Task.new do |rd|
 end
 
 Rake::TestTask.new("test") do |t|
-  t.ruby_opts << "-rubygems"
   t.libs << "test"
   t.test_files = FileList["test/**/*_test.rb"]
   t.verbose = true
