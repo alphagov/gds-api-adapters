@@ -289,19 +289,42 @@ describe GdsApi::EmailAlertApi do
   end
 
   describe "subscribing and a subscription is created" do
-    it "returns a 201 and the subscription id" do
-      subscribable_id = 5
-      address = "test@test.com"
-      created_subscription_id = 1
+    describe "with a frequency specified" do
+      it "returns a 201 and the subscription id" do
+        subscribable_id = 5
+        address = "test@test.com"
+        created_subscription_id = 1
+        frequency = "daily"
 
-      email_alert_api_creates_a_subscription(
-        subscribable_id,
-        address,
-        created_subscription_id
-      )
-      api_response = api_client.subscribe(subscribable_id: subscribable_id, address: address)
-      assert_equal(201, api_response.code)
-      assert_equal({ "subscription_id" => 1 }, api_response.to_h)
+        email_alert_api_creates_a_subscription(
+          subscribable_id,
+          address,
+          frequency,
+          created_subscription_id
+        )
+        api_response = api_client.subscribe(subscribable_id: subscribable_id, address: address, frequency: frequency)
+        assert_equal(201, api_response.code)
+        assert_equal({ "subscription_id" => 1 }, api_response.to_h)
+      end
+    end
+
+    describe "without a frequency specified" do
+      it "returns a 201 and the subscription id" do
+        subscribable_id = 6
+        address = "test@test.com"
+        created_subscription_id = 1
+        frequency = "immediately"
+
+        email_alert_api_creates_a_subscription(
+          subscribable_id,
+          address,
+          frequency,
+          created_subscription_id
+        )
+        api_response = api_client.subscribe(subscribable_id: subscribable_id, address: address)
+        assert_equal(201, api_response.code)
+        assert_equal({ "subscription_id" => 1 }, api_response.to_h)
+      end
     end
   end
 
@@ -310,13 +333,15 @@ describe GdsApi::EmailAlertApi do
       subscribable_id = 5
       address = "test@test.com"
       existing_subscription_id = 1
+      frequency = "immediately"
 
       email_alert_api_creates_an_existing_subscription(
         subscribable_id,
         address,
+        frequency,
         existing_subscription_id
       )
-      api_response = api_client.subscribe(subscribable_id: subscribable_id, address: address)
+      api_response = api_client.subscribe(subscribable_id: subscribable_id, address: address, frequency: frequency)
       assert_equal(200, api_response.code)
       assert_equal({ "subscription_id" => 1 }, api_response.to_h)
     end
@@ -324,10 +349,10 @@ describe GdsApi::EmailAlertApi do
 
   describe "subscribing with an invalid address" do
     it "raises an unprocessable entity error" do
-      email_alert_api_refuses_to_create_subscription(123, "invalid")
+      email_alert_api_refuses_to_create_subscription(123, "invalid", "weekly")
 
       assert_raises GdsApi::HTTPUnprocessableEntity do
-        api_client.subscribe(subscribable_id: 123, address: "invalid")
+        api_client.subscribe(subscribable_id: 123, address: "invalid", frequency: "weekly")
       end
     end
   end

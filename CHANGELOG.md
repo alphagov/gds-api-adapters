@@ -1,3 +1,7 @@
+# Unreleased
+
+* Include frequency as a parameter when subscribing to emails through Email alert api
+
 # 51.0.0
 
 * **Breaking Change:** Require a minimum of Ruby 2.3
