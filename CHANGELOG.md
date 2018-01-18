@@ -1,4 +1,4 @@
-# Unreleased
+# 51.1.0
 
 * Include frequency as a parameter when subscribing to emails through Email alert api
 
