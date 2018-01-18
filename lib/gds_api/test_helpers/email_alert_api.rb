@@ -105,24 +105,24 @@ module GdsApi
           .to_return(status: 404)
       end
 
-      def email_alert_api_creates_a_subscription(subscribable_id, address, returned_subscription_id)
+      def email_alert_api_creates_a_subscription(subscribable_id, address, frequency, returned_subscription_id)
         stub_request(:post, subscribe_url)
           .with(
-            body: { subscribable_id: subscribable_id, address: address }.to_json
+            body: { subscribable_id: subscribable_id, address: address, frequency: frequency }.to_json
         ).to_return(status: 201, body: { subscription_id: returned_subscription_id }.to_json)
       end
 
-      def email_alert_api_creates_an_existing_subscription(subscribable_id, address, returned_subscription_id)
+      def email_alert_api_creates_an_existing_subscription(subscribable_id, address, frequency, returned_subscription_id)
         stub_request(:post, subscribe_url)
           .with(
-            body: { subscribable_id: subscribable_id, address: address }.to_json
+            body: { subscribable_id: subscribable_id, address: address, frequency: frequency }.to_json
         ).to_return(status: 200, body: { subscription_id: returned_subscription_id }.to_json)
       end
 
-      def email_alert_api_refuses_to_create_subscription(subscribable_id, address)
+      def email_alert_api_refuses_to_create_subscription(subscribable_id, address, frequency)
         stub_request(:post, subscribe_url)
           .with(
-            body: { subscribable_id: subscribable_id, address: address }.to_json
+            body: { subscribable_id: subscribable_id, address: address, frequency: frequency }.to_json
         ).to_return(status: 422)
       end
 

@@ -100,11 +100,12 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   # Subscribe
   #
   # @return [Hash] subscription_id
-  def subscribe(subscribable_id:, address:)
+  def subscribe(subscribable_id:, address:, frequency: "immediately")
     post_json(
       "#{endpoint}/subscriptions",
       subscribable_id: subscribable_id,
       address: address,
+      frequency: frequency,
     )
   end
 
