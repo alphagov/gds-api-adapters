@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add frequency param to `assert_subscribed` in Email alert api test helpers
+
 # 51.1.0
 
 * Include frequency as a parameter when subscribing to emails through Email alert api
