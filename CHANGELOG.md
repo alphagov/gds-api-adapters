@@ -1,4 +1,4 @@
-# Unreleased
+# 51.1.1
 
 * Add frequency param to `assert_subscribed` in Email alert api test helpers
 
