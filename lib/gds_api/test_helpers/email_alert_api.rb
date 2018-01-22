@@ -130,11 +130,12 @@ module GdsApi
         assert_requested(:post, unsubscribe_url(uuid), times: 1)
       end
 
-      def assert_subscribed(subscribable_id, address)
+      def assert_subscribed(subscribable_id, address, frequency = "immediately")
         assert_requested(:post, subscribe_url) do |req|
           JSON.parse(req.body).symbolize_keys == {
             subscribable_id: subscribable_id,
-            address: address
+            address: address,
+            frequency: frequency
           }
         end
       end
