@@ -1,3 +1,7 @@
+# 51.2.0
+
+* Add helper method `.redirect_for_path` to GdsApi::ContentStore to allow determining a redirect destination from a request
+
 # 51.1.1
 
 * Add frequency param to `assert_subscribed` in Email alert api test helpers
