@@ -235,6 +235,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # Return the expanded links of the item.
   #
   # @param content_id [UUID]
+  # @param locale [String] Locale with which to generate the expanded links. Unless this is specified, the default locale (`en`) in the Publishing API will be used.
   # @param with_drafts [Bool] Whether links to draft-only editions are returned, defaulting to `true`.
   # @param generate [Bool] Whether to require publishing-api to generate the expanded links, which may be slow. Defaults to `false`.
   #
@@ -255,10 +256,11 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   #   }
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2expanded-linkscontent_id
-  def get_expanded_links(content_id, with_drafts: true, generate: false)
+  def get_expanded_links(content_id, locale: nil, with_drafts: true, generate: false)
     params = {}
     params[:with_drafts] = "false" unless with_drafts
     params[:generate] = "true" if generate
+    params[:locale] = locale if locale
     query = query_string(params)
     validate_content_id(content_id)
     get_json("#{endpoint}/v2/expanded-links/#{content_id}#{query}")
