@@ -1,4 +1,4 @@
-# Unreleased
+# 51.3.0
 
 * Add `locale` param to `get_expanded_links` in the Publishing API
   client
