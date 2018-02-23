@@ -1,3 +1,8 @@
+# Unreleased
+
+* Add `locale` param to `get_expanded_links` in the Publishing API
+  client
+
 # 51.2.0
 
 * Add helper method `.redirect_for_path` to GdsApi::ContentStore to allow determining a redirect destination from a request
