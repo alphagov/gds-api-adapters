@@ -74,6 +74,11 @@ class GdsApi::SupportApi < GdsApi::Base
     get_json(uri)
   end
 
+  def feedback_by_day(date, page = 1, per_page = 100)
+    uri = "#{endpoint}/feedback-by-day/#{date.strftime('%Y-%m-%d')}?page=#{page}&per_page=#{per_page}"
+    get_json(uri)
+  end
+
   def feedback_export_request(id)
     get_json("#{endpoint}/anonymous-feedback/export-requests/#{id}")
   end

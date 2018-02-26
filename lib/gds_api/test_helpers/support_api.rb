@@ -30,6 +30,12 @@ module GdsApi
         post_stub.to_return(status: 202)
       end
 
+      def stub_support_api_feedback_by_day(date, page, per_page, response_body = { results: [] })
+        date_string = date.strftime("%Y-%m-%d")
+        get_stub = stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/feedback-by-day/#{date_string}?page=#{page}&per_page=#{per_page}")
+        get_stub.to_return(status: 200, body: response_body.to_json)
+      end
+
       def stub_support_api_global_export_request_creation(request_details = nil)
         post_stub = stub_http_request(:post, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/global-export-requests")
         post_stub.with(body: { global_export_request: request_details }) unless request_details.nil?
