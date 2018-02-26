@@ -1,3 +1,7 @@
+# 51.4.0
+
+* Add support for the /feedback-by-day endpoint in the Support API
+
 # 51.3.0
 
 * Add `locale` param to `get_expanded_links` in the Publishing API
