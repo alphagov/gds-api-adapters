@@ -213,4 +213,22 @@ describe GdsApi::SupportApi do
       assert_requested(stub_post)
     end
   end
+
+  describe "GET /feedback-by-day/[date_str]" do
+    it "make a GET request to the support API with default" do
+      stub_get = stub_support_api_feedback_by_day(Date.today, 1, 100)
+
+      @api.feedback_by_day(Date.today)
+
+      assert_requested(stub_get)
+    end
+
+    it "make a GET request to the support API with page params" do
+      stub_get = stub_support_api_feedback_by_day(Date.today, 2, 200)
+
+      @api.feedback_by_day(Date.today, 2, 200)
+
+      assert_requested(stub_get)
+    end
+  end
 end
