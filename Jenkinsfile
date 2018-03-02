@@ -1,7 +1,8 @@
 #!/usr/bin/env groovy
 
+library("govuk")
+
 node {
-  def govuk = load("/var/lib/jenkins/groovy_scripts/govuk_jenkinslib.groovy")
 
   def pact_branch = (env.BRANCH_NAME == 'master' ? 'master' : "branch-${env.BRANCH_NAME}")
   govuk.setEnvar("PACT_TARGET_BRANCH", pact_branch)
