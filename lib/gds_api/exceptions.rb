@@ -31,6 +31,7 @@ module GdsApi
 
   # Superclass & fallback for all 4XX errors
   class HTTPClientError < HTTPErrorResponse; end
+  class HTTPIntermittentClientError < HTTPClientError; end
 
   class HTTPNotFound < HTTPClientError; end
   class HTTPGone < HTTPClientError; end
@@ -39,14 +40,16 @@ module GdsApi
   class HTTPForbidden < HTTPClientError; end
   class HTTPConflict < HTTPClientError; end
   class HTTPUnprocessableEntity < HTTPClientError; end
+  class HTTPTooManyRequests < HTTPIntermittentClientError; end
 
   # Superclass & fallback for all 5XX errors
   class HTTPServerError < HTTPErrorResponse; end
+  class HTTPIntermittentServerError < HTTPServerError; end
 
   class HTTPInternalServerError < HTTPServerError; end
-  class HTTPBadGateway < HTTPServerError; end
-  class HTTPUnavailable < HTTPServerError; end
-  class HTTPGatewayTimeout < HTTPServerError; end
+  class HTTPBadGateway < HTTPIntermittentServerError; end
+  class HTTPUnavailable < HTTPIntermittentServerError; end
+  class HTTPGatewayTimeout < HTTPIntermittentServerError; end
 
   module ExceptionHandling
     def build_specific_http_error(error, url, details = nil, request_body = nil)
@@ -71,6 +74,8 @@ module GdsApi
         GdsApi::HTTPPayloadTooLarge
       when 422
         GdsApi::HTTPUnprocessableEntity
+      when 429
+        GdsApi::HTTPTooManyRequests
       when (400..499)
         GdsApi::HTTPClientError
       when 500
