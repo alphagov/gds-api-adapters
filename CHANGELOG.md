@@ -1,4 +1,4 @@
-# Unreleased
+# 52.0.0
 
 * Remove deprecated `notifications` and `notification` methods from `GdsApi::EmailAlertApi`.
 
