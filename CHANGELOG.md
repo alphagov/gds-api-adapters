@@ -1,3 +1,8 @@
+# dev
+
+* Add `GdsApi::HTTPIntermittentServerError` and `GdsApi::HTTPIntermittentClientError` superclasses.
+* Add a `GdsApi::HTTPTooManyRequests` exception
+
 # 52.0.0
 
 * Remove deprecated `notifications` and `notification` methods from `GdsApi::EmailAlertApi`.
