@@ -1,3 +1,7 @@
+# Unreleased
+
+* Remove deprecated `notifications` and `notification` methods from `GdsApi::EmailAlertApi`.
+
 # 51.4.0
 
 * Add support for the /feedback-by-day endpoint in the Support API

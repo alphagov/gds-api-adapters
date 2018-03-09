@@ -234,34 +234,6 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
-  describe "notifications" do
-    it "retrieves notifications" do
-      stubbed_request = email_alert_api_has_notifications([
-        { "subject" => "Foo" }, { "subject" => "Bar" }
-      ])
-      api_client.notifications
-      assert_requested(stubbed_request)
-    end
-
-    it "uses the start_at param if present" do
-      stubbed_request = email_alert_api_has_notifications([
-        { "subject" => "Foo" }, { "subject" => "Bar" }
-      ], "101AA")
-      api_client.notifications("101AA")
-      assert_requested(stubbed_request)
-    end
-  end
-
-  describe "notification" do
-    before do
-      @stubbed_request = email_alert_api_has_notification("web_service_bulletin" => { "to_param" => "10001001" })
-    end
-    it "retrieves a notification by id" do
-      api_client.notification("10001001")
-      assert_requested(@stubbed_request)
-    end
-  end
-
   describe "unsubscribing" do
     describe "with an existing subscription" do
       it "returns a 204" do

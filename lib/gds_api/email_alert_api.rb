@@ -57,26 +57,6 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     post_json("#{endpoint}/notifications", publication, headers)
   end
 
-  # Get notifications
-  #
-  # @option start_at [String] Optional GovDelivery bulletin id to page back through notifications
-  #
-  # @return [Hash] notifications
-  def notifications(start_at = nil)
-    url = "#{endpoint}/notifications"
-    url += "?start_at=#{start_at}" if start_at
-    get_json(url)
-  end
-
-  # Get notification
-  #
-  # @param id [String] GovDelivery bulletin id
-  #
-  # @return [Hash] notification
-  def notification(id)
-    get_json("#{endpoint}/notifications/#{id}")
-  end
-
   # Get topic matches
   #
   # @param attributes [Hash] tags, links, document_type,
