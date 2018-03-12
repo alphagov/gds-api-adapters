@@ -1,4 +1,4 @@
-# dev
+# 52.1.0
 
 * Add `GdsApi::HTTPIntermittentServerError` and `GdsApi::HTTPIntermittentClientError` superclasses.
 * Add a `GdsApi::HTTPTooManyRequests` exception
