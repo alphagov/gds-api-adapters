@@ -31,7 +31,7 @@ class GdsApi::Imminence < GdsApi::Base
   end
 
   def areas_for_postcode(postcode)
-    url = "#{@endpoint}/areas/#{URI.encode(postcode)}.json"
+    url = "#{@endpoint}/areas/#{ERB::Util.url_encode(postcode)}.json"
     get_json(url)
   end
 
