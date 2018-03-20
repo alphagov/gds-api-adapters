@@ -108,6 +108,23 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     get_json("#{endpoint}/subscribables/#{reference}")
   end
 
+  # Get a Subscription
+  #
+  # @return [Hash] subscription: {
+  #  id
+  #  subscriber_list
+  #  subscriber
+  #  created_at
+  #  updated_at
+  #  ended_at
+  #  ended_reason
+  #  frequency
+  #  source
+  # }
+  def get_subscription(id)
+    get_json("#{endpoint}/subscriptions/#{id}")
+  end
+
   # Get Subscriptions for a Subscriber
   # #
   # @param string Subscriber address

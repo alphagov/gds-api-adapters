@@ -45,6 +45,14 @@ module GdsApi
           .to_return(status: 404)
       end
 
+      def email_alert_api_has_subscription(id, frequency)
+        stub_request(:get, subscription_url(id))
+          .to_return(
+            status: 200,
+            body: get_subscription_response(id, frequency).to_json,
+          )
+      end
+
       def email_alert_api_has_subscriber_list(attributes)
         stub_request(:get, subscriber_lists_url(attributes))
           .to_return(
@@ -275,8 +283,8 @@ module GdsApi
         EMAIL_ALERT_API_ENDPOINT + "/subscriptions"
       end
 
-      def subscription_url(subscription_id)
-        EMAIL_ALERT_API_ENDPOINT + "/subscriptions/#{subscription_id}"
+      def subscription_url(id)
+        EMAIL_ALERT_API_ENDPOINT + "/subscriptions/#{id}"
       end
 
       def subscribable_url(reference)

@@ -48,6 +48,22 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
+  describe "subscriptions" do
+    describe "a subscription exists" do
+      before do
+        email_alert_api_has_subscription(1, "weekly")
+      end
+
+      it "returns the subscription attributes" do
+        subscription_attrs = api_client.get_subscription(1)
+          .to_hash
+          .fetch("subscription")
+
+        assert_equal("weekly", subscription_attrs.fetch("frequency"))
+      end
+    end
+  end
+
   describe "subscriber lists" do
     let(:expected_subscription_url) { "a subscription url" }
 
