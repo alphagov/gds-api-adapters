@@ -1,3 +1,7 @@
+# 52.2.0
+
+* Add `get_subscription`, `get_subscriptions`, `change_subscriber` and `change_subscription` to `GdsApi::EmailAlertApi`.
+
 # 52.1.0
 
 * Add `GdsApi::HTTPIntermittentServerError` and `GdsApi::HTTPIntermittentClientError` superclasses.
