@@ -45,11 +45,11 @@ module GdsApi
           .to_return(status: 404)
       end
 
-      def email_alert_api_has_subscription(id, frequency)
+      def email_alert_api_has_subscription(id, frequency, title: "Some title")
         stub_request(:get, subscription_url(id))
           .to_return(
             status: 200,
-            body: get_subscription_response(id, frequency).to_json,
+            body: get_subscription_response(id, frequency, title).to_json,
           )
       end
 
@@ -90,16 +90,17 @@ module GdsApi
         }
       end
 
-      def get_subscription_response(subscription_id, frequency)
+      def get_subscription_response(id, frequency, title = "Some title")
         {
           "subscription" => {
             "subscriber_id" => 1,
             "subscriber_list_id" => 1000,
             "frequency" => frequency,
-            "id" => subscription_id,
+            "id" => id,
             "subscriber_list" => {
               "id" => 1000,
-              "slug" => "some-thing"
+              "slug" => "some-thing",
+              "title" => title,
             }
           }
         }

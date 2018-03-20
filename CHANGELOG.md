@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add a title parameter to the `get_subscription_response` stub for Email Alert API.
+
 # 52.2.0
 
 * Add `get_subscription`, `get_subscriptions`, `change_subscriber` and `change_subscription` to `GdsApi::EmailAlertApi`.
