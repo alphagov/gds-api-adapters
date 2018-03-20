@@ -48,6 +48,22 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
+  describe "subscriptions" do
+    describe "a subscription exists" do
+      before do
+        email_alert_api_has_subscription(1, "weekly")
+      end
+
+      it "returns the subscription attributes" do
+        subscription_attrs = api_client.get_subscription(1)
+          .to_hash
+          .fetch("subscription")
+
+        assert_equal("weekly", subscription_attrs.fetch("frequency"))
+      end
+    end
+  end
+
   describe "subscriber lists" do
     let(:expected_subscription_url) { "a subscription url" }
 
@@ -351,6 +367,81 @@ describe GdsApi::EmailAlertApi do
 
       assert_raises GdsApi::HTTPNotFound do
         api_client.get_subscribable(reference: "test123")
+      end
+    end
+  end
+
+  describe "change_subscriber when a subscriber exists" do
+    it "changes the subscriber's address" do
+      email_alert_api_has_updated_subscriber("test@example.com", "test2@example.com")
+      api_response = api_client.change_subscriber(
+        address: "test@example.com",
+        new_address: "test2@example.com"
+      )
+      assert_equal(200, api_response.code)
+      parsed_body = api_response.to_h
+      assert_equal("test2@example.com", parsed_body["subscriber"]["address"])
+    end
+  end
+
+  describe "change_subscriber when a subscriber doesn't exist" do
+    it "returns 404" do
+      email_alert_api_does_not_have_updated_subscriber("test@example.com")
+
+      assert_raises GdsApi::HTTPNotFound do
+        api_client.change_subscriber(
+          address: "test@example.com",
+          new_address: "test2@example.com"
+        )
+      end
+    end
+  end
+
+  describe "change_subscription when a subscription exists" do
+    it "changes the subscription's frequency" do
+      email_alert_api_has_updated_subscription(
+        "8ed841d1-3d20-4633-aaf4-df41deaaf51c",
+        "weekly"
+      )
+      api_response = api_client.change_subscription(
+        id: "8ed841d1-3d20-4633-aaf4-df41deaaf51c",
+        frequency: "weekly"
+      )
+      assert_equal(200, api_response.code)
+      parsed_body = api_response.to_h
+      assert_equal("weekly", parsed_body["subscription"]["frequency"])
+    end
+  end
+
+  describe "change_subscription when a subscription doesn't exist" do
+    it "returns 404" do
+      email_alert_api_does_not_have_updated_subscription("8ed841d1-3d20-4633-aaf4-df41deaaf51c")
+
+      assert_raises GdsApi::HTTPNotFound do
+        api_client.change_subscription(
+          id: "8ed841d1-3d20-4633-aaf4-df41deaaf51c",
+          frequency: "weekly"
+        )
+      end
+    end
+  end
+
+  describe "get_subscriptions when a subscriber exists" do
+    it "returns it" do
+      email_alert_api_has_subscriber_subscriptions("test@example.com")
+      api_response = api_client.get_subscriptions(address: "test@example.com")
+      assert_equal(200, api_response.code)
+      parsed_body = api_response.to_h
+      assert_equal("some-thing", parsed_body["subscriptions"][0]["subscriber_list"]["slug"])
+    end
+  end
+
+  describe "get_subscriptions when a subscriber doesn't exist" do
+    it "returns 404" do
+      email_alert_api_does_not_have_subscriber_subscriptions("test@example.com")
+
+      assert_raises GdsApi::HTTPNotFound do
+        api_client.get_subscriptions(address: "test@example.com")
       end
     end
   end

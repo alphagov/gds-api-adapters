@@ -105,8 +105,58 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   #  subscriber_count
   # }
   def get_subscribable(reference:)
-    get_json(
-      "#{endpoint}/subscribables/#{reference}"
+    get_json("#{endpoint}/subscribables/#{reference}")
+  end
+
+  # Get a Subscription
+  #
+  # @return [Hash] subscription: {
+  #  id
+  #  subscriber_list
+  #  subscriber
+  #  created_at
+  #  updated_at
+  #  ended_at
+  #  ended_reason
+  #  frequency
+  #  source
+  # }
+  def get_subscription(id)
+    get_json("#{endpoint}/subscriptions/#{id}")
+  end
+
+  # Get Subscriptions for a Subscriber
+  # #
+  # @param string Subscriber address
+  #
+  # @return [Hash] subscriber, subscriptions
+  def get_subscriptions(address:)
+    get_json("#{endpoint}/subscribers/#{address}/subscriptions")
+  end
+
+  # Patch a Subscriber
+  # #
+  # @param string Subscriber address
+  # @param string Subscriber new_address
+  #
+  # @return [Hash] subscriber
+  def change_subscriber(address:, new_address:)
+    patch_json(
+      "#{endpoint}/subscribers/#{address}",
+      new_address: new_address
+    )
+  end
+
+  # Patch a Subscription
+  # #
+  # @param string Subscription id
+  # @param string Subscription frequency
+  #
+  # @return [Hash] subscription
+  def change_subscription(id:, frequency:)
+    patch_json(
+      "#{endpoint}/subscriptions/#{id}",
+      frequency: frequency
     )
   end
 

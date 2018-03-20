@@ -6,6 +6,53 @@ module GdsApi
     module EmailAlertApi
       EMAIL_ALERT_API_ENDPOINT = Plek.find("email-alert-api")
 
+      def email_alert_api_has_updated_subscriber(old_address, new_address)
+        stub_request(:patch, subscriber_url(old_address))
+          .to_return(
+            status: 200,
+            body: get_subscriber_response(new_address).to_json,
+          )
+      end
+
+      def email_alert_api_does_not_have_updated_subscriber(address)
+        stub_request(:patch, subscriber_url(address))
+          .to_return(status: 404)
+      end
+
+      def email_alert_api_has_updated_subscription(subscription_id, frequency)
+        stub_request(:patch, subscription_url(subscription_id))
+          .to_return(
+            status: 200,
+            body: get_subscription_response(subscription_id, frequency).to_json,
+          )
+      end
+
+      def email_alert_api_does_not_have_updated_subscription(subscription_id)
+        stub_request(:patch, subscription_url(subscription_id))
+          .to_return(status: 404)
+      end
+
+      def email_alert_api_has_subscriber_subscriptions(address)
+        stub_request(:get, subscriber_subscriptions_url(address))
+          .to_return(
+            status: 200,
+            body: get_subscriber_subscriptions_response(address).to_json,
+          )
+      end
+
+      def email_alert_api_does_not_have_subscriber_subscriptions(address)
+        stub_request(:get, subscriber_subscriptions_url(address))
+          .to_return(status: 404)
+      end
+
+      def email_alert_api_has_subscription(id, frequency)
+        stub_request(:get, subscription_url(id))
+          .to_return(
+            status: 200,
+            body: get_subscription_response(id, frequency).to_json,
+          )
+      end
+
       def email_alert_api_has_subscriber_list(attributes)
         stub_request(:get, subscriber_lists_url(attributes))
           .to_return(
@@ -34,12 +81,55 @@ module GdsApi
           )
       end
 
+      def get_subscriber_response(address)
+        {
+          "subscriber" => {
+            "id" => 1,
+            "address" => address
+          }
+        }
+      end
+
+      def get_subscription_response(subscription_id, frequency)
+        {
+          "subscription" => {
+            "subscriber_id" => 1,
+            "subscriber_list_id" => 1000,
+            "frequency" => frequency,
+            "id" => subscription_id,
+            "subscriber_list" => {
+              "id" => 1000,
+              "slug" => "some-thing"
+            }
+          }
+        }
+      end
+
+      def get_subscriber_subscriptions_response(address)
+        {
+          "subscriber" => {
+            "id" => 1,
+            "address" => address
+          },
+          "subscriptions" => [
+            {
+              "subscriber_id" => 1,
+              "subscriber_list_id" => 1000,
+              "frequency" => "daily",
+              "id" => "447135c3-07d6-4c3a-8a3b-efa49ef70e52",
+              "subscriber_list" => {
+                "id" => 1000,
+                "slug" => "some-thing"
+              }
+            }
+          ]
+        }
+      end
+
       def get_subscriber_list_response(attributes)
         {
           "subscriber_list" => {
             "id" => "447135c3-07d6-4c3a-8a3b-efa49ef70e52",
-            "subscription_url" => "https://stage-public.govdelivery.com/accounts/UKGOVUK/subscriber/new?topic_id=UKGOVUK_1234",
-            "gov_delivery_id" => "UKGOVUK_1234",
             "title" => "Some title",
           }.merge(attributes)
         }
@@ -193,8 +283,20 @@ module GdsApi
         EMAIL_ALERT_API_ENDPOINT + "/subscriptions"
       end
 
+      def subscription_url(id)
+        EMAIL_ALERT_API_ENDPOINT + "/subscriptions/#{id}"
+      end
+
       def subscribable_url(reference)
         EMAIL_ALERT_API_ENDPOINT + "/subscribables/#{reference}"
+      end
+
+      def subscriber_url(address)
+        EMAIL_ALERT_API_ENDPOINT + "/subscribers/#{address}"
+      end
+
+      def subscriber_subscriptions_url(address)
+        EMAIL_ALERT_API_ENDPOINT + "/subscribers/#{address}/subscriptions"
       end
     end
   end
