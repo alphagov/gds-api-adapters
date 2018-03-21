@@ -1,3 +1,7 @@
+# Unreleased
+
+* Avoid grouping Sentry errors by exception type
+
 # 52.2.1
 
 * Add a title parameter to the `get_subscription_response` stub for Email Alert API.
