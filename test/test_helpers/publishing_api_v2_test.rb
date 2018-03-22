@@ -32,6 +32,23 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
     end
   end
 
+  describe "#publish_api_has_links_for_content_ids" do
+    it "stubs the call to get links for content ids" do
+      links = {
+                "2878337b-bed9-4e7f-85b6-10ed2cbcd504" => {
+                  "links" => { "taxons" => ["eb6965c7-3056-45d0-ae50-2f0a5e2e0854"] }
+                },
+                "eec13cea-219d-4896-9c97-60114da23559" => {
+                  "links" => {}
+                }
+              }
+
+      publishing_api_has_links_for_content_ids(links)
+
+      assert_equal publishing_api.get_links_for_content_ids(links.keys), links
+    end
+  end
+
   describe "#publishing_api_has_lookups" do
     it "stubs the lookup for content items" do
       lookup_hash = { "/foo" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" }
