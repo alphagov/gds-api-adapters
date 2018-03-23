@@ -6,16 +6,16 @@ module GdsApi
     module EmailAlertApi
       EMAIL_ALERT_API_ENDPOINT = Plek.find("email-alert-api")
 
-      def email_alert_api_has_updated_subscriber(old_address, new_address)
-        stub_request(:patch, subscriber_url(old_address))
+      def email_alert_api_has_updated_subscriber(id, new_address)
+        stub_request(:patch, subscriber_url(id))
           .to_return(
             status: 200,
-            body: get_subscriber_response(new_address).to_json,
+            body: get_subscriber_response(id, new_address).to_json,
           )
       end
 
-      def email_alert_api_does_not_have_updated_subscriber(address)
-        stub_request(:patch, subscriber_url(address))
+      def email_alert_api_does_not_have_updated_subscriber(id)
+        stub_request(:patch, subscriber_url(id))
           .to_return(status: 404)
       end
 
@@ -32,16 +32,16 @@ module GdsApi
           .to_return(status: 404)
       end
 
-      def email_alert_api_has_subscriber_subscriptions(address)
-        stub_request(:get, subscriber_subscriptions_url(address))
+      def email_alert_api_has_subscriber_subscriptions(id, address)
+        stub_request(:get, subscriber_subscriptions_url(id))
           .to_return(
             status: 200,
-            body: get_subscriber_subscriptions_response(address).to_json,
+            body: get_subscriber_subscriptions_response(id, address).to_json,
           )
       end
 
-      def email_alert_api_does_not_have_subscriber_subscriptions(address)
-        stub_request(:get, subscriber_subscriptions_url(address))
+      def email_alert_api_does_not_have_subscriber_subscriptions(id)
+        stub_request(:get, subscriber_subscriptions_url(id))
           .to_return(status: 404)
       end
 
@@ -81,10 +81,10 @@ module GdsApi
           )
       end
 
-      def get_subscriber_response(address)
+      def get_subscriber_response(id, address)
         {
           "subscriber" => {
-            "id" => 1,
+            "id" => id,
             "address" => address
           }
         }
@@ -106,10 +106,10 @@ module GdsApi
         }
       end
 
-      def get_subscriber_subscriptions_response(address)
+      def get_subscriber_subscriptions_response(id, address)
         {
           "subscriber" => {
-            "id" => 1,
+            "id" => id,
             "address" => address
           },
           "subscriptions" => [
@@ -292,12 +292,12 @@ module GdsApi
         EMAIL_ALERT_API_ENDPOINT + "/subscribables/#{reference}"
       end
 
-      def subscriber_url(address)
-        EMAIL_ALERT_API_ENDPOINT + "/subscribers/#{address}"
+      def subscriber_url(id)
+        EMAIL_ALERT_API_ENDPOINT + "/subscribers/#{id}"
       end
 
-      def subscriber_subscriptions_url(address)
-        EMAIL_ALERT_API_ENDPOINT + "/subscribers/#{address}/subscriptions"
+      def subscriber_subscriptions_url(id)
+        EMAIL_ALERT_API_ENDPOINT + "/subscribers/#{id}/subscriptions"
       end
     end
   end
