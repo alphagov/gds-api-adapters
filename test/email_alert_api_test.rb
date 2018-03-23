@@ -373,9 +373,9 @@ describe GdsApi::EmailAlertApi do
 
   describe "change_subscriber when a subscriber exists" do
     it "changes the subscriber's address" do
-      email_alert_api_has_updated_subscriber("test@example.com", "test2@example.com")
+      email_alert_api_has_updated_subscriber(1, "test2@example.com")
       api_response = api_client.change_subscriber(
-        address: "test@example.com",
+        id: 1,
         new_address: "test2@example.com"
       )
       assert_equal(200, api_response.code)
@@ -386,11 +386,11 @@ describe GdsApi::EmailAlertApi do
 
   describe "change_subscriber when a subscriber doesn't exist" do
     it "returns 404" do
-      email_alert_api_does_not_have_updated_subscriber("test@example.com")
+      email_alert_api_does_not_have_updated_subscriber(1)
 
       assert_raises GdsApi::HTTPNotFound do
         api_client.change_subscriber(
-          address: "test@example.com",
+          id: 1,
           new_address: "test2@example.com"
         )
       end
@@ -428,8 +428,8 @@ describe GdsApi::EmailAlertApi do
 
   describe "get_subscriptions when a subscriber exists" do
     it "returns it" do
-      email_alert_api_has_subscriber_subscriptions("test@example.com")
-      api_response = api_client.get_subscriptions(address: "test@example.com")
+      email_alert_api_has_subscriber_subscriptions(1, "test@example.com")
+      api_response = api_client.get_subscriptions(id: 1)
       assert_equal(200, api_response.code)
       parsed_body = api_response.to_h
       assert_equal("some-thing", parsed_body["subscriptions"][0]["subscriber_list"]["slug"])
@@ -438,10 +438,10 @@ describe GdsApi::EmailAlertApi do
 
   describe "get_subscriptions when a subscriber doesn't exist" do
     it "returns 404" do
-      email_alert_api_does_not_have_subscriber_subscriptions("test@example.com")
+      email_alert_api_does_not_have_subscriber_subscriptions(1)
 
       assert_raises GdsApi::HTTPNotFound do
-        api_client.get_subscriptions(address: "test@example.com")
+        api_client.get_subscriptions(id: 1)
       end
     end
   end

@@ -127,22 +127,22 @@ class GdsApi::EmailAlertApi < GdsApi::Base
 
   # Get Subscriptions for a Subscriber
   # #
-  # @param string Subscriber address
+  # @param integer Subscriber id
   #
   # @return [Hash] subscriber, subscriptions
-  def get_subscriptions(address:)
-    get_json("#{endpoint}/subscribers/#{address}/subscriptions")
+  def get_subscriptions(id:)
+    get_json("#{endpoint}/subscribers/#{id}/subscriptions")
   end
 
   # Patch a Subscriber
   # #
-  # @param string Subscriber address
+  # @param integer Subscriber id
   # @param string Subscriber new_address
   #
   # @return [Hash] subscriber
-  def change_subscriber(address:, new_address:)
+  def change_subscriber(id:, new_address:)
     patch_json(
-      "#{endpoint}/subscribers/#{address}",
+      "#{endpoint}/subscribers/#{id}",
       new_address: new_address
     )
   end
