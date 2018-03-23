@@ -448,6 +448,35 @@ module GdsApi
         stub_request(:get, url).to_return(status: 200, body: links.to_json, headers: {})
       end
 
+      # Stub a request to get links for content ids
+      #
+      # @param [Hash] links the links for each content id
+      #
+      # @example
+      #   publishing_api_has_links_for_content_ids(
+      #     { "2878337b-bed9-4e7f-85b6-10ed2cbcd504" => {
+      #         "links" => { "taxons" => ["eb6965c7-3056-45d0-ae50-2f0a5e2e0854"] }
+      #       },
+      #       "eec13cea-219d-4896-9c97-60114da23559" => {
+      #         "links" => {}
+      #       }
+      #     }
+      #   )
+      #
+      # @example
+      #   Services.publishing_api.get_links_for_content_ids(["2878337b-bed9-4e7f-85b6-10ed2cbcd504"])
+      #   =>  {
+      #         "2878337b-bed9-4e7f-85b6-10ed2cbcd504" => {
+      #           "links" => [
+      #             "eb6965c7-3056-45d0-ae50-2f0a5e2e0854"
+      #           ]
+      #         }
+      #       }
+      def publishing_api_has_links_for_content_ids(links)
+        url = PUBLISHING_API_V2_ENDPOINT + "/links/by-content-id"
+        stub_request(:post, url).with(body: { content_ids: links.keys }).to_return(status: 200, body: links.to_json, headers: {})
+      end
+
       # Stub GET /v2/links/:content_id to return a 404 response
       #
       # @param content_id [UUID]
