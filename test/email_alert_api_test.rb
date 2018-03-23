@@ -250,7 +250,7 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
-  describe "unsubscribing" do
+  describe "unsubscribing from a topic" do
     describe "with an existing subscription" do
       it "returns a 204" do
         uuid = SecureRandom.uuid
@@ -271,6 +271,32 @@ describe GdsApi::EmailAlertApi do
 
         assert_raises GdsApi::HTTPNotFound do
           api_client.unsubscribe(uuid)
+        end
+      end
+    end
+  end
+
+  describe "unsubscribing from everything" do
+    describe "with an existing subscriber" do
+      it "returns a 204" do
+        subscriber_id = SecureRandom.random_number(10)
+        email_alert_api_unsubscribes_a_subscriber(subscriber_id)
+        api_response = api_client.unsubscribe_subscriber(subscriber_id)
+
+        assert_equal(
+          api_response.code,
+          204
+        )
+      end
+    end
+
+    describe "without an existing subscriber" do
+      it "returns a 404" do
+        subscriber_id = SecureRandom.random_number(10)
+        email_alert_api_has_no_subscriber(subscriber_id)
+
+        assert_raises GdsApi::HTTPNotFound do
+          api_client.unsubscribe_subscriber(subscriber_id)
         end
       end
     end

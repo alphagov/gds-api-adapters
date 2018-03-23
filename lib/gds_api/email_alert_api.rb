@@ -68,13 +68,22 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     get_json("#{endpoint}/topic-matches.json?#{query_string}")
   end
 
-  # Unsubscribe
+  # Unsubscribe subscriber from subscription
   # #
   # @param uuid Subscription uuid
   #
-  # @return [Hash] deleted
+  # @return null
   def unsubscribe(uuid)
     post_json("#{endpoint}/unsubscribe/#{uuid}")
+  end
+
+  # Unsubscribe subscriber from everything
+  # #
+  # @param integer Subscriber id
+  #
+  # @return null
+  def unsubscribe_subscriber(id)
+    delete_json("#{endpoint}/subscribers/#{id}")
   end
 
   # Subscribe
