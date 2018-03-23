@@ -196,6 +196,16 @@ module GdsApi
           .to_return(status: 404)
       end
 
+      def email_alert_api_unsubscribes_a_subscriber(subscriber_id)
+        stub_request(:delete, unsubscribe_subscriber_url(subscriber_id))
+          .to_return(status: 204)
+      end
+
+      def email_alert_api_has_no_subscriber(subscriber_id)
+        stub_request(:delete, unsubscribe_subscriber_url(subscriber_id))
+          .to_return(status: 404)
+      end
+
       def email_alert_api_creates_a_subscription(subscribable_id, address, frequency, returned_subscription_id)
         stub_request(:post, subscribe_url)
           .with(
@@ -278,6 +288,10 @@ module GdsApi
 
       def unsubscribe_url(uuid)
         EMAIL_ALERT_API_ENDPOINT + "/unsubscribe/#{uuid}"
+      end
+
+      def unsubscribe_subscriber_url(id)
+        EMAIL_ALERT_API_ENDPOINT + "/subscribers/#{id}"
       end
 
       def subscribe_url
