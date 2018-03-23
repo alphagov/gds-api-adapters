@@ -1,3 +1,7 @@
+# 52.4.0
+
+* Add `unsubscribe_subscriber` to `GdsApi::EmailAlertApi`.
+
 # 52.3.0
 
 * Change `get_subscriptions` and `change_subscriber` to accept a subscriber ID rather than an email address
