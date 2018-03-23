@@ -1,3 +1,7 @@
+# 52.3.0
+
+* Change `get_subscriptions` and `change_subscriber` to accept a subscriber ID rather than an email address
+
 # 52.2.1
 
 * Add a title parameter to the `get_subscription_response` stub for Email Alert API.
