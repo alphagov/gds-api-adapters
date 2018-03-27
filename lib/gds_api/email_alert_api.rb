@@ -69,19 +69,19 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   end
 
   # Unsubscribe subscriber from subscription
-  # #
-  # @param uuid Subscription uuid
   #
-  # @return null
+  # @param [string] Subscription uuid
+  #
+  # @return [nil]
   def unsubscribe(uuid)
     post_json("#{endpoint}/unsubscribe/#{uuid}")
   end
 
   # Unsubscribe subscriber from everything
-  # #
-  # @param integer Subscriber id
   #
-  # @return null
+  # @param [integer] Subscriber id
+  #
+  # @return [nil]
   def unsubscribe_subscriber(id)
     delete_json("#{endpoint}/subscribers/#{id}")
   end
@@ -135,8 +135,8 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   end
 
   # Get Subscriptions for a Subscriber
-  # #
-  # @param integer Subscriber id
+  #
+  # @param [integer] Subscriber id
   #
   # @return [Hash] subscriber, subscriptions
   def get_subscriptions(id:)
@@ -144,9 +144,9 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   end
 
   # Patch a Subscriber
-  # #
-  # @param integer Subscriber id
-  # @param string Subscriber new_address
+  #
+  # @param [integer] Subscriber id
+  # @param [string] Subscriber new_address
   #
   # @return [Hash] subscriber
   def change_subscriber(id:, new_address:)
@@ -157,9 +157,9 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   end
 
   # Patch a Subscription
-  # #
-  # @param string Subscription id
-  # @param string Subscription frequency
+  #
+  # @param [string] Subscription id
+  # @param [string] Subscription frequency
   #
   # @return [Hash] subscription
   def change_subscription(id:, frequency:)
