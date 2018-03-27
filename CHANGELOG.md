@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add `create_auth_token` to `GdsApi::EmailAlertApi`.
+
 # 52.4.0
 
 * Add `unsubscribe_subscriber` to `GdsApi::EmailAlertApi`.
