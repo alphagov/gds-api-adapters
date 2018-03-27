@@ -227,6 +227,14 @@ module GdsApi
         ).to_return(status: 422)
       end
 
+      def email_alert_api_creates_an_auth_token(subscriber_id, address)
+        stub_request(:post, auth_token_url)
+          .to_return(
+            status: 201,
+            body: get_subscriber_response(subscriber_id, address).to_json
+          )
+      end
+
       def assert_unsubscribed(uuid)
         assert_requested(:post, unsubscribe_url(uuid), times: 1)
       end
@@ -312,6 +320,10 @@ module GdsApi
 
       def subscriber_subscriptions_url(id)
         EMAIL_ALERT_API_ENDPOINT + "/subscribers/#{id}/subscriptions"
+      end
+
+      def auth_token_url
+        EMAIL_ALERT_API_ENDPOINT + "/subscribers/auth-token"
       end
     end
   end

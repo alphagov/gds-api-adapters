@@ -471,4 +471,12 @@ describe GdsApi::EmailAlertApi do
       end
     end
   end
+
+  describe "create an auth token" do
+    it "returns 201" do
+      email_alert_api_creates_an_auth_token(1, "test@example.com")
+      api_response = api_client.create_auth_token(address: 1, destination: "/test")
+      assert_equal(201, api_response.code)
+    end
+  end
 end

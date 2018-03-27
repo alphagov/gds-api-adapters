@@ -169,6 +169,23 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     )
   end
 
+  # Create an authentication token for a subscriber
+  #
+  # @param [string]       address       Email address of subscriber to create token for
+  # @param [string]       destination   Path on GOV.UK that subscriber will be emailed
+  # @param [string, nil]  redirect      Path on GOV.UK to be encoded into the token for redirecting
+  #
+  # @return [Hash]  subscriber
+  #
+  def create_auth_token(address:, destination:, redirect: nil)
+    post_json(
+      "#{endpoint}/subscribers/auth-token",
+      address: address,
+      destination: destination,
+      redirect: redirect,
+    )
+  end
+
 private
 
   def nested_query_string(params)
