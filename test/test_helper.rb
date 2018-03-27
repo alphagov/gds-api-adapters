@@ -28,14 +28,14 @@ require 'pact/consumer/minitest'
 module PactTest
   include Pact::Consumer::Minitest
 
-  def before_suite
+  def before_setup
     # Pact does its own stubbing of network connections, so we want to
     # prevent WebMock interfering when pact is being used.
     ::WebMock.allow_net_connect!
     super
   end
 
-  def after_suite
+  def after_teardown
     super
     ::WebMock.disable_net_connect!
   end
