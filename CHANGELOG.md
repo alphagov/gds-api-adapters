@@ -1,4 +1,4 @@
-# Unreleased
+# 52.5.0
 
 * Add `create_auth_token` to `GdsApi::EmailAlertApi`.
 
