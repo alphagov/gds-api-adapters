@@ -23,7 +23,7 @@ module GdsApi
         stub_request(:patch, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions/#{subscription_id}")
           .to_return(
             status: 200,
-            body: get_subscription_response(subscription_id, frequency).to_json,
+            body: get_subscription_response(subscription_id, frequency: frequency).to_json,
           )
       end
 
@@ -45,11 +45,25 @@ module GdsApi
           .to_return(status: 404)
       end
 
-      def email_alert_api_has_subscription(id, frequency, title: "Some title")
+      def email_alert_api_has_subscription(
+        id,
+        frequency,
+        title: "Some title",
+        subscriber_id: 1,
+        subscriber_list_id: 1000,
+        ended: false
+      )
         stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions/#{id}")
           .to_return(
             status: 200,
-            body: get_subscription_response(id, frequency, title).to_json,
+            body: get_subscription_response(
+              id,
+              frequency: frequency,
+              title: title,
+              subscriber_id: subscriber_id,
+              subscriber_list_id: subscriber_list_id,
+              ended: ended,
+            ).to_json,
           )
       end
 
@@ -211,15 +225,27 @@ module GdsApi
         }
       end
 
-      def get_subscription_response(id, frequency, title = "Some title")
+      def get_subscription_response(
+        id,
+        frequency: "daily",
+        title: "Some title",
+        subscriber_id: 1,
+        subscriber_list_id: 1000,
+        ended: false
+      )
         {
           "subscription" => {
-            "subscriber_id" => 1,
-            "subscriber_list_id" => 1000,
-            "frequency" => frequency,
             "id" => id,
+            "frequency" => frequency,
+            "source" => "user_signed_up",
+            "ended_at" => ended ? Time.now.rfc3339 : nil,
+            "ended_reason" => ended ? "unsubscribed" : nil,
+            "subscriber" => {
+              "id" => subscriber_id,
+              "address" => "test@example.com",
+            },
             "subscriber_list" => {
-              "id" => 1000,
+              "id" => subscriber_list_id,
               "slug" => "some-thing",
               "title" => title,
             }
