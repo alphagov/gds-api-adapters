@@ -1,3 +1,7 @@
+# Unreleased
+
+* Make the subscription response for Email Alert API closer to reality.
+
 # 52.5.0
 
 * Add `create_auth_token` to `GdsApi::EmailAlertApi`.
