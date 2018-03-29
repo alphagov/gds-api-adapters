@@ -1,4 +1,4 @@
-# Unreleased
+# 52.5.1
 
 * Make the subscription response for Email Alert API closer to reality.
 
