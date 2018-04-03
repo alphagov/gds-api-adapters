@@ -19,6 +19,28 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
     }
   }
 
+  let(:expected_put_content_payload) {
+    {
+      base_path: special_route[:base_path],
+      document_type: "special_route",
+      schema_name: "special_route",
+      title: special_route[:title],
+      description: special_route[:description],
+      routes: [
+        {
+          path: special_route[:base_path],
+          type: special_route[:type],
+        }
+      ],
+      locale: "en",
+      details: {},
+      publishing_app: special_route[:publishing_app],
+      rendering_app: special_route[:rendering_app],
+      public_updated_at: Time.now.iso8601,
+      update_type: "major",
+    }
+  }
+
   let(:publisher) { GdsApi::PublishingApi::SpecialRoutePublisher.new }
   let(:endpoint) { Plek.current.find('publishing-api') }
 
@@ -33,28 +55,13 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
       Timecop.freeze(Time.now) do
         publisher.publish(special_route)
 
-        expected_payload = {
-          base_path: special_route[:base_path],
-          document_type: "special_route",
-          schema_name: "special_route",
-          title: special_route[:title],
-          description: special_route[:description],
-          routes: [
-            {
-              path: special_route[:base_path],
-              type: special_route[:type],
-            }
-          ],
-          locale: "en",
-          details: {},
-          publishing_app: special_route[:publishing_app],
-          rendering_app: special_route[:rendering_app],
-          public_updated_at: Time.now.iso8601,
-          update_type: "major",
-        }
+        assert_requested(
+          :put,
+          "#{endpoint}/v2/content/#{content_id}",
+          body: expected_put_content_payload
+        )
+        assert_valid_special_route(expected_put_content_payload)
 
-        assert_requested(:put, "#{endpoint}/v2/content/#{content_id}", body: expected_payload)
-        assert_valid_special_route(expected_payload)
         assert_publishing_api_publish(content_id)
       end
     end
