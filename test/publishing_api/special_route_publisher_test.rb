@@ -44,6 +44,18 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
   let(:publisher) { GdsApi::PublishingApi::SpecialRoutePublisher.new }
   let(:endpoint) { Plek.current.find('publishing-api') }
 
+  describe "expected put_content payload" do
+    it "is valid" do
+      validator = GovukContentSchemaTestHelpers::Validator.new(
+        "special_route",
+        "schema",
+        expected_put_content_payload
+      )
+
+      assert validator.valid?, validator.errors.join("\n")
+    end
+  end
+
   describe ".publish" do
     before do
       stub_publishing_api_put_content(special_route[:content_id], {})
@@ -60,7 +72,6 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
           "#{endpoint}/v2/content/#{content_id}",
           body: expected_put_content_payload
         )
-        assert_valid_special_route(expected_put_content_payload)
 
         assert_publishing_api_publish(content_id)
       end
@@ -131,15 +142,5 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
         end
       end
     end
-  end
-
-  def assert_valid_special_route(payload)
-    validator = GovukContentSchemaTestHelpers::Validator.new(
-      "special_route",
-      "schema",
-      payload
-    )
-
-    assert validator.valid?, validator.errors.join("\n")
   end
 end
