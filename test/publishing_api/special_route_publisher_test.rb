@@ -24,7 +24,9 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
 
   describe ".publish" do
     before do
-      stub_any_publishing_api_call
+      stub_publishing_api_put_content(special_route[:content_id], {})
+      stub_publishing_api_publish(special_route[:content_id], {})
+      stub_publishing_api_patch_links(special_route[:content_id], {})
     end
 
     it "publishes valid special routes" do
