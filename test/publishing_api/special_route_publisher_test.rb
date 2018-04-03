@@ -19,6 +19,14 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
     }
   }
 
+  let(:special_route_links) {
+    {
+      links: {
+        organisations: ['org-content-id']
+      }
+    }
+  }
+
   let(:expected_put_content_payload) {
     {
       base_path: special_route[:base_path],
@@ -95,15 +103,13 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
     end
 
     it "publishes links" do
-      links = {
-        links: {
-          organisations: ['org-content-id']
-        }
-      }
+      publisher.publish(special_route.merge(special_route_links))
 
-      publisher.publish(special_route.merge(links))
-
-      assert_requested(:patch, "#{endpoint}/v2/links/#{content_id}", body: links)
+      assert_requested(
+        :patch,
+        "#{endpoint}/v2/links/#{content_id}",
+        body: special_route_links
+      )
     end
   end
 
