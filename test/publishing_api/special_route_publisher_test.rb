@@ -105,41 +105,41 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
 
       assert_requested(:patch, "#{endpoint}/v2/links/#{content_id}", body: links)
     end
+  end
 
-    describe 'Timezone handling' do
-      let(:publishing_api) {
-        stub(:publishing_api, put_content_item: nil)
-      }
-      let(:publisher) {
-        GdsApi::PublishingApi::SpecialRoutePublisher.new(publishing_api: publishing_api)
-      }
+  describe 'Timezone handling' do
+    let(:publishing_api) {
+      stub(:publishing_api, put_content_item: nil)
+    }
+    let(:publisher) {
+      GdsApi::PublishingApi::SpecialRoutePublisher.new(publishing_api: publishing_api)
+    }
 
-      it "is robust to Time.zone returning nil" do
-        Timecop.freeze(Time.now) do
-          Time.stubs(:zone).returns(nil)
-          publishing_api.expects(:put_content).with(
-            anything,
-            has_entries(public_updated_at: Time.now.iso8601)
-          )
-          publishing_api.expects(:publish)
+    it "is robust to Time.zone returning nil" do
+      Timecop.freeze(Time.now) do
+        Time.stubs(:zone).returns(nil)
+        publishing_api.expects(:put_content).with(
+          anything,
+          has_entries(public_updated_at: Time.now.iso8601)
+        )
+        publishing_api.expects(:publish)
 
-          publisher.publish(special_route)
-        end
+        publisher.publish(special_route)
       end
+    end
 
-      it "uses Time.zone if available" do
-        Timecop.freeze(Time.now) do
-          time_in_zone = stub("Time in zone", now: Time.parse("2010-01-01 10:10:10 +04:00"))
-          Time.stubs(:zone).returns(time_in_zone)
+    it "uses Time.zone if available" do
+      Timecop.freeze(Time.now) do
+        time_in_zone = stub("Time in zone", now: Time.parse("2010-01-01 10:10:10 +04:00"))
+        Time.stubs(:zone).returns(time_in_zone)
 
-          publishing_api.expects(:put_content).with(
-            anything,
-            has_entries(public_updated_at: time_in_zone.now.iso8601)
-          )
-          publishing_api.expects(:publish)
+        publishing_api.expects(:put_content).with(
+          anything,
+          has_entries(public_updated_at: time_in_zone.now.iso8601)
+        )
+        publishing_api.expects(:publish)
 
-          publisher.publish(special_route)
-        end
+        publisher.publish(special_route)
       end
     end
   end
