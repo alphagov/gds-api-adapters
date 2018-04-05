@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add `get_and_patch_links` to `GdsApi::PublishingApiV2`.
+
 # 52.5.1
 
 * Make the subscription response for Email Alert API closer to reality.
