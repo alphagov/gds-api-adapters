@@ -358,7 +358,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2linkedcontent_id
   def get_linked_items(content_id, params = {})
-    query = query_string(params)
+    query = query_string(convert_include_withdrawn(params))
     validate_content_id(content_id)
     get_json("#{endpoint}/v2/linked/#{content_id}#{query}")
   end
@@ -428,6 +428,12 @@ private
     validate_content_id(content_id)
     query = query_string(params)
     "#{endpoint}/v2/content/#{content_id}#{query}"
+  end
+
+  def convert_include_withdrawn(params)
+    new_params = params.reject { |k, _| k == :include_withdrawn }
+    return new_params.merge(debug: 'include_withdrawn') if params[:include_withdrawn]
+    new_params
   end
 
   def links_url(content_id)

@@ -30,18 +30,44 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
         links
       )
     end
+
+    it "stubs the get linked items api call with 'debug' => 'include_withdrawn'" do
+      links = [
+        { 'content_id' => 'id-1', 'title' => 'title 1', 'link_type' => 'taxons' },
+        { 'content_id' => 'id-2', 'title' => 'title 2', 'link_type' => 'taxons' },
+      ]
+      publishing_api_has_linked_items(
+        links,
+        content_id: 'content-id',
+        link_type: 'taxons',
+        fields: [:title],
+        include_withdrawn: true
+      )
+
+      api_response = publishing_api.get_linked_items(
+        'content-id',
+        link_type: 'taxons',
+        fields: [:title],
+        include_withdrawn: true
+      )
+
+      assert_equal(
+        api_response.to_hash,
+        links
+      )
+    end
   end
 
   describe "#publish_api_has_links_for_content_ids" do
     it "stubs the call to get links for content ids" do
       links = {
-                "2878337b-bed9-4e7f-85b6-10ed2cbcd504" => {
-                  "links" => { "taxons" => ["eb6965c7-3056-45d0-ae50-2f0a5e2e0854"] }
-                },
-                "eec13cea-219d-4896-9c97-60114da23559" => {
-                  "links" => {}
-                }
-              }
+        "2878337b-bed9-4e7f-85b6-10ed2cbcd504" => {
+          "links" => { "taxons" => ["eb6965c7-3056-45d0-ae50-2f0a5e2e0854"] }
+        },
+        "eec13cea-219d-4896-9c97-60114da23559" => {
+          "links" => {}
+        }
+      }
 
       publishing_api_has_links_for_content_ids(links)
 
@@ -100,8 +126,8 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
           { "content_id" => content_id_2 },
           { "content_id" => content_id_3 },
         ],
-                  page: 1,
-          per_page: 2
+        page: 1,
+        per_page: 2
       )
 
       response = publishing_api.get_content_items(page: 1, per_page: 2)
@@ -125,8 +151,8 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
           { "content_id" => content_id_1 },
           { "content_id" => content_id_2 },
         ],
-                  page: 10,
-          per_page: 2
+        page: 10,
+        per_page: 2
       )
 
       response = publishing_api.get_content_items(page: 10, per_page: 2)
@@ -156,9 +182,9 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
       ).parsed_content
 
       assert_equal({
-          "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504",
-          "version" => 3
-        },
+        "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504",
+        "version" => 3
+      },
         response
       )
     end
