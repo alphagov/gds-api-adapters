@@ -503,6 +503,8 @@ module GdsApi
 
       #
       # Stub calls to the get linked items endpoint
+      # Including include_withdrawn: true in the params
+      # adds 'debug' => 'include_withdrawn' to the request
       #
       # @param items [Array] The linked items we wish to return
       # @param params [Hash] A hash of parameters
@@ -525,13 +527,10 @@ module GdsApi
 
         url = Plek.current.find('publishing-api') + "/v2/linked/#{content_id}"
 
-        request_parmeters = {
-          "fields" => fields,
-          "link_type" => link_type,
-        }
+        request_parameters = build_request_parameters(fields, link_type, params[:include_withdrawn])
 
         stub_request(:get, url)
-          .with(query: request_parmeters)
+          .with(query: request_parameters)
           .and_return(
             body: items.to_json,
             status: 200
@@ -573,6 +572,16 @@ module GdsApi
       end
 
     private
+
+      def build_request_parameters(fields, link_type, include_withdrawn)
+        request_parameters = {
+          "fields" => fields,
+          "link_type" => link_type,
+        }
+
+        return request_parameters.merge('debug' => 'include_withdrawn') if include_withdrawn
+        request_parameters
+      end
 
       def stub_publishing_api_put(*args)
         stub_publishing_api_postlike_call(:put, *args)
