@@ -8,7 +8,6 @@ module GdsApi
           "description" => "Description for #{base_path}",
           "schema_name" => "guide",
           "document_type" => "guide",
-          "need_ids" => ["100001"],
           "public_updated_at" => "2014-05-06T12:01:00+00:00",
           # base_path is added in as necessary (ie for content-store GET responses)
           # "base_path" => base_path,
