@@ -279,6 +279,7 @@ module GdsApi
           "subscriber_list" => {
             "id" => "447135c3-07d6-4c3a-8a3b-efa49ef70e52",
             "title" => "Some title",
+            "active_subscriptions_count" => 42,
           }.merge(attributes)
         }
       end

@@ -97,6 +97,11 @@ describe GdsApi::EmailAlertApi do
             expected_subscription_url,
             subscriber_list_attrs.fetch("subscription_url"),
           )
+
+          assert_equal(
+            42,
+            subscriber_list_attrs.fetch("active_subscriptions_count"),
+          )
         end
       end
 
