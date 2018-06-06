@@ -209,6 +209,50 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json(links_url(content_id))
   end
 
+  # Update the links for a given content_id.
+  #
+  # Given a Content ID, it fetchs the existing link set and passes
+  # that to the provided block. The return value of the block is then
+  # passed to `patch_links`.
+  #
+  # @param content_id [String]
+  # @param options [Hash]
+  # @option params [Boolean] bulk_publishing Set to true to indicate
+  #   that this is part of a mass-republish. Allows the publishing-api
+  #   to prioritise human-initiated publishing (optional, default
+  #   false)
+  #
+  # @yieldparam [Hash] The existing links for the content_id.
+  # @yieldreturn [Hash] The new links for the content_id.
+  #
+  # @return [GdsApi::Response] The response from the patch links
+  # request.
+  #
+  # @example
+  #
+  #   publishing_api.get_and_patch_links("a-content-id") do |links|
+  #     {
+  #       'link_type' => (
+  #         links.fetch('link_type', []) + ['e10655d3-31eb-4909-84f7-5b7a2312cbfc']
+  #       ).uniq
+  #     }
+  #   end
+  def get_and_patch_links(content_id, options = {})
+    links = get_links(content_id)
+
+    patch_links(
+      content_id,
+      merge_optional_keys(
+        {
+          links: yield(links["links"]),
+          previous_version: links["previous_version"]
+        },
+        options,
+        %i[bulk_publishing]
+      )
+    )
+  end
+
   # Returns an array of changes to links.
   #
   # The link changes can be filtered by link_type, source content_id,
