@@ -1,3 +1,8 @@
+# Unreleased
+
+* Add `generate` argument to `publishing_api_has_expanded_links` which reflects the behaviour of the actual request
+  more closely
+
 # 52.5.1
 
 * Make the subscription response for Email Alert API closer to reality.
