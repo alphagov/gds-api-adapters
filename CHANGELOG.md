@@ -1,4 +1,4 @@
-# Unreleased
+# 52.6.0
 
 * Add `generate` argument to `publishing_api_has_expanded_links` which reflects the behaviour of the actual request
   more closely
