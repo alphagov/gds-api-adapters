@@ -441,11 +441,16 @@ module GdsApi
       #           ]
       #         }
       #       }
-      def publishing_api_has_expanded_links(links, with_drafts: true)
+      def publishing_api_has_expanded_links(links, with_drafts: true, generate: false)
         links = deep_transform_keys(links, &:to_sym)
-        query = with_drafts ? "" : "?with_drafts=false"
-        url = PUBLISHING_API_V2_ENDPOINT + "/expanded-links/" + links[:content_id] + query
-        stub_request(:get, url).to_return(status: 200, body: links.to_json, headers: {})
+        request_params = {}
+        request_params['with_drafts'] = false if !with_drafts
+        request_params['generate'] = true if generate
+
+        url = PUBLISHING_API_V2_ENDPOINT + "/expanded-links/" + links[:content_id]
+        stub_request(:get, url)
+          .with(query: request_params)
+          .to_return(status: 200, body: links.to_json, headers: {})
       end
 
       # Stub a request to get links for content ids
