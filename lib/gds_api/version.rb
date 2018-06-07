@@ -1,3 +1,3 @@
 module GdsApi
-  VERSION = '52.5.1'.freeze
+  VERSION = '52.6.0'.freeze
 end
