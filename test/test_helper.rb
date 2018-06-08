@@ -13,7 +13,7 @@ end
 require 'minitest/autorun'
 require 'rack/utils'
 require 'rack/test'
-require 'mocha/mini_test'
+require 'mocha/minitest'
 require 'timecop'
 require 'gds-api-adapters'
 require 'govuk-content-schema-test-helpers'
