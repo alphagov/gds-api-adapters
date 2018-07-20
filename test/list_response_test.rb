@@ -41,7 +41,10 @@ describe GdsApi::ListResponse do
       page_1 = {
         "results" => %w(foo1 bar1),
         "total" => 6,
-        "current_page" => 1, "pages" => 3, "page_size" => 2,
+        "current_page" => 1,
+        "pages" => 3,
+        "page_size" => 2,
+        "next_page_url" => "http://www.example.com/2",
         "_response_info" => {
           "status" => "ok",
           "links" => [
@@ -53,7 +56,11 @@ describe GdsApi::ListResponse do
       page_2 = {
         "results" => %w(foo2 bar2),
         "total" => 6,
-        "current_page" => 2, "pages" => 3, "page_size" => 2,
+        "current_page" => 2,
+        "pages" => 3,
+        "page_size" => 2,
+        "next_page_url" => "http://www.example.com/3",
+        "previous_page_url" => "http://www.example.com/1",
         "_response_info" => {
           "status" => "ok",
           "links" => [
@@ -66,7 +73,10 @@ describe GdsApi::ListResponse do
       page_3 = {
         "results" => %w(foo3 bar3),
         "total" => 6,
-        "current_page" => 3, "pages" => 3, "page_size" => 2,
+        "current_page" => 3,
+        "pages" => 3,
+        "page_size" => 2,
+        "previous_page_url" => "http://www.example.com/2",
         "_response_info" => {
           "status" => "ok",
           "links" => [
@@ -77,24 +87,15 @@ describe GdsApi::ListResponse do
       }
       @p1_response = stub(
         body: page_1.to_json,
-        status: 200,
-        headers: {
-          link: '<http://www.example.com/1>; rel="self", <http://www.example.com/2>; rel="next"'
-        }
+        status: 200
       )
       @p2_response = stub(
         body: page_2.to_json,
-        status: 200,
-        headers: {
-          link: '<http://www.example.com/2>; rel="self", <http://www.example.com/3>; rel="next", <http://www.example.com/1>; rel="previous"'
-        }
+        status: 200
       )
       @p3_response = stub(
         body: page_3.to_json,
-        status: 200,
-        headers: {
-          link: '<http://www.example.com/3>; rel="self", <http://www.example.com/1>; rel="previous"'
-        }
+        status: 200
       )
 
       @client = stub
