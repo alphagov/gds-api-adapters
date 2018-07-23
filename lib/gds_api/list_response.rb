@@ -25,30 +25,21 @@ module GdsApi
     end
 
     def has_next_page?
-      ! page_link("next").nil?
-    end
-
-    def next_page
-      # This shouldn't be a performance problem, since the cache will generally
-      # avoid us making multiple requests for the same page, but we shouldn't
-      # allow the data to change once it's already been loaded, so long as we
-      # retain a reference to any one page in the sequence
-      @next_page ||= if has_next_page?
-                       @api_client.get_list page_link("next").href
-                     end
+      to_hash["next_page_url"]
     end
 
     def has_previous_page?
-      ! page_link("previous").nil?
+      to_hash["previous_page_url"]
+    end
+
+    def next_page
+      return unless to_hash["next_page_url"]
+      @next_page ||= @api_client.get_list(to_hash["next_page_url"])
     end
 
     def previous_page
-      # See the note in `next_page` for why this is memoised
-      @previous_page ||= begin
-        if has_previous_page?
-          @api_client.get_list(page_link("previous").href)
-        end
-      end
+      return unless to_hash["previous_page_url"]
+      @previous_page ||= @api_client.get_list(to_hash["previous_page_url"])
     end
 
     # Transparently get all results across all pages. Compare this with #each
@@ -70,22 +61,13 @@ module GdsApi
     # point. Note that the responses are stored so subsequent pages will not be
     # loaded multiple times.
     def with_subsequent_pages
-      Enumerator.new { |yielder|
-        self.each do |i| yielder << i end
-        if has_next_page?
-          next_page.with_subsequent_pages.each do |i| yielder << i end
+      Enumerator.new do |yielder|
+        self.each { |i| yielder << i }
+
+        if next_page
+          next_page.with_subsequent_pages.each { |i| yielder << i }
         end
-      }
-    end
-
-  private
-
-    def link_header
-      @link_header ||= LinkHeader.parse @http_response.headers[:link]
-    end
-
-    def page_link(rel)
-      link_header.find_link(["rel", rel])
+      end
     end
   end
 end

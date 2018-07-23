@@ -34,6 +34,8 @@ module GdsApi
         end
 
         pages.each_with_index do |page, i|
+          links = { self: "#{ORGANISATIONS_API_ENDPOINT}/api/organisations?page=#{i + 1}" }
+
           page_details = plural_response_base.merge("results" => page,
             "total" => organisation_bodies.size,
             "pages" => pages.size,
@@ -41,22 +43,22 @@ module GdsApi
             "page_size" => 20,
             "start_index" => i * 20 + 1)
 
-          links = { self: "#{ORGANISATIONS_API_ENDPOINT}/api/organisations?page=#{i + 1}" }
-          links[:next] = "#{ORGANISATIONS_API_ENDPOINT}/api/organisations?page=#{i + 2}" if pages[i + 1]
-          links[:previous] = "#{ORGANISATIONS_API_ENDPOINT}/api/organisations?page=#{i}" unless i == 0
-          page_details["_response_info"]["links"] = []
-          link_headers = []
-          links.each do |rel, href|
-            page_details["_response_info"]["links"] << { "rel" => rel, "href" => href }
-            link_headers << "<#{href}>; rel=\"#{rel}\""
+          if pages[i + 1]
+            page_details["next_page_url"] = "#{ORGANISATIONS_API_ENDPOINT}/api/organisations?page=#{i + 2}"
+            links[:next] = page_details["next_page_url"]
           end
 
-          stub_request(:get, links[:self]).
-            to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
-          if i == 0
-            # First page exists at URL with and without page param
-            stub_request(:get, links[:self].sub(/\?page=1/, '')).
-              to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
+          unless i.zero?
+            page_details["previous_page_url"] = "#{ORGANISATIONS_API_ENDPOINT}/api/organisations?page=#{i}"
+            links[:previous] = page_details["previous_page_url"]
+          end
+
+          if i.zero?
+            stub_request(:get, links[:self].sub(/\?page=1/, ''))
+              .to_return(status: 200, body: page_details.to_json)
+          else
+            stub_request(:get, links[:self])
+              .to_return(status: 200, body: page_details.to_json)
           end
         end
 
