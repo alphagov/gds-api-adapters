@@ -154,8 +154,7 @@ describe GdsApi::PublishingApiV2 do
             "schema_name" => "manual",
             "locale" => "en",
             "details" => { "body" => [] },
-            "previous_version" => "3"
-          )
+            "previous_version" => "3")
 
           publishing_api
             .given("the content item #{@content_id} is at version 3")
@@ -186,8 +185,7 @@ describe GdsApi::PublishingApiV2 do
             "schema_name" => "manual",
             "locale" => "en",
             "details" => { "body" => [] },
-            "previous_version" => "2"
-          )
+            "previous_version" => "2")
 
           publishing_api
             .given("the content item #{@content_id} is at version 3")
@@ -1123,8 +1121,7 @@ describe GdsApi::PublishingApiV2 do
             links: {
               organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
             },
-            previous_version: 3,
-          )
+            previous_version: 3,)
 
           assert_equal 200, response.code
         end
@@ -1171,8 +1168,7 @@ describe GdsApi::PublishingApiV2 do
               links: {
                 organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
               },
-              previous_version: 2,
-            )
+              previous_version: 2,)
           end
 
           assert_equal 409, error.code
@@ -1375,7 +1371,7 @@ describe GdsApi::PublishingApiV2 do
 
       response = @api_client.get_content_items(
         document_type: 'topic',
-        fields: [:title, :base_path],
+        fields: %i[title base_path],
       )
 
       assert_equal 200, response.code
@@ -1419,7 +1415,7 @@ describe GdsApi::PublishingApiV2 do
 
       response = @api_client.get_content_items(
         document_type: 'topic',
-        fields: [:content_id, :locale],
+        fields: %i[content_id locale],
       )
 
       assert_equal 200, response.code
@@ -1463,7 +1459,7 @@ describe GdsApi::PublishingApiV2 do
 
       response = @api_client.get_content_items(
         document_type: 'topic',
-        fields: [:content_id, :locale],
+        fields: %i[content_id locale],
         locale: 'fr',
       )
 
@@ -1509,7 +1505,7 @@ describe GdsApi::PublishingApiV2 do
 
       response = @api_client.get_content_items(
         document_type: 'topic',
-        fields: [:content_id, :locale],
+        fields: %i[content_id locale],
         locale: 'all',
       )
 
@@ -1556,7 +1552,7 @@ describe GdsApi::PublishingApiV2 do
 
       response = @api_client.get_content_items(
         document_type: 'topic',
-        fields: [:content_id, :details],
+        fields: %i[content_id details],
       )
 
       assert_equal 200, response.code
@@ -1593,7 +1589,7 @@ describe GdsApi::PublishingApiV2 do
               rel: "self"
             }],
             results: [
-              { content_id:  "aaaaaaaa-aaaa-1aaa-aaaa-aaaaaaaaaaaa" }
+              { content_id: "aaaaaaaa-aaaa-1aaa-aaaa-aaaaaaaaaaaa" }
             ]
           }
         )
@@ -1976,7 +1972,7 @@ describe GdsApi::PublishingApiV2 do
   end
 
   describe "content ID validation" do
-    [:get_content, :get_links, :get_linked_items, :discard_draft].each do |method|
+    %i[get_content get_links get_linked_items discard_draft].each do |method|
       it "happens on #{method}" do
         proc { @api_client.send(method, nil) }.must_raise ArgumentError
       end

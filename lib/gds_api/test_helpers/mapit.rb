@@ -23,7 +23,7 @@ module GdsApi
           "postcode"  => postcode
         }
 
-        area_response = Hash[areas.map.with_index {|area, i|
+        area_response = Hash[areas.map.with_index { |area, i|
           [i, {
             'codes' => {
               'ons' => area['ons'],

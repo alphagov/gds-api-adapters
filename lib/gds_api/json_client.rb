@@ -259,26 +259,21 @@ module GdsApi
       end
 
       return ::RestClient::Request.execute(method_params)
-
     rescue Errno::ECONNREFUSED => e
       logger.error loggable.merge(status: 'refused', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::EndpointNotFound.new("Could not connect to #{url}")
-
     rescue RestClient::Exceptions::Timeout => e
       logger.error loggable.merge(status: 'timeout', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::TimedOutException.new
-
     rescue URI::InvalidURIError => e
       logger.error loggable.merge(status: 'invalid_uri', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::InvalidUrl
-
     rescue RestClient::Exception => e
       # Log the error here, since we have access to loggable, but raise the
       # exception up to the calling method to deal with
       loggable.merge!(status: e.http_code, end_time: Time.now.to_f, body: e.http_body)
       logger.warn loggable.to_json
       raise
-
     rescue Errno::ECONNRESET => e
       logger.error loggable.merge(status: 'connection_reset', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::TimedOutException.new

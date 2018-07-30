@@ -19,7 +19,7 @@ class GdsApi::Router < GdsApi::Base
 
   def get_route(path, type = nil)
     if type
-      $stderr.puts "DEPRECATION WARNING: passing type to GdsApi::Router#get_route is deprecated and will be removed in a future version. Caller: #{caller[0]}"
+      warn "DEPRECATION WARNING: passing type to GdsApi::Router#get_route is deprecated and will be removed in a future version. Caller: #{caller(1..1)}"
     end
     get_json("#{endpoint}/routes?incoming_path=#{CGI.escape(path)}")
   end

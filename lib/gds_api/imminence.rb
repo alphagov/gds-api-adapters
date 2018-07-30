@@ -2,7 +2,7 @@ require_relative 'base'
 
 class GdsApi::Imminence < GdsApi::Base
   def api_url(type, params)
-    vals = [:limit, :lat, :lng, :postcode].select { |p| params.include? p }
+    vals = %i[limit lat lng postcode].select { |p| params.include? p }
     querystring = URI.encode_www_form vals.map { |p| [p, params[p]] }
     "#{@endpoint}/places/#{type}.json?#{querystring}"
   end
