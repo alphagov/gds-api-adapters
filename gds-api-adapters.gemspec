@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+
 lib = File.expand_path('../lib/', __FILE__)
 $:.unshift lib unless $:.include?(lib)
 
@@ -17,13 +18,13 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.3.0'
   s.files        = Dir.glob("lib/**/*") + Dir.glob("test/fixtures/**/*") + %w(README.md Rakefile)
   s.require_path = 'lib'
-  s.add_dependency 'plek', '>= 1.9.0'
-  s.add_dependency 'null_logger'
+  s.add_dependency 'addressable'
   s.add_dependency 'link_header'
   s.add_dependency 'lrucache', '~> 0.1.1'
-  s.add_dependency 'rest-client', '~> 2.0'
+  s.add_dependency 'null_logger'
+  s.add_dependency 'plek', '>= 1.9.0'
   s.add_dependency 'rack-cache'
-  s.add_dependency 'addressable'
+  s.add_dependency 'rest-client', '~> 2.0'
 
   s.add_development_dependency 'govuk-content-schema-test-helpers', '~> 1.6'
   s.add_development_dependency 'govuk-lint', '~> 3.7'

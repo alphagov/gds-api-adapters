@@ -132,7 +132,6 @@ describe GdsApi::PublishingApi do
           headers: {
             "Content-Type" => "application/json"
           },
-
         )
         .will_respond_with(
           status: 422,

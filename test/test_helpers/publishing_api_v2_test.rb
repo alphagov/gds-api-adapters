@@ -159,8 +159,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
           "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504",
           "version" => 3
         },
-        response
-      )
+        response)
     end
   end
 

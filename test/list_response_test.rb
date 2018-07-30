@@ -32,7 +32,7 @@ describe GdsApi::ListResponse do
       response = GdsApi::ListResponse.new(stub(body: data.to_json), nil)
 
       assert_equal [], response.to_a
-      assert ! response.any?
+      assert response.none?
     end
   end
 

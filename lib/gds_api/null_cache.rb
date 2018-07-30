@@ -4,10 +4,8 @@ module GdsApi
       nil
     end
 
-    def []=(k, v)
-    end
+    def []=(k, v); end
 
-    def store(k, v, expiry_time = nil)
-    end
+    def store(k, v, expiry_time = nil); end
   end
 end

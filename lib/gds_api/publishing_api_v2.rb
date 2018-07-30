@@ -104,10 +104,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
       update_type: update_type
     }
 
-    optional_keys = [
-      :locale,
-      :previous_version,
-    ]
+    optional_keys = %i[locale previous_version]
 
     params = merge_optional_keys(params, options, optional_keys)
 
@@ -174,10 +171,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#post-v2contentcontent_iddiscard-draft
   def discard_draft(content_id, options = {})
-    optional_keys = [
-      :locale,
-      :previous_version,
-    ]
+    optional_keys = %i[locale previous_version]
 
     params = merge_optional_keys({}, options, optional_keys)
 
@@ -291,7 +285,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
       links: params.fetch(:links)
     }
 
-    payload = merge_optional_keys(payload, params, [:previous_version, :bulk_publishing])
+    payload = merge_optional_keys(payload, params, %i[previous_version bulk_publishing])
 
     patch_json(links_url(content_id), payload)
   end
