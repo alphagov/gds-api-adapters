@@ -416,6 +416,19 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     post_json("#{endpoint}/v2/links/by-content-id", content_ids: content_ids).to_hash
   end
 
+  # Reserves a path for a publishing application
+  #
+  # Returns success or failure only.
+  #
+  # @param payload [Hash]
+  # @option payload [Hash] publishing_app The publishing application, like `content-tagger`
+  #
+  # @see https://docs.publishing.service.gov.uk/apis/publishing-api/api.html#put-pathsbase_path
+  def put_path(base_path, payload)
+    url = "#{endpoint}/paths#{base_path}"
+    put_json(url, payload)
+  end
+
 private
 
   def content_url(content_id, params = {})
