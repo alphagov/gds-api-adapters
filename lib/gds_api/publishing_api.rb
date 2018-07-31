@@ -12,6 +12,7 @@ class GdsApi::PublishingApi < GdsApi::Base
     e
   end
 
+  # @deprecated Use GdsApi::PublishingApiV2
   def put_path(base_path, payload)
     put_json(paths_url(base_path), payload)
   end
