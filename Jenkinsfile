@@ -9,6 +9,7 @@ node {
   govuk.setEnvar("PACT_BROKER_BASE_URL", "https://pact-broker.cloudapps.digital")
 
   govuk.buildProject(
+    rubyListDiff: false,
     extraParameters: [
       stringParam(
         name: 'PUBLISHING_API_BRANCH',
