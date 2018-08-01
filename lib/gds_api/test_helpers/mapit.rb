@@ -31,7 +31,8 @@ module GdsApi
               'govuk_slug' => area['govuk_slug']
             },
             'name' => area['name'],
-            'type' => area['type']
+            'type' => area['type'],
+            'country_name' => area['country_name']
           }]
         }]
 
