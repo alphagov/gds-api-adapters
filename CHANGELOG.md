@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add support for the `unpublish-messages` endpoint in email-alert-api
+
 # 52.7.0
 
 * Expose the `country_name` parameter as part of the Mapit test helper
