@@ -7,5 +7,7 @@ module GdsApi
     def []=(k, v); end
 
     def store(k, v, expiry_time = nil); end
+
+    def delete(k); end
   end
 end
