@@ -26,6 +26,11 @@ class GdsApi::ContentStore < GdsApi::Base
     RedirectResolver.call(content_item, request_path, request_query)
   end
 
+  def put_json(url, params, additional_headers = {})
+    client.cache.delete(url)
+    super(url, params, additional_headers)
+  end
+
 private
 
   def content_item_url(base_path)

@@ -212,4 +212,19 @@ describe GdsApi::ContentStore do
       assert_equal "http://www.dev.gov.uk/x/y/c", destination
     end
   end
+
+  describe "put_json" do
+    it "deletes the cached item" do
+      url = "http://some.endpoint/some.json"
+      stub_request(:put, url).with(body: %Q({"foo":"bar"})).to_return(body: "{}", status: 200)
+      @api.client.cache = LRUCache.new
+      @api.client.cache.store(url, %Q({"some":"json"}))
+
+      refute_nil @api.client.cache[url]
+
+      @api.put_json(url, { "foo" => "bar" })
+
+      assert_nil @api.client.cache[url]
+    end
+  end
 end
