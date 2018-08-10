@@ -1,4 +1,4 @@
-# Unreleased
+# 52.8.0
 
 * Add support for the `unpublish-messages` endpoint in email-alert-api
 
