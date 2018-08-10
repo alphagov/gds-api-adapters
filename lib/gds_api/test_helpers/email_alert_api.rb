@@ -93,6 +93,11 @@ module GdsApi
           .to_return(status: 422)
       end
 
+      def email_alert_api_accepts_unpublishing_message
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/unpublish-messages")
+          .to_return(status: 202, body: {}.to_json)
+      end
+
       def email_alert_api_accepts_alert
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/notifications")
           .to_return(status: 202, body: {}.to_json)
