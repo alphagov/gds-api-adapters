@@ -39,15 +39,7 @@ module GdsApi
       end
 
       @logger = options[:logger] || NullLogger.instance
-      disable_cache = options[:disable_cache] || ENV.fetch("GDS_API_DISABLE_CACHE", false)
-
-      if disable_cache || options[:cache_size]&.zero?
-        @cache = NullCache.new
-      else
-        cache_size = options[:cache_size] || DEFAULT_CACHE_SIZE
-        cache_ttl = options[:cache_ttl] || DEFAULT_CACHE_TTL
-        @cache = JsonClient.cache(cache_size, cache_ttl)
-      end
+      @cache = NullCache.new
       @options = options
     end
 

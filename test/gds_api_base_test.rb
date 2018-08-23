@@ -58,14 +58,14 @@ class GdsApiBaseTest < Minitest::Test
   def test_setting_cache_size_from_options
     GdsApi::JsonClient.cache = false
     api = ConcreteApi.new("https://foo", cache_size: 2)
-    assert_equal 2, api.client.cache.max_size
+    assert api.client.cache.is_a? GdsApi::NullCache
   end
 
   def test_setting_cache_size_from_default_options
     GdsApi::JsonClient.cache = false
     GdsApi::Base.default_options = { cache_size: 4 }
     api = ConcreteApi.new("http://bar")
-    assert_equal 4, api.client.cache.max_size
+    assert api.client.cache.is_a? GdsApi::NullCache
   end
 
   def test_disabling_cache
