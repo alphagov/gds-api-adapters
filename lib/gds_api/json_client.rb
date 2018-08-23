@@ -122,7 +122,7 @@ module GdsApi
         if params
           additional_headers.merge!(self.class.json_body_headers)
         end
-        response = do_request_with_cache(method, url, (params.to_json if params), additional_headers)
+        response = do_request(method, url, (params.to_json if params), additional_headers)
       rescue RestClient::Exception => e
         # Attempt to parse the body as JSON if possible
         error_details = begin
@@ -179,45 +179,6 @@ module GdsApi
         # This is the default value anyway, but we should probably be explicit
         verify_ssl: OpenSSL::SSL::VERIFY_NONE
       )
-    end
-
-    def do_request_with_cache(method, url, params = nil, additional_headers = {})
-      # Only read GET requests from the cache: any other request methods should
-      # always be passed through. Note that this means HEAD requests won't get
-      # cached, but that would involve separating the cache by method and URL.
-      # Also, we don't generally make HEAD requests.
-      use_cache = (method == :get)
-
-      if use_cache
-        cached_response = @cache[url]
-        return cached_response if cached_response
-      end
-
-      response = do_request(method, url, params, additional_headers)
-
-      if use_cache
-        cache_time = response_cache_time(response)
-        # If cache_time is nil, this will fall back on @cache's default
-        @cache.store(url, response, cache_time)
-      end
-
-      response
-    end
-
-    # Return either a Time object representing the expiry time of the response
-    # or nil if no cache information is provided
-    def response_cache_time(response)
-      if response.headers[:cache_control]
-        cache_control = Rack::Cache::CacheControl.new(response.headers[:cache_control])
-
-        if cache_control.private? || cache_control.no_cache? || cache_control.no_store?
-          Time.now.utc
-        elsif cache_control.max_age
-          Time.now.utc + cache_control.max_age
-        end
-      elsif response.headers[:expires]
-        Time.httpdate response.headers[:expires]
-      end
     end
 
     def do_request(method, url, params = nil, additional_headers = {})
