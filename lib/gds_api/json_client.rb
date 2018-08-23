@@ -1,7 +1,6 @@
 require_relative 'response'
 require_relative 'exceptions'
 require_relative 'version'
-require_relative 'null_cache'
 require_relative 'govuk_headers'
 require 'rest-client'
 require 'null_logger'
@@ -10,18 +9,7 @@ module GdsApi
   class JsonClient
     include GdsApi::ExceptionHandling
 
-    # Set the caching implementation. Default is Null. Can be Anything
-    # which responds to:
-    #
-    #   [](key)
-    #   []=(key, value)
-    #   store(key, value, expiry_time=nil) - or a Ruby Time object
-    #
-    class << self
-      attr_writer :cache
-    end
-
-    attr_accessor :logger, :options, :cache
+    attr_accessor :logger, :options
 
     def initialize(options = {})
       if options[:disable_timeout] || options[:timeout].to_i < 0
@@ -29,7 +17,6 @@ module GdsApi
       end
 
       @logger = options[:logger] || NullLogger.instance
-      @cache = NullCache.new
       @options = options
     end
 

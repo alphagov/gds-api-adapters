@@ -50,33 +50,6 @@ class GdsApiBaseTest < Minitest::Test
     assert_equal "bar", api.options[:foo]
   end
 
-  def test_setting_cache_size_from_options
-    GdsApi::JsonClient.cache = false
-    api = ConcreteApi.new("https://foo", cache_size: 2)
-    assert api.client.cache.is_a? GdsApi::NullCache
-  end
-
-  def test_setting_cache_size_from_default_options
-    GdsApi::JsonClient.cache = false
-    GdsApi::Base.default_options = { cache_size: 4 }
-    api = ConcreteApi.new("http://bar")
-    assert api.client.cache.is_a? GdsApi::NullCache
-  end
-
-  def test_disabling_cache
-    # Ensure that there is a non-null cache by default
-    GdsApi::JsonClient.cache = true
-    api = ConcreteApi.new("http://bar", disable_cache: true)
-    assert api.client.cache.is_a? GdsApi::NullCache
-  end
-
-  def test_disabling_cache_old_style
-    # Ensure that there is a non-null cache by default
-    GdsApi::JsonClient.cache = true
-    api = ConcreteApi.new("http://bar", cache_size: 0)
-    assert api.client.cache.is_a? GdsApi::NullCache
-  end
-
   def test_should_barf_if_not_given_valid_url
     assert_raises GdsApi::Base::InvalidAPIURL do
       ConcreteApi.new('invalid-url')
