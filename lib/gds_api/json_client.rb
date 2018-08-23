@@ -3,7 +3,6 @@ require_relative 'exceptions'
 require_relative 'version'
 require_relative 'null_cache'
 require_relative 'govuk_headers'
-require 'lrucache'
 require 'rest-client'
 require 'null_logger'
 
@@ -11,16 +10,7 @@ module GdsApi
   class JsonClient
     include GdsApi::ExceptionHandling
 
-    # Cache TTL will be overridden for a given request/response by the Expires
-    # header if it is included in the response.
-    #
-    # LRUCache doesn't respect a cache size of 0, and instead effectively
-    # creates a cache with a size of 1.
-    def self.cache(size = DEFAULT_CACHE_SIZE, ttl = DEFAULT_CACHE_TTL)
-      @cache ||= LRUCache.new(max_size: size, ttl: ttl)
-    end
-
-    # Set the caching implementation. Default is LRUCache. Can be Anything
+    # Set the caching implementation. Default is Null. Can be Anything
     # which responds to:
     #
     #   [](key)
@@ -62,8 +52,6 @@ module GdsApi
     end
 
     DEFAULT_TIMEOUT_IN_SECONDS = 4
-    DEFAULT_CACHE_SIZE = 100
-    DEFAULT_CACHE_TTL = 15 * 60 # 15 minutes
 
     def get_raw!(url)
       do_raw_request(:get, url)

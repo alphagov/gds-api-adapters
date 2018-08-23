@@ -9,13 +9,8 @@ class GdsApiBaseTest < Minitest::Test
     end
   end
 
-  def setup
-    @orig_cache = GdsApi::JsonClient.cache
-  end
-
   def teardown
     GdsApi::Base.default_options = nil
-    GdsApi::JsonClient.cache = @orig_cache
   end
 
   def test_should_construct_escaped_query_string

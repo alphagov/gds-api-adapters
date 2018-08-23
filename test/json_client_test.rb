@@ -6,22 +6,9 @@ require 'null_logger'
 
 class JsonClientTest < MiniTest::Spec
   def setup
-    @json_client_cache = GdsApi::JsonClient.cache
-
-    # Set the cache to nil so the JsonClient recreates it on each test run
-    # This used to initialise the cache to an empty Hash, eliminating the
-    # potential problem of cache entries expiring during a test run, but that
-    # no longer works now our code calls the `store` method with an expiry time
-    GdsApi::JsonClient.cache = nil
-
     @client = GdsApi::JsonClient.new
 
     WebMock.disable_net_connect!
-  end
-
-  def teardown
-    super
-    GdsApi::JsonClient.cache = @json_client_cache
   end
 
   def options;
