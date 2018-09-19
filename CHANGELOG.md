@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add Asset Manager test helpers: `asset_manager_update_asset`, `asset_manager_update_failure`, `asset_manager_delete_asset` and `asset_manager_delete_asset_failure`.
+
 # 53.0.0
 
 * Remove support for caching responses.
