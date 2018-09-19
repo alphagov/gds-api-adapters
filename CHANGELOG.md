@@ -1,4 +1,4 @@
-# Unreleased
+# 53.1.0
 
 * Add Asset Manager test helpers: `asset_manager_update_asset`, `asset_manager_update_failure`, `asset_manager_delete_asset` and `asset_manager_delete_asset_failure`.
 
