@@ -42,6 +42,24 @@ module GdsApi
       def asset_manager_upload_failure
         stub_request(:post, "#{ASSET_MANAGER_ENDPOINT}/assets").to_return(status: 500)
       end
+
+      def asset_manager_update_asset(asset_id, body = {})
+        stub_request(:put, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}")
+          .to_return(body: body.to_json, status: 200)
+      end
+
+      def asset_manager_update_failure(asset_id)
+        stub_request(:put, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}").to_return(status: 500)
+      end
+
+      def asset_manager_delete_asset(asset_id, body = {})
+        stub_request(:delete, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}")
+          .to_return(body: body.to_json, status: 200)
+      end
+
+      def asset_manager_delete_asset_failure(asset_id)
+        stub_request(:delete, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}").to_return(status: 500)
+      end
     end
   end
 end
