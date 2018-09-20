@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add methods to GdsApi to create instances of adapters with common options to reduce boilerplate code across apps
+
 # 53.1.0
 
 * Add Asset Manager test helpers: `asset_manager_update_asset`, `asset_manager_update_failure`, `asset_manager_delete_asset` and `asset_manager_delete_asset_failure`.
