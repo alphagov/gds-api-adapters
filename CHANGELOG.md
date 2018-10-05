@@ -1,6 +1,7 @@
 # Unreleased
 
 * Add methods to GdsApi to create instances of adapters with common options to reduce boilerplate code across apps
+* Deprecate GdsApi::Helpers in favour of using explicit GdsApi.service_name methods
 
 # 53.1.0
 
