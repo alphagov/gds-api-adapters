@@ -5,6 +5,9 @@ require 'gds_api/licence_application'
 require 'gds_api/worldwide'
 require 'gds_api/email_alert_api'
 
+# This module is deprecated and should be removed in the next major release
+# Apps using this are encouraged to use GdsApi module methods
+# (e.g. GdsApi.asset_manger) rather than using this mixin
 module GdsApi
   module Helpers
     def asset_manager_api(options = {})
