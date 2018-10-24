@@ -70,6 +70,20 @@ module GdsApi
       get_json(request_url, additional_headers)
     end
 
+    # Perform a batch search.
+    #
+    # @param searches [Array] An array valid search queries. Maximum of 6. See Rummager documentation for options.
+    #
+    # # @see https://github.com/alphagov/rummager/blob/master/doc/search-api.md
+    def batch_search(searches, additional_headers = {})
+      url_friendly_searches = searches.each_with_index.map do |search, index|
+        { index => search }
+      end
+      searches_query = { search: url_friendly_searches }
+      request_url = "#{base_url}/batch_search?.json?search=#{Rack::Utils.build_nested_query(searches_query)}"
+      get_json(request_url, additional_headers)
+    end
+
     # Perform a search, returning the results as an enumerator.
     #
     # The enumerator abstracts away rummager's pagination and fetches new pages when
