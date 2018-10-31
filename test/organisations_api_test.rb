@@ -6,7 +6,7 @@ describe GdsApi::Organisations do
   include GdsApi::TestHelpers::Organisations
 
   before do
-    @base_api_url = GdsApi::TestHelpers::Organisations::ORGANISATIONS_API_ENDPOINT
+    @base_api_url = Plek.new.website_root
     @api = GdsApi::Organisations.new(@base_api_url)
   end
 

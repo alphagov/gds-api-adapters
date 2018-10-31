@@ -8,8 +8,7 @@ module GdsApi
     module Organisations
       include GdsApi::TestHelpers::CommonResponses
 
-      ORGANISATIONS_API_ENDPOINT = Plek.current.find('whitehall-admin')
-      PUBLIC_HOST = Plek.current.find('www')
+      WEBSITE_ROOT = Plek.new.website_root
 
       def organisations_api_has_organisations(organisation_slugs)
         bodies = organisation_slugs.map { |slug| organisation_for_slug(slug) }
@@ -41,9 +40,9 @@ module GdsApi
             "page_size" => 20,
             "start_index" => i * 20 + 1)
 
-          links = { self: "#{ORGANISATIONS_API_ENDPOINT}/api/organisations?page=#{i + 1}" }
-          links[:next] = "#{ORGANISATIONS_API_ENDPOINT}/api/organisations?page=#{i + 2}" if pages[i + 1]
-          links[:previous] = "#{ORGANISATIONS_API_ENDPOINT}/api/organisations?page=#{i}" unless i == 0
+          links = { self: "#{WEBSITE_ROOT}/api/organisations?page=#{i + 1}" }
+          links[:next] = "#{WEBSITE_ROOT}/api/organisations?page=#{i + 2}" if pages[i + 1]
+          links[:previous] = "#{WEBSITE_ROOT}/api/organisations?page=#{i}" unless i.zero?
           page_details["_response_info"]["links"] = []
           link_headers = []
           links.each do |rel, href|
@@ -62,18 +61,18 @@ module GdsApi
 
         if pages.empty?
           # If there are no pages - and so no organisations specified - then stub /api/organisations.
-          stub_request(:get, "#{ORGANISATIONS_API_ENDPOINT}/api/organisations").to_return(status: 200, body: plural_response_base.to_json, headers: {})
+          stub_request(:get, "#{WEBSITE_ROOT}/api/organisations").to_return(status: 200, body: plural_response_base.to_json, headers: {})
         end
       end
 
       def organisations_api_has_organisation(organisation_slug, details = nil)
         details ||= organisation_for_slug(organisation_slug)
-        stub_request(:get, "#{ORGANISATIONS_API_ENDPOINT}/api/organisations/#{organisation_slug}").
+        stub_request(:get, "#{WEBSITE_ROOT}/api/organisations/#{organisation_slug}").
           to_return(status: 200, body: details.to_json)
       end
 
       def organisations_api_does_not_have_organisation(organisation_slug)
-        stub_request(:get, "#{ORGANISATIONS_API_ENDPOINT}/api/organisations/#{organisation_slug}").to_return(status: 404)
+        stub_request(:get, "#{WEBSITE_ROOT}/api/organisations/#{organisation_slug}").to_return(status: 404)
       end
 
       def organisation_for_slug(slug)
@@ -86,11 +85,11 @@ module GdsApi
       # otherwise it will be set to 'Executive agency'
       def organisation_details_for_slug(slug, content_id = SecureRandom.uuid)
         {
-          "id" => "#{ORGANISATIONS_API_ENDPOINT}/api/organisations/#{slug}",
+          "id" => "#{WEBSITE_ROOT}/api/organisations/#{slug}",
           "title" => titleize_slug(slug, title_case: true),
           "format" => (slug =~ /ministry/ ? "Ministerial department" : "Executive agency"),
           "updated_at" => "2013-03-25T13:06:42+00:00",
-          "web_url" => "#{PUBLIC_HOST}/government/organisations/#{slug}",
+          "web_url" => "#{WEBSITE_ROOT}/government/organisations/#{slug}",
           "details" => {
             "slug" => slug,
             "abbreviation" => acronymize_slug(slug),
@@ -103,14 +102,14 @@ module GdsApi
           },
           "parent_organisations" => [
             {
-              "id" => "#{ORGANISATIONS_API_ENDPOINT}/api/organisations/#{slug}-parent-1",
-              "web_url" => "#{PUBLIC_HOST}/government/organisations/#{slug}-parent-1"
+              "id" => "#{WEBSITE_ROOT}/api/organisations/#{slug}-parent-1",
+              "web_url" => "#{WEBSITE_ROOT}/government/organisations/#{slug}-parent-1"
             },
           ],
           "child_organisations" => [
             {
-              "id" => "#{ORGANISATIONS_API_ENDPOINT}/api/organisations/#{slug}-child-1",
-              "web_url" => "#{PUBLIC_HOST}/government/organisations/#{slug}-child-1"
+              "id" => "#{WEBSITE_ROOT}/api/organisations/#{slug}-child-1",
+              "web_url" => "#{WEBSITE_ROOT}/government/organisations/#{slug}-child-1"
             },
           ],
         }
