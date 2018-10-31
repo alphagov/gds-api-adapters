@@ -1,3 +1,5 @@
+* Expect `GdsApi::TestHelpers::Organisations` to be using the public API instead of Whitehall.
+
 # 53.2.0
 
 * Add methods to GdsApi to create instances of adapters with common options to reduce boilerplate code across apps
