@@ -1,3 +1,5 @@
+# 54.0.0
+
 * Expect `GdsApi::TestHelpers::Organisations` to be using the public API instead of Whitehall.
 
 # 53.2.0
