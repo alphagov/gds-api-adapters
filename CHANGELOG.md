@@ -1,3 +1,7 @@
+# 54.1.0
+
+* Add ability to batch search Rummager
+
 # 54.0.0
 
 * Expect `GdsApi::TestHelpers::Organisations` to be using the public API instead of Whitehall.
