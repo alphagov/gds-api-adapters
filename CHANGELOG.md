@@ -1,3 +1,7 @@
+# 54.1.1
+
+* Add extra Publishing API stub for conflict when patching links
+
 # 54.1.0
 
 * Add ability to batch search Rummager
