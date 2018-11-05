@@ -34,10 +34,37 @@ module GdsApi
 
       # Stub a PATCH /v2/links/:content_id request
       #
+      # @example
+      #   stub_publishing_api_patch_links(
+      #     my_content_id,
+      #     "links" => {
+      #       "taxons" => %w(level_one_topic level_two_topic),
+      #     },
+      #     "previous_version" => "3",
+      #   )
+      #
       # @param content_id [UUID]
       # @param body  [String]
       def stub_publishing_api_patch_links(content_id, body)
         stub_publishing_api_patch(content_id, body, '/links')
+      end
+
+      # Stub a PATCH /v2/links/:content_id request to return a 409 response
+      #
+      # @example
+      #   stub_publishing_api_patch_links_conflict(
+      #     my_content_id,
+      #     "links" => {
+      #       "taxons" => %w(level_one_topic level_two_topic),
+      #     },
+      #     "previous_version" => "3",
+      #   )
+      #
+      # @param content_id [UUID]
+      # @param body  [String]
+      def stub_publishing_api_patch_links_conflict(content_id, body)
+        override_response_hash = { status: 409, body: version_conflict(body[:previous_version]) }
+        stub_publishing_api_patch(content_id, body, '/links', override_response_hash)
       end
 
       # Stub a POST /v2/content/:content_id/publish request
@@ -617,6 +644,16 @@ module GdsApi
           error: {
             code: 404,
             message: "Could not find #{type} with content_id: #{content_id}",
+          }
+        }
+      end
+
+      def version_conflict(expected_version, actual_version = expected_version + 1)
+        {
+          error: {
+            code: 409,
+            message: "A lock-version conflict occurred. The `previous_version` you've sent (#{expected_version}) is not the same as the current lock version of the edition (#{actual_version}).",
+            fields: { previous_version: ["does not match"] },
           }
         }
       end
