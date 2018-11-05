@@ -40,7 +40,7 @@ module GdsApi
       #     "links" => {
       #       "taxons" => %w(level_one_topic level_two_topic),
       #     },
-      #     "previous_version" => "3",
+      #     "previous_version" => 3,
       #   )
       #
       # @param content_id [UUID]
@@ -57,13 +57,14 @@ module GdsApi
       #     "links" => {
       #       "taxons" => %w(level_one_topic level_two_topic),
       #     },
-      #     "previous_version" => "3",
+      #     "previous_version" => 3,
       #   )
       #
       # @param content_id [UUID]
       # @param body  [String]
       def stub_publishing_api_patch_links_conflict(content_id, body)
-        override_response_hash = { status: 409, body: version_conflict(body[:previous_version]) }
+        previous_version = JSON.parse(body.to_json)["previous_version"]
+        override_response_hash = { status: 409, body: version_conflict(previous_version) }
         stub_publishing_api_patch(content_id, body, '/links', override_response_hash)
       end
 
