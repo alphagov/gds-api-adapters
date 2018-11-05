@@ -234,7 +234,53 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
     end
   end
 
-  describe "stub_any_publishing_api_publish" do
+  describe '#stub_publishing_api_patch_links' do
+    it "stubs a request to patch links" do
+      content_id = SecureRandom.uuid
+      body = {
+        links: {
+          my_linkset: %w(link_1),
+        },
+        previous_version: 4
+      }
+
+      assert_raises WebMock::NetConnectNotAllowedError do
+        publishing_api.patch_links(content_id, body)
+      end
+
+      stub_publishing_api_patch_links(content_id, body)
+      response = publishing_api.patch_links(content_id, body)
+      assert_equal(response.code, 200)
+    end
+  end
+
+  describe '#stub_publishing_api_patch_links_conflict' do
+    it "stubs a request to patch links with a 409 conflict response" do
+      content_id = SecureRandom.uuid
+      body = {
+        links: {
+          my_linkset: %w(link_1),
+        },
+        previous_version: 4
+      }
+
+      stub_publishing_api_patch_links_conflict(content_id, body)
+
+      error = assert_raises GdsApi::HTTPConflict do
+        publishing_api.patch_links(content_id, body)
+      end
+
+      assert error.message.include?({
+        error: {
+          code: 409,
+          message: "A lock-version conflict occurred. The `previous_version` you've sent (4) is not the same as the current lock version of the edition (5).",
+          fields: { previous_version: ["does not match"] },
+        }
+      }.to_json)
+    end
+  end
+
+  describe '#stub_any_publishing_api_publish' do
     it "stubs any publish request to the publishing api" do
       stub_any_publishing_api_publish
       publishing_api.publish("some-content-id", "major")
@@ -242,7 +288,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
     end
   end
 
-  describe "stub_any_publishing_api_unpublish" do
+  describe '#stub_any_publishing_api_unpublish' do
     it "stubs any unpublish request to the publishing api" do
       stub_any_publishing_api_unpublish
       publishing_api.unpublish("some-content-id", type: :gone)
@@ -250,7 +296,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
     end
   end
 
-  describe "stub_any_publishing_api_discard_draft" do
+  describe '#stub_any_publishing_api_discard_draft' do
     it "stubs any discard draft request to the publishing api" do
       stub_any_publishing_api_discard_draft
       publishing_api.discard_draft("some-content-id")
