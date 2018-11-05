@@ -1,3 +1,5 @@
+* Ensure new Publishing API patch_links stub is symbol/string-agnostic
+
 # 54.1.1
 
 * Add extra Publishing API stub for conflict when patching links
