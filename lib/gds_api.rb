@@ -110,7 +110,7 @@ module GdsApi
   #
   # @return [GdsApi::Organisations]
   def self.organisations(options = {})
-    GdsApi::Organisations.new(Plek.find('whitehall-admin'), options)
+    GdsApi::Organisations.new(Plek.new.website_root, options)
   end
 
   # Creates a GdsApi::PublishingApi adapter
