@@ -1,8 +1,8 @@
 require_relative 'base'
 
 class GdsApi::Worldwide < GdsApi::Base
-  def world_locations
-    get_list("#{base_url}/world-locations")
+  def world_locations(options = { page: 1 })
+    get_list("#{base_url}/world-locations?page=#{options[:page]}")
   end
 
   def world_location(location_slug)

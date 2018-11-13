@@ -32,7 +32,7 @@ describe GdsApi::Worldwide do
     end
 
     it "should raise error if endpoint 404s" do
-      stub_request(:get, "#{@base_api_url}/api/world-locations").to_return(status: 404)
+      stub_request(:get, "#{@base_api_url}/api/world-locations?page=1").to_return(status: 404)
       assert_raises GdsApi::HTTPNotFound do
         @api.world_locations
       end
