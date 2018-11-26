@@ -324,4 +324,22 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
       )
     end
   end
+
+  describe '#publishing_api_isnt_available' do
+    it "returns a 503 for V2 requests" do
+      publishing_api_isnt_available
+
+      assert_raises GdsApi::BaseError do
+        publishing_api.get_content_items({})
+      end
+    end
+
+    it "returns a 503 for V1 requests" do
+      publishing_api_isnt_available
+
+      assert_raises GdsApi::BaseError do
+        publishing_api.lookup_content_id(base_path: "")
+      end
+    end
+  end
 end

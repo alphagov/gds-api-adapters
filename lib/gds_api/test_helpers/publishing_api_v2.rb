@@ -10,6 +10,7 @@ module GdsApi
       include ContentItemHelpers
 
       PUBLISHING_API_V2_ENDPOINT = Plek.current.find('publishing-api') + '/v2'
+      PUBLISHING_API_ENDPOINT = Plek.current.find('publishing-api')
 
       # Stub a PUT /v2/content/:content_id request with the given content id and request body.
       # if no response_hash is given, a default response as follows is created:
@@ -166,6 +167,7 @@ module GdsApi
       # Stub any version 2 request to the publishing API to return a 503 response
       def publishing_api_isnt_available
         stub_request(:any, /#{PUBLISHING_API_V2_ENDPOINT}\/.*/).to_return(status: 503)
+        stub_request(:any, /#{PUBLISHING_API_ENDPOINT}\/.*/).to_return(status: 503)
       end
 
       # Assert that a draft was saved and published, and links were updated.
