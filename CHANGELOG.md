@@ -1,5 +1,10 @@
 * Ensure new Publishing API patch_links stub is symbol/string-agnostic
 
+# 54.1.3
+
+* Extend Publishing API V2 unavailable stub to cover legacy V1 routes
+* Extend Asset Manager not found stub to cover delete action
+
 # 54.1.1
 
 * Add extra Publishing API stub for conflict when patching links
