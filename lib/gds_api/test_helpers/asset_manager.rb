@@ -22,7 +22,7 @@ module GdsApi
           "_response_info" => { "status" => "not found" }
         }
 
-        stub_request(:get, "#{ASSET_MANAGER_ENDPOINT}/assets/#{id}")
+        stub_request(:any, "#{ASSET_MANAGER_ENDPOINT}/assets/#{id}")
           .to_return(body: response.to_json, status: 404)
       end
 

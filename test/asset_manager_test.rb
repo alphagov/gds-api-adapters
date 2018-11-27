@@ -52,6 +52,10 @@ describe GdsApi::AssetManager do
     assert_raises GdsApi::HTTPNotFound do
       api.asset("not-really-here")
     end
+
+    assert_raises GdsApi::HTTPNotFound do
+      api.delete_asset("not-really-here")
+    end
   end
 
   it "raises not found when a Whitehall asset does not exist" do
