@@ -1,4 +1,5 @@
 * Ensure new Publishing API patch_links stub is symbol/string-agnostic
+* Change GdsApi.organisations adapter to use the public organisations API
 
 # 54.1.3
 
