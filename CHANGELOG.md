@@ -1,5 +1,6 @@
 * Ensure new Publishing API patch_links stub is symbol/string-agnostic
 * Change GdsApi.organisations adapter to use the public organisations API
+* Fix the URL for Rummager batch queries.
 
 # 54.1.3
 
