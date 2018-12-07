@@ -142,13 +142,14 @@ describe GdsApi::Rummager do
   it "#batch_search should issue a single request containing all queries" do
     GdsApi::Rummager.new("http://example.com").batch_search([{ q: 'self assessment' }, { q: 'tax return' }])
 
-    assert_requested :get, /\[\]\[0\]\[q\]=self assessment/
-    assert_requested :get, /\[\]\[1\]\[q\]=tax return/
+    assert_requested :get, /search\[\]\[0\]\[q\]=self assessment/
+    assert_requested :get, /search\[\]\[1\]\[q\]=tax return/
   end
 
   it "#batch_search should return the search deserialized from json" do
     batch_search_results = [{ "title" => "document-title" }, { "title" => "document-title-2" }]
-    stub_request(:get, /example.com\/batch_search/).to_return(body: batch_search_results.to_json)
+    stub_request(:get, "http://example.com/batch_search.json?search[][0][q]=self+assessment&search[][1][q]=tax+return")
+      .to_return(body: batch_search_results.to_json)
     results = GdsApi::Rummager.new("http://example.com").batch_search([{ q: 'self assessment' }, { q: 'tax return' }])
     assert_equal batch_search_results, results.to_hash
   end

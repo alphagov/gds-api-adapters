@@ -80,7 +80,7 @@ module GdsApi
         { index => search }
       end
       searches_query = { search: url_friendly_searches }
-      request_url = "#{base_url}/batch_search?.json?search=#{Rack::Utils.build_nested_query(searches_query)}"
+      request_url = "#{base_url}/batch_search.json?#{Rack::Utils.build_nested_query(searches_query)}"
       get_json(request_url, additional_headers)
     end
 
