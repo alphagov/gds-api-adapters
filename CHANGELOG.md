@@ -1,4 +1,4 @@
-# Unreleased
+# 55.0.1
 
 * Change how the default logger is assigned.
 
