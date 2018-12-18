@@ -1,3 +1,7 @@
+# Unreleased
+
+* Change how the default logger is assigned.
+
 # 55.0.0
 
 * Ensure new Publishing API patch_links stub is symbol/string-agnostic
