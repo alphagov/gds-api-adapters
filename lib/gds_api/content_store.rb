@@ -4,10 +4,17 @@ require_relative 'base'
 require_relative 'exceptions'
 
 class GdsApi::ContentStore < GdsApi::Base
+  EXTENDED_TIMEOUT_FOR_AWS = 8
+
   class ItemNotFound < GdsApi::HTTPNotFound
     def self.build_from(http_error)
       new(http_error.code, http_error.message, http_error.error_details)
     end
+  end
+
+  def initialize(endpoint_url, options = {})
+    options[:timeout] ||= EXTENDED_TIMEOUT_FOR_AWS
+    super(endpoint_url, options)
   end
 
   def content_item(base_path)
