@@ -205,6 +205,9 @@ module GdsApi
     rescue Errno::ECONNRESET => e
       logger.error loggable.merge(status: 'connection_reset', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::TimedOutException.new
+    rescue SocketError => e
+      logger.error loggable.merge(status: 'socket_error', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
+      raise GdsApi::SocketErrorException.new
     end
   end
 end

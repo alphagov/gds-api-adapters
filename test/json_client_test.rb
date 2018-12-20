@@ -63,6 +63,14 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  def test_socket_error
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_raise(SocketError)
+    assert_raises GdsApi::SocketErrorException do
+      @client.get_json(url)
+    end
+  end
+
   def test_get_should_raise_error_on_restclient_error
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_raise(RestClient::ServerBrokeConnection)
