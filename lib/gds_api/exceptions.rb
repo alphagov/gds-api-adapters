@@ -16,6 +16,7 @@ module GdsApi
   class EndpointNotFound < BaseError; end
   class TimedOutException < BaseError; end
   class InvalidUrl < BaseError; end
+  class SocketErrorException < BaseError; end
 
   # Superclass for all 4XX and 5XX errors
   class HTTPErrorResponse < BaseError
