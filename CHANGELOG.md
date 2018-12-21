@@ -1,4 +1,4 @@
-# Unreleased
+# 55.0.2
 
 * Add SocketError exception handling.
 
