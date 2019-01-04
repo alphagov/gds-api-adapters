@@ -1,3 +1,7 @@
+# Unreleased
+
+* Change the expected Publishing API behaviour regarding percent-encoding of URLs included in responses.
+
 # 55.0.2
 
 * Add SocketError exception handling.
