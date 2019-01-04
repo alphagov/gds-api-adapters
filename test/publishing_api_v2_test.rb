@@ -1293,9 +1293,9 @@ describe GdsApi::PublishingApiV2 do
             total: 4,
             pages: 2,
             current_page: 1,
-            links: [{ href: "http://example.org/v2/content?document_type=topic&fields[]=title&fields[]=base_path&per_page=2&page=2",
+            links: [{ href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&per_page=2&page=2",
                      rel: "next" },
-                    { href: "http://example.org/v2/content?document_type=topic&fields[]=title&fields[]=base_path&per_page=2&page=1",
+                    { href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&per_page=2&page=1",
                       rel: "self" }],
             results: [
               { title: 'title_1', base_path: '/path_1' },
@@ -1320,9 +1320,9 @@ describe GdsApi::PublishingApiV2 do
             total: 4,
             pages: 2,
             current_page: 2,
-            links: [{ href: "http://example.org/v2/content?document_type=topic&fields[]=title&fields[]=base_path&per_page=2&page=1",
+            links: [{ href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&per_page=2&page=1",
                       rel: "previous" },
-                    { href: "http://example.org/v2/content?document_type=topic&fields[]=title&fields[]=base_path&per_page=2&page=2",
+                    { href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&per_page=2&page=2",
                       rel: "self" }],
             results: [
               { title: 'title_3', base_path: '/path_3' },
@@ -1359,7 +1359,7 @@ describe GdsApi::PublishingApiV2 do
             pages: 1,
             current_page: 1,
             links: [{
-              href: "http://example.org/v2/content?document_type=topic&fields[]=title&fields[]=base_path&page=1",
+              href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&page=1",
               rel: "self"
             }],
             results: [
@@ -1380,7 +1380,7 @@ describe GdsApi::PublishingApiV2 do
         ["total", 2],
         ["pages", 1],
         ["current_page", 1],
-        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields[]=title&fields[]=base_path&page=1", "rel" => "self" }]],
+        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&page=1", "rel" => "self" }]],
         ["results", [{ "title" => "Content Item A", "base_path" => "/a-base-path" }, { "title" => "Content Item B", "base_path" => "/another-base-path" }]]
       ], response.to_a
     end
@@ -1404,7 +1404,7 @@ describe GdsApi::PublishingApiV2 do
             pages: 1,
             current_page: 1,
             links: [{
-              href: "http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&page=1",
+              href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&page=1",
               rel: "self"
             }],
             results: [
@@ -1424,7 +1424,7 @@ describe GdsApi::PublishingApiV2 do
         ["total", 1],
         ["pages", 1],
         ["current_page", 1],
-        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&page=1", "rel" => "self" }]],
+        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&page=1", "rel" => "self" }]],
         ["results", [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "en" }]]
       ], response.to_a
     end
@@ -1448,7 +1448,7 @@ describe GdsApi::PublishingApiV2 do
             pages: 1,
             current_page: 1,
             links: [{
-              href: "http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&locale=fr&page=1",
+              href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=fr&page=1",
               rel: "self"
             }],
             results: [
@@ -1468,7 +1468,7 @@ describe GdsApi::PublishingApiV2 do
         ["total", 1],
         ["pages", 1],
         ["current_page", 1],
-        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&locale=fr&page=1", "rel" => "self" }]],
+        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=fr&page=1", "rel" => "self" }]],
         ["results", [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "fr" }]]
       ], response.to_a
     end
@@ -1492,7 +1492,7 @@ describe GdsApi::PublishingApiV2 do
             pages: 1,
             current_page: 1,
             links: [{
-              href: "http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&locale=all&page=1",
+              href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=all&page=1",
               rel: "self"
             }],
             results: [
@@ -1514,7 +1514,7 @@ describe GdsApi::PublishingApiV2 do
         ["total", 3],
         ["pages", 1], ["current_page", 1],
         ["links",
-         [{ "href" => "http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=locale&locale=all&page=1", "rel" => "self" }]],
+         [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=all&page=1", "rel" => "self" }]],
         ["results",
          [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "en" },
           { "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "fr" },
@@ -1541,7 +1541,7 @@ describe GdsApi::PublishingApiV2 do
             pages: 1,
             current_page: 1,
             links: [{
-              href: "http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=details&page=1",
+              href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=details&page=1",
               rel: "self"
             }],
             results: [
@@ -1561,7 +1561,7 @@ describe GdsApi::PublishingApiV2 do
         ["total", 1],
         ["pages", 1],
         ["current_page", 1],
-        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields[]=content_id&fields[]=details&page=1", "rel" => "self" }]],
+        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=details&page=1", "rel" => "self" }]],
         ["results", [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "details" => { "foo" => "bar" } }]]
       ], response.to_a
     end
@@ -1585,7 +1585,7 @@ describe GdsApi::PublishingApiV2 do
             pages: 1,
             current_page: 1,
             links: [{
-              href: "http://example.org/v2/content?document_type=topic&fields[]=content_id&q=an+internal+name&search_in[]=details.internal_name&page=1",
+              href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&q=an+internal+name&search_in%5B%5D=details.internal_name&page=1",
               rel: "self"
             }],
             results: [
@@ -1607,7 +1607,7 @@ describe GdsApi::PublishingApiV2 do
         ["total", 1],
         ["pages", 1],
         ["current_page", 1],
-        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields[]=content_id&q=an+internal+name&search_in[]=details.internal_name&page=1", "rel" => "self" }]],
+        ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&q=an+internal+name&search_in%5B%5D=details.internal_name&page=1", "rel" => "self" }]],
         ["results", [{ "content_id" => "aaaaaaaa-aaaa-1aaa-aaaa-aaaaaaaaaaaa" }]]
       ], response.to_a
     end
