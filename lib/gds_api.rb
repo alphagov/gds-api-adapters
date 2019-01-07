@@ -76,9 +76,15 @@ module GdsApi
 
   # Creates a GdsApi::LinkCheckerApi adapter
   #
+  # This will set a bearer token if a LINK_CHECKER_API_BEARER_TOKEN environment
+  # variable is set
+  #
   # @return [GdsApi::LinkCheckerApi]
   def self.link_checker_api(options = {})
-    GdsApi::LinkCheckerApi.new(Plek.find('link-checker-api'), options)
+    GdsApi::LinkCheckerApi.new(
+      Plek.find('link-checker-api'),
+      { bearer_token: ENV['LINK_CHECKER_API_BEARER_TOKEN'] }.merge(options)
+    )
   end
 
   # Creates a GdsApi::LocalLinksManager adapter
