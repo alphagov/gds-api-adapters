@@ -26,16 +26,20 @@ node {
           passwordVariable: 'PACT_BROKER_PASSWORD'
         ]
       ]) {
-        publishBranchPact(govuk)
+        publishPacts(govuk, env.BRANCH_NAME == 'master')
         runPublishingApiPactTests(govuk)
       }
     }
   )
 }
 
-def publishBranchPact(govuk) {
-  stage("Publish branch pact") {
+def publishPacts(govuk, releasedVersion) {
+  stage("Publish pacts") {
     govuk.runRakeTask("pact:publish:branch")
+
+    if (releasedVersion) {
+      govuk.runRakeTask("pact:publish:released_version")
+    }
   }
 }
 
