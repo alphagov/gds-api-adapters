@@ -175,9 +175,15 @@ module GdsApi
 
   # Creates a GdsApi::SupportApi adapter
   #
+  # This will set a bearer token if a SUPPORT_API_BEARER_TOKEN environment
+  # variable is set
+  #
   # @return [GdsApi::SupportApi]
   def self.support_api(options = {})
-    GdsApi::SupportApi.new(Plek.find('support-api'), options)
+    GdsApi::SupportApi.new(
+      Plek.find('support-api'),
+      { bearer_token: ENV['SUPPORT_API_BEARER_TOKEN'] }.merge(options),
+    )
   end
 
   # Creates a GdsApi::Worldwide adapter for accessing Whitehall APIs on a
