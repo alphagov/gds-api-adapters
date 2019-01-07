@@ -1,4 +1,4 @@
-# Unreleased
+# 56.0.0
 
 * Change the expected Publishing API behaviour regarding percent-encoding of URLs included in responses.
 * Remove many deprecated methods
