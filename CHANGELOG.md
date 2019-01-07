@@ -1,4 +1,4 @@
-# Unreleased
+# 57.0.0
 
 * Pass `LINK_CHECKER_API_BEARER_TOKEN` in Link Checker API requests if present.
 * Pass `SUPPORT_API_BEARER_TOKEN` in Support API requests if present.
