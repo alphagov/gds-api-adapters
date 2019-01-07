@@ -1,3 +1,7 @@
+# Unreleased
+
+* Pass `LINK_CHECKER_API_BEARER_TOKEN` in Link Checker API requests if present.
+
 # 56.0.0
 
 * Change the expected Publishing API behaviour regarding percent-encoding of URLs included in responses.
