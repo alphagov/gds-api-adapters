@@ -1,6 +1,20 @@
 # Unreleased
 
 * Change the expected Publishing API behaviour regarding percent-encoding of URLs included in responses.
+* Remove many deprecated methods
+  - `GdsApi::TestHelpers::Rummager.stub_any_rummager_post_with_queueing_enabled`
+    - Use `stub_any_rummager_post` instead
+  - `GdsApi::Rummager.delete_content!` and `GdsApi::Rummager.get_content!`
+     - Use `delete_content` and `get_content` respectively
+  - `GdsApi::PublishingApiV2.get_content!`
+     - Use `get_content` instead
+  - `GdsApi::PublishingApi.put_path`
+     - Use `GdsApi::PublishingApiV2.put_path` instead
+  - `GdsApi::ContentStore.get_content!`
+     - Use `get_content` instead
+* Remove the `type` parameter from `GdsApi::Router.get_route`
+* Remove the `GdsApi::Helpers` module
+  - Use the `GdsApi` module methods instead
 
 # 55.0.2
 

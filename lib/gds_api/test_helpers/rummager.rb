@@ -16,13 +16,6 @@ module GdsApi
         end
       end
 
-      def stub_any_rummager_post_with_queueing_enabled
-        warn "stub_any_rummager_post_with_queueing_enabled is deprecated: use stub_any_rummager_post instead"
-
-        stub_request(:post, %r{#{RUMMAGER_ENDPOINT}/documents}) \
-          .to_return(status: [202, "Accepted"])
-      end
-
       def assert_rummager_posted_item(attributes, index: nil, **options)
         if index
           url = RUMMAGER_ENDPOINT + "/#{index}/documents"
