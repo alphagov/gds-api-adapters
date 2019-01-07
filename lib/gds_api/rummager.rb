@@ -144,11 +144,6 @@ module GdsApi
       delete_json(request_url)
     end
 
-    # @private
-    def delete_content!(*)
-      raise "`Rummager#delete_content!` is deprecated. Use `Rummager#delete_content`"
-    end
-
     # Retrieve a content-document from the index.
     #
     # Content documents are pages on GOV.UK that have a base path and are
@@ -160,11 +155,6 @@ module GdsApi
     def get_content(base_path)
       request_url = "#{base_url}/content?link=#{base_path}"
       get_json(request_url)
-    end
-
-    # @private
-    def get_content!(*)
-      raise "`Rummager#get_content!` is deprecated. Use `Rummager#get_content`"
     end
 
     # Delete a non-content document from the search index.

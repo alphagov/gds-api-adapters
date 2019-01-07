@@ -33,11 +33,6 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     get_json(content_url(content_id, params))
   end
 
-  # @private
-  def get_content!(*)
-    raise "`PublishingApiV2#get_content!` is deprecated. Use `PublishingApiV2#get_content`"
-  end
-
   # Find the content_ids for a list of base_paths.
   #
   # @param base_paths [Array]

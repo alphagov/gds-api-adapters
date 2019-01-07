@@ -16,10 +16,6 @@ class GdsApi::ContentStore < GdsApi::Base
     raise ItemNotFound.build_from(e)
   end
 
-  def content_item!(_)
-    raise "`ContentStore#content_item!` is deprecated. Use `ContentStore#content_item` instead"
-  end
-
   # Returns an array tuple of destination url with status code e.g
   # ["https://www.gov.uk/destination", 301]
   def self.redirect_for_path(content_item, request_path, request_query = "")
