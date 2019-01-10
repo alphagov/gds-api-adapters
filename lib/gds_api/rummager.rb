@@ -108,6 +108,16 @@ module GdsApi
       end
     end
 
+    # Perform a suggestions search.
+    #
+    # @param args [Hash] A valid suggestions query. See Rummager documentation for options.
+    #
+    # @see https://github.com/alphagov/rummager/blob/master/doc/search-api.md
+    def suggestions(args, additional_headers = {})
+      request_url = "#{base_url}/autocomplete?#{Rack::Utils.build_nested_query(args)}"
+      get_json(request_url, additional_headers)
+    end
+
     # Advanced search.
     #
     # @deprecated Only in use by Whitehall. Use the `#search` method.
