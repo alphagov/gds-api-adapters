@@ -11,6 +11,16 @@ module GdsApi
         stub_request(:any, %r{\A#{ASSET_MANAGER_ENDPOINT}}).to_return(status: 503)
       end
 
+      def asset_manager_updates_any_asset(body = {})
+        stub_request(:put, %r{\A#{ASSET_MANAGER_ENDPOINT}/assets})
+          .to_return(body: body.to_json, status: 200)
+      end
+
+      def asset_manager_deletes_any_asset(body = {})
+        stub_request(:delete, %r{\A#{ASSET_MANAGER_ENDPOINT}/assets})
+          .to_return(body: body.to_json, status: 200)
+      end
+
       def asset_manager_has_an_asset(id, atts)
         response = atts.merge("_response_info" => { "status" => "ok" })
 
