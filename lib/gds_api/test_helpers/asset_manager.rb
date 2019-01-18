@@ -3,6 +3,14 @@ module GdsApi
     module AssetManager
       ASSET_MANAGER_ENDPOINT = Plek.current.find('asset-manager')
 
+      def stub_any_asset_manager_call
+        stub_request(:any, %r{\A#{ASSET_MANAGER_ENDPOINT}}).to_return(status: 200)
+      end
+
+      def asset_manager_is_down
+        stub_request(:any, %r{\A#{ASSET_MANAGER_ENDPOINT}}).to_return(status: 503)
+      end
+
       def asset_manager_has_an_asset(id, atts)
         response = atts.merge("_response_info" => { "status" => "ok" })
 
