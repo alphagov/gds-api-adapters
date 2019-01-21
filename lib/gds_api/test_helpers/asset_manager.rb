@@ -53,8 +53,31 @@ module GdsApi
           .to_return(body: response.to_json, status: 404)
       end
 
-      def asset_manager_receives_an_asset(response_url)
-        stub_request(:post, "#{ASSET_MANAGER_ENDPOINT}/assets").to_return(body: { file_url: response_url }.to_json, status: 200)
+      # This can take a string of an exact url or a hash of options
+      #
+      # with a string:
+      # `asset_manager_receives_an_asset("https://asset-manager/media/619ce797-b415-42e5-b2b1-2ffa0df52302/file.jpg")`
+      #
+      # with a hash:
+      # `asset_manager_receives_an_asset(id: "20d04259-e3ae-4f71-8157-e6c843096e96", filename: "file.jpg")`
+      # which would return a file url of "https://asset-manager/media/20d04259-e3ae-4f71-8157-e6c843096e96/file.jpg"
+      #
+      # with no argument
+      #
+      # `asset_manager_receives_an_asset`
+      # which would return a file url of "https://asset-manager/media/0053adbf-0737-4923-9d8a-8180f2c723af/0d19136c4a94f07"
+      def asset_manager_receives_an_asset(response_url = {})
+        stub_request(:post, "#{ASSET_MANAGER_ENDPOINT}/assets").to_return do
+          unless response_url.is_a?(String)
+            options = {
+              id: SecureRandom.uuid,
+              filename: SecureRandom.hex(8)
+            }.merge(response_url)
+
+            response_url = "#{ASSET_MANAGER_ENDPOINT}/media/#{options[:id]}/#{options[:filename]}"
+          end
+          { body: { file_url: response_url }.to_json, status: 200 }
+        end
       end
 
       def asset_manager_upload_failure
