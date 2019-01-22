@@ -10,7 +10,7 @@ module GdsApi
 
       WEBSITE_ROOT = Plek.new.website_root
 
-      def organisations_api_has_organisations(organisation_slugs)
+      def stub_organisations_api_has_organisations(organisation_slugs)
         bodies = organisation_slugs.map { |slug| organisation_for_slug(slug) }
         organisations_api_has_organisations_with_bodies(bodies)
       end
@@ -20,7 +20,7 @@ module GdsApi
       #
       # This also sets up the individual endpoints for each slug
       # by calling organisations_api_has_organisation below
-      def organisations_api_has_organisations_with_bodies(organisation_bodies)
+      def stub_organisations_api_has_organisations_with_bodies(organisation_bodies)
         # Stub API call to the endpoint for an individual organisation
         organisation_bodies.each do |body|
           slug = body["details"]["slug"]
@@ -65,13 +65,13 @@ module GdsApi
         end
       end
 
-      def organisations_api_has_organisation(organisation_slug, details = nil)
+      def stub_organisations_api_has_organisation(organisation_slug, details = nil)
         details ||= organisation_for_slug(organisation_slug)
         stub_request(:get, "#{WEBSITE_ROOT}/api/organisations/#{organisation_slug}").
           to_return(status: 200, body: details.to_json)
       end
 
-      def organisations_api_does_not_have_organisation(organisation_slug)
+      def stub_organisations_api_does_not_have_organisation(organisation_slug)
         stub_request(:get, "#{WEBSITE_ROOT}/api/organisations/#{organisation_slug}").to_return(status: 404)
       end
 
@@ -114,6 +114,12 @@ module GdsApi
           ],
         }
       end
+
+      # Aliases for DEPRECATED methods
+      alias_method :organisations_api_has_organisations, :stub_organisations_api_has_organisations
+      alias_method :organisations_api_has_organisations_with_bodies, :stub_organisations_api_has_organisations_with_bodies
+      alias_method :organisations_api_has_organisation, :stub_organisations_api_has_organisation
+      alias_method :organisations_api_does_not_have_organisation, :stub_organisations_api_does_not_have_organisation
     end
   end
 end

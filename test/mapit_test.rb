@@ -12,7 +12,7 @@ describe GdsApi::Mapit do
 
   describe "postcodes" do
     it "should return the coordinates" do
-      mapit_has_a_postcode("SW1A 1AA", [51.5010096, -0.1415870])
+      stub_mapit_has_a_postcode("SW1A 1AA", [51.5010096, -0.1415870])
 
       response = @api.location_for_postcode("SW1A 1AA")
       assert_equal 51.5010096, response.lat
@@ -20,14 +20,14 @@ describe GdsApi::Mapit do
     end
 
     it "should return the postcode" do
-      mapit_has_a_postcode("SW1A 1AA", [51.5010096, -0.1415870])
+      stub_mapit_has_a_postcode("SW1A 1AA", [51.5010096, -0.1415870])
 
       response = @api.location_for_postcode("SW1A 1AA")
       assert_equal "SW1A 1AA", response.postcode
     end
 
     it "should return areas" do
-      mapit_has_a_postcode_and_areas("SW1A 1AA", [51.5010096, -0.1415870], [
+      stub_mapit_has_a_postcode_and_areas("SW1A 1AA", [51.5010096, -0.1415870], [
         { 'name' => 'Lancashire County Council', 'type' => 'CTY', 'ons' => '30', 'gss' => 'E10000017' },
         { 'name' => 'South Ribble Borough Council', 'type' => 'DIS', 'ons' => '30UN', 'gss' => 'E07000126' }
       ])
@@ -46,7 +46,7 @@ describe GdsApi::Mapit do
     end
 
     it "should raise if a postcode doesn't exist" do
-      mapit_does_not_have_a_postcode("SW1A 1AA")
+      stub_mapit_does_not_have_a_postcode("SW1A 1AA")
 
       assert_raises(GdsApi::HTTPNotFound) do
         @api.location_for_postcode("SW1A 1AA")
@@ -54,7 +54,7 @@ describe GdsApi::Mapit do
     end
 
     it "should return 400 for an invalid postcode" do
-      mapit_does_not_have_a_bad_postcode("B4DP05TC0D3")
+      stub_mapit_does_not_have_a_bad_postcode("B4DP05TC0D3")
 
       assert_raises GdsApi::HTTPClientError do
         @api.location_for_postcode("B4DP05TC0D3")
@@ -64,10 +64,10 @@ describe GdsApi::Mapit do
 
   describe "areas_for_type" do
     before do
-      mapit_has_areas('EUR', "123" => { "name" => "Eastern", "id" => "123", "country_name" => "England" },
+      stub_mapit_has_areas('EUR', "123" => { "name" => "Eastern", "id" => "123", "country_name" => "England" },
        "234" => { "name" => "North West", "id" => "234", "country_name" => "England" },
        "345" => { "name" => "Scotland", "id" => "345", "country_name" => "Scotland" })
-      mapit_does_not_have_areas('FOO')
+      stub_mapit_does_not_have_areas('FOO')
     end
     it "should return areas of a type" do
       areas = @api.areas_for_type('EUR').to_hash
@@ -98,8 +98,8 @@ describe GdsApi::Mapit do
         },
         type: "DIS"
       }
-      mapit_has_area_for_code('ons', '30UN', south_ribble_area)
-      mapit_does_not_have_area_for_code('govuk_slug', 'neverland')
+      stub_mapit_has_area_for_code('ons', '30UN', south_ribble_area)
+      stub_mapit_does_not_have_area_for_code('govuk_slug', 'neverland')
     end
 
     it "should return area for a code type" do

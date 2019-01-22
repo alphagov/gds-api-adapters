@@ -68,7 +68,7 @@ module GdsApi
         post_stub.to_return(status: 200, body: response_body.to_json)
       end
 
-      def support_api_isnt_available
+      def stub_support_api_isnt_available
         stub_request(:post, /#{SUPPORT_API_ENDPOINT}\/.*/).to_return(status: 503)
       end
 
@@ -147,6 +147,9 @@ module GdsApi
       def stub_any_support_api_call
         stub_request(:any, %r{\A#{SUPPORT_API_ENDPOINT}})
       end
+
+      # Aliases for DEPRECATED methods
+      alias_method :support_api_isnt_available, :stub_support_api_isnt_available
     end
   end
 end

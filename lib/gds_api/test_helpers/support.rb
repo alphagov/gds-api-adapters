@@ -15,9 +15,12 @@ module GdsApi
         post_stub.to_return(status: 201)
       end
 
-      def support_isnt_available
+      def stub_support_isnt_available
         stub_request(:post, /#{SUPPORT_ENDPOINT}\/.*/).to_return(status: 503)
       end
+
+      # Aliases for DEPRECATED methods
+      alias_method :support_isnt_available, :stub_support_isnt_available
     end
   end
 end

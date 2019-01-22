@@ -7,12 +7,12 @@ module GdsApi
       # you could redefine/override the constant or stub directly.
       IMMINENCE_API_ENDPOINT = Plek.current.find('imminence')
 
-      def imminence_has_places(latitude, longitude, details)
+      def stub_imminence_has_places(latitude, longitude, details)
         query_hash = { "lat" => latitude, "lng" => longitude, "limit" => "5" }
         stub_imminence_places_request(details['slug'], query_hash, details['details'])
       end
 
-      def imminence_has_areas_for_postcode(postcode, areas)
+      def stub_imminence_has_areas_for_postcode(postcode, areas)
         results = {
           "_response_info" => { "status" => "ok" },
           "total" => areas.size, "startIndex" => 1, "pageSize" => areas.size,
@@ -23,7 +23,7 @@ module GdsApi
           to_return(body: results.to_json)
       end
 
-      def imminence_has_places_for_postcode(places, slug, postcode, limit)
+      def stub_imminence_has_places_for_postcode(places, slug, postcode, limit)
         query_hash = { "postcode" => postcode, "limit" => limit }
         stub_imminence_places_request(slug, query_hash, places)
       end
@@ -33,6 +33,11 @@ module GdsApi
         with(query: query_hash).
         to_return(status: status_code, body: return_data.to_json, headers: {})
       end
+
+      # Aliases for DEPRECATED methods
+      alias_method :imminence_has_places, :stub_imminence_has_places
+      alias_method :imminence_has_areas_for_postcode, :stub_imminence_has_areas_for_postcode
+      alias_method :imminence_has_places_for_postcode, :stub_imminence_has_places_for_postcode
     end
   end
 end

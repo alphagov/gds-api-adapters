@@ -59,7 +59,7 @@ module GdsApi
         end
       end
 
-      def publishing_api_isnt_available
+      def stub_publishing_api_isnt_available
         stub_request(:any, /#{PUBLISHING_API_ENDPOINT}\/.*/).to_return(status: 503)
       end
 
@@ -71,7 +71,7 @@ module GdsApi
         }
       end
 
-      def publishing_api_has_path_reservation_for(path, publishing_app)
+      def stub_publishing_api_has_path_reservation_for(path, publishing_app)
         data = publishing_api_path_data_for(path, "publishing_app" => publishing_app)
         error_data = data.merge("errors" => { "path" => ["is already reserved by the #{publishing_app} application"] })
 
@@ -86,13 +86,18 @@ module GdsApi
                     body: data.to_json)
       end
 
-      def publishing_api_returns_path_reservation_validation_error_for(path, error_details = nil)
+      def stub_publishing_api_returns_path_reservation_validation_error_for(path, error_details = nil)
         error_details ||= { "base" => ["computer says no"] }
         error_data = publishing_api_path_data_for(path).merge("errors" => error_details)
 
         stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{path}").
           to_return(status: 422, body: error_data.to_json, headers: { content_type: "application/json" })
       end
+
+      # Aliases for DEPRECATED methods
+      alias_method :publishing_api_isnt_available, :stub_publishing_api_isnt_available
+      alias_method :publishing_api_has_path_reservation_for, :stub_publishing_api_has_path_reservation_for
+      alias_method :publishing_api_returns_path_reservation_validation_error_for, :stub_publishing_api_returns_path_reservation_validation_error_for
 
     private
 

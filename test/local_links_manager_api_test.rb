@@ -13,7 +13,7 @@ describe GdsApi::LocalLinksManager do
   describe "#link" do
     describe "when making a request" do
       it "returns the local authority and local interaction details if link present" do
-        local_links_manager_has_a_link(
+        stub_local_links_manager_has_a_link(
           authority_slug: "blackburn",
           lgsl: 2,
           lgil: 4,
@@ -39,7 +39,7 @@ describe GdsApi::LocalLinksManager do
       end
 
       it "returns the local authority details only if no link present" do
-        local_links_manager_has_no_link(
+        stub_local_links_manager_has_no_link(
           authority_slug: "blackburn",
           lgsl: 2,
           lgil: 4,
@@ -59,7 +59,7 @@ describe GdsApi::LocalLinksManager do
       end
 
       it 'returns the local authority without a homepage url if no homepage link present' do
-        local_links_manager_has_no_link_and_no_homepage_url(
+        stub_local_links_manager_has_no_link_and_no_homepage_url(
           authority_slug: "blackburn",
           lgsl: 2,
           lgil: 4,
@@ -81,7 +81,7 @@ describe GdsApi::LocalLinksManager do
 
     describe "when making request with missing required parameters" do
       it "raises HTTPClientError when authority_slug is missing" do
-        local_links_manager_request_with_missing_parameters(nil, 2, 8)
+        stub_local_links_manager_request_with_missing_parameters(nil, 2, 8)
 
         assert_raises GdsApi::HTTPClientError do
           @api.local_link(nil, 2, 8)
@@ -89,7 +89,7 @@ describe GdsApi::LocalLinksManager do
       end
 
       it "raises HTTPClientError when LGSL is missing" do
-        local_links_manager_request_with_missing_parameters('blackburn', nil, 8)
+        stub_local_links_manager_request_with_missing_parameters('blackburn', nil, 8)
 
         assert_raises GdsApi::HTTPClientError do
           @api.local_link('blackburn', nil, 8)
@@ -97,7 +97,7 @@ describe GdsApi::LocalLinksManager do
       end
 
       it "raises HTTPClientError when LGIL is missing" do
-        local_links_manager_request_with_missing_parameters('blackburn', 2, nil)
+        stub_local_links_manager_request_with_missing_parameters('blackburn', 2, nil)
 
         assert_raises GdsApi::HTTPClientError do
           @api.local_link('blackburn', 2, nil)
@@ -107,7 +107,7 @@ describe GdsApi::LocalLinksManager do
 
     describe "when making request with invalid required parameters" do
       it "raises when authority_slug is invalid" do
-        local_links_manager_does_not_have_required_objects("hogwarts", 2, 8)
+        stub_local_links_manager_does_not_have_required_objects("hogwarts", 2, 8)
 
         assert_raises(GdsApi::HTTPNotFound) do
           @api.local_link("hogwarts", 2, 8)
@@ -115,7 +115,7 @@ describe GdsApi::LocalLinksManager do
       end
 
       it "raises when LGSL is invalid" do
-        local_links_manager_does_not_have_required_objects("blackburn", 999, 8)
+        stub_local_links_manager_does_not_have_required_objects("blackburn", 999, 8)
 
         assert_raises(GdsApi::HTTPNotFound) do
           @api.local_link("blackburn", 999, 8)
@@ -123,7 +123,7 @@ describe GdsApi::LocalLinksManager do
       end
 
       it "raises when the LGSL and LGIL combination is invalid" do
-        local_links_manager_does_not_have_required_objects("blackburn", 2, 9)
+        stub_local_links_manager_does_not_have_required_objects("blackburn", 2, 9)
 
         assert_raises(GdsApi::HTTPNotFound) do
           @api.local_link("blackburn", 2, 9)
@@ -135,7 +135,7 @@ describe GdsApi::LocalLinksManager do
   describe '#local_authority' do
     describe 'when making a request for a local authority with a parent' do
       it 'should return the local authority and its parent' do
-        local_links_manager_has_a_district_and_county_local_authority('blackburn', 'rochester')
+        stub_local_links_manager_has_a_district_and_county_local_authority('blackburn', 'rochester')
 
         expected_response = {
           "local_authorities" => [
@@ -159,7 +159,7 @@ describe GdsApi::LocalLinksManager do
 
     describe 'when making a request for a local authority without a parent' do
       it 'should return the local authority' do
-        local_links_manager_has_a_local_authority('blackburn')
+        stub_local_links_manager_has_a_local_authority('blackburn')
 
         expected_response = {
           "local_authorities" => [
@@ -178,7 +178,7 @@ describe GdsApi::LocalLinksManager do
 
     describe 'when making a request without the required parameters' do
       it "raises HTTPClientError when authority_slug is missing" do
-        local_links_manager_request_without_local_authority_slug
+        stub_local_links_manager_request_without_local_authority_slug
 
         assert_raises GdsApi::HTTPClientError do
           @api.local_authority(nil)
@@ -188,7 +188,7 @@ describe GdsApi::LocalLinksManager do
 
     describe 'when making a request with invalid required parameters' do
       it "raises when authority_slug is invalid" do
-        local_links_manager_does_not_have_an_authority("hogwarts")
+        stub_local_links_manager_does_not_have_an_authority("hogwarts")
 
         assert_raises(GdsApi::HTTPNotFound) { @api.local_authority("hogwarts") }
       end

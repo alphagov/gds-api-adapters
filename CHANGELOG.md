@@ -1,5 +1,6 @@
 # 57.1.0
 
+* Change all test helpers to use a stub\_ prefix (old names are now aliases)
 * Add additional Asset Manager test helper methods
 
 # 57.0.0

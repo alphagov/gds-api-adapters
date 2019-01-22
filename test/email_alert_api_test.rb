@@ -26,7 +26,7 @@ describe GdsApi::EmailAlertApi do
     }
 
     before do
-      email_alert_api_accepts_alert
+      stub_email_alert_api_accepts_alert
     end
 
     it "posts a new alert" do
@@ -56,7 +56,7 @@ describe GdsApi::EmailAlertApi do
 
   describe "unpublishing messages" do
     before do
-      email_alert_api_accepts_unpublishing_message
+      stub_email_alert_api_accepts_unpublishing_message
     end
 
     it "sends an unpublish message" do
@@ -69,7 +69,7 @@ describe GdsApi::EmailAlertApi do
   describe "subscriptions" do
     describe "a subscription exists" do
       before do
-        email_alert_api_has_subscription(1, "weekly")
+        stub_email_alert_api_has_subscription(1, "weekly")
       end
 
       it "returns the subscription attributes" do
@@ -95,11 +95,11 @@ describe GdsApi::EmailAlertApi do
 
       describe "a subscriber list with that tag set does not yet exist" do
         before do
-          email_alert_api_does_not_have_subscriber_list(
+          stub_email_alert_api_does_not_have_subscriber_list(
             "tags" => tags,
           )
 
-          email_alert_api_creates_subscriber_list(
+          stub_email_alert_api_creates_subscriber_list(
             "title" => title,
             "tags" => tags,
             "subscription_url" => expected_subscription_url,
@@ -125,7 +125,7 @@ describe GdsApi::EmailAlertApi do
 
       describe "a subscriber list with that tag set does already exist" do
         before do
-          email_alert_api_has_subscriber_list(
+          stub_email_alert_api_has_subscriber_list(
             "title" => "Some Title",
             "tags" => tags,
             "subscription_url" => expected_subscription_url,
@@ -154,7 +154,7 @@ describe GdsApi::EmailAlertApi do
         }
 
         before do
-          email_alert_api_has_subscriber_list(
+          stub_email_alert_api_has_subscriber_list(
             "title" => "Some Title",
             "tags" => tags,
             "document_type" => "travel_advice",
@@ -185,7 +185,7 @@ describe GdsApi::EmailAlertApi do
         }
 
         before do
-          email_alert_api_has_subscriber_list(
+          stub_email_alert_api_has_subscriber_list(
             "title" => "Some Title",
             "tags" => tags,
             "email_document_supertype" => "publications",
@@ -220,7 +220,7 @@ describe GdsApi::EmailAlertApi do
         }
 
         before do
-          email_alert_api_has_subscriber_list(
+          stub_email_alert_api_has_subscriber_list(
             "title" => "Some Title",
             "tags" => tags,
             "gov_delivery_id" => "TOPIC-A",
@@ -256,7 +256,7 @@ describe GdsApi::EmailAlertApi do
         }
 
         before do
-          email_alert_api_has_subscriber_list(
+          stub_email_alert_api_has_subscriber_list(
             "title" => "Some Title",
             "tags" => tags,
             "links" => links,
@@ -277,7 +277,7 @@ describe GdsApi::EmailAlertApi do
     describe "with an existing subscription" do
       it "returns a 204" do
         uuid = SecureRandom.uuid
-        email_alert_api_unsubscribes_a_subscription(uuid)
+        stub_email_alert_api_unsubscribes_a_subscription(uuid)
         api_response = api_client.unsubscribe(uuid)
 
         assert_equal(
@@ -290,7 +290,7 @@ describe GdsApi::EmailAlertApi do
     describe "without an existing subscription" do
       it "returns a 404" do
         uuid = SecureRandom.uuid
-        email_alert_api_has_no_subscription_for_uuid(uuid)
+        stub_email_alert_api_has_no_subscription_for_uuid(uuid)
 
         assert_raises GdsApi::HTTPNotFound do
           api_client.unsubscribe(uuid)
@@ -303,7 +303,7 @@ describe GdsApi::EmailAlertApi do
     describe "with an existing subscriber" do
       it "returns a 204" do
         subscriber_id = SecureRandom.random_number(10)
-        email_alert_api_unsubscribes_a_subscriber(subscriber_id)
+        stub_email_alert_api_unsubscribes_a_subscriber(subscriber_id)
         api_response = api_client.unsubscribe_subscriber(subscriber_id)
 
         assert_equal(
@@ -316,7 +316,7 @@ describe GdsApi::EmailAlertApi do
     describe "without an existing subscriber" do
       it "returns a 404" do
         subscriber_id = SecureRandom.random_number(10)
-        email_alert_api_has_no_subscriber(subscriber_id)
+        stub_email_alert_api_has_no_subscriber(subscriber_id)
 
         assert_raises GdsApi::HTTPNotFound do
           api_client.unsubscribe_subscriber(subscriber_id)
@@ -333,7 +333,7 @@ describe GdsApi::EmailAlertApi do
         created_subscription_id = 1
         frequency = "daily"
 
-        email_alert_api_creates_a_subscription(
+        stub_email_alert_api_creates_a_subscription(
           subscribable_id,
           address,
           frequency,
@@ -352,7 +352,7 @@ describe GdsApi::EmailAlertApi do
         created_subscription_id = 1
         frequency = "immediately"
 
-        email_alert_api_creates_a_subscription(
+        stub_email_alert_api_creates_a_subscription(
           subscribable_id,
           address,
           frequency,
@@ -372,7 +372,7 @@ describe GdsApi::EmailAlertApi do
       existing_subscription_id = 1
       frequency = "immediately"
 
-      email_alert_api_creates_an_existing_subscription(
+      stub_email_alert_api_creates_an_existing_subscription(
         subscribable_id,
         address,
         frequency,
@@ -386,7 +386,7 @@ describe GdsApi::EmailAlertApi do
 
   describe "subscribing with an invalid address" do
     it "raises an unprocessable entity error" do
-      email_alert_api_refuses_to_create_subscription(123, "invalid", "weekly")
+      stub_email_alert_api_refuses_to_create_subscription(123, "invalid", "weekly")
 
       assert_raises GdsApi::HTTPUnprocessableEntity do
         api_client.subscribe(subscribable_id: 123, address: "invalid", frequency: "weekly")
@@ -396,7 +396,7 @@ describe GdsApi::EmailAlertApi do
 
   describe "get_subscribable when one exists" do
     it "returns it" do
-      email_alert_api_has_subscribable(
+      stub_email_alert_api_has_subscribable(
         reference: "test123",
         returned_attributes: {
           id: 1,
@@ -412,7 +412,7 @@ describe GdsApi::EmailAlertApi do
 
   describe "get_subscribable when one doesn't exist" do
     it "returns 404" do
-      email_alert_api_does_not_have_subscribable(reference: "test123")
+      stub_email_alert_api_does_not_have_subscribable(reference: "test123")
 
       assert_raises GdsApi::HTTPNotFound do
         api_client.get_subscribable(reference: "test123")
@@ -422,7 +422,7 @@ describe GdsApi::EmailAlertApi do
 
   describe "change_subscriber when a subscriber exists" do
     it "changes the subscriber's address" do
-      email_alert_api_has_updated_subscriber(1, "test2@example.com")
+      stub_email_alert_api_has_updated_subscriber(1, "test2@example.com")
       api_response = api_client.change_subscriber(
         id: 1,
         new_address: "test2@example.com"
@@ -435,7 +435,7 @@ describe GdsApi::EmailAlertApi do
 
   describe "change_subscriber when a subscriber doesn't exist" do
     it "returns 404" do
-      email_alert_api_does_not_have_updated_subscriber(1)
+      stub_email_alert_api_does_not_have_updated_subscriber(1)
 
       assert_raises GdsApi::HTTPNotFound do
         api_client.change_subscriber(
@@ -448,7 +448,7 @@ describe GdsApi::EmailAlertApi do
 
   describe "change_subscription when a subscription exists" do
     it "changes the subscription's frequency" do
-      email_alert_api_has_updated_subscription(
+      stub_email_alert_api_has_updated_subscription(
         "8ed841d1-3d20-4633-aaf4-df41deaaf51c",
         "weekly"
       )
@@ -464,7 +464,7 @@ describe GdsApi::EmailAlertApi do
 
   describe "change_subscription when a subscription doesn't exist" do
     it "returns 404" do
-      email_alert_api_does_not_have_updated_subscription("8ed841d1-3d20-4633-aaf4-df41deaaf51c")
+      stub_email_alert_api_does_not_have_updated_subscription("8ed841d1-3d20-4633-aaf4-df41deaaf51c")
 
       assert_raises GdsApi::HTTPNotFound do
         api_client.change_subscription(
@@ -477,7 +477,7 @@ describe GdsApi::EmailAlertApi do
 
   describe "get_subscriptions when a subscriber exists" do
     it "returns it" do
-      email_alert_api_has_subscriber_subscriptions(1, "test@example.com")
+      stub_email_alert_api_has_subscriber_subscriptions(1, "test@example.com")
       api_response = api_client.get_subscriptions(id: 1)
       assert_equal(200, api_response.code)
       parsed_body = api_response.to_h
@@ -487,7 +487,7 @@ describe GdsApi::EmailAlertApi do
 
   describe "get_subscriptions when a subscriber doesn't exist" do
     it "returns 404" do
-      email_alert_api_does_not_have_subscriber_subscriptions(1)
+      stub_email_alert_api_does_not_have_subscriber_subscriptions(1)
 
       assert_raises GdsApi::HTTPNotFound do
         api_client.get_subscriptions(id: 1)
@@ -497,7 +497,7 @@ describe GdsApi::EmailAlertApi do
 
   describe "create an auth token" do
     it "returns 201" do
-      email_alert_api_creates_an_auth_token(1, "test@example.com")
+      stub_email_alert_api_creates_an_auth_token(1, "test@example.com")
       api_response = api_client.create_auth_token(address: 1, destination: "/test")
       assert_equal(201, api_response.code)
     end

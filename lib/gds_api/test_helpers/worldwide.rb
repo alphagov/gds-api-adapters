@@ -12,9 +12,9 @@ module GdsApi
       # The stubs are setup to paginate in chunks of 20
       #
       # This also sets up the individual endpoints for each slug
-      # by calling worldwide_api_has_location below
-      def worldwide_api_has_locations(location_slugs)
-        location_slugs.each { |s| worldwide_api_has_location(s) }
+      # by calling stub_worldwide_api_has_location below
+      def stub_worldwide_api_has_locations(location_slugs)
+        location_slugs.each { |s| stub_worldwide_api_has_location(s) }
         pages = []
         location_slugs.each_slice(20) do |slugs|
           pages << slugs.map { |s| world_location_details_for_slug(s) }
@@ -48,8 +48,8 @@ module GdsApi
         end
       end
 
-      def worldwide_api_has_selection_of_locations
-        worldwide_api_has_locations %w(
+      def stub_worldwide_api_has_selection_of_locations
+        stub_worldwide_api_has_locations %w(
           afghanistan angola australia bahamas belarus brazil brunei cambodia chad
           croatia denmark eritrea france ghana iceland japan laos luxembourg malta
           micronesia mozambique nicaragua panama portugal sao-tome-and-principe singapore
@@ -59,24 +59,24 @@ module GdsApi
         )
       end
 
-      def worldwide_api_has_location(location_slug, details = nil)
+      def stub_worldwide_api_has_location(location_slug, details = nil)
         details ||= world_location_for_slug(location_slug)
         stub_request(:get, "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}").
           to_return(status: 200, body: details.to_json)
       end
 
-      def worldwide_api_does_not_have_location(location_slug)
+      def stub_worldwide_api_does_not_have_location(location_slug)
         stub_request(:get, "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}").to_return(status: 404)
       end
 
-      def worldwide_api_has_organisations_for_location(location_slug, json_or_hash)
+      def stub_worldwide_api_has_organisations_for_location(location_slug, json_or_hash)
         json = json_or_hash.is_a?(Hash) ? json_or_hash.to_json : json_or_hash
         url = "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}/organisations"
         stub_request(:get, url).
           to_return(status: 200, body: json, headers: { "Link" => "<#{url}; rel\"self\"" })
       end
 
-      def worldwide_api_has_no_organisations_for_location(location_slug)
+      def stub_worldwide_api_has_no_organisations_for_location(location_slug)
         details = { "results" => [], "total" => 0, "_response_info" => { "status" => "ok" } }
         url = "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}/organisations"
         stub_request(:get, url).
@@ -108,6 +108,14 @@ module GdsApi
           },
         }
       end
+
+      # Aliases for DEPRECATED methods
+      alias_method :worldwide_api_has_locations, :stub_worldwide_api_has_locations
+      alias_method :worldwide_api_has_selection_of_locations, :stub_worldwide_api_has_selection_of_locations
+      alias_method :worldwide_api_has_location, :stub_worldwide_api_has_location
+      alias_method :worldwide_api_has_does_not_have_location, :stub_worldwide_api_does_not_have_location
+      alias_method :worldwide_api_has_organisations_for_location, :stub_worldwide_api_has_organisations_for_location
+      alias_method :worldwide_api_has_no_organisations_for_location, :stub_worldwide_api_has_no_organisations_for_location
     end
   end
 end
