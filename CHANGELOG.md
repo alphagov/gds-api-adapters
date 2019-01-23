@@ -1,3 +1,5 @@
+* Fix broken test helper for Publishing API
+
 # 57.2.0
 
 * Change all test helpers to use a stub\_ prefix (old names are now aliases)

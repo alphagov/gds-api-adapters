@@ -609,19 +609,19 @@ module GdsApi
 
       # Aliases for DEPRECATED methods
       alias_method :publishing_api_isnt_available, :stub_publishing_api_isnt_available
-      alias_method :pubishing_api_has_content, :stub_publishing_api_has_content
-      alias_method :pubishing_api_has_fields_for_document, :stub_publishing_api_has_fields_for_document
-      alias_method :pubishing_api_has_linkables, :stub_publishing_api_has_linkables
-      alias_method :pubishing_api_has_item, :stub_publishing_api_has_item
-      alias_method :pubishing_api_has_item_in_sequence, :stub_publishing_api_has_item_in_sequence
-      alias_method :pubishing_api_does_not_have_item, :stub_publishing_api_does_not_have_item
-      alias_method :pubishing_api_has_links, :stub_publishing_api_has_links
-      alias_method :pubishing_api_has_expanded_links, :stub_publishing_api_has_expanded_links
-      alias_method :pubishing_api_has_links_for_content_ids, :stub_publishing_api_has_links_for_content_ids
-      alias_method :pubishing_api_does_not_have_links, :stub_publishing_api_does_not_have_links
-      alias_method :pubishing_api_has_lookups, :stub_publishing_api_has_lookups
-      alias_method :pubishing_api_has_linked_items, :stub_publishing_api_has_linked_items
-      alias_method :pubishing_api_get_editions, :stub_publishing_api_get_editions
+      alias_method :publishing_api_has_content, :stub_publishing_api_has_content
+      alias_method :publishing_api_has_fields_for_document, :stub_publishing_api_has_fields_for_document
+      alias_method :publishing_api_has_linkables, :stub_publishing_api_has_linkables
+      alias_method :publishing_api_has_item, :stub_publishing_api_has_item
+      alias_method :publishing_api_has_item_in_sequence, :stub_publishing_api_has_item_in_sequence
+      alias_method :publishing_api_does_not_have_item, :stub_publishing_api_does_not_have_item
+      alias_method :publishing_api_has_links, :stub_publishing_api_has_links
+      alias_method :publishing_api_has_expanded_links, :stub_publishing_api_has_expanded_links
+      alias_method :publishing_api_has_links_for_content_ids, :stub_publishing_api_has_links_for_content_ids
+      alias_method :publishing_api_does_not_have_links, :stub_publishing_api_does_not_have_links
+      alias_method :publishing_api_has_lookups, :stub_publishing_api_has_lookups
+      alias_method :publishing_api_has_linked_items, :stub_publishing_api_has_linked_items
+      alias_method :publishing_api_get_editions, :stub_publishing_api_get_editions
 
     private
 
