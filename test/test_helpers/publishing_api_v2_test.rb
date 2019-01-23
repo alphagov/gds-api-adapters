@@ -12,7 +12,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
         { 'content_id' => 'id-1', 'title' => 'title 1', 'link_type' => 'taxons' },
         { 'content_id' => 'id-2', 'title' => 'title 2', 'link_type' => 'taxons' },
       ]
-      publishing_api_has_linked_items(
+      stub_publishing_api_has_linked_items(
         links,
         content_id: 'content-id',
         link_type: 'taxons',
@@ -43,7 +43,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
                 }
               }
 
-      publishing_api_has_links_for_content_ids(links)
+      stub_publishing_api_has_links_for_content_ids(links)
 
       assert_equal publishing_api.get_links_for_content_ids(links.keys), links
     end
@@ -53,7 +53,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
     it "stubs the lookup for content items" do
       lookup_hash = { "/foo" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" }
 
-      publishing_api_has_lookups(lookup_hash)
+      stub_publishing_api_has_lookups(lookup_hash)
 
       assert_equal publishing_api.lookup_content_ids(base_paths: ["/foo"]), lookup_hash
       assert_equal publishing_api.lookup_content_id(base_path: "/foo"), "2878337b-bed9-4e7f-85b6-10ed2cbcd504"
@@ -62,7 +62,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
 
   describe "#publishing_api_has_content" do
     it "stubs the call to get content items" do
-      publishing_api_has_content([{ "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" }])
+      stub_publishing_api_has_content([{ "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" }])
 
       response = publishing_api.get_content_items({})['results']
 
@@ -70,7 +70,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
     end
 
     it 'allows params' do
-      publishing_api_has_content(
+      stub_publishing_api_has_content(
         [{
           "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504"
         }],
@@ -94,7 +94,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
       content_id_2 = "2878337b-bed9-4e7f-85b6-10ed2cbcd505"
       content_id_3 = "2878337b-bed9-4e7f-85b6-10ed2cbcd506"
 
-      publishing_api_has_content(
+      stub_publishing_api_has_content(
         [
           { "content_id" => content_id_1 },
           { "content_id" => content_id_2 },
@@ -120,7 +120,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
       content_id_1 = "2878337b-bed9-4e7f-85b6-10ed2cbcd504"
       content_id_2 = "2878337b-bed9-4e7f-85b6-10ed2cbcd505"
 
-      publishing_api_has_content(
+      stub_publishing_api_has_content(
         [
           { "content_id" => content_id_1 },
           { "content_id" => content_id_2 },
@@ -138,14 +138,14 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
 
   describe "#publishing_api_has_item" do
     it "stubs the call to get content items" do
-      publishing_api_has_item("content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504")
+      stub_publishing_api_has_item("content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504")
       response = publishing_api.get_content("2878337b-bed9-4e7f-85b6-10ed2cbcd504").parsed_content
 
       assert_equal({ "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" }, response)
     end
 
     it 'allows params' do
-      publishing_api_has_item(
+      stub_publishing_api_has_item(
         "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504",
         "version" => 3,
       )
@@ -174,7 +174,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
         ]
       }
 
-      publishing_api_has_expanded_links(payload)
+      stub_publishing_api_has_expanded_links(payload)
       response = publishing_api.get_expanded_links("2e20294a-d694-4083-985e-d8bedefc2354")
 
       assert_equal({
@@ -197,7 +197,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
         ]
       }
 
-      publishing_api_has_expanded_links(payload)
+      stub_publishing_api_has_expanded_links(payload)
       response = publishing_api.get_expanded_links("2e20294a-d694-4083-985e-d8bedefc2354")
 
       assert_equal({
@@ -220,7 +220,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
         ]
       }
 
-      publishing_api_has_expanded_links(payload, with_drafts: false, generate: true)
+      stub_publishing_api_has_expanded_links(payload, with_drafts: false, generate: true)
       response = publishing_api.get_expanded_links("2e20294a-d694-4083-985e-d8bedefc2354", with_drafts: false, generate: true)
 
       assert_equal({
@@ -311,7 +311,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
         { "content_id" => "id-2", "title" => "title 2" },
       ]
 
-      publishing_api_get_editions(
+      stub_publishing_api_get_editions(
         editions,
         fields: ["title"]
       )
@@ -327,7 +327,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
 
   describe '#publishing_api_isnt_available' do
     it "returns a 503 for V2 requests" do
-      publishing_api_isnt_available
+      stub_publishing_api_isnt_available
 
       assert_raises GdsApi::BaseError do
         publishing_api.get_content_items({})
@@ -335,7 +335,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
     end
 
     it "returns a 503 for V1 requests" do
-      publishing_api_isnt_available
+      stub_publishing_api_isnt_available
 
       assert_raises GdsApi::BaseError do
         publishing_api.lookup_content_id(base_path: "")

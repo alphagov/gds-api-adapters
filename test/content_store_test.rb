@@ -13,7 +13,7 @@ describe GdsApi::ContentStore do
   describe "#content_item" do
     it "returns the item" do
       base_path = "/test-from-content-store"
-      content_store_has_item(base_path)
+      stub_content_store_has_item(base_path)
 
       response = @api.content_item(base_path)
 
@@ -21,7 +21,7 @@ describe GdsApi::ContentStore do
     end
 
     it "raises if the item doesn't exist" do
-      content_store_does_not_have_item("/non-existent")
+      stub_content_store_does_not_have_item("/non-existent")
 
       assert_raises(GdsApi::HTTPNotFound) do
         @api.content_item("/non-existent")
@@ -29,7 +29,7 @@ describe GdsApi::ContentStore do
     end
 
     it "raises if the item doesn't exist" do
-      content_store_does_not_have_item("/non-existent")
+      stub_content_store_does_not_have_item("/non-existent")
 
       assert_raises GdsApi::HTTPNotFound do
         @api.content_item("/non-existent")
@@ -37,7 +37,7 @@ describe GdsApi::ContentStore do
     end
 
     it "raises if the item is gone" do
-      content_store_has_gone_item("/it-is-gone")
+      stub_content_store_has_gone_item("/it-is-gone")
 
       assert_raises(GdsApi::HTTPGone) do
         @api.content_item("/it-is-gone")
@@ -45,7 +45,7 @@ describe GdsApi::ContentStore do
     end
 
     it "raises if the item is gone" do
-      content_store_has_gone_item("/it-is-gone")
+      stub_content_store_has_gone_item("/it-is-gone")
 
       assert_raises GdsApi::HTTPGone do
         @api.content_item("/it-is-gone")

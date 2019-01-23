@@ -47,7 +47,7 @@ describe GdsApi::Calendars do
     end
 
     it "fetches the bank holidays requested for all divisions" do
-      calendars_has_a_bank_holiday_on(Date.parse('2012-12-12'))
+      stub_calendars_has_a_bank_holiday_on(Date.parse('2012-12-12'))
       holidays = @api.bank_holidays
 
       assert_equal "2012-12-12", holidays['england-and-wales']['events'][0]['date']
@@ -56,7 +56,7 @@ describe GdsApi::Calendars do
     end
 
     it "fetches the bank holidays requested for just one divisions" do
-      calendars_has_a_bank_holiday_on(Date.parse('2012-12-12'), in_division: 'scotland')
+      stub_calendars_has_a_bank_holiday_on(Date.parse('2012-12-12'), in_division: 'scotland')
       holidays = @api.bank_holidays(:scotland)
 
       assert_equal "2012-12-12", holidays['events'][0]['date']

@@ -165,7 +165,7 @@ module GdsApi
       end
 
       # Stub any version 2 request to the publishing API to return a 503 response
-      def publishing_api_isnt_available
+      def stub_publishing_api_isnt_available
         stub_request(:any, /#{PUBLISHING_API_V2_ENDPOINT}\/.*/).to_return(status: 503)
         stub_request(:any, /#{PUBLISHING_API_ENDPOINT}\/.*/).to_return(status: 503)
       end
@@ -280,7 +280,7 @@ module GdsApi
       #
       # @example
       #
-      #   publishing_api_has_content(
+      #   stub_publishing_api_has_content(
       #     vehicle_recalls_and_faults,   # this is a variable containing an array of content items
       #     document_type: described_class.publishing_api_document_type,   #example of a document_type: "vehicle_recalls_and_faults_alert"
       #     fields: fields,   #example: let(:fields) { %i[base_path content_id public_updated_at title publication_state] }
@@ -289,7 +289,7 @@ module GdsApi
       #   )
       # @param items [Array]
       # @param params [Hash]
-      def publishing_api_has_content(items, params = {})
+      def stub_publishing_api_has_content(items, params = {})
         url = PUBLISHING_API_V2_ENDPOINT + "/content"
 
         if params.respond_to? :fetch
@@ -324,7 +324,7 @@ module GdsApi
 
       # This method has been refactored into publishing_api_has_content (above)
       # publishing_api_has_content allows for flexible passing in of arguments, please use instead
-      def publishing_api_has_fields_for_document(document_type, items, fields)
+      def stub_publishing_api_has_fields_for_document(document_type, items, fields)
         body = Array(items).map { |item|
           deep_stringify_keys(item).slice(*fields)
         }
@@ -341,7 +341,7 @@ module GdsApi
       # Stub GET /v2/linkables to return a set of content items with a specific document type
       #
       # @param linkables [Array]
-      def publishing_api_has_linkables(linkables, document_type:)
+      def stub_publishing_api_has_linkables(linkables, document_type:)
         url = PUBLISHING_API_V2_ENDPOINT + "/linkables?document_type=#{document_type}"
         stub_request(:get, url).to_return(status: 200, body: linkables.to_json, headers: {})
       end
@@ -349,7 +349,7 @@ module GdsApi
       # Stub GET /v2/content/:content_id to return a specific content item hash
       #
       # @param item [Hash]
-      def publishing_api_has_item(item, params = {})
+      def stub_publishing_api_has_item(item, params = {})
         item = deep_transform_keys(item, &:to_sym)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + item[:content_id]
         stub_request(:get, url)
@@ -360,7 +360,7 @@ module GdsApi
       # Stub GET /v2/content/:content_id to progress through a series of responses.
       #
       # @param items [Array]
-      def publishing_api_has_item_in_sequence(content_id, items)
+      def stub_publishing_api_has_item_in_sequence(content_id, items)
         items = items.each { |item| deep_transform_keys(item, &:to_sym) }
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
         calls = -1
@@ -376,7 +376,7 @@ module GdsApi
       # Stub GET /v2/content/:content_id to return a 404 response
       #
       # @param content_id [UUID]
-      def publishing_api_does_not_have_item(content_id)
+      def stub_publishing_api_does_not_have_item(content_id)
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
         stub_request(:get, url).to_return(status: 404, body: resource_not_found(content_id, "content item").to_json, headers: {})
       end
@@ -387,7 +387,7 @@ module GdsApi
       #
       # @example
       #
-      #  publishing_api_has_links(
+      #  stub_publishing_api_has_links(
       #    {
       #      "content_id" => "64aadc14-9bca-40d9-abb6-4f21f9792a05",
       #      "links" => {
@@ -411,7 +411,7 @@ module GdsApi
       #        },
       #        "version" => 6
       #      }
-      def publishing_api_has_links(links)
+      def stub_publishing_api_has_links(links)
         links = deep_transform_keys(links, &:to_sym)
         url = PUBLISHING_API_V2_ENDPOINT + "/links/" + links[:content_id]
         stub_request(:get, url).to_return(status: 200, body: links.to_json, headers: {})
@@ -422,7 +422,7 @@ module GdsApi
       # @param [Hash] links the structure of the links hash
       #
       # @example
-      #   publishing_api_has_expanded_links(
+      #   stub_publishing_api_has_expanded_links(
       #     {
       #       "content_id" => "64aadc14-9bca-40d9-abb4-4f21f9792a05",
       #       "expanded_links" => {
@@ -471,7 +471,7 @@ module GdsApi
       #           ]
       #         }
       #       }
-      def publishing_api_has_expanded_links(links, with_drafts: true, generate: false)
+      def stub_publishing_api_has_expanded_links(links, with_drafts: true, generate: false)
         links = deep_transform_keys(links, &:to_sym)
         request_params = {}
         request_params['with_drafts'] = false if !with_drafts
@@ -488,7 +488,7 @@ module GdsApi
       # @param [Hash] links the links for each content id
       #
       # @example
-      #   publishing_api_has_links_for_content_ids(
+      #   stub_publishing_api_has_links_for_content_ids(
       #     { "2878337b-bed9-4e7f-85b6-10ed2cbcd504" => {
       #         "links" => { "taxons" => ["eb6965c7-3056-45d0-ae50-2f0a5e2e0854"] }
       #       },
@@ -507,7 +507,7 @@ module GdsApi
       #           ]
       #         }
       #       }
-      def publishing_api_has_links_for_content_ids(links)
+      def stub_publishing_api_has_links_for_content_ids(links)
         url = PUBLISHING_API_V2_ENDPOINT + "/links/by-content-id"
         stub_request(:post, url).with(body: { content_ids: links.keys }).to_return(status: 200, body: links.to_json, headers: {})
       end
@@ -515,7 +515,7 @@ module GdsApi
       # Stub GET /v2/links/:content_id to return a 404 response
       #
       # @param content_id [UUID]
-      def publishing_api_does_not_have_links(content_id)
+      def stub_publishing_api_does_not_have_links(content_id)
         url = PUBLISHING_API_V2_ENDPOINT + "/links/" + content_id
         stub_request(:get, url).to_return(status: 404, body: resource_not_found(content_id, "link set").to_json, headers: {})
       end
@@ -526,12 +526,12 @@ module GdsApi
       #
       # @example
       #
-      #   publishing_api_has_lookups({
+      #   stub_publishing_api_has_lookups({
       #     "/foo" => "51ac4247-fd92-470a-a207-6b852a97f2db",
       #     "/bar" => "261bd281-f16c-48d5-82d2-9544019ad9ca"
       #   })
       #
-      def publishing_api_has_lookups(lookup_hash)
+      def stub_publishing_api_has_lookups(lookup_hash)
         url = Plek.current.find('publishing-api') + '/lookup-by-base-path'
         stub_request(:post, url).to_return(body: lookup_hash.to_json)
       end
@@ -544,7 +544,7 @@ module GdsApi
       #
       # @example
       #
-      #   publishing_api_has_linked_items(
+      #   stub_publishing_api_has_linked_items(
       #     [ item_1, item_2 ],
       #     {
       #       content_id: "51ac4247-fd92-470a-a207-6b852a97f2db",
@@ -553,7 +553,7 @@ module GdsApi
       #     }
       #   )
       #
-      def publishing_api_has_linked_items(items, params = {})
+      def stub_publishing_api_has_linked_items(items, params = {})
         content_id = params.fetch(:content_id)
         link_type = params.fetch(:link_type)
         fields = params.fetch(:fields, %w(base_path content_id document_type title))
@@ -577,14 +577,14 @@ module GdsApi
       #
       # @example
       #
-      #   publishing_api_get_editions(
+      #   stub_publishing_api_get_editions(
       #     vehicle_recalls_and_faults,   # this is a variable containing an array of editions
       #     fields: fields,   #example: let(:fields) { %i[base_path content_id public_updated_at title publication_state] }
       #     per_page: 50
       #   )
       # @param items [Array]
       # @param params [Hash]
-      def publishing_api_get_editions(editions, params = {})
+      def stub_publishing_api_get_editions(editions, params = {})
         url = PUBLISHING_API_V2_ENDPOINT + "/editions"
 
         results = editions.map do |edition|
@@ -606,6 +606,22 @@ module GdsApi
           .with(query: params)
           .to_return(status: 200, body: body.to_json, headers: {})
       end
+
+      # Aliases for DEPRECATED methods
+      alias_method :publishing_api_isnt_available, :stub_publishing_api_isnt_available
+      alias_method :pubishing_api_has_content, :stub_publishing_api_has_content
+      alias_method :pubishing_api_has_fields_for_document, :stub_publishing_api_has_fields_for_document
+      alias_method :pubishing_api_has_linkables, :stub_publishing_api_has_linkables
+      alias_method :pubishing_api_has_item, :stub_publishing_api_has_item
+      alias_method :pubishing_api_has_item_in_sequence, :stub_publishing_api_has_item_in_sequence
+      alias_method :pubishing_api_does_not_have_item, :stub_publishing_api_does_not_have_item
+      alias_method :pubishing_api_has_links, :stub_publishing_api_has_links
+      alias_method :pubishing_api_has_expanded_links, :stub_publishing_api_has_expanded_links
+      alias_method :pubishing_api_has_links_for_content_ids, :stub_publishing_api_has_links_for_content_ids
+      alias_method :pubishing_api_does_not_have_links, :stub_publishing_api_does_not_have_links
+      alias_method :pubishing_api_has_lookups, :stub_publishing_api_has_lookups
+      alias_method :pubishing_api_has_linked_items, :stub_publishing_api_has_linked_items
+      alias_method :pubishing_api_get_editions, :stub_publishing_api_get_editions
 
     private
 

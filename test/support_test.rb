@@ -23,7 +23,7 @@ describe GdsApi::Support do
   end
 
   it "throws an exception when the support app isn't available while creating FOI requests" do
-    support_isnt_available
+    stub_support_isnt_available
 
     assert_raises(GdsApi::HTTPServerError) { @api.create_foi_request({}) }
   end
@@ -41,7 +41,7 @@ describe GdsApi::Support do
   end
 
   it "throws an exception when the support app isn't available while creating named contacts" do
-    support_isnt_available
+    stub_support_isnt_available
 
     assert_raises(GdsApi::HTTPServerError) { @api.create_named_contact({}) }
   end

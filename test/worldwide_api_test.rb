@@ -13,7 +13,7 @@ describe GdsApi::Worldwide do
   describe "fetching list of world locations" do
     it "should get the world locations" do
       country_slugs = %w(the-shire rivendel rohan lorien gondor arnor mordor)
-      worldwide_api_has_locations(country_slugs)
+      stub_worldwide_api_has_locations(country_slugs)
 
       response = @api.world_locations
       assert_equal country_slugs, response.map { |r| r['details']['slug'] }
@@ -22,7 +22,7 @@ describe GdsApi::Worldwide do
 
     it "should handle the pagination" do
       country_slugs = (1..50).map { |n| "country-#{n}" }
-      worldwide_api_has_locations(country_slugs)
+      stub_worldwide_api_has_locations(country_slugs)
 
       response = @api.world_locations
       assert_equal(
@@ -41,14 +41,14 @@ describe GdsApi::Worldwide do
 
   describe "fetching a world location" do
     it "should return the details" do
-      worldwide_api_has_location('rohan')
+      stub_worldwide_api_has_location('rohan')
 
       response = @api.world_location('rohan')
       assert_equal 'Rohan', response['title']
     end
 
     it "raises for a non-existent location" do
-      worldwide_api_does_not_have_location('non-existent')
+      stub_worldwide_api_does_not_have_location('non-existent')
 
       assert_raises(GdsApi::HTTPNotFound) do
         @api.world_location('non-existent')
@@ -59,7 +59,7 @@ describe GdsApi::Worldwide do
   describe "fetching organisations for a location" do
     it "should return the organisation details" do
       details = JSON.parse(load_fixture_file("world_organisations_australia.json").read)
-      worldwide_api_has_organisations_for_location('australia', details)
+      stub_worldwide_api_has_organisations_for_location('australia', details)
 
       response = @api.organisations_for_world_location('australia')
       assert response.is_a?(GdsApi::ListResponse)

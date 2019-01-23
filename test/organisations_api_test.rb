@@ -13,7 +13,7 @@ describe GdsApi::Organisations do
   describe "fetching list of organisations" do
     it "should get the organisations" do
       organisation_slugs = %w(ministry-of-fun tea-agency)
-      organisations_api_has_organisations(organisation_slugs)
+      stub_organisations_api_has_organisations(organisation_slugs)
 
       response = @api.organisations
       assert_equal organisation_slugs, response.map { |r| r['details']['slug'] }
@@ -22,7 +22,7 @@ describe GdsApi::Organisations do
 
     it "should handle the pagination" do
       organisation_slugs = (1..50).map { |n| "organisation-#{n}" }
-      organisations_api_has_organisations(organisation_slugs)
+      stub_organisations_api_has_organisations(organisation_slugs)
 
       response = @api.organisations
       assert_equal(
@@ -41,14 +41,14 @@ describe GdsApi::Organisations do
 
   describe "fetching an organisation" do
     it "should return the details" do
-      organisations_api_has_organisation('ministry-of-fun')
+      stub_organisations_api_has_organisation('ministry-of-fun')
 
       response = @api.organisation('ministry-of-fun')
       assert_equal 'Ministry Of Fun', response['title']
     end
 
     it "should raise for a non-existent organisation" do
-      organisations_api_does_not_have_organisation('non-existent')
+      stub_organisations_api_does_not_have_organisation('non-existent')
 
       assert_raises(GdsApi::HTTPNotFound) do
         @api.organisation('non-existent')

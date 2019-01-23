@@ -83,27 +83,27 @@ module GdsApi
         )
       end
 
-      def rummager_has_services_and_info_data_for_organisation
+      def stub_rummager_has_services_and_info_data_for_organisation
         stub_request_for(search_results_found)
         run_example_query
       end
 
-      def rummager_has_no_services_and_info_data_for_organisation
+      def stub_rummager_has_no_services_and_info_data_for_organisation
         stub_request_for(no_search_results_found)
         run_example_query
       end
 
-      def rummager_has_specialist_sector_organisations(_sub_sector)
+      def stub_rummager_has_specialist_sector_organisations(_sub_sector)
         stub_request_for(sub_sector_organisations_results)
         run_example_query
       end
 
-      def rummager_has_no_policies_for_any_type
+      def stub_rummager_has_no_policies_for_any_type
         stub_request(:get, %r{/search.json})
           .to_return(body: no_search_results_found)
       end
 
-      def rummager_has_policies_for_every_type(options = {})
+      def stub_rummager_has_policies_for_every_type(options = {})
         if options[:count]
           stub_request(:get, %r{/search.json.*count=#{options[:count]}.*})
             .to_return(body: first_n_results(new_policies_results, n: options[:count]))
@@ -112,6 +112,13 @@ module GdsApi
             .to_return(body: new_policies_results)
         end
       end
+
+      # Aliases for DEPRECATED methods
+      alias_method :rummager_has_services_and_info_data_for_organisation, :stub_rummager_has_services_and_info_data_for_organisation
+      alias_method :rummager_has_no_services_and_info_data_for_organisation, :stub_rummager_has_no_services_and_info_data_for_organisation
+      alias_method :rummager_has_specialist_sector_organisations, :stub_rummager_has_specialist_sector_organisations
+      alias_method :rummager_has_no_policies_for_any_type, :stub_rummager_has_no_policies_for_any_type
+      alias_method :rummager_has_policies_for_every_type, :stub_rummager_has_policies_for_every_type
 
     private
 

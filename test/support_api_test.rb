@@ -53,7 +53,7 @@ describe GdsApi::SupportApi do
   end
 
   it "throws an exception when the support app isn't available" do
-    support_api_isnt_available
+    stub_support_api_isnt_available
 
     assert_raises(GdsApi::HTTPServerError) { @api.create_service_feedback({}) }
   end
