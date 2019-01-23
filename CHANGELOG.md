@@ -1,3 +1,5 @@
+# 57.2.1
+
 * Fix broken test helper for Publishing API
 
 # 57.2.0
