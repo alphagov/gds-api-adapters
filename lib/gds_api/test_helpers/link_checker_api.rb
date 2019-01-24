@@ -91,12 +91,12 @@ module GdsApi
       end
 
       # Aliases for DEPRECATED methods
-      alias_method :link_link_checker_api_link_report_hash, :stub_link_checker_api_link_report_hash
-      alias_method :link_link_checker_api_batch_report_hash, :stub_link_checker_api_batch_report_hash
-      alias_method :link_link_checker_api_check, :stub_link_checker_api_check
-      alias_method :link_link_checker_api_get_batch, :stub_link_checker_api_get_batch
-      alias_method :link_link_checker_api_create_batch, :stub_link_checker_api_create_batch
-      alias_method :link_link_checker_api_upsert_resource_monitor, :stub_link_checker_api_upsert_resource_monitor
+      alias_method :link_checker_api_link_report_hash, :stub_link_checker_api_link_report_hash
+      alias_method :link_checker_api_batch_report_hash, :stub_link_checker_api_batch_report_hash
+      alias_method :link_checker_api_check, :stub_link_checker_api_check
+      alias_method :link_checker_api_get_batch, :stub_link_checker_api_get_batch
+      alias_method :link_checker_api_create_batch, :stub_link_checker_api_create_batch
+      alias_method :link_checker_api_upsert_resource_monitor, :stub_link_checker_api_upsert_resource_monitor
     end
   end
 end

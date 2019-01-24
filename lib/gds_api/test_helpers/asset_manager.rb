@@ -111,6 +111,7 @@ module GdsApi
       alias_method :asset_manager_does_not_have_an_asset, :stub_asset_manager_does_not_have_an_asset
       alias_method :asset_manager_does_not_have_a_whitehall_asset, :stub_asset_manager_does_not_have_a_whitehall_asset
       alias_method :asset_manager_receives_an_asset, :stub_asset_manager_receives_an_asset
+      alias_method :asset_manager_upload_failure, :stub_asset_manager_upload_failure
       alias_method :asset_manager_update_asset, :stub_asset_manager_update_asset
       alias_method :asset_manager_update_failure, :stub_asset_manager_update_asset_failure
       alias_method :asset_manager_delete_asset, :stub_asset_manager_delete_asset
