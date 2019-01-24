@@ -68,15 +68,17 @@ module GdsApi
       # which would return a file url of "https://asset-manager/media/0053adbf-0737-4923-9d8a-8180f2c723af/0d19136c4a94f07"
       def stub_asset_manager_receives_an_asset(response_url = {})
         stub_request(:post, "#{ASSET_MANAGER_ENDPOINT}/assets").to_return do
-          unless response_url.is_a?(String)
+          if response_url.is_a?(String)
+            file_url = response_url
+          else
             options = {
               id: SecureRandom.uuid,
               filename: SecureRandom.hex(8)
             }.merge(response_url)
 
-            response_url = "#{ASSET_MANAGER_ENDPOINT}/media/#{options[:id]}/#{options[:filename]}"
+            file_url = "#{ASSET_MANAGER_ENDPOINT}/media/#{options[:id]}/#{options[:filename]}"
           end
-          { body: { file_url: response_url }.to_json, status: 200 }
+          { body: { file_url: file_url }.to_json, status: 200 }
         end
       end
 

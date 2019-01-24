@@ -28,6 +28,14 @@ describe GdsApi::TestHelpers::AssetManager do
         url_format = %r{\Ahttp://asset-manager.dev.gov.uk/media/[^/]*/[^/]*\Z}
         assert_match url_format, response["file_url"]
       end
+
+      it "returns a different URL each call" do
+        stub_asset_manager_receives_an_asset
+        response1 = stub_asset_manager.create_asset({})
+        response2 = stub_asset_manager.create_asset({})
+
+        refute_match response1["file_url"], response2["file_url"]
+      end
     end
 
     describe "when passed a hash" do
