@@ -7,7 +7,7 @@ module GdsApi
         stub_request(:any, %r{\A#{ASSET_MANAGER_ENDPOINT}}).to_return(status: 200)
       end
 
-      def stub_asset_manager_is_down
+      def stub_asset_manager_isnt_available
         stub_request(:any, %r{\A#{ASSET_MANAGER_ENDPOINT}}).to_return(status: 503)
       end
 
@@ -105,7 +105,6 @@ module GdsApi
       end
 
       # Aliases for DEPRECATED methods
-      alias_method :asset_manager_is_down, :stub_asset_manager_is_down
       alias_method :asset_manager_updates_any_asset, :stub_asset_manager_updates_any_asset
       alias_method :asset_manager_deletes_any_asset, :stub_asset_manager_deletes_any_asset
       alias_method :asset_manager_has_an_asset, :stub_asset_manager_has_an_asset
