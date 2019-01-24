@@ -1,3 +1,8 @@
+# Unreleased
+
+* Fix stub_asset_manager_receives_an_asset not returning unique filenames each call
+* Rename stub_asset_manager_is_down to stub_asset_manager_isnt_available
+
 # 57.2.1
 
 * Fix broken test helper for Publishing API
