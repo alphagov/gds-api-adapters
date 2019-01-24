@@ -1,5 +1,6 @@
-# Unreleased
+# 57.2.2
 
+* Fix more deprecated helpers (Asset Manager and Link Checker API)
 * Fix stub_asset_manager_receives_an_asset not returning unique filenames each call
 * Rename stub_asset_manager_is_down to stub_asset_manager_isnt_available
 
