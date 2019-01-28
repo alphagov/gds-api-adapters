@@ -1,3 +1,8 @@
+# 57.2.3
+
+* Add `create_business_finder_feedback` to `GdsApi::SupportApi`
+* Add `stub_support_api_create_business_finder_feedback` to `GdsApi::TestHelpers::SupportApi`
+
 # 57.2.2
 
 * Fix more deprecated helpers (Asset Manager and Link Checker API)
