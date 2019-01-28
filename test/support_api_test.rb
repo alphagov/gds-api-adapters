@@ -40,6 +40,15 @@ describe GdsApi::SupportApi do
     assert_requested(stub_post)
   end
 
+  it 'can submit anonymous-contact/business-finder' do
+    request_details = { description: 'something is missing' }
+    stub_post = stub_support_api_create_business_finder_feedback(request_details)
+
+    @api.create_business_finder_feedback(request_details)
+
+    assert_requested(stub_post)
+  end
+
   it "fetches problem report daily totals" do
     response_body = { "data" => ["results"] }
     request_date = Date.new(2014, 7, 12)
