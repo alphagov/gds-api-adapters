@@ -48,6 +48,12 @@ module GdsApi
         post_stub.to_return(status: 201)
       end
 
+      def stub_support_api_create_business_finder_feedback(params)
+        post_stub = stub_http_request(:post, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/business-finder")
+        post_stub.with(body: params)
+        post_stub.to_return(status: 201)
+      end
+
       def stub_support_api_problem_report_daily_totals_for(date, expected_results = nil)
         date_string = date.strftime("%Y-%m-%d")
         get_stub = stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/problem-reports/#{date_string}/totals")
