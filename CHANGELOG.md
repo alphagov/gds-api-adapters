@@ -1,3 +1,7 @@
+# 57.2.4
+
+* Add `content_purpose_supergroup` as optional parameter to `find_subscriber_list` in `GdsApi::EmailAlertApi` 
+
 # 57.2.3
 
 * Add `create_business_finder_feedback` to `GdsApi::SupportApi`
