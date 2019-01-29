@@ -149,7 +149,10 @@ module GdsApi
   #
   # @return [GdsApi::Router]
   def self.router(options = {})
-    GdsApi::Router.new(Plek.find('router-api'), options)
+    GdsApi::Router.new(
+      Plek.find('router-api'),
+      { bearer_token: ENV['ROUTER_API_BEARER_TOKEN'] }.merge(options),
+    )
   end
 
   # Creates a GdsApi::Rummager adapter to access via a rummager.* hostname
