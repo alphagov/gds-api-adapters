@@ -1,3 +1,5 @@
+* Add Router API stubs for getting routes.
+
 # 57.2.4
 
 * Add `content_purpose_supergroup` as optional parameter to `find_subscriber_list` in `GdsApi::EmailAlertApi` 
