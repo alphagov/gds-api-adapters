@@ -42,9 +42,15 @@ module GdsApi
 
   # Creates a GdsApi::ContentStore adapter
   #
+  # This will set a bearer token if a CONTENT_STORE_BEARER_TOKEN environment
+  # variable is set
+  #
   # @return [GdsApi::ContentStore]
   def self.content_store(options = {})
-    GdsApi::ContentStore.new(Plek.find('content-store'), options)
+    GdsApi::ContentStore.new(
+      Plek.find('content-store'),
+      { bearer_token: ENV['CONTENT_STORE_BEARER_TOKEN'] }.merge(options),
+    )
   end
 
   # Creates a GdsApi::EmailAlertApi adapter
@@ -146,6 +152,9 @@ module GdsApi
   end
 
   # Creates a GdsApi::Router adapter for communicating with Router API
+  #
+  # This will set a bearer token if a ROUTER_API_BEARER_TOKEN environment
+  # variable is set
   #
   # @return [GdsApi::Router]
   def self.router(options = {})
