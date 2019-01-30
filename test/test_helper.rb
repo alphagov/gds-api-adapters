@@ -11,12 +11,14 @@ SimpleCov.start do
 end
 
 require 'minitest/autorun'
+require 'minitest/around'
 require 'rack/utils'
 require 'rack/test'
 require 'mocha/mini_test'
 require 'timecop'
 require 'gds-api-adapters'
 require 'govuk-content-schema-test-helpers'
+require 'climate_control'
 
 class Minitest::Test
   def teardown

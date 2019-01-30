@@ -1,10 +1,19 @@
 require 'test_helper'
 require 'gds_api/router'
+require 'gds_api/test_helpers/router'
 
 describe GdsApi::Router do
+  include GdsApi::TestHelpers::Router
+
   before do
-    @base_api_url = "http://router-api.example.com"
-    @api = GdsApi::Router.new(@base_api_url)
+    @base_api_url = Plek.find("router-api")
+    @api = GdsApi::Router.new(@base_api_url, bearer_token: "token")
+  end
+
+  around do |test|
+    ClimateControl.modify ROUTER_API_BEARER_TOKEN: "token" do
+      test.call
+    end
   end
 
   describe "managing backends" do
@@ -147,11 +156,8 @@ describe GdsApi::Router do
     end
 
     describe "fetching a route" do
-      it "should return the route details" do
-        route_data = { "incoming_path" => "/foo", "route_type" => "exact", "handler" => "backend", "backend_id" => "foo" }
-        req = WebMock.stub_request(:get, "#{@base_api_url}/routes").
-          with(query: { "incoming_path" => "/foo" }).
-          to_return(status: 200, body: route_data.to_json, headers: { "Content-type" => "application/json" })
+      it "should return the backend route details" do
+        req = stub_router_has_backend_route("/foo", backend_id: "foo")
 
         response = @api.get_route("/foo")
         assert_equal 200, response.code
@@ -162,9 +168,7 @@ describe GdsApi::Router do
       end
 
       it "should raise if nothing found" do
-        req = WebMock.stub_request(:get, "#{@base_api_url}/routes").
-          with(query: { "incoming_path" => "/foo" }).
-          to_return(status: 404)
+        req = stub_router_doesnt_have_route("/foo")
 
         assert_raises(GdsApi::HTTPNotFound) do
           @api.get_route("/foo")
@@ -172,6 +176,23 @@ describe GdsApi::Router do
 
         assert_requested(req)
         assert_not_requested(@commit_req)
+      end
+
+      it "should return the gone route details" do
+        stub_router_has_gone_route("/foo")
+
+        response = @api.get_route("/foo")
+        assert_equal 200, response.code
+        assert_equal "gone", response["handler"]
+      end
+
+      it "should return the redirect route details" do
+        stub_router_has_redirect_route("/foo", redirect_to: "/bar")
+
+        response = @api.get_route("/foo")
+        assert_equal 200, response.code
+        assert_equal "redirect", response["handler"]
+        assert_equal "/bar", response["redirect_to"]
       end
 
       it "should escape the params" do
