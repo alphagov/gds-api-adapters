@@ -1,3 +1,5 @@
+* Add automatic bearer tokens for `GdsApi.router` and `GdsApi.content_store`.
+
 # 57.2.3
 
 * Add `create_business_finder_feedback` to `GdsApi::SupportApi`
