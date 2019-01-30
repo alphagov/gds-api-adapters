@@ -42,9 +42,9 @@ describe GdsApi::SupportApi do
 
   it 'can submit anonymous-contact/business-finder' do
     request_details = { description: 'something is missing' }
-    stub_post = stub_support_api_create_business_finder_feedback(request_details)
+    stub_post = stub_support_api_create_content_improvement_feedback(request_details)
 
-    @api.create_business_finder_feedback(request_details)
+    @api.create_content_improvement_feedback(request_details)
 
     assert_requested(stub_post)
   end

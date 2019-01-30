@@ -47,8 +47,8 @@ class GdsApi::SupportApi < GdsApi::Base
     get_json("#{endpoint}/anonymous-feedback/problem-reports/#{date_string}/totals")
   end
 
-  def create_business_finder_feedback(params)
-    post_json("#{endpoint}/anonymous-feedback/business-finder", params)
+  def create_content_improvement_feedback(params)
+    post_json("#{endpoint}/anonymous-feedback/content_improvement", params)
   end
 
   def anonymous_feedback(options = {})
