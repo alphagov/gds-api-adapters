@@ -1,6 +1,7 @@
 # 57.2.4
 
 * Add `content_purpose_supergroup` as optional parameter to `find_subscriber_list` in `GdsApi::EmailAlertApi` 
+* Add automatic bearer tokens for `GdsApi.router` and `GdsApi.content_store`.
 
 # 57.2.3
 
