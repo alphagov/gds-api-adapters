@@ -1,10 +1,14 @@
+# 57.3.1
+
+* Rename `create_business_finder_feedback` to `create_content_improvement_feedback`
+
 # 57.3.0
 
 * Add Router API stubs for getting routes.
 
 # 57.2.4
 
-* Add `content_purpose_supergroup` as optional parameter to `find_subscriber_list` in `GdsApi::EmailAlertApi` 
+* Add `content_purpose_supergroup` as optional parameter to `find_subscriber_list` in `GdsApi::EmailAlertApi`
 * Add automatic bearer tokens for `GdsApi.router` and `GdsApi.content_store`.
 
 # 57.2.3
