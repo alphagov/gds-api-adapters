@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add GdsApi::PublishingApiV2#republish endpoint to `publishing_api`
+
 # 57.3.1
 
 * Rename `create_business_finder_feedback` to `create_content_improvement_feedback`

@@ -84,6 +84,21 @@ module GdsApi
         stub_request(:post, url).with(body: body).to_return(response)
       end
 
+      # Stub a POST /v2/content/:content_id/republish request
+      #
+      # @param content_id [UUID]
+      # @param body  [String]
+      # @param response_hash [Hash]
+      def stub_publishing_api_republish(content_id, body = {}, response_hash = {})
+        url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/republish"
+        response = {
+          status: 200,
+          body: '{}',
+          headers: { "Content-Type" => "application/json; charset=utf-8" }
+        }.merge(response_hash)
+        stub_request(:post, url).with(body: body).to_return(response)
+      end
+
       # Stub a POST /v2/content/:content_id/unpublish request
       #
       # @param content_id [UUID]
@@ -141,6 +156,11 @@ module GdsApi
       # Stub any POST /v2/content/*/publish request
       def stub_any_publishing_api_publish
         stub_request(:post, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/.*/publish})
+      end
+
+      # Stub any POST /v2/content/*/publish request
+      def stub_any_publishing_api_republish
+        stub_request(:post, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/.*/republish})
       end
 
       # Stub any POST /v2/content/*/unpublish request
