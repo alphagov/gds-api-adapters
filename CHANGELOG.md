@@ -1,4 +1,4 @@
-# Unreleased
+# 57.4.0
 
 * Add GdsApi::PublishingApiV2#republish endpoint to `publishing_api`
 
