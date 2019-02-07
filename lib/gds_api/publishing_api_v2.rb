@@ -106,6 +106,24 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     post_json(publish_url(content_id), params)
   end
 
+  # Republish a content item
+  #
+  # The publishing-api will "republish" a live edition. This can be used to remove an unpublishing or to
+  # re-send a published edition downstream
+  #
+  # @param content_id [UUID]
+  # @param options [Hash]
+  # @option options [String] locale The language, defaults to 'en' in publishing-api.
+  #
+  # @see ...
+  def republish(content_id, options = {})
+    optional_keys = %i[locale previous_version]
+
+    params = merge_optional_keys({}, options, optional_keys)
+
+    post_json(republish_url(content_id), params)
+  end
+
   # Import content into the publishing API
   #
   # The publishing-api will delete any content which has the content
@@ -445,6 +463,11 @@ private
   def publish_url(content_id)
     validate_content_id(content_id)
     "#{endpoint}/v2/content/#{content_id}/publish"
+  end
+
+  def republish_url(content_id)
+    validate_content_id(content_id)
+    "#{endpoint}/v2/content/#{content_id}/republish"
   end
 
   def unpublish_url(content_id)

@@ -511,6 +511,128 @@ describe GdsApi::PublishingApiV2 do
     end
   end
 
+  describe "#republish" do
+    describe "if the republish command succeeds" do
+      before do
+        publishing_api
+          .given("an unpublished content item exists with content_id: #{@content_id}")
+          .upon_receiving("a republish request")
+          .with(
+            method: :post,
+            path: "/v2/content/#{@content_id}/republish",
+            body: {},
+            headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
+              "Authorization" => "Bearer #{@bearer_token}"
+            ),
+          )
+          .will_respond_with(
+            status: 200
+          )
+      end
+
+      it "responds with 200 if the publish command succeeds" do
+        response = @api_client.republish(@content_id)
+        assert_equal 200, response.code
+      end
+    end
+
+    describe "if the content item does not exist" do
+      before do
+        publishing_api
+          .given("no content exists")
+          .upon_receiving("a republish request")
+          .with(
+            method: :post,
+            path: "/v2/content/#{@content_id}/republish",
+            body: {},
+            headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
+              "Authorization" => "Bearer #{@bearer_token}"
+            ),
+          )
+          .will_respond_with(
+            status: 404
+          )
+      end
+
+      it "responds with 404" do
+        error = assert_raises GdsApi::HTTPClientError do
+          @api_client.republish(@content_id)
+        end
+
+        assert_equal 404, error.code
+      end
+    end
+
+    describe "optimistic locking" do
+      describe "if the content item has not changed since it was requested" do
+        before do
+          publishing_api
+            .given("the published content item #{@content_id} is at version 3")
+            .upon_receiving("a republish request for version 3")
+            .with(
+              method: :post,
+              path: "/v2/content/#{@content_id}/republish",
+              body: {
+                previous_version: 3,
+              },
+              headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
+                "Authorization" => "Bearer #{@bearer_token}"
+              ),
+            )
+            .will_respond_with(
+              status: 200,
+            )
+        end
+
+        it "responds with 200 OK" do
+          response = @api_client.republish(@content_id, previous_version: 3)
+          assert_equal 200, response.code
+        end
+      end
+
+      describe "if the content item has changed in the meantime" do
+        before do
+          publishing_api
+            .given("the published content item #{@content_id} is at version 3")
+            .upon_receiving("a republish request for version 2")
+            .with(
+              method: :post,
+              path: "/v2/content/#{@content_id}/republish",
+              body: {
+                previous_version: 2,
+              },
+              headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
+                "Authorization" => "Bearer #{@bearer_token}"
+              ),
+            )
+            .will_respond_with(
+              status: 409,
+              body: {
+                "error" => {
+                  "code" => 409,
+                  "message" => Pact.term(generate: "Conflict", matcher: /\S+/),
+                  "fields" => {
+                    "previous_version" => Pact.each_like("does not match", min: 1),
+                  },
+                },
+              },
+              headers: {
+                "Content-Type" => "application/json; charset=utf-8"
+              }
+            )
+        end
+
+        it "responds with 409 Conflict" do
+          error = assert_raises GdsApi::HTTPClientError do
+            @api_client.republish(@content_id, previous_version: 2)
+          end
+          assert_equal 409, error.code
+          assert_equal "Conflict", error.error_details["error"]["message"]
+        end
+      end
+    end
+  end
+
   describe "#publish" do
     describe "if the publish command succeeds" do
       before do
