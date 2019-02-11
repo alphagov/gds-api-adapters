@@ -1,3 +1,7 @@
+# 57.4.1
+
+* Add reject_content_purpose_supergroup as optional email alert api subscriber list param
+
 # 57.4.0
 
 * Add GdsApi::PublishingApiV2#republish endpoint to `publishing_api`
