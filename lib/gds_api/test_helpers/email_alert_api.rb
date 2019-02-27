@@ -204,8 +204,8 @@ module GdsApi
         end
       end
 
-      def stub_email_alert_api_has_subscriber_list_by_slug(reference:, returned_attributes:)
-        stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{reference}")
+      def stub_email_alert_api_has_subscriber_list_by_slug(slug:, returned_attributes:)
+        stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}")
           .to_return(
             status: 200,
             body: {
@@ -214,8 +214,8 @@ module GdsApi
         )
       end
 
-      def stub_email_alert_api_does_not_have_subscriber_list_by_slug(reference:)
-        stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{reference}")
+      def stub_email_alert_api_does_not_have_subscriber_list_by_slug(slug:)
+        stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}")
           .to_return(status: 404)
       end
 

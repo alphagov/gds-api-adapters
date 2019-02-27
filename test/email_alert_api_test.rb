@@ -397,13 +397,13 @@ describe GdsApi::EmailAlertApi do
   describe "get_subscriber_list when one exists" do
     it "returns it" do
       stub_email_alert_api_has_subscriber_list_by_slug(
-        reference: "test123",
+        slug: "test123",
         returned_attributes: {
           id: 1,
           gov_delivery_id: "test123",
         }
       )
-      api_response = api_client.get_subscriber_list(reference: "test123")
+      api_response = api_client.get_subscriber_list(slug: "test123")
       assert_equal(200, api_response.code)
       parsed_body = api_response.to_h
       assert_equal(1, parsed_body["subscriber_list"]["id"])
@@ -412,10 +412,10 @@ describe GdsApi::EmailAlertApi do
 
   describe "get_subscriber_list when one doesn't exist" do
     it "returns 404" do
-      stub_email_alert_api_does_not_have_subscriber_list_by_slug(reference: "test123")
+      stub_email_alert_api_does_not_have_subscriber_list_by_slug(slug: "test123")
 
       assert_raises GdsApi::HTTPNotFound do
-        api_client.get_subscriber_list(reference: "test123")
+        api_client.get_subscriber_list(slug: "test123")
       end
     end
   end

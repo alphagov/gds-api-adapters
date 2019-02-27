@@ -126,8 +126,8 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   #  government_document_supertype
   #  subscriber_count
   # }
-  def get_subscriber_list(reference:)
-    get_json("#{endpoint}/subscriber-lists/#{reference}")
+  def get_subscriber_list(slug:)
+    get_json("#{endpoint}/subscriber-lists/#{slug}")
   end
 
   # Get a Subscription
