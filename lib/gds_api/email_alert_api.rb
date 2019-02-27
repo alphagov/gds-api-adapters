@@ -102,18 +102,18 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   # Subscribe
   #
   # @return [Hash] subscription_id
-  def subscribe(subscribable_id:, address:, frequency: "immediately")
+  def subscribe(subscriber_list_id:, address:, frequency: "immediately")
     post_json(
       "#{endpoint}/subscriptions",
-      subscribable_id: subscribable_id,
+      subscriber_list_id: subscriber_list_id,
       address: address,
       frequency: frequency,
     )
   end
 
-  # Get a Subscribable
+  # Get a Subscriber List
   #
-  # @return [Hash] subscribable: {
+  # @return [Hash] subscriber_list: {
   #  id
   #  title
   #  gov_delivery_id
@@ -126,8 +126,8 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   #  government_document_supertype
   #  subscriber_count
   # }
-  def get_subscribable(reference:)
-    get_json("#{endpoint}/subscribables/#{reference}")
+  def get_subscriber_list(reference:)
+    get_json("#{endpoint}/subscriber-lists/#{reference}")
   end
 
   # Get a Subscription

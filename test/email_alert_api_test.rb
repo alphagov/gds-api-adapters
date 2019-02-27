@@ -328,18 +328,18 @@ describe GdsApi::EmailAlertApi do
   describe "subscribing and a subscription is created" do
     describe "with a frequency specified" do
       it "returns a 201 and the subscription id" do
-        subscribable_id = 5
+        subscriber_list_id = 5
         address = "test@test.com"
         created_subscription_id = 1
         frequency = "daily"
 
         stub_email_alert_api_creates_a_subscription(
-          subscribable_id,
+          subscriber_list_id,
           address,
           frequency,
           created_subscription_id
         )
-        api_response = api_client.subscribe(subscribable_id: subscribable_id, address: address, frequency: frequency)
+        api_response = api_client.subscribe(subscriber_list_id: subscriber_list_id, address: address, frequency: frequency)
         assert_equal(201, api_response.code)
         assert_equal({ "subscription_id" => 1 }, api_response.to_h)
       end
@@ -347,18 +347,18 @@ describe GdsApi::EmailAlertApi do
 
     describe "without a frequency specified" do
       it "returns a 201 and the subscription id" do
-        subscribable_id = 6
+        subscriber_list_id = 6
         address = "test@test.com"
         created_subscription_id = 1
         frequency = "immediately"
 
         stub_email_alert_api_creates_a_subscription(
-          subscribable_id,
+          subscriber_list_id,
           address,
           frequency,
           created_subscription_id
         )
-        api_response = api_client.subscribe(subscribable_id: subscribable_id, address: address)
+        api_response = api_client.subscribe(subscriber_list_id: subscriber_list_id, address: address)
         assert_equal(201, api_response.code)
         assert_equal({ "subscription_id" => 1 }, api_response.to_h)
       end
@@ -367,18 +367,18 @@ describe GdsApi::EmailAlertApi do
 
   describe "subscribing and a subscription already exists" do
     it "returns a 200 and the subscription id" do
-      subscribable_id = 5
+      subscriber_list_id = 5
       address = "test@test.com"
       existing_subscription_id = 1
       frequency = "immediately"
 
       stub_email_alert_api_creates_an_existing_subscription(
-        subscribable_id,
+        subscriber_list_id,
         address,
         frequency,
         existing_subscription_id
       )
-      api_response = api_client.subscribe(subscribable_id: subscribable_id, address: address, frequency: frequency)
+      api_response = api_client.subscribe(subscriber_list_id: subscriber_list_id, address: address, frequency: frequency)
       assert_equal(200, api_response.code)
       assert_equal({ "subscription_id" => 1 }, api_response.to_h)
     end
@@ -389,33 +389,33 @@ describe GdsApi::EmailAlertApi do
       stub_email_alert_api_refuses_to_create_subscription(123, "invalid", "weekly")
 
       assert_raises GdsApi::HTTPUnprocessableEntity do
-        api_client.subscribe(subscribable_id: 123, address: "invalid", frequency: "weekly")
+        api_client.subscribe(subscriber_list_id: 123, address: "invalid", frequency: "weekly")
       end
     end
   end
 
-  describe "get_subscribable when one exists" do
+  describe "get_subscriber_list when one exists" do
     it "returns it" do
-      stub_email_alert_api_has_subscribable(
+      stub_email_alert_api_has_subscriber_list_by_slug(
         reference: "test123",
         returned_attributes: {
           id: 1,
           gov_delivery_id: "test123",
         }
       )
-      api_response = api_client.get_subscribable(reference: "test123")
+      api_response = api_client.get_subscriber_list(reference: "test123")
       assert_equal(200, api_response.code)
       parsed_body = api_response.to_h
-      assert_equal(1, parsed_body["subscribable"]["id"])
+      assert_equal(1, parsed_body["subscriber_list"]["id"])
     end
   end
 
-  describe "get_subscribable when one doesn't exist" do
+  describe "get_subscriber_list when one doesn't exist" do
     it "returns 404" do
-      stub_email_alert_api_does_not_have_subscribable(reference: "test123")
+      stub_email_alert_api_does_not_have_subscriber_list_by_slug(reference: "test123")
 
       assert_raises GdsApi::HTTPNotFound do
-        api_client.get_subscribable(reference: "test123")
+        api_client.get_subscriber_list(reference: "test123")
       end
     end
   end
