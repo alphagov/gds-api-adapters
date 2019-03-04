@@ -1,3 +1,5 @@
+* Find rummager by using the "search" alias, rather than referring to "rummager" directly
+
 # 57.4.1
 
 * Add reject_content_purpose_supergroup as optional email alert api subscriber list param
