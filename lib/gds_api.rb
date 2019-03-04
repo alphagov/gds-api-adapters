@@ -168,7 +168,7 @@ module GdsApi
   #
   # @return [GdsApi::Rummager]
   def self.rummager(options = {})
-    GdsApi::Rummager.new(Plek.find('rummager'), options)
+    GdsApi::Rummager.new(Plek.find('search'), options)
   end
 
   # Creates a GdsApi::Rummager adapter to access via a search.* hostname

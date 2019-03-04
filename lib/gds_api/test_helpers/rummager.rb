@@ -4,7 +4,7 @@ require 'gds_api/test_helpers/json_client_helper'
 module GdsApi
   module TestHelpers
     module Rummager
-      RUMMAGER_ENDPOINT = Plek.current.find('rummager')
+      RUMMAGER_ENDPOINT = Plek.current.find('search')
 
       def stub_any_rummager_post(index: nil)
         if index
