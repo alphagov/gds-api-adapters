@@ -6,7 +6,7 @@ Example usage:
 
 ```ruby
 require 'gds_api/rummager'
-rummager = GdsApi::Rummager.new(Plek.new.find('rummager'))
+rummager = GdsApi::Rummager.new(Plek.new.find('search))
 results = rummager.search(q: "taxes")
 ```
 
