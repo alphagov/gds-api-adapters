@@ -329,7 +329,6 @@ module GdsApi
           government_document_supertype = attributes["government_document_supertype"]
           gov_delivery_id = attributes["gov_delivery_id"]
           content_purpose_supergroup = attributes["content_purpose_supergroup"]
-          reject_content_purpose_supergroup = attributes["reject_content_purpose_supergroup"]
 
           params = {}
           params[:tags] = tags if tags
@@ -339,7 +338,6 @@ module GdsApi
           params[:government_document_supertype] = government_document_supertype if government_document_supertype
           params[:gov_delivery_id] = gov_delivery_id if gov_delivery_id
           params[:content_purpose_supergroup] = content_purpose_supergroup if content_purpose_supergroup
-          params[:reject_content_purpose_supergroup] = reject_content_purpose_supergroup if reject_content_purpose_supergroup
 
           query = Rack::Utils.build_nested_query(params)
         end
