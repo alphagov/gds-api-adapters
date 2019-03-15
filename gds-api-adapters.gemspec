@@ -42,7 +42,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'simplecov', '~> 0.16'
   s.add_development_dependency 'simplecov-rcov'
   s.add_development_dependency 'timecop', '~> 0.9'
-  s.add_development_dependency 'webmock', '~> 3.3'
+  s.add_development_dependency 'webmock', '~> 3.5'
   s.add_development_dependency 'webrick', '~> 1.4'
   s.add_development_dependency 'yard', '~> 0.9'
 end
