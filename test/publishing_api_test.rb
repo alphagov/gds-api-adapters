@@ -62,9 +62,9 @@ describe GdsApi::PublishingApi do
           },
         )
 
-       assert_raises GdsApi::HTTPNotFound do
-         @api_client.unreserve_path(base_path, publishing_app)
-       end
+      assert_raises GdsApi::HTTPNotFound do
+        @api_client.unreserve_path(base_path, publishing_app)
+      end
     end
 
     it "raises an error if the reservation is with another app" do
@@ -90,9 +90,9 @@ describe GdsApi::PublishingApi do
           },
         )
 
-       assert_raises GdsApi::HTTPUnprocessableEntity do
-         @api_client.unreserve_path(base_path, publishing_app)
-       end
+      assert_raises GdsApi::HTTPUnprocessableEntity do
+        @api_client.unreserve_path(base_path, publishing_app)
+      end
     end
   end
 
