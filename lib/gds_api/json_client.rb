@@ -64,8 +64,8 @@ module GdsApi
       do_json_request(:patch, url, params, additional_headers)
     end
 
-    def delete_json(url, additional_headers = {})
-      do_json_request(:delete, url, nil, additional_headers)
+    def delete_json(url, params = {}, additional_headers = {})
+      do_json_request(:delete, url, params, additional_headers)
     end
 
     def delete_json_with_params!(url, params, additional_headers = {})

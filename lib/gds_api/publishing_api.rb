@@ -12,7 +12,16 @@ class GdsApi::PublishingApi < GdsApi::Base
     e
   end
 
+  def unreserve_path(base_path, publishing_app)
+    payload = { publishing_app: publishing_app }
+    delete_json(unreserve_url(base_path), payload)
+  end
+
 private
+
+  def unreserve_url(base_path)
+    "#{endpoint}/paths#{base_path}"
+  end
 
   def intent_url(base_path)
     "#{endpoint}/publish-intent#{base_path}"

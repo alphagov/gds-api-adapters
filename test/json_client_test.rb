@@ -425,7 +425,8 @@ class JsonClientTest < MiniTest::Spec
     stub_request(:delete, "http://some.other.endpoint/some.json").to_return(status: 200)
 
     GdsApi::JsonClient.new.delete_json("http://some.other.endpoint/some.json",
-                                                  "HEADER-A" => "B", "HEADER-C" => "D")
+                                       {},
+                                       "HEADER-A" => "B", "HEADER-C" => "D")
 
     assert_requested(:delete, %r{/some.json}) do |request|
       headers_with_uppercase_names = Hash[request.headers.collect { |key, value| [key.upcase, value] }]
