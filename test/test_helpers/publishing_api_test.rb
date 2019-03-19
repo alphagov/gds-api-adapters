@@ -13,6 +13,12 @@ describe GdsApi::TestHelpers::PublishingApi do
       api_response = publishing_api.unreserve_path("/foo", "myapp")
       assert_equal(api_response.code, 200)
     end
+
+    it "stubs for any app if not specified" do
+      stub_publishing_api_unreserve_path("/foo")
+      api_response = publishing_api.unreserve_path("/foo", "myapp")
+      assert_equal(api_response.code, 200)
+    end
   end
 
   describe "#stub_publishing_api_unreserve_path_not_found" do
@@ -23,11 +29,27 @@ describe GdsApi::TestHelpers::PublishingApi do
         publishing_api.unreserve_path("/foo", "myapp")
       end
     end
+
+    it "stubs for any app if not specified" do
+      stub_publishing_api_unreserve_path_not_found("/foo")
+
+      assert_raises GdsApi::HTTPNotFound do
+        publishing_api.unreserve_path("/foo", "myapp")
+      end
+    end
   end
 
   describe "#stub_publishing_api_unreserve_path_invalid" do
     it "stubs the unreserve path API call" do
       stub_publishing_api_unreserve_path_invalid("/foo", "myapp")
+
+      assert_raises GdsApi::HTTPUnprocessableEntity do
+        publishing_api.unreserve_path("/foo", "myapp")
+      end
+    end
+
+    it "stubs for any app if not specified" do
+      stub_publishing_api_unreserve_path_invalid("/foo")
 
       assert_raises GdsApi::HTTPUnprocessableEntity do
         publishing_api.unreserve_path("/foo", "myapp")

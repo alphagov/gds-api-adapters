@@ -11,15 +11,15 @@ module GdsApi
 
       PUBLISHING_API_ENDPOINT = Plek.current.find('publishing-api')
 
-      def stub_publishing_api_unreserve_path(base_path, publishing_app)
+      def stub_publishing_api_unreserve_path(base_path, publishing_app = /.*/)
         stub_publishing_api_unreserve_path_with_code(base_path, publishing_app, 200)
       end
 
-      def stub_publishing_api_unreserve_path_not_found(base_path, publishing_app)
+      def stub_publishing_api_unreserve_path_not_found(base_path, publishing_app = /.*/)
         stub_publishing_api_unreserve_path_with_code(base_path, publishing_app, 404)
       end
 
-      def stub_publishing_api_unreserve_path_invalid(base_path, publishing_app)
+      def stub_publishing_api_unreserve_path_invalid(base_path, publishing_app = /.*/)
         stub_publishing_api_unreserve_path_with_code(base_path, publishing_app, 422)
       end
 
