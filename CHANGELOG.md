@@ -1,3 +1,6 @@
+# 57.5.0
+
+* Support new unreserve_path endpoint for Publishing API (v1) adapter
 * Remove reject_content_purpose_supergroup as optional email alert api subscriber list param
 
 # 57.4.2
