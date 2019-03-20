@@ -11,6 +11,18 @@ module GdsApi
 
       PUBLISHING_API_ENDPOINT = Plek.current.find('publishing-api')
 
+      def stub_publishing_api_unreserve_path(base_path, publishing_app = /.*/)
+        stub_publishing_api_unreserve_path_with_code(base_path, publishing_app, 200)
+      end
+
+      def stub_publishing_api_unreserve_path_not_found(base_path, publishing_app = /.*/)
+        stub_publishing_api_unreserve_path_with_code(base_path, publishing_app, 404)
+      end
+
+      def stub_publishing_api_unreserve_path_invalid(base_path, publishing_app = /.*/)
+        stub_publishing_api_unreserve_path_with_code(base_path, publishing_app, 422)
+      end
+
       def stub_publishing_api_put_intent(base_path, body = intent_for_publishing_api(base_path))
         url = PUBLISHING_API_ENDPOINT + "/publish-intent" + base_path
         body = body.to_json unless body.is_a?(String)
@@ -100,6 +112,12 @@ module GdsApi
       alias_method :publishing_api_returns_path_reservation_validation_error_for, :stub_publishing_api_returns_path_reservation_validation_error_for
 
     private
+
+      def stub_publishing_api_unreserve_path_with_code(base_path, publishing_app, code)
+        url = PUBLISHING_API_ENDPOINT + "/paths" + base_path
+        body = { publishing_app: publishing_app }
+        stub_request(:delete, url).with(body: body).to_return(status: code, body: '{}', headers: { "Content-Type" => "application/json; charset=utf-8" })
+      end
 
       def values_match_recursively(expected_value, actual_value)
         case expected_value

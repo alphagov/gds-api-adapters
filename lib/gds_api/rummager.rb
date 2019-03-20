@@ -19,6 +19,7 @@ module GdsApi
       def delete_document(type, id)
         delete_json(
           "#{documents_url}/#{id}",
+          nil,
           _type: type,
         )
       end

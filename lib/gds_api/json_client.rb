@@ -64,19 +64,7 @@ module GdsApi
       do_json_request(:patch, url, params, additional_headers)
     end
 
-    def delete_json(url, additional_headers = {})
-      do_json_request(:delete, url, nil, additional_headers)
-    end
-
-    def delete_json_with_params!(url, params, additional_headers = {})
-      warn <<-doc
-        DEPRECATION NOTICE: Delete requests should not include parameters.
-
-        Do not use this method as the ability to do this will be removed.
-
-        Called from: #{caller[2]}
-      doc
-
+    def delete_json(url, params = {}, additional_headers = {})
       do_json_request(:delete, url, params, additional_headers)
     end
 

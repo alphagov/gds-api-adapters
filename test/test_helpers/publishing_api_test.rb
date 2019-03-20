@@ -7,6 +7,56 @@ describe GdsApi::TestHelpers::PublishingApi do
   let(:base_api_url) { Plek.current.find("publishing-api") }
   let(:publishing_api) { GdsApi::PublishingApi.new(base_api_url) }
 
+  describe "#stub_publishing_api_unreserve_path" do
+    it "stubs the unreserve path API call" do
+      stub_publishing_api_unreserve_path("/foo", "myapp")
+      api_response = publishing_api.unreserve_path("/foo", "myapp")
+      assert_equal(api_response.code, 200)
+    end
+
+    it "stubs for any app if not specified" do
+      stub_publishing_api_unreserve_path("/foo")
+      api_response = publishing_api.unreserve_path("/foo", "myapp")
+      assert_equal(api_response.code, 200)
+    end
+  end
+
+  describe "#stub_publishing_api_unreserve_path_not_found" do
+    it "stubs the unreserve path API call" do
+      stub_publishing_api_unreserve_path_not_found("/foo", "myapp")
+
+      assert_raises GdsApi::HTTPNotFound do
+        publishing_api.unreserve_path("/foo", "myapp")
+      end
+    end
+
+    it "stubs for any app if not specified" do
+      stub_publishing_api_unreserve_path_not_found("/foo")
+
+      assert_raises GdsApi::HTTPNotFound do
+        publishing_api.unreserve_path("/foo", "myapp")
+      end
+    end
+  end
+
+  describe "#stub_publishing_api_unreserve_path_invalid" do
+    it "stubs the unreserve path API call" do
+      stub_publishing_api_unreserve_path_invalid("/foo", "myapp")
+
+      assert_raises GdsApi::HTTPUnprocessableEntity do
+        publishing_api.unreserve_path("/foo", "myapp")
+      end
+    end
+
+    it "stubs for any app if not specified" do
+      stub_publishing_api_unreserve_path_invalid("/foo")
+
+      assert_raises GdsApi::HTTPUnprocessableEntity do
+        publishing_api.unreserve_path("/foo", "myapp")
+      end
+    end
+  end
+
   describe '#request_json_matching predicate' do
     describe "nested required attribute" do
       let(:matcher) { request_json_matching("a" => { "b" => 1 }) }
