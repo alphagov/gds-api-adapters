@@ -1,4 +1,4 @@
-# Unreleased
+# 58.0.0
 
 * Rename references of subscribable to subscriber_list in Email Alert API. Note
   this is a breaking change for users of the Email Alert API adapters, clients
