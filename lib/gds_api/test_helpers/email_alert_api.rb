@@ -161,24 +161,24 @@ module GdsApi
           .to_return(status: 404)
       end
 
-      def stub_email_alert_api_creates_a_subscription(subscribable_id, address, frequency, returned_subscription_id)
+      def stub_email_alert_api_creates_a_subscription(subscriber_list_id, address, frequency, returned_subscription_id)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions")
           .with(
-            body: { subscribable_id: subscribable_id, address: address, frequency: frequency }.to_json
+            body: { subscriber_list_id: subscriber_list_id, address: address, frequency: frequency }.to_json
         ).to_return(status: 201, body: { subscription_id: returned_subscription_id }.to_json)
       end
 
-      def stub_email_alert_api_creates_an_existing_subscription(subscribable_id, address, frequency, returned_subscription_id)
+      def stub_email_alert_api_creates_an_existing_subscription(subscriber_list_id, address, frequency, returned_subscription_id)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions")
           .with(
-            body: { subscribable_id: subscribable_id, address: address, frequency: frequency }.to_json
+            body: { subscriber_list_id: subscriber_list_id, address: address, frequency: frequency }.to_json
         ).to_return(status: 200, body: { subscription_id: returned_subscription_id }.to_json)
       end
 
-      def stub_email_alert_api_refuses_to_create_subscription(subscribable_id, address, frequency)
+      def stub_email_alert_api_refuses_to_create_subscription(subscriber_list_id, address, frequency)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions")
           .with(
-            body: { subscribable_id: subscribable_id, address: address, frequency: frequency }.to_json
+            body: { subscriber_list_id: subscriber_list_id, address: address, frequency: frequency }.to_json
         ).to_return(status: 422)
       end
 
@@ -194,28 +194,28 @@ module GdsApi
         assert_requested(:post, "#{EMAIL_ALERT_API_ENDPOINT}/unsubscribe/#{uuid}", times: 1)
       end
 
-      def assert_subscribed(subscribable_id, address, frequency = "immediately")
+      def assert_subscribed(subscriber_list_id, address, frequency = "immediately")
         assert_requested(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions") do |req|
           JSON.parse(req.body).symbolize_keys == {
-            subscribable_id: subscribable_id,
+            subscriber_list_id: subscriber_list_id,
             address: address,
             frequency: frequency
           }
         end
       end
 
-      def stub_email_alert_api_has_subscribable(reference:, returned_attributes:)
-        stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscribables/#{reference}")
+      def stub_email_alert_api_has_subscriber_list_by_slug(slug:, returned_attributes:)
+        stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}")
           .to_return(
             status: 200,
             body: {
-              subscribable: returned_attributes
+              subscriber_list: returned_attributes
             }.to_json
         )
       end
 
-      def stub_email_alert_api_does_not_have_subscribable(reference:)
-        stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscribables/#{reference}")
+      def stub_email_alert_api_does_not_have_subscriber_list_by_slug(slug:)
+        stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}")
           .to_return(status: 404)
       end
 
@@ -243,8 +243,8 @@ module GdsApi
       alias_method :email_alert_api_creates_an_existing_subscription, :stub_email_alert_api_creates_an_existing_subscription
       alias_method :email_alert_api_refuses_to_create_subscription, :stub_email_alert_api_refuses_to_create_subscription
       alias_method :email_alert_api_creates_an_auth_token, :stub_email_alert_api_creates_an_auth_token
-      alias_method :email_alert_api_has_subscribable, :stub_email_alert_api_has_subscribable
-      alias_method :email_alert_api_does_not_have_subscribable, :stub_email_alert_api_does_not_have_subscribable
+      alias_method :email_alert_api_has_subscriber_list_by_slug, :stub_email_alert_api_has_subscriber_list_by_slug
+      alias_method :email_alert_api_does_not_have_subscriber_list_by_slug, :stub_email_alert_api_does_not_have_subscriber_list_by_slug
 
     private
 

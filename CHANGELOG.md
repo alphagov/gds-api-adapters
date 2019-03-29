@@ -1,3 +1,9 @@
+# Unreleased
+
+* Rename references of subscribable to subscriber_list in Email Alert API. Note
+  this is a breaking change for users of the Email Alert API adapters, clients
+  will need to also update any references to subscribable.
+
 # 57.5.0
 
 * Support new unreserve_path endpoint for Publishing API (v1) adapter
