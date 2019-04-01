@@ -1,11 +1,8 @@
 module GdsApi
   module TestHelpers
     module Calendars
-      CALENDARS_ENDPOINT = Plek.current.find('calendars')
-
-
       def stub_calendars_endpoint(in_division: nil)
-        endpoint = "#{CALENDARS_ENDPOINT}/bank-holidays"
+        endpoint = "#{Plek.new.website_root}/bank-holidays"
         endpoint += "/#{in_division}" unless in_division.nil?
         endpoint + '.json'
       end

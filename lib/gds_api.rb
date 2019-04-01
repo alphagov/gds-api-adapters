@@ -37,7 +37,7 @@ module GdsApi
   #
   # @return [GdsApi::Calendars]
   def self.calendars(options = {})
-    GdsApi::Calendars.new(Plek.find('calendars'), options)
+    GdsApi::Calendars.new(Plek.new.website_root, options)
   end
 
   # Creates a GdsApi::ContentStore adapter
