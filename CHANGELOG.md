@@ -1,4 +1,4 @@
-# Unreleased
+# 59.0.0
 
 * Expect applications to access the bank holidays API via the public website
   and not internally via the calendars app.
