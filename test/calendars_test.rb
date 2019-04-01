@@ -6,7 +6,7 @@ describe GdsApi::Calendars do
   include GdsApi::TestHelpers::Calendars
 
   before do
-    @host = Plek.current.find("calendars")
+    @host = Plek.new.website_root
     @api = GdsApi::Calendars.new(@host)
   end
 

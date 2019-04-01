@@ -1,3 +1,8 @@
+# Unreleased
+
+* Expect applications to access the bank holidays API via the public website
+  and not internally via the calendars app.
+
 # 58.0.0
 
 * Rename references of subscribable to subscriber_list in Email Alert API. Note
