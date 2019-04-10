@@ -442,6 +442,20 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
     put_json(url, payload)
   end
 
+  # Generates a notification via the publishing API
+  #
+  # Returns success or failure only.
+  #
+  # @param payload [Hash]
+  # @option payload [Hash] publishing_app The publishing application, like `content-tagger`
+  # @option payload [Hash] workflow_message A custom notification message, presented in the email, explaining the change.
+  #
+  # @see https://docs.publishing.service.gov.uk/apis/publishing-api/api.html#notify
+  def notify(content_id, payload)
+    url = "#{endpoint}/v2/content/#{content_id}/notify"
+    post_json(url, payload)
+  end
+
 private
 
   def content_url(content_id, params = {})

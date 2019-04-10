@@ -2209,4 +2209,138 @@ describe GdsApi::PublishingApiV2 do
       assert_equal 200, response.code
     end
   end
+
+  describe "#notify" do
+    it "returns 200 for a valid notification payload" do
+      content_id = "cfbd081e-56de-47ec-99a4-c9d23ec24d9c"
+      payload = {
+        publishing_app: "content-tagger",
+        workflow_message: "Something was re-tagged",
+      }
+
+      publishing_api
+        .given("content exists for content_id 'cfbd081e-56de-47ec-99a4-c9d23ec24d9c'")
+        .upon_receiving("a request to notify subscribers of the workflow change")
+        .with(
+          method: :post,
+          path: "/v2/content/#{content_id}/notify",
+          body: payload,
+          headers: {
+            "Content-Type" => "application/json"
+          },
+        )
+        .will_respond_with(
+          status: 200,
+          body: {},
+          headers: {
+            "Content-Type" => "application/json; charset=utf-8"
+          }
+        )
+
+      response = @api_client.notify(content_id, payload)
+      assert_equal 200, response.code
+    end
+
+    it "returns 422 if the request is invalid" do
+      content_id = "cfbd081e-56de-47ec-99a4-c9d23ec24d9c"
+      payload = { publishing_app: "content-tagger" }
+
+      publishing_api
+        .given("content exists for content_id 'cfbd081e-56de-47ec-99a4-c9d23ec24d9c'")
+        .upon_receiving("a request to notify without a workflow message")
+        .with(
+          method: :post,
+          path: "/v2/content/#{content_id}/notify",
+          body: payload,
+          headers: {
+            "Content-Type" => "application/json"
+          }
+        )
+        .will_respond_with(
+          status: 422,
+          body: {
+            "error" => {
+              "code" => 422,
+              "message" => Pact.term(generate: "Unprocessable", matcher: /\S+/),
+              "fields" => {
+                "workflow_message" => Pact.each_like("must be present", min: 1),
+              },
+            },
+          },
+        )
+
+      error = assert_raises GdsApi::HTTPUnprocessableEntity do
+        @api_client.notify(content_id, payload)
+      end
+      assert_equal "Unprocessable", error.error_details["error"]["message"]
+    end
+
+    it "returns 422 if the content_id is invalid" do
+      content_id = "4a11d85d-9aae-4598-99b5-820b61d51e3b"
+      payload = { publishing_app: "content-tagger", workflow_message: "Hi!" }
+
+      publishing_api
+        .given("content doesn't exist for content_id '4a11d85d-9aae-4598-99b5-820b61d51e3b'")
+        .upon_receiving("a request to notify for non-existant content")
+        .with(
+          method: :post,
+          path: "/v2/content/#{content_id}/notify",
+          body: payload,
+          headers: {
+            "Content-Type" => "application/json"
+          }
+        )
+        .will_respond_with(
+          status: 422,
+          body: {
+            "error" => {
+              "code" => 422,
+              "message" => Pact.term(generate: "Unprocessable", matcher: /\S+/),
+              "fields" => {
+                "content_id" => Pact.each_like("must be valid", min: 1),
+              },
+            },
+          },
+        )
+
+      error = assert_raises GdsApi::HTTPUnprocessableEntity do
+        @api_client.notify(content_id, payload)
+      end
+      assert_equal "Unprocessable", error.error_details["error"]["message"]
+    end
+
+    it "returns 422 if the content is not published" do
+      content_id = "4a11d85d-9aae-4598-99b5-820b61d51e3b"
+      payload = { publishing_app: "content-tagger", workflow_message: "Hi!" }
+
+      publishing_api
+        .given("content isn't published for content_id '4a11d85d-9aae-4598-99b5-820b61d51e3b'")
+        .upon_receiving("a request to notify for content which isn't published")
+        .with(
+          method: :post,
+          path: "/v2/content/#{content_id}/notify",
+          body: payload,
+          headers: {
+            "Content-Type" => "application/json"
+          }
+        )
+        .will_respond_with(
+          status: 422,
+          body: {
+            "error" => {
+              "code" => 422,
+              "message" => Pact.term(generate: "Unprocessable", matcher: /\S+/),
+              "fields" => {
+                "content_id" => Pact.each_like("must be published", min: 1),
+              },
+            },
+          },
+        )
+
+      error = assert_raises GdsApi::HTTPUnprocessableEntity do
+        @api_client.notify(content_id, payload)
+      end
+      assert_equal "Unprocessable", error.error_details["error"]["message"]
+    end
+  end
 end
