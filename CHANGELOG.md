@@ -1,3 +1,8 @@
+# Unreleased
+
+* Add Publishing API 'notify' v2 endpoint. This can be used to notify email subscribers
+  of important workflow changes which take place after publishing.
+
 # 59.0.0
 
 * Expect applications to access the bank holidays API via the public website
