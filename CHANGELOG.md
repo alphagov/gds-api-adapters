@@ -1,4 +1,4 @@
-# Unreleased
+# 59.1.0
 
 * Use `POST` rather than `GET` to perform anonymous feedback queries with
   support-api.
