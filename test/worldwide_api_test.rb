@@ -16,7 +16,7 @@ describe GdsApi::Worldwide do
       stub_worldwide_api_has_locations(country_slugs)
 
       response = @api.world_locations
-      assert_equal country_slugs, response.map { |r| r['details']['slug'] }
+      assert_equal(country_slugs, response.map { |r| r['details']['slug'] })
       assert_equal "Rohan", response['results'][2]['title']
     end
 

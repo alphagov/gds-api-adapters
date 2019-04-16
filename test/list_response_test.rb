@@ -38,7 +38,7 @@ describe GdsApi::ListResponse do
 
   describe "handling pagination" do
     before :each do
-      page_1 = {
+      page1 = {
         "results" => %w(foo1 bar1),
         "total" => 6,
         "current_page" => 1, "pages" => 3, "page_size" => 2,
@@ -50,7 +50,7 @@ describe GdsApi::ListResponse do
           ]
         }
       }
-      page_2 = {
+      page2 = {
         "results" => %w(foo2 bar2),
         "total" => 6,
         "current_page" => 2, "pages" => 3, "page_size" => 2,
@@ -63,7 +63,7 @@ describe GdsApi::ListResponse do
           ]
         }
       }
-      page_3 = {
+      page3 = {
         "results" => %w(foo3 bar3),
         "total" => 6,
         "current_page" => 3, "pages" => 3, "page_size" => 2,
@@ -76,21 +76,21 @@ describe GdsApi::ListResponse do
         }
       }
       @p1_response = stub(
-        body: page_1.to_json,
+        body: page1.to_json,
         status: 200,
         headers: {
           link: '<http://www.example.com/1>; rel="self", <http://www.example.com/2>; rel="next"'
         }
       )
       @p2_response = stub(
-        body: page_2.to_json,
+        body: page2.to_json,
         status: 200,
         headers: {
           link: '<http://www.example.com/2>; rel="self", <http://www.example.com/3>; rel="next", <http://www.example.com/1>; rel="previous"'
         }
       )
       @p3_response = stub(
-        body: page_3.to_json,
+        body: page3.to_json,
         status: 200,
         headers: {
           link: '<http://www.example.com/3>; rel="self", <http://www.example.com/1>; rel="previous"'
@@ -159,7 +159,7 @@ describe GdsApi::ListResponse do
       it "should allow iteration across multiple pages" do
         assert_equal 6, @response.with_subsequent_pages.count
         assert_equal %w(foo1 bar1 foo2 bar2 foo3 bar3), @response.with_subsequent_pages.to_a
-        assert_equal %w(foo1 foo2 foo3), @response.with_subsequent_pages.select { |s| s =~ /foo/ }
+        assert_equal(%w(foo1 foo2 foo3), @response.with_subsequent_pages.select { |s| s =~ /foo/ })
       end
 
       it "should not load a page multiple times" do

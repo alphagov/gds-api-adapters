@@ -31,6 +31,7 @@ module GdsApi
 
       def add_document(id, document, index_name)
         raise(InvalidIndex, index_name) unless index_name == 'metasearch'
+
         post_json(
           "#{base_url}/v2/metasearch/documents",
           document.merge(
@@ -41,6 +42,7 @@ module GdsApi
 
       def delete_document(id, index_name)
         raise(InvalidIndex, index_name) unless index_name == 'metasearch'
+
         delete_json("#{base_url}/v2/metasearch/documents/#{id}")
       end
     end
@@ -114,6 +116,7 @@ module GdsApi
     # @deprecated Only in use by Whitehall. Use the `#search` method.
     def advanced_search(args)
       raise ArgumentError.new("Args cannot be blank") if args.nil? || args.empty?
+
       request_path = "#{base_url}/advanced_search?#{Rack::Utils.build_nested_query(args)}"
       get_json(request_path)
     end

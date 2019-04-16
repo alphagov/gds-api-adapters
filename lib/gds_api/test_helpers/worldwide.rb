@@ -30,7 +30,7 @@ module GdsApi
 
           links = { self: "#{WORLDWIDE_API_ENDPOINT}/api/world-locations?page=#{i + 1}" }
           links[:next] = "#{WORLDWIDE_API_ENDPOINT}/api/world-locations?page=#{i + 2}" if pages[i + 1]
-          links[:previous] = "#{WORLDWIDE_API_ENDPOINT}/api/world-locations?page=#{i}" unless i == 0
+          links[:previous] = "#{WORLDWIDE_API_ENDPOINT}/api/world-locations?page=#{i}" unless i.zero?
           page_details["_response_info"]["links"] = []
           link_headers = []
           links.each do |rel, href|
@@ -40,7 +40,8 @@ module GdsApi
 
           stub_request(:get, links[:self]).
             to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
-          if i == 0
+
+          if i.zero?
             # First page exists at URL with and without page param
             stub_request(:get, links[:self].sub(/\?page=1/, '')).
               to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })

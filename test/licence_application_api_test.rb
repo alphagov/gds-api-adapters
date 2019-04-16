@@ -21,32 +21,32 @@ class LicenceApplicationApiTest < Minitest::Test
     stub_request(:get, "#{@core_url}/api/licences").
       with(headers: GdsApi::JsonClient.default_request_headers).
       to_return(status: 200,
-                body: <<-EOS
-[
-   {
-      "code":"1324-5-1",
-      "name":"Land drainage consents",
-      "legislation":[
-         "Land Drainage Act 1991"
-      ]
-   },
-   {
-      "code":"695-5-1",
-      "name":"Skip operator licence",
-      "legislation":[
-         "Highways Act 1980, Section 139"
-      ]
-   },
-   {
-      "code":"1251-4-1",
-      "name":"Residential care homes",
-      "legislation":[
-         "Health and Personal Social Services (Quality, Improvement and Regulation) (Northern Ireland) Order 2003"
-      ]
-   }
-]
-EOS
-)
+                body: <<~JSON
+                  [
+                     {
+                        "code":"1324-5-1",
+                        "name":"Land drainage consents",
+                        "legislation":[
+                           "Land Drainage Act 1991"
+                        ]
+                     },
+                     {
+                        "code":"695-5-1",
+                        "name":"Skip operator licence",
+                        "legislation":[
+                           "Highways Act 1980, Section 139"
+                        ]
+                     },
+                     {
+                        "code":"1251-4-1",
+                        "name":"Residential care homes",
+                        "legislation":[
+                           "Health and Personal Social Services (Quality, Improvement and Regulation) (Northern Ireland) Order 2003"
+                        ]
+                     }
+                  ]
+                JSON
+              )
 
     land_drainage = {
       "code" => "1324-5-1",
@@ -120,53 +120,53 @@ EOS
   end
 
   def test_should_return_full_licence_details_with_location_specific_information
-    licence_exists('866-5-1/00AA', <<-EOS
-{
-   "isLocationSpecific":true,
-   "geographicalAvailability":[
-      "England",
-      "Wales"
-   ],
-   "issuingAuthorities":[
+    licence_exists('866-5-1/00AA', <<~JSON
       {
-         "authorityName":"City of London",
-         "authorityInteractions":{
-            "apply":[
-               {
-                  "url":"https://www.gov.uk/motor-salvage-operator-registration/city-of-london/apply-1",
-                  "usesLicensify":true,
-                  "description":"Application to register as a motor salvage operator",
-                  "payment":"none"
+         "isLocationSpecific":true,
+         "geographicalAvailability":[
+            "England",
+            "Wales"
+         ],
+         "issuingAuthorities":[
+            {
+               "authorityName":"City of London",
+               "authorityInteractions":{
+                  "apply":[
+                     {
+                        "url":"https://www.gov.uk/motor-salvage-operator-registration/city-of-london/apply-1",
+                        "usesLicensify":true,
+                        "description":"Application to register as a motor salvage operator",
+                        "payment":"none"
+                     }
+                  ],
+                  "renew":[
+                     {
+                        "url":"https://www.gov.uk/motor-salvage-operator-registration/city-of-london/renew-1",
+                        "usesLicensify":true,
+                        "description":"Application to renew a registration as motor salvage operator",
+                        "payment":"none"
+                     }
+                  ],
+                  "change":[
+                     {
+                        "url":"https://www.gov.uk/motor-salvage-operator-registration/city-of-london/change-1",
+                        "usesLicensify":true,
+                        "description":"Application to change a registration as motor salvage operator",
+                        "payment":"none"
+                     },
+                     {
+                        "url":"https://www.gov.uk/motor-salvage-operator-registration/city-of-london/change-2",
+                        "usesLicensify":true,
+                        "description":"Application to surrender a registration as motor salvage operator",
+                        "payment":"none"
+                     }
+                  ]
                }
-            ],
-            "renew":[
-               {
-                  "url":"https://www.gov.uk/motor-salvage-operator-registration/city-of-london/renew-1",
-                  "usesLicensify":true,
-                  "description":"Application to renew a registration as motor salvage operator",
-                  "payment":"none"
-               }
-            ],
-            "change":[
-               {
-                  "url":"https://www.gov.uk/motor-salvage-operator-registration/city-of-london/change-1",
-                  "usesLicensify":true,
-                  "description":"Application to change a registration as motor salvage operator",
-                  "payment":"none"
-               },
-               {
-                  "url":"https://www.gov.uk/motor-salvage-operator-registration/city-of-london/change-2",
-                  "usesLicensify":true,
-                  "description":"Application to surrender a registration as motor salvage operator",
-                  "payment":"none"
-               }
-            ]
-         }
+            }
+         ]
       }
-   ]
-}
-EOS
-)
+    JSON
+    )
 
     response = api.details_for_licence("866-5-1", "00AA")
 

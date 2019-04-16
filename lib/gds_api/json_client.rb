@@ -12,7 +12,7 @@ module GdsApi
     attr_accessor :logger, :options
 
     def initialize(options = {})
-      if options[:disable_timeout] || options[:timeout].to_i < 0
+      if options[:disable_timeout] || options[:timeout].to_i.negative?
         raise "It is no longer possible to disable the timeout."
       end
 
@@ -101,10 +101,10 @@ module GdsApi
       rescue RestClient::Exception => e
         # Attempt to parse the body as JSON if possible
         error_details = begin
-          e.http_body ? JSON.parse(e.http_body) : nil
-        rescue JSON::ParserError
-          nil
-        end
+                          e.http_body ? JSON.parse(e.http_body) : nil
+                        rescue JSON::ParserError
+                          nil
+                        end
         raise build_specific_http_error(e, url, error_details, params)
       end
 
@@ -174,7 +174,7 @@ module GdsApi
         method_params = with_ssl_options(method_params)
       end
 
-      return ::RestClient::Request.execute(method_params)
+      ::RestClient::Request.execute(method_params)
     rescue Errno::ECONNREFUSED => e
       logger.error loggable.merge(status: 'refused', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::EndpointNotFound.new("Could not connect to #{url}")

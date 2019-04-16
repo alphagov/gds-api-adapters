@@ -123,6 +123,7 @@ module GdsApi
         case expected_value
         when Hash
           return false unless actual_value.is_a?(Hash)
+
           expected_value.all? do |expected_sub_key, expected_sub_value|
             actual_value.has_key?(expected_sub_key.to_s) &&
               values_match_recursively(expected_sub_value, actual_value[expected_sub_key.to_s])
@@ -130,6 +131,7 @@ module GdsApi
         when Array
           return false unless actual_value.is_a?(Array)
           return false unless actual_value.size == expected_value.size
+
           expected_value.each.with_index.all? do |expected_sub_value, i|
             values_match_recursively(expected_sub_value, actual_value[i])
           end

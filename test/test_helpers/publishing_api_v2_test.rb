@@ -90,18 +90,18 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
     end
 
     it 'returns paginated results' do
-      content_id_1 = "2878337b-bed9-4e7f-85b6-10ed2cbcd504"
-      content_id_2 = "2878337b-bed9-4e7f-85b6-10ed2cbcd505"
-      content_id_3 = "2878337b-bed9-4e7f-85b6-10ed2cbcd506"
+      content_id1 = "2878337b-bed9-4e7f-85b6-10ed2cbcd504"
+      content_id2 = "2878337b-bed9-4e7f-85b6-10ed2cbcd505"
+      content_id3 = "2878337b-bed9-4e7f-85b6-10ed2cbcd506"
 
       stub_publishing_api_has_content(
         [
-          { "content_id" => content_id_1 },
-          { "content_id" => content_id_2 },
-          { "content_id" => content_id_3 },
+          { "content_id" => content_id1 },
+          { "content_id" => content_id2 },
+          { "content_id" => content_id3 },
         ],
-                  page: 1,
-          per_page: 2
+        page: 1,
+        per_page: 2,
       )
 
       response = publishing_api.get_content_items(page: 1, per_page: 2)
@@ -112,21 +112,21 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
       assert_equal(response['current_page'], 1)
 
       assert_equal(records.length, 2)
-      assert_equal(records.first['content_id'], content_id_1)
-      assert_equal(records.last['content_id'], content_id_2)
+      assert_equal(records.first['content_id'], content_id1)
+      assert_equal(records.last['content_id'], content_id2)
     end
 
     it 'returns an empty list of results for out-of-bound queries' do
-      content_id_1 = "2878337b-bed9-4e7f-85b6-10ed2cbcd504"
-      content_id_2 = "2878337b-bed9-4e7f-85b6-10ed2cbcd505"
+      content_id1 = "2878337b-bed9-4e7f-85b6-10ed2cbcd504"
+      content_id2 = "2878337b-bed9-4e7f-85b6-10ed2cbcd505"
 
       stub_publishing_api_has_content(
         [
-          { "content_id" => content_id_1 },
-          { "content_id" => content_id_2 },
+          { "content_id" => content_id1 },
+          { "content_id" => content_id2 },
         ],
-                  page: 10,
-          per_page: 2
+        page: 10,
+        per_page: 2
       )
 
       response = publishing_api.get_content_items(page: 10, per_page: 2)
@@ -313,7 +313,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
 
       stub_publishing_api_get_editions(
         editions,
-        fields: ["title"]
+        fields: %w(title)
       )
 
       api_response = publishing_api.get_editions(fields: [:title])

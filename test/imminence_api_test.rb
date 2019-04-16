@@ -118,23 +118,23 @@ class ImminenceApiTest < Minitest::Test
   end
 
   def test_places_kml
-    kml_body = <<-EOS
-<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
-  <Document>
-    <name>DVLA Offices</name>
-    <Placemark>
-      <atom:link/>
-      <name>DVLA Aberdeen local office</name>
-      <description>For enquiries about vehicles: 0300 790 6802 (Textphone minicom users 0300 123 1279).For enquiries about driving licences: 0300 790 6801 (Textphone minicom users 0300 123 1278).Please note, all calls are handled initially by our call centre based in Swansea</description>
-      <address>Greyfriars House, Gallowgate, Aberdeen, AB10 1WG, UK</address>
-      <Point>
-        <coordinates>-2.0971999005177566,57.150739708305785,0</coordinates>
-      </Point>
-    </Placemark>
-  </document>
-</kml>
-EOS
+    kml_body = <<~KML
+      <?xml version="1.0" encoding="UTF-8"?>
+      <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+        <Document>
+          <name>DVLA Offices</name>
+          <Placemark>
+            <atom:link/>
+            <name>DVLA Aberdeen local office</name>
+            <description>For enquiries about vehicles: 0300 790 6802 (Textphone minicom users 0300 123 1279).For enquiries about driving licences: 0300 790 6801 (Textphone minicom users 0300 123 1278).Please note, all calls are handled initially by our call centre based in Swansea</description>
+            <address>Greyfriars House, Gallowgate, Aberdeen, AB10 1WG, UK</address>
+            <Point>
+              <coordinates>-2.0971999005177566,57.150739708305785,0</coordinates>
+            </Point>
+          </Placemark>
+        </document>
+      </kml>
+    KML
 
     stub_request(:get, "#{ROOT}/places/test.kml").
       with(headers: GdsApi::JsonClient.default_request_headers).
