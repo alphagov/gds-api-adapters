@@ -79,9 +79,9 @@ module GdsApi
       end
 
       def stub_support_api_anonymous_feedback(params, response_body = {})
-        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback").
-          with(query: params).
-          to_return(status: 200, body: response_body.to_json)
+        stub_http_request(:post, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback")
+          .with(body: params)
+          .to_return(status: 200, body: response_body.to_json)
       end
 
       def stub_support_api_anonymous_feedback_organisation_summary(slug, ordering = nil, response_body = {})

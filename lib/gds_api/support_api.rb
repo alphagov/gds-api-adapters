@@ -51,9 +51,8 @@ class GdsApi::SupportApi < GdsApi::Base
     post_json("#{endpoint}/anonymous-feedback/content_improvement", params)
   end
 
-  def anonymous_feedback(options = {})
-    uri = "#{endpoint}/anonymous-feedback" + query_string(options)
-    get_json(uri)
+  def anonymous_feedback(params = {})
+    post_json("#{endpoint}/anonymous-feedback", params)
   end
 
   def organisation_summary(organisation_slug, options = {})
