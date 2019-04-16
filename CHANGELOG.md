@@ -1,3 +1,8 @@
+# Unreleased
+
+* Use `POST` rather than `GET` to perform anonymous feedback queries with
+  support-api.
+
 # 59.0.0
 
 * Expect applications to access the bank holidays API via the public website
