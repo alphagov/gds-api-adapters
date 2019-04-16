@@ -7,6 +7,7 @@ class GdsApi::LicenceApplication < GdsApi::Base
 
   def details_for_licence(id, snac_code = nil)
     return nil if id.nil?
+
     get_json(build_licence_url(id, snac_code))
   end
 

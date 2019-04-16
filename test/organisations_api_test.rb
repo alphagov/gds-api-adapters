@@ -16,7 +16,7 @@ describe GdsApi::Organisations do
       stub_organisations_api_has_organisations(organisation_slugs)
 
       response = @api.organisations
-      assert_equal organisation_slugs, response.map { |r| r['details']['slug'] }
+      assert_equal(organisation_slugs, response.map { |r| r['details']['slug'] })
       assert_equal "Tea Agency", response['results'][1]['title']
     end
 

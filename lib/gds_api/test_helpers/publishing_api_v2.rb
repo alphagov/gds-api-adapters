@@ -609,6 +609,7 @@ module GdsApi
 
         results = editions.map do |edition|
           next edition unless params[:fields]
+
           edition.select { |k| params[:fields].include?(k) }
         end
 

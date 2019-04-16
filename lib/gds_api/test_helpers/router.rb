@@ -43,12 +43,14 @@ module GdsApi
       end
 
       def stub_route_registration(path, type, backend_id)
-        route = { route: {
-                    incoming_path: path,
-                    route_type: type,
-                    handler: 'backend',
-                    backend_id: backend_id }
-                }
+        route = {
+          route: {
+            incoming_path: path,
+            route_type: type,
+            handler: 'backend',
+            backend_id: backend_id
+          }
+        }
 
         register_stub = stub_route_put(route)
         commit_stub = stub_router_commit
@@ -56,14 +58,16 @@ module GdsApi
       end
 
       def stub_redirect_registration(path, type, destination, redirect_type, segments_mode = nil)
-        redirect = { route: {
-                      incoming_path: path,
-                      route_type: type,
-                      handler: 'redirect',
-                      redirect_to: destination,
-                      redirect_type: redirect_type,
-                      segments_mode: segments_mode }
-                  }
+        redirect = {
+          route: {
+            incoming_path: path,
+            route_type: type,
+            handler: 'redirect',
+            redirect_to: destination,
+            redirect_type: redirect_type,
+            segments_mode: segments_mode,
+          }
+        }
 
         register_stub = stub_route_put(redirect)
         commit_stub = stub_router_commit
@@ -71,11 +75,13 @@ module GdsApi
       end
 
       def stub_gone_route_registration(path, type)
-        route = { route: {
-                      incoming_path: path,
-                      route_type: type,
-                      handler: 'gone' }
-                  }
+        route = {
+          route: {
+            incoming_path: path,
+            route_type: type,
+            handler: 'gone',
+          }
+        }
 
         register_stub = stub_route_put(route)
         commit_stub = stub_router_commit

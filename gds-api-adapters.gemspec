@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-lib = File.expand_path('../lib/', __FILE__)
+lib = File.expand_path("lib", __dir__)
 $:.unshift lib unless $:.include?(lib)
 
 require 'gds_api/version'
@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'climate_control', '~> 0.2'
   s.add_development_dependency 'govuk-content-schema-test-helpers', '~> 1.6'
-  s.add_development_dependency 'govuk-lint', '~> 3.7'
+  s.add_development_dependency 'govuk-lint', '~> 3.11'
   s.add_development_dependency 'minitest', '~> 5.11'
   s.add_development_dependency 'minitest-around', '~> 0.5'
   s.add_development_dependency 'mocha', '~> 1.3'

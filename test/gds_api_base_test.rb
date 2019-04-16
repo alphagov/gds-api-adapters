@@ -23,7 +23,7 @@ class GdsApiBaseTest < Minitest::Test
   def test_should_construct_escaped_query_string_for_rails
     api = ConcreteApi.new('http://foo')
 
-    url = api.url_for_slug("slug", "b" => ['123'])
+    url = api.url_for_slug("slug", "b" => %w(123))
     u = URI.parse(url)
     assert_equal "b%5B%5D=123", u.query
 

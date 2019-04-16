@@ -1390,7 +1390,7 @@ describe GdsApi::PublishingApiV2 do
           body: link_changes
         )
 
-      response = @api_client.get_links_changes(link_types: ["taxons"])
+      response = @api_client.get_links_changes(link_types: %w(taxons))
       assert_equal 200, response.code
       assert_equal link_changes, response.to_hash
     end

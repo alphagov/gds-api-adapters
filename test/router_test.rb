@@ -68,19 +68,20 @@ describe GdsApi::Router do
       end
 
       it "should raise an error if creating/updating a backend fails" do
-        response_data = { "backend_id" => "foo", "backend_url" => "ftp://foo.example.com/", "errors" => { "backend_url" => "is not an HTTP URL" } }
-        req = WebMock.stub_request(:put, "#{@base_api_url}/backends/foo").
-          with(body: { "backend" => { "backend_url" => "http://foo.example.com/" } }.to_json).
-          to_return(status: 400, body: response_data.to_json, headers: { "Content-type" => "application/json" })
+        response_data = {
+          "backend_id" => "foo",
+          "backend_url" => "ftp://foo.example.com/",
+          "errors" => { "backend_url" => "is not an HTTP URL" },
+        }
 
-        e = nil
-        begin
+        req = WebMock.stub_request(:put, "#{@base_api_url}/backends/foo")
+          .with(body: { "backend" => { "backend_url" => "http://foo.example.com/" } }.to_json)
+          .to_return(status: 400, body: response_data.to_json, headers: { "Content-type" => "application/json" })
+
+        e = assert_raises(GdsApi::HTTPErrorResponse) do
           @api.add_backend("foo", "http://foo.example.com/")
-        rescue GdsApi::HTTPErrorResponse => ex
-          e = ex
         end
 
-        refute_nil e
         assert_equal 400, e.code
         assert_equal response_data, e.error_details
 
@@ -117,18 +118,19 @@ describe GdsApi::Router do
       end
 
       it "should raise an error if deleting the backend fails" do
-        response_data = { "backend_id" => "foo", "backend_url" => "ftp://foo.example.com/", "errors" => { "base" => "Backend has routes - can't delete" } }
-        req = WebMock.stub_request(:delete, "#{@base_api_url}/backends/foo").
-          to_return(status: 400, body: response_data.to_json, headers: { "Content-type" => "application/json" })
+        response_data = {
+          "backend_id" => "foo",
+          "backend_url" => "ftp://foo.example.com/",
+          "errors" => { "base" => "Backend has routes - can't delete" },
+        }
 
-        e = nil
-        begin
+        req = WebMock.stub_request(:delete, "#{@base_api_url}/backends/foo")
+          .to_return(status: 400, body: response_data.to_json, headers: { "Content-type" => "application/json" })
+
+        e = assert_raises(GdsApi::HTTPErrorResponse) do
           @api.delete_backend("foo")
-        rescue GdsApi::HTTPErrorResponse => ex
-          e = ex
         end
 
-        refute_nil e
         assert_equal 400, e.code
         assert_equal response_data, e.error_details
 
@@ -139,7 +141,6 @@ describe GdsApi::Router do
         req = WebMock.stub_request(:delete, "#{@base_api_url}/backends/foo+bar").
           to_return(status: 404, body: "Not found")
 
-        # We expect a GdsApi::HTTPErrorResponse, but we want to ensure nothing else is raised
         assert_raises GdsApi::HTTPErrorResponse do
           @api.delete_backend("foo bar")
         end
@@ -240,18 +241,14 @@ describe GdsApi::Router do
         route_data = { "incoming_path" => "/foo", "route_type" => "exact", "handler" => "backend", "backend_id" => "foo" }
         response_data = route_data.merge("errors" => { "backend_id" => "does not exist" })
 
-        req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
-          with(body: { "route" => route_data }.to_json).
-          to_return(status: 400, body: response_data.to_json, headers: { "Content-type" => "application/json" })
+        req = WebMock.stub_request(:put, "#{@base_api_url}/routes")
+          .with(body: { "route" => route_data }.to_json)
+          .to_return(status: 400, body: response_data.to_json, headers: { "Content-type" => "application/json" })
 
-        e = nil
-        begin
+        e = assert_raises(GdsApi::HTTPErrorResponse) do
           @api.add_route("/foo", "exact", "foo")
-        rescue GdsApi::HTTPErrorResponse => ex
-          e = ex
         end
 
-        refute_nil e
         assert_equal 400, e.code
         assert_equal response_data, e.error_details
 
@@ -321,18 +318,14 @@ describe GdsApi::Router do
           "redirect_to" => "bar", "redirect_type" => "permanent", "segments_mode" => nil }
         response_data = route_data.merge("errors" => { "redirect_to" => "is not a valid URL path" })
 
-        req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
-          with(body: { "route" => route_data }.to_json).
-          to_return(status: 400, body: response_data.to_json, headers: { "Content-type" => "application/json" })
+        req = WebMock.stub_request(:put, "#{@base_api_url}/routes")
+          .with(body: { "route" => route_data }.to_json)
+          .to_return(status: 400, body: response_data.to_json, headers: { "Content-type" => "application/json" })
 
-        e = nil
-        begin
+        e = assert_raises(GdsApi::HTTPErrorResponse) do
           @api.add_redirect_route("/foo", "exact", "bar")
-        rescue GdsApi::HTTPErrorResponse => ex
-          e = ex
         end
 
-        refute_nil e
         assert_equal 400, e.code
         assert_equal response_data, e.error_details
 
@@ -370,18 +363,14 @@ describe GdsApi::Router do
         route_data = { "incoming_path" => "foo", "route_type" => "exact", "handler" => "gone" }
         response_data = route_data.merge("errors" => { "incoming_path" => "is not a valid URL path" })
 
-        req = WebMock.stub_request(:put, "#{@base_api_url}/routes").
-          with(body: { "route" => route_data }.to_json).
-          to_return(status: 400, body: response_data.to_json, headers: { "Content-type" => "application/json" })
+        req = WebMock.stub_request(:put, "#{@base_api_url}/routes")
+          .with(body: { "route" => route_data }.to_json)
+          .to_return(status: 400, body: response_data.to_json, headers: { "Content-type" => "application/json" })
 
-        e = nil
-        begin
+        e = assert_raises(GdsApi::HTTPErrorResponse) do
           @api.add_gone_route("foo", "exact")
-        rescue GdsApi::HTTPErrorResponse => ex
-          e = ex
         end
 
-        refute_nil e
         assert_equal 400, e.code
         assert_equal response_data, e.error_details
 
@@ -421,14 +410,10 @@ describe GdsApi::Router do
           with(query: { "incoming_path" => "/foo" }).
           to_return(status: 404)
 
-        e = nil
-        begin
+        e = assert_raises(GdsApi::HTTPNotFound) do
           @api.delete_route("/foo")
-        rescue GdsApi::HTTPNotFound => ex
-          e = ex
         end
 
-        refute_nil e
         assert_equal 404, e.code
 
         assert_requested(req)
@@ -461,14 +446,10 @@ describe GdsApi::Router do
         WebMock.stub_request(:post, "#{@base_api_url}/routes/commit").
           to_return(status: 500, body: "Failed to update all routers")
 
-        e = nil
-        begin
+        e = assert_raises(GdsApi::HTTPErrorResponse) do
           @api.commit_routes
-        rescue GdsApi::HTTPErrorResponse => ex
-          e = ex
         end
 
-        refute_nil e
         assert_equal 500, e.code
         assert_equal "URL: #{@base_api_url}/routes/commit\nResponse body:\nFailed to update all routers\n\nRequest body:\n{}", e.message
       end

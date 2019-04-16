@@ -60,6 +60,7 @@ module GdsApi
         if id =~ %r{^/}
           raise ArgumentError, 'Rummager id must not start with a slash'
         end
+
         if index
           assert_requested(
             :delete,
@@ -133,8 +134,8 @@ module GdsApi
       def search_results_found
         File.read(
           File.expand_path(
-            "../../../../test/fixtures/services_and_info_fixture.json",
-            __FILE__
+            "../../../test/fixtures/services_and_info_fixture.json",
+            __dir__
           )
         )
       end
@@ -142,8 +143,8 @@ module GdsApi
       def no_search_results_found
         File.read(
           File.expand_path(
-            "../../../../test/fixtures/no_services_and_info_data_found_fixture.json",
-            __FILE__
+            "../../../test/fixtures/no_services_and_info_data_found_fixture.json",
+            __dir__
           )
         )
       end
@@ -151,8 +152,8 @@ module GdsApi
       def sub_sector_organisations_results
         File.read(
           File.expand_path(
-            "../../../../test/fixtures/sub_sector_organisations.json",
-            __FILE__
+            "../../../test/fixtures/sub_sector_organisations.json",
+            __dir__
           )
         )
       end
@@ -160,8 +161,8 @@ module GdsApi
       def new_policies_results
         File.read(
           File.expand_path(
-            "../../../../test/fixtures/new_policies_for_dwp.json",
-            __FILE__
+            "../../../test/fixtures/new_policies_for_dwp.json",
+            __dir__
           )
         )
       end
@@ -169,8 +170,8 @@ module GdsApi
       def old_policies_results
         File.read(
           File.expand_path(
-            "../../../../test/fixtures/old_policies_for_dwp.json",
-            __FILE__
+            "../../../test/fixtures/old_policies_for_dwp.json",
+            __dir__
           )
         )
       end

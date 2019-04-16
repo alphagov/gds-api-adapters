@@ -65,6 +65,7 @@ private
     def redirect_for_path(path)
       redirects_by_segments.find do |r|
         next true if r["path"] == path
+
         route_prefix_match?(r["path"], path) if r["type"] == "prefix"
       end
     end

@@ -1,4 +1,3 @@
-
 module GdsApi
   module TestHelpers
     module ContentItemHelpers
