@@ -20,15 +20,15 @@ module GdsApi
       end
 
       def stub_any_rummager_search(*args)
-        stub_any_search_search(*args)
+        stub_any_search(*args)
       end
 
       def stub_any_rummager_search_to_return_no_results(*args)
-        stub_any_search_search_to_return_no_results(*args)
+        stub_any_search_to_return_no_results(*args)
       end
 
       def assert_rummager_search(*args)
-        assert_search_search(*args)
+        assert_search(*args)
       end
 
       def stub_any_rummager_delete(*args)

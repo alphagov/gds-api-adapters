@@ -31,15 +31,15 @@ module GdsApi
         end
       end
 
-      def stub_any_search_search
+      def stub_any_search
         stub_request(:get, %r{#{SEARCH_ENDPOINT}/search.json})
       end
 
-      def stub_any_search_search_to_return_no_results
-        stub_any_search_search.to_return(body: { results: [] }.to_json)
+      def stub_any_search_to_return_no_results
+        stub_any_search.to_return(body: { results: [] }.to_json)
       end
 
-      def assert_search_search(options)
+      def assert_search(options)
         assert_requested :get, "#{SEARCH_ENDPOINT}/search.json", **options
       end
 
