@@ -1,3 +1,7 @@
+* Add `GdsApi::Search`, deprecate `GdsApi::Rummager`.
+* Add `GdsApI::TestHelpers::Search`, deprecate `GdsApi::TestHelpers::Rummager`.
+* Make `GdsApi.search` return a `GdsApi::Search`, deprecate `GdsApi.rummager`.
+
 # 59.1.0
 
 * Use `POST` rather than `GET` to perform anonymous feedback queries with
