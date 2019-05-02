@@ -149,12 +149,14 @@ describe GdsApi::PublishingApiV2 do
     describe "optimistic locking" do
       describe "if the content item has not changed since it was requested" do
         before do
-          @content_item = content_item_for_content_id(@content_id,
+          @content_item = content_item_for_content_id(
+            @content_id,
             "document_type" => "manual",
             "schema_name" => "manual",
             "locale" => "en",
             "details" => { "body" => [] },
-            "previous_version" => "3")
+            "previous_version" => "3"
+          )
 
           publishing_api
             .given("the content item #{@content_id} is at version 3")
@@ -180,12 +182,14 @@ describe GdsApi::PublishingApiV2 do
 
       describe "if the content item has changed in the meantime" do
         before do
-          @content_item = content_item_for_content_id(@content_id,
+          @content_item = content_item_for_content_id(
+            @content_id,
             "document_type" => "manual",
             "schema_name" => "manual",
             "locale" => "en",
             "details" => { "body" => [] },
-            "previous_version" => "2")
+            "previous_version" => "2"
+          )
 
           publishing_api
             .given("the content item #{@content_id} is at version 3")
@@ -1239,11 +1243,13 @@ describe GdsApi::PublishingApiV2 do
         end
 
         it "responds with 200 OK" do
-          response = @api_client.patch_links(@content_id,
+          response = @api_client.patch_links(
+            @content_id,
             links: {
               organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
             },
-            previous_version: 3,)
+            previous_version: 3,
+          )
 
           assert_equal 200, response.code
         end
@@ -1286,11 +1292,13 @@ describe GdsApi::PublishingApiV2 do
 
         it "responds with 409 Conflict" do
           error = assert_raises GdsApi::HTTPClientError do
-            @api_client.patch_links(@content_id,
+            @api_client.patch_links(
+              @content_id,
               links: {
                 organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
               },
-              previous_version: 2,)
+              previous_version: 2,
+            )
           end
 
           assert_equal 409, error.code
@@ -1452,11 +1460,15 @@ describe GdsApi::PublishingApiV2 do
             ]
           },
         )
-      assert_equal(@api_client.get_content_items_enum(document_type: 'topic', fields: %i[title base_path], per_page: 2).to_a,
-                  [{ 'title' => 'title_1', 'base_path' => '/path_1' },
-                   { 'title' => 'title_2', 'base_path' => '/path_2' },
-                   { 'title' => 'title_3', 'base_path' => '/path_3' },
-                   { 'title' => 'title_4', 'base_path' => '/path_4' }])
+      assert_equal(
+        @api_client.get_content_items_enum(document_type: 'topic', fields: %i[title base_path], per_page: 2).to_a,
+        [
+          { 'title' => 'title_1', 'base_path' => '/path_1' },
+          { 'title' => 'title_2', 'base_path' => '/path_2' },
+          { 'title' => 'title_3', 'base_path' => '/path_3' },
+          { 'title' => 'title_4', 'base_path' => '/path_4' }
+        ]
+      )
     end
   end
 
@@ -1900,16 +1912,20 @@ describe GdsApi::PublishingApiV2 do
         content_id3 = "e2961462-bc37-48e9-bb98-c981ef1a2d59"
 
         @linked_content_item = content_item_for_content_id("6cb2cf8c-670f-4de3-97d5-6ad9114581c7")
-        @linking_content_item1 = content_item_for_content_id(content_id3,
+        @linking_content_item1 = content_item_for_content_id(
+          content_id3,
           "base_path" => "/item-b",
           "links" => {
             "topic" => [@linked_content_item['content_id1']]
-        })
-        @linking_content_item2 = content_item_for_content_id(content_id2,
+          }
+        )
+        @linking_content_item2 = content_item_for_content_id(
+          content_id2,
           "base_path" => "/item-a",
           "links" => {
             "topic" => [@linked_content_item['content_id1']],
-        })
+          }
+        )
 
         publishing_api
           .given("there are two documents with a 'topic' link to another document")
@@ -1940,8 +1956,8 @@ describe GdsApi::PublishingApiV2 do
       it "returns the requested fields of linking items" do
         response = @api_client.get_linked_items(
           @linked_content_item["content_id"],
-                      link_type: "topic",
-            fields: %w(content_id base_path)
+          link_type: "topic",
+          fields: %w(content_id base_path)
         )
         assert_equal 200, response.code
 
