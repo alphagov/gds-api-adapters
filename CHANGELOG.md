@@ -1,3 +1,5 @@
+# 59.2.0
+
 * Add `GdsApi::Search`, deprecate `GdsApi::Rummager`.
 * Add `GdsApI::TestHelpers::Search`, deprecate `GdsApi::TestHelpers::Rummager`.
 * Make `GdsApi.search` return a `GdsApi::Search`, deprecate `GdsApi.rummager`.
