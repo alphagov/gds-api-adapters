@@ -389,7 +389,8 @@ class JsonClientTest < MiniTest::Spec
     stub_request(:get, "http://some.other.endpoint/some.json").to_return(status: 200)
 
     GdsApi::JsonClient.new.get_json("http://some.other.endpoint/some.json",
-                                               "HEADER-A" => "B", "HEADER-C" => "D")
+                                    "HEADER-A" => "B",
+                                    "HEADER-C" => "D")
 
     assert_requested(:get, %r{/some.json}) do |request|
       headers_with_uppercase_names = Hash[request.headers.collect { |key, value| [key.upcase, value] }]
@@ -400,8 +401,10 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_set_custom_headers_on_posts
     stub_request(:post, "http://some.other.endpoint/some.json").to_return(status: 200)
 
-    GdsApi::JsonClient.new.post_json("http://some.other.endpoint/some.json", {},
-                                                "HEADER-A" => "B", "HEADER-C" => "D")
+    GdsApi::JsonClient.new.post_json("http://some.other.endpoint/some.json",
+                                     {},
+                                     "HEADER-A" => "B",
+                                     "HEADER-C" => "D")
 
     assert_requested(:post, %r{/some.json}) do |request|
       headers_with_uppercase_names = Hash[request.headers.collect { |key, value| [key.upcase, value] }]
@@ -412,8 +415,10 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_set_custom_headers_on_puts
     stub_request(:put, "http://some.other.endpoint/some.json").to_return(status: 200)
 
-    GdsApi::JsonClient.new.put_json("http://some.other.endpoint/some.json", {},
-                                               "HEADER-A" => "B", "HEADER-C" => "D")
+    GdsApi::JsonClient.new.put_json("http://some.other.endpoint/some.json",
+                                    {},
+                                    "HEADER-A" => "B",
+                                    "HEADER-C" => "D")
 
     assert_requested(:put, %r{/some.json}) do |request|
       headers_with_uppercase_names = Hash[request.headers.collect { |key, value| [key.upcase, value] }]

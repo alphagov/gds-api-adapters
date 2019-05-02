@@ -1,198 +1,90 @@
 require 'json'
 require 'gds_api/test_helpers/json_client_helper'
+require 'gds_api/test_helpers/search'
 
 module GdsApi
   module TestHelpers
     module Rummager
-      RUMMAGER_ENDPOINT = Plek.current.find('search')
+      warn "GdsApi::TestHelpers::Rummager is deprecated.  Use GdsApi::TestHelpers::Search instead."
 
-      def stub_any_rummager_post(index: nil)
-        if index
-          stub_request(:post, %r{#{RUMMAGER_ENDPOINT}/#{index}/documents})
-            .to_return(status: [202, "Accepted"])
-        else
-          stub_request(:post, %r{#{RUMMAGER_ENDPOINT}/documents})
-            .to_return(status: [202, "Accepted"])
-        end
+      include GdsApi::TestHelpers::Search
+
+      RUMMAGER_ENDPOINT = SEARCH_ENDPOINT
+
+      def stub_any_rummager_post(*args)
+        stub_any_search_post(*args)
       end
 
-      def assert_rummager_posted_item(attributes, index: nil, **options)
-        if index
-          url = RUMMAGER_ENDPOINT + "/#{index}/documents"
-        else
-          url = RUMMAGER_ENDPOINT + "/documents"
-        end
-
-        assert_requested(:post, url, **options) do |req|
-          data = JSON.parse(req.body)
-          attributes.to_a.all? do |key, value|
-            data[key.to_s] == value
-          end
-        end
+      def assert_rummager_posted_item(*args)
+        assert_search_posted_item(*args)
       end
 
-      def stub_any_rummager_search
-        stub_request(:get, %r{#{RUMMAGER_ENDPOINT}/search.json})
+      def stub_any_rummager_search(*args)
+        stub_any_search(*args)
       end
 
-      def stub_any_rummager_search_to_return_no_results
-        stub_any_rummager_search.to_return(body: { results: [] }.to_json)
+      def stub_any_rummager_search_to_return_no_results(*args)
+        stub_any_search_to_return_no_results(*args)
       end
 
-      def assert_rummager_search(options)
-        assert_requested :get, "#{RUMMAGER_ENDPOINT}/search.json", **options
+      def assert_rummager_search(*args)
+        assert_search(*args)
       end
 
-      def stub_any_rummager_delete(index: nil)
-        if index
-          stub_request(:delete, %r{#{RUMMAGER_ENDPOINT}/#{index}/documents/.*})
-        else
-          # use rummager's default index
-          stub_request(:delete, %r{#{RUMMAGER_ENDPOINT}/documents/.*})
-        end
+      def stub_any_rummager_delete(*args)
+        stub_any_search_delete(*args)
       end
 
-      def stub_any_rummager_delete_content
-        stub_request(:delete, %r{#{RUMMAGER_ENDPOINT}/content.*})
+      def stub_any_rummager_delete_content(*args)
+        stub_any_search_delete_content(*args)
       end
 
-      def assert_rummager_deleted_item(id, index: nil, **options)
-        if id =~ %r{^/}
-          raise ArgumentError, 'Rummager id must not start with a slash'
-        end
-
-        if index
-          assert_requested(
-            :delete,
-            %r{#{RUMMAGER_ENDPOINT}/#{index}/documents/#{id}},
-            **options
-          )
-        else
-          assert_requested(
-            :delete,
-            %r{#{RUMMAGER_ENDPOINT}/documents/#{id}},
-            **options
-          )
-        end
+      def assert_rummager_deleted_item(*args)
+        assert_search_deleted_item(*args)
       end
 
-      def assert_rummager_deleted_content(base_path, **options)
-        assert_requested(
-          :delete,
-          %r{#{RUMMAGER_ENDPOINT}/content.*#{base_path}},
-          **options
-        )
+      def assert_rummager_deleted_content(*args)
+        assert_search_deleted_content(*args)
       end
 
-      def stub_rummager_has_services_and_info_data_for_organisation
-        stub_request_for(search_results_found)
-        run_example_query
+      def stub_rummager_has_services_and_info_data_for_organisation(*args)
+        stub_search_has_services_and_info_data_for_organisation(*args)
       end
 
-      def stub_rummager_has_no_services_and_info_data_for_organisation
-        stub_request_for(no_search_results_found)
-        run_example_query
+      def stub_rummager_has_no_services_and_info_data_for_organisation(*args)
+        stub_search_has_no_services_and_info_data_for_organisation(*args)
       end
 
-      def stub_rummager_has_specialist_sector_organisations(_sub_sector)
-        stub_request_for(sub_sector_organisations_results)
-        run_example_query
+      def stub_rummager_has_specialist_sector_organisations(*args)
+        stub_rummager_has_specialist_sector_organisations(*args)
       end
 
-      def stub_rummager_has_no_policies_for_any_type
-        stub_request(:get, %r{/search.json})
-          .to_return(body: no_search_results_found)
+      def stub_rummager_has_no_policies_for_any_type(*args)
+        stub_search_has_no_policies_for_any_type(*args)
       end
 
-      def stub_rummager_has_policies_for_every_type(options = {})
-        if options[:count]
-          stub_request(:get, %r{/search.json.*count=#{options[:count]}.*})
-            .to_return(body: first_n_results(new_policies_results, n: options[:count]))
-        else
-          stub_request(:get, %r{/search.json})
-            .to_return(body: new_policies_results)
-        end
+      def stub_rummager_has_policies_for_every_type(*args)
+        stub_search_has_policies_for_every_type(*args)
       end
 
-      # Aliases for DEPRECATED methods
-      alias_method :rummager_has_services_and_info_data_for_organisation, :stub_rummager_has_services_and_info_data_for_organisation
-      alias_method :rummager_has_no_services_and_info_data_for_organisation, :stub_rummager_has_no_services_and_info_data_for_organisation
-      alias_method :rummager_has_specialist_sector_organisations, :stub_rummager_has_specialist_sector_organisations
-      alias_method :rummager_has_no_policies_for_any_type, :stub_rummager_has_no_policies_for_any_type
-      alias_method :rummager_has_policies_for_every_type, :stub_rummager_has_policies_for_every_type
-
-    private
-
-      def stub_request_for(result_set)
-        stub_request(:get, /example.com\/search/).to_return(body: result_set)
+      def rummager_has_services_and_info_data_for_organisation(*args)
+        stub_rummager_has_services_and_info_data_for_organisation(*args)
       end
 
-      def run_example_query
-        client.search(example_query)
+      def rummager_has_no_services_and_info_data_for_organisation(*args)
+        stub_rummager_has_no_services_and_info_data_for_organisation(*args)
       end
 
-      def search_results_found
-        File.read(
-          File.expand_path(
-            "../../../test/fixtures/services_and_info_fixture.json",
-            __dir__
-          )
-        )
+      def rummager_has_specialist_sector_organisations(*args)
+        stub_rummager_has_specialist_sector_organisations(*args)
       end
 
-      def no_search_results_found
-        File.read(
-          File.expand_path(
-            "../../../test/fixtures/no_services_and_info_data_found_fixture.json",
-            __dir__
-          )
-        )
+      def rummager_has_no_policies_for_any_type(*args)
+        stub_rummager_has_no_policies_for_any_type(*args)
       end
 
-      def sub_sector_organisations_results
-        File.read(
-          File.expand_path(
-            "../../../test/fixtures/sub_sector_organisations.json",
-            __dir__
-          )
-        )
-      end
-
-      def new_policies_results
-        File.read(
-          File.expand_path(
-            "../../../test/fixtures/new_policies_for_dwp.json",
-            __dir__
-          )
-        )
-      end
-
-      def old_policies_results
-        File.read(
-          File.expand_path(
-            "../../../test/fixtures/old_policies_for_dwp.json",
-            __dir__
-          )
-        )
-      end
-
-      def first_n_results(results, options)
-        n = options[:n]
-        results = JSON.parse(results)
-        results["results"] = results["results"][0...n]
-
-        results.to_json
-      end
-
-      def client
-        GdsApi::Rummager.new("http://example.com")
-      end
-
-      def example_query
-        {
-          filter_organisations: ["an-organisation-slug"],
-          facet_specialist_sectors: "1000,examples:4,example_scope:global,order:value.title"
-        }
+      def rummager_has_policies_for_every_type(*args)
+        stub_rummager_has_policies_for_every_type(*args)
       end
     end
   end

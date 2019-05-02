@@ -155,11 +155,13 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
         "version" => 3,
       ).parsed_content
 
-      assert_equal({
+      assert_equal(
+        {
           "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504",
           "version" => 3
         },
-        response)
+        response
+      )
     end
   end
 

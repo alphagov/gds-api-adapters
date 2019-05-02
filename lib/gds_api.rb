@@ -14,6 +14,7 @@ require 'gds_api/publishing_api'
 require 'gds_api/publishing_api_v2'
 require 'gds_api/router'
 require 'gds_api/rummager'
+require 'gds_api/search'
 require 'gds_api/support'
 require 'gds_api/support_api'
 require 'gds_api/worldwide'
@@ -168,14 +169,16 @@ module GdsApi
   #
   # @return [GdsApi::Rummager]
   def self.rummager(options = {})
+    warn "GdsApi.rummager is deprecated.  Use GdsApi.search instead."
+
     GdsApi::Rummager.new(Plek.find('search'), options)
   end
 
-  # Creates a GdsApi::Rummager adapter to access via a search.* hostname
+  # Creates a GdsApi::Search adapter to access via a search.* hostname
   #
-  # @return [GdsApi::Rummager]
+  # @return [GdsApi::Search]
   def self.search(options = {})
-    GdsApi::Rummager.new(Plek.find('search'), options)
+    GdsApi::Search.new(Plek.find('search'), options)
   end
 
   # Creates a GdsApi::Support adapter

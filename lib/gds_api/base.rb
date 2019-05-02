@@ -18,14 +18,15 @@ class GdsApi::Base
     GdsApi::JsonClient.new(options)
   end
 
-  def_delegators :client, :get_json,
-                          :post_json,
-                          :put_json,
-                          :patch_json,
-                          :delete_json,
-                          :get_raw, :get_raw!,
-                          :put_multipart,
-                          :post_multipart
+  def_delegators :client,
+                 :get_json,
+                 :post_json,
+                 :put_json,
+                 :patch_json,
+                 :delete_json,
+                 :get_raw, :get_raw!,
+                 :put_multipart,
+                 :post_multipart
 
   attr_reader :options
 
