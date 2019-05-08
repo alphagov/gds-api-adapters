@@ -1,3 +1,8 @@
+# Unreleased
+
+* Warn when `GdsApi::Rummager` is initialised and `GdsApi::TestHelpersRummager`
+  is included.
+
 # 59.2.0
 
 * Add `GdsApi::Search`, deprecate `GdsApi::Rummager`.
