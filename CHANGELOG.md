@@ -1,4 +1,4 @@
-# Unreleased
+# 59.2.1
 
 * Warn when `GdsApi::Rummager` is initialised and `GdsApi::TestHelpersRummager`
   is included.
