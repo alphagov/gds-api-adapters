@@ -5,9 +5,11 @@ require 'gds_api/test_helpers/search'
 module GdsApi
   module TestHelpers
     module Rummager
-      warn "GdsApi::TestHelpers::Rummager is deprecated.  Use GdsApi::TestHelpers::Search instead."
-
       include GdsApi::TestHelpers::Search
+
+      def self.included(_base)
+        warn "GdsApi::TestHelpers::Rummager is deprecated.  Use GdsApi::TestHelpers::Search instead."
+      end
 
       RUMMAGER_ENDPOINT = SEARCH_ENDPOINT
 

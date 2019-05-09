@@ -169,8 +169,6 @@ module GdsApi
   #
   # @return [GdsApi::Rummager]
   def self.rummager(options = {})
-    warn "GdsApi.rummager is deprecated.  Use GdsApi.search instead."
-
     GdsApi::Rummager.new(Plek.find('search'), options)
   end
 
