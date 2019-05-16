@@ -74,6 +74,11 @@ describe GdsApi::Search do
     end
   end
 
+  it "#search should not raise an exception if the service responds 500 but eventually 200" do
+    stub_request(:get, /example.com\/search.json/).to_return(status: [500, "Internal Server Error"]).times(2).and_then_return(status: 200)
+    assert_equal 200, GdsApi::Search.new("http://example.com").search(q: "query").code
+  end
+
   it "#search should raise an exception if the service at the search URI returns a 404" do
     stub_request(:get, /example.com\/search/).to_return(status: [404, "Not Found"])
     assert_raises(GdsApi::HTTPNotFound) do

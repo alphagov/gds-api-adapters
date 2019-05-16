@@ -70,7 +70,7 @@ module GdsApi
     # @see https://github.com/alphagov/search-api/blob/master/doc/search-api.md
     def search(args, additional_headers = {})
       request_url = "#{base_url}/search.json?#{Rack::Utils.build_nested_query(args)}"
-      get_json(request_url, additional_headers)
+      get_json_with_retries(request_url, additional_headers)
     end
 
     # Perform a batch search.
@@ -84,7 +84,7 @@ module GdsApi
       end
       searches_query = { search: url_friendly_searches }
       request_url = "#{base_url}/batch_search.json?#{Rack::Utils.build_nested_query(searches_query)}"
-      get_json(request_url, additional_headers)
+      get_json_with_retries(request_url, additional_headers)
     end
 
     # Perform a search, returning the results as an enumerator.

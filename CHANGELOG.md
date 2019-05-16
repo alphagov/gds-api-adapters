@@ -1,3 +1,4 @@
+* Retry search requests three times if we receive a server error from search-api.
 * Add get_json_with_retries to json_client to permit retrying requests.
 
 # 59.2.1
