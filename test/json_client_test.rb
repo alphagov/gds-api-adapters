@@ -32,6 +32,37 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
+  def test_get_request_retries_and_then_fails
+    url = "http://www.example.com/always-fails.json"
+    stub_request(:get, url).to_raise(GdsApi::HTTPServerError)
+    assert_raises GdsApi::HTTPServerError do
+      @client.get_json_with_retries(url)
+    end
+  end
+
+  def test_get_request_retries_and_then_succeeds
+    url = "http://www.example.com/sometimes-fails.json"
+    success = { status: 200 }
+    stub_request(:get, url).to_raise(GdsApi::HTTPServerError).times(1).then.to_return(success)
+    assert_equal 200, @client.get_json_with_retries(url).code
+  end
+
+  def test_get_request_retries_specified_times
+    url = "http://www.example.com/fails.json"
+    url_two = "http://www.example.com/fails-2.json"
+    stub_request(:get, url).to_raise(GdsApi::HTTPServerError).times(2).then.to_return(status: 200)
+    stub_request(:get, url_two).to_raise(GdsApi::HTTPServerError).times(2).then.to_return(status: 200)
+
+    @client.get_json_with_retries(url, {}, retries: 3)
+    assert_requested(:get, url, times: 3)
+
+    assert_raises GdsApi::HTTPServerError do
+      @client.get_json_with_retries(url_two, {}, retries: 1)
+    end
+
+    assert_requested(:get, url_two, times: 2)
+  end
+
   def test_request_an_invalid_url
     url = "http://www.example.com/there-is-a-space-in-this-slug /"
     assert_raises GdsApi::InvalidUrl do

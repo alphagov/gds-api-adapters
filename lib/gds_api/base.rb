@@ -20,6 +20,7 @@ class GdsApi::Base
 
   def_delegators :client,
                  :get_json,
+                 :get_json_with_retries,
                  :post_json,
                  :put_json,
                  :patch_json,

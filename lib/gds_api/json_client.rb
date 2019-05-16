@@ -48,6 +48,26 @@ module GdsApi
       get_raw!(url)
     end
 
+    def get_json_with_retries(url, additional_headers = {}, retries: 3, &create_response)
+      remaining_attempts = retries
+
+      begin
+        get_json(url, additional_headers, &create_response)
+      rescue GdsApi::HTTPServerError => e
+        if remaining_attempts.zero?
+          raise e
+        else
+          remaining_attempts -= 1
+          # Exponentially increasing sleep time, which doesn't exceed a set maximum
+          # 0.5, 2, 4, 8, ... seconds delay
+          seconds = (2**((retries - remaining_attempts) - 1))
+          sleep_time = [seconds, MAX_BACKOFF].min
+          sleep sleep_time
+          retry
+        end
+      end
+    end
+
     def get_json(url, additional_headers = {}, &create_response)
       do_json_request(:get, url, nil, additional_headers, &create_response)
     end
@@ -79,6 +99,8 @@ module GdsApi
     end
 
   private
+
+    MAX_BACKOFF = 5
 
     def do_raw_request(method, url, params = nil)
       do_request(method, url, params)
