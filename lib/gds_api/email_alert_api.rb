@@ -145,6 +145,25 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     get_json("#{endpoint}/subscriptions/#{id}")
   end
 
+  # Get the latest Subscription that has the same subscriber_list
+  # and email as the Subscription associated with the `id` passed.
+  # This may or may not be the same Subscription.
+  #
+  # @return [Hash] subscription: {
+  #  id
+  #  subscriber_list
+  #  subscriber
+  #  created_at
+  #  updated_at
+  #  ended_at
+  #  ended_reason
+  #  frequency
+  #  source
+  # }
+  def get_latest_matching_subscription(id)
+    get_json("#{endpoint}/subscriptions/#{id}/latest")
+  end
+
   # Get Subscriptions for a Subscriber
   #
   # @param [integer] Subscriber id
