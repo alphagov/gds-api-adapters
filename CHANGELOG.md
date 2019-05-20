@@ -1,3 +1,7 @@
+# 59.3.0
+
+* Add `get_latest_matching_subscription` method to `GdsApi::EmailAlertApi`.
+
 # 59.2.1
 
 * Warn when `GdsApi::Rummager` is initialised and `GdsApi::TestHelpersRummager`
