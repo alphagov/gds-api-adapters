@@ -53,18 +53,19 @@ module GdsApi
         subscriber_list_id: 1000,
         ended: false
       )
+        response = get_subscription_response(
+          id,
+          frequency: frequency,
+          title: title,
+          subscriber_id: subscriber_id,
+          subscriber_list_id: subscriber_list_id,
+          ended: ended,
+        ).to_json
+
         stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions/#{id}")
-          .to_return(
-            status: 200,
-            body: get_subscription_response(
-              id,
-              frequency: frequency,
-              title: title,
-              subscriber_id: subscriber_id,
-              subscriber_list_id: subscriber_list_id,
-              ended: ended,
-            ).to_json,
-          )
+          .to_return(status: 200, body: response)
+        stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions/#{id}/latest")
+          .to_return(status: 200, body: response)
       end
 
       def stub_email_alert_api_has_subscriber_list(attributes)

@@ -79,6 +79,14 @@ describe GdsApi::EmailAlertApi do
 
         assert_equal("weekly", subscription_attrs.fetch("frequency"))
       end
+
+      it "returns the subscription attributes on /latest" do
+        subscription_attrs = api_client.get_latest_matching_subscription(1)
+          .to_hash
+          .fetch("subscription")
+
+         assert_equal(1, subscription_attrs.fetch("id"))
+      end
     end
   end
 
