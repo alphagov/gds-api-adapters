@@ -85,7 +85,85 @@ describe GdsApi::EmailAlertApi do
           .to_hash
           .fetch("subscription")
 
-         assert_equal(1, subscription_attrs.fetch("id"))
+        assert_equal(1, subscription_attrs.fetch("id"))
+      end
+    end
+
+    describe "user unsubscribed then resubscribed at the same frequency" do
+      before do
+        stub_email_alert_api_has_subscriptions([
+          {
+            id: 1,
+            frequency: "weekly",
+            ended: true,
+          },
+          {
+            id: 2000,
+            frequency: "weekly",
+          },
+        ])
+      end
+
+      it "returns the latest subscription attributes on /latest" do
+        subscription_attrs = api_client.get_latest_matching_subscription(1)
+          .to_hash
+          .fetch("subscription")
+
+        assert_equal(2000, subscription_attrs.fetch("id"))
+      end
+    end
+
+    describe "user changed their frequency then unsubscribed altogether" do
+      before do
+        stub_email_alert_api_has_subscriptions([
+          {
+            id: 1,
+            frequency: "weekly",
+            ended: true
+          },
+          {
+            id: 2000,
+            frequency: "daily",
+            ended: true,
+          }
+        ])
+      end
+
+      it "returns the latest subscription attributes on /latest" do
+        subscription_attrs = api_client.get_latest_matching_subscription(1)
+          .to_hash
+          .fetch("subscription")
+
+        assert_equal(2000, subscription_attrs.fetch("id"))
+      end
+    end
+
+    describe "user is subscribed to multiple lists" do
+      before do
+        stub_email_alert_api_has_subscriptions([
+          {
+            id: 1,
+            frequency: "weekly",
+            subscriber_list_id: 123,
+          },
+          {
+            id: 2,
+            frequency: "weekly",
+            subscriber_list_id: 456,
+          }
+        ])
+      end
+
+      it "returns the correct subscriber list on /latest" do
+        first_subscription_attrs = api_client.get_latest_matching_subscription(1)
+          .to_hash
+          .fetch("subscription")
+        second_subscription_attrs = api_client.get_latest_matching_subscription(2)
+          .to_hash
+          .fetch("subscription")
+
+        assert_equal(1, first_subscription_attrs.fetch("id"))
+        assert_equal(2, second_subscription_attrs.fetch("id"))
       end
     end
   end

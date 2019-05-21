@@ -68,6 +68,55 @@ module GdsApi
           .to_return(status: 200, body: response)
       end
 
+      # Stubs the API responses as if each subscription happened in the order they are passed.
+      # Useful if you need to query the '/latest' endpoint of a subscription.
+      # Takes an array of hashes.
+      #
+      # @example
+      #  stub_email_alert_api_has_subscriptions([
+      #    {
+      #      id: 'id-of-my-subscriber-list',
+      #      frequency: 'weekly',
+      #      ended: true,
+      #    },
+      #    {
+      #      id: 'id-of-my-subscriber-list',
+      #      frequency: 'daily',
+      #    },
+      #  ])
+      #
+      # @param subscriptions [Array]
+      def stub_email_alert_api_has_subscriptions(subscriptions)
+        subscriptions.map! { |subscription| apply_subscription_defaults(subscription) }
+        subscriptions.each do |id, params|
+          latest_id, latest_params = get_latest_matching(params, subscriptions)
+          stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions/#{id}")
+            .to_return(status: 200, body: get_subscription_response(id, params).to_json)
+          stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions/#{id}/latest")
+            .to_return(status: 200, body: get_subscription_response(latest_id, latest_params).to_json)
+        end
+      end
+
+      def apply_subscription_defaults(subscription)
+        parameters = {
+          title: "Some title",
+          subscriber_id: 1,
+          subscriber_list_id: 1000,
+          ended: true,
+        }.merge(subscription)
+        # Strip out ID as subsequent call to `get_subscription_response` throws `ArgumentError`
+        id = parameters.delete(:id)
+        [id, parameters]
+      end
+
+      def get_latest_matching(params, subscriptions)
+        matching = subscriptions.select do |_current_id, current_params|
+          params[:subscriber_id] == current_params[:subscriber_id] &&
+            params[:subscriber_list_id] == current_params[:subscriber_list_id]
+        end
+        matching.last
+      end
+
       def stub_email_alert_api_has_subscriber_list(attributes)
         stub_request(:get, build_subscriber_lists_url(attributes))
           .to_return(
@@ -228,6 +277,7 @@ module GdsApi
       alias_method :email_alert_api_has_subscriber_subscriptions, :stub_email_alert_api_has_subscriber_subscriptions
       alias_method :email_alert_api_does_not_have_subscriber_subscriptions, :stub_email_alert_api_does_not_have_subscriber_subscriptions
       alias_method :email_alert_api_has_subscription, :stub_email_alert_api_has_subscription
+      alias_method :email_alert_api_has_subscriptions, :stub_email_alert_api_has_subscriptions
       alias_method :email_alert_api_has_subscriber_list, :stub_email_alert_api_has_subscriber_list
       alias_method :email_alert_api_does_not_have_subscriber_list, :stub_email_alert_api_does_not_have_subscriber_list
       alias_method :email_alert_api_creates_subscriber_list, :stub_email_alert_api_creates_subscriber_list
