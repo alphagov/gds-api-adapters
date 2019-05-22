@@ -271,7 +271,7 @@ module GdsApi
             "id" => id,
             "frequency" => frequency,
             "source" => "user_signed_up",
-            "ended_at" => ended ? Time.now.rfc3339 : nil,
+            "ended_at" => ended ? Time.now.to_datetime.rfc3339 : nil,
             "ended_reason" => ended ? "unsubscribed" : nil,
             "subscriber" => {
               "id" => subscriber_id,
