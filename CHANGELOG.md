@@ -1,4 +1,4 @@
-# Unreleased
+# 59.4.0
 
 * Adds `stub_email_alert_api_has_subscriptions` test helper method.
 * Ensures that `stub_email_alert_api_has_subscription` also stubs the `/latest` endpoint.
