@@ -1,3 +1,8 @@
+# Unreleased
+
+* Adds `stub_email_alert_api_has_subscriptions` test helper method.
+* Ensures that `stub_email_alert_api_has_subscription` also stubs the `/latest` endpoint.
+
 # 59.3.0
 
 * Add `get_latest_matching_subscription` method to `GdsApi::EmailAlertApi`.
