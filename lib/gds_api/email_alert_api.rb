@@ -25,6 +25,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     email_document_supertype = attributes["email_document_supertype"]
     government_document_supertype = attributes["government_document_supertype"]
     gov_delivery_id = attributes["gov_delivery_id"]
+    combine_mode = attributes["combine_mode"]
 
     if tags && links
       message = "please provide either tags or links (or neither), but not both"
@@ -38,6 +39,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     params[:email_document_supertype] = email_document_supertype if email_document_supertype
     params[:government_document_supertype] = government_document_supertype if government_document_supertype
     params[:gov_delivery_id] = gov_delivery_id if gov_delivery_id
+    params[:combine_mode] = combine_mode if combine_mode
 
     query_string = nested_query_string(params)
     get_json("#{endpoint}/subscriber-lists?" + query_string)
