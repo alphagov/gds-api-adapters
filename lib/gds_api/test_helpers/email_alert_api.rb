@@ -380,6 +380,7 @@ module GdsApi
           government_document_supertype = attributes["government_document_supertype"]
           gov_delivery_id = attributes["gov_delivery_id"]
           content_purpose_supergroup = attributes["content_purpose_supergroup"]
+          combine_mode = attributes["combine_mode"]
 
           params = {}
           params[:tags] = tags if tags
@@ -389,6 +390,7 @@ module GdsApi
           params[:government_document_supertype] = government_document_supertype if government_document_supertype
           params[:gov_delivery_id] = gov_delivery_id if gov_delivery_id
           params[:content_purpose_supergroup] = content_purpose_supergroup if content_purpose_supergroup
+          params[:combine_mode] = combine_mode if combine_mode
 
           query = Rack::Utils.build_nested_query(params)
         end

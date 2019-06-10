@@ -1,3 +1,7 @@
+# Unreleased
+
+* Adds `combine_mode` parameter to Email Alert API test helpers
+
 # 59.5.0
 
 * Adds `combine_mode` parameter to Email Alert API `find_subscriber_list` method
