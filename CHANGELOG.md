@@ -1,4 +1,4 @@
-# Unreleased
+# 59.5.1
 
 * Adds `combine_mode` parameter to Email Alert API test helpers
 
