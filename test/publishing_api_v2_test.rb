@@ -380,7 +380,6 @@ describe GdsApi::PublishingApiV2 do
                 "rendering_app" => Pact.like("frontend"),
                 "locale" => Pact.like("en"),
                 "routes" => Pact.like([{}]),
-                "public_updated_at" => Pact.like("2015-07-30T13:58:11.000Z"),
                 "details" => Pact.like({}),
                 "publication_state" => "draft"
               },
