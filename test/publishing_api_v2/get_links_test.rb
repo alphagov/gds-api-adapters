@@ -24,7 +24,7 @@ describe GdsApi::PublishingApiV2 do
             status: 200,
             body: {
               links: {
-                organisations: ["20583132-1619-4c68-af24-77583172c070"]
+                organisations: %w[20583132-1619-4c68-af24-77583172c070]
               }
             }
           )
@@ -34,7 +34,7 @@ describe GdsApi::PublishingApiV2 do
         response = @api_client.get_links(@content_id)
         assert_equal 200, response.code
         assert_equal(
-          ["20583132-1619-4c68-af24-77583172c070"],
+          %w[20583132-1619-4c68-af24-77583172c070],
           response['links']['organisations']
         )
       end

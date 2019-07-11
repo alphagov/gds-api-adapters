@@ -77,7 +77,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
     it "publishes links" do
       links = {
         links: {
-          organisations: ['org-content-id']
+          organisations: %w[org-content-id]
         }
       }
 

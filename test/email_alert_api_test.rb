@@ -11,7 +11,7 @@ describe GdsApi::EmailAlertApi do
   let(:title) { "Some Title" }
   let(:tags) {
     {
-      "format" => ["some-document-format"],
+      "format" => %w[some-document-format],
     }
   }
 
@@ -329,7 +329,7 @@ describe GdsApi::EmailAlertApi do
       describe "when both tags and links are provided" do
         let(:links) {
           {
-            "format" => ["some-document-format"]
+            "format" => %w[some-document-format]
           }
         }
 

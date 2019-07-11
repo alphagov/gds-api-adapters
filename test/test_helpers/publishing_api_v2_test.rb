@@ -36,7 +36,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
     it "stubs the call to get links for content ids" do
       links = {
                 "2878337b-bed9-4e7f-85b6-10ed2cbcd504" => {
-                  "links" => { "taxons" => ["eb6965c7-3056-45d0-ae50-2f0a5e2e0854"] }
+                  "links" => { "taxons" => %w[eb6965c7-3056-45d0-ae50-2f0a5e2e0854] }
                 },
                 "eec13cea-219d-4896-9c97-60114da23559" => {
                   "links" => {}
@@ -171,7 +171,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
         content_id: "2e20294a-d694-4083-985e-d8bedefc2354",
         organisations: [
           {
-            content_id: ["a8a09822-1729-48a7-8a68-d08300de9d1e"]
+            content_id: %w[a8a09822-1729-48a7-8a68-d08300de9d1e]
           }
         ]
       }
@@ -183,7 +183,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
         "content_id" => "2e20294a-d694-4083-985e-d8bedefc2354",
         "organisations" => [
           {
-            "content_id" => ["a8a09822-1729-48a7-8a68-d08300de9d1e"]
+            "content_id" => %w[a8a09822-1729-48a7-8a68-d08300de9d1e]
           }
         ]
       }, response.to_h)
@@ -194,7 +194,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
         "content_id" => "2e20294a-d694-4083-985e-d8bedefc2354",
         organisations: [
           {
-            content_id: ["a8a09822-1729-48a7-8a68-d08300de9d1e"]
+            content_id: %w[a8a09822-1729-48a7-8a68-d08300de9d1e]
           }
         ]
       }
@@ -206,7 +206,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
         "content_id" => "2e20294a-d694-4083-985e-d8bedefc2354",
         "organisations" => [
           {
-            "content_id" => ["a8a09822-1729-48a7-8a68-d08300de9d1e"]
+            "content_id" => %w[a8a09822-1729-48a7-8a68-d08300de9d1e]
           }
         ]
       }, response.to_h)
@@ -217,7 +217,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
         "content_id" => "2e20294a-d694-4083-985e-d8bedefc2354",
         organisations: [
           {
-            content_id: ["a8a09822-1729-48a7-8a68-d08300de9d1e"]
+            content_id: %w[a8a09822-1729-48a7-8a68-d08300de9d1e]
           }
         ]
       }
@@ -229,7 +229,7 @@ describe GdsApi::TestHelpers::PublishingApiV2 do
         "content_id" => "2e20294a-d694-4083-985e-d8bedefc2354",
         "organisations" => [
           {
-            "content_id" => ["a8a09822-1729-48a7-8a68-d08300de9d1e"]
+            "content_id" => %w[a8a09822-1729-48a7-8a68-d08300de9d1e]
           }
         ]
       }, response.to_h)
