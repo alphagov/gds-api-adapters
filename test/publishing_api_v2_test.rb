@@ -1068,7 +1068,7 @@ describe GdsApi::PublishingApiV2 do
             path: "/v2/links/#{@content_id}",
             body: {
               links: {
-                organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+                organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
               }
             },
             headers: {
@@ -1079,7 +1079,7 @@ describe GdsApi::PublishingApiV2 do
             status: 200,
             body: {
               links: {
-                organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+                organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
               }
             }
           )
@@ -1087,11 +1087,11 @@ describe GdsApi::PublishingApiV2 do
 
       it "replaces the links and responds with the new links" do
         response = @api_client.patch_links(@content_id, links: {
-          organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+          organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
         })
         assert_equal 200, response.code
         assert_equal(
-          ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+          %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
           response['links']['organisations']
         )
       end
@@ -1107,7 +1107,7 @@ describe GdsApi::PublishingApiV2 do
             path: "/v2/links/#{@content_id}",
             body: {
               links: {
-                topics: ["225df4a8-2945-4e9b-8799-df7424a90b69"],
+                topics: %w[225df4a8-2945-4e9b-8799-df7424a90b69],
               }
             },
             headers: {
@@ -1118,8 +1118,8 @@ describe GdsApi::PublishingApiV2 do
             status: 200,
             body: {
               links: {
-                topics: ["225df4a8-2945-4e9b-8799-df7424a90b69"],
-                organisations: ["20583132-1619-4c68-af24-77583172c070"]
+                topics: %w[225df4a8-2945-4e9b-8799-df7424a90b69],
+                organisations: %w[20583132-1619-4c68-af24-77583172c070]
               }
             }
           )
@@ -1127,14 +1127,14 @@ describe GdsApi::PublishingApiV2 do
 
       it "adds the new type of links and responds with the whole link set" do
         response = @api_client.patch_links(@content_id, links: {
-          topics: ["225df4a8-2945-4e9b-8799-df7424a90b69"],
+          topics: %w[225df4a8-2945-4e9b-8799-df7424a90b69],
         })
 
         assert_equal 200, response.code
         assert_equal(
           {
-            'topics' => ["225df4a8-2945-4e9b-8799-df7424a90b69"],
-            'organisations' => ["20583132-1619-4c68-af24-77583172c070"],
+            'topics' => %w[225df4a8-2945-4e9b-8799-df7424a90b69],
+            'organisations' => %w[20583132-1619-4c68-af24-77583172c070],
           },
           response['links']
         )
@@ -1186,7 +1186,7 @@ describe GdsApi::PublishingApiV2 do
             path: "/v2/links/#{@content_id}",
             body: {
               links: {
-                organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+                organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
               }
             },
             headers: {
@@ -1197,7 +1197,7 @@ describe GdsApi::PublishingApiV2 do
             status: 200,
             body: {
               links: {
-                organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+                organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
               }
             },
           )
@@ -1205,13 +1205,13 @@ describe GdsApi::PublishingApiV2 do
 
       it "responds with the links" do
         response = @api_client.patch_links(@content_id, links: {
-          organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+          organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
         })
 
         assert_equal 200, response.code
         assert_equal(
           {
-            'organisations' => ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+            'organisations' => %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
           },
           response['links']
         )
@@ -1229,7 +1229,7 @@ describe GdsApi::PublishingApiV2 do
               path: "/v2/links/#{@content_id}",
               body: {
                 links: {
-                  organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+                  organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
                 },
                 previous_version: 3,
               },
@@ -1246,7 +1246,7 @@ describe GdsApi::PublishingApiV2 do
           response = @api_client.patch_links(
             @content_id,
             links: {
-              organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+              organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
             },
             previous_version: 3,
           )
@@ -1265,7 +1265,7 @@ describe GdsApi::PublishingApiV2 do
               path: "/v2/links/#{@content_id}",
               body: {
                 links: {
-                  organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+                  organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
                 },
                 previous_version: 2,
               },
@@ -1295,7 +1295,7 @@ describe GdsApi::PublishingApiV2 do
             @api_client.patch_links(
               @content_id,
               links: {
-                organisations: ["591436ab-c2ae-416f-a3c5-1901d633fbfb"],
+                organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
               },
               previous_version: 2,
             )
@@ -1834,7 +1834,7 @@ describe GdsApi::PublishingApiV2 do
       response_hash = {
         content_id_with_links => {
           "links" => {
-            "taxons" => ["20583132-1619-4c68-af24-77583172c070"]
+            "taxons" => %w[20583132-1619-4c68-af24-77583172c070]
           },
           "version" => 2
         },
