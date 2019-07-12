@@ -1,3 +1,7 @@
+# Unreleased
+
+* Adds `deferred_publishing` option to patch links in Publishing
+
 # 59.5.1
 
 * Adds `combine_mode` parameter to Email Alert API test helpers

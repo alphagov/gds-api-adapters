@@ -280,6 +280,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # @option params [Hash] links A "links hash"
   # @option params [Integer] previous_version The previous version (returned by `get_links`). If this version is not the current version, the publishing-api will reject the change and return 409 Conflict. (optional)
   # @option params [Boolean] bulk_publishing Set to true to indicate that this is part of a mass-republish. Allows the publishing-api to prioritise human-initiated publishing (optional, default false)
+  # @option params [Boolean] deferred_publishing Set to true to indicate that this is publishing which can be run on an ad-hoc basis. This should be used on non human-initiated publishing where time is not of the essence. (optional, default false)
   # @example
   #
   #   publishing_api.patch_links(
@@ -298,7 +299,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
       links: params.fetch(:links)
     }
 
-    payload = merge_optional_keys(payload, params, %i[previous_version bulk_publishing])
+    payload = merge_optional_keys(payload, params, %i[previous_version bulk_publishing deferred_publishing])
 
     patch_json(links_url(content_id), payload)
   end
