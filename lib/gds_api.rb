@@ -17,6 +17,7 @@ require 'gds_api/rummager'
 require 'gds_api/search'
 require 'gds_api/support'
 require 'gds_api/support_api'
+require 'gds_api/whitehall_admin'
 require 'gds_api/worldwide'
 
 # @api documented
@@ -196,6 +197,19 @@ module GdsApi
     GdsApi::SupportApi.new(
       Plek.find('support-api'),
       { bearer_token: ENV['SUPPORT_API_BEARER_TOKEN'] }.merge(options),
+    )
+  end
+
+  # Creates a GdsApi::Whitehall adapter
+  #
+  # This will set a bearer token if a WHITEHALL_BEARER_TOKEN environment
+  # variable is set
+  #
+  # @return [GdsApi::Whitehall]
+  def self.whitehall(options = {})
+    GdsApi::WhitehallAdmin.new(
+      Plek.find('whitehall-admin'),
+      { bearer_token: ENV['WHITEHALL_BEARER_TOKEN'] }.merge(options),
     )
   end
 
