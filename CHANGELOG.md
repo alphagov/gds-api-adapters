@@ -1,3 +1,8 @@
+## Unreleased
+
+* Adds middleware to allow the header `X-Govuk-Authenticated-User-Organisation`
+  to be passed along to content-store.
+
 # 59.5.1
 
 * Adds `combine_mode` parameter to Email Alert API test helpers
