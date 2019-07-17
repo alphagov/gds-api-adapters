@@ -2,6 +2,7 @@
 
 * Adds middleware to allow the header `X-Govuk-Authenticated-User-Organisation`
   to be passed along to content-store.
+* Changes logging level about header forwarding from info to debug
 
 # 59.5.1
 
