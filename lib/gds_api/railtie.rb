@@ -3,12 +3,12 @@ require_relative 'middleware/govuk_header_sniffer'
 module GdsApi
   class Railtie < Rails::Railtie
     initializer "gds_api.initialize_govuk_request_id_sniffer" do |app|
-      Rails.logger.debug "Using middleware GdsApi::GovukHeaderSniffer to sniff for GOVUK-Request-Id header"
+      Rails.logger.debug "Using middleware GdsApi::GovukHeaderSniffer to sniff for Govuk-Request-Id header"
       app.middleware.use GdsApi::GovukHeaderSniffer, 'HTTP_GOVUK_REQUEST_ID'
     end
 
     initializer "gds_api.initialize_govuk_original_url_sniffer" do |app|
-      Rails.logger.debug "Using middleware GdsApi::GovukHeaderSniffer to sniff for GOVUK-Original-Url header"
+      Rails.logger.debug "Using middleware GdsApi::GovukHeaderSniffer to sniff for Govuk-Original-Url header"
       app.middleware.use GdsApi::GovukHeaderSniffer, 'HTTP_GOVUK_ORIGINAL_URL'
     end
 
