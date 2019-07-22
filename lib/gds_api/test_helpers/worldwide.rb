@@ -107,6 +107,7 @@ module GdsApi
             "id" => "https://www.gov.uk/api/world-locations/#{slug}/organisations",
             "web_url" => "https://www.gov.uk/government/world/#{slug}#organisations"
           },
+          "content_id" => "content_id_for_#{slug}"
         }
       end
 
