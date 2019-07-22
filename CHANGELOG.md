@@ -1,5 +1,6 @@
-## Unreleased
+# 59.6.0
 
+* Adds content_id to worldwide location test helper
 * Adds middleware to allow the header `X-Govuk-Authenticated-User-Organisation`
   to be passed along to content-store.
 * Changes logging level about header forwarding from info to debug
