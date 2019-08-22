@@ -173,27 +173,6 @@ module GdsApi
         assert_requested(:post, "#{EMAIL_ALERT_API_ENDPOINT}/content-changes", times: 1, &matcher)
       end
 
-      def stub_email_alert_api_has_notifications(notifications, start_at = nil)
-        url = "#{EMAIL_ALERT_API_ENDPOINT}/notifications"
-        url += "?start_at=#{start_at}" if start_at
-        url_regexp = Regexp.new("^#{Regexp.escape(url)}$")
-
-        stub_request(:get, url_regexp)
-          .to_return(
-            status: 200,
-            body: notifications.to_json
-          )
-      end
-
-      def stub_email_alert_api_has_notification(notification)
-        url = "#{EMAIL_ALERT_API_ENDPOINT}/notifications/#{notification['web_service_bulletin']['to_param']}"
-
-        stub_request(:get, url).to_return(
-          status: 200,
-          body: notification.to_json
-        )
-      end
-
       def stub_email_alert_api_unsubscribes_a_subscription(uuid)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/unsubscribe/#{uuid}")
           .with(body: "{}")
@@ -288,8 +267,6 @@ module GdsApi
       alias_method :email_alert_api_creates_subscriber_list, :stub_email_alert_api_creates_subscriber_list
       alias_method :email_alert_api_refuses_to_create_subscriber_list, :stub_email_alert_api_refuses_to_create_subscriber_list
       alias_method :email_alert_api_accepts_unpublishing_message, :stub_email_alert_api_accepts_unpublishing_message
-      alias_method :email_alert_api_has_notifications, :stub_email_alert_api_has_notifications
-      alias_method :email_alert_api_has_notification, :stub_email_alert_api_has_notification
       alias_method :email_alert_api_unsubscribes_a_subscription, :stub_email_alert_api_unsubscribes_a_subscription
       alias_method :email_alert_api_has_no_subscription_for_uuid, :stub_email_alert_api_has_no_subscription_for_uuid
       alias_method :email_alert_api_unsubscribes_a_subscriber, :stub_email_alert_api_unsubscribes_a_subscriber
