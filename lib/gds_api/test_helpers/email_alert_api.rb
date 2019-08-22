@@ -153,6 +153,11 @@ module GdsApi
           .to_return(status: 202, body: {}.to_json)
       end
 
+      def stub_email_alert_api_accepts_send_email
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/emails")
+          .to_return(status: 202, body: {}.to_json)
+      end
+
       def stub_any_email_alert_api_call
         stub_request(:any, %r{\A#{EMAIL_ALERT_API_ENDPOINT}})
       end

@@ -59,6 +59,13 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     post_json("#{endpoint}/notifications", publication, headers)
   end
 
+  # Send email
+  #
+  # @param email_params [Hash] address, subject, body
+  def send_email(email_params)
+    post_json("#{endpoint}/emails", email_params)
+  end
+
   # Unpublishing alert
   #
   # @param message [Hash] content_id
