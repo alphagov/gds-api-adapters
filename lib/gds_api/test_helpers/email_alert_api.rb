@@ -148,8 +148,8 @@ module GdsApi
           .to_return(status: 202, body: {}.to_json)
       end
 
-      def stub_email_alert_api_accepts_alert
-        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/notifications")
+      def stub_email_alert_api_accepts_content_change
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/content-changes")
           .to_return(status: 202, body: {}.to_json)
       end
 
@@ -162,7 +162,7 @@ module GdsApi
         stub_request(:any, %r{\A#{EMAIL_ALERT_API_ENDPOINT}})
       end
 
-      def assert_email_alert_sent(attributes = nil)
+      def assert_email_alert_api_content_change_created(attributes = nil)
         if attributes
           matcher = ->(request) do
             payload = JSON.parse(request.body)
@@ -170,7 +170,7 @@ module GdsApi
           end
         end
 
-        assert_requested(:post, "#{EMAIL_ALERT_API_ENDPOINT}/notifications", times: 1, &matcher)
+        assert_requested(:post, "#{EMAIL_ALERT_API_ENDPOINT}/content-changes", times: 1, &matcher)
       end
 
       def stub_email_alert_api_has_notifications(notifications, start_at = nil)
@@ -288,7 +288,6 @@ module GdsApi
       alias_method :email_alert_api_creates_subscriber_list, :stub_email_alert_api_creates_subscriber_list
       alias_method :email_alert_api_refuses_to_create_subscriber_list, :stub_email_alert_api_refuses_to_create_subscriber_list
       alias_method :email_alert_api_accepts_unpublishing_message, :stub_email_alert_api_accepts_unpublishing_message
-      alias_method :email_alert_api_accepts_alert, :stub_email_alert_api_accepts_alert
       alias_method :email_alert_api_has_notifications, :stub_email_alert_api_has_notifications
       alias_method :email_alert_api_has_notification, :stub_email_alert_api_has_notification
       alias_method :email_alert_api_unsubscribes_a_subscription, :stub_email_alert_api_unsubscribes_a_subscription

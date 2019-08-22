@@ -26,24 +26,24 @@ describe GdsApi::EmailAlertApi do
     }
 
     before do
-      stub_email_alert_api_accepts_alert
+      stub_email_alert_api_accepts_content_change
     end
 
     it "posts a new alert" do
-      assert api_client.send_alert(publication_params)
+      assert api_client.create_content_change(publication_params)
 
-      assert_requested(:post, "#{base_url}/notifications", body: publication_params.to_json)
+      assert_requested(:post, "#{base_url}/content-changes", body: publication_params.to_json)
     end
 
     it "returns the an empty response" do
-      assert api_client.send_alert(publication_params).to_hash.empty?
+      assert api_client.create_content_change(publication_params).to_hash.empty?
     end
 
     describe "when custom headers are passed in" do
       it "posts a new alert with the custom headers" do
-        assert api_client.send_alert(publication_params, govuk_request_id: 'aaaaaaa-1111111')
+        assert api_client.create_content_change(publication_params, govuk_request_id: 'aaaaaaa-1111111')
 
-        assert_requested(:post, "#{base_url}/notifications", body: publication_params.to_json, headers: { 'Govuk-Request-Id' => 'aaaaaaa-1111111' })
+        assert_requested(:post, "#{base_url}/content-changes", body: publication_params.to_json, headers: { 'Govuk-Request-Id' => 'aaaaaaa-1111111' })
       end
     end
   end
