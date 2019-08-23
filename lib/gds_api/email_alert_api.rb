@@ -62,7 +62,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   # Send email
   #
   # @param email_params [Hash] address, subject, body
-  def send_email(email_params)
+  def create_email(email_params)
     post_json("#{endpoint}/emails", email_params)
   end
 
