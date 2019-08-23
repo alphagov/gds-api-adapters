@@ -5,6 +5,8 @@
   **Note:** this is a breaking change for users of the Email Alert API
   adapters.
 * Adds `create_email` Email Alert API method to send individual emails.
+* Adds `create_message` Email Alert API method to send message emails out to a
+  subscriber list.
 
 # 59.6.0
 

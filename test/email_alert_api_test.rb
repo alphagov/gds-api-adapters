@@ -15,7 +15,7 @@ describe GdsApi::EmailAlertApi do
     }
   }
 
-  describe "alerts" do
+  describe "content changes" do
     let(:subject) { "Email subject" }
     let(:publication_params) {
       {
@@ -45,6 +45,31 @@ describe GdsApi::EmailAlertApi do
 
         assert_requested(:post, "#{base_url}/content-changes", body: publication_params.to_json, headers: { 'Govuk-Request-Id' => 'aaaaaaa-1111111' })
       end
+    end
+  end
+
+  describe "messages" do
+    let(:subject) { "Email subject" }
+    let(:message_params) {
+      {
+        "subject" => subject,
+        "body" => "Body",
+        "tags" => tags,
+      }
+    }
+
+    before do
+      stub_email_alert_api_accepts_message
+    end
+
+    it "posts a new message" do
+      assert api_client.create_message(message_params)
+
+      assert_requested(:post, "#{base_url}/messages", body: message_params.to_json)
+    end
+
+    it "returns the an empty response" do
+      assert api_client.create_message(message_params).to_hash.empty?
     end
   end
 
