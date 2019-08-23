@@ -8,17 +8,17 @@ describe GdsApi::TestHelpers::EmailAlertApi do
   let(:base_api_url) { Plek.current.find("email-alert-api") }
   let(:email_alert_api) { GdsApi::EmailAlertApi.new(base_api_url) }
 
-  describe "#assert_email_alert_sent" do
+  describe "#assert_email_alert_api_content_change_created" do
     before { stub_any_email_alert_api_call }
 
     it "matches a post request with any empty attributes by default" do
-      email_alert_api.send_alert("foo" => "bar")
-      assert_email_alert_sent
+      email_alert_api.create_content_change("foo" => "bar")
+      assert_email_alert_api_content_change_created
     end
 
     it "matches a post request subset of attributes" do
-      email_alert_api.send_alert("foo" => "bar", "baz" => "qux")
-      assert_email_alert_sent("foo" => "bar")
+      email_alert_api.create_content_change("foo" => "bar", "baz" => "qux")
+      assert_email_alert_api_content_change_created("foo" => "bar")
     end
   end
 end

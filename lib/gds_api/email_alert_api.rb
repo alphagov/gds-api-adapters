@@ -52,17 +52,17 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     post_json("#{endpoint}/subscriber-lists", attributes)
   end
 
-  # Post notification
+  # Post a content change
   #
-  # @param publication [Hash] Valid publication attributes
-  def send_alert(publication, headers = {})
-    post_json("#{endpoint}/notifications", publication, headers)
+  # @param content_change [Hash] Valid content change attributes
+  def create_content_change(content_change, headers = {})
+    post_json("#{endpoint}/content-changes", content_change, headers)
   end
 
   # Send email
   #
   # @param email_params [Hash] address, subject, body
-  def send_email(email_params)
+  def create_email(email_params)
     post_json("#{endpoint}/emails", email_params)
   end
 

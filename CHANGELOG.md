@@ -1,3 +1,11 @@
+# Unreleased
+
+* Renames the Email Alert API `send_alert` method to `create_content_change` (and
+  related test helper methods) to reflect a change in the underling endpoint.
+  **Note:** this is a breaking change for users of the Email Alert API
+  adapters.
+* Adds `create_email` Email Alert API method to send individual emails.
+
 # 59.6.0
 
 * Adds content_id to worldwide location test helper
