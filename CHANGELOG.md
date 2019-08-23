@@ -1,4 +1,4 @@
-# Unreleased
+# 60.0.0
 
 * Renames the Email Alert API `send_alert` method to `create_content_change` (and
   related test helper methods) to reflect a change in the underling endpoint.
