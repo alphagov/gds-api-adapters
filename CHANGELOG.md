@@ -1,3 +1,7 @@
+# Unreleased
+
+* Update get_subscriptions endpoint for email-alert-api to accept order param
+
 # 60.0.0
 
 * Renames the Email Alert API `send_alert` method to `create_content_change` (and

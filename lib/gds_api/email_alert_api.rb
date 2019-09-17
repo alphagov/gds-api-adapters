@@ -183,10 +183,15 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   # Get Subscriptions for a Subscriber
   #
   # @param [integer] Subscriber id
+  # @param [string] Subscription order - title, created_at
   #
   # @return [Hash] subscriber, subscriptions
-  def get_subscriptions(id:)
-    get_json("#{endpoint}/subscribers/#{id}/subscriptions")
+  def get_subscriptions(id:, order: nil)
+    if order
+      get_json("#{endpoint}/subscribers/#{id}/subscriptions?order=#{order}")
+    else
+      get_json("#{endpoint}/subscribers/#{id}/subscriptions")
+    end
   end
 
   # Patch a Subscriber

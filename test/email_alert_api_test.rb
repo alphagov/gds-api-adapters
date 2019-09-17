@@ -597,8 +597,8 @@ describe GdsApi::EmailAlertApi do
 
   describe "get_subscriptions when a subscriber exists" do
     it "returns it" do
-      stub_email_alert_api_has_subscriber_subscriptions(1, "test@example.com")
-      api_response = api_client.get_subscriptions(id: 1)
+      stub_email_alert_api_has_subscriber_subscriptions(1, "test@example.com", "-title")
+      api_response = api_client.get_subscriptions(id: 1, order: "-title")
       assert_equal(200, api_response.code)
       parsed_body = api_response.to_h
       assert_equal("some-thing", parsed_body["subscriptions"][0]["subscriber_list"]["slug"])
