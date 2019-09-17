@@ -1,4 +1,4 @@
-# Unreleased
+# 60.1.0
 
 * Update get_subscriptions endpoint for email-alert-api to accept order param
 
