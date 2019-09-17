@@ -32,8 +32,8 @@ module GdsApi
           .to_return(status: 404)
       end
 
-      def stub_email_alert_api_has_subscriber_subscriptions(id, address)
-        stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/#{id}/subscriptions")
+      def stub_email_alert_api_has_subscriber_subscriptions(id, address, order)
+        stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/#{id}/subscriptions?order=#{order}")
           .to_return(
             status: 200,
             body: get_subscriber_subscriptions_response(id, address).to_json,
