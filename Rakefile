@@ -29,12 +29,6 @@ PactBroker::Client::PublicationTask.new("branch") do |task|
   configure_pact_broker_location(task)
 end
 
-PactBroker::Client::PublicationTask.new("released_version") do |task|
-  require 'gds_api/version'
-  task.consumer_version = GdsApi::VERSION
-  configure_pact_broker_location(task)
-end
-
 desc "Run the linter against changed files"
 task :lint do
   sh "bundle exec govuk-lint-ruby --format clang lib test"

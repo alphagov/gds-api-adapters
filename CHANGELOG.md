@@ -1,3 +1,8 @@
+# Unreleased
+
+* Removes publishing pacts for released versions as they incorrectly referenced
+  unreleased changes
+
 # 60.1.0
 
 * Update get_subscriptions endpoint for email-alert-api to accept order param

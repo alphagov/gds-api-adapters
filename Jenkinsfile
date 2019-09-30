@@ -36,10 +36,6 @@ node {
 def publishPacts(govuk, releasedVersion) {
   stage("Publish pacts") {
     govuk.runRakeTask("pact:publish:branch")
-
-    if (releasedVersion) {
-      govuk.runRakeTask("pact:publish:released_version")
-    }
   }
 }
 
