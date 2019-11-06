@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'climate_control', '~> 0.2'
   s.add_development_dependency 'govuk-content-schema-test-helpers', '~> 1.6'
-  s.add_development_dependency 'govuk-lint', '~> 3.11'
+  s.add_development_dependency 'govuk-lint', '~> 4.2'
   s.add_development_dependency 'minitest', '~> 5.11'
   s.add_development_dependency 'minitest-around', '~> 0.5'
   s.add_development_dependency 'mocha', '~> 1.3'
