@@ -1,4 +1,4 @@
-require_relative 'base'
+require_relative "base"
 
 # @api documented
 class GdsApi::SupportApi < GdsApi::Base

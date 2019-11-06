@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/rummager'
-require 'gds_api/test_helpers/rummager'
+require "test_helper"
+require "gds_api/rummager"
+require "gds_api/test_helpers/rummager"
 
 class RummagerHelpersTest < Minitest::Test
   include GdsApi::TestHelpers::Rummager
@@ -15,6 +15,6 @@ class RummagerHelpersTest < Minitest::Test
     response = stub_rummager_has_no_services_and_info_data_for_organisation
 
     assert_instance_of GdsApi::Response, response
-    assert_equal 0, response['facets']['specialist_sectors']['total_options']
+    assert_equal 0, response["facets"]["specialist_sectors"]["total_options"]
   end
 end

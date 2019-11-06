@@ -1,5 +1,5 @@
-require_relative 'base'
-require_relative 'exceptions'
+require_relative "base"
+require_relative "exceptions"
 
 # @api documented
 class GdsApi::AssetManager < GdsApi::Base

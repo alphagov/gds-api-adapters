@@ -17,7 +17,7 @@ describe GdsApi::LocalLinksManager do
           authority_slug: "blackburn",
           lgsl: 2,
           lgil: 4,
-          url: "http://blackburn.example.com/abandoned-shopping-trolleys/report"
+          url: "http://blackburn.example.com/abandoned-shopping-trolleys/report",
         )
 
         expected_response = {
@@ -31,7 +31,7 @@ describe GdsApi::LocalLinksManager do
             "lgsl_code" => 2,
             "lgil_code" => 4,
             "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/report",
-          }
+          },
         }
 
         response = @api.local_link("blackburn", 2, 4)
@@ -58,7 +58,7 @@ describe GdsApi::LocalLinksManager do
         assert_equal expected_response, response.to_hash
       end
 
-      it 'returns the local authority without a homepage url if no homepage link present' do
+      it "returns the local authority without a homepage url if no homepage link present" do
         stub_local_links_manager_has_no_link_and_no_homepage_url(
           authority_slug: "blackburn",
           lgsl: 2,
@@ -89,18 +89,18 @@ describe GdsApi::LocalLinksManager do
       end
 
       it "raises HTTPClientError when LGSL is missing" do
-        stub_local_links_manager_request_with_missing_parameters('blackburn', nil, 8)
+        stub_local_links_manager_request_with_missing_parameters("blackburn", nil, 8)
 
         assert_raises GdsApi::HTTPClientError do
-          @api.local_link('blackburn', nil, 8)
+          @api.local_link("blackburn", nil, 8)
         end
       end
 
       it "raises HTTPClientError when LGIL is missing" do
-        stub_local_links_manager_request_with_missing_parameters('blackburn', 2, nil)
+        stub_local_links_manager_request_with_missing_parameters("blackburn", 2, nil)
 
         assert_raises GdsApi::HTTPClientError do
-          @api.local_link('blackburn', 2, nil)
+          @api.local_link("blackburn", 2, nil)
         end
       end
     end
@@ -132,51 +132,51 @@ describe GdsApi::LocalLinksManager do
     end
   end
 
-  describe '#local_authority' do
-    describe 'when making a request for a local authority with a parent' do
-      it 'should return the local authority and its parent' do
-        stub_local_links_manager_has_a_district_and_county_local_authority('blackburn', 'rochester')
+  describe "#local_authority" do
+    describe "when making a request for a local authority with a parent" do
+      it "should return the local authority and its parent" do
+        stub_local_links_manager_has_a_district_and_county_local_authority("blackburn", "rochester")
 
         expected_response = {
           "local_authorities" => [
             {
-              "name" => 'Blackburn',
+              "name" => "Blackburn",
               "homepage_url" => "http://blackburn.example.com",
-              "tier" => "district"
+              "tier" => "district",
             },
             {
-              "name" => 'Rochester',
+              "name" => "Rochester",
               "homepage_url" => "http://rochester.example.com",
-              "tier" => "county"
-            }
-          ]
+              "tier" => "county",
+            },
+          ],
         }
 
-        response = @api.local_authority('blackburn')
+        response = @api.local_authority("blackburn")
         assert_equal expected_response, response.to_hash
       end
     end
 
-    describe 'when making a request for a local authority without a parent' do
-      it 'should return the local authority' do
-        stub_local_links_manager_has_a_local_authority('blackburn')
+    describe "when making a request for a local authority without a parent" do
+      it "should return the local authority" do
+        stub_local_links_manager_has_a_local_authority("blackburn")
 
         expected_response = {
           "local_authorities" => [
             {
-              "name" => 'Blackburn',
+              "name" => "Blackburn",
               "homepage_url" => "http://blackburn.example.com",
-              "tier" => "unitary"
-            }
-          ]
+              "tier" => "unitary",
+            },
+          ],
         }
 
-        response = @api.local_authority('blackburn')
+        response = @api.local_authority("blackburn")
         assert_equal expected_response, response.to_hash
       end
     end
 
-    describe 'when making a request without the required parameters' do
+    describe "when making a request without the required parameters" do
       it "raises HTTPClientError when authority_slug is missing" do
         stub_local_links_manager_request_without_local_authority_slug
 
@@ -186,7 +186,7 @@ describe GdsApi::LocalLinksManager do
       end
     end
 
-    describe 'when making a request with invalid required parameters' do
+    describe "when making a request with invalid required parameters" do
       it "raises when authority_slug is invalid" do
         stub_local_links_manager_does_not_have_an_authority("hogwarts")
 

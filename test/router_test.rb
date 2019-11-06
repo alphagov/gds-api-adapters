@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/router'
-require 'gds_api/test_helpers/router'
+require "test_helper"
+require "gds_api/router"
+require "gds_api/test_helpers/router"
 
 describe GdsApi::Router do
   include GdsApi::TestHelpers::Router
@@ -25,7 +25,7 @@ describe GdsApi::Router do
 
         response = @api.get_backend("foo")
         assert_equal 200, response.code
-        assert_equal "http://foo.example.com/", response['backend_url']
+        assert_equal "http://foo.example.com/", response["backend_url"]
 
         assert_requested(req)
       end
@@ -62,7 +62,7 @@ describe GdsApi::Router do
 
         response = @api.add_backend("foo", "http://foo.example.com/")
         assert_equal 201, response.code
-        assert_equal "http://foo.example.com/", response['backend_url']
+        assert_equal "http://foo.example.com/", response["backend_url"]
 
         assert_requested(req)
       end
@@ -112,7 +112,7 @@ describe GdsApi::Router do
 
         response = @api.delete_backend("foo")
         assert_equal 200, response.code
-        assert_equal "http://foo.example.com/", response['backend_url']
+        assert_equal "http://foo.example.com/", response["backend_url"]
 
         assert_requested(req)
       end
@@ -162,7 +162,7 @@ describe GdsApi::Router do
 
         response = @api.get_route("/foo")
         assert_equal 200, response.code
-        assert_equal "foo", response['backend_id']
+        assert_equal "foo", response["backend_id"]
 
         assert_requested(req)
         assert_not_requested(@commit_req)
@@ -221,7 +221,7 @@ describe GdsApi::Router do
 
         response = @api.add_route("/foo", "exact", "foo")
         assert_equal 201, response.code
-        assert_equal "foo", response['backend_id']
+        assert_equal "foo", response["backend_id"]
 
         assert_requested(req)
         assert_not_requested(@commit_req)
@@ -267,7 +267,7 @@ describe GdsApi::Router do
 
         response = @api.add_redirect_route("/foo", "exact", "/bar")
         assert_equal 201, response.code
-        assert_equal "/bar", response['redirect_to']
+        assert_equal "/bar", response["redirect_to"]
 
         assert_requested(req)
         assert_not_requested(@commit_req)
@@ -282,7 +282,7 @@ describe GdsApi::Router do
 
         response = @api.add_redirect_route("/foo", "exact", "/bar", "temporary")
         assert_equal 201, response.code
-        assert_equal "/bar", response['redirect_to']
+        assert_equal "/bar", response["redirect_to"]
 
         assert_requested(req)
         assert_not_requested(@commit_req)
@@ -297,7 +297,7 @@ describe GdsApi::Router do
 
         response = @api.add_redirect_route("/foo", "exact", "/bar", "temporary", segments_mode: "preserve")
         assert_equal 201, response.code
-        assert_equal "/bar", response['redirect_to']
+        assert_equal "/bar", response["redirect_to"]
 
         assert_requested(req)
         assert_not_requested(@commit_req)
@@ -343,7 +343,7 @@ describe GdsApi::Router do
 
         response = @api.add_gone_route("/foo", "exact")
         assert_equal 201, response.code
-        assert_equal "/foo", response['incoming_path']
+        assert_equal "/foo", response["incoming_path"]
 
         assert_requested(req)
         assert_not_requested(@commit_req)
@@ -388,7 +388,7 @@ describe GdsApi::Router do
 
         response = @api.delete_route("/foo")
         assert_equal 200, response.code
-        assert_equal "foo", response['backend_id']
+        assert_equal "foo", response["backend_id"]
 
         assert_requested(req)
         assert_not_requested(@commit_req)

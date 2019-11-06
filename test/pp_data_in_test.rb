@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/performance_platform/data_in'
-require 'gds_api/test_helpers/performance_platform/data_in'
+require "test_helper"
+require "gds_api/performance_platform/data_in"
+require "gds_api/test_helpers/performance_platform/data_in"
 
 describe GdsApi::PerformancePlatform::DataIn do
   include GdsApi::TestHelpers::PerformancePlatform::DataIn

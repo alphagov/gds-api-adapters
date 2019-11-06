@@ -1,6 +1,6 @@
-require_relative 'test_helper'
-require 'gds_api/worldwide'
-require 'gds_api/test_helpers/worldwide'
+require_relative "test_helper"
+require "gds_api/worldwide"
+require "gds_api/test_helpers/worldwide"
 
 describe GdsApi::Worldwide do
   include GdsApi::TestHelpers::Worldwide
@@ -16,8 +16,8 @@ describe GdsApi::Worldwide do
       stub_worldwide_api_has_locations(country_slugs)
 
       response = @api.world_locations
-      assert_equal(country_slugs, response.map { |r| r['details']['slug'] })
-      assert_equal "Rohan", response['results'][2]['title']
+      assert_equal(country_slugs, response.map { |r| r["details"]["slug"] })
+      assert_equal "Rohan", response["results"][2]["title"]
     end
 
     it "should handle the pagination" do
@@ -27,7 +27,7 @@ describe GdsApi::Worldwide do
       response = @api.world_locations
       assert_equal(
         country_slugs,
-        response.with_subsequent_pages.map { |r| r['details']['slug'] }
+        response.with_subsequent_pages.map { |r| r["details"]["slug"] },
       )
     end
 
@@ -41,17 +41,17 @@ describe GdsApi::Worldwide do
 
   describe "fetching a world location" do
     it "should return the details" do
-      stub_worldwide_api_has_location('rohan')
+      stub_worldwide_api_has_location("rohan")
 
-      response = @api.world_location('rohan')
-      assert_equal 'Rohan', response['title']
+      response = @api.world_location("rohan")
+      assert_equal "Rohan", response["title"]
     end
 
     it "raises for a non-existent location" do
-      stub_worldwide_api_does_not_have_location('non-existent')
+      stub_worldwide_api_does_not_have_location("non-existent")
 
       assert_raises(GdsApi::HTTPNotFound) do
-        @api.world_location('non-existent')
+        @api.world_location("non-existent")
       end
     end
   end
@@ -59,23 +59,23 @@ describe GdsApi::Worldwide do
   describe "fetching organisations for a location" do
     it "should return the organisation details" do
       details = JSON.parse(load_fixture_file("world_organisations_australia.json").read)
-      stub_worldwide_api_has_organisations_for_location('australia', details)
+      stub_worldwide_api_has_organisations_for_location("australia", details)
 
-      response = @api.organisations_for_world_location('australia')
+      response = @api.organisations_for_world_location("australia")
       assert response.is_a?(GdsApi::ListResponse)
       assert_equal(
         [
           "UK Trade & Investment Australia",
-          "British High Commission Canberra"
+          "British High Commission Canberra",
         ],
-        response.map { |item| item['title'] }
+        response.map { |item| item["title"] },
       )
     end
 
     it "should raise error on 404" do
       stub_request(:get, "#{@base_api_url}/api/world-locations/non-existent/organisations").to_return(status: 404)
       assert_raises GdsApi::HTTPNotFound do
-        @api.organisations_for_world_location('non-existent')
+        @api.organisations_for_world_location("non-existent")
       end
     end
   end

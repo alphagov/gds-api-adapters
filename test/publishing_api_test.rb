@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/publishing_api'
-require 'gds_api/test_helpers/publishing_api'
+require "test_helper"
+require "gds_api/publishing_api"
+require "gds_api/test_helpers/publishing_api"
 
 describe GdsApi::PublishingApi do
   include GdsApi::TestHelpers::PublishingApi
@@ -24,14 +24,14 @@ describe GdsApi::PublishingApi do
           path: "/paths#{base_path}",
           body: { publishing_app: publishing_app },
           headers: {
-            "Content-Type" => "application/json"
+            "Content-Type" => "application/json",
           },
         )
         .will_respond_with(
           status: 200,
           body: {},
           headers: {
-            "Content-Type" => "application/json; charset=utf-8"
+            "Content-Type" => "application/json; charset=utf-8",
           },
         )
 
@@ -51,14 +51,14 @@ describe GdsApi::PublishingApi do
           path: "/paths#{base_path}",
           body: { publishing_app: publishing_app },
           headers: {
-            "Content-Type" => "application/json"
+            "Content-Type" => "application/json",
           },
         )
         .will_respond_with(
           status: 404,
           body: {},
           headers: {
-            "Content-Type" => "application/json; charset=utf-8"
+            "Content-Type" => "application/json; charset=utf-8",
           },
         )
 
@@ -79,14 +79,14 @@ describe GdsApi::PublishingApi do
           path: "/paths#{base_path}",
           body: { publishing_app: "whitehall" },
           headers: {
-            "Content-Type" => "application/json"
+            "Content-Type" => "application/json",
           },
         )
         .will_respond_with(
           status: 422,
           body: {},
           headers: {
-            "Content-Type" => "application/json; charset=utf-8"
+            "Content-Type" => "application/json; charset=utf-8",
           },
         )
 
@@ -109,14 +109,14 @@ describe GdsApi::PublishingApi do
           path: "/publish-intent#{base_path}",
           body: publish_intent,
           headers: {
-            "Content-Type" => "application/json"
+            "Content-Type" => "application/json",
           },
         )
         .will_respond_with(
           status: 200,
           body: {},
           headers: {
-            "Content-Type" => "application/json; charset=utf-8"
+            "Content-Type" => "application/json; charset=utf-8",
           },
         )
 
@@ -140,8 +140,8 @@ describe GdsApi::PublishingApi do
           status: 200,
           body: {},
           headers: {
-            "Content-Type" => "application/json; charset=utf-8"
-          }
+            "Content-Type" => "application/json; charset=utf-8",
+          },
         )
 
       response = @api_client.destroy_intent(base_path)
@@ -162,8 +162,8 @@ describe GdsApi::PublishingApi do
           status: 404,
           body: {},
           headers: {
-            "Content-Type" => "application/json; charset=utf-8"
-          }
+            "Content-Type" => "application/json; charset=utf-8",
+          },
         )
 
       response = @api_client.destroy_intent(base_path)

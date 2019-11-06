@@ -1,4 +1,4 @@
-require 'gds_api/test_helpers/json_client_helper'
+require "gds_api/test_helpers/json_client_helper"
 
 module GdsApi
   module TestHelpers

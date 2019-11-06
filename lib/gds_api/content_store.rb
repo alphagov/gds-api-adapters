@@ -1,7 +1,7 @@
 require "plek"
 
-require_relative 'base'
-require_relative 'exceptions'
+require_relative "base"
+require_relative "exceptions"
 
 class GdsApi::ContentStore < GdsApi::Base
   class ItemNotFound < GdsApi::HTTPNotFound
@@ -44,7 +44,7 @@ private
       raise UnresolvedRedirect, "Could not find a matching redirect" unless redirect
 
       destination_uri = URI.parse(
-        resolve_destination(redirect, request_path, request_query)
+        resolve_destination(redirect, request_path, request_query),
       )
 
       url = if destination_uri.absolute?

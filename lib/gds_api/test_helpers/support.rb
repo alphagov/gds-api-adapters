@@ -1,7 +1,7 @@
 module GdsApi
   module TestHelpers
     module Support
-      SUPPORT_ENDPOINT = Plek.current.find('support')
+      SUPPORT_ENDPOINT = Plek.current.find("support")
 
       def stub_support_foi_request_creation(request_details = nil)
         post_stub = stub_http_request(:post, "#{SUPPORT_ENDPOINT}/foi_requests")

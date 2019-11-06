@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/email_alert_api'
-require 'gds_api/test_helpers/email_alert_api'
+require "test_helper"
+require "gds_api/email_alert_api"
+require "gds_api/test_helpers/email_alert_api"
 
 describe GdsApi::TestHelpers::EmailAlertApi do
   include GdsApi::TestHelpers::EmailAlertApi

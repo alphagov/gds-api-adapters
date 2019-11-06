@@ -1,7 +1,7 @@
 module GdsApi
   module TestHelpers
     module AssetManager
-      ASSET_MANAGER_ENDPOINT = Plek.current.find('asset-manager')
+      ASSET_MANAGER_ENDPOINT = Plek.current.find("asset-manager")
 
       def stub_any_asset_manager_call
         stub_request(:any, %r{\A#{ASSET_MANAGER_ENDPOINT}}).to_return(status: 200)
@@ -37,7 +37,7 @@ module GdsApi
 
       def stub_asset_manager_does_not_have_an_asset(id)
         response = {
-          "_response_info" => { "status" => "not found" }
+          "_response_info" => { "status" => "not found" },
         }
 
         stub_request(:any, "#{ASSET_MANAGER_ENDPOINT}/assets/#{id}")
@@ -46,7 +46,7 @@ module GdsApi
 
       def stub_asset_manager_does_not_have_a_whitehall_asset(legacy_url_path)
         response = {
-          "_response_info" => { "status" => "not found" }
+          "_response_info" => { "status" => "not found" },
         }
 
         stub_request(:get, "#{ASSET_MANAGER_ENDPOINT}/whitehall_assets/#{legacy_url_path}")
@@ -73,7 +73,7 @@ module GdsApi
           else
             options = {
               id: SecureRandom.uuid,
-              filename: SecureRandom.hex(8)
+              filename: SecureRandom.hex(8),
             }.merge(response_url)
 
             file_url = "#{ASSET_MANAGER_ENDPOINT}/media/#{options[:id]}/#{options[:filename]}"

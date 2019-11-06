@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/content_store'
-require 'gds_api/test_helpers/content_store'
+require "test_helper"
+require "gds_api/content_store"
+require "gds_api/test_helpers/content_store"
 
 describe GdsApi::ContentStore do
   include GdsApi::TestHelpers::ContentStore
@@ -84,7 +84,7 @@ describe GdsApi::ContentStore do
 
     it "raises when no redirects match the request path" do
       @content_item["redirects"] = [
-        create_redirect(path: "/not-going-to-match")
+        create_redirect(path: "/not-going-to-match"),
       ]
 
       assert_raises GdsApi::ContentStore::UnresolvedRedirect do
@@ -94,7 +94,7 @@ describe GdsApi::ContentStore do
 
     it "creates an absolute URL when a redirect redirects internally" do
       @content_item["redirects"] = [
-        create_redirect(path: "/a", destination: "/b")
+        create_redirect(path: "/a", destination: "/b"),
       ]
 
       destination, = GdsApi::ContentStore.redirect_for_path(@content_item, "/a")
@@ -103,7 +103,7 @@ describe GdsApi::ContentStore do
 
     it "returns an absolute URL redirect unmodified" do
       @content_item["redirects"] = [
-        create_redirect(path: "/a", destination: "https://example.com/b")
+        create_redirect(path: "/a", destination: "https://example.com/b"),
       ]
 
       destination, = GdsApi::ContentStore.redirect_for_path(@content_item, "/a")
@@ -112,7 +112,7 @@ describe GdsApi::ContentStore do
 
     it "includes a 301 status code for a permanent redirect" do
       @content_item["redirects"] = [
-        create_redirect(path: "/a", redirect_type: "permanent")
+        create_redirect(path: "/a", redirect_type: "permanent"),
       ]
 
       _, status_code = GdsApi::ContentStore.redirect_for_path(@content_item, "/a")
@@ -121,7 +121,7 @@ describe GdsApi::ContentStore do
 
     it "includes a 301 status code for a temporary redirect" do
       @content_item["redirects"] = [
-        create_redirect(path: "/a", redirect_type: "temporary")
+        create_redirect(path: "/a", redirect_type: "temporary"),
       ]
 
       _, status_code = GdsApi::ContentStore.redirect_for_path(@content_item, "/a")
@@ -130,7 +130,7 @@ describe GdsApi::ContentStore do
 
     it "returns an absolute URL redirect unmodified" do
       @content_item["redirects"] = [
-        create_redirect(path: "/a", destination: "https://example.com/b")
+        create_redirect(path: "/a", destination: "https://example.com/b"),
       ]
 
       destination, = GdsApi::ContentStore.redirect_for_path(@content_item, "/a")
@@ -140,7 +140,7 @@ describe GdsApi::ContentStore do
     describe "when a redirect has segment_mode ignore" do
       it "ignores query string for an exact route" do
         @content_item["redirects"] = [
-          create_redirect(path: "/a", destination: "/b", segments_mode: "ignore")
+          create_redirect(path: "/a", destination: "/b", segments_mode: "ignore"),
         ]
 
         destination, = GdsApi::ContentStore.redirect_for_path(@content_item, "/a", "query=1")
@@ -150,8 +150,8 @@ describe GdsApi::ContentStore do
       it "ignores segments for a prefix route" do
         @content_item["redirects"] = [
           create_redirect(
-            path: "/a", destination: "/b", segments_mode: "ignore", type: "prefix"
-          )
+            path: "/a", destination: "/b", segments_mode: "ignore", type: "prefix",
+          ),
         ]
 
         destination, = GdsApi::ContentStore.redirect_for_path(@content_item, "/a/b")
@@ -162,7 +162,7 @@ describe GdsApi::ContentStore do
     describe "when a redirect has segment_mode preserve" do
       it "maintains a query string for an exact route" do
         @content_item["redirects"] = [
-          create_redirect(path: "/a", destination: "/b", segments_mode: "preserve")
+          create_redirect(path: "/a", destination: "/b", segments_mode: "preserve"),
         ]
 
         destination, = GdsApi::ContentStore.redirect_for_path(@content_item, "/a", "query=1")
@@ -172,8 +172,8 @@ describe GdsApi::ContentStore do
       it "maintains segments for a prefix route" do
         @content_item["redirects"] = [
           create_redirect(
-            path: "/path", destination: "/destination", segments_mode: "preserve", type: "prefix"
-          )
+            path: "/path", destination: "/destination", segments_mode: "preserve", type: "prefix",
+          ),
         ]
 
         destination, = GdsApi::ContentStore.redirect_for_path(@content_item, "/path/segment", "query=0")
@@ -183,8 +183,8 @@ describe GdsApi::ContentStore do
       it "maintains segments for an absolute prefix route" do
         @content_item["redirects"] = [
           create_redirect(
-            path: "/path", destination: "http://example.com/destination", segments_mode: "preserve", type: "prefix"
-          )
+            path: "/path", destination: "http://example.com/destination", segments_mode: "preserve", type: "prefix",
+          ),
         ]
 
         destination, = GdsApi::ContentStore.redirect_for_path(@content_item, "/path/segment")

@@ -1,8 +1,8 @@
-require_relative 'test_helper'
-require 'gds_api/base'
-require 'gds_api/json_client'
-require 'base64'
-require 'null_logger'
+require_relative "test_helper"
+require "gds_api/base"
+require "gds_api/json_client"
+require "base64"
+require "null_logger"
 
 class JsonClientTest < MiniTest::Spec
   def setup
@@ -163,11 +163,11 @@ class JsonClientTest < MiniTest::Spec
     stub_request(:get, url).to_return(
       body: "",
       status: 301,
-      headers: { "Location" => new_url }
+      headers: { "Location" => new_url },
     )
     stub_request(:get, new_url).to_return(body: '{"a": 1}', status: 200)
     result = @client.get_json(url)
-    assert_equal 1, result['a']
+    assert_equal 1, result["a"]
   end
 
   def test_get_should_follow_found_redirect
@@ -176,11 +176,11 @@ class JsonClientTest < MiniTest::Spec
     stub_request(:get, url).to_return(
       body: "",
       status: 302,
-      headers: { "Location" => new_url }
+      headers: { "Location" => new_url },
     )
     stub_request(:get, new_url).to_return(body: '{"a": 1}', status: 200)
     result = @client.get_json(url)
-    assert_equal 1, result['a']
+    assert_equal 1, result["a"]
   end
 
   def test_get_should_follow_see_other
@@ -189,11 +189,11 @@ class JsonClientTest < MiniTest::Spec
     stub_request(:get, url).to_return(
       body: "",
       status: 303,
-      headers: { "Location" => new_url }
+      headers: { "Location" => new_url },
     )
     stub_request(:get, new_url).to_return(body: '{"a": 1}', status: 200)
     result = @client.get_json(url)
-    assert_equal 1, result['a']
+    assert_equal 1, result["a"]
   end
 
   def test_get_should_follow_temporary_redirect
@@ -202,11 +202,11 @@ class JsonClientTest < MiniTest::Spec
     stub_request(:get, url).to_return(
       body: "",
       status: 307,
-      headers: { "Location" => new_url }
+      headers: { "Location" => new_url },
     )
     stub_request(:get, new_url).to_return(body: '{"a": 1}', status: 200)
     result = @client.get_json(url)
-    assert_equal 1, result['a']
+    assert_equal 1, result["a"]
   end
 
   def test_should_handle_infinite_redirects
@@ -214,7 +214,7 @@ class JsonClientTest < MiniTest::Spec
     redirect = {
       body: "",
       status: 302,
-      headers: { "Location" => url }
+      headers: { "Location" => url },
     }
 
     # Theoretically, we could set this up to mock out any number of requests
@@ -236,12 +236,12 @@ class JsonClientTest < MiniTest::Spec
     first_redirect = {
       body: "",
       status: 302,
-      headers: { "Location" => second_url }
+      headers: { "Location" => second_url },
     }
     second_redirect = {
       body: "",
       status: 302,
-      headers: { "Location" => first_url }
+      headers: { "Location" => first_url },
     }
 
     # See the comment in the above test for an explanation of this
@@ -276,7 +276,7 @@ class JsonClientTest < MiniTest::Spec
     stub_request(:post, url).to_return(
       body: "",
       status: 302,
-      headers: { "Location" => new_url }
+      headers: { "Location" => new_url },
     )
     assert_raises GdsApi::HTTPErrorResponse do
       @client.post_json(url, {})
@@ -301,7 +301,7 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def empty_response
-    net_http_response = stub(body: '{}')
+    net_http_response = stub(body: "{}")
     GdsApi::Response.new(net_http_response)
   end
 
@@ -350,7 +350,7 @@ class JsonClientTest < MiniTest::Spec
     payload = { a: 1 }
     stub_request(:put, url).with(body: payload.to_json).to_return(body: '{"a":{"b":2}}', status: 200)
     response = @client.put_json(url, payload)
-    assert_equal 2, response['a']['b']
+    assert_equal 2, response["a"]["b"]
   end
 
   def test_a_response_is_always_considered_present_and_not_blank
@@ -362,27 +362,27 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_client_can_use_basic_auth
-    client = GdsApi::JsonClient.new(basic_auth: { user: 'user', password: 'password' })
+    client = GdsApi::JsonClient.new(basic_auth: { user: "user", password: "password" })
 
     stub_request(:put, "http://some.endpoint/some.json").
       with(basic_auth: %w{user password}).
       to_return(body: '{"a":1}', status: 200)
 
     response = client.put_json("http://some.endpoint/some.json", {})
-    assert_equal 1, response['a']
+    assert_equal 1, response["a"]
   end
 
   def test_client_can_use_bearer_token
-    client = GdsApi::JsonClient.new(bearer_token: 'SOME_BEARER_TOKEN')
+    client = GdsApi::JsonClient.new(bearer_token: "SOME_BEARER_TOKEN")
     expected_headers = GdsApi::JsonClient.default_request_with_json_body_headers.
-      merge('Authorization' => 'Bearer SOME_BEARER_TOKEN')
+      merge("Authorization" => "Bearer SOME_BEARER_TOKEN")
 
     stub_request(:put, "http://some.other.endpoint/some.json").
       with(headers: expected_headers).
       to_return(body: '{"a":2}', status: 200)
 
     response = client.put_json("http://some.other.endpoint/some.json", {})
-    assert_equal 2, response['a']
+    assert_equal 2, response["a"]
   end
 
   def test_client_can_set_custom_headers_on_gets
@@ -449,8 +449,8 @@ class JsonClientTest < MiniTest::Spec
     GdsApi::JsonClient.new.get_json("http://some.other.endpoint/some.json")
 
     assert_requested(:get, %r{/some.json}) do |request|
-      request.headers['Govuk-Request-Id'] == '12345' &&
-        request.headers['Govuk-Original-Url'] == 'http://example.com'
+      request.headers["Govuk-Request-Id"] == "12345" &&
+        request.headers["Govuk-Original-Url"] == "http://example.com"
     end
   end
 
@@ -461,17 +461,17 @@ class JsonClientTest < MiniTest::Spec
     GdsApi::JsonClient.new.get_json("http://some.other.endpoint/some.json")
 
     assert_requested(:get, %r{/some.json}) do |request|
-      !request.headers.has_key?('X-Govuk-Authenticated-User')
+      !request.headers.has_key?("X-Govuk-Authenticated-User")
     end
   end
 
   def test_additional_headers_passed_in_do_not_get_modified
     stub_request(:get, "http://some.other.endpoint/some.json").to_return(status: 200)
 
-    headers = { 'HEADER-A' => 'A' }
+    headers = { "HEADER-A" => "A" }
     GdsApi::JsonClient.new.get_json("http://some.other.endpoint/some.json", headers)
 
-    assert_equal({ 'HEADER-A' => 'A' }, headers)
+    assert_equal({ "HEADER-A" => "A" }, headers)
   end
 
   # def test_client_can_decompress_gzip_responses
@@ -489,24 +489,24 @@ class JsonClientTest < MiniTest::Spec
 
   def test_client_does_not_send_content_type_header_for_multipart_post
     RestClient::Request.expects(:execute).with do |args|
-      args[:headers]['Content-Type'].nil?
+      args[:headers]["Content-Type"].nil?
     end
 
-    @client.post_multipart('http://example.com', {})
+    @client.post_multipart("http://example.com", {})
   end
 
   def test_client_does_not_send_content_type_header_for_multipart_put
     RestClient::Request.expects(:execute).with do |args|
-      args[:headers]['Content-Type'].nil?
+      args[:headers]["Content-Type"].nil?
     end
 
-    @client.put_multipart('http://example.com', {})
+    @client.put_multipart("http://example.com", {})
   end
 
   def test_client_can_post_multipart_responses
     url = "http://some.endpoint/some.json"
     stub_request(:post, url).
-      with(headers: { 'Content-Type' => %r{multipart/form-data; boundary=----RubyFormBoundary\w+} }) { |request|
+      with(headers: { "Content-Type" => %r{multipart/form-data; boundary=----RubyFormBoundary\w+} }) { |request|
         request.body =~ %r{------RubyFormBoundary\w+\r\nContent-Disposition: form-data; name="a"\r\n\r\n123\r\n------RubyFormBoundary\w+--\r\n}
       }.to_return(body: '{"b": "1"}', status: 200)
 
@@ -516,7 +516,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_post_multipart_should_raise_exception_if_not_found
     url = "http://some.endpoint/some.json"
-    stub_request(:post, url).to_return(body: '', status: 404)
+    stub_request(:post, url).to_return(body: "", status: 404)
 
     assert_raises GdsApi::HTTPNotFound do
       @client.post_multipart("http://some.endpoint/some.json", "a" => "123")
@@ -525,7 +525,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_post_multipart_should_raise_error_responses
     url = "http://some.endpoint/some.json"
-    stub_request(:post, url).to_return(body: '', status: 500)
+    stub_request(:post, url).to_return(body: "", status: 500)
 
     assert_raises GdsApi::HTTPServerError do
       @client.post_multipart("http://some.endpoint/some.json", "a" => "123")
@@ -536,7 +536,7 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_put_multipart_responses
     url = "http://some.endpoint/some.json"
     stub_request(:put, url).
-      with(headers: { 'Content-Type' => %r{multipart/form-data; boundary=----RubyFormBoundary\w+} }) { |request|
+      with(headers: { "Content-Type" => %r{multipart/form-data; boundary=----RubyFormBoundary\w+} }) { |request|
         request.body =~ %r{------RubyFormBoundary\w+\r\nContent-Disposition: form-data; name="a"\r\n\r\n123\r\n------RubyFormBoundary\w+--\r\n}
       }.to_return(body: '{"b": "1"}', status: 200)
 
@@ -546,7 +546,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_put_multipart_should_raise_exception_if_not_found
     url = "http://some.endpoint/some.json"
-    stub_request(:put, url).to_return(body: '', status: 404)
+    stub_request(:put, url).to_return(body: "", status: 404)
 
     assert_raises GdsApi::HTTPNotFound do
       @client.put_multipart("http://some.endpoint/some.json", "a" => "123")
@@ -555,7 +555,7 @@ class JsonClientTest < MiniTest::Spec
 
   def test_put_multipart_should_raise_error_responses
     url = "http://some.endpoint/some.json"
-    stub_request(:put, url).to_return(body: '', status: 500)
+    stub_request(:put, url).to_return(body: "", status: 500)
 
     assert_raises GdsApi::HTTPServerError do
       @client.put_multipart("http://some.endpoint/some.json", "a" => "123")
@@ -572,8 +572,8 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_should_add_user_agent_using_env
-    previous_govuk_app_name = ENV['GOVUK_APP_NAME']
-    ENV['GOVUK_APP_NAME'] = "api-tests"
+    previous_govuk_app_name = ENV["GOVUK_APP_NAME"]
+    ENV["GOVUK_APP_NAME"] = "api-tests"
 
     url = "http://some.other.endpoint/some.json"
     stub_request(:get, url).to_return(status: 200)
@@ -584,7 +584,7 @@ class JsonClientTest < MiniTest::Spec
       request.headers["User-Agent"] == "gds-api-adapters/#{GdsApi::VERSION} (api-tests)"
     end
   ensure
-    ENV['GOVUK_APP_NAME'] = previous_govuk_app_name
+    ENV["GOVUK_APP_NAME"] = previous_govuk_app_name
   end
 
   def test_should_default_to_using_null_logger
@@ -592,7 +592,7 @@ class JsonClientTest < MiniTest::Spec
   end
 
   def test_should_use_custom_logger_specified_in_options
-    custom_logger = stub('custom-logger')
+    custom_logger = stub("custom-logger")
     client = GdsApi::JsonClient.new(logger: custom_logger)
     assert_same client.logger, custom_logger
   end

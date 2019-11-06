@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/asset_manager'
-require 'gds_api/test_helpers/asset_manager'
+require "test_helper"
+require "gds_api/asset_manager"
+require "gds_api/test_helpers/asset_manager"
 
 describe GdsApi::TestHelpers::AssetManager do
   include GdsApi::TestHelpers::AssetManager

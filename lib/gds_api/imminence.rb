@@ -1,4 +1,4 @@
-require_relative 'base'
+require_relative "base"
 
 class GdsApi::Imminence < GdsApi::Base
   def api_url(type, params)
@@ -59,7 +59,7 @@ class GdsApi::Imminence < GdsApi::Base
   def self.extract_address_hash(place_hash)
     address_fields = [
       place_hash["address1"],
-      place_hash["address2"]
+      place_hash["address2"],
     ].reject { |a| a.nil? || a == "" }
     { "address" => address_fields.map(&:strip).join(", ") }
   end

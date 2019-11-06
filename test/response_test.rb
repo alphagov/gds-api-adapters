@@ -1,10 +1,10 @@
-require_relative 'test_helper'
-require 'gds_api/response'
+require_relative "test_helper"
+require "gds_api/response"
 
 describe GdsApi::Response do
   describe "accessing HTTP response details" do
     before :each do
-      @mock_http_response = stub(body: "A Response body", code: 200, headers: { cache_control: 'public' })
+      @mock_http_response = stub(body: "A Response body", code: 200, headers: { cache_control: "public" })
       @response = GdsApi::Response.new(@mock_http_response)
     end
 
@@ -17,14 +17,14 @@ describe GdsApi::Response do
     end
 
     it "should pass-on the response headers" do
-      assert_equal({ cache_control: 'public' }, @response.headers)
+      assert_equal({ cache_control: "public" }, @response.headers)
     end
   end
 
   describe ".expires_at" do
     it "should be calculated from cache-control max-age" do
       Timecop.freeze(Time.parse("15:00")) do
-        cache_control_headers = { cache_control: 'public, max-age=900' }
+        cache_control_headers = { cache_control: "public, max-age=900" }
         headers = cache_control_headers.merge(date: Time.now.httpdate)
 
         mock_http_response = stub(body: "A Response body", code: 200, headers: headers)
@@ -36,7 +36,7 @@ describe GdsApi::Response do
 
     it "should be same as the value of Expires header in absence of max-age" do
       Timecop.freeze(Time.parse("15:00")) do
-        cache_headers = { cache_control: 'public', expires: (Time.now + 900).httpdate }
+        cache_headers = { cache_control: "public", expires: (Time.now + 900).httpdate }
         headers = cache_headers.merge(date: Time.now.httpdate)
 
         mock_http_response = stub(body: "A Response body", code: 200, headers: headers)
@@ -63,7 +63,7 @@ describe GdsApi::Response do
 
   describe ".expires_in" do
     it "should be seconds remaining from expiration time inferred from max-age" do
-      cache_control_headers = { cache_control: 'public, max-age=900' }
+      cache_control_headers = { cache_control: "public, max-age=900" }
       headers = cache_control_headers.merge(date: Time.now.httpdate)
       mock_http_response = stub(body: "A Response body", code: 200, headers: headers)
 
@@ -74,7 +74,7 @@ describe GdsApi::Response do
     end
 
     it "should be seconds remaining from expiration time inferred from Expires header" do
-      cache_headers = { cache_control: 'public', expires: (Time.now + 900).httpdate }
+      cache_headers = { cache_control: "public", expires: (Time.now + 900).httpdate }
       headers = cache_headers.merge(date: Time.now.httpdate)
       mock_http_response = stub(body: "A Response body", code: 200, headers: headers)
 
@@ -92,7 +92,7 @@ describe GdsApi::Response do
     end
 
     it "should be nil in absence of Date header" do
-      cache_control_headers = { cache_control: 'public, max-age=900' }
+      cache_control_headers = { cache_control: "public, max-age=900" }
       mock_http_response = stub(body: "A Response body", code: 200, headers: cache_control_headers)
       response = GdsApi::Response.new(mock_http_response)
 
@@ -107,19 +107,19 @@ describe GdsApi::Response do
 
     it "should map web URLs" do
       body = {
-        "web_url" => "https://www.gov.uk/test"
+        "web_url" => "https://www.gov.uk/test",
       }.to_json
-      assert_equal "/test", build_response(body)['web_url']
+      assert_equal "/test", build_response(body)["web_url"]
     end
 
     it "should leave other properties alone" do
       body = {
         "title" => "Title",
-        "description" => "Description"
+        "description" => "Description",
       }.to_json
       response = build_response(body)
-      assert_equal "Title", response['title']
-      assert_equal "Description", response['description']
+      assert_equal "Title", response["title"]
+      assert_equal "Description", response["description"]
     end
 
     it "should traverse into hashes" do
@@ -127,11 +127,11 @@ describe GdsApi::Response do
         "details" => {
           "chirality" => "widdershins",
           "web_url" => "https://www.gov.uk/left",
-        }
+        },
       }.to_json
 
       response = build_response(body)
-      assert_equal "/left", response['details']['web_url']
+      assert_equal "/left", response["details"]["web_url"]
     end
 
     it "should traverse into arrays" do
@@ -139,55 +139,55 @@ describe GdsApi::Response do
         "other_urls" => [
           { "title" => "Pies", "web_url" => "https://www.gov.uk/pies" },
           { "title" => "Cheese", "web_url" => "https://www.gov.uk/cheese" },
-        ]
+        ],
       }.to_json
 
       response = build_response(body)
-      assert_equal "/pies", response['other_urls'][0]['web_url']
-      assert_equal "/cheese", response['other_urls'][1]['web_url']
+      assert_equal "/pies", response["other_urls"][0]["web_url"]
+      assert_equal "/cheese", response["other_urls"][1]["web_url"]
     end
 
     it "should handle nil values" do
       body = { "web_url" => nil }.to_json
 
       response = build_response(body)
-      assert_nil response['web_url']
+      assert_nil response["web_url"]
     end
 
     it "should handle query parameters" do
       body = {
-        "web_url" => "https://www.gov.uk/thing?does=stuff"
+        "web_url" => "https://www.gov.uk/thing?does=stuff",
       }.to_json
 
       response = build_response(body)
-      assert_equal "/thing?does=stuff", response['web_url']
+      assert_equal "/thing?does=stuff", response["web_url"]
     end
 
     it "should handle fragments" do
       body = {
-        "web_url" => "https://www.gov.uk/thing#part-2"
+        "web_url" => "https://www.gov.uk/thing#part-2",
       }.to_json
 
       response = build_response(body)
-      assert_equal "/thing#part-2", response['web_url']
+      assert_equal "/thing#part-2", response["web_url"]
     end
 
     it "should keep URLs from other domains absolute" do
       body = {
-        "web_url" => "https://www.example.com/example"
+        "web_url" => "https://www.example.com/example",
       }.to_json
 
       response = build_response(body)
-      assert_equal "https://www.example.com/example", response['web_url']
+      assert_equal "https://www.example.com/example", response["web_url"]
     end
 
     it "should keep URLs with other schemes absolute" do
       body = {
-        "web_url" => "http://www.example.com/example"
+        "web_url" => "http://www.example.com/example",
       }.to_json
 
       response = build_response(body)
-      assert_equal "http://www.example.com/example", response['web_url']
+      assert_equal "http://www.example.com/example", response["web_url"]
     end
   end
 
@@ -195,7 +195,7 @@ describe GdsApi::Response do
     before :each do
       @response_data = {
         "_response_info" => {
-            "status" => "ok"
+            "status" => "ok",
         },
         "id" => "https://www.gov.uk/api/vat-rates.json",
         "web_url" => "https://www.gov.uk/vat-rates",

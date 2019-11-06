@@ -1,10 +1,10 @@
-require 'cgi'
-require 'plek'
+require "cgi"
+require "plek"
 
 module GdsApi
   module TestHelpers
     module SupportApi
-      SUPPORT_API_ENDPOINT = Plek.current.find('support-api')
+      SUPPORT_API_ENDPOINT = Plek.current.find("support-api")
 
       def stub_support_api_problem_report_creation(request_details = nil)
         post_stub = stub_http_request(:post, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/problem-reports")
@@ -98,15 +98,15 @@ module GdsApi
             web_url: "https://www.gov.uk/government/organisations/cabinet-office",
             title: "Cabinet Office",
             acronym: "CO",
-            govuk_status: "live"
+            govuk_status: "live",
           },
           {
             slug: "gds",
             web_url: "https://www.gov.uk/government/organisations/gds",
             title: "Government Digital Service",
             acronym: "GDS",
-            govuk_status: "live"
-          }
+            govuk_status: "live",
+          },
         ]
 
         stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/organisations").
@@ -119,7 +119,7 @@ module GdsApi
           web_url: "https://www.gov.uk/government/organisations/#{slug}",
           title: "Cabinet Office",
           acronym: "CO",
-          govuk_status: "live"
+          govuk_status: "live",
         }
 
         stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/organisations/#{slug}").
@@ -143,7 +143,7 @@ module GdsApi
       def stub_support_api_feedback_export_request(id, response_body = nil)
         response_body ||= {
           filename: "feedex_0000-00-00_2015-01-01.csv",
-          ready: true
+          ready: true,
         }
 
         stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/export-requests/#{id}").

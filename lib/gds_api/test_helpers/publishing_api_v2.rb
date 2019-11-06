@@ -1,7 +1,7 @@
-require 'gds_api/test_helpers/json_client_helper'
-require 'gds_api/test_helpers/content_item_helpers'
-require 'gds_api/test_helpers/intent_helpers'
-require 'json'
+require "gds_api/test_helpers/json_client_helper"
+require "gds_api/test_helpers/content_item_helpers"
+require "gds_api/test_helpers/intent_helpers"
+require "json"
 
 module GdsApi
   module TestHelpers
@@ -9,8 +9,8 @@ module GdsApi
     module PublishingApiV2
       include ContentItemHelpers
 
-      PUBLISHING_API_V2_ENDPOINT = Plek.current.find('publishing-api') + '/v2'
-      PUBLISHING_API_ENDPOINT = Plek.current.find('publishing-api')
+      PUBLISHING_API_V2_ENDPOINT = Plek.current.find("publishing-api") + "/v2"
+      PUBLISHING_API_ENDPOINT = Plek.current.find("publishing-api")
 
       # Stub a PUT /v2/content/:content_id request with the given content id and request body.
       # if no response_hash is given, a default response as follows is created:
@@ -30,7 +30,7 @@ module GdsApi
       # @param body  [String]
       # @param response_hash [Hash]
       def stub_publishing_api_put_content(content_id, body, response_hash = {})
-        stub_publishing_api_put(content_id, body, '/content', response_hash)
+        stub_publishing_api_put(content_id, body, "/content", response_hash)
       end
 
       # Stub a PATCH /v2/links/:content_id request
@@ -47,7 +47,7 @@ module GdsApi
       # @param content_id [UUID]
       # @param body  [String]
       def stub_publishing_api_patch_links(content_id, body)
-        stub_publishing_api_patch(content_id, body, '/links')
+        stub_publishing_api_patch(content_id, body, "/links")
       end
 
       # Stub a PATCH /v2/links/:content_id request to return a 409 response
@@ -66,7 +66,7 @@ module GdsApi
       def stub_publishing_api_patch_links_conflict(content_id, body)
         previous_version = JSON.parse(body.to_json)["previous_version"]
         override_response_hash = { status: 409, body: version_conflict(previous_version) }
-        stub_publishing_api_patch(content_id, body, '/links', override_response_hash)
+        stub_publishing_api_patch(content_id, body, "/links", override_response_hash)
       end
 
       # Stub a POST /v2/content/:content_id/publish request
@@ -78,8 +78,8 @@ module GdsApi
         url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/publish"
         response = {
           status: 200,
-          body: '{}',
-          headers: { "Content-Type" => "application/json; charset=utf-8" }
+          body: "{}",
+          headers: { "Content-Type" => "application/json; charset=utf-8" },
         }.merge(response_hash)
         stub_request(:post, url).with(body: body).to_return(response)
       end
@@ -93,8 +93,8 @@ module GdsApi
         url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/republish"
         response = {
           status: 200,
-          body: '{}',
-          headers: { "Content-Type" => "application/json; charset=utf-8" }
+          body: "{}",
+          headers: { "Content-Type" => "application/json; charset=utf-8" },
         }.merge(response_hash)
         stub_request(:post, url).with(body: body).to_return(response)
       end
@@ -108,8 +108,8 @@ module GdsApi
         url = PUBLISHING_API_V2_ENDPOINT + "/content/#{content_id}/unpublish"
         response = {
           status: 200,
-          body: '{}',
-          headers: { "Content-Type" => "application/json; charset=utf-8" }
+          body: "{}",
+          headers: { "Content-Type" => "application/json; charset=utf-8" },
         }.merge(response_hash)
         stub_request(:post, url).with(params).to_return(response)
       end
@@ -334,7 +334,7 @@ module GdsApi
           results: page_items,
           total: items.count,
           pages: number_of_pages,
-          current_page: page
+          current_page: page,
         }
 
         stub_request(:get, url)
@@ -494,8 +494,8 @@ module GdsApi
       def stub_publishing_api_has_expanded_links(links, with_drafts: true, generate: false)
         links = deep_transform_keys(links, &:to_sym)
         request_params = {}
-        request_params['with_drafts'] = false if !with_drafts
-        request_params['generate'] = true if generate
+        request_params["with_drafts"] = false if !with_drafts
+        request_params["generate"] = true if generate
 
         url = PUBLISHING_API_V2_ENDPOINT + "/expanded-links/" + links[:content_id]
         stub_request(:get, url)
@@ -552,7 +552,7 @@ module GdsApi
       #   })
       #
       def stub_publishing_api_has_lookups(lookup_hash)
-        url = Plek.current.find('publishing-api') + '/lookup-by-base-path'
+        url = Plek.current.find("publishing-api") + "/lookup-by-base-path"
         stub_request(:post, url).to_return(body: lookup_hash.to_json)
       end
 
@@ -578,7 +578,7 @@ module GdsApi
         link_type = params.fetch(:link_type)
         fields = params.fetch(:fields, %w(base_path content_id document_type title))
 
-        url = Plek.current.find('publishing-api') + "/v2/linked/#{content_id}"
+        url = Plek.current.find("publishing-api") + "/v2/linked/#{content_id}"
 
         request_parmeters = {
           "fields" => fields,
@@ -589,7 +589,7 @@ module GdsApi
           .with(query: request_parmeters)
           .and_return(
             body: items.to_json,
-            status: 200
+            status: 200,
           )
       end
 
@@ -655,7 +655,7 @@ module GdsApi
       end
 
       def stub_publishing_api_postlike_call(method, content_id, body, resource_path, override_response_hash = {})
-        response_hash = { status: 200, body: '{}', headers: { "Content-Type" => "application/json; charset=utf-8" } }
+        response_hash = { status: 200, body: "{}", headers: { "Content-Type" => "application/json; charset=utf-8" } }
         response_hash.merge!(override_response_hash)
         response_hash[:body] = response_hash[:body].to_json if response_hash[:body].is_a?(Hash)
         url = PUBLISHING_API_V2_ENDPOINT + resource_path + "/" + content_id
@@ -684,7 +684,7 @@ module GdsApi
           error: {
             code: 404,
             message: "Could not find #{type} with content_id: #{content_id}",
-          }
+          },
         }
       end
 
@@ -694,7 +694,7 @@ module GdsApi
             code: 409,
             message: "A lock-version conflict occurred. The `previous_version` you've sent (#{expected_version}) is not the same as the current lock version of the edition (#{actual_version}).",
             fields: { previous_version: ["does not match"] },
-          }
+          },
         }
       end
     end

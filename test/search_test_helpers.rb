@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/search'
-require 'gds_api/test_helpers/search'
+require "test_helper"
+require "gds_api/search"
+require "gds_api/test_helpers/search"
 
 class SearchHelpersTest < Minitest::Test
   include GdsApi::TestHelpers::Search
@@ -15,6 +15,6 @@ class SearchHelpersTest < Minitest::Test
     response = stub_search_has_no_services_and_info_data_for_organisation
 
     assert_instance_of GdsApi::Response, response
-    assert_equal 0, response['facets']['specialist_sectors']['total_options']
+    assert_equal 0, response["facets"]["specialist_sectors"]["total_options"]
   end
 end

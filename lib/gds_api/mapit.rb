@@ -1,5 +1,5 @@
-require_relative 'base'
-require_relative 'exceptions'
+require_relative "base"
+require_relative "exceptions"
 
 class GdsApi::Mapit < GdsApi::Base
   def location_for_postcode(postcode)
@@ -23,19 +23,19 @@ class GdsApi::Mapit < GdsApi::Base
     end
 
     def lat
-      @response['wgs84_lat']
+      @response["wgs84_lat"]
     end
 
     def lon
-      @response['wgs84_lon']
+      @response["wgs84_lon"]
     end
 
     def areas
-      @response['areas'].map { |_i, area| OpenStruct.new(area) }
+      @response["areas"].map { |_i, area| OpenStruct.new(area) }
     end
 
     def postcode
-      @response['postcode']
+      @response["postcode"]
     end
   end
 

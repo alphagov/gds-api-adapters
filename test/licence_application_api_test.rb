@@ -21,7 +21,7 @@ class LicenceApplicationApiTest < Minitest::Test
     stub_request(:get, "#{@core_url}/api/licences").
       with(headers: GdsApi::JsonClient.default_request_headers).
       to_return(status: 200,
-                body: <<~JSON
+                body: <<~JSON,
                   [
                      {
                         "code":"1324-5-1",
@@ -73,7 +73,7 @@ class LicenceApplicationApiTest < Minitest::Test
   end
 
   def test_should_raise_if_licence_is_unrecognised
-    licence_does_not_exist('bloop')
+    licence_does_not_exist("bloop")
 
     assert_raises(GdsApi::HTTPNotFound) do
       api.details_for_licence("bloop")
@@ -81,19 +81,19 @@ class LicenceApplicationApiTest < Minitest::Test
   end
 
   def test_should_provide_full_licence_details_for_canonical_id
-    licence_exists('590001', "isLocationSpecific" => true, "geographicalAvailability" => %w(England Wales), "issuingAuthorities" => [])
+    licence_exists("590001", "isLocationSpecific" => true, "geographicalAvailability" => %w(England Wales), "issuingAuthorities" => [])
 
     expected = {
       "isLocationSpecific" => true,
       "geographicalAvailability" => %w(England Wales),
-      "issuingAuthorities" => []
+      "issuingAuthorities" => [],
     }
 
     assert_equal expected, api.details_for_licence("590001").to_hash
   end
 
   def test_should_raise_for_bad_snac_code_entry
-    licence_does_not_exist('590001/bleep')
+    licence_does_not_exist("590001/bleep")
 
     assert_raises(GdsApi::HTTPNotFound) do
       api.details_for_licence("590001", "bleep")
@@ -101,7 +101,7 @@ class LicenceApplicationApiTest < Minitest::Test
   end
 
   def test_should_raise_for_bad_licence_id_and_snac_code
-    licence_does_not_exist('bloop/bleep')
+    licence_does_not_exist("bloop/bleep")
 
     assert_raises(GdsApi::HTTPNotFound) do
       api.details_for_licence("bloop", "bleep")
@@ -120,7 +120,7 @@ class LicenceApplicationApiTest < Minitest::Test
   end
 
   def test_should_return_full_licence_details_with_location_specific_information
-    licence_exists('866-5-1/00AA', <<~JSON
+    licence_exists("866-5-1/00AA", <<~JSON
       {
          "isLocationSpecific":true,
          "geographicalAvailability":[

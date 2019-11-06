@@ -1,5 +1,5 @@
-require_relative 'base'
-require_relative 'exceptions'
+require_relative "base"
+require_relative "exceptions"
 
 # Adapter for the Email Alert API
 #
@@ -203,7 +203,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   def change_subscriber(id:, new_address:)
     patch_json(
       "#{endpoint}/subscribers/#{id}",
-      new_address: new_address
+      new_address: new_address,
     )
   end
 
@@ -216,7 +216,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   def change_subscription(id:, frequency:)
     patch_json(
       "#{endpoint}/subscriptions/#{id}",
-      frequency: frequency
+      frequency: frequency,
     )
   end
 

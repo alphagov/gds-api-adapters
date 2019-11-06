@@ -1,4 +1,4 @@
-require_relative 'base'
+require_relative "base"
 
 class GdsApi::Support < GdsApi::Base
   def create_foi_request(request_details)

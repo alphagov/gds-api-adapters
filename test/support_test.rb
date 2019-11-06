@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/support'
-require 'gds_api/test_helpers/support'
+require "test_helper"
+require "gds_api/support"
+require "gds_api/test_helpers/support"
 
 describe GdsApi::Support do
   include GdsApi::TestHelpers::Support
@@ -48,6 +48,6 @@ describe GdsApi::Support do
 
   it "gets the correct feedback URL" do
     assert_equal("#{@base_api_url}/anonymous_feedback?path=foo",
-                 @api.feedback_url('foo'))
+                 @api.feedback_url("foo"))
   end
 end

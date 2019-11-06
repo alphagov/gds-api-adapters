@@ -1,4 +1,4 @@
-require_relative 'base'
+require_relative "base"
 
 class GdsApi::Router < GdsApi::Base
   ### Backends
@@ -36,8 +36,8 @@ class GdsApi::Router < GdsApi::Base
         handler: "redirect",
         redirect_to: destination,
         redirect_type: redirect_type,
-        segments_mode: options[:segments_mode]
-      }
+        segments_mode: options[:segments_mode],
+      },
     )
 
     commit_routes if options[:commit]

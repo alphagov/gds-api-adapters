@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/publishing_api_v2'
-require 'json'
+require "test_helper"
+require "gds_api/publishing_api_v2"
+require "json"
 
 describe GdsApi::PublishingApiV2 do
   include PactTest
@@ -18,7 +18,7 @@ describe GdsApi::PublishingApiV2 do
           method: :post,
           path: "/lookup-by-base-path",
           body: {
-            base_paths: ["/foo"]
+            base_paths: ["/foo"],
           },
           headers: {
             "Content-Type" => "application/json",
@@ -27,8 +27,8 @@ describe GdsApi::PublishingApiV2 do
         .will_respond_with(
           status: 200,
           body: {
-            "/foo" => "08f86d00-e95f-492f-af1d-470c5ba4752e"
-          }
+            "/foo" => "08f86d00-e95f-492f-af1d-470c5ba4752e",
+          },
         )
 
       content_id = @api_client.lookup_content_id(base_path: "/foo")
@@ -54,8 +54,8 @@ describe GdsApi::PublishingApiV2 do
         .will_respond_with(
           status: 200,
           body: {
-            "/foo" => "cbb460a7-60de-4a74-b5be-0b27c6d6af9b"
-          }
+            "/foo" => "cbb460a7-60de-4a74-b5be-0b27c6d6af9b",
+          },
         )
 
       content_id = @api_client.lookup_content_id(base_path: "/foo", with_drafts: true)
@@ -78,7 +78,7 @@ describe GdsApi::PublishingApiV2 do
           method: :post,
           path: "/lookup-by-base-path",
           body: {
-            base_paths: ["/foo", "/bar"]
+            base_paths: ["/foo", "/bar"],
           },
           headers: {
             "Content-Type" => "application/json",

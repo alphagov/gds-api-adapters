@@ -1,9 +1,9 @@
-require_relative 'response'
-require_relative 'exceptions'
-require_relative 'version'
-require_relative 'govuk_headers'
-require 'rest-client'
-require 'null_logger'
+require_relative "response"
+require_relative "exceptions"
+require_relative "version"
+require_relative "govuk_headers"
+require "rest-client"
+require "null_logger"
 
 module GdsApi
   class JsonClient
@@ -22,9 +22,9 @@ module GdsApi
 
     def self.default_request_headers
       {
-        'Accept' => 'application/json',
+        "Accept" => "application/json",
         # GOVUK_APP_NAME is set for all apps by Puppet
-        'User-Agent' => "gds-api-adapters/#{GdsApi::VERSION} (#{ENV['GOVUK_APP_NAME']})"
+        "User-Agent" => "gds-api-adapters/#{GdsApi::VERSION} (#{ENV['GOVUK_APP_NAME']})",
       }
     end
 
@@ -34,7 +34,7 @@ module GdsApi
 
     def self.json_body_headers
       {
-        'Content-Type' => 'application/json',
+        "Content-Type" => "application/json",
       }
     end
 
@@ -119,12 +119,12 @@ module GdsApi
       if @options[:bearer_token]
         headers = method_params[:headers] || {}
         method_params.merge(headers: headers.merge(
-          "Authorization" => "Bearer #{@options[:bearer_token]}"
+          "Authorization" => "Bearer #{@options[:bearer_token]}",
         ))
       elsif @options[:basic_auth]
         method_params.merge(
           user: @options[:basic_auth][:user],
-          password: @options[:basic_auth][:password]
+          password: @options[:basic_auth][:password],
         )
       else
         method_params
@@ -145,20 +145,20 @@ module GdsApi
         headers: default_headers
           .merge(method_params[:headers] || {})
           .merge(GdsApi::GovukHeaders.headers)
-          .merge(additional_headers)
+          .merge(additional_headers),
       )
     end
 
     def with_ssl_options(method_params)
       method_params.merge(
         # This is the default value anyway, but we should probably be explicit
-        verify_ssl: OpenSSL::SSL::VERIFY_NONE
+        verify_ssl: OpenSSL::SSL::VERIFY_NONE,
       )
     end
 
     def do_request(method, url, params = nil, additional_headers = {})
       loggable = { request_uri: url, start_time: Time.now.to_f }
-      start_logging = loggable.merge(action: 'start')
+      start_logging = loggable.merge(action: "start")
       logger.debug start_logging.to_json
 
       method_params = {
@@ -176,13 +176,13 @@ module GdsApi
 
       ::RestClient::Request.execute(method_params)
     rescue Errno::ECONNREFUSED => e
-      logger.error loggable.merge(status: 'refused', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
+      logger.error loggable.merge(status: "refused", error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::EndpointNotFound.new("Could not connect to #{url}")
     rescue RestClient::Exceptions::Timeout => e
-      logger.error loggable.merge(status: 'timeout', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
+      logger.error loggable.merge(status: "timeout", error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::TimedOutException.new
     rescue URI::InvalidURIError => e
-      logger.error loggable.merge(status: 'invalid_uri', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
+      logger.error loggable.merge(status: "invalid_uri", error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::InvalidUrl
     rescue RestClient::Exception => e
       # Log the error here, since we have access to loggable, but raise the
@@ -191,10 +191,10 @@ module GdsApi
       logger.warn loggable.to_json
       raise
     rescue Errno::ECONNRESET => e
-      logger.error loggable.merge(status: 'connection_reset', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
+      logger.error loggable.merge(status: "connection_reset", error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::TimedOutException.new
     rescue SocketError => e
-      logger.error loggable.merge(status: 'socket_error', error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
+      logger.error loggable.merge(status: "socket_error", error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::SocketErrorException.new
     end
   end
