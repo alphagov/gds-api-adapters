@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/publishing_api_v2'
-require 'json'
+require "test_helper"
+require "gds_api/publishing_api_v2"
+require "json"
 
 describe GdsApi::PublishingApiV2 do
   include PactTest
@@ -24,9 +24,9 @@ describe GdsApi::PublishingApiV2 do
             status: 200,
             body: {
               links: {
-                organisations: %w[20583132-1619-4c68-af24-77583172c070]
-              }
-            }
+                organisations: %w[20583132-1619-4c68-af24-77583172c070],
+              },
+            },
           )
       end
 
@@ -35,7 +35,7 @@ describe GdsApi::PublishingApiV2 do
         assert_equal 200, response.code
         assert_equal(
           %w[20583132-1619-4c68-af24-77583172c070],
-          response['links']['organisations']
+          response["links"]["organisations"],
         )
       end
     end
@@ -53,15 +53,15 @@ describe GdsApi::PublishingApiV2 do
             status: 200,
             body: {
               links: {
-              }
-            }
+              },
+            },
           )
       end
 
       it "responds with the empty link set" do
         response = @api_client.get_links(@content_id)
         assert_equal 200, response.code
-        assert_equal({}, response['links'])
+        assert_equal({}, response["links"])
       end
     end
 
@@ -75,7 +75,7 @@ describe GdsApi::PublishingApiV2 do
             path: "/v2/links/#{@content_id}",
           )
           .will_respond_with(
-            status: 404
+            status: 404,
           )
       end
 

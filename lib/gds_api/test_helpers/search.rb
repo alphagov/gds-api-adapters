@@ -1,10 +1,10 @@
-require 'json'
-require 'gds_api/test_helpers/json_client_helper'
+require "json"
+require "gds_api/test_helpers/json_client_helper"
 
 module GdsApi
   module TestHelpers
     module Search
-      SEARCH_ENDPOINT = Plek.current.find('search')
+      SEARCH_ENDPOINT = Plek.current.find("search")
 
       def stub_any_search_post(index: nil)
         if index
@@ -58,20 +58,20 @@ module GdsApi
 
       def assert_search_deleted_item(id, index: nil, **options)
         if id =~ %r{^/}
-          raise ArgumentError, 'Search id must not start with a slash'
+          raise ArgumentError, "Search id must not start with a slash"
         end
 
         if index
           assert_requested(
             :delete,
             %r{#{SEARCH_ENDPOINT}/#{index}/documents/#{id}},
-            **options
+            **options,
           )
         else
           assert_requested(
             :delete,
             %r{#{SEARCH_ENDPOINT}/documents/#{id}},
-            **options
+            **options,
           )
         end
       end
@@ -80,7 +80,7 @@ module GdsApi
         assert_requested(
           :delete,
           %r{#{SEARCH_ENDPOINT}/content.*#{base_path}},
-          **options
+          **options,
         )
       end
 
@@ -128,8 +128,8 @@ module GdsApi
         File.read(
           File.expand_path(
             "../../../test/fixtures/services_and_info_fixture.json",
-            __dir__
-          )
+            __dir__,
+          ),
         )
       end
 
@@ -137,8 +137,8 @@ module GdsApi
         File.read(
           File.expand_path(
             "../../../test/fixtures/no_services_and_info_data_found_fixture.json",
-            __dir__
-          )
+            __dir__,
+          ),
         )
       end
 
@@ -146,8 +146,8 @@ module GdsApi
         File.read(
           File.expand_path(
             "../../../test/fixtures/sub_sector_organisations.json",
-            __dir__
-          )
+            __dir__,
+          ),
         )
       end
 
@@ -155,8 +155,8 @@ module GdsApi
         File.read(
           File.expand_path(
             "../../../test/fixtures/new_policies_for_dwp.json",
-            __dir__
-          )
+            __dir__,
+          ),
         )
       end
 
@@ -164,8 +164,8 @@ module GdsApi
         File.read(
           File.expand_path(
             "../../../test/fixtures/old_policies_for_dwp.json",
-            __dir__
-          )
+            __dir__,
+          ),
         )
       end
 
@@ -184,7 +184,7 @@ module GdsApi
       def example_query
         {
           filter_organisations: %w[an-organisation-slug],
-          facet_specialist_sectors: "1000,examples:4,example_scope:global,order:value.title"
+          facet_specialist_sectors: "1000,examples:4,example_scope:global,order:value.title",
         }
       end
     end

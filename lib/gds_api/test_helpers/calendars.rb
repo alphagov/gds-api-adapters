@@ -4,7 +4,7 @@ module GdsApi
       def stub_calendars_endpoint(in_division: nil)
         endpoint = "#{Plek.new.website_root}/bank-holidays"
         endpoint += "/#{in_division}" unless in_division.nil?
-        endpoint + '.json'
+        endpoint + ".json"
       end
 
       def stub_calendars_has_no_bank_holidays(in_division: nil)
@@ -17,30 +17,30 @@ module GdsApi
             title: "Caturday #{idx}!",
             date: date.to_date.iso8601,
             notes: "Y'know, for cats!",
-            bunting: true
+            bunting: true,
           }
         end
 
         response =
           if in_division.nil?
             {
-              'england-and-wales' => {
-                division: 'england-and-wales',
-                events: events
+              "england-and-wales" => {
+                division: "england-and-wales",
+                events: events,
               },
-              'scotland' => {
-                division: 'scotland',
-                events: events
+              "scotland" => {
+                division: "scotland",
+                events: events,
               },
-              'northern-ireland' => {
-                division: 'northern-ireland',
-                events: events
-              }
+              "northern-ireland" => {
+                division: "northern-ireland",
+                events: events,
+              },
             }
           else
             {
               division: in_division,
-              events: events
+              events: events,
             }
           end
 

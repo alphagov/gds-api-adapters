@@ -1,4 +1,4 @@
-require_relative 'base'
+require_relative "base"
 
 class GdsApi::LinkCheckerApi < GdsApi::Base
   # Checks whether a link is broken.
@@ -24,11 +24,11 @@ class GdsApi::LinkCheckerApi < GdsApi::Base
     params = {
       uri: uri,
       synchronous: synchronous,
-      checked_within: checked_within
+      checked_within: checked_within,
     }
 
     response = get_json(
-      "#{endpoint}/check" + query_string(params.delete_if { |_, v| v.nil? })
+      "#{endpoint}/check" + query_string(params.delete_if { |_, v| v.nil? }),
     )
 
     LinkReport.new(response.to_hash)
@@ -84,8 +84,8 @@ class GdsApi::LinkCheckerApi < GdsApi::Base
   def get_batch(id)
     BatchReport.new(
       get_json(
-        "#{endpoint}/batch/#{id}"
-      ).to_hash
+        "#{endpoint}/batch/#{id}",
+      ).to_hash,
     )
   end
 
@@ -106,7 +106,7 @@ class GdsApi::LinkCheckerApi < GdsApi::Base
     payload = {
       links: links,
       app: app,
-      reference: reference
+      reference: reference,
     }
 
     response = post_json("#{endpoint}/monitor", payload)

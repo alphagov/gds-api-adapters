@@ -25,7 +25,7 @@ class ImminenceApiTest < Minitest::Test
       "source_address" => "Town Hall, Cauldwell Street, Bedford",
       "text_phone" => nil,
       "town" => nil,
-      "url" => "http://www.bedford.gov.uk/advice_and_benefits/registration_service.aspx"
+      "url" => "http://www.bedford.gov.uk/advice_and_benefits/registration_service.aspx",
     }
   end
 
@@ -86,7 +86,7 @@ class ImminenceApiTest < Minitest::Test
     c = api_client
     url = "#{ROOT}/places/wibble.json?limit=5&lat=52&lng=0"
     place_info = dummy_place.merge(
-      "location" => { "longitude" => LONGITUDE, "latitude" => LATITUDE }
+      "location" => { "longitude" => LONGITUDE, "latitude" => LATITUDE },
     )
     c.expects(:get_json).with(url).returns([place_info])
     places = c.places("wibble", 52, 0)
@@ -147,7 +147,7 @@ class ImminenceApiTest < Minitest::Test
   def test_areas_for_postcode
     areas = [
       { "id" => 12, "type" => "LBO", "name" => "Westminster City Council", "country_name" => "England" },
-      { "id" => 66, "type" => "EUR", "name" => "London", "country_name" => "England" }
+      { "id" => 66, "type" => "EUR", "name" => "London", "country_name" => "England" },
     ]
     results = {
       "_response_info" => { "status" => "ok" },
@@ -171,7 +171,7 @@ class ImminenceApiTest < Minitest::Test
   def test_areas_by_type
     areas = [
       { "id" => 122, "type" => "EUR", "name" => "Yorkshire and the Humber", "country_name" => "England" },
-      { "id" => 665, "type" => "EUR", "name" => "London", "country_name" => "England" }
+      { "id" => 665, "type" => "EUR", "name" => "London", "country_name" => "England" },
     ]
     results = {
       "_response_info" => { "status" => "ok" },

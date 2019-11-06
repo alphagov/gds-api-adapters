@@ -1,7 +1,7 @@
-require 'test_helper'
-require 'gds_api/publishing_api_v2'
-require 'gds_api/test_helpers/publishing_api_v2'
-require 'json'
+require "test_helper"
+require "gds_api/publishing_api_v2"
+require "gds_api/test_helpers/publishing_api_v2"
+require "json"
 
 describe GdsApi::PublishingApiV2 do
   include GdsApi::TestHelpers::PublishingApiV2
@@ -22,8 +22,8 @@ describe GdsApi::PublishingApiV2 do
       "routes" => [
         {
           "path" => attrs["base_path"] || "/robots.txt",
-          "type" => "exact"
-        }
+          "type" => "exact",
+        },
       ],
       "update_type" => "major",
       "details" => {},
@@ -54,7 +54,7 @@ describe GdsApi::PublishingApiV2 do
             path: "/v2/content/#{@content_id}",
             body: @content_item,
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
@@ -80,7 +80,7 @@ describe GdsApi::PublishingApiV2 do
             path: "/v2/content/#{@content_id}",
             body: @content_item,
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
@@ -95,8 +95,8 @@ describe GdsApi::PublishingApiV2 do
               },
             },
             headers: {
-              "Content-Type" => "application/json; charset=utf-8"
-            }
+              "Content-Type" => "application/json; charset=utf-8",
+            },
           )
       end
 
@@ -120,7 +120,7 @@ describe GdsApi::PublishingApiV2 do
             path: "/v2/content/#{@content_id}",
             body: @content_item,
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
@@ -130,12 +130,12 @@ describe GdsApi::PublishingApiV2 do
                 schema: Pact.like({}),
                 fragment: "#/base_path",
                 message: Pact.like("The property '#/base_path' value \"not a url path\" did not match the regex '^/(([a-zA-Z0-9._~!$&'()*+,;=:@-]|%[0-9a-fA-F]{2})+(/([a-zA-Z0-9._~!$&'()*+,;=:@-]|%[0-9a-fA-F]{2})*)*)?$' in schema 729a13d6-8ddb-5ba8-b116-3b7604dc3d3d#"),
-                failed_attribute: "Pattern"
-              }
+                failed_attribute: "Pattern",
+              },
             ],
             headers: {
-              "Content-Type" => "application/json; charset=utf-8"
-            }
+              "Content-Type" => "application/json; charset=utf-8",
+            },
           )
       end
 
@@ -155,7 +155,7 @@ describe GdsApi::PublishingApiV2 do
             "schema_name" => "manual",
             "locale" => "en",
             "details" => { "body" => [] },
-            "previous_version" => "3"
+            "previous_version" => "3",
           )
 
           publishing_api
@@ -166,7 +166,7 @@ describe GdsApi::PublishingApiV2 do
               path: "/v2/content/#{@content_id}",
               body: @content_item,
               headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-                "Authorization" => "Bearer #{@bearer_token}"
+                "Authorization" => "Bearer #{@bearer_token}",
               ),
             )
             .will_respond_with(
@@ -188,7 +188,7 @@ describe GdsApi::PublishingApiV2 do
             "schema_name" => "manual",
             "locale" => "en",
             "details" => { "body" => [] },
-            "previous_version" => "2"
+            "previous_version" => "2",
           )
 
           publishing_api
@@ -199,7 +199,7 @@ describe GdsApi::PublishingApiV2 do
               path: "/v2/content/#{@content_id}",
               body: @content_item,
               headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-                "Authorization" => "Bearer #{@bearer_token}"
+                "Authorization" => "Bearer #{@bearer_token}",
               ),
             )
             .will_respond_with(
@@ -214,8 +214,8 @@ describe GdsApi::PublishingApiV2 do
                 },
               },
               headers: {
-                "Content-Type" => "application/json; charset=utf-8"
-              }
+                "Content-Type" => "application/json; charset=utf-8",
+              },
             )
         end
 
@@ -242,7 +242,7 @@ describe GdsApi::PublishingApiV2 do
             method: :get,
             path: "/v2/content/#{@content_id}",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
@@ -256,7 +256,7 @@ describe GdsApi::PublishingApiV2 do
               "locale" => Pact.like("en"),
               "routes" => Pact.like([{}]),
               "public_updated_at" => Pact.like("2015-07-30T13:58:11.000Z"),
-              "details" => Pact.like({})
+              "details" => Pact.like({}),
             },
             headers: {
               "Content-Type" => "application/json; charset=utf-8",
@@ -283,7 +283,7 @@ describe GdsApi::PublishingApiV2 do
             path: "/v2/content/#{@content_id}",
             query: "locale=fr",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
@@ -297,7 +297,7 @@ describe GdsApi::PublishingApiV2 do
               "locale" => "fr",
               "routes" => Pact.like([{}]),
               "public_updated_at" => Pact.like("2015-07-30T13:58:11.000Z"),
-              "details" => Pact.like({})
+              "details" => Pact.like({}),
             },
             headers: {
               "Content-Type" => "application/json; charset=utf-8",
@@ -325,7 +325,7 @@ describe GdsApi::PublishingApiV2 do
               path: "/v2/content/#{@content_id}",
               query: "version=1",
               headers: GdsApi::JsonClient.default_request_headers.merge(
-                "Authorization" => "Bearer #{@bearer_token}"
+                "Authorization" => "Bearer #{@bearer_token}",
               ),
             )
             .will_respond_with(
@@ -340,7 +340,7 @@ describe GdsApi::PublishingApiV2 do
                 "routes" => Pact.like([{}]),
                 "public_updated_at" => Pact.like("2015-07-30T13:58:11.000Z"),
                 "details" => Pact.like({}),
-                "publication_state" => "superseded"
+                "publication_state" => "superseded",
               },
               headers: {
                 "Content-Type" => "application/json; charset=utf-8",
@@ -366,7 +366,7 @@ describe GdsApi::PublishingApiV2 do
               method: :get,
               path: "/v2/content/#{@content_id}",
               headers: GdsApi::JsonClient.default_request_headers.merge(
-                "Authorization" => "Bearer #{@bearer_token}"
+                "Authorization" => "Bearer #{@bearer_token}",
               ),
             )
             .will_respond_with(
@@ -381,7 +381,7 @@ describe GdsApi::PublishingApiV2 do
                 "locale" => Pact.like("en"),
                 "routes" => Pact.like([{}]),
                 "details" => Pact.like({}),
-                "publication_state" => "draft"
+                "publication_state" => "draft",
               },
               headers: {
                 "Content-Type" => "application/json; charset=utf-8",
@@ -408,7 +408,7 @@ describe GdsApi::PublishingApiV2 do
               path: "/v2/content/#{@content_id}",
               query: "version=2",
               headers: GdsApi::JsonClient.default_request_headers.merge(
-                "Authorization" => "Bearer #{@bearer_token}"
+                "Authorization" => "Bearer #{@bearer_token}",
               ),
             )
             .will_respond_with(
@@ -423,7 +423,7 @@ describe GdsApi::PublishingApiV2 do
                 "routes" => Pact.like([{}]),
                 "public_updated_at" => Pact.like("2015-07-30T13:58:11.000Z"),
                 "details" => Pact.like({}),
-                "publication_state" => "published"
+                "publication_state" => "published",
               },
               headers: {
                 "Content-Type" => "application/json; charset=utf-8",
@@ -449,7 +449,7 @@ describe GdsApi::PublishingApiV2 do
               method: :get,
               path: "/v2/content/#{@content_id}",
               headers: GdsApi::JsonClient.default_request_headers.merge(
-                "Authorization" => "Bearer #{@bearer_token}"
+                "Authorization" => "Bearer #{@bearer_token}",
               ),
             )
             .will_respond_with(
@@ -464,7 +464,7 @@ describe GdsApi::PublishingApiV2 do
                 "routes" => Pact.like([{}]),
                 "public_updated_at" => Pact.like("2015-07-30T13:58:11.000Z"),
                 "details" => Pact.like({}),
-                "publication_state" => "published"
+                "publication_state" => "published",
               },
               headers: {
                 "Content-Type" => "application/json; charset=utf-8",
@@ -489,7 +489,7 @@ describe GdsApi::PublishingApiV2 do
             method: :get,
             path: "/v2/content/#{@content_id}",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
@@ -497,7 +497,7 @@ describe GdsApi::PublishingApiV2 do
             body: {
               "error" => {
                 "code" => 404,
-                "message" => Pact.term(generate: "not found", matcher: /\S+/)
+                "message" => Pact.term(generate: "not found", matcher: /\S+/),
               },
             },
             headers: {
@@ -525,11 +525,11 @@ describe GdsApi::PublishingApiV2 do
             path: "/v2/content/#{@content_id}/republish",
             body: {},
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
-            status: 200
+            status: 200,
           )
       end
 
@@ -549,11 +549,11 @@ describe GdsApi::PublishingApiV2 do
             path: "/v2/content/#{@content_id}/republish",
             body: {},
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
-            status: 404
+            status: 404,
           )
       end
 
@@ -579,7 +579,7 @@ describe GdsApi::PublishingApiV2 do
                 previous_version: 3,
               },
               headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-                "Authorization" => "Bearer #{@bearer_token}"
+                "Authorization" => "Bearer #{@bearer_token}",
               ),
             )
             .will_respond_with(
@@ -605,7 +605,7 @@ describe GdsApi::PublishingApiV2 do
                 previous_version: 2,
               },
               headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-                "Authorization" => "Bearer #{@bearer_token}"
+                "Authorization" => "Bearer #{@bearer_token}",
               ),
             )
             .will_respond_with(
@@ -620,8 +620,8 @@ describe GdsApi::PublishingApiV2 do
                 },
               },
               headers: {
-                "Content-Type" => "application/json; charset=utf-8"
-              }
+                "Content-Type" => "application/json; charset=utf-8",
+              },
             )
         end
 
@@ -649,11 +649,11 @@ describe GdsApi::PublishingApiV2 do
               update_type: "major",
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
-            status: 200
+            status: 200,
           )
       end
 
@@ -675,11 +675,11 @@ describe GdsApi::PublishingApiV2 do
               update_type: "major",
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
-            status: 404
+            status: 404,
           )
       end
 
@@ -701,10 +701,10 @@ describe GdsApi::PublishingApiV2 do
             method: :post,
             path: "/v2/content/#{@content_id}/publish",
             body: {
-              "update_type" => ""
+              "update_type" => "",
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
@@ -717,7 +717,7 @@ describe GdsApi::PublishingApiV2 do
                   "update_type" => Pact.each_like("is required", min: 1),
                 },
               },
-            }
+            },
           )
       end
 
@@ -743,16 +743,16 @@ describe GdsApi::PublishingApiV2 do
               update_type: "major",
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
             status: 409,
             body: {
               "error" => {
-                "code" => 409, "message" => Pact.term(generate: "Cannot publish an already published content item", matcher: /\S+/),
+                "code" => 409, "message" => Pact.term(generate: "Cannot publish an already published content item", matcher: /\S+/)
               },
-            }
+            },
           )
       end
 
@@ -779,7 +779,7 @@ describe GdsApi::PublishingApiV2 do
               locale: "fr",
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
@@ -807,7 +807,7 @@ describe GdsApi::PublishingApiV2 do
                 previous_version: 3,
               },
               headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-                "Authorization" => "Bearer #{@bearer_token}"
+                "Authorization" => "Bearer #{@bearer_token}",
               ),
             )
             .will_respond_with(
@@ -834,7 +834,7 @@ describe GdsApi::PublishingApiV2 do
                 previous_version: 2,
               },
               headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-                "Authorization" => "Bearer #{@bearer_token}"
+                "Authorization" => "Bearer #{@bearer_token}",
               ),
             )
             .will_respond_with(
@@ -849,8 +849,8 @@ describe GdsApi::PublishingApiV2 do
                 },
               },
               headers: {
-                "Content-Type" => "application/json; charset=utf-8"
-              }
+                "Content-Type" => "application/json; charset=utf-8",
+              },
             )
         end
 
@@ -878,11 +878,11 @@ describe GdsApi::PublishingApiV2 do
               type: "gone",
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
-            status: 200
+            status: 200,
           )
       end
 
@@ -904,11 +904,11 @@ describe GdsApi::PublishingApiV2 do
               type: "gone",
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
-            status: 404
+            status: 404,
           )
       end
 
@@ -933,7 +933,7 @@ describe GdsApi::PublishingApiV2 do
               type: "not-a-valid-type",
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
@@ -944,7 +944,7 @@ describe GdsApi::PublishingApiV2 do
                 "message" => Pact.term(generate: "not-a-valid-type is not a valid unpublishing type", matcher: /\S+/),
                 "fields" => {},
               },
-            }
+            },
           )
       end
 
@@ -970,11 +970,11 @@ describe GdsApi::PublishingApiV2 do
               type: "gone",
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
-            status: 200
+            status: 200,
           )
       end
 
@@ -998,7 +998,7 @@ describe GdsApi::PublishingApiV2 do
                 previous_version: 3,
               },
               headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-                "Authorization" => "Bearer #{@bearer_token}"
+                "Authorization" => "Bearer #{@bearer_token}",
               ),
             )
             .will_respond_with(
@@ -1025,7 +1025,7 @@ describe GdsApi::PublishingApiV2 do
                 previous_version: 2,
               },
               headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-                "Authorization" => "Bearer #{@bearer_token}"
+                "Authorization" => "Bearer #{@bearer_token}",
               ),
             )
             .will_respond_with(
@@ -1040,8 +1040,8 @@ describe GdsApi::PublishingApiV2 do
                 },
               },
               headers: {
-                "Content-Type" => "application/json; charset=utf-8"
-              }
+                "Content-Type" => "application/json; charset=utf-8",
+              },
             )
         end
 
@@ -1068,7 +1068,7 @@ describe GdsApi::PublishingApiV2 do
             body: {
               links: {
                 organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
-              }
+              },
             },
             headers: {
               "Content-Type" => "application/json",
@@ -1079,8 +1079,8 @@ describe GdsApi::PublishingApiV2 do
             body: {
               links: {
                 organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
-              }
-            }
+              },
+            },
           )
       end
 
@@ -1091,7 +1091,7 @@ describe GdsApi::PublishingApiV2 do
         assert_equal 200, response.code
         assert_equal(
           %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
-          response['links']['organisations']
+          response["links"]["organisations"],
         )
       end
     end
@@ -1107,7 +1107,7 @@ describe GdsApi::PublishingApiV2 do
             body: {
               links: {
                 topics: %w[225df4a8-2945-4e9b-8799-df7424a90b69],
-              }
+              },
             },
             headers: {
               "Content-Type" => "application/json",
@@ -1118,9 +1118,9 @@ describe GdsApi::PublishingApiV2 do
             body: {
               links: {
                 topics: %w[225df4a8-2945-4e9b-8799-df7424a90b69],
-                organisations: %w[20583132-1619-4c68-af24-77583172c070]
-              }
-            }
+                organisations: %w[20583132-1619-4c68-af24-77583172c070],
+              },
+            },
           )
       end
 
@@ -1132,10 +1132,10 @@ describe GdsApi::PublishingApiV2 do
         assert_equal 200, response.code
         assert_equal(
           {
-            'topics' => %w[225df4a8-2945-4e9b-8799-df7424a90b69],
-            'organisations' => %w[20583132-1619-4c68-af24-77583172c070],
+            "topics" => %w[225df4a8-2945-4e9b-8799-df7424a90b69],
+            "organisations" => %w[20583132-1619-4c68-af24-77583172c070],
           },
-          response['links']
+          response["links"],
         )
       end
     end
@@ -1151,7 +1151,7 @@ describe GdsApi::PublishingApiV2 do
             body: {
               links: {
                 organisations: [],
-              }
+              },
             },
             headers: {
               "Content-Type" => "application/json",
@@ -1160,8 +1160,8 @@ describe GdsApi::PublishingApiV2 do
           .will_respond_with(
             status: 200,
             body: {
-              links: {}
-            }
+              links: {},
+            },
           )
       end
 
@@ -1171,7 +1171,7 @@ describe GdsApi::PublishingApiV2 do
         })
 
         assert_equal 200, response.code
-        assert_equal({}, response['links'])
+        assert_equal({}, response["links"])
       end
     end
 
@@ -1186,7 +1186,7 @@ describe GdsApi::PublishingApiV2 do
             body: {
               links: {
                 organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
-              }
+              },
             },
             headers: {
               "Content-Type" => "application/json",
@@ -1197,7 +1197,7 @@ describe GdsApi::PublishingApiV2 do
             body: {
               links: {
                 organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
-              }
+              },
             },
           )
       end
@@ -1210,9 +1210,9 @@ describe GdsApi::PublishingApiV2 do
         assert_equal 200, response.code
         assert_equal(
           {
-            'organisations' => %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
+            "organisations" => %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
           },
-          response['links']
+          response["links"],
         )
       end
     end
@@ -1284,8 +1284,8 @@ describe GdsApi::PublishingApiV2 do
                 },
               },
               headers: {
-                "Content-Type" => "application/json; charset=utf-8"
-              }
+                "Content-Type" => "application/json; charset=utf-8",
+              },
             )
         end
 
@@ -1336,7 +1336,7 @@ describe GdsApi::PublishingApiV2 do
           path: "/v2/linkables",
           query: "document_type=topic",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}"
+            "Authorization" => "Bearer #{@bearer_token}",
           ),
         )
         .will_respond_with(
@@ -1352,31 +1352,31 @@ describe GdsApi::PublishingApiV2 do
 
   describe "#get_links_changes" do
     let(:link_changes) {
-      { 'link_changes' => [
+      { "link_changes" => [
         {
-          'source' => { 'title' => 'Edition Title A1',
-                        'base_path' => '/base/path/a1',
-                        'content_id' => 'aaaaaaaa-aaaa-1aaa-aaaa-aaaaaaaaaaaa' },
-          'target' => { 'title' => 'Edition Title B1',
-                        'base_path' => '/base/path/b1',
-                        'content_id' => 'bbbbbbbb-bbbb-1bbb-bbbb-bbbbbbbbbbbb' },
-          'link_type' => 'taxons',
-          'change' => 'add',
-          'user_uid' => '11111111-1111-1111-1111-111111111111',
-          'created_at' => "2017-01-01T09:00:00.100Z"
+          "source" => { "title" => "Edition Title A1",
+                        "base_path" => "/base/path/a1",
+                        "content_id" => "aaaaaaaa-aaaa-1aaa-aaaa-aaaaaaaaaaaa" },
+          "target" => { "title" => "Edition Title B1",
+                        "base_path" => "/base/path/b1",
+                        "content_id" => "bbbbbbbb-bbbb-1bbb-bbbb-bbbbbbbbbbbb" },
+          "link_type" => "taxons",
+          "change" => "add",
+          "user_uid" => "11111111-1111-1111-1111-111111111111",
+          "created_at" => "2017-01-01T09:00:00.100Z",
         },
         {
-          'source' => { 'title' => 'Edition Title A2',
-                        'base_path' => '/base/path/a2',
-                        'content_id' => 'aaaaaaaa-aaaa-2aaa-aaaa-aaaaaaaaaaaa' },
-          'target' => { 'title' => 'Edition Title B2',
-                        'base_path' => '/base/path/b2',
-                        'content_id' => 'bbbbbbbb-bbbb-2bbb-bbbb-bbbbbbbbbbbb' },
-          'link_type' => 'taxons',
-          'change' => 'remove',
-          'user_uid' => '22222222-2222-2222-2222-222222222222',
-          'created_at' => "2017-01-01T09:00:00.100Z"
-        }
+          "source" => { "title" => "Edition Title A2",
+                        "base_path" => "/base/path/a2",
+                        "content_id" => "aaaaaaaa-aaaa-2aaa-aaaa-aaaaaaaaaaaa" },
+          "target" => { "title" => "Edition Title B2",
+                        "base_path" => "/base/path/b2",
+                        "content_id" => "bbbbbbbb-bbbb-2bbb-bbbb-bbbbbbbbbbbb" },
+          "link_type" => "taxons",
+          "change" => "remove",
+          "user_uid" => "22222222-2222-2222-2222-222222222222",
+          "created_at" => "2017-01-01T09:00:00.100Z",
+        },
       ] }
     }
 
@@ -1389,12 +1389,12 @@ describe GdsApi::PublishingApiV2 do
           path: "/v2/links/changes",
           query: "link_types%5B%5D=taxons",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}"
+            "Authorization" => "Bearer #{@bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
-          body: link_changes
+          body: link_changes,
         )
 
       response = @api_client.get_links_changes(link_types: %w(taxons))
@@ -1411,9 +1411,9 @@ describe GdsApi::PublishingApiV2 do
         .with(
           method: :get,
           path: "/v2/content",
-          query: 'document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&page=1&per_page=2',
+          query: "document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&page=1&per_page=2",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}"
+            "Authorization" => "Bearer #{@bearer_token}",
           ),
         )
         .will_respond_with(
@@ -1427,10 +1427,10 @@ describe GdsApi::PublishingApiV2 do
                     { href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&per_page=2&page=1",
                       rel: "self" }],
             results: [
-              { title: 'title_1', base_path: '/path_1' },
-              { title: 'title_2', base_path: '/path_2' },
-            ]
-          }
+              { title: "title_1", base_path: "/path_1" },
+              { title: "title_2", base_path: "/path_2" },
+            ],
+          },
         )
       publishing_api
         .given("there are four content items with document_type 'topic'")
@@ -1438,9 +1438,9 @@ describe GdsApi::PublishingApiV2 do
         .with(
           method: :get,
           path: "/v2/content",
-          query: 'document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&page=2&per_page=2',
+          query: "document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&page=2&per_page=2",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}"
+            "Authorization" => "Bearer #{@bearer_token}",
           ),
         )
         .will_respond_with(
@@ -1454,19 +1454,19 @@ describe GdsApi::PublishingApiV2 do
                     { href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&per_page=2&page=2",
                       rel: "self" }],
             results: [
-              { title: 'title_3', base_path: '/path_3' },
-              { title: 'title_4', base_path: '/path_4' },
-            ]
+              { title: "title_3", base_path: "/path_3" },
+              { title: "title_4", base_path: "/path_4" },
+            ],
           },
         )
       assert_equal(
-        @api_client.get_content_items_enum(document_type: 'topic', fields: %i[title base_path], per_page: 2).to_a,
+        @api_client.get_content_items_enum(document_type: "topic", fields: %i[title base_path], per_page: 2).to_a,
         [
-          { 'title' => 'title_1', 'base_path' => '/path_1' },
-          { 'title' => 'title_2', 'base_path' => '/path_2' },
-          { 'title' => 'title_3', 'base_path' => '/path_3' },
-          { 'title' => 'title_4', 'base_path' => '/path_4' }
-        ]
+          { "title" => "title_1", "base_path" => "/path_1" },
+          { "title" => "title_2", "base_path" => "/path_2" },
+          { "title" => "title_3", "base_path" => "/path_3" },
+          { "title" => "title_4", "base_path" => "/path_4" },
+        ],
       )
     end
   end
@@ -1482,7 +1482,7 @@ describe GdsApi::PublishingApiV2 do
           path: "/v2/content",
           query: "document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}"
+            "Authorization" => "Bearer #{@bearer_token}",
           ),
         )
         .will_respond_with(
@@ -1493,17 +1493,17 @@ describe GdsApi::PublishingApiV2 do
             current_page: 1,
             links: [{
               href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&page=1",
-              rel: "self"
+              rel: "self",
             }],
             results: [
-              { title: 'Content Item A', base_path: '/a-base-path' },
-              { title: 'Content Item B', base_path: '/another-base-path' },
-            ]
-          }
+              { title: "Content Item A", base_path: "/a-base-path" },
+              { title: "Content Item B", base_path: "/another-base-path" },
+            ],
+          },
         )
 
       response = @api_client.get_content_items(
-        document_type: 'topic',
+        document_type: "topic",
         fields: %i[title base_path],
       )
 
@@ -1514,7 +1514,7 @@ describe GdsApi::PublishingApiV2 do
         ["pages", 1],
         ["current_page", 1],
         ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&page=1", "rel" => "self" }]],
-        ["results", [{ "title" => "Content Item A", "base_path" => "/a-base-path" }, { "title" => "Content Item B", "base_path" => "/another-base-path" }]]
+        ["results", [{ "title" => "Content Item A", "base_path" => "/a-base-path" }, { "title" => "Content Item B", "base_path" => "/another-base-path" }]],
       ], response.to_a
     end
 
@@ -1527,7 +1527,7 @@ describe GdsApi::PublishingApiV2 do
           path: "/v2/content",
           query: "document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}"
+            "Authorization" => "Bearer #{@bearer_token}",
           ),
         )
         .will_respond_with(
@@ -1538,16 +1538,16 @@ describe GdsApi::PublishingApiV2 do
             current_page: 1,
             links: [{
               href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&page=1",
-              rel: "self"
+              rel: "self",
             }],
             results: [
-              { content_id: @content_id, locale: "en" }
-            ]
-          }
+              { content_id: @content_id, locale: "en" },
+            ],
+          },
         )
 
       response = @api_client.get_content_items(
-        document_type: 'topic',
+        document_type: "topic",
         fields: %i[content_id locale],
       )
 
@@ -1558,7 +1558,7 @@ describe GdsApi::PublishingApiV2 do
         ["pages", 1],
         ["current_page", 1],
         ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&page=1", "rel" => "self" }]],
-        ["results", [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "en" }]]
+        ["results", [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "en" }]],
       ], response.to_a
     end
 
@@ -1571,7 +1571,7 @@ describe GdsApi::PublishingApiV2 do
           path: "/v2/content",
           query: "document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=fr",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}"
+            "Authorization" => "Bearer #{@bearer_token}",
           ),
         )
         .will_respond_with(
@@ -1582,18 +1582,18 @@ describe GdsApi::PublishingApiV2 do
             current_page: 1,
             links: [{
               href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=fr&page=1",
-              rel: "self"
+              rel: "self",
             }],
             results: [
-              { content_id: @content_id, locale: "fr" }
-            ]
-          }
+              { content_id: @content_id, locale: "fr" },
+            ],
+          },
         )
 
       response = @api_client.get_content_items(
-        document_type: 'topic',
+        document_type: "topic",
         fields: %i[content_id locale],
-        locale: 'fr',
+        locale: "fr",
       )
 
       assert_equal 200, response.code
@@ -1602,7 +1602,7 @@ describe GdsApi::PublishingApiV2 do
         ["pages", 1],
         ["current_page", 1],
         ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=fr&page=1", "rel" => "self" }]],
-        ["results", [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "fr" }]]
+        ["results", [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "fr" }]],
       ], response.to_a
     end
 
@@ -1615,7 +1615,7 @@ describe GdsApi::PublishingApiV2 do
           path: "/v2/content",
           query: "document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=all",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}"
+            "Authorization" => "Bearer #{@bearer_token}",
           ),
         )
         .will_respond_with(
@@ -1626,20 +1626,20 @@ describe GdsApi::PublishingApiV2 do
             current_page: 1,
             links: [{
               href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=all&page=1",
-              rel: "self"
+              rel: "self",
             }],
             results: [
               { content_id: @content_id, locale: "en" },
               { content_id: @content_id, locale: "fr" },
               { content_id: @content_id, locale: "ar" },
-            ]
-          }
+            ],
+          },
         )
 
       response = @api_client.get_content_items(
-        document_type: 'topic',
+        document_type: "topic",
         fields: %i[content_id locale],
-        locale: 'all',
+        locale: "all",
       )
 
       assert_equal 200, response.code
@@ -1664,7 +1664,7 @@ describe GdsApi::PublishingApiV2 do
           path: "/v2/content",
           query: "document_type=topic&fields%5B%5D=content_id&fields%5B%5D=details",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}"
+            "Authorization" => "Bearer #{@bearer_token}",
           ),
         )
         .will_respond_with(
@@ -1675,16 +1675,16 @@ describe GdsApi::PublishingApiV2 do
             current_page: 1,
             links: [{
               href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=details&page=1",
-              rel: "self"
+              rel: "self",
             }],
             results: [
-              { content_id: @content_id, details: { foo: :bar } }
-            ]
-          }
+              { content_id: @content_id, details: { foo: :bar } },
+            ],
+          },
         )
 
       response = @api_client.get_content_items(
-        document_type: 'topic',
+        document_type: "topic",
         fields: %i[content_id details],
       )
 
@@ -1695,7 +1695,7 @@ describe GdsApi::PublishingApiV2 do
         ["pages", 1],
         ["current_page", 1],
         ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=details&page=1", "rel" => "self" }]],
-        ["results", [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "details" => { "foo" => "bar" } }]]
+        ["results", [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "details" => { "foo" => "bar" } }]],
       ], response.to_a
     end
 
@@ -1708,7 +1708,7 @@ describe GdsApi::PublishingApiV2 do
           path: "/v2/content",
           query: "document_type=topic&fields%5B%5D=content_id&q=an+internal+name&search_in%5B%5D=details.internal_name",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}"
+            "Authorization" => "Bearer #{@bearer_token}",
           ),
         )
         .will_respond_with(
@@ -1719,19 +1719,19 @@ describe GdsApi::PublishingApiV2 do
             current_page: 1,
             links: [{
               href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&q=an+internal+name&search_in%5B%5D=details.internal_name&page=1",
-              rel: "self"
+              rel: "self",
             }],
             results: [
-              { content_id: "aaaaaaaa-aaaa-1aaa-aaaa-aaaaaaaaaaaa" }
-            ]
-          }
+              { content_id: "aaaaaaaa-aaaa-1aaa-aaaa-aaaaaaaaaaaa" },
+            ],
+          },
         )
 
       response = @api_client.get_content_items(
-        document_type: 'topic',
+        document_type: "topic",
         fields: [:content_id],
         q: "an internal name",
-        search_in: ["details.internal_name"]
+        search_in: ["details.internal_name"],
       )
 
       assert_equal 200, response.code
@@ -1741,7 +1741,7 @@ describe GdsApi::PublishingApiV2 do
         ["pages", 1],
         ["current_page", 1],
         ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&q=an+internal+name&search_in%5B%5D=details.internal_name&page=1", "rel" => "self" }]],
-        ["results", [{ "content_id" => "aaaaaaaa-aaaa-1aaa-aaaa-aaaaaaaaaaaa" }]]
+        ["results", [{ "content_id" => "aaaaaaaa-aaaa-1aaa-aaaa-aaaaaaaaaaaa" }]],
       ], response.to_a
     end
   end
@@ -1757,7 +1757,7 @@ describe GdsApi::PublishingApiV2 do
             path: "/v2/content/#{@content_id}/discard-draft",
             body: {},
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1783,7 +1783,7 @@ describe GdsApi::PublishingApiV2 do
               locale: "fr",
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1807,7 +1807,7 @@ describe GdsApi::PublishingApiV2 do
             path: "/v2/content/#{@content_id}/discard-draft",
             body: {},
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1833,14 +1833,14 @@ describe GdsApi::PublishingApiV2 do
       response_hash = {
         content_id_with_links => {
           "links" => {
-            "taxons" => %w[20583132-1619-4c68-af24-77583172c070]
+            "taxons" => %w[20583132-1619-4c68-af24-77583172c070],
           },
-          "version" => 2
+          "version" => 2,
         },
         content_id_no_links => {
           "links" => {},
-          "version" => 0
-        }
+          "version" => 0,
+        },
       }
 
       publishing_api
@@ -1850,7 +1850,7 @@ describe GdsApi::PublishingApiV2 do
           method: :post,
           path: "/v2/links/by-content-id",
           body: {
-            content_ids: [content_id_with_links, content_id_no_links]
+            content_ids: [content_id_with_links, content_id_no_links],
           },
           headers: {
             "Content-Type" => "application/json",
@@ -1877,7 +1877,7 @@ describe GdsApi::PublishingApiV2 do
             path: "/v2/linked/#{@content_id}",
             query: "fields%5B%5D=content_id&fields%5B%5D=base_path&link_type=topic",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1885,7 +1885,7 @@ describe GdsApi::PublishingApiV2 do
             body: {
               "error" => {
                 "code" => 404,
-                "message" => Pact.term(generate: "not found", matcher: /\S+/)
+                "message" => Pact.term(generate: "not found", matcher: /\S+/),
               },
             },
             headers: {
@@ -1915,15 +1915,15 @@ describe GdsApi::PublishingApiV2 do
           content_id3,
           "base_path" => "/item-b",
           "links" => {
-            "topic" => [@linked_content_item['content_id1']]
-          }
+            "topic" => [@linked_content_item["content_id1"]],
+          },
         )
         @linking_content_item2 = content_item_for_content_id(
           content_id2,
           "base_path" => "/item-a",
           "links" => {
-            "topic" => [@linked_content_item['content_id1']],
-          }
+            "topic" => [@linked_content_item["content_id1"]],
+          },
         )
 
         publishing_api
@@ -1931,10 +1931,10 @@ describe GdsApi::PublishingApiV2 do
           .upon_receiving("a get linked request")
           .with(
             method: :get,
-            path: "/v2/linked/" + @linked_content_item['content_id'],
+            path: "/v2/linked/" + @linked_content_item["content_id"],
             query: "fields%5B%5D=content_id&fields%5B%5D=base_path&link_type=topic",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1942,13 +1942,13 @@ describe GdsApi::PublishingApiV2 do
             body: [
               {
                 content_id: @linking_content_item1["content_id"],
-                base_path: @linking_content_item1["base_path"]
+                base_path: @linking_content_item1["base_path"],
               },
               {
                 content_id: @linking_content_item2["content_id"],
-                base_path: @linking_content_item2["base_path"]
-              }
-            ]
+                base_path: @linking_content_item2["base_path"],
+              },
+            ],
           )
       end
 
@@ -1956,7 +1956,7 @@ describe GdsApi::PublishingApiV2 do
         response = @api_client.get_linked_items(
           @linked_content_item["content_id"],
           link_type: "topic",
-          fields: %w(content_id base_path)
+          fields: %w(content_id base_path),
         )
         assert_equal 200, response.code
 
@@ -1983,7 +1983,7 @@ describe GdsApi::PublishingApiV2 do
             path: "/v2/editions",
             query: "fields%5B%5D=content_id",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1996,7 +1996,7 @@ describe GdsApi::PublishingApiV2 do
               links: [
                 { href: "http://example.org/v2/editions?fields%5B%5D=content_id", rel: "self" },
               ],
-            }
+            },
           )
       end
 
@@ -2009,10 +2009,10 @@ describe GdsApi::PublishingApiV2 do
 
   describe "#get_paged_editions" do
     describe "there are multiple pages of editions" do
-      let(:content_id_1) { 'bd50a6d9-f03d-4ccf-94aa-ad79579990a9' }
-      let(:content_id_2) { '989033fe-252a-4e69-976d-5c0059bca949' }
-      let(:content_id_3) { '271d4270-9186-4d60-b2ca-1d7dae7e0f73' }
-      let(:content_id_4) { '638af19c-27fc-4cc9-a914-4cca49028688' }
+      let(:content_id_1) { "bd50a6d9-f03d-4ccf-94aa-ad79579990a9" }
+      let(:content_id_2) { "989033fe-252a-4e69-976d-5c0059bca949" }
+      let(:content_id_3) { "271d4270-9186-4d60-b2ca-1d7dae7e0f73" }
+      let(:content_id_4) { "638af19c-27fc-4cc9-a914-4cca49028688" }
 
       let(:first_page) do
         {
@@ -2021,7 +2021,7 @@ describe GdsApi::PublishingApiV2 do
             path: "/v2/editions",
             query: "fields%5B%5D=content_id&per_page=2",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           },
           response: {
@@ -2034,9 +2034,9 @@ describe GdsApi::PublishingApiV2 do
               links: [
                 { href: "http://example.org#{second_page[:request][:path]}?#{second_page[:request][:query]}", rel: "next" },
                 { href: "http://example.org/v2/editions?fields%5B%5D=content_id&per_page=2", rel: "self" },
-              ]
-            }
-          }
+              ],
+            },
+          },
         }
       end
 
@@ -2047,7 +2047,7 @@ describe GdsApi::PublishingApiV2 do
             path: "/v2/editions",
             query: "fields%5B%5D=content_id&per_page=2&after=2017-02-01T00%3A00%3A00.000000Z%2C2",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}"
+              "Authorization" => "Bearer #{@bearer_token}",
             ),
           },
           response: {
@@ -2061,8 +2061,8 @@ describe GdsApi::PublishingApiV2 do
                 { href: "http://example.org/v2/editions?fields%5B%5D=content_id&per_page=2&after=2017-02-01T00%3A00%3A00.000000Z%2C2", rel: "self" },
                 { href: "http://example.org/v2/editions?fields%5B%5D=content_id&per_page=2&before=2017-03-01T00%3A00%3A00.000000Z%2C3", rel: "previous" },
               ],
-            }
-          }
+            },
+          },
         }
       end
 
@@ -2099,8 +2099,8 @@ describe GdsApi::PublishingApiV2 do
         response = @api_client.get_paged_editions(fields: %w(content_id), per_page: 2).to_a
 
         response.count.must_equal 2
-        first_page_content_ids = response[0]['results'].map { |content_item| content_item['content_id'] }
-        second_page_content_ids = response[1]['results'].map { |content_item| content_item['content_id'] }
+        first_page_content_ids = response[0]["results"].map { |content_item| content_item["content_id"] }
+        second_page_content_ids = response[1]["results"].map { |content_item| content_item["content_id"] }
 
         first_page_content_ids.must_equal [content_id_1, content_id_2]
         second_page_content_ids.must_equal [content_id_3, content_id_4]
@@ -2132,7 +2132,7 @@ describe GdsApi::PublishingApiV2 do
     it "returns 200 if the path was successfully reserved" do
       base_path = "/test-intent"
       payload = {
-        publishing_app: "publisher"
+        publishing_app: "publisher",
       }
 
       publishing_api
@@ -2143,15 +2143,15 @@ describe GdsApi::PublishingApiV2 do
           path: "/paths#{base_path}",
           body: payload,
           headers: {
-            "Content-Type" => "application/json"
+            "Content-Type" => "application/json",
           },
         )
         .will_respond_with(
           status: 200,
           body: {},
           headers: {
-            "Content-Type" => "application/json; charset=utf-8"
-          }
+            "Content-Type" => "application/json; charset=utf-8",
+          },
         )
 
       response = @api_client.put_path(base_path, payload)
@@ -2161,7 +2161,7 @@ describe GdsApi::PublishingApiV2 do
     it "returns 422 if the request is invalid" do
       base_path = "/test-item"
       payload = {
-        publishing_app: "whitehall"
+        publishing_app: "whitehall",
       }
 
       publishing_api
@@ -2172,8 +2172,8 @@ describe GdsApi::PublishingApiV2 do
           path: "/paths#{base_path}",
           body: payload,
           headers: {
-            "Content-Type" => "application/json"
-          }
+            "Content-Type" => "application/json",
+          },
         )
         .will_respond_with(
           status: 422,
@@ -2209,15 +2209,15 @@ describe GdsApi::PublishingApiV2 do
           path: "/paths#{base_path}",
           body: payload,
           headers: {
-            "Content-Type" => "application/json"
+            "Content-Type" => "application/json",
           },
         )
         .will_respond_with(
           status: 200,
           body: {},
           headers: {
-            "Content-Type" => "application/json; charset=utf-8"
-          }
+            "Content-Type" => "application/json; charset=utf-8",
+          },
         )
 
       response = @api_client.put_path(base_path, payload)

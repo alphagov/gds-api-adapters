@@ -1,6 +1,6 @@
-require 'gds_api/test_helpers/json_client_helper'
-require 'gds_api/test_helpers/content_item_helpers'
-require 'json'
+require "gds_api/test_helpers/json_client_helper"
+require "gds_api/test_helpers/content_item_helpers"
+require "json"
 
 module GdsApi
   module TestHelpers
@@ -15,7 +15,7 @@ module GdsApi
       #             will include "public"
       #   :draft    will point to the draft content store if set to true
       def stub_content_store_endpoint(draft = false)
-        draft ? Plek.current.find('draft-content-store') : Plek.current.find('content-store')
+        draft ? Plek.current.find("draft-content-store") : Plek.current.find("content-store")
       end
 
       def stub_content_store_has_item(base_path, body = content_item_for_base_path(base_path), options = {})
@@ -29,8 +29,8 @@ module GdsApi
           body: body,
           headers: {
             cache_control: "#{visibility}, max-age=#{max_age}",
-            date: Time.now.httpdate
-          }
+            date: Time.now.httpdate,
+          },
         )
       end
 
@@ -73,7 +73,7 @@ module GdsApi
         stub_request(:get, url).to_return(
           status: 410,
           body: body,
-          headers: {}
+          headers: {},
         )
       end
 

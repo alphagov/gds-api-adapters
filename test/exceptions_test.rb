@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class GdsApiBaseTest < Minitest::Test
   def test_fingerprints_per_exception_type

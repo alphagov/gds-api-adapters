@@ -1,4 +1,4 @@
-require_relative 'base'
+require_relative "base"
 
 class GdsApi::LocalLinksManager < GdsApi::Base
   def local_link(authority_slug, lgsl, lgil)

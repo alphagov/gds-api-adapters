@@ -1,19 +1,19 @@
-require 'gds_api/test_helpers/json_client_helper'
+require "gds_api/test_helpers/json_client_helper"
 
 module GdsApi
   module TestHelpers
     module Router
-      ROUTER_API_ENDPOINT = Plek.current.find('router-api')
+      ROUTER_API_ENDPOINT = Plek.current.find("router-api")
 
-      def stub_router_has_route(path, route, bearer_token = ENV['ROUTER_API_BEARER_TOKEN'])
+      def stub_router_has_route(path, route, bearer_token = ENV["ROUTER_API_BEARER_TOKEN"])
         stub_get_route(path, bearer_token).to_return(
           status: 200,
           body: route.to_json,
-          headers: { "Content-Type" => "application/json" }
+          headers: { "Content-Type" => "application/json" },
         )
       end
 
-      def stub_router_doesnt_have_route(path, bearer_token = ENV['ROUTER_API_BEARER_TOKEN'])
+      def stub_router_doesnt_have_route(path, bearer_token = ENV["ROUTER_API_BEARER_TOKEN"])
         stub_get_route(path, bearer_token).to_return(status: 404)
       end
 
@@ -47,9 +47,9 @@ module GdsApi
           route: {
             incoming_path: path,
             route_type: type,
-            handler: 'backend',
-            backend_id: backend_id
-          }
+            handler: "backend",
+            backend_id: backend_id,
+          },
         }
 
         register_stub = stub_route_put(route)
@@ -62,11 +62,11 @@ module GdsApi
           route: {
             incoming_path: path,
             route_type: type,
-            handler: 'redirect',
+            handler: "redirect",
             redirect_to: destination,
             redirect_type: redirect_type,
             segments_mode: segments_mode,
-          }
+          },
         }
 
         register_stub = stub_route_put(redirect)
@@ -79,8 +79,8 @@ module GdsApi
           route: {
             incoming_path: path,
             route_type: type,
-            handler: 'gone',
-          }
+            handler: "gone",
+          },
         }
 
         register_stub = stub_route_put(route)

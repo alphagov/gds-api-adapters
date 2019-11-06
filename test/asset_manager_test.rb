@@ -1,12 +1,12 @@
-require 'test_helper'
-require 'gds_api/asset_manager'
-require 'gds_api/test_helpers/asset_manager'
-require 'json'
+require "test_helper"
+require "gds_api/asset_manager"
+require "gds_api/test_helpers/asset_manager"
+require "json"
 
 describe GdsApi::AssetManager do
   include GdsApi::TestHelpers::AssetManager
 
-  let(:base_api_url) { Plek.current.find('asset-manager') }
+  let(:base_api_url) { Plek.current.find("asset-manager") }
   let(:api) { GdsApi::AssetManager.new(base_api_url) }
 
   let(:file_fixture) { load_fixture_file("hello.txt") }
@@ -18,7 +18,7 @@ describe GdsApi::AssetManager do
     {
       asset: {
         id: asset_url,
-      }
+      },
     }
   }
 
@@ -30,7 +30,7 @@ describe GdsApi::AssetManager do
 
     response = api.create_asset(file: file_fixture)
 
-    assert_equal asset_url, response['asset']['id']
+    assert_equal asset_url, response["asset"]["id"]
     assert_requested(req)
   end
 
@@ -40,9 +40,9 @@ describe GdsApi::AssetManager do
         request.body =~ %r{Content\-Disposition: form\-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent\-Type: text/plain}
       }.to_return(body: JSON.dump(stub_asset_manager_response), status: 201)
 
-    response = api.create_whitehall_asset(file: file_fixture, legacy_url_path: '/government/uploads/path/to/hello.txt')
+    response = api.create_whitehall_asset(file: file_fixture, legacy_url_path: "/government/uploads/path/to/hello.txt")
 
-    assert_equal asset_url, response['asset']['id']
+    assert_equal asset_url, response["asset"]["id"]
     assert_requested(req)
   end
 
@@ -84,16 +84,16 @@ describe GdsApi::AssetManager do
 
       response = api.update_asset(asset_id, file: file_fixture)
 
-      assert_equal "#{base_api_url}/assets/#{asset_id}", response['asset']['id']
+      assert_equal "#{base_api_url}/assets/#{asset_id}", response["asset"]["id"]
       assert_requested(req)
     end
 
     it "retrieves an asset" do
       asset = api.asset(asset_id)
 
-      assert_equal "photo.jpg", asset['name']
-      assert_equal "image/jpeg", asset['content_type']
-      assert_equal "http://fooey.gov.uk/media/photo.jpg", asset['file_url']
+      assert_equal "photo.jpg", asset["name"]
+      assert_equal "image/jpeg", asset["content_type"]
+      assert_equal "http://fooey.gov.uk/media/photo.jpg", asset["file_url"]
     end
   end
 
@@ -101,14 +101,14 @@ describe GdsApi::AssetManager do
     before do
       stub_asset_manager_has_a_whitehall_asset(
         "/government/uploads/photo.jpg",
-        "id" => "asset-id"
+        "id" => "asset-id",
       )
     end
 
     it "retrieves an asset" do
       asset = api.whitehall_asset("/government/uploads/photo.jpg")
 
-      assert_equal "asset-id", asset['id']
+      assert_equal "asset-id", asset["id"]
     end
   end
 
@@ -116,14 +116,14 @@ describe GdsApi::AssetManager do
     before do
       stub_asset_manager_has_a_whitehall_asset(
         "/government/uploads/phot%C3%B8.jpg",
-        "id" => "asset-id"
+        "id" => "asset-id",
       )
     end
 
     it "retrieves an asset" do
       asset = api.whitehall_asset("/government/uploads/photø.jpg")
 
-      assert_equal "asset-id", asset['id']
+      assert_equal "asset-id", asset["id"]
     end
   end
 
@@ -133,7 +133,7 @@ describe GdsApi::AssetManager do
 
     response = api.delete_asset(asset_id)
 
-    assert_equal "#{base_api_url}/assets/#{asset_id}", response['asset']['id']
+    assert_equal "#{base_api_url}/assets/#{asset_id}", response["asset"]["id"]
     assert_requested(req)
   end
 
@@ -143,7 +143,7 @@ describe GdsApi::AssetManager do
 
     response = api.restore_asset(asset_id)
 
-    assert_equal "#{base_api_url}/assets/#{asset_id}", response['asset']['id']
+    assert_equal "#{base_api_url}/assets/#{asset_id}", response["asset"]["id"]
     assert_requested(req)
   end
 end

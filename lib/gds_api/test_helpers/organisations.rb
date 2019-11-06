@@ -1,7 +1,7 @@
-require 'gds_api/test_helpers/json_client_helper'
-require 'gds_api/test_helpers/common_responses'
-require 'plek'
-require 'securerandom'
+require "gds_api/test_helpers/json_client_helper"
+require "gds_api/test_helpers/common_responses"
+require "plek"
+require "securerandom"
 
 module GdsApi
   module TestHelpers
@@ -55,7 +55,7 @@ module GdsApi
 
           if i.zero?
             # First page exists at URL with and without page param
-            stub_request(:get, links[:self].sub(/\?page=1/, '')).
+            stub_request(:get, links[:self].sub(/\?page=1/, "")).
               to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
           end
         end
@@ -104,13 +104,13 @@ module GdsApi
           "parent_organisations" => [
             {
               "id" => "#{WEBSITE_ROOT}/api/organisations/#{slug}-parent-1",
-              "web_url" => "#{WEBSITE_ROOT}/government/organisations/#{slug}-parent-1"
+              "web_url" => "#{WEBSITE_ROOT}/government/organisations/#{slug}-parent-1",
             },
           ],
           "child_organisations" => [
             {
               "id" => "#{WEBSITE_ROOT}/api/organisations/#{slug}-child-1",
-              "web_url" => "#{WEBSITE_ROOT}/government/organisations/#{slug}-child-1"
+              "web_url" => "#{WEBSITE_ROOT}/government/organisations/#{slug}-child-1",
             },
           ],
         }

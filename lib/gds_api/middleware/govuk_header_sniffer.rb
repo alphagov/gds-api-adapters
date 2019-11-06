@@ -1,4 +1,4 @@
-require_relative '../govuk_headers'
+require_relative "../govuk_headers"
 
 module GdsApi
   class GovukHeaderSniffer

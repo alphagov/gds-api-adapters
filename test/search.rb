@@ -140,7 +140,7 @@ describe GdsApi::Search do
   end
 
   it "#batch_search should issue a single request containing all queries" do
-    GdsApi::Search.new("http://example.com").batch_search([{ q: 'self assessment' }, { q: 'tax return' }])
+    GdsApi::Search.new("http://example.com").batch_search([{ q: "self assessment" }, { q: "tax return" }])
 
     assert_requested :get, /search\[\]\[0\]\[q\]=self assessment/
     assert_requested :get, /search\[\]\[1\]\[q\]=tax return/
@@ -150,39 +150,39 @@ describe GdsApi::Search do
     batch_search_results = [{ "title" => "document-title" }, { "title" => "document-title-2" }]
     stub_request(:get, "http://example.com/batch_search.json?search[][0][q]=self+assessment&search[][1][q]=tax+return")
       .to_return(body: batch_search_results.to_json)
-    results = GdsApi::Search.new("http://example.com").batch_search([{ q: 'self assessment' }, { q: 'tax return' }])
+    results = GdsApi::Search.new("http://example.com").batch_search([{ q: "self assessment" }, { q: "tax return" }])
     assert_equal batch_search_results, results.to_hash
   end
 
   # tests for search_enum
   it "#search_enum returns two pages - last page is half full" do
     stub_request(:get, /example.com\/search/)
-      .with(query: hash_including(start: '0', count: '2'))
-      .to_return(body: { 'results' => [{ 'title' => 't1' }, { 'title' => 't2' }] }.to_json)
+      .with(query: hash_including(start: "0", count: "2"))
+      .to_return(body: { "results" => [{ "title" => "t1" }, { "title" => "t2" }] }.to_json)
 
     stub_request(:get, /example.com\/search/)
-      .with(query: hash_including(start: '2', count: '2'))
-      .to_return(body: { 'results' => [{ 'title' => 't3' }] }.to_json)
+      .with(query: hash_including(start: "2", count: "2"))
+      .to_return(body: { "results" => [{ "title" => "t3" }] }.to_json)
 
-    search_results = [{ 'title' => 't1' }, { 'title' => 't2' }, { 'title' => 't3' }]
+    search_results = [{ "title" => "t1" }, { "title" => "t2" }, { "title" => "t3" }]
     results = GdsApi::Search.new("http://example.com").search_enum({}, page_size: 2)
     assert_equal search_results, results.to_a
   end
 
   it "#search_enum returns two pages - last page is full" do
     stub_request(:get, /example.com\/search/)
-      .with(query: hash_including(start: '0', count: '2'))
-      .to_return(body: { 'results' => [{ 'title' => 't1' }, { 'title' => 't2' }] }.to_json)
+      .with(query: hash_including(start: "0", count: "2"))
+      .to_return(body: { "results" => [{ "title" => "t1" }, { "title" => "t2" }] }.to_json)
 
     stub_request(:get, /example.com\/search/)
-      .with(query: hash_including(start: '2', count: '2'))
-      .to_return(body: { 'results' => [{ 'title' => 't3' }, { 'title' => 't4' }] }.to_json)
+      .with(query: hash_including(start: "2", count: "2"))
+      .to_return(body: { "results" => [{ "title" => "t3" }, { "title" => "t4" }] }.to_json)
 
     stub_request(:get, /example.com\/search/)
-      .with(query: { start: '4', count: '2' })
-      .to_return(body: { 'results' => [] }.to_json)
+      .with(query: { start: "4", count: "2" })
+      .to_return(body: { "results" => [] }.to_json)
 
-    search_results = [{ 'title' => 't1' }, { 'title' => 't2' }, { 'title' => 't3' }, { 'title' => 't4' }]
+    search_results = [{ "title" => "t1" }, { "title" => "t2" }, { "title" => "t3" }, { "title" => "t4" }]
     results = GdsApi::Search.new("http://example.com").search_enum({}, page_size: 2)
     assert_equal search_results, results.to_a
   end

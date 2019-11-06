@@ -1,8 +1,8 @@
-require 'bundler'
+require "bundler"
 Bundler.setup :default, :development, :test
 
-require 'simplecov'
-require 'simplecov-rcov'
+require "simplecov"
+require "simplecov-rcov"
 
 SimpleCov.start do
   add_filter "/test/"
@@ -10,15 +10,15 @@ SimpleCov.start do
   formatter SimpleCov::Formatter::RcovFormatter
 end
 
-require 'minitest/autorun'
-require 'minitest/around'
-require 'rack/utils'
-require 'rack/test'
-require 'mocha/minitest'
-require 'timecop'
-require 'gds-api-adapters'
-require 'govuk-content-schema-test-helpers'
-require 'climate_control'
+require "minitest/autorun"
+require "minitest/around"
+require "rack/utils"
+require "rack/test"
+require "mocha/minitest"
+require "timecop"
+require "gds-api-adapters"
+require "govuk-content-schema-test-helpers"
+require "climate_control"
 
 class Minitest::Test
   def teardown
@@ -26,7 +26,7 @@ class Minitest::Test
   end
 end
 
-require 'pact/consumer/minitest'
+require "pact/consumer/minitest"
 module PactTest
   include Pact::Consumer::Minitest
 
@@ -44,16 +44,16 @@ module PactTest
 end
 
 def load_fixture_file(filename)
-  File.open(File.join(File.dirname(__FILE__), "fixtures", filename), encoding: 'utf-8')
+  File.open(File.join(File.dirname(__FILE__), "fixtures", filename), encoding: "utf-8")
 end
 
-require 'gds_api/test_helpers/json_client_helper'
-require 'test_helpers/pact_helper'
+require "gds_api/test_helpers/json_client_helper"
+require "test_helpers/pact_helper"
 
-require 'webmock/minitest'
+require "webmock/minitest"
 WebMock.disable_net_connect!
 
 GovukContentSchemaTestHelpers.configure do |config|
-  config.schema_type = 'publisher_v2'
-  config.project_root = File.absolute_path(File.join(File.basename(__FILE__), '..'))
+  config.schema_type = "publisher_v2"
+  config.project_root = File.absolute_path(File.join(File.basename(__FILE__), ".."))
 end

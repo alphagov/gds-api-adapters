@@ -12,7 +12,7 @@ module GdsApi
           # "base_path" => base_path,
           "details" => {
             "body" => "Some content for #{base_path}",
-          }
+          },
         }
       end
 
@@ -25,7 +25,7 @@ module GdsApi
           "public_updated_at" => nil,
           "base_path" => base_path,
           "withdrawn_notice" => {},
-          "details" => {}
+          "details" => {},
         }
       end
 

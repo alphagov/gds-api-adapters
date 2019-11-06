@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/performance_platform/data_out'
-require 'gds_api/test_helpers/performance_platform/data_out'
+require "test_helper"
+require "gds_api/performance_platform/data_out"
+require "gds_api/test_helpers/performance_platform/data_out"
 
 describe GdsApi::PerformancePlatform::DataOut do
   include GdsApi::TestHelpers::PerformancePlatform::DataOut
@@ -10,8 +10,8 @@ describe GdsApi::PerformancePlatform::DataOut do
     @api = GdsApi::PerformancePlatform::DataOut.new(@base_api_url)
   end
 
-  let(:transaction_slug) { 'register-to-vote' }
-  let(:statistics_slug) { '/european-health-insurance-card' }
+  let(:transaction_slug) { "register-to-vote" }
+  let(:statistics_slug) { "/european-health-insurance-card" }
 
   it "calls the service feedback endpoint for a particular slug" do
     request_details = { "some" => "data" }

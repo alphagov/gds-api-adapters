@@ -1,12 +1,12 @@
-require 'test_helper'
+require "test_helper"
 require "gds_api/publishing_api/special_route_publisher"
 require "govuk-content-schema-test-helpers"
-require File.dirname(__FILE__) + '/../../lib/gds_api/test_helpers/publishing_api_v2'
+require File.dirname(__FILE__) + "/../../lib/gds_api/test_helpers/publishing_api_v2"
 
 describe GdsApi::PublishingApi::SpecialRoutePublisher do
   include ::GdsApi::TestHelpers::PublishingApiV2
 
-  let(:content_id) { 'a-content-id-of-sorts' }
+  let(:content_id) { "a-content-id-of-sorts" }
   let(:special_route) {
     {
       content_id: content_id,
@@ -20,7 +20,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
   }
 
   let(:publisher) { GdsApi::PublishingApi::SpecialRoutePublisher.new }
-  let(:endpoint) { Plek.current.find('publishing-api') }
+  let(:endpoint) { Plek.current.find("publishing-api") }
 
   describe ".publish" do
     before do
@@ -41,7 +41,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
             {
               path: special_route[:base_path],
               type: special_route[:type],
-            }
+            },
           ],
           locale: "en",
           details: {},
@@ -77,8 +77,8 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
     it "publishes links" do
       links = {
         links: {
-          organisations: %w[org-content-id]
-        }
+          organisations: %w[org-content-id],
+        },
       }
 
       publisher.publish(special_route.merge(links))
@@ -86,7 +86,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
       assert_requested(:patch, "#{endpoint}/v2/links/#{content_id}", body: links)
     end
 
-    describe 'Timezone handling' do
+    describe "Timezone handling" do
       let(:publishing_api) {
         stub(:publishing_api, put_content_item: nil)
       }
@@ -99,7 +99,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
           Time.stubs(:zone).returns(nil)
           publishing_api.expects(:put_content).with(
             anything,
-            has_entries(public_updated_at: Time.now.iso8601)
+            has_entries(public_updated_at: Time.now.iso8601),
           )
           publishing_api.expects(:publish)
 
@@ -114,7 +114,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
 
           publishing_api.expects(:put_content).with(
             anything,
-            has_entries(public_updated_at: time_in_zone.now.iso8601)
+            has_entries(public_updated_at: time_in_zone.now.iso8601),
           )
           publishing_api.expects(:publish)
 
@@ -128,7 +128,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
     validator = GovukContentSchemaTestHelpers::Validator.new(
       "special_route",
       "schema",
-      payload
+      payload,
     )
 
     assert validator.valid?, validator.errors.join("\n")

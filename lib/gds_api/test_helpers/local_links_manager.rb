@@ -1,9 +1,9 @@
-require 'gds_api/test_helpers/json_client_helper'
+require "gds_api/test_helpers/json_client_helper"
 
 module GdsApi
   module TestHelpers
     module LocalLinksManager
-      LOCAL_LINKS_MANAGER_ENDPOINT = Plek.current.find('local-links-manager')
+      LOCAL_LINKS_MANAGER_ENDPOINT = Plek.current.find("local-links-manager")
 
       def stub_local_links_manager_has_a_link(authority_slug:, lgsl:, lgil:, url:)
         response = {
@@ -17,7 +17,7 @@ module GdsApi
             "lgsl_code" => lgsl,
             "lgil_code" => lgil,
             "url" => url,
-          }
+          },
         }
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
@@ -82,9 +82,9 @@ module GdsApi
             {
               "name" => authority_slug.capitalize,
               "homepage_url" => "http://#{authority_slug}.example.com",
-              "tier" => "unitary"
-            }
-          ]
+              "tier" => "unitary",
+            },
+          ],
         }
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
@@ -98,14 +98,14 @@ module GdsApi
             {
               "name" => district_slug.capitalize,
               "homepage_url" => "http://#{district_slug}.example.com",
-              "tier" => "district"
+              "tier" => "district",
             },
             {
               "name" => county_slug.capitalize,
               "homepage_url" => "http://#{county_slug}.example.com",
-              "tier" => "county"
-            }
-          ]
+              "tier" => "county",
+            },
+          ],
         }
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
@@ -115,7 +115,7 @@ module GdsApi
 
       def stub_local_links_manager_request_without_local_authority_slug
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
-        .with(query: { authority_slug: '' })
+        .with(query: { authority_slug: "" })
         .to_return(body: {}.to_json, status: 400)
       end
 
@@ -131,9 +131,9 @@ module GdsApi
             {
               "name" => authority_slug.capitalize,
               "homepage_url" => "",
-              "tier" => "unitary"
-            }
-          ]
+              "tier" => "unitary",
+            },
+          ],
         }
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")

@@ -1,12 +1,12 @@
-require 'gds_api/test_helpers/json_client_helper'
-require 'gds_api/test_helpers/common_responses'
+require "gds_api/test_helpers/json_client_helper"
+require "gds_api/test_helpers/common_responses"
 
 module GdsApi
   module TestHelpers
     module Worldwide
       include GdsApi::TestHelpers::CommonResponses
 
-      WORLDWIDE_API_ENDPOINT = Plek.current.find('whitehall-admin')
+      WORLDWIDE_API_ENDPOINT = Plek.current.find("whitehall-admin")
 
       # Sets up the index endpoints for the given country slugs
       # The stubs are setup to paginate in chunks of 20
@@ -43,7 +43,7 @@ module GdsApi
 
           if i.zero?
             # First page exists at URL with and without page param
-            stub_request(:get, links[:self].sub(/\?page=1/, '')).
+            stub_request(:get, links[:self].sub(/\?page=1/, "")).
               to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
           end
         end
@@ -105,9 +105,9 @@ module GdsApi
           },
           "organisations" => {
             "id" => "https://www.gov.uk/api/world-locations/#{slug}/organisations",
-            "web_url" => "https://www.gov.uk/government/world/#{slug}#organisations"
+            "web_url" => "https://www.gov.uk/government/world/#{slug}#organisations",
           },
-          "content_id" => "content_id_for_#{slug}"
+          "content_id" => "content_id_for_#{slug}",
         }
       end
 

@@ -19,8 +19,8 @@ module GdsApi
       def response_base
         {
           "_response_info" => {
-            "status" => "ok"
-          }
+            "status" => "ok",
+          },
         }
       end
       alias_method :singular_response_base, :response_base
@@ -33,7 +33,7 @@ module GdsApi
           "page_size" => 100,
           "current_page" => 1,
           "pages" => 1,
-          "results" => []
+          "results" => [],
         )
       end
     end

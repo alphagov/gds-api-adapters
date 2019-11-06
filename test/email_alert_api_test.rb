@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/email_alert_api'
-require 'gds_api/test_helpers/email_alert_api'
+require "test_helper"
+require "gds_api/email_alert_api"
+require "gds_api/test_helpers/email_alert_api"
 
 describe GdsApi::EmailAlertApi do
   include GdsApi::TestHelpers::EmailAlertApi
@@ -41,9 +41,9 @@ describe GdsApi::EmailAlertApi do
 
     describe "when custom headers are passed in" do
       it "posts a new alert with the custom headers" do
-        assert api_client.create_content_change(publication_params, govuk_request_id: 'aaaaaaa-1111111')
+        assert api_client.create_content_change(publication_params, govuk_request_id: "aaaaaaa-1111111")
 
-        assert_requested(:post, "#{base_url}/content-changes", body: publication_params.to_json, headers: { 'Govuk-Request-Id' => 'aaaaaaa-1111111' })
+        assert_requested(:post, "#{base_url}/content-changes", body: publication_params.to_json, headers: { "Govuk-Request-Id" => "aaaaaaa-1111111" })
       end
     end
   end
@@ -75,7 +75,7 @@ describe GdsApi::EmailAlertApi do
 
   it "posts a new email" do
     stub_email_alert_api_accepts_email
-    email_params = { address: 'test@test.com', subject: 'Subject', body: 'Description of thing' }
+    email_params = { address: "test@test.com", subject: "Subject", body: "Description of thing" }
 
     assert api_client.create_email(email_params)
 
@@ -84,7 +84,7 @@ describe GdsApi::EmailAlertApi do
 
   let(:unpublish_message) {
     {
-      "content_id" => "content-id"
+      "content_id" => "content-id",
     }
   }
 
@@ -153,13 +153,13 @@ describe GdsApi::EmailAlertApi do
           {
             id: 1,
             frequency: "weekly",
-            ended: true
+            ended: true,
           },
           {
             id: 2000,
             frequency: "daily",
             ended: true,
-          }
+          },
         ])
       end
 
@@ -184,7 +184,7 @@ describe GdsApi::EmailAlertApi do
             id: 2,
             frequency: "weekly",
             subscriber_list_id: 456,
-          }
+          },
         ])
       end
 
@@ -289,7 +289,7 @@ describe GdsApi::EmailAlertApi do
 
           assert_equal(
             "travel_advice",
-            subscriber_list_attrs.fetch("document_type")
+            subscriber_list_attrs.fetch("document_type"),
           )
         end
       end
@@ -321,11 +321,11 @@ describe GdsApi::EmailAlertApi do
 
           assert_equal(
             "publications",
-            subscriber_list_attrs.fetch("email_document_supertype")
+            subscriber_list_attrs.fetch("email_document_supertype"),
           )
           assert_equal(
             "travel_advice",
-            subscriber_list_attrs.fetch("government_document_supertype")
+            subscriber_list_attrs.fetch("government_document_supertype"),
           )
         end
       end
@@ -355,7 +355,7 @@ describe GdsApi::EmailAlertApi do
 
           assert_equal(
             "TOPIC-A",
-            subscriber_list_attrs.fetch("gov_delivery_id")
+            subscriber_list_attrs.fetch("gov_delivery_id"),
           )
         end
       end
@@ -363,7 +363,7 @@ describe GdsApi::EmailAlertApi do
       describe "when both tags and links are provided" do
         let(:links) {
           {
-            "format" => %w[some-document-format]
+            "format" => %w[some-document-format],
           }
         }
 
@@ -402,7 +402,7 @@ describe GdsApi::EmailAlertApi do
 
         assert_equal(
           api_response.code,
-          204
+          204,
         )
       end
     end
@@ -428,7 +428,7 @@ describe GdsApi::EmailAlertApi do
 
         assert_equal(
           api_response.code,
-          204
+          204,
         )
       end
     end
@@ -457,7 +457,7 @@ describe GdsApi::EmailAlertApi do
           subscriber_list_id,
           address,
           frequency,
-          created_subscription_id
+          created_subscription_id,
         )
         api_response = api_client.subscribe(subscriber_list_id: subscriber_list_id, address: address, frequency: frequency)
         assert_equal(201, api_response.code)
@@ -476,7 +476,7 @@ describe GdsApi::EmailAlertApi do
           subscriber_list_id,
           address,
           frequency,
-          created_subscription_id
+          created_subscription_id,
         )
         api_response = api_client.subscribe(subscriber_list_id: subscriber_list_id, address: address)
         assert_equal(201, api_response.code)
@@ -496,7 +496,7 @@ describe GdsApi::EmailAlertApi do
         subscriber_list_id,
         address,
         frequency,
-        existing_subscription_id
+        existing_subscription_id,
       )
       api_response = api_client.subscribe(subscriber_list_id: subscriber_list_id, address: address, frequency: frequency)
       assert_equal(200, api_response.code)
@@ -521,7 +521,7 @@ describe GdsApi::EmailAlertApi do
         returned_attributes: {
           id: 1,
           gov_delivery_id: "test123",
-        }
+        },
       )
       api_response = api_client.get_subscriber_list(slug: "test123")
       assert_equal(200, api_response.code)
@@ -545,7 +545,7 @@ describe GdsApi::EmailAlertApi do
       stub_email_alert_api_has_updated_subscriber(1, "test2@example.com")
       api_response = api_client.change_subscriber(
         id: 1,
-        new_address: "test2@example.com"
+        new_address: "test2@example.com",
       )
       assert_equal(200, api_response.code)
       parsed_body = api_response.to_h
@@ -560,7 +560,7 @@ describe GdsApi::EmailAlertApi do
       assert_raises GdsApi::HTTPNotFound do
         api_client.change_subscriber(
           id: 1,
-          new_address: "test2@example.com"
+          new_address: "test2@example.com",
         )
       end
     end
@@ -570,11 +570,11 @@ describe GdsApi::EmailAlertApi do
     it "changes the subscription's frequency" do
       stub_email_alert_api_has_updated_subscription(
         "8ed841d1-3d20-4633-aaf4-df41deaaf51c",
-        "weekly"
+        "weekly",
       )
       api_response = api_client.change_subscription(
         id: "8ed841d1-3d20-4633-aaf4-df41deaaf51c",
-        frequency: "weekly"
+        frequency: "weekly",
       )
       assert_equal(200, api_response.code)
       parsed_body = api_response.to_h
@@ -589,7 +589,7 @@ describe GdsApi::EmailAlertApi do
       assert_raises GdsApi::HTTPNotFound do
         api_client.change_subscription(
           id: "8ed841d1-3d20-4633-aaf4-df41deaaf51c",
-          frequency: "weekly"
+          frequency: "weekly",
         )
       end
     end

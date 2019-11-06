@@ -1,6 +1,6 @@
-require 'json'
-require 'forwardable'
-require 'rack/cache'
+require "json"
+require "forwardable"
+require "rack/cache"
 
 module GdsApi
   # This wraps an HTTP response with a JSON body.
@@ -87,7 +87,7 @@ module GdsApi
       when Hash
         Hash[value.map { |k, v|
           # NOTE: Don't bother transforming if the value is nil
-          if k == 'web_url' && v
+          if k == "web_url" && v
             # Use relative URLs to route when the web_url value is on the
             # same domain as the site root. Note that we can't just use the
             # `route_to` method, as this would give us technically correct

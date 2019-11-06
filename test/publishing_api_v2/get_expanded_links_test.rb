@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/publishing_api_v2'
-require 'json'
+require "test_helper"
+require "gds_api/publishing_api_v2"
+require "json"
 
 describe GdsApi::PublishingApiV2 do
   include PactTest
@@ -24,10 +24,10 @@ describe GdsApi::PublishingApiV2 do
           body: {
             expanded_links: {
               organisations: [
-                { content_id: "20583132-1619-4c68-af24-77583172c070" }
-              ]
-            }
-          }
+                { content_id: "20583132-1619-4c68-af24-77583172c070" },
+              ],
+            },
+          },
         )
 
       response = @api_client.get_expanded_links(@content_id)
@@ -35,9 +35,9 @@ describe GdsApi::PublishingApiV2 do
       expected_body = {
         "expanded_links" => {
           "organisations" => [
-            { "content_id" => "20583132-1619-4c68-af24-77583172c070" }
-          ]
-        }
+            { "content_id" => "20583132-1619-4c68-af24-77583172c070" },
+          ],
+        },
       }
       assert_equal 200, response.code
       assert_equal expected_body, response.to_h
@@ -55,14 +55,14 @@ describe GdsApi::PublishingApiV2 do
           status: 200,
           body: {
             expanded_links: {
-            }
-          }
+            },
+          },
         )
 
       response = @api_client.get_expanded_links(@content_id)
 
       assert_equal 200, response.code
-      assert_equal({}, response.to_h['expanded_links'])
+      assert_equal({}, response.to_h["expanded_links"])
     end
 
     it "responds with 404 if there's no link set entry" do
@@ -74,7 +74,7 @@ describe GdsApi::PublishingApiV2 do
           path: "/v2/expanded-links/#{@content_id}",
         )
         .will_respond_with(
-          status: 404
+          status: 404,
         )
 
       assert_raises(GdsApi::HTTPNotFound) do

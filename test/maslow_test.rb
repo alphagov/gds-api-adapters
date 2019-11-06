@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'gds_api/maslow'
+require "test_helper"
+require "gds_api/maslow"
 
 describe GdsApi::Maslow do
   before do

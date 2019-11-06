@@ -1,4 +1,4 @@
-require 'gds_api/search'
+require "gds_api/search"
 
 module GdsApi
   class Rummager < Search

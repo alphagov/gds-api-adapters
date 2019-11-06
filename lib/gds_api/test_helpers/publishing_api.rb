@@ -1,7 +1,7 @@
-require 'gds_api/test_helpers/json_client_helper'
-require 'gds_api/test_helpers/content_item_helpers'
-require 'gds_api/test_helpers/intent_helpers'
-require 'json'
+require "gds_api/test_helpers/json_client_helper"
+require "gds_api/test_helpers/content_item_helpers"
+require "gds_api/test_helpers/intent_helpers"
+require "json"
 
 module GdsApi
   module TestHelpers
@@ -9,7 +9,7 @@ module GdsApi
       include ContentItemHelpers
       include IntentHelpers
 
-      PUBLISHING_API_ENDPOINT = Plek.current.find('publishing-api')
+      PUBLISHING_API_ENDPOINT = Plek.current.find("publishing-api")
 
       def stub_publishing_api_unreserve_path(base_path, publishing_app = /.*/)
         stub_publishing_api_unreserve_path_with_code(base_path, publishing_app, 200)
@@ -26,12 +26,12 @@ module GdsApi
       def stub_publishing_api_put_intent(base_path, body = intent_for_publishing_api(base_path))
         url = PUBLISHING_API_ENDPOINT + "/publish-intent" + base_path
         body = body.to_json unless body.is_a?(String)
-        stub_request(:put, url).with(body: body).to_return(status: 200, body: '{}', headers: { "Content-Type" => "application/json; charset=utf-8" })
+        stub_request(:put, url).with(body: body).to_return(status: 200, body: "{}", headers: { "Content-Type" => "application/json; charset=utf-8" })
       end
 
       def stub_publishing_api_destroy_intent(base_path)
         url = PUBLISHING_API_ENDPOINT + "/publish-intent" + base_path
-        stub_request(:delete, url).to_return(status: 200, body: '{}', headers: { "Content-Type" => "application/json; charset=utf-8" })
+        stub_request(:delete, url).to_return(status: 200, body: "{}", headers: { "Content-Type" => "application/json; charset=utf-8" })
       end
 
       def stub_default_publishing_api_put_intent
@@ -116,7 +116,7 @@ module GdsApi
       def stub_publishing_api_unreserve_path_with_code(base_path, publishing_app, code)
         url = PUBLISHING_API_ENDPOINT + "/paths" + base_path
         body = { publishing_app: publishing_app }
-        stub_request(:delete, url).with(body: body).to_return(status: code, body: '{}', headers: { "Content-Type" => "application/json; charset=utf-8" })
+        stub_request(:delete, url).with(body: body).to_return(status: code, body: "{}", headers: { "Content-Type" => "application/json; charset=utf-8" })
       end
 
       def values_match_recursively(expected_value, actual_value)

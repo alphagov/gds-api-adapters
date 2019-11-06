@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/base'
-require 'uri'
+require "test_helper"
+require "gds_api/base"
+require "uri"
 
 class GdsApiBaseTest < Minitest::Test
   class ConcreteApi < GdsApi::Base
@@ -14,14 +14,14 @@ class GdsApiBaseTest < Minitest::Test
   end
 
   def test_should_construct_escaped_query_string
-    api = ConcreteApi.new('http://foo')
+    api = ConcreteApi.new("http://foo")
     url = api.url_for_slug("slug", "a" => " ", "b" => "/")
     u = URI.parse(url)
     assert_equal "a=+&b=%2F", u.query
   end
 
   def test_should_construct_escaped_query_string_for_rails
-    api = ConcreteApi.new('http://foo')
+    api = ConcreteApi.new("http://foo")
 
     url = api.url_for_slug("slug", "b" => %w(123))
     u = URI.parse(url)
@@ -33,7 +33,7 @@ class GdsApiBaseTest < Minitest::Test
   end
 
   def test_should_not_add_a_question_mark_if_there_are_no_parameters
-    api = ConcreteApi.new('http://foo')
+    api = ConcreteApi.new("http://foo")
     url = api.url_for_slug("slug")
     refute_match(/\?/, url)
   end
@@ -52,7 +52,7 @@ class GdsApiBaseTest < Minitest::Test
 
   def test_should_barf_if_not_given_valid_url
     assert_raises GdsApi::Base::InvalidAPIURL do
-      ConcreteApi.new('invalid-url')
+      ConcreteApi.new("invalid-url")
     end
   end
 
@@ -62,16 +62,16 @@ class GdsApiBaseTest < Minitest::Test
   end
 
   def test_should_set_json_client_logger_to_logger_in_default_options
-    custom_logger = stub('custom-logger')
+    custom_logger = stub("custom-logger")
     GdsApi::Base.default_options = { logger: custom_logger }
     api = ConcreteApi.new("http://bar")
     assert_same custom_logger, api.client.logger
   end
 
   def test_should_set_json_client_logger_to_logger_in_options
-    custom_logger = stub('custom-logger')
+    custom_logger = stub("custom-logger")
     GdsApi::Base.default_options = { logger: custom_logger }
-    another_logger = stub('another-logger')
+    another_logger = stub("another-logger")
     api = ConcreteApi.new("http://bar", logger: another_logger)
     assert_same another_logger, api.client.logger
   end

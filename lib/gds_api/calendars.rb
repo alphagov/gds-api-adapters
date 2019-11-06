@@ -1,4 +1,4 @@
-require_relative 'base'
+require_relative "base"
 
 class GdsApi::Calendars < GdsApi::Base
   def bank_holidays(division = nil)

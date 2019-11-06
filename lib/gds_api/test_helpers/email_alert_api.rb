@@ -1,5 +1,5 @@
-require 'gds_api/test_helpers/json_client_helper'
-require 'json'
+require "gds_api/test_helpers/json_client_helper"
+require "json"
 
 module GdsApi
   module TestHelpers
@@ -214,21 +214,21 @@ module GdsApi
       def stub_email_alert_api_creates_a_subscription(subscriber_list_id, address, frequency, returned_subscription_id)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions")
           .with(
-            body: { subscriber_list_id: subscriber_list_id, address: address, frequency: frequency }.to_json
+            body: { subscriber_list_id: subscriber_list_id, address: address, frequency: frequency }.to_json,
         ).to_return(status: 201, body: { subscription_id: returned_subscription_id }.to_json)
       end
 
       def stub_email_alert_api_creates_an_existing_subscription(subscriber_list_id, address, frequency, returned_subscription_id)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions")
           .with(
-            body: { subscriber_list_id: subscriber_list_id, address: address, frequency: frequency }.to_json
+            body: { subscriber_list_id: subscriber_list_id, address: address, frequency: frequency }.to_json,
         ).to_return(status: 200, body: { subscription_id: returned_subscription_id }.to_json)
       end
 
       def stub_email_alert_api_refuses_to_create_subscription(subscriber_list_id, address, frequency)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions")
           .with(
-            body: { subscriber_list_id: subscriber_list_id, address: address, frequency: frequency }.to_json
+            body: { subscriber_list_id: subscriber_list_id, address: address, frequency: frequency }.to_json,
         ).to_return(status: 422)
       end
 
@@ -236,7 +236,7 @@ module GdsApi
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/auth-token")
           .to_return(
             status: 201,
-            body: get_subscriber_response(subscriber_id, address).to_json
+            body: get_subscriber_response(subscriber_id, address).to_json,
           )
       end
 
@@ -249,7 +249,7 @@ module GdsApi
           JSON.parse(req.body).symbolize_keys == {
             subscriber_list_id: subscriber_list_id,
             address: address,
-            frequency: frequency
+            frequency: frequency,
           }
         end
       end
@@ -259,8 +259,8 @@ module GdsApi
           .to_return(
             status: 200,
             body: {
-              subscriber_list: returned_attributes
-            }.to_json
+              subscriber_list: returned_attributes,
+            }.to_json,
         )
       end
 
@@ -300,8 +300,8 @@ module GdsApi
         {
           "subscriber" => {
             "id" => id,
-            "address" => address
-          }
+            "address" => address,
+          },
         }
       end
 
@@ -328,8 +328,8 @@ module GdsApi
               "id" => subscriber_list_id,
               "slug" => "some-thing",
               "title" => title,
-            }
-          }
+            },
+          },
         }
       end
 
@@ -337,7 +337,7 @@ module GdsApi
         {
           "subscriber" => {
             "id" => id,
-            "address" => address
+            "address" => address,
           },
           "subscriptions" => [
             {
@@ -347,10 +347,10 @@ module GdsApi
               "id" => "447135c3-07d6-4c3a-8a3b-efa49ef70e52",
               "subscriber_list" => {
                 "id" => 1000,
-                "slug" => "some-thing"
-              }
-            }
-          ]
+                "slug" => "some-thing",
+              },
+            },
+          ],
         }
       end
 
@@ -360,7 +360,7 @@ module GdsApi
             "id" => "447135c3-07d6-4c3a-8a3b-efa49ef70e52",
             "title" => "Some title",
             "active_subscriptions_count" => 42,
-          }.merge(attributes)
+          }.merge(attributes),
         }
       end
 

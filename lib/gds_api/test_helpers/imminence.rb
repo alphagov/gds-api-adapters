@@ -1,15 +1,15 @@
-require 'gds_api/test_helpers/json_client_helper'
+require "gds_api/test_helpers/json_client_helper"
 
 module GdsApi
   module TestHelpers
     module Imminence
       # Generally true. If you are initializing the client differently,
       # you could redefine/override the constant or stub directly.
-      IMMINENCE_API_ENDPOINT = Plek.current.find('imminence')
+      IMMINENCE_API_ENDPOINT = Plek.current.find("imminence")
 
       def stub_imminence_has_places(latitude, longitude, details)
         query_hash = { "lat" => latitude, "lng" => longitude, "limit" => "5" }
-        stub_imminence_places_request(details['slug'], query_hash, details['details'])
+        stub_imminence_places_request(details["slug"], query_hash, details["details"])
       end
 
       def stub_imminence_has_areas_for_postcode(postcode, areas)

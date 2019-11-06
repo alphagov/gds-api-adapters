@@ -1,5 +1,5 @@
-require 'gds_api/base'
-require 'rack/utils'
+require "gds_api/base"
+require "rack/utils"
 
 module GdsApi
   # @api documented
@@ -12,7 +12,7 @@ module GdsApi
           document.merge(
             _type: type,
             _id: id,
-          )
+          ),
         )
       end
 
@@ -30,27 +30,27 @@ module GdsApi
       class InvalidIndex < StandardError; end
 
       def add_document(id, document, index_name)
-        raise(InvalidIndex, index_name) unless index_name == 'metasearch'
+        raise(InvalidIndex, index_name) unless index_name == "metasearch"
 
         post_json(
           "#{base_url}/v2/metasearch/documents",
           document.merge(
             _id: id,
-          )
+          ),
         )
       end
 
       def delete_document(id, index_name)
-        raise(InvalidIndex, index_name) unless index_name == 'metasearch'
+        raise(InvalidIndex, index_name) unless index_name == "metasearch"
 
         delete_json("#{base_url}/v2/metasearch/documents/#{id}")
       end
     end
 
-    DEFAULT_API_VERSION = 'V1'.freeze
+    DEFAULT_API_VERSION = "V1".freeze
     API_VERSIONS = {
-      'V1' => GdsApi::Search::V1,
-      'V2' => GdsApi::Search::V2,
+      "V1" => GdsApi::Search::V1,
+      "V2" => GdsApi::Search::V2,
     }.freeze
     class UnknownAPIVersion < StandardError; end
 
@@ -100,7 +100,7 @@ module GdsApi
       Enumerator.new do |yielder|
         (0..Float::INFINITY).step(page_size).each do |index|
           search_params = args.merge(start: index.to_i, count: page_size)
-          results = search(search_params, additional_headers).to_h.fetch('results', [])
+          results = search(search_params, additional_headers).to_h.fetch("results", [])
           results.each do |result|
             yielder << result
           end

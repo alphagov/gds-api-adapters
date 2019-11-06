@@ -1,6 +1,6 @@
-require_relative 'test_helper'
-require 'gds_api/calendars'
-require 'gds_api/test_helpers/calendars'
+require_relative "test_helper"
+require "gds_api/calendars"
+require "gds_api/test_helpers/calendars"
 
 describe GdsApi::Calendars do
   include GdsApi::TestHelpers::Calendars
@@ -30,7 +30,7 @@ describe GdsApi::Calendars do
     end
 
     it "normalises the argument from underscores to dashes" do
-      underscored_england_and_wales_holidays_request = stub_request(:get, "#{@host}/bank-holidays/england_and_wales.json").to_return(status: 200, body: '{}')
+      underscored_england_and_wales_holidays_request = stub_request(:get, "#{@host}/bank-holidays/england_and_wales.json").to_return(status: 200, body: "{}")
       dashed_england_and_wales_holidays_request = stub_request(:get, "#{@host}/bank-holidays/england-and-wales.json").to_return(status: 200, body: "{}")
 
       @api.bank_holidays(:england_and_wales)
@@ -47,20 +47,20 @@ describe GdsApi::Calendars do
     end
 
     it "fetches the bank holidays requested for all divisions" do
-      stub_calendars_has_a_bank_holiday_on(Date.parse('2012-12-12'))
+      stub_calendars_has_a_bank_holiday_on(Date.parse("2012-12-12"))
       holidays = @api.bank_holidays
 
-      assert_equal "2012-12-12", holidays['england-and-wales']['events'][0]['date']
-      assert_equal "2012-12-12", holidays['scotland']['events'][0]['date']
-      assert_equal "2012-12-12", holidays['northern-ireland']['events'][0]['date']
+      assert_equal "2012-12-12", holidays["england-and-wales"]["events"][0]["date"]
+      assert_equal "2012-12-12", holidays["scotland"]["events"][0]["date"]
+      assert_equal "2012-12-12", holidays["northern-ireland"]["events"][0]["date"]
     end
 
     it "fetches the bank holidays requested for just one divisions" do
-      stub_calendars_has_a_bank_holiday_on(Date.parse('2012-12-12'), in_division: 'scotland')
+      stub_calendars_has_a_bank_holiday_on(Date.parse("2012-12-12"), in_division: "scotland")
       holidays = @api.bank_holidays(:scotland)
 
-      assert_equal "2012-12-12", holidays['events'][0]['date']
-      assert_equal "scotland", holidays['division']
+      assert_equal "2012-12-12", holidays["events"][0]["date"]
+      assert_equal "scotland", holidays["division"]
     end
   end
 end

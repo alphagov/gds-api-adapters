@@ -1,6 +1,6 @@
-require_relative 'test_helper'
-require 'gds_api/organisations'
-require 'gds_api/test_helpers/organisations'
+require_relative "test_helper"
+require "gds_api/organisations"
+require "gds_api/test_helpers/organisations"
 
 describe GdsApi::Organisations do
   include GdsApi::TestHelpers::Organisations
@@ -16,8 +16,8 @@ describe GdsApi::Organisations do
       stub_organisations_api_has_organisations(organisation_slugs)
 
       response = @api.organisations
-      assert_equal(organisation_slugs, response.map { |r| r['details']['slug'] })
-      assert_equal "Tea Agency", response['results'][1]['title']
+      assert_equal(organisation_slugs, response.map { |r| r["details"]["slug"] })
+      assert_equal "Tea Agency", response["results"][1]["title"]
     end
 
     it "should handle the pagination" do
@@ -27,7 +27,7 @@ describe GdsApi::Organisations do
       response = @api.organisations
       assert_equal(
         organisation_slugs,
-        response.with_subsequent_pages.map { |r| r['details']['slug'] }
+        response.with_subsequent_pages.map { |r| r["details"]["slug"] },
       )
     end
 
@@ -41,17 +41,17 @@ describe GdsApi::Organisations do
 
   describe "fetching an organisation" do
     it "should return the details" do
-      stub_organisations_api_has_organisation('ministry-of-fun')
+      stub_organisations_api_has_organisation("ministry-of-fun")
 
-      response = @api.organisation('ministry-of-fun')
-      assert_equal 'Ministry Of Fun', response['title']
+      response = @api.organisation("ministry-of-fun")
+      assert_equal "Ministry Of Fun", response["title"]
     end
 
     it "should raise for a non-existent organisation" do
-      stub_organisations_api_does_not_have_organisation('non-existent')
+      stub_organisations_api_does_not_have_organisation("non-existent")
 
       assert_raises(GdsApi::HTTPNotFound) do
-        @api.organisation('non-existent')
+        @api.organisation("non-existent")
       end
     end
   end

@@ -1,5 +1,5 @@
-require_relative 'base'
-require_relative 'exceptions'
+require_relative "base"
+require_relative "exceptions"
 
 class GdsApi::PublishingApi < GdsApi::Base
   # Create a publishing intent for a base_path.

@@ -39,7 +39,7 @@ module GdsApi
 
       def stub_link_checker_api_get_batch(id:, status: :completed, links: [], totals: {}, completed_at: nil)
         body = stub_link_checker_api_batch_report_hash(
-          id: id, status: status, links: links, totals: totals, completed_at: completed_at
+          id: id, status: status, links: links, totals: totals, completed_at: completed_at,
         ).to_json
 
         stub_request(:get, "#{LINK_CHECKER_API_ENDPOINT}/batch/#{id}")
@@ -54,7 +54,7 @@ module GdsApi
           status: status,
           links: links,
           totals: totals,
-          completed_at: completed_at
+          completed_at: completed_at,
         ).to_json
 
         request_body = {
@@ -69,7 +69,7 @@ module GdsApi
           .to_return(
             body: response_body,
             status: status == :in_progress ? 202 : 201,
-            headers: { "Content-Type" => "application/json" }
+            headers: { "Content-Type" => "application/json" },
           )
       end
 
@@ -79,14 +79,14 @@ module GdsApi
         request_body = {
           links: links,
           app: app,
-          reference: reference
+          reference: reference,
         }.to_json
 
         stub_request(:post, "#{LINK_CHECKER_API_ENDPOINT}/monitor")
           .with(body: request_body)
           .to_return(
             body: response_body,
-            headers: { "Content-Type" => "application/json" }
+            headers: { "Content-Type" => "application/json" },
           )
       end
 

@@ -21,9 +21,9 @@ module GdsApi
         def stub_search_terms(slug, response_body = {})
           options = {
               slug: slug,
-              transaction: 'search-terms',
-              group_by: 'searchKeyword',
-              collect: 'searchUniques:sum'
+              transaction: "search-terms",
+              group_by: "searchKeyword",
+              collect: "searchUniques:sum",
           }
           stub_statistics(options, false, response_body)
         end
@@ -31,9 +31,9 @@ module GdsApi
         def stub_searches(slug, is_multipart, response_body = {})
           options = {
               slug: slug,
-              transaction: 'search-terms',
-              group_by: 'pagePath',
-              collect: 'searchUniques:sum'
+              transaction: "search-terms",
+              group_by: "pagePath",
+              collect: "searchUniques:sum",
           }
           stub_statistics(options, is_multipart, response_body)
         end
@@ -41,9 +41,9 @@ module GdsApi
         def stub_page_views(slug, is_multipart, response_body = {})
           options = {
               slug: slug,
-              transaction: 'page-statistics',
-              group_by: 'pagePath',
-              collect: 'uniquePageviews:sum'
+              transaction: "page-statistics",
+              group_by: "pagePath",
+              collect: "uniquePageviews:sum",
           }
           stub_statistics(options, is_multipart, response_body)
         end
@@ -51,9 +51,9 @@ module GdsApi
         def stub_problem_reports(slug, is_multipart, response_body = {})
           options = {
               slug: slug,
-              transaction: 'page-contacts',
-              group_by: 'pagePath',
-              collect: 'total:sum'
+              transaction: "page-contacts",
+              group_by: "pagePath",
+              collect: "total:sum",
           }
           stub_statistics(options, is_multipart, response_body)
         end
@@ -64,7 +64,7 @@ module GdsApi
               collect: options[:collect],
               duration: 42,
               period: "day",
-              end_at: Date.today.to_time.getutc.iso8601
+              end_at: Date.today.to_time.getutc.iso8601,
           }
 
           filter_param = is_multipart ? :filter_by_prefix : :filter_by

@@ -47,16 +47,16 @@ describe GdsApi::LinkCheckerApi do
       stub_link_checker_api_upsert_resource_monitor(
         reference: "Test:10",
         app: "testing",
-        links: ["http://example.com"]
+        links: ["http://example.com"],
       )
 
       resource_monitor = @api.upsert_resource_monitor(
         ["http://example.com"],
         "testing",
-        "Test:10"
+        "Test:10",
       )
 
-      assert resource_monitor.has_key?('id')
+      assert resource_monitor.has_key?("id")
     end
   end
 end

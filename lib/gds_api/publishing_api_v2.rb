@@ -1,4 +1,4 @@
-require_relative 'base'
+require_relative "base"
 
 # Adapter for the Publishing API.
 #
@@ -96,7 +96,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#post-v2contentcontent_idpublish
   def publish(content_id, update_type = nil, options = {})
     params = {
-      update_type: update_type
+      update_type: update_type,
     }
 
     optional_keys = %i[locale previous_version]
@@ -159,7 +159,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#post-v2contentcontent_idunpublish
   def unpublish(content_id, type:, explanation: nil, alternative_path: nil, discard_drafts: false, allow_draft: false, previous_version: nil, locale: nil, unpublished_at: nil, redirects: nil)
     params = {
-      type: type
+      type: type,
     }
 
     params[:explanation] = explanation if explanation
@@ -295,7 +295,7 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#patch-v2linkscontent_id
   def patch_links(content_id, params)
     payload = {
-      links: params.fetch(:links)
+      links: params.fetch(:links),
     }
 
     payload = merge_optional_keys(payload, params, %i[previous_version bulk_publishing])
@@ -341,11 +341,11 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
       (1..Float::INFINITY).each do |index|
         merged_params = params.merge(page: index)
         page = get_content_items(merged_params).to_h
-        results = page.fetch('results', [])
+        results = page.fetch("results", [])
         results.each do |result|
           yielder << result
         end
-        break if page.fetch('pages') <= index
+        break if page.fetch("pages") <= index
       end
     end
   end
@@ -397,8 +397,8 @@ class GdsApi::PublishingApiV2 < GdsApi::Base
         yielder.yield begin
           response = get_json(next_link)
         end
-        next_link_info = response['links'].select { |link| link['rel'] == 'next' }.first
-        next_link = next_link_info && next_link_info['href']
+        next_link_info = response["links"].select { |link| link["rel"] == "next" }.first
+        next_link = next_link_info && next_link_info["href"]
       end
     end
   end

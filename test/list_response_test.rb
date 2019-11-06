@@ -1,5 +1,5 @@
-require_relative 'test_helper'
-require 'gds_api/list_response'
+require_relative "test_helper"
+require "gds_api/list_response"
 
 describe GdsApi::ListResponse do
   describe "accessing results" do
@@ -12,7 +12,7 @@ describe GdsApi::ListResponse do
         "total" => 3,
         "_response_info" => {
           "status" => "ok",
-        }
+        },
       }
       response = GdsApi::ListResponse.new(stub(body: data.to_json), nil)
 
@@ -27,7 +27,7 @@ describe GdsApi::ListResponse do
         "total" => 0,
         "_response_info" => {
           "status" => "ok",
-        }
+        },
       }
       response = GdsApi::ListResponse.new(stub(body: data.to_json), nil)
 
@@ -47,7 +47,7 @@ describe GdsApi::ListResponse do
           "links" => [
             { "href" => "http://www.example.com/2", "rel" => "next" },
             { "href" => "http://www.example.com/1", "rel" => "self" },
-          ]
+          ],
         }
       }
       page2 = {
@@ -60,7 +60,7 @@ describe GdsApi::ListResponse do
             { "href" => "http://www.example.com/1", "rel" => "previous" },
             { "href" => "http://www.example.com/3", "rel" => "next" },
             { "href" => "http://www.example.com/2", "rel" => "self" },
-          ]
+          ],
         }
       }
       page3 = {
@@ -72,29 +72,29 @@ describe GdsApi::ListResponse do
           "links" => [
             { "href" => "http://www.example.com/2", "rel" => "previous" },
             { "href" => "http://www.example.com/3", "rel" => "self" },
-          ]
+          ],
         }
       }
       @p1_response = stub(
         body: page1.to_json,
         status: 200,
         headers: {
-          link: '<http://www.example.com/1>; rel="self", <http://www.example.com/2>; rel="next"'
-        }
+          link: '<http://www.example.com/1>; rel="self", <http://www.example.com/2>; rel="next"',
+        },
       )
       @p2_response = stub(
         body: page2.to_json,
         status: 200,
         headers: {
-          link: '<http://www.example.com/2>; rel="self", <http://www.example.com/3>; rel="next", <http://www.example.com/1>; rel="previous"'
-        }
+          link: '<http://www.example.com/2>; rel="self", <http://www.example.com/3>; rel="next", <http://www.example.com/1>; rel="previous"',
+        },
       )
       @p3_response = stub(
         body: page3.to_json,
         status: 200,
         headers: {
-          link: '<http://www.example.com/3>; rel="self", <http://www.example.com/1>; rel="previous"'
-        }
+          link: '<http://www.example.com/3>; rel="self", <http://www.example.com/1>; rel="previous"',
+        },
       )
 
       @client = stub
@@ -107,7 +107,7 @@ describe GdsApi::ListResponse do
       it "should allow accessing the next page" do
         resp = GdsApi::ListResponse.new(@p1_response, @client)
         assert resp.has_next_page?
-        assert_equal %w(foo2 bar2), resp.next_page['results']
+        assert_equal %w(foo2 bar2), resp.next_page["results"]
       end
 
       it "should return nil with no next page" do
@@ -131,7 +131,7 @@ describe GdsApi::ListResponse do
       it "should allow accessing the previous page" do
         resp = GdsApi::ListResponse.new(@p2_response, @client)
         assert resp.has_previous_page?
-        assert_equal %w(foo1 bar1), resp.previous_page['results']
+        assert_equal %w(foo1 bar1), resp.previous_page["results"]
       end
 
       it "should return nil with no previous page" do
@@ -178,7 +178,7 @@ describe GdsApi::ListResponse do
           "total" => 2,
           "_response_info" => {
             "status" => "ok",
-          }
+          },
         }
         response = GdsApi::ListResponse.new(stub(body: data.to_json, status: 200, headers: {}), nil)
 

@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/support_api'
-require 'gds_api/test_helpers/support_api'
+require "test_helper"
+require "gds_api/support_api"
+require "gds_api/test_helpers/support_api"
 
 describe GdsApi::SupportApi do
   include GdsApi::TestHelpers::SupportApi
@@ -40,8 +40,8 @@ describe GdsApi::SupportApi do
     assert_requested(stub_post)
   end
 
-  it 'can submit anonymous-contact/business-finder' do
-    request_details = { description: 'something is missing' }
+  it "can submit anonymous-contact/business-finder" do
+    request_details = { description: "something is missing" }
     stub_post = stub_support_api_create_content_improvement_feedback(request_details)
 
     @api.create_content_improvement_feedback(request_details)
@@ -202,7 +202,7 @@ describe GdsApi::SupportApi do
 
   describe "GET /anonymous-feedback/problem-reports" do
     it "fetches a list of problem reports" do
-      params = { from_date: '2016-12-12', to_date: '2016-12-13', page: 1, exclude_reviewed: true }
+      params = { from_date: "2016-12-12", to_date: "2016-12-13", page: 1, exclude_reviewed: true }
       stub_get = stub_support_api_problem_reports(params)
 
       @api.problem_reports(params)

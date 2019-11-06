@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/publishing_api'
-require 'gds_api/test_helpers/publishing_api'
+require "test_helper"
+require "gds_api/publishing_api"
+require "gds_api/test_helpers/publishing_api"
 
 describe GdsApi::TestHelpers::PublishingApi do
   include GdsApi::TestHelpers::PublishingApi
@@ -57,7 +57,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
-  describe '#request_json_matching predicate' do
+  describe "#request_json_matching predicate" do
     describe "nested required attribute" do
       let(:matcher) { request_json_matching("a" => { "b" => 1 }) }
 
@@ -91,7 +91,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
-  describe '#request_json_including predicate' do
+  describe "#request_json_including predicate" do
     describe "no required attributes" do
       let(:matcher) { request_json_including({}) }
 
