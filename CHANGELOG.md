@@ -2,6 +2,7 @@
 
 * Removes publishing pacts for released versions as they incorrectly referenced
   unreleased changes
+* Removes `Search#advanced_search`
 
 # 60.1.0
 
