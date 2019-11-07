@@ -5,16 +5,16 @@ A set of API adapters to work with the GDS APIs.
 Example usage:
 
 ```ruby
-require 'gds_api/rummager'
-rummager = GdsApi::Rummager.new(Plek.new.find('search))
-results = rummager.search(q: "taxes")
+require 'gds_api/search'
+search = GdsApi::Search.new(Plek.new.find('search))
+results = search.search(q: "taxes")
 ```
 
 Example adapters for frequently used applications:
 
 - [Publishing API](lib/gds_api/publishing_api_v2.rb) ([docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/PublishingApiV2), [test helper code](https://github.com/alphagov/gds-api-adapters/blob/master/lib/gds_api/test_helpers/publishing_api_v2.rb), [test helper docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/TestHelpers/PublishingApiV2))
 - [Content Store](lib/gds_api/content_store.rb) ([docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/ContentStore), [test helper code](https://github.com/alphagov/gds-api-adapters/blob/master/lib/gds_api/test_helpers/content_store.rb), [test helper docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/TestHelpers/ContentStore))
-- [Rummager](lib/gds_api/rummager.rb) ([docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/Rummager), [test helper code](https://github.com/alphagov/gds-api-adapters/blob/master/lib/gds_api/test_helpers/rummager.rb), [test helper docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/TestHelpers/Rummager))
+- [Search API](lib/gds_api/search.rb) ([docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/Search), [test helper code](https://github.com/alphagov/gds-api-adapters/blob/master/lib/gds_api/test_helpers/search.rb), [test helper docs](http://www.rubydoc.info/gems/gds-api-adapters/GdsApi/TestHelpers/Search))
 
 ## Logging
 
