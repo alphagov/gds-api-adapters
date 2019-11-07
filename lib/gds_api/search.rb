@@ -111,16 +111,6 @@ module GdsApi
       end
     end
 
-    # Advanced search.
-    #
-    # @deprecated Only in use by Whitehall. Use the `#search` method.
-    def advanced_search(args)
-      raise ArgumentError.new("Args cannot be blank") if args.nil? || args.empty?
-
-      request_path = "#{base_url}/advanced_search?#{Rack::Utils.build_nested_query(args)}"
-      get_json(request_path)
-    end
-
     # Add a document to the search index.
     #
     # @param type [String] The search-api document type.
