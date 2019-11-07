@@ -1,4 +1,4 @@
-# Unreleased
+# 61.0.0
 
 * Removes publishing pacts for released versions as they incorrectly referenced
   unreleased changes
