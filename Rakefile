@@ -31,5 +31,5 @@ end
 
 desc "Run the linter against changed files"
 task :lint do
-  sh "bundle exec govuk-lint-ruby --format clang lib test"
+  sh "bundle exec rubocop --format clang lib test"
 end
