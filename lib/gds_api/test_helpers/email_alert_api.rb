@@ -19,6 +19,11 @@ module GdsApi
           .to_return(status: 404)
       end
 
+      def stub_email_alert_api_invalid_update_subscriber(id)
+        stub_request(:patch, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/#{id}")
+          .to_return(status: 422)
+      end
+
       def stub_email_alert_api_has_updated_subscription(subscription_id, frequency)
         stub_request(:patch, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions/#{subscription_id}")
           .to_return(
@@ -238,6 +243,16 @@ module GdsApi
             status: 201,
             body: get_subscriber_response(subscriber_id, address).to_json,
           )
+      end
+
+      def stub_email_alert_api_invalid_auth_token
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/auth-token")
+          .to_return(status: 422)
+      end
+
+      def stub_email_alert_api_auth_token_no_subscriber
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/auth-token")
+          .to_return(status: 404)
       end
 
       def assert_unsubscribed(uuid)
