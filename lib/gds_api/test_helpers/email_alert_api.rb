@@ -19,6 +19,11 @@ module GdsApi
           .to_return(status: 404)
       end
 
+      def stub_email_alert_api_invalid_update_subscriber(id)
+        stub_request(:patch, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/#{id}")
+          .to_return(status: 422)
+      end
+
       def stub_email_alert_api_has_updated_subscription(subscription_id, frequency)
         stub_request(:patch, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions/#{subscription_id}")
           .to_return(
@@ -32,11 +37,13 @@ module GdsApi
           .to_return(status: 404)
       end
 
-      def stub_email_alert_api_has_subscriber_subscriptions(id, address, order)
-        stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/#{id}/subscriptions?order=#{order}")
+      def stub_email_alert_api_has_subscriber_subscriptions(id, address, order = nil, subscriptions: nil)
+        params = order ? "?order=#{order}" : ""
+
+        stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/#{id}/subscriptions#{params}")
           .to_return(
             status: 200,
-            body: get_subscriber_subscriptions_response(id, address).to_json,
+            body: get_subscriber_subscriptions_response(id, address, subscriptions: subscriptions).to_json,
           )
       end
 
@@ -240,6 +247,16 @@ module GdsApi
           )
       end
 
+      def stub_email_alert_api_invalid_auth_token
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/auth-token")
+          .to_return(status: 422)
+      end
+
+      def stub_email_alert_api_auth_token_no_subscriber
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/auth-token")
+          .to_return(status: 404)
+      end
+
       def assert_unsubscribed(uuid)
         assert_requested(:post, "#{EMAIL_ALERT_API_ENDPOINT}/unsubscribe/#{uuid}", times: 1)
       end
@@ -333,13 +350,13 @@ module GdsApi
         }
       end
 
-      def get_subscriber_subscriptions_response(id, address)
+      def get_subscriber_subscriptions_response(id, address, subscriptions:)
         {
           "subscriber" => {
             "id" => id,
             "address" => address,
           },
-          "subscriptions" => [
+          "subscriptions" => subscriptions || [
             {
               "subscriber_id" => 1,
               "subscriber_list_id" => 1000,
