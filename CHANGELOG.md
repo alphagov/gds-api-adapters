@@ -1,3 +1,8 @@
+# 61.1.0
+
+* Add stubs for email-alert-api edge cases (auth token and subscriber update)
+* Extend the email-alert-api subscription stub to support an array of subscriptions
+
 # 61.0.0
 
 * Removes publishing pacts for released versions as they incorrectly referenced
