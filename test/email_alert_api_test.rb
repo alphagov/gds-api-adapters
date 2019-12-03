@@ -615,6 +615,14 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
+  describe "send_subscription_verification_email" do
+    it "returns 200" do
+      stub_email_alert_api_sends_subscription_verification_email("test@example.com", "immediately", "topic")
+      api_response = api_client.send_subscription_verification_email(address: "test@example.com", frequency: "immediately", topic_id: "topic")
+      assert_equal(200, api_response.code)
+    end
+  end
+
   describe "send_subscriber_verification_email" do
     it "returns 201" do
       stub_email_alert_api_sends_subscriber_verification_email(1, "test@example.com")

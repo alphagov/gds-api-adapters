@@ -239,6 +239,19 @@ module GdsApi
         ).to_return(status: 422)
       end
 
+      def stub_email_alert_api_sends_subscription_verification_email(address, frequency, topic_id)
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions/auth-token")
+          .with(
+            body: { address: address, frequency: frequency, topic_id: topic_id }.to_json,
+          ).to_return(status: 200)
+      end
+
+      def stub_email_alert_api_subscription_verification_email_invalid(address, frequency, topic_id)
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions/auth-token")
+          .with(
+            body: { address: address, frequency: frequency, topic_id: topic_id }.to_json,
+          ).to_return(status: 422)
+      end
 
       def stub_email_alert_api_sends_subscriber_verification_email(subscriber_id, address)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/auth-token")
