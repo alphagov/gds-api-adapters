@@ -615,10 +615,10 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
-  describe "create an auth token" do
+  describe "send_subscriber_verification_email" do
     it "returns 201" do
-      stub_email_alert_api_creates_an_auth_token(1, "test@example.com")
-      api_response = api_client.create_auth_token(address: 1, destination: "/test")
+      stub_email_alert_api_sends_subscriber_verification_email(1, "test@example.com")
+      api_response = api_client.send_subscriber_verification_email(address: 1, destination: "/test")
       assert_equal(201, api_response.code)
     end
   end

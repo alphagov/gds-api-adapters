@@ -220,7 +220,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     )
   end
 
-  # Create an authentication token for a subscriber
+  # Verify a subscriber has control of a provided email
   #
   # @param [string]       address       Email address of subscriber to create token for
   # @param [string]       destination   Path on GOV.UK that subscriber will be emailed
@@ -228,7 +228,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   #
   # @return [Hash]  subscriber
   #
-  def create_auth_token(address:, destination:, redirect: nil)
+  def send_subscriber_verification_email(address:, destination:, redirect: nil)
     post_json(
       "#{endpoint}/subscribers/auth-token",
       address: address,

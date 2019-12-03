@@ -239,7 +239,8 @@ module GdsApi
         ).to_return(status: 422)
       end
 
-      def stub_email_alert_api_creates_an_auth_token(subscriber_id, address)
+
+      def stub_email_alert_api_sends_subscriber_verification_email(subscriber_id, address)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/auth-token")
           .to_return(
             status: 201,
@@ -247,12 +248,12 @@ module GdsApi
           )
       end
 
-      def stub_email_alert_api_invalid_auth_token
+      def stub_email_alert_api_subscriber_verification_email_invalid
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/auth-token")
           .to_return(status: 422)
       end
 
-      def stub_email_alert_api_auth_token_no_subscriber
+      def stub_email_alert_api_subscriber_verification_email_no_subscriber
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/auth-token")
           .to_return(status: 404)
       end
@@ -307,7 +308,6 @@ module GdsApi
       alias_method :email_alert_api_creates_a_subscription, :stub_email_alert_api_creates_a_subscription
       alias_method :email_alert_api_creates_an_existing_subscription, :stub_email_alert_api_creates_an_existing_subscription
       alias_method :email_alert_api_refuses_to_create_subscription, :stub_email_alert_api_refuses_to_create_subscription
-      alias_method :email_alert_api_creates_an_auth_token, :stub_email_alert_api_creates_an_auth_token
       alias_method :email_alert_api_has_subscriber_list_by_slug, :stub_email_alert_api_has_subscriber_list_by_slug
       alias_method :email_alert_api_does_not_have_subscriber_list_by_slug, :stub_email_alert_api_does_not_have_subscriber_list_by_slug
 
