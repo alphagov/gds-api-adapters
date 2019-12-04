@@ -7,6 +7,10 @@ describe GdsApi::Rummager do
     stub_request(:get, /example.com\/batch_search/).to_return(body: "[]")
   end
 
+  around(:each) do |example|
+    assert_output(nil, /deprecated/, &example)
+  end
+
   # tests for search
 
   it "#search should raise an exception if the service at the search URI returns a 500" do
