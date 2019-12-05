@@ -1,3 +1,8 @@
+# Unreleased
+
+* BREAKING: rename Email Alert API adapter method to create auth token
+* Add Email Alert API adapter method to send subscription verification email
+
 # 61.1.0
 
 * Add stubs for email-alert-api edge cases (auth token and subscriber update)

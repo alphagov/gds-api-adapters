@@ -220,20 +220,37 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     )
   end
 
-  # Create an authentication token for a subscriber
+  # Verify a subscriber has control of a provided email
   #
-  # @param [string]       address       Email address of subscriber to create token for
+  # @param [string]       address       Address to send verification email to
   # @param [string]       destination   Path on GOV.UK that subscriber will be emailed
   # @param [string, nil]  redirect      Path on GOV.UK to be encoded into the token for redirecting
   #
   # @return [Hash]  subscriber
   #
-  def create_auth_token(address:, destination:, redirect: nil)
+  def send_subscriber_verification_email(address:, destination:, redirect: nil)
     post_json(
       "#{endpoint}/subscribers/auth-token",
       address: address,
       destination: destination,
       redirect: redirect,
+    )
+  end
+
+  # Verify a subscriber intends to be added to a subscription
+  #
+  # @param [string]       address       Address to send verification email to
+  # @param [string]       frequency     How often the subscriber wishes to be notified of new items
+  # @param [string]       topic_id      The slugs/ID for the topic being subscribed to
+  #
+  # return [Hash]  subscription
+  #
+  def send_subscription_verification_email(address:, frequency:, topic_id:)
+    post_json(
+      "#{endpoint}/subscriptions/auth-token",
+      address: address,
+      frequency: frequency,
+      topic_id: topic_id,
     )
   end
 
