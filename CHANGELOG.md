@@ -1,4 +1,4 @@
-# Unreleased
+# 62.0.0
 
 * BREAKING: rename Email Alert API adapter method to create auth token
 * Add Email Alert API adapter method to send subscription verification email
