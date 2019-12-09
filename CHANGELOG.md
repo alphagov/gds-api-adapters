@@ -1,3 +1,5 @@
+# 63.0.0
+
 * BREAKING: Remove `GdsApi::Rummager`.  Use `GdsApi::Search` instead.
 
 # 62.0.0
