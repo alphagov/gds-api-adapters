@@ -1,3 +1,5 @@
+* BREAKING: Remove `GdsApi::Rummager`.  Use `GdsApi::Search` instead.
+
 # 62.0.0
 
 * BREAKING: rename Email Alert API adapter method to create auth token
