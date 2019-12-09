@@ -13,7 +13,6 @@ require "gds_api/organisations"
 require "gds_api/publishing_api"
 require "gds_api/publishing_api_v2"
 require "gds_api/router"
-require "gds_api/rummager"
 require "gds_api/search"
 require "gds_api/support"
 require "gds_api/support_api"
@@ -163,13 +162,6 @@ module GdsApi
       Plek.find("router-api"),
       { bearer_token: ENV["ROUTER_API_BEARER_TOKEN"] }.merge(options),
     )
-  end
-
-  # Creates a GdsApi::Rummager adapter to access via a rummager.* hostname
-  #
-  # @return [GdsApi::Rummager]
-  def self.rummager(options = {})
-    GdsApi::Rummager.new(Plek.find("search"), options)
   end
 
   # Creates a GdsApi::Search adapter to access via a search.* hostname
