@@ -552,7 +552,7 @@ module GdsApi
       #   })
       #
       def stub_publishing_api_has_lookups(lookup_hash)
-        url = Plek.current.find("publishing-api") + "/lookup-by-base-path"
+        url = PUBLISHING_API_ENDPOINT + "/lookup-by-base-path"
         stub_request(:post, url).to_return(body: lookup_hash.to_json)
       end
 
@@ -578,7 +578,7 @@ module GdsApi
         link_type = params.fetch(:link_type)
         fields = params.fetch(:fields, %w(base_path content_id document_type title))
 
-        url = Plek.current.find("publishing-api") + "/v2/linked/#{content_id}"
+        url = PUBLISHING_API_V2_ENDPOINT + "/linked/#{content_id}"
 
         request_parmeters = {
           "fields" => fields,
