@@ -1,3 +1,5 @@
+* Combine `GdsApi::PublishingAPI` and `GdsApi::PublishingApiV2`
+
 # 63.0.0
 
 * BREAKING: Remove `GdsApi::Rummager`.  Use `GdsApi::Search` instead.
