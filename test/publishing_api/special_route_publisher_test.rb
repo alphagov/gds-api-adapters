@@ -1,10 +1,10 @@
 require "test_helper"
 require "gds_api/publishing_api/special_route_publisher"
 require "govuk-content-schema-test-helpers"
-require File.dirname(__FILE__) + "/../../lib/gds_api/test_helpers/publishing_api_v2"
+require File.dirname(__FILE__) + "/../../lib/gds_api/test_helpers/publishing_api"
 
 describe GdsApi::PublishingApi::SpecialRoutePublisher do
-  include ::GdsApi::TestHelpers::PublishingApiV2
+  include ::GdsApi::TestHelpers::PublishingApi
 
   let(:content_id) { "a-content-id-of-sorts" }
   let(:special_route) {
