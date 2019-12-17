@@ -1,4 +1,4 @@
-require "gds_api/publishing_api_v2"
+require "gds_api/publishing_api"
 require "time"
 
 module GdsApi
@@ -6,7 +6,7 @@ module GdsApi
     class SpecialRoutePublisher
       def initialize(options = {})
         @logger = options[:logger] || GdsApi::Base.logger
-        @publishing_api = options[:publishing_api] || GdsApi::PublishingApiV2.new(Plek.find("publishing-api"))
+        @publishing_api = options[:publishing_api] || GdsApi::PublishingApi.new(Plek.find("publishing-api"))
       end
 
       def publish(options)
