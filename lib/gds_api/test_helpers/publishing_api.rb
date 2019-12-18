@@ -689,7 +689,7 @@ module GdsApi
         end
       end
 
-      # Stub a PUT /v2/paths/:base_path request with the given content id and request body.
+      # Stub a PUT /paths/:base_path request with the given content id and request body.
       #
       # @example
       #   stub_publishing_api_path_reservation(
