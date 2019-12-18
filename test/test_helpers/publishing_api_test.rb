@@ -6,7 +6,7 @@ describe GdsApi::TestHelpers::PublishingApi do
   include GdsApi::TestHelpers::PublishingApi
   let(:publishing_api) { GdsApi::PublishingApi.new(Plek.current.find("publishing-api")) }
 
-  describe "#publishing_api_has_linked_items" do
+  describe "#stub_publishing_api_has_linked_items" do
     it "stubs the get linked items api call" do
       links = [
         { "content_id" => "id-1", "title" => "title 1", "link_type" => "taxons" },
@@ -32,7 +32,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
-  describe "#publish_api_has_links_for_content_ids" do
+  describe "#stub_publish_api_has_links_for_content_ids" do
     it "stubs the call to get links for content ids" do
       links = {
                 "2878337b-bed9-4e7f-85b6-10ed2cbcd504" => {
@@ -49,7 +49,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
-  describe "#publishing_api_has_lookups" do
+  describe "#stub_publishing_api_has_lookups" do
     it "stubs the lookup for content items" do
       lookup_hash = { "/foo" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" }
 
@@ -60,7 +60,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
-  describe "#publishing_api_has_content" do
+  describe "#stub_publishing_api_has_content" do
     it "stubs the call to get content items" do
       stub_publishing_api_has_content([{ "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" }])
 
@@ -136,7 +136,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
-  describe "#publishing_api_has_item" do
+  describe "#stub_publishing_api_has_item" do
     it "stubs the call to get content items" do
       stub_publishing_api_has_item("content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504")
       response = publishing_api.get_content("2878337b-bed9-4e7f-85b6-10ed2cbcd504").parsed_content
@@ -165,7 +165,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
-  describe "#publishing_api_has_expanded_links" do
+  describe "#stub_publishing_api_has_expanded_links" do
     it "stubs the call to get expanded links when content_id is a symbol" do
       payload = {
         content_id: "2e20294a-d694-4083-985e-d8bedefc2354",
@@ -306,7 +306,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
-  describe "#publishing_api_get_editions" do
+  describe "#stub_publishing_api_get_editions" do
     it "stubs the get editions api call" do
       editions = [
         { "content_id" => "id-1", "title" => "title 1" },
@@ -327,7 +327,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
-  describe "#publishing_api_isnt_available" do
+  describe "#stub_publishing_api_isnt_available" do
     it "returns a 503 for V2 requests" do
       stub_publishing_api_isnt_available
 
