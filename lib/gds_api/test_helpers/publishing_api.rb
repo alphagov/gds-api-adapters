@@ -652,7 +652,7 @@ module GdsApi
         stub_request(:delete, url).to_return(status: 200, body: "{}", headers: { "Content-Type" => "application/json; charset=utf-8" })
       end
 
-      def stub_default_publishing_api_put_intent
+      def stub_any_publishing_api_put_intent
         stub_request(:put, %r{\A#{PUBLISHING_API_ENDPOINT}/publish-intent})
       end
 
@@ -711,7 +711,7 @@ module GdsApi
         stub_request(:put, url).with(body: params).to_return(response)
       end
 
-      def stub_default_publishing_api_path_reservation
+      def stub_any_publishing_api_path_reservation
         stub_request(:put, %r[\A#{PUBLISHING_API_ENDPOINT}/paths/]).to_return { |request|
           base_path = request.uri.path.sub(%r{\A/paths/}, "")
           { status: 200, headers: { content_type: "application/json" },
@@ -759,6 +759,8 @@ module GdsApi
       alias_method :publishing_api_get_editions, :stub_publishing_api_get_editions
       alias_method :publishing_api_has_path_reservation_for, :stub_publishing_api_has_path_reservation_for
       alias_method :publishing_api_returns_path_reservation_validation_error_for, :stub_publishing_api_returns_path_reservation_validation_error_for
+      alias_method :stub_default_publishing_api_path_reservation, :stub_any_publishing_api_path_reservation
+      alias_method :stub_default_publishing_api_put_intent, :stub_any_publishing_api_put_intent
 
     private
 
