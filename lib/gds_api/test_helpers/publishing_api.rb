@@ -711,12 +711,20 @@ module GdsApi
         stub_request(:put, url).with(body: params).to_return(response)
       end
 
+      # Stub all PUT /paths/:base_path requests
+      #
+      # @example
+      #   stub_any_publishing_api_path_reservation
       def stub_any_publishing_api_path_reservation
-        stub_request(:put, %r[\A#{PUBLISHING_API_ENDPOINT}/paths/]).to_return { |request|
-          base_path = request.uri.path.sub(%r{\A/paths/}, "")
-          { status: 200, headers: { content_type: "application/json" },
-            body: publishing_api_path_data_for(base_path).to_json }
-        }
+        stub_request(:put, %r[\A#{PUBLISHING_API_ENDPOINT}/paths/]).to_return do |request|
+          base_path = request.uri.path.sub(%r{\A/paths}, "")
+          body = JSON.parse(request.body).merge(base_path: base_path)
+          {
+            status: 200,
+            headers: { content_type: "application/json" },
+            body: body.to_json,
+          }
+        end
       end
 
       def stub_publishing_api_has_path_reservation_for(path, publishing_app)

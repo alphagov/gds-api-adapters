@@ -395,6 +395,25 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
+  describe "#stub_any_publishing_api_path_reservation" do
+    it "stubs a request to reserve a path" do
+      stub_any_publishing_api_path_reservation
+
+      api_response = publishing_api.put_path("/foo", {})
+      assert_equal(api_response.code, 200)
+    end
+
+    it "returns the payload with the base_path merged in" do
+      stub_any_publishing_api_path_reservation
+
+      api_response = publishing_api.put_path("/foo", publishing_app: "foo-publisher")
+      assert_equal({
+        "publishing_app" => "foo-publisher",
+        "base_path" => "/foo",
+      }, api_response.to_h)
+    end
+  end
+
   describe "#request_json_matching predicate" do
     describe "nested required attribute" do
       let(:matcher) { request_json_matching("a" => { "b" => 1 }) }
