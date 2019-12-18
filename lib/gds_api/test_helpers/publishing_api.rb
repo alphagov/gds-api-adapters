@@ -888,16 +888,6 @@ module GdsApi
       def intent_for_publishing_api(base_path, publishing_app = "publisher")
         intent_for_base_path(base_path).merge("publishing_app" => publishing_app)
       end
-
-      def publishing_api_path_data_for(path, override_attributes = {})
-        now = Time.zone.now.utc.iso8601
-        {
-          "path" => path,
-          "publishing_app" => "foo-publisher",
-          "created_at" => now,
-          "updated_at" => now,
-        }.merge(override_attributes)
-      end
     end
   end
 end
