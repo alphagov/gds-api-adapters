@@ -443,6 +443,43 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
+  describe "#stub_publishing_api_returns_path_reservation_validation_error_for" do
+    it "returns a validation error for a particular path" do
+      stub_publishing_api_returns_path_reservation_validation_error_for("/foo")
+
+      error = assert_raises GdsApi::HTTPUnprocessableEntity do
+        publishing_api.put_path("/foo", {})
+      end
+
+      assert error.message.include?({
+        error: {
+          code: 422,
+          message: "Base path Computer says no",
+          fields: { base_path: ["Computer says no"] },
+        },
+      }.to_json)
+    end
+
+    it "can accept user provided errors" do
+      stub_publishing_api_returns_path_reservation_validation_error_for(
+        "/foo",
+        field: ["error 1", "error 2"],
+      )
+
+      error = assert_raises GdsApi::HTTPUnprocessableEntity do
+        publishing_api.put_path("/foo", {})
+      end
+
+      assert error.message.include?({
+        error: {
+          code: 422,
+          message: "Field error 1",
+          fields: { field: ["error 1", "error 2"] },
+        },
+      }.to_json)
+    end
+  end
+
   describe "#request_json_matching predicate" do
     describe "nested required attribute" do
       let(:matcher) { request_json_matching("a" => { "b" => 1 }) }

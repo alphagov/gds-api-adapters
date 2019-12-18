@@ -754,12 +754,30 @@ module GdsApi
                     body: { publishing_app: publishing_app, base_path: path }.to_json)
       end
 
-      def stub_publishing_api_returns_path_reservation_validation_error_for(path, error_details = nil)
-        error_details ||= { "base" => ["computer says no"] }
-        error_data = publishing_api_path_data_for(path).merge("errors" => error_details)
+      # Stub a PUT /paths/:base_path request for a particular publishing
+      # application. Calling for a different publishing application will return
+      # a 422 response.
+      #
+      # @example
+      #   stub_publishing_api_returns_path_reservation_validation_error_for(
+      #     "/foo",
+      #     "field" => ["error 1", "error 2"]
+      #   )
+      #
+      # @param base_path [String]
+      # @param error_fields [Hash]
+      def stub_publishing_api_returns_path_reservation_validation_error_for(base_path, error_fields = {})
+        error_fields = { "base_path" => ["Computer says no"] } if error_fields.empty?
 
-        stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{path}").
-          to_return(status: 422, body: error_data.to_json, headers: { content_type: "application/json" })
+        message = error_fields.keys.first.to_s.capitalize.gsub(/_/, " ") + " " +
+          error_fields.values.flatten.first
+
+        error = { code: 422, message: message, fields: error_fields }
+
+        stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{base_path}").
+          to_return(status: 422,
+                    headers: { content_type: "application/json" },
+                    body: { error: error }.to_json)
       end
 
       # Aliases for DEPRECATED methods
