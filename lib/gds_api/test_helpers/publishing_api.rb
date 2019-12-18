@@ -689,6 +689,28 @@ module GdsApi
         end
       end
 
+      # Stub a PUT /v2/paths/:base_path request with the given content id and request body.
+      #
+      # @example
+      #   stub_publishing_api_path_reservation(
+      #     my_content_id,
+      #     publishing_app: "content-publisher",
+      #     override_existing: true,
+      #   )
+      #
+      # @param base_path [String]
+      # @param params [Hash]
+      def stub_publishing_api_path_reservation(base_path, params = {})
+        url = PUBLISHING_API_ENDPOINT + "/paths#{base_path}"
+        response = {
+          status: 200,
+          headers: { content_type: "application/json" },
+          body: params.merge(base_path: base_path).to_json,
+        }
+
+        stub_request(:put, url).with(body: params).to_return(response)
+      end
+
       def stub_default_publishing_api_path_reservation
         stub_request(:put, %r[\A#{PUBLISHING_API_ENDPOINT}/paths/]).to_return { |request|
           base_path = request.uri.path.sub(%r{\A/paths/}, "")
