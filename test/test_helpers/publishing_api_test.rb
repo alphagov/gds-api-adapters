@@ -414,6 +414,35 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
+  describe "#stub_publishing_api_has_path_reservation_for" do
+    it "returns successfully for a request for the path and publishing app" do
+      stub_publishing_api_has_path_reservation_for("/foo", "foo-publisher")
+
+      api_response = publishing_api.put_path("/foo", publishing_app: "foo-publisher")
+      assert_equal(api_response.code, 200)
+      assert_equal({
+        "publishing_app" => "foo-publisher",
+        "base_path" => "/foo",
+      }, api_response.to_h)
+    end
+
+    it "returns an error response for a request for the path and a different publishing app" do
+      stub_publishing_api_has_path_reservation_for("/foo", "foo-publisher")
+
+      error = assert_raises GdsApi::HTTPUnprocessableEntity do
+        publishing_api.put_path("/foo", publishing_app: "bar-publisher")
+      end
+
+      assert error.message.include?({
+        error: {
+          code: 422,
+          message: "Base path /foo is already reserved by foo-publisher",
+          fields: { base_path: ["/foo is already reserved by foo-publisher"] },
+        },
+      }.to_json)
+    end
+  end
+
   describe "#request_json_matching predicate" do
     describe "nested required attribute" do
       let(:matcher) { request_json_matching("a" => { "b" => 1 }) }

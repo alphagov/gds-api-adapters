@@ -727,19 +727,31 @@ module GdsApi
         end
       end
 
+      # Stub a PUT /paths/:base_path request for a particular publishing
+      # application. Calling for a different publishing application will return
+      # a 422 response.
+      #
+      # @example
+      #   stub_publishing_api_has_path_reservation_for("/foo", "content-publisher")
+      #
+      # @param base_path [String]
+      # @param publishing_app [String]
       def stub_publishing_api_has_path_reservation_for(path, publishing_app)
-        data = publishing_api_path_data_for(path, "publishing_app" => publishing_app)
-        error_data = data.merge("errors" => { "path" => ["is already reserved by the #{publishing_app} application"] })
+        message = "#{path} is already reserved by #{publishing_app}"
+        error = { code: 422,
+                  message: "Base path #{message}",
+                  fields: { base_path: [message] } }
 
         stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{path}").
-                  to_return(status: 422, body: error_data.to_json,
-                            headers: { content_type: "application/json" })
+                  to_return(status: 422,
+                            headers: { content_type: "application/json" },
+                            body: { error: error }.to_json)
 
         stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{path}").
           with(body: { "publishing_app" => publishing_app }).
           to_return(status: 200,
                     headers: { content_type: "application/json" },
-                    body: data.to_json)
+                    body: { publishing_app: publishing_app, base_path: path }.to_json)
       end
 
       def stub_publishing_api_returns_path_reservation_validation_error_for(path, error_details = nil)
