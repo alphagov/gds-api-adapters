@@ -1,4 +1,4 @@
-# Unreleased
+# 63.1.0
 
 * Make success and error responses on Publishing API path methods accurate.
 * Deprecate `stub_default_*` Publishing API test helpers in favour of the `stub_any_*` convention.
