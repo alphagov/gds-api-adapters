@@ -1,3 +1,7 @@
+# Unreleased
+
+* Make success and error responses on Publishing API path methods accurate.
+* Deprecate `stub_default_*` Publishing API test helpers in favour of the `stub_any_*` convention.
 * Add `stub_publishing_api_path_reservation` test helper method.
 * Combine `GdsApi::PublishingAPI` and `GdsApi::PublishingApiV2`
 

@@ -6,7 +6,7 @@ describe GdsApi::TestHelpers::PublishingApi do
   include GdsApi::TestHelpers::PublishingApi
   let(:publishing_api) { GdsApi::PublishingApi.new(Plek.current.find("publishing-api")) }
 
-  describe "#publishing_api_has_linked_items" do
+  describe "#stub_publishing_api_has_linked_items" do
     it "stubs the get linked items api call" do
       links = [
         { "content_id" => "id-1", "title" => "title 1", "link_type" => "taxons" },
@@ -32,7 +32,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
-  describe "#publish_api_has_links_for_content_ids" do
+  describe "#stub_publish_api_has_links_for_content_ids" do
     it "stubs the call to get links for content ids" do
       links = {
                 "2878337b-bed9-4e7f-85b6-10ed2cbcd504" => {
@@ -49,7 +49,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
-  describe "#publishing_api_has_lookups" do
+  describe "#stub_publishing_api_has_lookups" do
     it "stubs the lookup for content items" do
       lookup_hash = { "/foo" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" }
 
@@ -60,7 +60,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
-  describe "#publishing_api_has_content" do
+  describe "#stub_publishing_api_has_content" do
     it "stubs the call to get content items" do
       stub_publishing_api_has_content([{ "content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504" }])
 
@@ -136,7 +136,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
-  describe "#publishing_api_has_item" do
+  describe "#stub_publishing_api_has_item" do
     it "stubs the call to get content items" do
       stub_publishing_api_has_item("content_id" => "2878337b-bed9-4e7f-85b6-10ed2cbcd504")
       response = publishing_api.get_content("2878337b-bed9-4e7f-85b6-10ed2cbcd504").parsed_content
@@ -165,7 +165,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
-  describe "#publishing_api_has_expanded_links" do
+  describe "#stub_publishing_api_has_expanded_links" do
     it "stubs the call to get expanded links when content_id is a symbol" do
       payload = {
         content_id: "2e20294a-d694-4083-985e-d8bedefc2354",
@@ -306,7 +306,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
-  describe "#publishing_api_get_editions" do
+  describe "#stub_publishing_api_get_editions" do
     it "stubs the get editions api call" do
       editions = [
         { "content_id" => "id-1", "title" => "title 1" },
@@ -327,7 +327,7 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
-  describe "#publishing_api_isnt_available" do
+  describe "#stub_publishing_api_isnt_available" do
     it "returns a 503 for V2 requests" do
       stub_publishing_api_isnt_available
 
@@ -392,6 +392,91 @@ describe GdsApi::TestHelpers::PublishingApi do
       assert_raises GdsApi::HTTPUnprocessableEntity do
         publishing_api.unreserve_path("/foo", "myapp")
       end
+    end
+  end
+
+  describe "#stub_any_publishing_api_path_reservation" do
+    it "stubs a request to reserve a path" do
+      stub_any_publishing_api_path_reservation
+
+      api_response = publishing_api.put_path("/foo", {})
+      assert_equal(api_response.code, 200)
+    end
+
+    it "returns the payload with the base_path merged in" do
+      stub_any_publishing_api_path_reservation
+
+      api_response = publishing_api.put_path("/foo", publishing_app: "foo-publisher")
+      assert_equal({
+        "publishing_app" => "foo-publisher",
+        "base_path" => "/foo",
+      }, api_response.to_h)
+    end
+  end
+
+  describe "#stub_publishing_api_has_path_reservation_for" do
+    it "returns successfully for a request for the path and publishing app" do
+      stub_publishing_api_has_path_reservation_for("/foo", "foo-publisher")
+
+      api_response = publishing_api.put_path("/foo", publishing_app: "foo-publisher")
+      assert_equal(api_response.code, 200)
+      assert_equal({
+        "publishing_app" => "foo-publisher",
+        "base_path" => "/foo",
+      }, api_response.to_h)
+    end
+
+    it "returns an error response for a request for the path and a different publishing app" do
+      stub_publishing_api_has_path_reservation_for("/foo", "foo-publisher")
+
+      error = assert_raises GdsApi::HTTPUnprocessableEntity do
+        publishing_api.put_path("/foo", publishing_app: "bar-publisher")
+      end
+
+      assert error.message.include?({
+        error: {
+          code: 422,
+          message: "Base path /foo is already reserved by foo-publisher",
+          fields: { base_path: ["/foo is already reserved by foo-publisher"] },
+        },
+      }.to_json)
+    end
+  end
+
+  describe "#stub_publishing_api_returns_path_reservation_validation_error_for" do
+    it "returns a validation error for a particular path" do
+      stub_publishing_api_returns_path_reservation_validation_error_for("/foo")
+
+      error = assert_raises GdsApi::HTTPUnprocessableEntity do
+        publishing_api.put_path("/foo", {})
+      end
+
+      assert error.message.include?({
+        error: {
+          code: 422,
+          message: "Base path Computer says no",
+          fields: { base_path: ["Computer says no"] },
+        },
+      }.to_json)
+    end
+
+    it "can accept user provided errors" do
+      stub_publishing_api_returns_path_reservation_validation_error_for(
+        "/foo",
+        field: ["error 1", "error 2"],
+      )
+
+      error = assert_raises GdsApi::HTTPUnprocessableEntity do
+        publishing_api.put_path("/foo", {})
+      end
+
+      assert error.message.include?({
+        error: {
+          code: 422,
+          message: "Field error 1",
+          fields: { field: ["error 1", "error 2"] },
+        },
+      }.to_json)
     end
   end
 

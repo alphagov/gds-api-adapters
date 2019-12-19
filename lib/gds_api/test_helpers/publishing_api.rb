@@ -652,7 +652,7 @@ module GdsApi
         stub_request(:delete, url).to_return(status: 200, body: "{}", headers: { "Content-Type" => "application/json; charset=utf-8" })
       end
 
-      def stub_default_publishing_api_put_intent
+      def stub_any_publishing_api_put_intent
         stub_request(:put, %r{\A#{PUBLISHING_API_ENDPOINT}/publish-intent})
       end
 
@@ -689,7 +689,7 @@ module GdsApi
         end
       end
 
-      # Stub a PUT /v2/paths/:base_path request with the given content id and request body.
+      # Stub a PUT /paths/:base_path request with the given content id and request body.
       #
       # @example
       #   stub_publishing_api_path_reservation(
@@ -711,35 +711,73 @@ module GdsApi
         stub_request(:put, url).with(body: params).to_return(response)
       end
 
-      def stub_default_publishing_api_path_reservation
-        stub_request(:put, %r[\A#{PUBLISHING_API_ENDPOINT}/paths/]).to_return { |request|
-          base_path = request.uri.path.sub(%r{\A/paths/}, "")
-          { status: 200, headers: { content_type: "application/json" },
-            body: publishing_api_path_data_for(base_path).to_json }
-        }
+      # Stub all PUT /paths/:base_path requests
+      #
+      # @example
+      #   stub_any_publishing_api_path_reservation
+      def stub_any_publishing_api_path_reservation
+        stub_request(:put, %r[\A#{PUBLISHING_API_ENDPOINT}/paths/]).to_return do |request|
+          base_path = request.uri.path.sub(%r{\A/paths}, "")
+          body = JSON.parse(request.body).merge(base_path: base_path)
+          {
+            status: 200,
+            headers: { content_type: "application/json" },
+            body: body.to_json,
+          }
+        end
       end
 
+      # Stub a PUT /paths/:base_path request for a particular publishing
+      # application. Calling for a different publishing application will return
+      # a 422 response.
+      #
+      # @example
+      #   stub_publishing_api_has_path_reservation_for("/foo", "content-publisher")
+      #
+      # @param base_path [String]
+      # @param publishing_app [String]
       def stub_publishing_api_has_path_reservation_for(path, publishing_app)
-        data = publishing_api_path_data_for(path, "publishing_app" => publishing_app)
-        error_data = data.merge("errors" => { "path" => ["is already reserved by the #{publishing_app} application"] })
+        message = "#{path} is already reserved by #{publishing_app}"
+        error = { code: 422,
+                  message: "Base path #{message}",
+                  fields: { base_path: [message] } }
 
         stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{path}").
-                  to_return(status: 422, body: error_data.to_json,
-                            headers: { content_type: "application/json" })
+                  to_return(status: 422,
+                            headers: { content_type: "application/json" },
+                            body: { error: error }.to_json)
 
         stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{path}").
           with(body: { "publishing_app" => publishing_app }).
           to_return(status: 200,
                     headers: { content_type: "application/json" },
-                    body: data.to_json)
+                    body: { publishing_app: publishing_app, base_path: path }.to_json)
       end
 
-      def stub_publishing_api_returns_path_reservation_validation_error_for(path, error_details = nil)
-        error_details ||= { "base" => ["computer says no"] }
-        error_data = publishing_api_path_data_for(path).merge("errors" => error_details)
+      # Stub a PUT /paths/:base_path request for a particular publishing
+      # application. Calling for a different publishing application will return
+      # a 422 response.
+      #
+      # @example
+      #   stub_publishing_api_returns_path_reservation_validation_error_for(
+      #     "/foo",
+      #     "field" => ["error 1", "error 2"]
+      #   )
+      #
+      # @param base_path [String]
+      # @param error_fields [Hash]
+      def stub_publishing_api_returns_path_reservation_validation_error_for(base_path, error_fields = {})
+        error_fields = { "base_path" => ["Computer says no"] } if error_fields.empty?
 
-        stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{path}").
-          to_return(status: 422, body: error_data.to_json, headers: { content_type: "application/json" })
+        message = error_fields.keys.first.to_s.capitalize.gsub(/_/, " ") + " " +
+          error_fields.values.flatten.first
+
+        error = { code: 422, message: message, fields: error_fields }
+
+        stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{base_path}").
+          to_return(status: 422,
+                    headers: { content_type: "application/json" },
+                    body: { error: error }.to_json)
       end
 
       # Aliases for DEPRECATED methods
@@ -759,6 +797,8 @@ module GdsApi
       alias_method :publishing_api_get_editions, :stub_publishing_api_get_editions
       alias_method :publishing_api_has_path_reservation_for, :stub_publishing_api_has_path_reservation_for
       alias_method :publishing_api_returns_path_reservation_validation_error_for, :stub_publishing_api_returns_path_reservation_validation_error_for
+      alias_method :stub_default_publishing_api_path_reservation, :stub_any_publishing_api_path_reservation
+      alias_method :stub_default_publishing_api_put_intent, :stub_any_publishing_api_put_intent
 
     private
 
@@ -847,16 +887,6 @@ module GdsApi
 
       def intent_for_publishing_api(base_path, publishing_app = "publisher")
         intent_for_base_path(base_path).merge("publishing_app" => publishing_app)
-      end
-
-      def publishing_api_path_data_for(path, override_attributes = {})
-        now = Time.zone.now.utc.iso8601
-        {
-          "path" => path,
-          "publishing_app" => "foo-publisher",
-          "created_at" => now,
-          "updated_at" => now,
-        }.merge(override_attributes)
       end
     end
   end
