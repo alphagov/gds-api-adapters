@@ -1,4 +1,4 @@
-# Unreleased
+# 63.1.1
 
 * Fix `GdsApi::TestHelpers::PublishingApiV2` not requiring Publishing API test helpers.
 
