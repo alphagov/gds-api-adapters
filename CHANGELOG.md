@@ -1,3 +1,7 @@
+# Unreleased
+
+* Fix `GdsApi::TestHelpers::PublishingApiV2` not requiring Publishing API test helpers.
+
 # 63.1.0
 
 * Make success and error responses on Publishing API path methods accurate.
