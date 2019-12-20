@@ -1,7 +1,4 @@
-require "gds_api/test_helpers/json_client_helper"
-require "gds_api/test_helpers/content_item_helpers"
-require "gds_api/test_helpers/intent_helpers"
-require "json"
+require "gds_api/test_helpers/publishing_api"
 
 module GdsApi
   module TestHelpers
