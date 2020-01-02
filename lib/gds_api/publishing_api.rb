@@ -8,6 +8,8 @@ require_relative "exceptions"
 # @see https://github.com/alphagov/publishing-api/blob/master/doc/model.md
 # @api documented
 class GdsApi::PublishingApi < GdsApi::Base
+  class NoLiveVersion < GdsApi::BaseError; end
+
   # Put a content item
   #
   # @param content_id [UUID]
@@ -32,6 +34,29 @@ class GdsApi::PublishingApi < GdsApi::Base
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2contentcontent_id
   def get_content(content_id, params = {})
     get_json(content_url(content_id, params))
+  end
+
+  # Return a live content item, i.e. content that has a state of "published" or "unpublished"
+  #
+  # Raises exception if the item doesn't exist.
+  #
+  # @param content_id [UUID]
+  # @option locale [String] locale The language, defaults to 'en' in publishing-api.
+  #
+  # @return [GdsApi::Response] a content item
+  #
+  # @raise [NoLiveVersion] when the content item is not found
+  # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2contentcontent_id
+  def get_live_content(content_id, locale = "en")
+    content_item = get_content(content_id, locale: locale)
+
+    live_states = %w[published unpublished]
+    return content_item if live_states.include?(content_item.to_h["publication_state"])
+
+    live_version_number = content_item["state_history"].find { |_, v| live_states.include?(v) }&.first
+    raise NoLiveVersion, "No live version exists for content_id: #{content_id}" unless live_version_number
+
+    get_content(content_id, locale: locale, version: live_version_number)
   end
 
   # Find the content_ids for a list of base_paths.
