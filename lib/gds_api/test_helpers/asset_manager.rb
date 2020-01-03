@@ -1,6 +1,10 @@
+require "gds_api/test_helpers/alias_deprecated"
+
 module GdsApi
   module TestHelpers
     module AssetManager
+      extend AliasDeprecated
+
       ASSET_MANAGER_ENDPOINT = Plek.current.find("asset-manager")
 
       def stub_any_asset_manager_call
@@ -104,19 +108,18 @@ module GdsApi
         stub_request(:delete, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}").to_return(status: 500)
       end
 
-      # Aliases for DEPRECATED methods
-      alias_method :asset_manager_updates_any_asset, :stub_asset_manager_updates_any_asset
-      alias_method :asset_manager_deletes_any_asset, :stub_asset_manager_deletes_any_asset
-      alias_method :asset_manager_has_an_asset, :stub_asset_manager_has_an_asset
-      alias_method :asset_manager_has_a_whitehall_asset, :stub_asset_manager_has_a_whitehall_asset
-      alias_method :asset_manager_does_not_have_an_asset, :stub_asset_manager_does_not_have_an_asset
-      alias_method :asset_manager_does_not_have_a_whitehall_asset, :stub_asset_manager_does_not_have_a_whitehall_asset
-      alias_method :asset_manager_receives_an_asset, :stub_asset_manager_receives_an_asset
-      alias_method :asset_manager_upload_failure, :stub_asset_manager_upload_failure
-      alias_method :asset_manager_update_asset, :stub_asset_manager_update_asset
-      alias_method :asset_manager_update_failure, :stub_asset_manager_update_asset_failure
-      alias_method :asset_manager_delete_asset, :stub_asset_manager_delete_asset
-      alias_method :asset_manager_delete_failure, :stub_asset_manager_delete_asset_failure
+      alias_deprecated :asset_manager_updates_any_asset, :stub_asset_manager_updates_any_asset
+      alias_deprecated :asset_manager_deletes_any_asset, :stub_asset_manager_deletes_any_asset
+      alias_deprecated :asset_manager_has_an_asset, :stub_asset_manager_has_an_asset
+      alias_deprecated :asset_manager_has_a_whitehall_asset, :stub_asset_manager_has_a_whitehall_asset
+      alias_deprecated :asset_manager_does_not_have_an_asset, :stub_asset_manager_does_not_have_an_asset
+      alias_deprecated :asset_manager_does_not_have_a_whitehall_asset, :stub_asset_manager_does_not_have_a_whitehall_asset
+      alias_deprecated :asset_manager_receives_an_asset, :stub_asset_manager_receives_an_asset
+      alias_deprecated :asset_manager_upload_failure, :stub_asset_manager_upload_failure
+      alias_deprecated :asset_manager_update_asset, :stub_asset_manager_update_asset
+      alias_deprecated :asset_manager_update_failure, :stub_asset_manager_update_asset_failure
+      alias_deprecated :asset_manager_delete_asset, :stub_asset_manager_delete_asset
+      alias_deprecated :asset_manager_delete_failure, :stub_asset_manager_delete_asset_failure
     end
   end
 end

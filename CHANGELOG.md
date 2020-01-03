@@ -1,3 +1,10 @@
+# Unreleased
+
+* Issue a warning when deprecated stub methods are called. `stub_*` methods
+  should be used instead.
+* Remove methods incorrectly marked as being stubs, I don't expect any are used
+  externally so shouldn't be a breaking change.
+
 # 63.1.1
 
 * Fix `GdsApi::TestHelpers::PublishingApiV2` not requiring Publishing API test helpers.

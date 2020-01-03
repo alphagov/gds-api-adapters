@@ -1,6 +1,9 @@
+require "gds_api/test_helpers/alias_deprecated"
+
 module GdsApi
   module TestHelpers
     module Mapit
+      extend AliasDeprecated
       MAPIT_ENDPOINT = Plek.current.find("mapit")
 
       def stub_mapit_has_a_postcode(postcode, coords)
@@ -72,15 +75,14 @@ module GdsApi
         .to_return(body: { "code" => 404, "error" => "No areas were found that matched code #{code_type} = #{code}." }.to_json, status: 404)
       end
 
-      # Aliases for DEPRECATED methods
-      alias_method :mapit_has_a_postcode, :stub_mapit_has_a_postcode
-      alias_method :mapit_has_a_postcode_and_areas, :stub_mapit_has_a_postcode_and_areas
-      alias_method :mapit_does_not_have_a_postcode, :stub_mapit_does_not_have_a_postcode
-      alias_method :mapit_does_not_have_a_bad_postcode, :stub_mapit_does_not_have_a_bad_postcode
-      alias_method :mapit_has_areas, :stub_mapit_has_areas
-      alias_method :mapit_does_not_have_areas, :stub_mapit_does_not_have_areas
-      alias_method :mapit_has_area_for_code, :stub_mapit_has_area_for_code
-      alias_method :mapit_does_not_have_area_for_code, :stub_mapit_does_not_have_area_for_code
+      alias_deprecated :mapit_has_a_postcode, :stub_mapit_has_a_postcode
+      alias_deprecated :mapit_has_a_postcode_and_areas, :stub_mapit_has_a_postcode_and_areas
+      alias_deprecated :mapit_does_not_have_a_postcode, :stub_mapit_does_not_have_a_postcode
+      alias_deprecated :mapit_does_not_have_a_bad_postcode, :stub_mapit_does_not_have_a_bad_postcode
+      alias_deprecated :mapit_has_areas, :stub_mapit_has_areas
+      alias_deprecated :mapit_does_not_have_areas, :stub_mapit_does_not_have_areas
+      alias_deprecated :mapit_has_area_for_code, :stub_mapit_has_area_for_code
+      alias_deprecated :mapit_does_not_have_area_for_code, :stub_mapit_does_not_have_area_for_code
     end
   end
 end

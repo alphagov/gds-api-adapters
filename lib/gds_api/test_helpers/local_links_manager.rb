@@ -1,8 +1,10 @@
+require "gds_api/test_helpers/alias_deprecated"
 require "gds_api/test_helpers/json_client_helper"
 
 module GdsApi
   module TestHelpers
     module LocalLinksManager
+      extend AliasDeprecated
       LOCAL_LINKS_MANAGER_ENDPOINT = Plek.current.find("local-links-manager")
 
       def stub_local_links_manager_has_a_link(authority_slug:, lgsl:, lgil:, url:)
@@ -115,14 +117,14 @@ module GdsApi
 
       def stub_local_links_manager_request_without_local_authority_slug
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
-        .with(query: { authority_slug: "" })
-        .to_return(body: {}.to_json, status: 400)
+          .with(query: { authority_slug: "" })
+          .to_return(body: {}.to_json, status: 400)
       end
 
       def stub_local_links_manager_does_not_have_an_authority(authority_slug)
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
-        .with(query: { authority_slug: authority_slug })
-        .to_return(body: {}.to_json, status: 404)
+          .with(query: { authority_slug: authority_slug })
+          .to_return(body: {}.to_json, status: 404)
       end
 
       def stub_local_links_manager_has_a_local_authority_without_homepage(authority_slug)
@@ -141,17 +143,16 @@ module GdsApi
           .to_return(body: response.to_json, status: 200)
       end
 
-      # Aliases for DEPRECATED methods
-      alias_method :local_links_manager_has_a_link, :stub_local_links_manager_has_a_link
-      alias_method :local_links_manager_has_no_link, :stub_local_links_manager_has_no_link
-      alias_method :local_links_manager_has_no_link_and_no_homepage_url, :stub_local_links_manager_has_no_link_and_no_homepage_url
-      alias_method :local_links_manager_request_with_missing_parameters, :stub_local_links_manager_request_with_missing_parameters
-      alias_method :local_links_manager_does_not_have_required_objects, :stub_local_links_manager_does_not_have_required_objects
-      alias_method :local_links_manager_has_a_local_authority, :stub_local_links_manager_has_a_local_authority
-      alias_method :local_links_manager_has_a_district_and_county_local_authority, :stub_local_links_manager_has_a_district_and_county_local_authority
-      alias_method :local_links_manager_request_without_local_authority_slug, :stub_local_links_manager_request_without_local_authority_slug
-      alias_method :local_links_manager_does_not_have_an_authority, :stub_local_links_manager_does_not_have_an_authority
-      alias_method :local_links_manager_has_a_local_authority_without_homepage, :stub_local_links_manager_has_a_local_authority_without_homepage
+      alias_deprecated :local_links_manager_has_a_link, :stub_local_links_manager_has_a_link
+      alias_deprecated :local_links_manager_has_no_link, :stub_local_links_manager_has_no_link
+      alias_deprecated :local_links_manager_has_no_link_and_no_homepage_url, :stub_local_links_manager_has_no_link_and_no_homepage_url
+      alias_deprecated :local_links_manager_request_with_missing_parameters, :stub_local_links_manager_request_with_missing_parameters
+      alias_deprecated :local_links_manager_does_not_have_required_objects, :stub_local_links_manager_does_not_have_required_objects
+      alias_deprecated :local_links_manager_has_a_local_authority, :stub_local_links_manager_has_a_local_authority
+      alias_deprecated :local_links_manager_has_a_district_and_county_local_authority, :stub_local_links_manager_has_a_district_and_county_local_authority
+      alias_deprecated :local_links_manager_request_without_local_authority_slug, :stub_local_links_manager_request_without_local_authority_slug
+      alias_deprecated :local_links_manager_does_not_have_an_authority, :stub_local_links_manager_does_not_have_an_authority
+      alias_deprecated :local_links_manager_has_a_local_authority_without_homepage, :stub_local_links_manager_has_a_local_authority_without_homepage
     end
   end
 end

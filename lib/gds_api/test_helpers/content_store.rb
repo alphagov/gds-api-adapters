@@ -1,3 +1,4 @@
+require "gds_api/test_helpers/alias_deprecated"
 require "gds_api/test_helpers/json_client_helper"
 require "gds_api/test_helpers/content_item_helpers"
 require "json"
@@ -5,7 +6,12 @@ require "json"
 module GdsApi
   module TestHelpers
     module ContentStore
+      extend AliasDeprecated
       include ContentItemHelpers
+
+      def content_store_endpoint(draft = false)
+        draft ? Plek.current.find("draft-content-store") : Plek.current.find("content-store")
+      end
 
       # Stubs a content item in the content store.
       # The following options can be passed in:
@@ -14,14 +20,10 @@ module GdsApi
       #   :private  if true, the Cache-Control header will include the "private" directive. By default it
       #             will include "public"
       #   :draft    will point to the draft content store if set to true
-      def stub_content_store_endpoint(draft = false)
-        draft ? Plek.current.find("draft-content-store") : Plek.current.find("content-store")
-      end
-
       def stub_content_store_has_item(base_path, body = content_item_for_base_path(base_path), options = {})
         max_age = options.fetch(:max_age, 900)
         visibility = options[:private] ? "private" : "public"
-        url = stub_content_store_endpoint(options[:draft]) + "/content" + base_path
+        url = content_store_endpoint(options[:draft]) + "/content" + base_path
         body = body.to_json unless body.is_a?(String)
 
         stub_request(:get, url).to_return(
@@ -35,10 +37,10 @@ module GdsApi
       end
 
       def stub_content_store_does_not_have_item(base_path, options = {})
-        url = stub_content_store_endpoint(options[:draft]) + "/content" + base_path
+        url = content_store_endpoint(options[:draft]) + "/content" + base_path
         stub_request(:get, url).to_return(status: 404, headers: {})
 
-        url = stub_content_store_endpoint(options[:draft]) + "/incoming-links" + base_path
+        url = content_store_endpoint(options[:draft]) + "/incoming-links" + base_path
         stub_request(:get, url).to_return(status: 404, headers: {})
       end
 
@@ -67,7 +69,7 @@ module GdsApi
       #     "details" => {}
       #   }
       def stub_content_store_has_gone_item(base_path, body = gone_content_item_for_base_path(base_path), options = {})
-        url = stub_content_store_endpoint(options[:draft]) + "/content" + base_path
+        url = content_store_endpoint(options[:draft]) + "/content" + base_path
         body = body.to_json unless body.is_a?(String)
 
         stub_request(:get, url).to_return(
@@ -78,7 +80,7 @@ module GdsApi
       end
 
       def stub_content_store_isnt_available
-        stub_request(:any, /#{stub_content_store_endpoint}\/.*/).to_return(status: 503)
+        stub_request(:any, /#{content_store_endpoint}\/.*/).to_return(status: 503)
       end
 
       def content_item_for_base_path(base_path)
@@ -86,19 +88,18 @@ module GdsApi
       end
 
       def stub_content_store_has_incoming_links(base_path, links)
-        url = stub_content_store_endpoint + "/incoming-links" + base_path
+        url = content_store_endpoint + "/incoming-links" + base_path
         body = links.to_json
 
         stub_request(:get, url).to_return(body: body)
       end
 
       # Aliases for DEPRECATED methods
-      alias_method :content_store_endpoint, :stub_content_store_endpoint
-      alias_method :content_store_has_item, :stub_content_store_has_item
-      alias_method :content_store_does_not_have_item, :stub_content_store_does_not_have_item
-      alias_method :content_store_has_gone_item, :stub_content_store_has_gone_item
-      alias_method :content_store_isnt_available, :stub_content_store_isnt_available
-      alias_method :content_store_has_incoming_links, :stub_content_store_has_incoming_links
+      alias_deprecated :content_store_has_item, :stub_content_store_has_item
+      alias_deprecated :content_store_does_not_have_item, :stub_content_store_does_not_have_item
+      alias_deprecated :content_store_has_gone_item, :stub_content_store_has_gone_item
+      alias_deprecated :content_store_isnt_available, :stub_content_store_isnt_available
+      alias_deprecated :content_store_has_incoming_links, :stub_content_store_has_incoming_links
     end
   end
 end

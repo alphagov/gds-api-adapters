@@ -73,7 +73,7 @@ class LicenceApplicationApiTest < Minitest::Test
   end
 
   def test_should_raise_if_licence_is_unrecognised
-    licence_does_not_exist("bloop")
+    stub_licence_does_not_exist("bloop")
 
     assert_raises(GdsApi::HTTPNotFound) do
       api.details_for_licence("bloop")
@@ -81,7 +81,7 @@ class LicenceApplicationApiTest < Minitest::Test
   end
 
   def test_should_provide_full_licence_details_for_canonical_id
-    licence_exists("590001", "isLocationSpecific" => true, "geographicalAvailability" => %w(England Wales), "issuingAuthorities" => [])
+    stub_licence_exists("590001", "isLocationSpecific" => true, "geographicalAvailability" => %w(England Wales), "issuingAuthorities" => [])
 
     expected = {
       "isLocationSpecific" => true,
@@ -93,7 +93,7 @@ class LicenceApplicationApiTest < Minitest::Test
   end
 
   def test_should_raise_for_bad_snac_code_entry
-    licence_does_not_exist("590001/bleep")
+    stub_licence_does_not_exist("590001/bleep")
 
     assert_raises(GdsApi::HTTPNotFound) do
       api.details_for_licence("590001", "bleep")
@@ -101,7 +101,7 @@ class LicenceApplicationApiTest < Minitest::Test
   end
 
   def test_should_raise_for_bad_licence_id_and_snac_code
-    licence_does_not_exist("bloop/bleep")
+    stub_licence_does_not_exist("bloop/bleep")
 
     assert_raises(GdsApi::HTTPNotFound) do
       api.details_for_licence("bloop", "bleep")
@@ -120,7 +120,7 @@ class LicenceApplicationApiTest < Minitest::Test
   end
 
   def test_should_return_full_licence_details_with_location_specific_information
-    licence_exists("866-5-1/00AA", <<~JSON
+    stub_licence_exists("866-5-1/00AA", <<~JSON
       {
          "isLocationSpecific":true,
          "geographicalAvailability":[
@@ -179,7 +179,7 @@ class LicenceApplicationApiTest < Minitest::Test
   end
 
   def test_should_raise_exception_on_timeout
-    licence_times_out("866-5-1")
+    stub_licence_times_out("866-5-1")
 
     assert_raises GdsApi::TimedOutException do
       api.details_for_licence("866-5-1")
@@ -187,7 +187,7 @@ class LicenceApplicationApiTest < Minitest::Test
   end
 
   def test_should_raise_exception_on_api_error
-    licence_returns_error("866-5-1")
+    stub_licence_returns_error("866-5-1")
 
     assert_raises GdsApi::HTTPServerError do
       api.details_for_licence("866-5-1")
