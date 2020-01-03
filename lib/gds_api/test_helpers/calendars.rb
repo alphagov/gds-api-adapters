@@ -1,7 +1,7 @@
 module GdsApi
   module TestHelpers
     module Calendars
-      def stub_calendars_endpoint(in_division: nil)
+      def calendars_endpoint(in_division: nil)
         endpoint = "#{Plek.new.website_root}/bank-holidays"
         endpoint += "/#{in_division}" unless in_division.nil?
         endpoint + ".json"
@@ -53,7 +53,6 @@ module GdsApi
       end
 
       # Aliases for DEPRECATED methods
-      alias_method :calendars_endpoint, :stub_calendars_endpoint
       alias_method :calendars_has_no_bank_holidays, :stub_calendars_has_no_bank_holidays
       alias_method :calendars_has_bank_holidays_on, :stub_calendars_has_bank_holidays_on
       alias_method :calendars_has_a_bank_holiday_on, :stub_calendars_has_a_bank_holiday_on

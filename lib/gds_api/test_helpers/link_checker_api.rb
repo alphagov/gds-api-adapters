@@ -5,7 +5,7 @@ module GdsApi
     module LinkCheckerApi
       LINK_CHECKER_API_ENDPOINT = Plek.current.find("link-checker-api")
 
-      def stub_link_checker_api_link_report_hash(uri:, status: :ok, checked: nil, errors: [], warnings: [], problem_summary: nil, suggested_fix: nil)
+      def link_checker_api_link_report_hash(uri:, status: :ok, checked: nil, errors: [], warnings: [], problem_summary: nil, suggested_fix: nil)
         {
           uri: uri,
           status: status,
@@ -17,18 +17,18 @@ module GdsApi
         }
       end
 
-      def stub_link_checker_api_batch_report_hash(id:, status: :completed, links: [], totals: {}, completed_at: nil)
+      def link_checker_api_batch_report_hash(id:, status: :completed, links: [], totals: {}, completed_at: nil)
         {
           id: id,
           status: status,
-          links: links.map { |hash| stub_link_checker_api_link_report_hash(**hash) },
+          links: links.map { |hash| link_checker_api_link_report_hash(**hash) },
           totals: totals,
           completed_at: completed_at || Time.now.iso8601,
         }
       end
 
       def stub_link_checker_api_check(uri:, status: :ok, checked: nil, errors: [], warnings: [], problem_summary: nil, suggested_fix: nil)
-        body = stub_link_checker_api_link_report_hash(
+        body = link_checker_api_link_report_hash(
           uri: uri, status: status, checked: checked, errors: errors, warnings: warnings, problem_summary: problem_summary, suggested_fix: suggested_fix,
         ).to_json
 
@@ -38,7 +38,7 @@ module GdsApi
       end
 
       def stub_link_checker_api_get_batch(id:, status: :completed, links: [], totals: {}, completed_at: nil)
-        body = stub_link_checker_api_batch_report_hash(
+        body = link_checker_api_batch_report_hash(
           id: id, status: status, links: links, totals: totals, completed_at: completed_at,
         ).to_json
 
@@ -49,7 +49,7 @@ module GdsApi
       def stub_link_checker_api_create_batch(uris:, checked_within: nil, webhook_uri: nil, webhook_secret_token: nil, id: 0, status: :in_progress, links: nil, totals: {}, completed_at: nil)
         links = uris.map { |uri| { uri: uri } } if links.nil?
 
-        response_body = stub_link_checker_api_batch_report_hash(
+        response_body = link_checker_api_batch_report_hash(
           id: id,
           status: status,
           links: links,
@@ -91,8 +91,6 @@ module GdsApi
       end
 
       # Aliases for DEPRECATED methods
-      alias_method :link_checker_api_link_report_hash, :stub_link_checker_api_link_report_hash
-      alias_method :link_checker_api_batch_report_hash, :stub_link_checker_api_batch_report_hash
       alias_method :link_checker_api_check, :stub_link_checker_api_check
       alias_method :link_checker_api_get_batch, :stub_link_checker_api_get_batch
       alias_method :link_checker_api_create_batch, :stub_link_checker_api_create_batch
