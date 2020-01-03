@@ -1,3 +1,4 @@
+require "gds_api/test_helpers/alias_deprecated"
 require "gds_api/test_helpers/json_client_helper"
 require "gds_api/test_helpers/content_item_helpers"
 require "json"
@@ -5,6 +6,7 @@ require "json"
 module GdsApi
   module TestHelpers
     module ContentStore
+      extend AliasDeprecated
       include ContentItemHelpers
 
       def content_store_endpoint(draft = false)
@@ -93,11 +95,11 @@ module GdsApi
       end
 
       # Aliases for DEPRECATED methods
-      alias_method :content_store_has_item, :stub_content_store_has_item
-      alias_method :content_store_does_not_have_item, :stub_content_store_does_not_have_item
-      alias_method :content_store_has_gone_item, :stub_content_store_has_gone_item
-      alias_method :content_store_isnt_available, :stub_content_store_isnt_available
-      alias_method :content_store_has_incoming_links, :stub_content_store_has_incoming_links
+      alias_deprecated :content_store_has_item, :stub_content_store_has_item
+      alias_deprecated :content_store_does_not_have_item, :stub_content_store_does_not_have_item
+      alias_deprecated :content_store_has_gone_item, :stub_content_store_has_gone_item
+      alias_deprecated :content_store_isnt_available, :stub_content_store_isnt_available
+      alias_deprecated :content_store_has_incoming_links, :stub_content_store_has_incoming_links
     end
   end
 end

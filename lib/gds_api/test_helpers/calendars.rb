@@ -1,6 +1,10 @@
+require "gds_api/test_helpers/alias_deprecated"
+
 module GdsApi
   module TestHelpers
     module Calendars
+      extend AliasDeprecated
+
       def calendars_endpoint(in_division: nil)
         endpoint = "#{Plek.new.website_root}/bank-holidays"
         endpoint += "/#{in_division}" unless in_division.nil?
@@ -53,9 +57,9 @@ module GdsApi
       end
 
       # Aliases for DEPRECATED methods
-      alias_method :calendars_has_no_bank_holidays, :stub_calendars_has_no_bank_holidays
-      alias_method :calendars_has_bank_holidays_on, :stub_calendars_has_bank_holidays_on
-      alias_method :calendars_has_a_bank_holiday_on, :stub_calendars_has_a_bank_holiday_on
+      alias_deprecated :calendars_has_no_bank_holidays, :stub_calendars_has_no_bank_holidays
+      alias_deprecated :calendars_has_bank_holidays_on, :stub_calendars_has_bank_holidays_on
+      alias_deprecated :calendars_has_a_bank_holiday_on, :stub_calendars_has_a_bank_holiday_on
     end
   end
 end

@@ -1,8 +1,11 @@
+require "gds_api/test_helpers/alias_deprecated"
 require "gds_api/test_helpers/json_client_helper"
 
 module GdsApi
   module TestHelpers
     module Imminence
+      extend AliasDeprecated
+
       # Generally true. If you are initializing the client differently,
       # you could redefine/override the constant or stub directly.
       IMMINENCE_API_ENDPOINT = Plek.current.find("imminence")
@@ -34,10 +37,9 @@ module GdsApi
         to_return(status: status_code, body: return_data.to_json, headers: {})
       end
 
-      # Aliases for DEPRECATED methods
-      alias_method :imminence_has_places, :stub_imminence_has_places
-      alias_method :imminence_has_areas_for_postcode, :stub_imminence_has_areas_for_postcode
-      alias_method :imminence_has_places_for_postcode, :stub_imminence_has_places_for_postcode
+      alias_deprecated :imminence_has_places, :stub_imminence_has_places
+      alias_deprecated :imminence_has_areas_for_postcode, :stub_imminence_has_areas_for_postcode
+      alias_deprecated :imminence_has_places_for_postcode, :stub_imminence_has_places_for_postcode
     end
   end
 end

@@ -1,3 +1,4 @@
+require "gds_api/test_helpers/alias_deprecated"
 require "gds_api/test_helpers/json_client_helper"
 require "gds_api/test_helpers/content_item_helpers"
 require "gds_api/test_helpers/intent_helpers"
@@ -7,6 +8,7 @@ module GdsApi
   module TestHelpers
     # @api documented
     module PublishingApi
+      extend AliasDeprecated
       include ContentItemHelpers
       include IntentHelpers
 
@@ -780,25 +782,24 @@ module GdsApi
                     body: { error: error }.to_json)
       end
 
-      # Aliases for DEPRECATED methods
-      alias_method :publishing_api_isnt_available, :stub_publishing_api_isnt_available
-      alias_method :publishing_api_has_content, :stub_publishing_api_has_content
-      alias_method :publishing_api_has_fields_for_document, :stub_publishing_api_has_fields_for_document
-      alias_method :publishing_api_has_linkables, :stub_publishing_api_has_linkables
-      alias_method :publishing_api_has_item, :stub_publishing_api_has_item
-      alias_method :publishing_api_has_item_in_sequence, :stub_publishing_api_has_item_in_sequence
-      alias_method :publishing_api_does_not_have_item, :stub_publishing_api_does_not_have_item
-      alias_method :publishing_api_has_links, :stub_publishing_api_has_links
-      alias_method :publishing_api_has_expanded_links, :stub_publishing_api_has_expanded_links
-      alias_method :publishing_api_has_links_for_content_ids, :stub_publishing_api_has_links_for_content_ids
-      alias_method :publishing_api_does_not_have_links, :stub_publishing_api_does_not_have_links
-      alias_method :publishing_api_has_lookups, :stub_publishing_api_has_lookups
-      alias_method :publishing_api_has_linked_items, :stub_publishing_api_has_linked_items
-      alias_method :publishing_api_get_editions, :stub_publishing_api_get_editions
-      alias_method :publishing_api_has_path_reservation_for, :stub_publishing_api_has_path_reservation_for
-      alias_method :publishing_api_returns_path_reservation_validation_error_for, :stub_publishing_api_returns_path_reservation_validation_error_for
-      alias_method :stub_default_publishing_api_path_reservation, :stub_any_publishing_api_path_reservation
-      alias_method :stub_default_publishing_api_put_intent, :stub_any_publishing_api_put_intent
+      alias_deprecated :publishing_api_isnt_available, :stub_publishing_api_isnt_available
+      alias_deprecated :publishing_api_has_content, :stub_publishing_api_has_content
+      alias_deprecated :publishing_api_has_fields_for_document, :stub_publishing_api_has_fields_for_document
+      alias_deprecated :publishing_api_has_linkables, :stub_publishing_api_has_linkables
+      alias_deprecated :publishing_api_has_item, :stub_publishing_api_has_item
+      alias_deprecated :publishing_api_has_item_in_sequence, :stub_publishing_api_has_item_in_sequence
+      alias_deprecated :publishing_api_does_not_have_item, :stub_publishing_api_does_not_have_item
+      alias_deprecated :publishing_api_has_links, :stub_publishing_api_has_links
+      alias_deprecated :publishing_api_has_expanded_links, :stub_publishing_api_has_expanded_links
+      alias_deprecated :publishing_api_has_links_for_content_ids, :stub_publishing_api_has_links_for_content_ids
+      alias_deprecated :publishing_api_does_not_have_links, :stub_publishing_api_does_not_have_links
+      alias_deprecated :publishing_api_has_lookups, :stub_publishing_api_has_lookups
+      alias_deprecated :publishing_api_has_linked_items, :stub_publishing_api_has_linked_items
+      alias_deprecated :publishing_api_get_editions, :stub_publishing_api_get_editions
+      alias_deprecated :publishing_api_has_path_reservation_for, :stub_publishing_api_has_path_reservation_for
+      alias_deprecated :publishing_api_returns_path_reservation_validation_error_for, :stub_publishing_api_returns_path_reservation_validation_error_for
+      alias_deprecated :stub_default_publishing_api_path_reservation, :stub_any_publishing_api_path_reservation
+      alias_deprecated :stub_default_publishing_api_put_intent, :stub_any_publishing_api_put_intent
 
     private
 
