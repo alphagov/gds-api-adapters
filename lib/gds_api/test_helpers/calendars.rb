@@ -12,7 +12,7 @@ module GdsApi
       end
 
       def stub_calendars_has_no_bank_holidays(in_division: nil)
-        calendars_has_bank_holidays_on([], in_division: in_division)
+        stub_calendars_has_bank_holidays_on([], in_division: in_division)
       end
 
       def stub_calendars_has_bank_holidays_on(dates, in_division: nil)
@@ -53,7 +53,7 @@ module GdsApi
       end
 
       def stub_calendars_has_a_bank_holiday_on(date, in_division: nil)
-        calendars_has_bank_holidays_on([date], in_division: in_division)
+        stub_calendars_has_bank_holidays_on([date], in_division: in_division)
       end
 
       # Aliases for DEPRECATED methods

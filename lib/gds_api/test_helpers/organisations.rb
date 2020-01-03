@@ -14,7 +14,7 @@ module GdsApi
 
       def stub_organisations_api_has_organisations(organisation_slugs)
         bodies = organisation_slugs.map { |slug| organisation_for_slug(slug) }
-        organisations_api_has_organisations_with_bodies(bodies)
+        stub_organisations_api_has_organisations_with_bodies(bodies)
       end
 
       # Sets up the index endpoints for the given organisation slugs
@@ -26,7 +26,7 @@ module GdsApi
         # Stub API call to the endpoint for an individual organisation
         organisation_bodies.each do |body|
           slug = body["details"]["slug"]
-          organisations_api_has_organisation(slug, body)
+          stub_organisations_api_has_organisation(slug, body)
         end
 
         pages = []
