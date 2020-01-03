@@ -4,6 +4,7 @@
   should be used instead.
 * Remove methods incorrectly marked as being stubs, I don't expect any are used
   externally so shouldn't be a breaking change.
+* Add `get_live_content` method to `GdsApi::PublishingApi`
 
 # 63.1.1
 
