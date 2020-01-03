@@ -1,7 +1,6 @@
 require "gds_api/test_helpers/alias_deprecated"
 require "gds_api/test_helpers/json_client_helper"
 require "gds_api/test_helpers/content_item_helpers"
-require "gds_api/test_helpers/intent_helpers"
 require "json"
 
 module GdsApi
@@ -10,7 +9,6 @@ module GdsApi
     module PublishingApi
       extend AliasDeprecated
       include ContentItemHelpers
-      include IntentHelpers
 
       PUBLISHING_API_V2_ENDPOINT = Plek.current.find("publishing-api") + "/v2"
       PUBLISHING_API_ENDPOINT = Plek.current.find("publishing-api")
@@ -643,10 +641,29 @@ module GdsApi
         stub_publishing_api_unreserve_path_with_code(base_path, publishing_app, 422)
       end
 
-      def stub_publishing_api_put_intent(base_path, body = intent_for_publishing_api(base_path))
-        url = PUBLISHING_API_ENDPOINT + "/publish-intent" + base_path
-        body = body.to_json unless body.is_a?(String)
-        stub_request(:put, url).with(body: body).to_return(status: 200, body: "{}", headers: { "Content-Type" => "application/json; charset=utf-8" })
+      # Stub a PUT /publish-intent/:base_path request with the given base_path
+      # and request body.
+      #
+      # @example
+      #   stub_publishing_api_put_intent(
+      #     "/path/to/content",
+      #     publishing_app: "publisher",
+      #     rendering_app: "frontend",
+      #     publish_time: "2019-11-11T17:56:17+00:00",
+      #   )
+      #
+      # @param base_path [String]
+      # @param params [Hash]
+      def stub_publishing_api_put_intent(base_path, params = {})
+        url = PUBLISHING_API_ENDPOINT + "/publish-intent#{base_path}"
+        body = params.is_a?(String) ? params : params.to_json
+
+        response = {
+          status: 200,
+          headers: { content_type: "application/json" },
+          body: body,
+        }
+        stub_request(:put, url).with(body: params).to_return(response)
       end
 
       def stub_publishing_api_destroy_intent(base_path)
@@ -885,10 +902,6 @@ module GdsApi
 
       def content_item_for_publishing_api(base_path, publishing_app = "publisher")
         content_item_for_base_path(base_path).merge("publishing_app" => publishing_app)
-      end
-
-      def intent_for_publishing_api(base_path, publishing_app = "publisher")
-        intent_for_base_path(base_path).merge("publishing_app" => publishing_app)
       end
     end
   end

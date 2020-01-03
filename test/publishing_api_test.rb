@@ -2313,7 +2313,9 @@ describe GdsApi::PublishingApi do
   describe "#put_intent" do
     it "responds with 200 OK if publish intent is valid" do
       base_path = "/test-intent"
-      publish_intent = intent_for_publishing_api(base_path)
+      publish_intent = { publishing_app: "publisher",
+                         rendering_app: "frontend",
+                         publish_time: "2019-11-11t17:56:17+00:00" }
 
       publishing_api
         .given("no content exists")
@@ -2328,7 +2330,11 @@ describe GdsApi::PublishingApi do
         )
         .will_respond_with(
           status: 200,
-          body: {},
+          body: {
+            "publishing_app" => "publisher",
+            "rendering_app" =>  "frontend",
+            "publish_time" => "2019-11-11t17:56:17+00:00",
+          },
           headers: {
             "Content-Type" => "application/json; charset=utf-8",
           },
