@@ -328,16 +328,12 @@ describe GdsApi::TestHelpers::PublishingApi do
   end
 
   describe "#stub_publishing_api_isnt_available" do
-    it "returns a 503 for V2 requests" do
+    it "returns a 503 for any request" do
       stub_publishing_api_isnt_available
 
       assert_raises GdsApi::BaseError do
         publishing_api.get_content_items({})
       end
-    end
-
-    it "returns a 503 for V1 requests" do
-      stub_publishing_api_isnt_available
 
       assert_raises GdsApi::BaseError do
         publishing_api.lookup_content_id(base_path: "")
