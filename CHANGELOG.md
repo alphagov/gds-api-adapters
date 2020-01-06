@@ -1,4 +1,4 @@
-# Unreleased
+# 63.2.0
 
 * Issue a warning when deprecated stub methods are called. `stub_*` methods
   should be used instead.
