@@ -328,20 +328,39 @@ describe GdsApi::TestHelpers::PublishingApi do
   end
 
   describe "#stub_publishing_api_isnt_available" do
-    it "returns a 503 for V2 requests" do
+    it "returns a 503 for any request" do
       stub_publishing_api_isnt_available
 
       assert_raises GdsApi::BaseError do
         publishing_api.get_content_items({})
       end
-    end
-
-    it "returns a 503 for V1 requests" do
-      stub_publishing_api_isnt_available
 
       assert_raises GdsApi::BaseError do
         publishing_api.lookup_content_id(base_path: "")
       end
+    end
+  end
+
+  describe "#stub_publishing_api_put_intent" do
+    it "stubs the put intent endpoint" do
+      params = { publishing_app: "publisher",
+                 rendering_app: "frontend",
+                 publish_time: "2019-11-11t17:56:17+00:00" }
+      stub_publishing_api_put_intent("/foo", params)
+      api_response = publishing_api.put_intent("/foo", params)
+      assert_equal(api_response.code, 200)
+
+      assert_equal({
+        "publishing_app" => "publisher",
+        "rendering_app" => "frontend",
+        "publish_time" => "2019-11-11t17:56:17+00:00",
+      }, api_response.to_h)
+    end
+
+    it "accepts parameters as a string" do
+      stub_publishing_api_put_intent("/foo", '"string"')
+      api_response = publishing_api.put_intent("/foo", "string")
+      assert_equal('"string"', api_response.raw_response_body)
     end
   end
 
