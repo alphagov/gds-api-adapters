@@ -1,3 +1,9 @@
+# Unreleased
+
+* Change Worldwide API requests to be routed to whitehall-frontend by
+  default, rather than whitehall-admin. Update the test helpers
+  accordingly.
+
 # 63.2.0
 
 * Issue a warning when deprecated stub methods are called. `stub_*` methods
