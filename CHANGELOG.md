@@ -1,4 +1,4 @@
-# Unreleased
+# 63.3.0
 
 * Change Worldwide API requests to be routed to whitehall-frontend by
   default, rather than whitehall-admin. Update the test helpers
