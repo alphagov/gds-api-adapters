@@ -192,10 +192,10 @@ module GdsApi
   end
 
   # Creates a GdsApi::Worldwide adapter for accessing Whitehall APIs on a
-  # whitehall-admin host
+  # whitehall-frontend host
   #
   # @return [GdsApi::Worldwide]
   def self.worldwide(options = {})
-    GdsApi::Worldwide.new(Plek.find("whitehall-admin"), options)
+    GdsApi::Worldwide.new(Plek.find("whitehall-frontend"), options)
   end
 end

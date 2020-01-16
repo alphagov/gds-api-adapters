@@ -8,7 +8,7 @@ module GdsApi
       extend AliasDeprecated
       include GdsApi::TestHelpers::CommonResponses
 
-      WORLDWIDE_API_ENDPOINT = Plek.current.find("whitehall-admin")
+      WORLDWIDE_API_ENDPOINT = Plek.current.find("whitehall-frontend")
 
       # Sets up the index endpoints for the given country slugs
       # The stubs are setup to paginate in chunks of 20
