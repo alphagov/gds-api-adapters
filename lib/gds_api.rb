@@ -117,8 +117,9 @@ module GdsApi
     GdsApi::Maslow.new(Plek.new.external_url_for("maslow"), options)
   end
 
-  # Creates a GdsApi::Organisations adapter for accessing Whitehall APIs on a
-  # whitehall-admin host
+  # Creates a GdsApi::Organisations adapter for accessing Whitehall
+  # APIs through the origin, where the requests will be handled by
+  # Collections frontend.
   #
   # @return [GdsApi::Organisations]
   def self.organisations(options = {})
