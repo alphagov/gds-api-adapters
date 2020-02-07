@@ -1,3 +1,8 @@
+# Unreleased
+
+* Fix Publishing API `stub_any_publishing_api_call` methods only operating on
+  the V2 endpoint.
+
 # 63.3.0
 
 * Change Worldwide API requests to be routed to whitehall-frontend by
