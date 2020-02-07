@@ -427,6 +427,15 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
+  describe "#stub_any_publishing_api_unreserve_path" do
+    it "stubs a request to unreserve a path" do
+      stub_any_publishing_api_unreserve_path
+
+      api_response = publishing_api.unreserve_path("/foo", "myapp")
+      assert_equal(api_response.code, 200)
+    end
+  end
+
   describe "#stub_any_publishing_api_path_reservation" do
     it "stubs a request to reserve a path" do
       stub_any_publishing_api_path_reservation

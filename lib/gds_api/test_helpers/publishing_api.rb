@@ -640,6 +640,10 @@ module GdsApi
         stub_publishing_api_unreserve_path_with_code(base_path, publishing_app, 422)
       end
 
+      def stub_any_publishing_api_unreserve_path
+        stub_request(:delete, %r{\A#{PUBLISHING_API_ENDPOINT}/paths/})
+      end
+
       # Stub a PUT /publish-intent/:base_path request with the given base_path
       # and request body.
       #

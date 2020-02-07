@@ -1,5 +1,6 @@
 # Unreleased
 
+* Add `stub_any_publishing_api_unreserve_path` test helper.
 * Fix Publishing API `stub_any_publishing_api_call` methods only operating on
   the V2 endpoint.
 
