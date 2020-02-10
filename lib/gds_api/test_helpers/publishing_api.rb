@@ -174,20 +174,19 @@ module GdsApi
         stub_request(:post, %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/.*/discard-draft})
       end
 
-      # Stub any version 2 request to the publishing API
+      # Stub any request to the publishing API
       def stub_any_publishing_api_call
-        stub_request(:any, %r{\A#{PUBLISHING_API_V2_ENDPOINT}})
+        stub_request(:any, %r{\A#{PUBLISHING_API_ENDPOINT}})
       end
 
-      # Stub any version 2 request to the publishing API to return a 404 response
+      # Stub any request to the publishing API to return a 404 response
       def stub_any_publishing_api_call_to_return_not_found
-        stub_request(:any, %r{\A#{PUBLISHING_API_V2_ENDPOINT}})
+        stub_request(:any, %r{\A#{PUBLISHING_API_ENDPOINT}})
           .to_return(status: 404, headers: { "Content-Type" => "application/json; charset=utf-8" })
       end
 
-      # Stub any version 2 request to the publishing API to return a 503 response
+      # Stub any request to the publishing API to return a 503 response
       def stub_publishing_api_isnt_available
-        stub_request(:any, /#{PUBLISHING_API_V2_ENDPOINT}\/.*/).to_return(status: 503)
         stub_request(:any, /#{PUBLISHING_API_ENDPOINT}\/.*/).to_return(status: 503)
       end
 
@@ -639,6 +638,10 @@ module GdsApi
 
       def stub_publishing_api_unreserve_path_invalid(base_path, publishing_app = /.*/)
         stub_publishing_api_unreserve_path_with_code(base_path, publishing_app, 422)
+      end
+
+      def stub_any_publishing_api_unreserve_path
+        stub_request(:delete, %r{\A#{PUBLISHING_API_ENDPOINT}/paths/})
       end
 
       # Stub a PUT /publish-intent/:base_path request with the given base_path

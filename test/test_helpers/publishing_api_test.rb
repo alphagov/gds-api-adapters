@@ -328,15 +328,28 @@ describe GdsApi::TestHelpers::PublishingApi do
   end
 
   describe "#stub_publishing_api_isnt_available" do
-    it "returns a 503 for any request" do
+    it "raises a GdsApi::HTTPUnavailable for any request" do
       stub_publishing_api_isnt_available
 
-      assert_raises GdsApi::BaseError do
+      assert_raises GdsApi::HTTPUnavailable do
         publishing_api.get_content_items({})
       end
+    end
+  end
 
-      assert_raises GdsApi::BaseError do
-        publishing_api.lookup_content_id(base_path: "")
+  describe "#stub_any_publishing_api_call" do
+    it "returns a 200 response for any request" do
+      stub_any_publishing_api_call
+      response = publishing_api.get_editions
+      assert_equal(response.code, 200)
+    end
+  end
+
+  describe "#stub_any_publishing_api_call_to_return_not_found" do
+    it "returns a GdsApi::HTTPNotFound for any request" do
+      stub_any_publishing_api_call_to_return_not_found
+      assert_raises GdsApi::HTTPNotFound do
+        publishing_api.get_editions
       end
     end
   end
@@ -411,6 +424,15 @@ describe GdsApi::TestHelpers::PublishingApi do
       assert_raises GdsApi::HTTPUnprocessableEntity do
         publishing_api.unreserve_path("/foo", "myapp")
       end
+    end
+  end
+
+  describe "#stub_any_publishing_api_unreserve_path" do
+    it "stubs a request to unreserve a path" do
+      stub_any_publishing_api_unreserve_path
+
+      api_response = publishing_api.unreserve_path("/foo", "myapp")
+      assert_equal(api_response.code, 200)
     end
   end
 
