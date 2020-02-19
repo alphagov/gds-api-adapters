@@ -1,3 +1,7 @@
+# Unreleased
+
+* Change Worldwide API requests to use the website root rather than whitehall-frontend
+
 # 63.4.0
 
 * Add `stub_any_publishing_api_unreserve_path` test helper.
