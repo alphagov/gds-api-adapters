@@ -197,6 +197,6 @@ module GdsApi
   #
   # @return [GdsApi::Worldwide]
   def self.worldwide(options = {})
-    GdsApi::Worldwide.new(Plek.find("whitehall-frontend"), options)
+    GdsApi::Worldwide.new(Plek.new.website_root, options)
   end
 end
