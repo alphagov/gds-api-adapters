@@ -5,6 +5,7 @@ $:.unshift lib unless $:.include?(lib)
 
 require "gds_api/version"
 
+# rubocop:disable Metrics/BlockLength
 Gem::Specification.new do |s|
   s.name         = "gds-api-adapters"
   s.version      = GdsApi::VERSION
@@ -46,3 +47,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency "webrick", "~> 1.4"
   s.add_development_dependency "yard", "~> 0.9"
 end
+# rubocop:enable Metrics/BlockLength
