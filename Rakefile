@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 require "rdoc/task"
-require 'rake/testtask'
+require "rake/testtask"
 
 RDoc::Task.new do |rd|
   rd.rdoc_files.include("lib/**/*.rb")
@@ -15,12 +15,12 @@ Rake::TestTask.new("test") do |t|
 end
 task default: :test
 
-require 'pact_broker/client/tasks'
+require "pact_broker/client/tasks"
 
 def configure_pact_broker_location(task)
   task.pact_broker_base_url = ENV.fetch("PACT_BROKER_BASE_URL")
-  if ENV['PACT_BROKER_USERNAME']
-    task.pact_broker_basic_auth = { username: ENV['PACT_BROKER_USERNAME'], password: ENV['PACT_BROKER_PASSWORD'] }
+  if ENV["PACT_BROKER_USERNAME"]
+    task.pact_broker_basic_auth = { username: ENV["PACT_BROKER_USERNAME"], password: ENV["PACT_BROKER_PASSWORD"] }
   end
 end
 
