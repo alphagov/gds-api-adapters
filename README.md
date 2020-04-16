@@ -38,12 +38,11 @@ GdsApi::Base.logger = Logger.new("/path/to/file.log")
 ## Setting the timeout
 
 By default the JsonClient timeout is set to 4 seconds. If this is exceeded a
-`GdsApi::TimedOutException` will be raised. Individual clients may decide to
-override this timeout. Alternatively, you can override this in the application
+`GdsApi::TimedOutException` will be raised. You can override this by doing:
 that uses the adapter with:
 
 ```ruby
-Services.publishing_api.client.options[:timeout] = number_of_seconds
+adapter = GdsApi.publishing_api(timeout: <number_of_seconds>)
 ```
 
 In most cases, there is an upper-limit of 30 seconds imposed by the app server
