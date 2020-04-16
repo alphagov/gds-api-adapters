@@ -5,9 +5,8 @@ A set of API adapters to work with the GDS APIs.
 Example usage:
 
 ```ruby
-require 'gds_api/search'
-search = GdsApi::Search.new(Plek.new.find('search))
-results = search.search(q: "taxes")
+require 'gds_api/publishing_api'
+GdsApi.publishing_api.get_content("f3bbdec2-0e62-4520-a7fd-6ffd5d36e03a")
 ```
 
 Example adapters for frequently used applications:
