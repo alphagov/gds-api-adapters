@@ -83,23 +83,6 @@ There are also test helpers for stubbing various requests in other apps.
 
 See [all the test helpers in lib/gds_api/test_helpers](/lib/gds_api/test_helpers).
 
-### Dependencies
-
-Some of the helpers come with additional dependencies that you'll need to
-have installed and configured in your consuming app/lib.
-
-At time of writing, these are:
-
-* [WebMock](https://github.com/bblimke/webmock)
-
-### Documentation
-
-See [RubyDoc](http://www.rubydoc.info/gems/gds-api-adapters) for some limited documentation.
-
-To run a Yard server locally to preview documentation, run:
-
-    $ bundle exec yard server --reload
-
 ## Licence
 
 Released under the MIT Licence, a copy of which can be found in the file
