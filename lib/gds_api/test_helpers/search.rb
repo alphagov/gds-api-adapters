@@ -17,10 +17,10 @@ module GdsApi
       end
 
       def assert_search_posted_item(attributes, index: nil, **options)
-        if index
-          url = SEARCH_ENDPOINT + "/#{index}/documents"
+        url = if index
+          SEARCH_ENDPOINT + "/#{index}/documents"
         else
-          url = SEARCH_ENDPOINT + "/documents"
+          SEARCH_ENDPOINT + "/documents"
         end
 
         assert_requested(:post, url, **options) do |req|
