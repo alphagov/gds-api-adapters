@@ -3,8 +3,4 @@ inherit_gem:
     - config/default.yml
 
 AllCops:
-  TargetRubyVersion: 2.3
-
-# This cop sometimes leads to ugly indentation.
-Style/ConditionalAssignment:
-  Enabled: false
+  TargetRubyVersion: 2.4

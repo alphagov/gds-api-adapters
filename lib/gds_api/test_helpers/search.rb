@@ -17,11 +17,11 @@ module GdsApi
       end
 
       def assert_search_posted_item(attributes, index: nil, **options)
-        if index
-          url = SEARCH_ENDPOINT + "/#{index}/documents"
-        else
-          url = SEARCH_ENDPOINT + "/documents"
-        end
+        url = if index
+                SEARCH_ENDPOINT + "/#{index}/documents"
+              else
+                SEARCH_ENDPOINT + "/documents"
+              end
 
         assert_requested(:post, url, **options) do |req|
           data = JSON.parse(req.body)

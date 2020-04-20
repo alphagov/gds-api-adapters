@@ -266,11 +266,11 @@ module GdsApi
       # @param attributes_or_matcher [Object]
       # @param times [Integer]
       def assert_publishing_api(verb, url, attributes_or_matcher = nil, times = 1)
-        if attributes_or_matcher.is_a?(Hash)
-          matcher = request_json_matches(attributes_or_matcher)
-        else
-          matcher = attributes_or_matcher
-        end
+        matcher = if attributes_or_matcher.is_a?(Hash)
+                    request_json_matches(attributes_or_matcher)
+                  else
+                    attributes_or_matcher
+                  end
 
         if matcher
           assert_requested(verb, url, times: times, &matcher)
@@ -684,11 +684,11 @@ module GdsApi
       end
 
       def assert_publishing_api_put(url, attributes_or_matcher = {}, times = 1)
-        if attributes_or_matcher.is_a?(Hash)
-          matcher = attributes_or_matcher.empty? ? nil : request_json_matching(attributes_or_matcher)
-        else
-          matcher = attributes_or_matcher
-        end
+        matcher = if attributes_or_matcher.is_a?(Hash)
+                    attributes_or_matcher.empty? ? nil : request_json_matching(attributes_or_matcher)
+                  else
+                    attributes_or_matcher
+                  end
 
         if matcher
           assert_requested(:put, url, times: times, &matcher)
