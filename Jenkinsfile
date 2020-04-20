@@ -2,7 +2,7 @@
 
 library("govuk")
 
-node {
+node("postgresql-9.6") {
 
   def pact_branch = (env.BRANCH_NAME == 'master' ? 'master' : "branch-${env.BRANCH_NAME}")
   govuk.setEnvar("PACT_TARGET_BRANCH", pact_branch)
