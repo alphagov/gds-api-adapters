@@ -5,9 +5,8 @@ A set of API adapters to work with the GDS APIs.
 Example usage:
 
 ```ruby
-require 'gds_api/search'
-search = GdsApi::Search.new(Plek.new.find('search))
-results = search.search(q: "taxes")
+require 'gds_api/publishing_api'
+GdsApi.publishing_api.get_content("f3bbdec2-0e62-4520-a7fd-6ffd5d36e03a")
 ```
 
 Example adapters for frequently used applications:
@@ -39,12 +38,11 @@ GdsApi::Base.logger = Logger.new("/path/to/file.log")
 ## Setting the timeout
 
 By default the JsonClient timeout is set to 4 seconds. If this is exceeded a
-`GdsApi::TimedOutException` will be raised. Individual clients may decide to
-override this timeout. Alternatively, you can override this in the application
+`GdsApi::TimedOutException` will be raised. You can override this by doing:
 that uses the adapter with:
 
 ```ruby
-Services.publishing_api.client.options[:timeout] = number_of_seconds
+adapter = GdsApi.publishing_api(timeout: <number_of_seconds>)
 ```
 
 In most cases, there is an upper-limit of 30 seconds imposed by the app server
@@ -84,23 +82,6 @@ return access-limited content to authenticated and authorised users.
 There are also test helpers for stubbing various requests in other apps.
 
 See [all the test helpers in lib/gds_api/test_helpers](/lib/gds_api/test_helpers).
-
-### Dependencies
-
-Some of the helpers come with additional dependencies that you'll need to
-have installed and configured in your consuming app/lib.
-
-At time of writing, these are:
-
-* [WebMock](https://github.com/bblimke/webmock)
-
-### Documentation
-
-See [RubyDoc](http://www.rubydoc.info/gems/gds-api-adapters) for some limited documentation.
-
-To run a Yard server locally to preview documentation, run:
-
-    $ bundle exec yard server --reload
 
 ## Licence
 
