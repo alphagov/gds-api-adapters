@@ -22,11 +22,10 @@ module GdsApi
   class HTTPErrorResponse < BaseError
     attr_accessor :code, :error_details
 
-    def initialize(code, message = nil, error_details = nil, request_body = nil)
+    def initialize(code, message = nil, error_details = nil)
       super(message)
       @code = code
       @error_details = error_details
-      @request_body = request_body
     end
   end
 
@@ -53,8 +52,8 @@ module GdsApi
   class HTTPGatewayTimeout < HTTPIntermittentServerError; end
 
   module ExceptionHandling
-    def build_specific_http_error(error, url, details = nil, request_body = nil)
-      message = "URL: #{url}\nResponse body:\n#{error.http_body}\n\nRequest body:\n#{request_body}"
+    def build_specific_http_error(error, url, details = nil)
+      message = "URL: #{url}\nResponse body:\n#{error.http_body}"
       code = error.http_code
       error_class_for_code(code).new(code, message, details)
     end
