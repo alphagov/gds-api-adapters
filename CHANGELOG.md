@@ -1,3 +1,7 @@
+# 63.6.0
+
+* Remove request body parameters from error reporting payload.
+
 # 63.5.1
 
 * Update Worldwide test helpers to use the website root
