@@ -1,3 +1,3 @@
 module GdsApi
-  VERSION = "63.5.1".freeze
+  VERSION = "63.6.0".freeze
 end
