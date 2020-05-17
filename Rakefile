@@ -13,7 +13,8 @@ Rake::TestTask.new("test") do |t|
   t.test_files = FileList["test/**/*_test.rb"]
   t.warning = false
 end
-task default: :test
+
+task default: %i[lint test]
 
 require "pact_broker/client/tasks"
 
@@ -31,5 +32,5 @@ end
 
 desc "Run the linter against changed files"
 task :lint do
-  sh "bundle exec rubocop --format clang lib test"
+  sh "bundle exec rubocop --format clang"
 end
