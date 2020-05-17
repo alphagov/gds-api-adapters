@@ -10,7 +10,7 @@ module GdsApi
         response = {
           "wgs84_lat" => coords.first,
           "wgs84_lon" => coords.last,
-          "postcode"  => postcode,
+          "postcode" => postcode,
         }
 
         stub_request(:get, "#{MAPIT_ENDPOINT}/postcode/" + postcode.tr(" ", "+") + ".json")
@@ -23,21 +23,22 @@ module GdsApi
         response = {
           "wgs84_lat" => coords.first,
           "wgs84_lon" => coords.last,
-          "postcode"  => postcode,
+          "postcode" => postcode,
         }
 
-        area_response = Hash[areas.map.with_index { |area, i|
-          [i, {
-            "codes" => {
-              "ons" => area["ons"],
-              "gss" => area["gss"],
-              "govuk_slug" => area["govuk_slug"],
-            },
-            "name" => area["name"],
-            "type" => area["type"],
-            "country_name" => area["country_name"],
-          }]
-        }]
+        area_response = Hash[areas.map.with_index do |area, i|
+          [i,
+           {
+             "codes" => {
+               "ons" => area["ons"],
+               "gss" => area["gss"],
+               "govuk_slug" => area["govuk_slug"],
+             },
+             "name" => area["name"],
+             "type" => area["type"],
+             "country_name" => area["country_name"],
+           }]
+        end]
 
         stub_request(:get, "#{MAPIT_ENDPOINT}/postcode/" + postcode.tr(" ", "+") + ".json")
           .to_return(body: response.merge("areas" => area_response).to_json, status: 200)

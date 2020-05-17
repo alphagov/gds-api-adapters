@@ -281,16 +281,16 @@ module GdsApi
 
       # Get a request matcher that checks if a JSON request includes a set of attributes
       def request_json_includes(required_attributes)
-        ->(request) do
+        lambda do |request|
           data = JSON.parse(request.body)
-          deep_stringify_keys(required_attributes).
-            to_a.all? { |key, value| data[key] == value }
+          deep_stringify_keys(required_attributes)
+            .to_a.all? { |key, value| data[key] == value }
         end
       end
 
       # Get a request matcher that checks if a JSON request matches a hash
       def request_json_matches(required_attributes)
-        ->(request) do
+        lambda do |request|
           data = JSON.parse(request.body)
           deep_stringify_keys(required_attributes) == data
         end
@@ -345,13 +345,13 @@ module GdsApi
       # This method has been refactored into publishing_api_has_content (above)
       # publishing_api_has_content allows for flexible passing in of arguments, please use instead
       def stub_publishing_api_has_fields_for_document(document_type, items, fields)
-        body = Array(items).map { |item|
+        body = Array(items).map do |item|
           deep_stringify_keys(item).slice(*fields)
-        }
+        end
 
-        query_params = fields.map { |f|
+        query_params = fields.map do |f|
           "&fields%5B%5D=#{f}"
-        }
+        end
 
         url = PUBLISHING_API_V2_ENDPOINT + "/content?document_type=#{document_type}#{query_params.join('')}"
 
@@ -494,7 +494,7 @@ module GdsApi
       def stub_publishing_api_has_expanded_links(links, with_drafts: true, generate: false)
         links = deep_transform_keys(links, &:to_sym)
         request_params = {}
-        request_params["with_drafts"] = false if !with_drafts
+        request_params["with_drafts"] = false unless with_drafts
         request_params["generate"] = true if generate
 
         url = PUBLISHING_API_V2_ENDPOINT + "/expanded-links/" + links[:content_id]
@@ -576,7 +576,7 @@ module GdsApi
       def stub_publishing_api_has_linked_items(items, params = {})
         content_id = params.fetch(:content_id)
         link_type = params.fetch(:link_type)
-        fields = params.fetch(:fields, %w(base_path content_id document_type title))
+        fields = params.fetch(:fields, %w[base_path content_id document_type title])
 
         url = PUBLISHING_API_V2_ENDPOINT + "/linked/#{content_id}"
 
@@ -698,14 +698,14 @@ module GdsApi
       end
 
       def request_json_matching(required_attributes)
-        ->(request) do
+        lambda do |request|
           data = JSON.parse(request.body)
           required_attributes.to_a.all? { |key, value| data[key.to_s] == value }
         end
       end
 
       def request_json_including(required_attributes)
-        ->(request) do
+        lambda do |request|
           data = JSON.parse(request.body)
           values_match_recursively(required_attributes, data)
         end
@@ -739,7 +739,7 @@ module GdsApi
       # @example
       #   stub_any_publishing_api_path_reservation
       def stub_any_publishing_api_path_reservation
-        stub_request(:put, %r[\A#{PUBLISHING_API_ENDPOINT}/paths/]).to_return do |request|
+        stub_request(:put, %r{\A#{PUBLISHING_API_ENDPOINT}/paths/}).to_return do |request|
           base_path = request.uri.path.sub(%r{\A/paths}, "")
           body = JSON.parse(request.body).merge(base_path: base_path)
           {
@@ -765,16 +765,16 @@ module GdsApi
                   message: "Base path #{message}",
                   fields: { base_path: [message] } }
 
-        stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{path}").
-                  to_return(status: 422,
-                            headers: { content_type: "application/json" },
-                            body: { error: error }.to_json)
+        stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{path}")
+                  .to_return(status: 422,
+                             headers: { content_type: "application/json" },
+                             body: { error: error }.to_json)
 
-        stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{path}").
-          with(body: { "publishing_app" => publishing_app }).
-          to_return(status: 200,
-                    headers: { content_type: "application/json" },
-                    body: { publishing_app: publishing_app, base_path: path }.to_json)
+        stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{path}")
+          .with(body: { "publishing_app" => publishing_app })
+          .to_return(status: 200,
+                     headers: { content_type: "application/json" },
+                     body: { publishing_app: publishing_app, base_path: path }.to_json)
       end
 
       # Stub a PUT /paths/:base_path request for a particular publishing
@@ -797,10 +797,10 @@ module GdsApi
 
         error = { code: 422, message: message, fields: error_fields }
 
-        stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{base_path}").
-          to_return(status: 422,
-                    headers: { content_type: "application/json" },
-                    body: { error: error }.to_json)
+        stub_request(:put, "#{PUBLISHING_API_ENDPOINT}/paths#{base_path}")
+          .to_return(status: 422,
+                     headers: { content_type: "application/json" },
+                     body: { error: error }.to_json)
       end
 
       alias_deprecated :publishing_api_isnt_available, :stub_publishing_api_isnt_available
@@ -888,7 +888,7 @@ module GdsApi
           return false unless actual_value.is_a?(Hash)
 
           expected_value.all? do |expected_sub_key, expected_sub_value|
-            actual_value.has_key?(expected_sub_key.to_s) &&
+            actual_value.key?(expected_sub_key.to_s) &&
               values_match_recursively(expected_sub_value, actual_value[expected_sub_key.to_s])
           end
         when Array

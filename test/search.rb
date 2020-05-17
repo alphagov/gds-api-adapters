@@ -66,7 +66,7 @@ describe GdsApi::Search do
   it "#search should issue a request for all the params supplied" do
     GdsApi::Search.new("http://example.com").search(
       q: "query & stuff",
-      filter_topics: %w(1 2),
+      filter_topics: %w[1 2],
       order: "-public_timestamp",
     )
 

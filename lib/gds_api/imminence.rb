@@ -20,8 +20,8 @@ class GdsApi::Imminence < GdsApi::Base
   end
 
   def self.parse_place_hash(place_hash)
-    location = self.extract_location_hash(place_hash["location"])
-    address = self.extract_address_hash(place_hash)
+    location = extract_location_hash(place_hash["location"])
+    address = extract_address_hash(place_hash)
 
     place_hash.merge(location).merge(address)
   end

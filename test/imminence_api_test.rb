@@ -136,9 +136,9 @@ class ImminenceApiTest < Minitest::Test
       </kml>
     KML
 
-    stub_request(:get, "#{ROOT}/places/test.kml").
-      with(headers: GdsApi::JsonClient.default_request_headers).
-      to_return(status: 200, body: kml_body)
+    stub_request(:get, "#{ROOT}/places/test.kml")
+      .with(headers: GdsApi::JsonClient.default_request_headers)
+      .to_return(status: 200, body: kml_body)
 
     response_body = api_client.places_kml("test")
     assert_equal kml_body, response_body
@@ -151,13 +151,17 @@ class ImminenceApiTest < Minitest::Test
     ]
     results = {
       "_response_info" => { "status" => "ok" },
-      "total" => areas.size, "startIndex" => 1, "pageSize" => areas.size,
-      "currentPage" => 1, "pages" => 1, "results" => areas
+      "total" => areas.size,
+      "startIndex" => 1,
+      "pageSize" => areas.size,
+      "currentPage" => 1,
+      "pages" => 1,
+      "results" => areas,
     }
 
-    stub_request(:get, "#{ROOT}/areas/WC2B%206SE.json").
-      with(headers: GdsApi::JsonClient.default_request_headers).
-      to_return(status: 200, body: results.to_json)
+    stub_request(:get, "#{ROOT}/areas/WC2B%206SE.json")
+      .with(headers: GdsApi::JsonClient.default_request_headers)
+      .to_return(status: 200, body: results.to_json)
 
     response = api_client.areas_for_postcode("WC2B 6SE")
 
@@ -175,13 +179,17 @@ class ImminenceApiTest < Minitest::Test
     ]
     results = {
       "_response_info" => { "status" => "ok" },
-      "total" => areas.size, "startIndex" => 1, "pageSize" => areas.size,
-      "currentPage" => 1, "pages" => 1, "results" => areas
+      "total" => areas.size,
+      "startIndex" => 1,
+      "pageSize" => areas.size,
+      "currentPage" => 1,
+      "pages" => 1,
+      "results" => areas,
     }
 
-    stub_request(:get, "#{ROOT}/areas/EUR.json").
-      with(headers: GdsApi::JsonClient.default_request_headers).
-      to_return(status: 200, body: results.to_json)
+    stub_request(:get, "#{ROOT}/areas/EUR.json")
+      .with(headers: GdsApi::JsonClient.default_request_headers)
+      .to_return(status: 200, body: results.to_json)
 
     response = api_client.areas_for_type("EUR")
 

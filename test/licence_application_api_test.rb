@@ -18,35 +18,35 @@ class LicenceApplicationApiTest < Minitest::Test
   end
 
   def test_should_return_list_of_licences
-    stub_request(:get, "#{@core_url}/api/licences").
-      with(headers: GdsApi::JsonClient.default_request_headers).
-      to_return(status: 200,
-                body: <<~JSON,
-                  [
-                     {
-                        "code":"1324-5-1",
-                        "name":"Land drainage consents",
-                        "legislation":[
-                           "Land Drainage Act 1991"
-                        ]
-                     },
-                     {
-                        "code":"695-5-1",
-                        "name":"Skip operator licence",
-                        "legislation":[
-                           "Highways Act 1980, Section 139"
-                        ]
-                     },
-                     {
-                        "code":"1251-4-1",
-                        "name":"Residential care homes",
-                        "legislation":[
-                           "Health and Personal Social Services (Quality, Improvement and Regulation) (Northern Ireland) Order 2003"
-                        ]
-                     }
-                  ]
-                JSON
-              )
+    stub_request(:get, "#{@core_url}/api/licences")
+      .with(headers: GdsApi::JsonClient.default_request_headers)
+      .to_return(status: 200,
+                 body: <<~JSON,
+                   [
+                      {
+                         "code":"1324-5-1",
+                         "name":"Land drainage consents",
+                         "legislation":[
+                            "Land Drainage Act 1991"
+                         ]
+                      },
+                      {
+                         "code":"695-5-1",
+                         "name":"Skip operator licence",
+                         "legislation":[
+                            "Highways Act 1980, Section 139"
+                         ]
+                      },
+                      {
+                         "code":"1251-4-1",
+                         "name":"Residential care homes",
+                         "legislation":[
+                            "Health and Personal Social Services (Quality, Improvement and Regulation) (Northern Ireland) Order 2003"
+                         ]
+                      }
+                   ]
+                 JSON
+                )
 
     land_drainage = {
       "code" => "1324-5-1",
@@ -58,10 +58,10 @@ class LicenceApplicationApiTest < Minitest::Test
   end
 
   def test_should_return_error_message_if_licences_collection_not_found
-    stub_request(:get, "#{@core_url}/api/licences").
-      with(headers: GdsApi::JsonClient.default_request_headers).
-      to_return(status: 404,
-        body: "{\"error\": \"Error\"}")
+    stub_request(:get, "#{@core_url}/api/licences")
+      .with(headers: GdsApi::JsonClient.default_request_headers)
+      .to_return(status: 404,
+                 body: "{\"error\": \"Error\"}")
 
     assert_raises GdsApi::HTTPNotFound do
       api.all_licences
@@ -81,11 +81,11 @@ class LicenceApplicationApiTest < Minitest::Test
   end
 
   def test_should_provide_full_licence_details_for_canonical_id
-    stub_licence_exists("590001", "isLocationSpecific" => true, "geographicalAvailability" => %w(England Wales), "issuingAuthorities" => [])
+    stub_licence_exists("590001", "isLocationSpecific" => true, "geographicalAvailability" => %w[England Wales], "issuingAuthorities" => [])
 
     expected = {
       "isLocationSpecific" => true,
-      "geographicalAvailability" => %w(England Wales),
+      "geographicalAvailability" => %w[England Wales],
       "issuingAuthorities" => [],
     }
 
@@ -109,10 +109,10 @@ class LicenceApplicationApiTest < Minitest::Test
   end
 
   def test_should_return_error_message_to_pick_a_relevant_snac_code_for_the_provided_licence_id
-    stub_request(:get, "#{@core_url}/api/licence/590001/sw10").
-      with(headers: GdsApi::JsonClient.default_request_headers).
-      to_return(status: 404,
-                body: "{\"error\": \"No authorities found for the licence 590001 and for the snacCode sw10\"}")
+    stub_request(:get, "#{@core_url}/api/licence/590001/sw10")
+      .with(headers: GdsApi::JsonClient.default_request_headers)
+      .to_return(status: 404,
+                 body: "{\"error\": \"No authorities found for the licence 590001 and for the snacCode sw10\"}")
 
     assert_raises(GdsApi::HTTPNotFound) do
       api.details_for_licence("590001", "sw10")
@@ -172,10 +172,11 @@ class LicenceApplicationApiTest < Minitest::Test
 
     assert_equal true, response["isLocationSpecific"]
 
-    assert_includes response["issuingAuthorities"][0]["authorityInteractions"]["apply"], "url" => "https://www.gov.uk/motor-salvage-operator-registration/city-of-london/apply-1",
-      "usesLicensify" => true,
-      "description" => "Application to register as a motor salvage operator",
-      "payment" => "none"
+    assert_includes response["issuingAuthorities"][0]["authorityInteractions"]["apply"],
+                    "url" => "https://www.gov.uk/motor-salvage-operator-registration/city-of-london/apply-1",
+                    "usesLicensify" => true,
+                    "description" => "Application to register as a motor salvage operator",
+                    "payment" => "none"
   end
 
   def test_should_raise_exception_on_timeout

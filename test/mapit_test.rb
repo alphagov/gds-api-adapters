@@ -27,10 +27,14 @@ describe GdsApi::Mapit do
     end
 
     it "should return areas" do
-      stub_mapit_has_a_postcode_and_areas("SW1A 1AA", [51.5010096, -0.1415870], [
-        { "name" => "Lancashire County Council", "type" => "CTY", "ons" => "30", "gss" => "E10000017" },
-        { "name" => "South Ribble Borough Council", "type" => "DIS", "ons" => "30UN", "gss" => "E07000126" },
-      ])
+      stub_mapit_has_a_postcode_and_areas(
+        "SW1A 1AA",
+        [51.5010096, -0.1415870],
+        [
+          { "name" => "Lancashire County Council", "type" => "CTY", "ons" => "30", "gss" => "E10000017" },
+          { "name" => "South Ribble Borough Council", "type" => "DIS", "ons" => "30UN", "gss" => "E07000126" },
+        ],
+      )
 
       response = @api.location_for_postcode("SW1A 1AA")
       assert_equal 2, response.areas.length
@@ -64,9 +68,12 @@ describe GdsApi::Mapit do
 
   describe "areas_for_type" do
     before do
-      stub_mapit_has_areas("EUR", "123" => { "name" => "Eastern", "id" => "123", "country_name" => "England" },
-       "234" => { "name" => "North West", "id" => "234", "country_name" => "England" },
-       "345" => { "name" => "Scotland", "id" => "345", "country_name" => "Scotland" })
+      stub_mapit_has_areas(
+        "EUR",
+        "123" => { "name" => "Eastern", "id" => "123", "country_name" => "England" },
+        "234" => { "name" => "North West", "id" => "234", "country_name" => "England" },
+        "345" => { "name" => "Scotland", "id" => "345", "country_name" => "Scotland" },
+      )
       stub_mapit_does_not_have_areas("FOO")
     end
     it "should return areas of a type" do

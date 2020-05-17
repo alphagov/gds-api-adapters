@@ -65,9 +65,9 @@ module GdsApi
       end
 
       def stub_support_api_problem_reports(params, response_body = {})
-        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/problem-reports").
-          with(query: params).
-          to_return(status: 200, body: response_body.to_json)
+        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/problem-reports")
+          .with(query: params)
+          .to_return(status: 200, body: response_body.to_json)
       end
 
       def stub_support_api_mark_reviewed_for_spam(request_details = nil, response_body = {})
@@ -89,8 +89,8 @@ module GdsApi
       def stub_support_api_anonymous_feedback_organisation_summary(slug, ordering = nil, response_body = {})
         uri = "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/organisations/#{slug}"
         uri << "?ordering=#{ordering}" if ordering
-        stub_http_request(:get, uri).
-          to_return(status: 200, body: response_body.to_json)
+        stub_http_request(:get, uri)
+          .to_return(status: 200, body: response_body.to_json)
       end
 
       def stub_support_api_organisations_list(response_body = nil)
@@ -111,8 +111,8 @@ module GdsApi
           },
         ]
 
-        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/organisations").
-          to_return(status: 200, body: response_body.to_json)
+        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/organisations")
+          .to_return(status: 200, body: response_body.to_json)
       end
 
       def stub_support_api_organisation(slug = "cabinet-office", response_body = nil)
@@ -124,22 +124,22 @@ module GdsApi
           govuk_status: "live",
         }
 
-        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/organisations/#{slug}").
-          to_return(status: 200, body: response_body.to_json)
+        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/organisations/#{slug}")
+          .to_return(status: 200, body: response_body.to_json)
       end
 
       def stub_support_api_document_type_list(response_body = nil)
-        response_body ||= %w(case_study detailed_guide smart_answer)
+        response_body ||= %w[case_study detailed_guide smart_answer]
 
-        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/document-types").
-            to_return(status: 200, body: response_body.to_json)
+        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/document-types")
+            .to_return(status: 200, body: response_body.to_json)
       end
 
       def stub_support_api_anonymous_feedback_doc_type_summary(document_type, ordering = nil, response_body = nil)
         uri = "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/document-types/#{document_type}"
         uri << "?ordering=#{ordering}" if ordering
-        stub_http_request(:get, uri).
-            to_return(status: 200, body: response_body.to_json)
+        stub_http_request(:get, uri)
+            .to_return(status: 200, body: response_body.to_json)
       end
 
       def stub_support_api_feedback_export_request(id, response_body = nil)
@@ -148,8 +148,8 @@ module GdsApi
           ready: true,
         }
 
-        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/export-requests/#{id}").
-          to_return(status: 200, body: response_body.to_json)
+        stub_http_request(:get, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/export-requests/#{id}")
+          .to_return(status: 200, body: response_body.to_json)
       end
 
       def stub_any_support_api_call

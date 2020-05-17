@@ -70,40 +70,40 @@ module GdsApi
 
       def search_terms(slug)
         options = {
-            slug: slug,
-            transaction: "search-terms",
-            group_by: "searchKeyword",
-            collect: "searchUniques:sum",
+          slug: slug,
+          transaction: "search-terms",
+          group_by: "searchKeyword",
+          collect: "searchUniques:sum",
         }
         statistics(options)
       end
 
       def searches(slug, is_multipart)
         options = {
-            slug: slug,
-            transaction: "search-terms",
-            group_by: "pagePath",
-            collect: "searchUniques:sum",
+          slug: slug,
+          transaction: "search-terms",
+          group_by: "pagePath",
+          collect: "searchUniques:sum",
         }
         statistics(options, is_multipart)
       end
 
       def page_views(slug, is_multipart)
         options = {
-            slug: slug,
-            transaction: "page-statistics",
-            group_by: "pagePath",
-            collect: "uniquePageviews:sum",
+          slug: slug,
+          transaction: "page-statistics",
+          group_by: "pagePath",
+          collect: "uniquePageviews:sum",
         }
         statistics(options, is_multipart)
       end
 
       def problem_reports(slug, is_multipart)
         options = {
-            slug: slug,
-            transaction: "page-contacts",
-            group_by: "pagePath",
-            collect: "total:sum",
+          slug: slug,
+          transaction: "page-contacts",
+          group_by: "pagePath",
+          collect: "total:sum",
         }
         statistics(options, is_multipart)
       end
@@ -114,11 +114,11 @@ module GdsApi
       # Backdrop can be found here: https://github.com/alphagov/backdrop
       def statistics(options, is_multipart = false)
         params = {
-            group_by: options[:group_by],
-            collect: options[:collect],
-            duration: 42,
-            period: "day",
-            end_at: Date.today.to_time.getutc.iso8601,
+          group_by: options[:group_by],
+          collect: options[:collect],
+          duration: 42,
+          period: "day",
+          end_at: Date.today.to_time.getutc.iso8601,
         }
 
         filter_param = is_multipart ? :filter_by_prefix : :filter_by

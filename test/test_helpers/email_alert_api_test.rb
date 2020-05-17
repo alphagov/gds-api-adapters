@@ -56,7 +56,7 @@ describe GdsApi::TestHelpers::EmailAlertApi do
       stub_email_alert_api_has_subscriber_subscriptions(
         id,
         address,
-        subscriptions: %w(one two),
+        subscriptions: %w[one two],
       )
 
       result = email_alert_api.get_subscriptions(id: id)

@@ -7,7 +7,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
   include ::GdsApi::TestHelpers::PublishingApi
 
   let(:content_id) { "a-content-id-of-sorts" }
-  let(:special_route) {
+  let(:special_route) do
     {
       content_id: content_id,
       title: "A title",
@@ -17,7 +17,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
       publishing_app: "static",
       rendering_app: "static",
     }
-  }
+  end
 
   let(:publisher) { GdsApi::PublishingApi::SpecialRoutePublisher.new }
   let(:endpoint) { Plek.current.find("publishing-api") }
@@ -87,12 +87,12 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
     end
 
     describe "Timezone handling" do
-      let(:publishing_api) {
+      let(:publishing_api) do
         stub(:publishing_api, put_content_item: nil)
-      }
-      let(:publisher) {
+      end
+      let(:publisher) do
         GdsApi::PublishingApi::SpecialRoutePublisher.new(publishing_api: publishing_api)
-      }
+      end
 
       it "is robust to Time.zone returning nil" do
         Timecop.freeze(Time.now) do

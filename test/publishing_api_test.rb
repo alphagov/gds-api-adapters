@@ -1274,9 +1274,12 @@ describe GdsApi::PublishingApi do
       end
 
       it "replaces the links and responds with the new links" do
-        response = @api_client.patch_links(@content_id, links: {
-          organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
-        })
+        response = @api_client.patch_links(
+          @content_id,
+          links: {
+            organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
+          },
+        )
         assert_equal 200, response.code
         assert_equal(
           %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
@@ -1314,9 +1317,12 @@ describe GdsApi::PublishingApi do
       end
 
       it "adds the new type of links and responds with the whole link set" do
-        response = @api_client.patch_links(@content_id, links: {
-          topics: %w[225df4a8-2945-4e9b-8799-df7424a90b69],
-        })
+        response = @api_client.patch_links(
+          @content_id,
+          links: {
+            topics: %w[225df4a8-2945-4e9b-8799-df7424a90b69],
+          },
+        )
 
         assert_equal 200, response.code
         assert_equal(
@@ -1355,9 +1361,12 @@ describe GdsApi::PublishingApi do
       end
 
       it "responds with the links" do
-        response = @api_client.patch_links(@content_id, links: {
-          organisations: [],
-        })
+        response = @api_client.patch_links(
+          @content_id,
+          links: {
+            organisations: [],
+          },
+        )
 
         assert_equal 200, response.code
         assert_equal({}, response["links"])
@@ -1392,9 +1401,12 @@ describe GdsApi::PublishingApi do
       end
 
       it "responds with the links" do
-        response = @api_client.patch_links(@content_id, links: {
-          organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
-        })
+        response = @api_client.patch_links(
+          @content_id,
+          links: {
+            organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
+          },
+        )
 
         assert_equal 200, response.code
         assert_equal(
@@ -1497,7 +1509,7 @@ describe GdsApi::PublishingApi do
   end
 
   describe "#get_linkables" do
-    let(:linkables) {
+    let(:linkables) do
       [
         {
           "title" => "Content Item A",
@@ -1514,7 +1526,7 @@ describe GdsApi::PublishingApi do
           "base_path" => "/another-base-path",
         },
       ]
-    }
+    end
 
     it "returns the content items of a given document_type" do
       publishing_api
@@ -1540,7 +1552,7 @@ describe GdsApi::PublishingApi do
   end
 
   describe "#get_links_changes" do
-    let(:link_changes) {
+    let(:link_changes) do
       { "link_changes" => [
         {
           "source" => { "title" => "Edition Title A1",
@@ -1567,7 +1579,7 @@ describe GdsApi::PublishingApi do
           "created_at" => "2017-01-01T09:00:00.100Z",
         },
       ] }
-    }
+    end
 
     it "returns the changes for a single link_type" do
       publishing_api
@@ -1586,7 +1598,7 @@ describe GdsApi::PublishingApi do
           body: link_changes,
         )
 
-      response = @api_client.get_links_changes(link_types: %w(taxons))
+      response = @api_client.get_links_changes(link_types: %w[taxons])
       assert_equal 200, response.code
       assert_equal link_changes, response.to_hash
     end
@@ -1612,7 +1624,7 @@ describe GdsApi::PublishingApi do
             pages: 2,
             current_page: 1,
             links: [{ href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&per_page=2&page=2",
-                     rel: "next" },
+                      rel: "next" },
                     { href: "http://example.org/v2/content?document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&per_page=2&page=1",
                       rel: "self" }],
             results: [
@@ -1660,7 +1672,6 @@ describe GdsApi::PublishingApi do
     end
   end
 
-
   describe "#get_content_items" do
     it "returns the content items of a certain document_type" do
       publishing_api
@@ -1704,7 +1715,8 @@ describe GdsApi::PublishingApi do
         ["current_page", 1],
         ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&page=1", "rel" => "self" }]],
         ["results", [{ "title" => "Content Item A", "base_path" => "/a-base-path" }, { "title" => "Content Item B", "base_path" => "/another-base-path" }]],
-      ], response.to_a
+      ],
+                   response.to_a
     end
 
     it "returns the content items in english locale by default" do
@@ -1748,7 +1760,8 @@ describe GdsApi::PublishingApi do
         ["current_page", 1],
         ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&page=1", "rel" => "self" }]],
         ["results", [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "en" }]],
-      ], response.to_a
+      ],
+                   response.to_a
     end
 
     it "returns the content items in a specific locale" do
@@ -1792,7 +1805,8 @@ describe GdsApi::PublishingApi do
         ["current_page", 1],
         ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=fr&page=1", "rel" => "self" }]],
         ["results", [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "fr" }]],
-      ], response.to_a
+      ],
+                   response.to_a
     end
 
     it "returns the content items in all the available locales" do
@@ -1834,14 +1848,16 @@ describe GdsApi::PublishingApi do
       assert_equal 200, response.code
       assert_equal [
         ["total", 3],
-        ["pages", 1], ["current_page", 1],
+        ["pages", 1],
+        ["current_page", 1],
         ["links",
          [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=all&page=1", "rel" => "self" }]],
         ["results",
          [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "en" },
           { "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "fr" },
-          { "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "ar" }]]
-      ], response.to_a
+          { "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "locale" => "ar" }]],
+      ],
+                   response.to_a
     end
 
     it "returns details hashes" do
@@ -1885,7 +1901,8 @@ describe GdsApi::PublishingApi do
         ["current_page", 1],
         ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&fields%5B%5D=details&page=1", "rel" => "self" }]],
         ["results", [{ "content_id" => "bed722e6-db68-43e5-9079-063f623335a7", "details" => { "foo" => "bar" } }]],
-      ], response.to_a
+      ],
+                   response.to_a
     end
 
     it "returns the items matching a query" do
@@ -1931,7 +1948,8 @@ describe GdsApi::PublishingApi do
         ["current_page", 1],
         ["links", [{ "href" => "http://example.org/v2/content?document_type=topic&fields%5B%5D=content_id&q=an+internal+name&search_in%5B%5D=details.internal_name&page=1", "rel" => "self" }]],
         ["results", [{ "content_id" => "aaaaaaaa-aaaa-1aaa-aaaa-aaaaaaaaaaaa" }]],
-      ], response.to_a
+      ],
+                   response.to_a
     end
   end
 
@@ -2088,7 +2106,7 @@ describe GdsApi::PublishingApi do
           @api_client.get_linked_items(
             @content_id,
             link_type: "topic",
-            fields: %w(content_id base_path),
+            fields: %w[content_id base_path],
           )
         end
       end
@@ -2145,7 +2163,7 @@ describe GdsApi::PublishingApi do
         response = @api_client.get_linked_items(
           @linked_content_item["content_id"],
           link_type: "topic",
-          fields: %w(content_id base_path),
+          fields: %w[content_id base_path],
         )
         assert_equal 200, response.code
 
@@ -2190,7 +2208,7 @@ describe GdsApi::PublishingApi do
       end
 
       it "will response correctly" do
-        response = @api_client.get_editions(fields: %w(content_id))
+        response = @api_client.get_editions(fields: %w[content_id])
         assert_equal response["results"].length, 2
       end
     end
@@ -2285,7 +2303,7 @@ describe GdsApi::PublishingApi do
           .with("http://example.org#{second_page_path}")
           .returns(GdsApi::JsonClient.new.get_json("#{publishing_api_host}#{second_page_path}", second_page[:request][:headers]))
 
-        response = @api_client.get_paged_editions(fields: %w(content_id), per_page: 2).to_a
+        response = @api_client.get_paged_editions(fields: %w[content_id], per_page: 2).to_a
 
         response.count.must_equal 2
         first_page_content_ids = response[0]["results"].map { |content_item| content_item["content_id"] }
@@ -2521,7 +2539,7 @@ describe GdsApi::PublishingApi do
           status: 200,
           body: {
             "publishing_app" => "publisher",
-            "rendering_app" =>  "frontend",
+            "rendering_app" => "frontend",
             "publish_time" => "2019-11-11t17:56:17+00:00",
           },
           headers: {

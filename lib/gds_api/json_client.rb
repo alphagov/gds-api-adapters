@@ -29,7 +29,7 @@ module GdsApi
     end
 
     def self.default_request_with_json_body_headers
-      self.default_request_headers.merge(self.json_body_headers)
+      default_request_headers.merge(json_body_headers)
     end
 
     def self.json_body_headers
@@ -109,7 +109,7 @@ module GdsApi
       end
 
       # If no custom response is given, just instantiate Response
-      create_response ||= Proc.new { |r| Response.new(r) }
+      create_response ||= proc { |r| Response.new(r) }
       create_response.call(response)
     end
 
@@ -177,10 +177,10 @@ module GdsApi
       ::RestClient::Request.execute(method_params)
     rescue Errno::ECONNREFUSED => e
       logger.error loggable.merge(status: "refused", error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
-      raise GdsApi::EndpointNotFound.new("Could not connect to #{url}")
+      raise GdsApi::EndpointNotFound, "Could not connect to #{url}"
     rescue RestClient::Exceptions::Timeout => e
       logger.error loggable.merge(status: "timeout", error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
-      raise GdsApi::TimedOutException.new
+      raise GdsApi::TimedOutException
     rescue URI::InvalidURIError => e
       logger.error loggable.merge(status: "invalid_uri", error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
       raise GdsApi::InvalidUrl
@@ -192,10 +192,10 @@ module GdsApi
       raise
     rescue Errno::ECONNRESET => e
       logger.error loggable.merge(status: "connection_reset", error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
-      raise GdsApi::TimedOutException.new
+      raise GdsApi::TimedOutException
     rescue SocketError => e
       logger.error loggable.merge(status: "socket_error", error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
-      raise GdsApi::SocketErrorException.new
+      raise GdsApi::SocketErrorException
     end
   end
 end

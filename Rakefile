@@ -1,5 +1,3 @@
-# -*- encoding: utf-8 -*-
-
 require "rdoc/task"
 require "rake/testtask"
 
