@@ -381,7 +381,7 @@ class GdsApi::PublishingApi < GdsApi::Base
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#get-v2linkables
   def get_linkables(document_type: nil)
     if document_type.nil?
-      raise ArgumentError.new("Please provide a `document_type`")
+      raise ArgumentError, "Please provide a `document_type`"
     end
 
     get_json("#{endpoint}/v2/linkables?document_type=#{document_type}")
@@ -486,7 +486,7 @@ class GdsApi::PublishingApi < GdsApi::Base
   #     publishing_app: 'content-publisher',
   #     rendering_app: 'government-frontend',
   #   }
-  #)
+  # )
   #
   # @see https://github.com/alphagov/publishing-api/blob/master/doc/api.md#put-publish-intentbase_path
   def put_intent(base_path, payload)

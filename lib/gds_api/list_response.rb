@@ -25,7 +25,7 @@ module GdsApi
     end
 
     def has_next_page?
-      ! page_link("next").nil?
+      !page_link("next").nil?
     end
 
     def next_page
@@ -39,7 +39,7 @@ module GdsApi
     end
 
     def has_previous_page?
-      ! page_link("previous").nil?
+      !page_link("previous").nil?
     end
 
     def previous_page
@@ -70,12 +70,12 @@ module GdsApi
     # point. Note that the responses are stored so subsequent pages will not be
     # loaded multiple times.
     def with_subsequent_pages
-      Enumerator.new { |yielder|
-        self.each do |i| yielder << i end
+      Enumerator.new do |yielder|
+        each { |i| yielder << i }
         if has_next_page?
-          next_page.with_subsequent_pages.each do |i| yielder << i end
+          next_page.with_subsequent_pages.each { |i| yielder << i }
         end
-      }
+      end
     end
 
   private

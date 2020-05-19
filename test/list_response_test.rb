@@ -8,7 +8,7 @@ describe GdsApi::ListResponse do
 
     it "should allow Enumerable access to the results array" do
       data = {
-        "results" => %w(foo bar baz),
+        "results" => %w[foo bar baz],
         "total" => 3,
         "_response_info" => {
           "status" => "ok",
@@ -17,7 +17,7 @@ describe GdsApi::ListResponse do
       response = GdsApi::ListResponse.new(stub(body: data.to_json), nil)
 
       assert_equal "foo", response.first
-      assert_equal %w(foo bar baz), response.to_a
+      assert_equal %w[foo bar baz], response.to_a
       assert response.any?
     end
 
@@ -39,21 +39,25 @@ describe GdsApi::ListResponse do
   describe "handling pagination" do
     before :each do
       page1 = {
-        "results" => %w(foo1 bar1),
+        "results" => %w[foo1 bar1],
         "total" => 6,
-        "current_page" => 1, "pages" => 3, "page_size" => 2,
+        "current_page" => 1,
+        "pages" => 3,
+        "page_size" => 2,
         "_response_info" => {
           "status" => "ok",
           "links" => [
             { "href" => "http://www.example.com/2", "rel" => "next" },
             { "href" => "http://www.example.com/1", "rel" => "self" },
           ],
-        }
+        },
       }
       page2 = {
-        "results" => %w(foo2 bar2),
+        "results" => %w[foo2 bar2],
         "total" => 6,
-        "current_page" => 2, "pages" => 3, "page_size" => 2,
+        "current_page" => 2,
+        "pages" => 3,
+        "page_size" => 2,
         "_response_info" => {
           "status" => "ok",
           "links" => [
@@ -61,19 +65,21 @@ describe GdsApi::ListResponse do
             { "href" => "http://www.example.com/3", "rel" => "next" },
             { "href" => "http://www.example.com/2", "rel" => "self" },
           ],
-        }
+        },
       }
       page3 = {
-        "results" => %w(foo3 bar3),
+        "results" => %w[foo3 bar3],
         "total" => 6,
-        "current_page" => 3, "pages" => 3, "page_size" => 2,
+        "current_page" => 3,
+        "pages" => 3,
+        "page_size" => 2,
         "_response_info" => {
           "status" => "ok",
           "links" => [
             { "href" => "http://www.example.com/2", "rel" => "previous" },
             { "href" => "http://www.example.com/3", "rel" => "self" },
           ],
-        }
+        },
       }
       @p1_response = stub(
         body: page1.to_json,
@@ -107,12 +113,12 @@ describe GdsApi::ListResponse do
       it "should allow accessing the next page" do
         resp = GdsApi::ListResponse.new(@p1_response, @client)
         assert resp.has_next_page?
-        assert_equal %w(foo2 bar2), resp.next_page["results"]
+        assert_equal %w[foo2 bar2], resp.next_page["results"]
       end
 
       it "should return nil with no next page" do
         resp = GdsApi::ListResponse.new(@p3_response, @client)
-        assert ! resp.has_next_page?
+        assert !resp.has_next_page?
         assert_nil resp.next_page
       end
 
@@ -131,12 +137,12 @@ describe GdsApi::ListResponse do
       it "should allow accessing the previous page" do
         resp = GdsApi::ListResponse.new(@p2_response, @client)
         assert resp.has_previous_page?
-        assert_equal %w(foo1 bar1), resp.previous_page["results"]
+        assert_equal %w[foo1 bar1], resp.previous_page["results"]
       end
 
       it "should return nil with no previous page" do
         resp = GdsApi::ListResponse.new(@p1_response, @client)
-        assert ! resp.has_previous_page?
+        assert !resp.has_previous_page?
         assert_nil resp.previous_page
       end
 
@@ -158,8 +164,8 @@ describe GdsApi::ListResponse do
 
       it "should allow iteration across multiple pages" do
         assert_equal 6, @response.with_subsequent_pages.count
-        assert_equal %w(foo1 bar1 foo2 bar2 foo3 bar3), @response.with_subsequent_pages.to_a
-        assert_equal(%w(foo1 foo2 foo3), @response.with_subsequent_pages.select { |s| s =~ /foo/ })
+        assert_equal %w[foo1 bar1 foo2 bar2 foo3 bar3], @response.with_subsequent_pages.to_a
+        assert_equal(%w[foo1 foo2 foo3], @response.with_subsequent_pages.select { |s| s =~ /foo/ })
       end
 
       it "should not load a page multiple times" do
@@ -174,7 +180,7 @@ describe GdsApi::ListResponse do
 
       it "should work with a non-paginated response" do
         data = {
-          "results" => %w(foo1 bar1),
+          "results" => %w[foo1 bar1],
           "total" => 2,
           "_response_info" => {
             "status" => "ok",
@@ -182,7 +188,7 @@ describe GdsApi::ListResponse do
         }
         response = GdsApi::ListResponse.new(stub(body: data.to_json, status: 200, headers: {}), nil)
 
-        assert_equal %w(foo1 bar1), response.with_subsequent_pages.to_a
+        assert_equal %w[foo1 bar1], response.with_subsequent_pages.to_a
       end
     end
   end

@@ -7,6 +7,6 @@ describe GdsApi::Maslow do
   end
 
   it "should provide a URL to need pages" do
-    assert_equal "http://maslow.dev.gov.uk/needs/12345", @api.need_page_url(12345)
+    assert_equal "http://maslow.dev.gov.uk/needs/12345", @api.need_page_url(12_345)
   end
 end

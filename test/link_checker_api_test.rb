@@ -56,7 +56,7 @@ describe GdsApi::LinkCheckerApi do
         "Test:10",
       )
 
-      assert resource_monitor.has_key?("id")
+      assert resource_monitor.key?("id")
     end
   end
 end

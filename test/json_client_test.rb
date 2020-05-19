@@ -11,7 +11,7 @@ class JsonClientTest < MiniTest::Spec
     WebMock.disable_net_connect!
   end
 
-  def options;
+  def options
     {}
   end
 
@@ -221,7 +221,7 @@ class JsonClientTest < MiniTest::Spec
     # with a redirect to the same URL, but we'd risk getting the test code into
     # an infinite loop if the code didn't do what it was supposed to. The
     # failure response block aborts the test if we have too many requests.
-    failure = lambda { |_request| flunk("Request called too many times") }
+    failure = ->(_request) { flunk("Request called too many times") }
     stub_request(:get, url).to_return(redirect).times(11).then.to_return(failure)
 
     assert_raises GdsApi::HTTPErrorResponse do
@@ -245,7 +245,7 @@ class JsonClientTest < MiniTest::Spec
     }
 
     # See the comment in the above test for an explanation of this
-    failure = lambda { |_request| flunk("Request called too many times") }
+    failure = ->(_request) { flunk("Request called too many times") }
     stub_request(:get, first_url).to_return(first_redirect).times(6).then.to_return(failure)
     stub_request(:get, second_url).to_return(second_redirect).times(6).then.to_return(failure)
 
@@ -357,16 +357,16 @@ class JsonClientTest < MiniTest::Spec
     url = "http://some.endpoint/some.json"
     stub_request(:put, url).to_return(body: '{"a":1}', status: 200)
     response = @client.put_json(url, {})
-    assert ! response.blank?
+    assert !response.blank?
     assert response.present?
   end
 
   def test_client_can_use_basic_auth
     client = GdsApi::JsonClient.new(basic_auth: { user: "user", password: "password" })
 
-    stub_request(:put, "http://some.endpoint/some.json").
-      with(basic_auth: %w{user password}).
-      to_return(body: '{"a":1}', status: 200)
+    stub_request(:put, "http://some.endpoint/some.json")
+      .with(basic_auth: %w[user password])
+      .to_return(body: '{"a":1}', status: 200)
 
     response = client.put_json("http://some.endpoint/some.json", {})
     assert_equal 1, response["a"]
@@ -374,12 +374,12 @@ class JsonClientTest < MiniTest::Spec
 
   def test_client_can_use_bearer_token
     client = GdsApi::JsonClient.new(bearer_token: "SOME_BEARER_TOKEN")
-    expected_headers = GdsApi::JsonClient.default_request_with_json_body_headers.
-      merge("Authorization" => "Bearer SOME_BEARER_TOKEN")
+    expected_headers = GdsApi::JsonClient.default_request_with_json_body_headers
+      .merge("Authorization" => "Bearer SOME_BEARER_TOKEN")
 
-    stub_request(:put, "http://some.other.endpoint/some.json").
-      with(headers: expected_headers).
-      to_return(body: '{"a":2}', status: 200)
+    stub_request(:put, "http://some.other.endpoint/some.json")
+      .with(headers: expected_headers)
+      .to_return(body: '{"a":2}', status: 200)
 
     response = client.put_json("http://some.other.endpoint/some.json", {})
     assert_equal 2, response["a"]
@@ -388,9 +388,11 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_set_custom_headers_on_gets
     stub_request(:get, "http://some.other.endpoint/some.json").to_return(status: 200)
 
-    GdsApi::JsonClient.new.get_json("http://some.other.endpoint/some.json",
-                                    "HEADER-A" => "B",
-                                    "HEADER-C" => "D")
+    GdsApi::JsonClient.new.get_json(
+      "http://some.other.endpoint/some.json",
+      "HEADER-A" => "B",
+      "HEADER-C" => "D",
+    )
 
     assert_requested(:get, %r{/some.json}) do |request|
       headers_with_uppercase_names = Hash[request.headers.collect { |key, value| [key.upcase, value] }]
@@ -401,10 +403,12 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_set_custom_headers_on_posts
     stub_request(:post, "http://some.other.endpoint/some.json").to_return(status: 200)
 
-    GdsApi::JsonClient.new.post_json("http://some.other.endpoint/some.json",
-                                     {},
-                                     "HEADER-A" => "B",
-                                     "HEADER-C" => "D")
+    GdsApi::JsonClient.new.post_json(
+      "http://some.other.endpoint/some.json",
+      {},
+      "HEADER-A" => "B",
+      "HEADER-C" => "D",
+    )
 
     assert_requested(:post, %r{/some.json}) do |request|
       headers_with_uppercase_names = Hash[request.headers.collect { |key, value| [key.upcase, value] }]
@@ -415,10 +419,12 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_set_custom_headers_on_puts
     stub_request(:put, "http://some.other.endpoint/some.json").to_return(status: 200)
 
-    GdsApi::JsonClient.new.put_json("http://some.other.endpoint/some.json",
-                                    {},
-                                    "HEADER-A" => "B",
-                                    "HEADER-C" => "D")
+    GdsApi::JsonClient.new.put_json(
+      "http://some.other.endpoint/some.json",
+      {},
+      "HEADER-A" => "B",
+      "HEADER-C" => "D",
+    )
 
     assert_requested(:put, %r{/some.json}) do |request|
       headers_with_uppercase_names = Hash[request.headers.collect { |key, value| [key.upcase, value] }]
@@ -429,9 +435,12 @@ class JsonClientTest < MiniTest::Spec
   def test_client_can_set_custom_headers_on_deletes
     stub_request(:delete, "http://some.other.endpoint/some.json").to_return(status: 200)
 
-    GdsApi::JsonClient.new.delete_json("http://some.other.endpoint/some.json",
-                                       {},
-                                       "HEADER-A" => "B", "HEADER-C" => "D")
+    GdsApi::JsonClient.new.delete_json(
+      "http://some.other.endpoint/some.json",
+      {},
+      "HEADER-A" => "B",
+      "HEADER-C" => "D",
+    )
 
     assert_requested(:delete, %r{/some.json}) do |request|
       headers_with_uppercase_names = Hash[request.headers.collect { |key, value| [key.upcase, value] }]
@@ -461,7 +470,7 @@ class JsonClientTest < MiniTest::Spec
     GdsApi::JsonClient.new.get_json("http://some.other.endpoint/some.json")
 
     assert_requested(:get, %r{/some.json}) do |request|
-      !request.headers.has_key?("X-Govuk-Authenticated-User")
+      !request.headers.key?("X-Govuk-Authenticated-User")
     end
   end
 
@@ -505,8 +514,8 @@ class JsonClientTest < MiniTest::Spec
 
   def test_client_can_post_multipart_responses
     url = "http://some.endpoint/some.json"
-    stub_request(:post, url).
-      with(headers: { "Content-Type" => %r{multipart/form-data; boundary=----RubyFormBoundary\w+} }) { |request|
+    stub_request(:post, url)
+      .with(headers: { "Content-Type" => %r{multipart/form-data; boundary=----RubyFormBoundary\w+} }) { |request|
         request.body =~ %r{------RubyFormBoundary\w+\r\nContent-Disposition: form-data; name="a"\r\n\r\n123\r\n------RubyFormBoundary\w+--\r\n}
       }.to_return(body: '{"b": "1"}', status: 200)
 
@@ -535,8 +544,8 @@ class JsonClientTest < MiniTest::Spec
   # EXACTLY the same as the post_multipart tests
   def test_client_can_put_multipart_responses
     url = "http://some.endpoint/some.json"
-    stub_request(:put, url).
-      with(headers: { "Content-Type" => %r{multipart/form-data; boundary=----RubyFormBoundary\w+} }) { |request|
+    stub_request(:put, url)
+      .with(headers: { "Content-Type" => %r{multipart/form-data; boundary=----RubyFormBoundary\w+} }) { |request|
         request.body =~ %r{------RubyFormBoundary\w+\r\nContent-Disposition: form-data; name="a"\r\n\r\n123\r\n------RubyFormBoundary\w+--\r\n}
       }.to_return(body: '{"b": "1"}', status: 200)
 

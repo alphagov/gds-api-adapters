@@ -1,11 +1,7 @@
-# -*- encoding: utf-8 -*-
-
 lib = File.expand_path("lib", __dir__)
-$:.unshift lib unless $:.include?(lib)
+$LOAD_PATH.unshift lib unless $LOAD_PATH.include?(lib)
 
 require "gds_api/version"
-
-# rubocop:disable Metrics/BlockLength
 Gem::Specification.new do |s|
   s.name         = "gds-api-adapters"
   s.version      = GdsApi::VERSION
@@ -17,7 +13,7 @@ Gem::Specification.new do |s|
   s.description  = "A set of adapters providing easy access to the GDS GOV.UK APIs"
 
   s.required_ruby_version = ">= 2.4.0"
-  s.files        = Dir.glob("lib/**/*") + Dir.glob("test/fixtures/**/*") + %w(README.md Rakefile)
+  s.files        = Dir.glob("lib/**/*") + Dir.glob("test/fixtures/**/*") + %w[README.md Rakefile]
   s.require_path = "lib"
   s.add_dependency "addressable"
   s.add_dependency "link_header"
@@ -47,4 +43,3 @@ Gem::Specification.new do |s|
   s.add_development_dependency "webrick", "~> 1.4"
   s.add_development_dependency "yard", "~> 0.9"
 end
-# rubocop:enable Metrics/BlockLength

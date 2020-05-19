@@ -14,10 +14,13 @@ describe GdsApi::GovukHeaders do
     GdsApi::GovukHeaders.set_header("GDS-Request-Id", "123-456")
     GdsApi::GovukHeaders.set_header("Content-Type", "application/pdf")
 
-    assert_equal({
-      "GDS-Request-Id" => "123-456",
-      "Content-Type" => "application/pdf",
-    }, GdsApi::GovukHeaders.headers)
+    assert_equal(
+      {
+        "GDS-Request-Id" => "123-456",
+        "Content-Type" => "application/pdf",
+      },
+      GdsApi::GovukHeaders.headers,
+    )
   end
 
   it "supports clearing of headers" do

@@ -195,7 +195,7 @@ describe GdsApi::Response do
     before :each do
       @response_data = {
         "_response_info" => {
-            "status" => "ok",
+          "status" => "ok",
         },
         "id" => "https://www.gov.uk/api/vat-rates.json",
         "web_url" => "https://www.gov.uk/vat-rates",
@@ -203,10 +203,10 @@ describe GdsApi::Response do
         "format" => "answer",
         "updated_at" => "2013-04-04T15:51:54+01:00",
         "details" => {
-            "need_id" => "1870",
-            "business_proposition" => false,
-            "description" => "Current VAT rates - standard 20% and rates for reduced rate and zero-rated items",
-            "language" => "en",
+          "need_id" => "1870",
+          "business_proposition" => false,
+          "description" => "Current VAT rates - standard 20% and rates for reduced rate and zero-rated items",
+          "language" => "en",
         },
         "tags" => [
           { "slug" => "foo" },

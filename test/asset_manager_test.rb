@@ -14,17 +14,17 @@ describe GdsApi::AssetManager do
   let(:asset_url) { [base_api_url, "assets", asset_id].join("/") }
   let(:asset_id) { "new-asset-id" }
 
-  let(:stub_asset_manager_response) {
+  let(:stub_asset_manager_response) do
     {
       asset: {
         id: asset_url,
       },
     }
-  }
+  end
 
   it "creates an asset with a file" do
-    req = stub_request(:post, "#{base_api_url}/assets").
-      with { |request|
+    req = stub_request(:post, "#{base_api_url}/assets")
+      .with { |request|
         request.body =~ %r{Content\-Disposition: form\-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent\-Type: text/plain}
       }.to_return(body: JSON.dump(stub_asset_manager_response), status: 201)
 
@@ -35,8 +35,8 @@ describe GdsApi::AssetManager do
   end
 
   it "creates a Whitehall asset with a file" do
-    req = stub_request(:post, "#{base_api_url}/whitehall_assets").
-      with { |request|
+    req = stub_request(:post, "#{base_api_url}/whitehall_assets")
+      .with { |request|
         request.body =~ %r{Content\-Disposition: form\-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent\-Type: text/plain}
       }.to_return(body: JSON.dump(stub_asset_manager_response), status: 201)
 
@@ -79,8 +79,8 @@ describe GdsApi::AssetManager do
     let(:asset_id) { "test-id" }
 
     it "updates an asset with a file" do
-      req = stub_request(:put, "#{base_api_url}/assets/test-id").
-        to_return(body: JSON.dump(stub_asset_manager_response), status: 200)
+      req = stub_request(:put, "#{base_api_url}/assets/test-id")
+        .to_return(body: JSON.dump(stub_asset_manager_response), status: 200)
 
       response = api.update_asset(asset_id, file: file_fixture)
 
@@ -128,8 +128,8 @@ describe GdsApi::AssetManager do
   end
 
   it "deletes an asset for the given id" do
-    req = stub_request(:delete, "#{base_api_url}/assets/#{asset_id}").
-      to_return(body: JSON.dump(stub_asset_manager_response), status: 200)
+    req = stub_request(:delete, "#{base_api_url}/assets/#{asset_id}")
+      .to_return(body: JSON.dump(stub_asset_manager_response), status: 200)
 
     response = api.delete_asset(asset_id)
 
@@ -138,8 +138,8 @@ describe GdsApi::AssetManager do
   end
 
   it "restores an asset for the given id" do
-    req = stub_request(:post, "#{base_api_url}/assets/#{asset_id}/restore").
-      to_return(body: JSON.dump(stub_asset_manager_response), status: 200)
+    req = stub_request(:post, "#{base_api_url}/assets/#{asset_id}/restore")
+      .to_return(body: JSON.dump(stub_asset_manager_response), status: 200)
 
     response = api.restore_asset(asset_id)
 

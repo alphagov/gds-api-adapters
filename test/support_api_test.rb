@@ -50,7 +50,7 @@ describe GdsApi::SupportApi do
   end
 
   it "fetches problem report daily totals" do
-    response_body = { "data" => %w(results) }
+    response_body = { "data" => %w[results] }
     request_date = Date.new(2014, 7, 12)
 
     stub_get = stub_support_api_problem_report_daily_totals_for(request_date, response_body.to_json)

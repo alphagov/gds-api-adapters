@@ -5,7 +5,7 @@ describe GdsApi::GovukHeaderSniffer do
   include Rack::Test::Methods
 
   let(:inner_app) do
-    lambda { |_env| [200, { "Content-Type" => "text/plain" }, ["All good!"]] }
+    ->(_env) { [200, { "Content-Type" => "text/plain" }, ["All good!"]] }
   end
 
   let(:app) { GdsApi::GovukHeaderSniffer.new(inner_app, "HTTP_GOVUK_REQUEST_ID") }

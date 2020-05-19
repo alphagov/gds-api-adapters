@@ -12,7 +12,7 @@ describe GdsApi::Worldwide do
 
   describe "fetching list of world locations" do
     it "should get the world locations" do
-      country_slugs = %w(the-shire rivendel rohan lorien gondor arnor mordor)
+      country_slugs = %w[the-shire rivendel rohan lorien gondor arnor mordor]
       stub_worldwide_api_has_locations(country_slugs)
 
       response = @api.world_locations

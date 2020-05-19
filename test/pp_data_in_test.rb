@@ -21,7 +21,7 @@ describe GdsApi::PerformancePlatform::DataIn do
   end
 
   it "can submit entries counts for corporate content problem reports" do
-    entries = %w(some entries)
+    entries = %w[some entries]
 
     stub_post = stub_corporate_content_problem_report_count_submission(entries)
 
@@ -31,7 +31,7 @@ describe GdsApi::PerformancePlatform::DataIn do
   end
 
   it "can submit the corporate content urls with the most problem reports" do
-    entries = %w(some entries)
+    entries = %w[some entries]
 
     stub_post = stub_corporate_content_urls_with_the_most_problem_reports_submission(entries)
 

@@ -12,7 +12,7 @@ describe GdsApi::Organisations do
 
   describe "fetching list of organisations" do
     it "should get the organisations" do
-      organisation_slugs = %w(ministry-of-fun tea-agency)
+      organisation_slugs = %w[ministry-of-fun tea-agency]
       stub_organisations_api_has_organisations(organisation_slugs)
 
       response = @api.organisations

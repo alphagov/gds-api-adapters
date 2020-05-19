@@ -23,9 +23,9 @@ describe GdsApi::LocalLinksManager do
         expected_response = {
           "local_authority" => {
             "name" => "Blackburn",
-              "snac" => "00AG",
-              "tier" => "unitary",
-              "homepage_url" => "http://blackburn.example.com",
+            "snac" => "00AG",
+            "tier" => "unitary",
+            "homepage_url" => "http://blackburn.example.com",
           },
           "local_interaction" => {
             "lgsl_code" => 2,
@@ -48,9 +48,9 @@ describe GdsApi::LocalLinksManager do
         expected_response = {
           "local_authority" => {
             "name" => "Blackburn",
-              "snac" => "00AG",
-              "tier" => "unitary",
-              "homepage_url" => "http://blackburn.example.com",
+            "snac" => "00AG",
+            "tier" => "unitary",
+            "homepage_url" => "http://blackburn.example.com",
           },
         }
 
@@ -68,9 +68,9 @@ describe GdsApi::LocalLinksManager do
         expected_response = {
           "local_authority" => {
             "name" => "Blackburn",
-              "snac" => "00AG",
-              "tier" => "unitary",
-              "homepage_url" => nil,
+            "snac" => "00AG",
+            "tier" => "unitary",
+            "homepage_url" => nil,
           },
         }
 

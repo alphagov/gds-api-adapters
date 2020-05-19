@@ -83,12 +83,12 @@ module GdsApi
       #  stub_email_alert_api_has_subscriptions([
       #    {
       #      id: 'id-of-my-subscriber-list',
-      #      frequency: 'weekly',
+      #      frequency: 'weekly',
       #      ended: true,
       #    },
       #    {
       #      id: 'id-of-my-subscriber-list',
-      #      frequency: 'daily',
+      #      frequency: 'daily',
       #    },
       #  ])
       #
@@ -176,7 +176,7 @@ module GdsApi
 
       def assert_email_alert_api_content_change_created(attributes = nil)
         if attributes
-          matcher = ->(request) do
+          matcher = lambda do |request|
             payload = JSON.parse(request.body)
             payload.select { |k, _| attributes.key?(k) } == attributes
           end
@@ -187,7 +187,7 @@ module GdsApi
 
       def assert_email_alert_api_message_created(attributes = nil)
         if attributes
-          matcher = ->(request) do
+          matcher = lambda do |request|
             payload = JSON.parse(request.body)
             payload.select { |k, _| attributes.key?(k) } == attributes
           end
@@ -222,21 +222,21 @@ module GdsApi
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions")
           .with(
             body: { subscriber_list_id: subscriber_list_id, address: address, frequency: frequency }.to_json,
-        ).to_return(status: 201, body: { subscription_id: returned_subscription_id }.to_json)
+          ).to_return(status: 201, body: { subscription_id: returned_subscription_id }.to_json)
       end
 
       def stub_email_alert_api_creates_an_existing_subscription(subscriber_list_id, address, frequency, returned_subscription_id)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions")
           .with(
             body: { subscriber_list_id: subscriber_list_id, address: address, frequency: frequency }.to_json,
-        ).to_return(status: 200, body: { subscription_id: returned_subscription_id }.to_json)
+          ).to_return(status: 200, body: { subscription_id: returned_subscription_id }.to_json)
       end
 
       def stub_email_alert_api_refuses_to_create_subscription(subscriber_list_id, address, frequency)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions")
           .with(
             body: { subscriber_list_id: subscriber_list_id, address: address, frequency: frequency }.to_json,
-        ).to_return(status: 422)
+          ).to_return(status: 422)
       end
 
       def stub_email_alert_api_sends_subscription_verification_email(address, frequency, topic_id)
@@ -292,7 +292,7 @@ module GdsApi
             body: {
               subscriber_list: returned_attributes,
             }.to_json,
-        )
+          )
       end
 
       def stub_email_alert_api_does_not_have_subscriber_list_by_slug(slug:)

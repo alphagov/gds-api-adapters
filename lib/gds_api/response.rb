@@ -74,9 +74,13 @@ module GdsApi
       @parsed_content ||= transform_parsed(JSON.parse(@http_response.body))
     end
 
-    def present?; true; end
+    def present?
+      true
+    end
 
-    def blank?; false; end
+    def blank?
+      false
+    end
 
   private
 
@@ -85,7 +89,7 @@ module GdsApi
 
       case value
       when Hash
-        Hash[value.map { |k, v|
+        Hash[value.map do |k, v|
           # NOTE: Don't bother transforming if the value is nil
           if k == "web_url" && v
             # Use relative URLs to route when the web_url value is on the
@@ -98,7 +102,7 @@ module GdsApi
           else
             [k, transform_parsed(v)]
           end
-        }]
+        end]
       when Array
         value.map { |v| transform_parsed(v) }
       else

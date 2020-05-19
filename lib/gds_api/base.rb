@@ -24,7 +24,8 @@ class GdsApi::Base
                  :put_json,
                  :patch_json,
                  :delete_json,
-                 :get_raw, :get_raw!,
+                 :get_raw,
+                 :get_raw!,
                  :put_multipart,
                  :post_multipart
 
@@ -69,9 +70,9 @@ private
     param_pairs = params.sort.map { |key, value|
       case value
       when Array
-        value.map { |v|
+        value.map do |v|
           "#{CGI.escape(key.to_s + '[]')}=#{CGI.escape(v.to_s)}"
-        }
+        end
       else
         "#{CGI.escape(key.to_s)}=#{CGI.escape(value.to_s)}"
       end

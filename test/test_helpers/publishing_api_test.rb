@@ -35,13 +35,13 @@ describe GdsApi::TestHelpers::PublishingApi do
   describe "#stub_publish_api_has_links_for_content_ids" do
     it "stubs the call to get links for content ids" do
       links = {
-                "2878337b-bed9-4e7f-85b6-10ed2cbcd504" => {
-                  "links" => { "taxons" => %w[eb6965c7-3056-45d0-ae50-2f0a5e2e0854] },
-                },
-                "eec13cea-219d-4896-9c97-60114da23559" => {
-                  "links" => {},
-                },
-              }
+        "2878337b-bed9-4e7f-85b6-10ed2cbcd504" => {
+          "links" => { "taxons" => %w[eb6965c7-3056-45d0-ae50-2f0a5e2e0854] },
+        },
+        "eec13cea-219d-4896-9c97-60114da23559" => {
+          "links" => {},
+        },
+      }
 
       stub_publishing_api_has_links_for_content_ids(links)
 
@@ -179,14 +179,17 @@ describe GdsApi::TestHelpers::PublishingApi do
       stub_publishing_api_has_expanded_links(payload)
       response = publishing_api.get_expanded_links("2e20294a-d694-4083-985e-d8bedefc2354")
 
-      assert_equal({
-        "content_id" => "2e20294a-d694-4083-985e-d8bedefc2354",
-        "organisations" => [
-          {
-            "content_id" => %w[a8a09822-1729-48a7-8a68-d08300de9d1e],
-          },
-        ],
-      }, response.to_h)
+      assert_equal(
+        {
+          "content_id" => "2e20294a-d694-4083-985e-d8bedefc2354",
+          "organisations" => [
+            {
+              "content_id" => %w[a8a09822-1729-48a7-8a68-d08300de9d1e],
+            },
+          ],
+        },
+        response.to_h,
+      )
     end
 
     it "stubs the call to get expanded links when content_id is a string" do
@@ -202,14 +205,17 @@ describe GdsApi::TestHelpers::PublishingApi do
       stub_publishing_api_has_expanded_links(payload)
       response = publishing_api.get_expanded_links("2e20294a-d694-4083-985e-d8bedefc2354")
 
-      assert_equal({
-        "content_id" => "2e20294a-d694-4083-985e-d8bedefc2354",
-        "organisations" => [
-          {
-            "content_id" => %w[a8a09822-1729-48a7-8a68-d08300de9d1e],
-          },
-        ],
-      }, response.to_h)
+      assert_equal(
+        {
+          "content_id" => "2e20294a-d694-4083-985e-d8bedefc2354",
+          "organisations" => [
+            {
+              "content_id" => %w[a8a09822-1729-48a7-8a68-d08300de9d1e],
+            },
+          ],
+        },
+        response.to_h,
+      )
     end
 
     it "stubs with query parameters" do
@@ -225,14 +231,17 @@ describe GdsApi::TestHelpers::PublishingApi do
       stub_publishing_api_has_expanded_links(payload, with_drafts: false, generate: true)
       response = publishing_api.get_expanded_links("2e20294a-d694-4083-985e-d8bedefc2354", with_drafts: false, generate: true)
 
-      assert_equal({
-        "content_id" => "2e20294a-d694-4083-985e-d8bedefc2354",
-        "organisations" => [
-          {
-            "content_id" => %w[a8a09822-1729-48a7-8a68-d08300de9d1e],
-          },
-        ],
-      }, response.to_h)
+      assert_equal(
+        {
+          "content_id" => "2e20294a-d694-4083-985e-d8bedefc2354",
+          "organisations" => [
+            {
+              "content_id" => %w[a8a09822-1729-48a7-8a68-d08300de9d1e],
+            },
+          ],
+        },
+        response.to_h,
+      )
     end
   end
 
@@ -241,7 +250,7 @@ describe GdsApi::TestHelpers::PublishingApi do
       content_id = SecureRandom.uuid
       body = {
         links: {
-          my_linkset: %w(link_1),
+          my_linkset: %w[link_1],
         },
         previous_version: 4,
       }
@@ -261,7 +270,7 @@ describe GdsApi::TestHelpers::PublishingApi do
       content_id = SecureRandom.uuid
       body = {
         links: {
-          my_linkset: %w(link_1),
+          my_linkset: %w[link_1],
         },
         previous_version: 4,
       }
@@ -315,7 +324,7 @@ describe GdsApi::TestHelpers::PublishingApi do
 
       stub_publishing_api_get_editions(
         editions,
-        fields: %w(title),
+        fields: %w[title],
       )
 
       api_response = publishing_api.get_editions(fields: [:title])
@@ -363,11 +372,14 @@ describe GdsApi::TestHelpers::PublishingApi do
       api_response = publishing_api.put_intent("/foo", params)
       assert_equal(api_response.code, 200)
 
-      assert_equal({
-        "publishing_app" => "publisher",
-        "rendering_app" => "frontend",
-        "publish_time" => "2019-11-11t17:56:17+00:00",
-      }, api_response.to_h)
+      assert_equal(
+        {
+          "publishing_app" => "publisher",
+          "rendering_app" => "frontend",
+          "publish_time" => "2019-11-11t17:56:17+00:00",
+        },
+        api_response.to_h,
+      )
     end
 
     it "accepts parameters as a string" do
@@ -448,10 +460,13 @@ describe GdsApi::TestHelpers::PublishingApi do
       stub_any_publishing_api_path_reservation
 
       api_response = publishing_api.put_path("/foo", publishing_app: "foo-publisher")
-      assert_equal({
-        "publishing_app" => "foo-publisher",
-        "base_path" => "/foo",
-      }, api_response.to_h)
+      assert_equal(
+        {
+          "publishing_app" => "foo-publisher",
+          "base_path" => "/foo",
+        },
+        api_response.to_h,
+      )
     end
   end
 
@@ -461,10 +476,13 @@ describe GdsApi::TestHelpers::PublishingApi do
 
       api_response = publishing_api.put_path("/foo", publishing_app: "foo-publisher")
       assert_equal(api_response.code, 200)
-      assert_equal({
-        "publishing_app" => "foo-publisher",
-        "base_path" => "/foo",
-      }, api_response.to_h)
+      assert_equal(
+        {
+          "publishing_app" => "foo-publisher",
+          "base_path" => "/foo",
+        },
+        api_response.to_h,
+      )
     end
 
     it "returns an error response for a request for the path and a different publishing app" do

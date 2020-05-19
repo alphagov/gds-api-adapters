@@ -9,21 +9,21 @@ describe GdsApi::EmailAlertApi do
   let(:api_client)    { GdsApi::EmailAlertApi.new(base_url) }
 
   let(:title) { "Some Title" }
-  let(:tags) {
+  let(:tags) do
     {
       "format" => %w[some-document-format],
     }
-  }
+  end
 
   describe "content changes" do
     let(:subject) { "Email subject" }
-    let(:publication_params) {
+    let(:publication_params) do
       {
         "title" => title,
         "subject" => subject,
         "tags" => tags,
       }
-    }
+    end
 
     before do
       stub_email_alert_api_accepts_content_change
@@ -50,13 +50,13 @@ describe GdsApi::EmailAlertApi do
 
   describe "messages" do
     let(:subject) { "Email subject" }
-    let(:message_params) {
+    let(:message_params) do
       {
         "subject" => subject,
         "body" => "Body",
         "tags" => tags,
       }
-    }
+    end
 
     before do
       stub_email_alert_api_accepts_message
@@ -82,11 +82,11 @@ describe GdsApi::EmailAlertApi do
     assert_requested(:post, "#{base_url}/emails", body: email_params.to_json)
   end
 
-  let(:unpublish_message) {
+  let(:unpublish_message) do
     {
       "content_id" => "content-id",
     }
-  }
+  end
 
   describe "unpublishing messages" do
     before do
@@ -206,12 +206,12 @@ describe GdsApi::EmailAlertApi do
     let(:expected_subscription_url) { "a subscription url" }
 
     describe "#find_or_create_subscriber_list_by_tags" do
-      let(:params) {
+      let(:params) do
         {
           "title" => title,
           "tags" => tags,
         }
-      }
+      end
 
       describe "a subscriber list with that tag set does not yet exist" do
         before do
@@ -265,13 +265,13 @@ describe GdsApi::EmailAlertApi do
       end
 
       describe "when the optional 'document_type' is provided" do
-        let(:params) {
+        let(:params) do
           {
             "title" => title,
             "tags" => tags,
             "document_type" => "travel_advice",
           }
-        }
+        end
 
         before do
           stub_email_alert_api_has_subscriber_list(
@@ -295,14 +295,14 @@ describe GdsApi::EmailAlertApi do
       end
 
       describe "when the optional 'email_document_supertype' and 'government_document_supertype' are provided" do
-        let(:params) {
+        let(:params) do
           {
             "title" => title,
             "tags" => tags,
             "email_document_supertype" => "publications",
             "government_document_supertype" => "travel_advice",
           }
-        }
+        end
 
         before do
           stub_email_alert_api_has_subscriber_list(
@@ -331,13 +331,13 @@ describe GdsApi::EmailAlertApi do
       end
 
       describe "when the optional 'gov_delivery_id' is provided" do
-        let(:params) {
+        let(:params) do
           {
             "title" => title,
             "tags" => tags,
             "gov_delivery_id" => "TOPIC-A",
           }
-        }
+        end
 
         before do
           stub_email_alert_api_has_subscriber_list(
@@ -361,19 +361,19 @@ describe GdsApi::EmailAlertApi do
       end
 
       describe "when both tags and links are provided" do
-        let(:links) {
+        let(:links) do
           {
             "format" => %w[some-document-format],
           }
-        }
+        end
 
-        let(:params) {
+        let(:params) do
           {
             "title" => title,
             "tags" => tags,
             "links" => links,
           }
-        }
+        end
 
         before do
           stub_email_alert_api_has_subscriber_list(
