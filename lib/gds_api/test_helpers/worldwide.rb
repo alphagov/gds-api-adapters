@@ -1,11 +1,9 @@
-require "gds_api/test_helpers/alias_deprecated"
 require "gds_api/test_helpers/json_client_helper"
 require "gds_api/test_helpers/common_responses"
 
 module GdsApi
   module TestHelpers
     module Worldwide
-      extend AliasDeprecated
       include GdsApi::TestHelpers::CommonResponses
 
       WORLDWIDE_API_ENDPOINT = Plek.new.website_root
@@ -141,13 +139,6 @@ module GdsApi
           "content_id" => "content_id_for_#{slug}",
         }
       end
-
-      alias_deprecated :worldwide_api_has_locations, :stub_worldwide_api_has_locations
-      alias_deprecated :worldwide_api_has_selection_of_locations, :stub_worldwide_api_has_selection_of_locations
-      alias_deprecated :worldwide_api_has_location, :stub_worldwide_api_has_location
-      alias_deprecated :worldwide_api_has_does_not_have_location, :stub_worldwide_api_does_not_have_location
-      alias_deprecated :worldwide_api_has_organisations_for_location, :stub_worldwide_api_has_organisations_for_location
-      alias_deprecated :worldwide_api_has_no_organisations_for_location, :stub_worldwide_api_has_no_organisations_for_location
     end
   end
 end

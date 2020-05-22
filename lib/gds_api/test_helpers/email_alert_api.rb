@@ -300,30 +300,6 @@ module GdsApi
           .to_return(status: 404)
       end
 
-      # Aliases for DEPRECATED methods
-      alias_method :email_alert_api_has_updated_subscriber, :stub_email_alert_api_has_updated_subscriber
-      alias_method :email_alert_api_does_not_have_updated_subscriber, :stub_email_alert_api_does_not_have_updated_subscriber
-      alias_method :email_alert_api_has_updated_subscription, :stub_email_alert_api_has_updated_subscription
-      alias_method :email_alert_api_does_not_have_updated_subscription, :stub_email_alert_api_does_not_have_updated_subscription
-      alias_method :email_alert_api_has_subscriber_subscriptions, :stub_email_alert_api_has_subscriber_subscriptions
-      alias_method :email_alert_api_does_not_have_subscriber_subscriptions, :stub_email_alert_api_does_not_have_subscriber_subscriptions
-      alias_method :email_alert_api_has_subscription, :stub_email_alert_api_has_subscription
-      alias_method :email_alert_api_has_subscriptions, :stub_email_alert_api_has_subscriptions
-      alias_method :email_alert_api_has_subscriber_list, :stub_email_alert_api_has_subscriber_list
-      alias_method :email_alert_api_does_not_have_subscriber_list, :stub_email_alert_api_does_not_have_subscriber_list
-      alias_method :email_alert_api_creates_subscriber_list, :stub_email_alert_api_creates_subscriber_list
-      alias_method :email_alert_api_refuses_to_create_subscriber_list, :stub_email_alert_api_refuses_to_create_subscriber_list
-      alias_method :email_alert_api_accepts_unpublishing_message, :stub_email_alert_api_accepts_unpublishing_message
-      alias_method :email_alert_api_unsubscribes_a_subscription, :stub_email_alert_api_unsubscribes_a_subscription
-      alias_method :email_alert_api_has_no_subscription_for_uuid, :stub_email_alert_api_has_no_subscription_for_uuid
-      alias_method :email_alert_api_unsubscribes_a_subscriber, :stub_email_alert_api_unsubscribes_a_subscriber
-      alias_method :email_alert_api_has_no_subscriber, :stub_email_alert_api_has_no_subscriber
-      alias_method :email_alert_api_creates_a_subscription, :stub_email_alert_api_creates_a_subscription
-      alias_method :email_alert_api_creates_an_existing_subscription, :stub_email_alert_api_creates_an_existing_subscription
-      alias_method :email_alert_api_refuses_to_create_subscription, :stub_email_alert_api_refuses_to_create_subscription
-      alias_method :email_alert_api_has_subscriber_list_by_slug, :stub_email_alert_api_has_subscriber_list_by_slug
-      alias_method :email_alert_api_does_not_have_subscriber_list_by_slug, :stub_email_alert_api_does_not_have_subscriber_list_by_slug
-
     private
 
       def get_subscriber_response(id, address)

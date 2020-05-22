@@ -1,11 +1,9 @@
-require "gds_api/test_helpers/alias_deprecated"
 require "cgi"
 require "plek"
 
 module GdsApi
   module TestHelpers
     module SupportApi
-      extend AliasDeprecated
       SUPPORT_API_ENDPOINT = Plek.current.find("support-api")
 
       def stub_support_api_problem_report_creation(request_details = nil)
@@ -155,8 +153,6 @@ module GdsApi
       def stub_any_support_api_call
         stub_request(:any, %r{\A#{SUPPORT_API_ENDPOINT}})
       end
-
-      alias_deprecated :support_api_isnt_available, :stub_support_api_isnt_available
     end
   end
 end
