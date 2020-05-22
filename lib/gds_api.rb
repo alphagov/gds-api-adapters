@@ -11,7 +11,6 @@ require "gds_api/mapit"
 require "gds_api/maslow"
 require "gds_api/organisations"
 require "gds_api/publishing_api"
-require "gds_api/publishing_api_v2"
 require "gds_api/router"
 require "gds_api/search"
 require "gds_api/support"
@@ -134,19 +133,6 @@ module GdsApi
   # @return [GdsApi::PublishingApi]
   def self.publishing_api(options = {})
     GdsApi::PublishingApi.new(
-      Plek.find("publishing-api"),
-      { bearer_token: ENV["PUBLISHING_API_BEARER_TOKEN"] }.merge(options),
-    )
-  end
-
-  # Creates a GdsApi::PublishingApiV2 adapter
-  #
-  # This will set a bearer token if a PUBLISHING_API_BEARER_TOKEN environment
-  # variable is set
-  #
-  # @return [GdsApi::PublishingApiV2]
-  def self.publishing_api_v2(options = {})
-    GdsApi::PublishingApiV2.new(
       Plek.find("publishing-api"),
       { bearer_token: ENV["PUBLISHING_API_BEARER_TOKEN"] }.merge(options),
     )

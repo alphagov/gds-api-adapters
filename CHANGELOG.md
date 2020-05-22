@@ -1,3 +1,7 @@
+# Unreleased
+
+* BREAKING: Remove `GdsApi::PublishingApiV2` use `GdsApi::PublishingApi`
+
 # 63.6.0
 
 * Remove request body parameters from error reporting payload.
