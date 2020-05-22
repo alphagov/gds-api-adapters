@@ -55,11 +55,11 @@ module GdsApi
           stub_request(:get, links[:self])
             .to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
 
-          if i.zero?
-            # First page exists at URL with and without page param
-            stub_request(:get, links[:self].sub(/\?page=1/, ""))
-              .to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
-          end
+          next unless i.zero?
+
+          # First page exists at URL with and without page param
+          stub_request(:get, links[:self].sub(/\?page=1/, ""))
+            .to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
         end
 
         if pages.empty?
