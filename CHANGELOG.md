@@ -1,5 +1,7 @@
 # 67.0.0
 
+* Note: this release was misnumbered and should have been version 64 - there
+  are no versions 64, 65, 66 of this gem.
 * BREAKING: Remove deprecated test helper methods that weren't prefixed with `stub_`
 * BREAKING: Remove `GdsApi::PublishingApiV2` use `GdsApi::PublishingApi`
 
