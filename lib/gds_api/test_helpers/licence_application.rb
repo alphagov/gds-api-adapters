@@ -1,11 +1,8 @@
-require "gds_api/test_helpers/alias_deprecated"
 require "gds_api/test_helpers/json_client_helper"
 
 module GdsApi
   module TestHelpers
     module LicenceApplication
-      extend AliasDeprecated
-
       # Generally true. If you are initializing the client differently,
       # you could redefine/override the constant or stub directly.
       LICENCE_APPLICATION_ENDPOINT = Plek.current.find("licensify")
@@ -32,11 +29,6 @@ module GdsApi
       def stub_licence_returns_error(identifier)
         stub_request(:get, "#{LICENCE_APPLICATION_ENDPOINT}/api/licence/#{identifier}").to_return(status: 500)
       end
-
-      alias_deprecated :licence_exists, :stub_licence_exists
-      alias_deprecated :licence_does_not_exist, :stub_licence_does_not_exist
-      alias_deprecated :licence_times_out, :stub_licence_times_out
-      alias_deprecated :licence_returns_error, :stub_licence_returns_error
     end
   end
 end

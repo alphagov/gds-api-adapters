@@ -1,11 +1,9 @@
-require "gds_api/test_helpers/alias_deprecated"
 require "gds_api/test_helpers/json_client_helper"
 require "gds_api/test_helpers/common_responses"
 
 module GdsApi
   module TestHelpers
     module Worldwide
-      extend AliasDeprecated
       include GdsApi::TestHelpers::CommonResponses
 
       WORLDWIDE_API_ENDPOINT = Plek.new.website_root
@@ -45,11 +43,11 @@ module GdsApi
           stub_request(:get, links[:self])
             .to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
 
-          if i.zero?
-            # First page exists at URL with and without page param
-            stub_request(:get, links[:self].sub(/\?page=1/, ""))
-              .to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
-          end
+          next unless i.zero?
+
+          # First page exists at URL with and without page param
+          stub_request(:get, links[:self].sub(/\?page=1/, ""))
+            .to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
         end
       end
 
@@ -141,13 +139,6 @@ module GdsApi
           "content_id" => "content_id_for_#{slug}",
         }
       end
-
-      alias_deprecated :worldwide_api_has_locations, :stub_worldwide_api_has_locations
-      alias_deprecated :worldwide_api_has_selection_of_locations, :stub_worldwide_api_has_selection_of_locations
-      alias_deprecated :worldwide_api_has_location, :stub_worldwide_api_has_location
-      alias_deprecated :worldwide_api_has_does_not_have_location, :stub_worldwide_api_does_not_have_location
-      alias_deprecated :worldwide_api_has_organisations_for_location, :stub_worldwide_api_has_organisations_for_location
-      alias_deprecated :worldwide_api_has_no_organisations_for_location, :stub_worldwide_api_has_no_organisations_for_location
     end
   end
 end

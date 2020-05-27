@@ -1,10 +1,8 @@
-require "gds_api/test_helpers/alias_deprecated"
 require "gds_api/test_helpers/json_client_helper"
 
 module GdsApi
   module TestHelpers
     module LinkCheckerApi
-      extend AliasDeprecated
       LINK_CHECKER_API_ENDPOINT = Plek.current.find("link-checker-api")
 
       def link_checker_api_link_report_hash(uri:, status: :ok, checked: nil, errors: [], warnings: [], problem_summary: nil, suggested_fix: nil)
@@ -91,12 +89,6 @@ module GdsApi
             headers: { "Content-Type" => "application/json" },
           )
       end
-
-      # Aliases for DEPRECATED methods
-      alias_deprecated :link_checker_api_check, :stub_link_checker_api_check
-      alias_deprecated :link_checker_api_get_batch, :stub_link_checker_api_get_batch
-      alias_deprecated :link_checker_api_create_batch, :stub_link_checker_api_create_batch
-      alias_deprecated :link_checker_api_upsert_resource_monitor, :stub_link_checker_api_upsert_resource_monitor
     end
   end
 end

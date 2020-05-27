@@ -1,4 +1,3 @@
-require "gds_api/test_helpers/alias_deprecated"
 require "gds_api/test_helpers/json_client_helper"
 require "gds_api/test_helpers/common_responses"
 require "plek"
@@ -7,7 +6,6 @@ require "securerandom"
 module GdsApi
   module TestHelpers
     module Organisations
-      extend AliasDeprecated
       include GdsApi::TestHelpers::CommonResponses
 
       WEBSITE_ROOT = Plek.new.website_root
@@ -57,11 +55,11 @@ module GdsApi
           stub_request(:get, links[:self])
             .to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
 
-          if i.zero?
-            # First page exists at URL with and without page param
-            stub_request(:get, links[:self].sub(/\?page=1/, ""))
-              .to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
-          end
+          next unless i.zero?
+
+          # First page exists at URL with and without page param
+          stub_request(:get, links[:self].sub(/\?page=1/, ""))
+            .to_return(status: 200, body: page_details.to_json, headers: { "Link" => link_headers.join(", ") })
         end
 
         if pages.empty?
@@ -119,11 +117,6 @@ module GdsApi
           ],
         }
       end
-
-      alias_deprecated :organisations_api_has_organisations, :stub_organisations_api_has_organisations
-      alias_deprecated :organisations_api_has_organisations_with_bodies, :stub_organisations_api_has_organisations_with_bodies
-      alias_deprecated :organisations_api_has_organisation, :stub_organisations_api_has_organisation
-      alias_deprecated :organisations_api_does_not_have_organisation, :stub_organisations_api_does_not_have_organisation
     end
   end
 end
