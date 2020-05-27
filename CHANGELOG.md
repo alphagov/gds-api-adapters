@@ -1,4 +1,4 @@
-# Unreleased
+# 67.0.0
 
 * BREAKING: Remove deprecated test helper methods that weren't prefixed with `stub_`
 * BREAKING: Remove `GdsApi::PublishingApiV2` use `GdsApi::PublishingApi`
