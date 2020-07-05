@@ -2173,7 +2173,7 @@ describe GdsApi::PublishingApi do
         ]
 
         expected_documents.each do |document|
-          response.to_a.must_include document
+          assert_includes response.to_a, document
         end
       end
     end
@@ -2305,12 +2305,12 @@ describe GdsApi::PublishingApi do
 
         response = @api_client.get_paged_editions(fields: %w[content_id], per_page: 2).to_a
 
-        response.count.must_equal 2
+        assert_equal 2, response.count
         first_page_content_ids = response[0]["results"].map { |content_item| content_item["content_id"] }
         second_page_content_ids = response[1]["results"].map { |content_item| content_item["content_id"] }
 
-        first_page_content_ids.must_equal [content_id_1, content_id_2]
-        second_page_content_ids.must_equal [content_id_3, content_id_4]
+        assert_equal [content_id_1, content_id_2], first_page_content_ids
+        assert_equal [content_id_3, content_id_4], second_page_content_ids
       end
     end
   end
@@ -2318,20 +2318,28 @@ describe GdsApi::PublishingApi do
   describe "content ID validation" do
     %i[get_content get_links get_linked_items discard_draft].each do |method|
       it "happens on #{method}" do
-        proc { @api_client.send(method, nil) }.must_raise ArgumentError
+        assert_raises ArgumentError do
+          @api_client.send(method, nil)
+        end
       end
     end
 
     it "happens on publish" do
-      proc { @api_client.publish(nil, "major") }.must_raise ArgumentError
+      assert_raises ArgumentError do
+        @api_client.publish(nil, "major")
+      end
     end
 
     it "happens on put_content" do
-      proc { @api_client.put_content(nil, {}) }.must_raise ArgumentError
+      assert_raises ArgumentError do
+        @api_client.put_content(nil, {})
+      end
     end
 
     it "happens on patch_links" do
-      proc { @api_client.patch_links(nil, links: {}) }.must_raise ArgumentError
+      assert_raises ArgumentError do
+        @api_client.patch_links(nil, links: {})
+      end
     end
   end
 
