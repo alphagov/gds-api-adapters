@@ -57,3 +57,7 @@ GovukContentSchemaTestHelpers.configure do |config|
   config.schema_type = "publisher_v2"
   config.project_root = File.absolute_path(File.join(File.basename(__FILE__), ".."))
 end
+
+Mocha.configure do |c|
+  c.reinstate_undocumented_behaviour_from_v1_9 = false
+end

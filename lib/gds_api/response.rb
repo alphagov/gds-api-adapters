@@ -1,6 +1,5 @@
 require "json"
 require "forwardable"
-require "rack/cache"
 
 module GdsApi
   # This wraps an HTTP response with a JSON body.
@@ -20,6 +19,77 @@ module GdsApi
   class Response
     extend Forwardable
     include Enumerable
+
+    class CacheControl < Hash
+      PATTERN = /([-a-z]+)(?:\s*=\s*([^,\s]+))?,?+/i.freeze
+
+      def initialize(value = nil)
+        parse(value)
+      end
+
+      def public?
+        self["public"]
+      end
+
+      def private?
+        self["private"]
+      end
+
+      def no_cache?
+        self["no-cache"]
+      end
+
+      def no_store?
+        self["no-store"]
+      end
+
+      def must_revalidate?
+        self["must-revalidate"]
+      end
+
+      def proxy_revalidate?
+        self["proxy-revalidate"]
+      end
+
+      def max_age
+        self["max-age"].to_i if key?("max-age")
+      end
+
+      def reverse_max_age
+        self["r-maxage"].to_i if key?("r-maxage")
+      end
+      alias_method :r_maxage, :reverse_max_age
+
+      def shared_max_age
+        self["s-maxage"].to_i if key?("r-maxage")
+      end
+      alias_method :s_maxage, :shared_max_age
+
+      def to_s
+        directives = []
+        values = []
+
+        each do |key, value|
+          if value == true
+            directives << key
+          elsif value
+            values << "#{key}=#{value}"
+          end
+        end
+
+        (directives.sort + values.sort).join(", ")
+      end
+
+    private
+
+      def parse(header)
+        return if header.nil? || header.empty?
+
+        header.scan(PATTERN).each do |name, value|
+          self[name.downcase] = value || true
+        end
+      end
+    end
 
     def_delegators :to_hash, :[], :"<=>", :each, :dig
 
@@ -63,7 +133,7 @@ module GdsApi
     end
 
     def cache_control
-      @cache_control ||= Rack::Cache::CacheControl.new(headers[:cache_control])
+      @cache_control ||= CacheControl.new(headers[:cache_control])
     end
 
     def to_hash

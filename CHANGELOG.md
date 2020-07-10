@@ -1,3 +1,5 @@
+* Remove dependency on rack-cache gem
+
 # 67.0.0
 
 * Note: this release was misnumbered and should have been version 64 - there
