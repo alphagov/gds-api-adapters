@@ -101,6 +101,20 @@ describe GdsApi::EmailAlertApi do
   end
 
   describe "subscriptions" do
+    describe "URI encoding ids" do
+      it "encodes the id for #get_subscription" do
+        request = stub_request(:get, "#{base_url}/subscriptions/string%20id")
+        api_client.get_subscription("string id")
+        assert_requested request
+      end
+
+      it "encodes the id for #get_latest_matching_subscription" do
+        request = stub_request(:get, "#{base_url}/subscriptions/string%20id/latest")
+        api_client.get_latest_matching_subscription("string id")
+        assert_requested request
+      end
+    end
+
     describe "a subscription exists" do
       before do
         stub_email_alert_api_has_subscription(1, "weekly")
@@ -394,6 +408,12 @@ describe GdsApi::EmailAlertApi do
   end
 
   describe "unsubscribing from a topic" do
+    it "URI encodes the id" do
+      request = stub_email_alert_api_unsubscribes_a_subscription("string%20id")
+      api_client.unsubscribe("string id")
+      assert_requested request
+    end
+
     describe "with an existing subscription" do
       it "returns a 204" do
         uuid = SecureRandom.uuid
@@ -420,6 +440,12 @@ describe GdsApi::EmailAlertApi do
   end
 
   describe "unsubscribing from everything" do
+    it "URI encodes the id" do
+      request = stub_email_alert_api_unsubscribes_a_subscriber("string%20id")
+      api_client.unsubscribe_subscriber("string id")
+      assert_requested request
+    end
+
     describe "with an existing subscriber" do
       it "returns a 204" do
         subscriber_id = SecureRandom.random_number(10)
@@ -514,6 +540,15 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
+  describe "get_subscriber_list with a slug that required URI encoding" do
+    it "encodes the slug" do
+      request = stub_email_alert_api_has_subscriber_list_by_slug(slug: "needs%20encoding",
+                                                                 returned_attributes: {})
+      api_client.get_subscriber_list(slug: "needs encoding")
+      assert_requested request
+    end
+  end
+
   describe "get_subscriber_list when one exists" do
     it "returns it" do
       stub_email_alert_api_has_subscriber_list_by_slug(
@@ -537,6 +572,14 @@ describe GdsApi::EmailAlertApi do
       assert_raises GdsApi::HTTPNotFound do
         api_client.get_subscriber_list(slug: "test123")
       end
+    end
+  end
+
+  describe "change_subscriber with an id that needs URI encoding" do
+    it "encodes the id" do
+      request = stub_email_alert_api_has_updated_subscriber("string%20id", "test2@example.com")
+      api_client.change_subscriber(id: "string id", new_address: "test2@example.com")
+      assert_requested request
     end
   end
 
@@ -566,6 +609,14 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
+  describe "change_subscription with an id that needs URI encoding" do
+    it "encodes the id" do
+      request = stub_email_alert_api_has_updated_subscription("string%20id", "weekly")
+      api_client.change_subscription(id: "string id", frequency: "weekly")
+      assert_requested request
+    end
+  end
+
   describe "change_subscription when a subscription exists" do
     it "changes the subscription's frequency" do
       stub_email_alert_api_has_updated_subscription(
@@ -592,6 +643,20 @@ describe GdsApi::EmailAlertApi do
           frequency: "weekly",
         )
       end
+    end
+  end
+
+  describe "get_subscriptions with parameters that require URI encoding" do
+    it "encodes an id parameter" do
+      request = stub_email_alert_api_has_subscriber_subscriptions("string%20id", "test@example.com")
+      api_client.get_subscriptions(id: "string id")
+      assert_requested request
+    end
+
+    it "encodes an order parameter" do
+      request = stub_email_alert_api_has_subscriber_subscriptions(1, "test@example.com", "order%20param")
+      api_client.get_subscriptions(id: 1, order: "order param")
+      assert_requested request
     end
   end
 
