@@ -1,3 +1,4 @@
+require "addressable"
 require "plek"
 require "gds_api/asset_manager"
 require "gds_api/calendars"
