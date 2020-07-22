@@ -1,4 +1,4 @@
-## Unreleased
+## 67.0.1
 
 * URI encode parameters in Email Alert API methods
 * Remove dependency on rack-cache gem
