@@ -80,4 +80,8 @@ private
 
     "?#{param_pairs.join('&')}"
   end
+
+  def uri_encode(param)
+    Addressable::URI.encode(param.to_s)
+  end
 end

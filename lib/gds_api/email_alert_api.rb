@@ -101,7 +101,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   #
   # @return [nil]
   def unsubscribe(uuid)
-    post_json("#{endpoint}/unsubscribe/#{uuid}")
+    post_json("#{endpoint}/unsubscribe/#{uri_encode(uuid)}")
   end
 
   # Unsubscribe subscriber from everything
@@ -110,7 +110,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   #
   # @return [nil]
   def unsubscribe_subscriber(id)
-    delete_json("#{endpoint}/subscribers/#{id}")
+    delete_json("#{endpoint}/subscribers/#{uri_encode(id)}")
   end
 
   # Subscribe
@@ -141,7 +141,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   #  subscriber_count
   # }
   def get_subscriber_list(slug:)
-    get_json("#{endpoint}/subscriber-lists/#{slug}")
+    get_json("#{endpoint}/subscriber-lists/#{uri_encode(slug)}")
   end
 
   # Get a Subscription
@@ -158,7 +158,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   #  source
   # }
   def get_subscription(id)
-    get_json("#{endpoint}/subscriptions/#{id}")
+    get_json("#{endpoint}/subscriptions/#{uri_encode(id)}")
   end
 
   # Get the latest Subscription that has the same subscriber_list
@@ -177,7 +177,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   #  source
   # }
   def get_latest_matching_subscription(id)
-    get_json("#{endpoint}/subscriptions/#{id}/latest")
+    get_json("#{endpoint}/subscriptions/#{uri_encode(id)}/latest")
   end
 
   # Get Subscriptions for a Subscriber
@@ -188,9 +188,9 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   # @return [Hash] subscriber, subscriptions
   def get_subscriptions(id:, order: nil)
     if order
-      get_json("#{endpoint}/subscribers/#{id}/subscriptions?order=#{order}")
+      get_json("#{endpoint}/subscribers/#{uri_encode(id)}/subscriptions?order=#{uri_encode(order)}")
     else
-      get_json("#{endpoint}/subscribers/#{id}/subscriptions")
+      get_json("#{endpoint}/subscribers/#{uri_encode(id)}/subscriptions")
     end
   end
 
@@ -202,7 +202,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   # @return [Hash] subscriber
   def change_subscriber(id:, new_address:)
     patch_json(
-      "#{endpoint}/subscribers/#{id}",
+      "#{endpoint}/subscribers/#{uri_encode(id)}",
       new_address: new_address,
     )
   end
@@ -215,7 +215,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   # @return [Hash] subscription
   def change_subscription(id:, frequency:)
     patch_json(
-      "#{endpoint}/subscriptions/#{id}",
+      "#{endpoint}/subscriptions/#{uri_encode(id)}",
       frequency: frequency,
     )
   end
