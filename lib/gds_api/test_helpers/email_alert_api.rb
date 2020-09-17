@@ -98,9 +98,9 @@ module GdsApi
         subscriptions.each do |id, params|
           latest_id, latest_params = get_latest_matching(params, subscriptions)
           stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions/#{id}")
-            .to_return(status: 200, body: get_subscription_response(id, params).to_json)
+            .to_return(status: 200, body: get_subscription_response(id, **params).to_json)
           stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions/#{id}/latest")
-            .to_return(status: 200, body: get_subscription_response(latest_id, latest_params).to_json)
+            .to_return(status: 200, body: get_subscription_response(latest_id, **latest_params).to_json)
         end
       end
 

@@ -1,3 +1,6 @@
+## Unreleased
+* Add double splat operator to last arguments that are keyword parameters
+
 ## 67.0.1
 
 * URI encode parameters in Email Alert API methods
