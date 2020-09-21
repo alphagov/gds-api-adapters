@@ -394,9 +394,11 @@ module GdsApi
       # Stub GET /v2/content/:content_id to return a 404 response
       #
       # @param content_id [UUID]
-      def stub_publishing_api_does_not_have_item(content_id)
+      def stub_publishing_api_does_not_have_item(content_id, params = {})
         url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
-        stub_request(:get, url).to_return(status: 404, body: resource_not_found(content_id, "content item").to_json, headers: {})
+        stub_request(:get, url)
+          .with(query: hash_including(params))
+          .to_return(status: 404, body: resource_not_found(content_id, "content item").to_json, headers: {})
       end
 
       # Stub a request to links endpoint
