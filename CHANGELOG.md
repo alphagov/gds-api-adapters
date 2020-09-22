@@ -1,7 +1,9 @@
-## Unreleased
-* Add double splat operator to last arguments that are keyword parameters
+# Unreleased
 
-## 67.0.1
+* Add double splat operator to last arguments that are keyword parameters
+* Accept params in `stub_publishing_api_does_not_have_item`
+
+# 67.0.1
 
 * URI encode parameters in Email Alert API methods
 * Remove dependency on rack-cache gem
