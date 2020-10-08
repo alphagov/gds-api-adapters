@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "pact", "~> 1.20"
   s.add_development_dependency "pact_broker-client", "~> 1.14"
   s.add_development_dependency "pact-consumer-minitest", "~> 1.0"
-  s.add_development_dependency "pact-mock_service", "~> 2.6"
+  s.add_development_dependency "pact-mock_service", "~> 3.6"
   s.add_development_dependency "pry"
   s.add_development_dependency "rack", "~> 2.0"
   s.add_development_dependency "rack-test"
