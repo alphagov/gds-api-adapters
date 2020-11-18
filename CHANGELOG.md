@@ -1,3 +1,7 @@
+# Unreleased
+
+* Fix email-alert-api subscription creation test helpers returning `subscription_id` instead of `id`
+
 # 67.1.0
 
 * Remove unused "redirect" param for email subscriber verification adapter
