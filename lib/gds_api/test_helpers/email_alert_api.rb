@@ -145,6 +145,17 @@ module GdsApi
           )
       end
 
+      def assert_email_alert_api_creates_subscriber_list(attributes = nil)
+        if attributes
+          matcher = lambda do |request|
+            payload = JSON.parse(request.body)
+            payload.select { |k, _| attributes.key?(k) } == attributes
+          end
+        end
+
+        assert_requested(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists", times: 1, &matcher)
+      end
+
       def stub_email_alert_api_refuses_to_create_subscriber_list
         stub_request(:post, build_subscriber_lists_url)
           .to_return(status: 422)

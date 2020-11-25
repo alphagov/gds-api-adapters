@@ -22,6 +22,20 @@ describe GdsApi::TestHelpers::EmailAlertApi do
     end
   end
 
+  describe "#assert_email_alert_api_creates_subscriber_list" do
+    before { stub_any_email_alert_api_call }
+
+    it "matches a post request with any empty attributes by default" do
+      email_alert_api.create_subscriber_list("foo" => "bar")
+      assert_email_alert_api_creates_subscriber_list
+    end
+
+    it "matches a post request subset of attributes" do
+      email_alert_api.create_subscriber_list("foo" => "bar", "baz" => "qux")
+      assert_email_alert_api_creates_subscriber_list("foo" => "bar")
+    end
+  end
+
   describe "#assert_email_alert_api_message_created" do
     before { stub_any_email_alert_api_call }
 
