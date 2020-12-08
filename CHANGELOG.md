@@ -1,5 +1,6 @@
-# Unreleased
+# 67.1.0
 
+* Remove unused "redirect" param for email subscriber verification adapter
 * Add double splat operator to last arguments that are keyword parameters
 * Accept params in `stub_publishing_api_does_not_have_item`
 * Upgrade to Ruby 2.7.2
