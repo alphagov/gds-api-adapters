@@ -224,16 +224,14 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   #
   # @param [string]       address       Address to send verification email to
   # @param [string]       destination   Path on GOV.UK that subscriber will be emailed
-  # @param [string, nil]  redirect      Path on GOV.UK to be encoded into the token for redirecting
   #
   # @return [Hash]  subscriber
   #
-  def send_subscriber_verification_email(address:, destination:, redirect: nil)
+  def send_subscriber_verification_email(address:, destination:)
     post_json(
       "#{endpoint}/subscribers/auth-token",
       address: address,
       destination: destination,
-      redirect: redirect,
     )
   end
 
