@@ -532,7 +532,15 @@ describe GdsApi::EmailAlertApi do
 
   describe "subscribing with an invalid address" do
     it "raises an unprocessable entity error" do
-      stub_email_alert_api_refuses_to_create_subscription(123, "invalid", "weekly")
+      subscriber_list_id = 123
+      address = "invalid"
+      frequency = "weekly"
+
+      stub_email_alert_api_refuses_to_create_subscription(
+        subscriber_list_id,
+        address,
+        frequency,
+      )
 
       assert_raises GdsApi::HTTPUnprocessableEntity do
         api_client.subscribe(subscriber_list_id: 123, address: "invalid", frequency: "weekly")
