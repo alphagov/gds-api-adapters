@@ -487,7 +487,7 @@ describe GdsApi::EmailAlertApi do
         )
         api_response = api_client.subscribe(subscriber_list_id: subscriber_list_id, address: address, frequency: frequency)
         assert_equal(201, api_response.code)
-        assert_equal({ "subscription_id" => 1 }, api_response.to_h)
+        assert_equal({ "id" => 1 }, api_response.to_h)
       end
     end
 
@@ -506,7 +506,7 @@ describe GdsApi::EmailAlertApi do
         )
         api_response = api_client.subscribe(subscriber_list_id: subscriber_list_id, address: address)
         assert_equal(201, api_response.code)
-        assert_equal({ "subscription_id" => 1 }, api_response.to_h)
+        assert_equal({ "id" => 1 }, api_response.to_h)
       end
     end
   end
@@ -526,7 +526,7 @@ describe GdsApi::EmailAlertApi do
       )
       api_response = api_client.subscribe(subscriber_list_id: subscriber_list_id, address: address, frequency: frequency)
       assert_equal(200, api_response.code)
-      assert_equal({ "subscription_id" => 1 }, api_response.to_h)
+      assert_equal({ "id" => 1 }, api_response.to_h)
     end
   end
 

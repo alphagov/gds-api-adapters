@@ -222,14 +222,14 @@ module GdsApi
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions")
           .with(
             body: { subscriber_list_id: subscriber_list_id, address: address, frequency: frequency }.to_json,
-          ).to_return(status: 201, body: { subscription_id: returned_subscription_id }.to_json)
+          ).to_return(status: 201, body: { id: returned_subscription_id }.to_json)
       end
 
       def stub_email_alert_api_creates_an_existing_subscription(subscriber_list_id, address, frequency, returned_subscription_id)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions")
           .with(
             body: { subscriber_list_id: subscriber_list_id, address: address, frequency: frequency }.to_json,
-          ).to_return(status: 200, body: { subscription_id: returned_subscription_id }.to_json)
+          ).to_return(status: 200, body: { id: returned_subscription_id }.to_json)
       end
 
       def stub_email_alert_api_refuses_to_create_subscription(subscriber_list_id, address, frequency)
