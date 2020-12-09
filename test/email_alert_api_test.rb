@@ -509,6 +509,32 @@ describe GdsApi::EmailAlertApi do
         assert_equal({ "id" => 1 }, api_response.to_h)
       end
     end
+
+    describe "without a confirmation email" do
+      it "returns a 201 and the subscription id" do
+        subscriber_list_id = 6
+        address = "test@test.com"
+        created_subscription_id = 1
+        frequency = "immediately"
+
+        stub_email_alert_api_creates_a_subscription(
+          subscriber_list_id,
+          address,
+          frequency,
+          created_subscription_id,
+          skip_confirmation_email: true,
+        )
+
+        api_response = api_client.subscribe(
+          subscriber_list_id: subscriber_list_id,
+          address: address,
+          skip_confirmation_email: true,
+        )
+
+        assert_equal(201, api_response.code)
+        assert_equal({ "id" => 1 }, api_response.to_h)
+      end
+    end
   end
 
   describe "subscribing and a subscription already exists" do
