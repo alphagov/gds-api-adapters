@@ -1,3 +1,8 @@
+# 67.2.0
+
+* Support non-en locales for special routes
+* Support param to skip confirmation email when subscribing (for accounts)
+
 # 67.1.1
 
 * Fix email-alert-api subscription creation test helpers returning `subscription_id` instead of `id`
