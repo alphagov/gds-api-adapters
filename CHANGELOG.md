@@ -1,5 +1,6 @@
 # 67.2.0
 
+* Support non-en locales for special routes
 * Support param to skip confirmation email when subscribing (for accounts)
 
 # 67.1.1
