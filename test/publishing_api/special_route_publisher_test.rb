@@ -57,6 +57,15 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
       end
     end
 
+    it "publishes non-English locales" do
+      publisher.publish(special_route.merge(locale: "cy"))
+
+      assert_requested(:put, "#{endpoint}/v2/content/#{content_id}") do |req|
+        JSON.parse(req.body)["locale"] == "cy"
+      end
+      assert_publishing_api_publish(content_id, { update_type: "major", locale: "cy" })
+    end
+
     it "publishes customized document type" do
       publisher.publish(special_route.merge(document_type: "other_document_type"))
 

@@ -1,3 +1,7 @@
+# Unreleased
+
+* Fix bug in special route publishing
+
 # 67.2.0
 
 * Support non-en locales for special routes
