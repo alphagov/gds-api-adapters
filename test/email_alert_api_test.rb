@@ -473,7 +473,7 @@ describe GdsApi::EmailAlertApi do
 
   describe "subscribing and a subscription is created" do
     describe "with a frequency specified" do
-      it "returns a 201 and the subscription id" do
+      it "returns a 200 and the subscription id" do
         subscriber_list_id = 5
         address = "test@test.com"
         created_subscription_id = 1
@@ -486,13 +486,14 @@ describe GdsApi::EmailAlertApi do
           created_subscription_id,
         )
         api_response = api_client.subscribe(subscriber_list_id: subscriber_list_id, address: address, frequency: frequency)
-        assert_equal(201, api_response.code)
-        assert_equal({ "id" => 1 }, api_response.to_h)
+        assert_equal(200, api_response.code)
+        parsed_body = api_response.to_h
+        assert_equal(created_subscription_id, parsed_body["subscription"]["id"])
       end
     end
 
     describe "without a frequency specified" do
-      it "returns a 201 and the subscription id" do
+      it "returns a 200 and the subscription id" do
         subscriber_list_id = 6
         address = "test@test.com"
         created_subscription_id = 1
@@ -505,13 +506,14 @@ describe GdsApi::EmailAlertApi do
           created_subscription_id,
         )
         api_response = api_client.subscribe(subscriber_list_id: subscriber_list_id, address: address)
-        assert_equal(201, api_response.code)
-        assert_equal({ "id" => 1 }, api_response.to_h)
+        assert_equal(200, api_response.code)
+        parsed_body = api_response.to_h
+        assert_equal(created_subscription_id, parsed_body["subscription"]["id"])
       end
     end
 
     describe "without a confirmation email" do
-      it "returns a 201 and the subscription id" do
+      it "returns a 200 and the subscription id" do
         subscriber_list_id = 6
         address = "test@test.com"
         created_subscription_id = 1
@@ -531,8 +533,9 @@ describe GdsApi::EmailAlertApi do
           skip_confirmation_email: true,
         )
 
-        assert_equal(201, api_response.code)
-        assert_equal({ "id" => 1 }, api_response.to_h)
+        assert_equal(200, api_response.code)
+        parsed_body = api_response.to_h
+        assert_equal(created_subscription_id, parsed_body["subscription"]["id"])
       end
     end
   end
@@ -552,7 +555,8 @@ describe GdsApi::EmailAlertApi do
       )
       api_response = api_client.subscribe(subscriber_list_id: subscriber_list_id, address: address, frequency: frequency)
       assert_equal(200, api_response.code)
-      assert_equal({ "id" => 1 }, api_response.to_h)
+      parsed_body = api_response.to_h
+      assert_equal(existing_subscription_id, parsed_body["subscription"]["id"])
     end
   end
 

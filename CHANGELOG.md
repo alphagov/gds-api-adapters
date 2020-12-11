@@ -1,3 +1,7 @@
+# Unversioned
+
+* BREAKING: update email test helper to match new API behaviour
+
 # 67.2.1
 
 * Fix bug in special route publishing
