@@ -540,26 +540,6 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
-  describe "subscribing and a subscription already exists" do
-    it "returns a 200 and the subscription id" do
-      subscriber_list_id = 5
-      address = "test@test.com"
-      existing_subscription_id = 1
-      frequency = "immediately"
-
-      stub_email_alert_api_creates_an_existing_subscription(
-        subscriber_list_id,
-        address,
-        frequency,
-        existing_subscription_id,
-      )
-      api_response = api_client.subscribe(subscriber_list_id: subscriber_list_id, address: address, frequency: frequency)
-      assert_equal(200, api_response.code)
-      parsed_body = api_response.to_h
-      assert_equal(existing_subscription_id, parsed_body["subscription"]["id"])
-    end
-  end
-
   describe "subscribing with an invalid address" do
     it "raises an unprocessable entity error" do
       subscriber_list_id = 123
