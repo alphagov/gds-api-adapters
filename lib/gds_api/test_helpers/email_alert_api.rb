@@ -218,22 +218,31 @@ module GdsApi
           .to_return(status: 404)
       end
 
-      def stub_email_alert_api_creates_a_subscription(subscriber_list_id, address, frequency, returned_subscription_id, skip_confirmation_email: false)
+      def stub_email_alert_api_creates_a_subscription(
+        subscriber_list_id: nil,
+        address: nil,
+        frequency: nil,
+        returned_subscription_id: nil,
+        skip_confirmation_email: false,
+        subscriber_id: nil
+      )
         response = get_subscription_response(
           returned_subscription_id,
           frequency: frequency,
           subscriber_list_id: subscriber_list_id,
+          subscriber_id: subscriber_id,
         )
 
+        request_params = {
+          subscriber_list_id: subscriber_list_id,
+          address: address,
+          frequency: frequency,
+          skip_confirmation_email: skip_confirmation_email,
+        }
+
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions")
-          .with(
-            body: {
-              subscriber_list_id: subscriber_list_id,
-              address: address,
-              frequency: frequency,
-              skip_confirmation_email: skip_confirmation_email,
-            }.to_json,
-          ).to_return(status: 200, body: response.to_json)
+          .with(body: hash_including(request_params.compact))
+          .to_return(status: 200, body: response.to_json)
       end
 
       def stub_email_alert_api_refuses_to_create_subscription(subscriber_list_id, address, frequency)
