@@ -511,7 +511,7 @@ describe GdsApi::EmailAlertApi do
     end
 
     describe "without a confirmation email" do
-      it "returns a 200 and the subscription id" do
+      it "returns a 200" do
         params = {
           subscriber_list_id: 6,
           address: "test@test.com",
@@ -519,14 +519,9 @@ describe GdsApi::EmailAlertApi do
           skip_confirmation_email: true,
         }
 
-        stub_email_alert_api_creates_a_subscription(
-          params.merge(returned_subscription_id: 1),
-        )
-
+        stub_email_alert_api_creates_a_subscription(params)
         api_response = api_client.subscribe(**params)
         assert_equal(200, api_response.code)
-        parsed_body = api_response.to_h
-        assert_equal(1, parsed_body["subscription"]["id"])
       end
     end
 
