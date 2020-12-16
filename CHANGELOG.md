@@ -2,6 +2,8 @@
 
 * BREAKING: make subscribe test helper interface more flexible
 * BREAKING: update email test helper to match new API behaviour
+* Remove support for unused subscription_url subscriber list field
+* Remove support for unused govdelivery_title subscriber list field
 
 # 67.2.1
 
