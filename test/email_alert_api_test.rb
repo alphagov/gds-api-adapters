@@ -473,86 +473,75 @@ describe GdsApi::EmailAlertApi do
 
   describe "subscribing and a subscription is created" do
     describe "with a frequency specified" do
-      it "returns a 201 and the subscription id" do
-        subscriber_list_id = 5
-        address = "test@test.com"
-        created_subscription_id = 1
-        frequency = "daily"
+      it "returns a 200 and the subscription id" do
+        params = {
+          subscriber_list_id: 5,
+          address: "test@test.com",
+          frequency: "daily",
+        }
 
         stub_email_alert_api_creates_a_subscription(
-          subscriber_list_id,
-          address,
-          frequency,
-          created_subscription_id,
+          params.merge(returned_subscription_id: 1),
         )
-        api_response = api_client.subscribe(subscriber_list_id: subscriber_list_id, address: address, frequency: frequency)
-        assert_equal(201, api_response.code)
-        assert_equal({ "id" => 1 }, api_response.to_h)
+
+        api_response = api_client.subscribe(**params)
+        assert_equal(200, api_response.code)
+        parsed_body = api_response.to_h
+        assert_equal(1, parsed_body["subscription"]["id"])
       end
     end
 
     describe "without a frequency specified" do
-      it "returns a 201 and the subscription id" do
-        subscriber_list_id = 6
-        address = "test@test.com"
-        created_subscription_id = 1
-        frequency = "immediately"
+      it "returns a 200 and the subscription id" do
+        params = {
+          subscriber_list_id: 6,
+          address: "test@test.com",
+          frequency: "immediately",
+        }
 
         stub_email_alert_api_creates_a_subscription(
-          subscriber_list_id,
-          address,
-          frequency,
-          created_subscription_id,
+          params.merge(returned_subscription_id: 1),
         )
-        api_response = api_client.subscribe(subscriber_list_id: subscriber_list_id, address: address)
-        assert_equal(201, api_response.code)
-        assert_equal({ "id" => 1 }, api_response.to_h)
+
+        api_response = api_client.subscribe(**params)
+        assert_equal(200, api_response.code)
+        parsed_body = api_response.to_h
+        assert_equal(1, parsed_body["subscription"]["id"])
       end
     end
 
     describe "without a confirmation email" do
-      it "returns a 201 and the subscription id" do
-        subscriber_list_id = 6
-        address = "test@test.com"
-        created_subscription_id = 1
-        frequency = "immediately"
-
-        stub_email_alert_api_creates_a_subscription(
-          subscriber_list_id,
-          address,
-          frequency,
-          created_subscription_id,
+      it "returns a 200" do
+        params = {
+          subscriber_list_id: 6,
+          address: "test@test.com",
+          frequency: "immediately",
           skip_confirmation_email: true,
-        )
+        }
 
-        api_response = api_client.subscribe(
-          subscriber_list_id: subscriber_list_id,
-          address: address,
-          skip_confirmation_email: true,
-        )
-
-        assert_equal(201, api_response.code)
-        assert_equal({ "id" => 1 }, api_response.to_h)
+        stub_email_alert_api_creates_a_subscription(params)
+        api_response = api_client.subscribe(**params)
+        assert_equal(200, api_response.code)
       end
     end
-  end
 
-  describe "subscribing and a subscription already exists" do
-    it "returns a 200 and the subscription id" do
-      subscriber_list_id = 5
-      address = "test@test.com"
-      existing_subscription_id = 1
-      frequency = "immediately"
+    describe "with a specified subscriber" do
+      it "returns a 200 and the subscriber id" do
+        params = {
+          subscriber_list_id: 6,
+          address: "test@test.com",
+          frequency: "immediately",
+        }
 
-      stub_email_alert_api_creates_an_existing_subscription(
-        subscriber_list_id,
-        address,
-        frequency,
-        existing_subscription_id,
-      )
-      api_response = api_client.subscribe(subscriber_list_id: subscriber_list_id, address: address, frequency: frequency)
-      assert_equal(200, api_response.code)
-      assert_equal({ "id" => 1 }, api_response.to_h)
+        stub_email_alert_api_creates_a_subscription(
+          params.merge(subscriber_id: 1),
+        )
+
+        api_response = api_client.subscribe(**params)
+        assert_equal(200, api_response.code)
+        parsed_body = api_response.to_h
+        assert_equal(1, parsed_body["subscription"]["subscriber"]["id"])
+      end
     end
   end
 
