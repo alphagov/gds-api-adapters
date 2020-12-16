@@ -344,36 +344,6 @@ describe GdsApi::EmailAlertApi do
         end
       end
 
-      describe "when the optional 'gov_delivery_id' is provided" do
-        let(:params) do
-          {
-            "title" => title,
-            "tags" => tags,
-            "gov_delivery_id" => "TOPIC-A",
-          }
-        end
-
-        before do
-          stub_email_alert_api_has_subscriber_list(
-            "title" => "Some Title",
-            "tags" => tags,
-            "gov_delivery_id" => "TOPIC-A",
-            "subscription_url" => expected_subscription_url,
-          )
-        end
-
-        it "returns the subscriber list attributes" do
-          subscriber_list_attrs = api_client.find_or_create_subscriber_list(params)
-            .to_hash
-            .fetch("subscriber_list")
-
-          assert_equal(
-            "TOPIC-A",
-            subscriber_list_attrs.fetch("gov_delivery_id"),
-          )
-        end
-      end
-
       describe "when both tags and links are provided" do
         let(:links) do
           {
@@ -578,7 +548,6 @@ describe GdsApi::EmailAlertApi do
         slug: "test123",
         returned_attributes: {
           id: 1,
-          gov_delivery_id: "test123",
         },
       )
       api_response = api_client.get_subscriber_list(slug: "test123")

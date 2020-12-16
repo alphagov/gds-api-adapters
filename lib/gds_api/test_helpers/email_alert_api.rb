@@ -398,7 +398,6 @@ module GdsApi
           document_type = attributes["document_type"]
           email_document_supertype = attributes["email_document_supertype"]
           government_document_supertype = attributes["government_document_supertype"]
-          gov_delivery_id = attributes["gov_delivery_id"]
           content_purpose_supergroup = attributes["content_purpose_supergroup"]
           combine_mode = attributes["combine_mode"]
 
@@ -408,7 +407,6 @@ module GdsApi
           params[:document_type] = document_type if document_type
           params[:email_document_supertype] = email_document_supertype if email_document_supertype
           params[:government_document_supertype] = government_document_supertype if government_document_supertype
-          params[:gov_delivery_id] = gov_delivery_id if gov_delivery_id
           params[:content_purpose_supergroup] = content_purpose_supergroup if content_purpose_supergroup
           params[:combine_mode] = combine_mode if combine_mode
 
