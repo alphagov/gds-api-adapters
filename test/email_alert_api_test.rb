@@ -217,8 +217,6 @@ describe GdsApi::EmailAlertApi do
   end
 
   describe "subscriber lists" do
-    let(:expected_subscription_url) { "a subscription url" }
-
     describe "#find_or_create_subscriber_list_by_tags" do
       let(:params) do
         {
@@ -236,7 +234,7 @@ describe GdsApi::EmailAlertApi do
           stub_email_alert_api_creates_subscriber_list(
             "title" => title,
             "tags" => tags,
-            "subscription_url" => expected_subscription_url,
+            "slug" => "slug",
           )
         end
 
@@ -246,8 +244,8 @@ describe GdsApi::EmailAlertApi do
             .fetch("subscriber_list")
 
           assert_equal(
-            expected_subscription_url,
-            subscriber_list_attrs.fetch("subscription_url"),
+            "slug",
+            subscriber_list_attrs.fetch("slug"),
           )
 
           assert_equal(
@@ -262,7 +260,7 @@ describe GdsApi::EmailAlertApi do
           stub_email_alert_api_has_subscriber_list(
             "title" => "Some Title",
             "tags" => tags,
-            "subscription_url" => expected_subscription_url,
+            "slug" => "slug",
           )
         end
 
@@ -272,8 +270,8 @@ describe GdsApi::EmailAlertApi do
             .fetch("subscriber_list")
 
           assert_equal(
-            expected_subscription_url,
-            subscriber_list_attrs.fetch("subscription_url"),
+            "slug",
+            subscriber_list_attrs.fetch("slug"),
           )
         end
       end
@@ -292,7 +290,6 @@ describe GdsApi::EmailAlertApi do
             "title" => "Some Title",
             "tags" => tags,
             "document_type" => "travel_advice",
-            "subscription_url" => expected_subscription_url,
           )
         end
 
@@ -324,7 +321,6 @@ describe GdsApi::EmailAlertApi do
             "tags" => tags,
             "email_document_supertype" => "publications",
             "government_document_supertype" => "travel_advice",
-            "subscription_url" => expected_subscription_url,
           )
         end
 
@@ -340,36 +336,6 @@ describe GdsApi::EmailAlertApi do
           assert_equal(
             "travel_advice",
             subscriber_list_attrs.fetch("government_document_supertype"),
-          )
-        end
-      end
-
-      describe "when the optional 'gov_delivery_id' is provided" do
-        let(:params) do
-          {
-            "title" => title,
-            "tags" => tags,
-            "gov_delivery_id" => "TOPIC-A",
-          }
-        end
-
-        before do
-          stub_email_alert_api_has_subscriber_list(
-            "title" => "Some Title",
-            "tags" => tags,
-            "gov_delivery_id" => "TOPIC-A",
-            "subscription_url" => expected_subscription_url,
-          )
-        end
-
-        it "returns the subscriber list attributes" do
-          subscriber_list_attrs = api_client.find_or_create_subscriber_list(params)
-            .to_hash
-            .fetch("subscriber_list")
-
-          assert_equal(
-            "TOPIC-A",
-            subscriber_list_attrs.fetch("gov_delivery_id"),
           )
         end
       end
@@ -394,7 +360,6 @@ describe GdsApi::EmailAlertApi do
             "title" => "Some Title",
             "tags" => tags,
             "links" => links,
-            "subscription_url" => expected_subscription_url,
           )
         end
 
@@ -578,7 +543,6 @@ describe GdsApi::EmailAlertApi do
         slug: "test123",
         returned_attributes: {
           id: 1,
-          gov_delivery_id: "test123",
         },
       )
       api_response = api_client.get_subscriber_list(slug: "test123")

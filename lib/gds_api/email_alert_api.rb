@@ -24,7 +24,6 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     document_type = attributes["document_type"]
     email_document_supertype = attributes["email_document_supertype"]
     government_document_supertype = attributes["government_document_supertype"]
-    gov_delivery_id = attributes["gov_delivery_id"]
     combine_mode = attributes["combine_mode"]
 
     if tags && links
@@ -38,7 +37,6 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     params[:document_type] = document_type if document_type
     params[:email_document_supertype] = email_document_supertype if email_document_supertype
     params[:government_document_supertype] = government_document_supertype if government_document_supertype
-    params[:gov_delivery_id] = gov_delivery_id if gov_delivery_id
     params[:combine_mode] = combine_mode if combine_mode
 
     query_string = nested_query_string(params)
@@ -131,7 +129,6 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   # @return [Hash] subscriber_list: {
   #  id
   #  title
-  #  gov_delivery_id
   #  created_at
   #  updated_at
   #  document_type
