@@ -5,13 +5,14 @@ module GdsApi
     module LocalLinksManager
       LOCAL_LINKS_MANAGER_ENDPOINT = Plek.current.find("local-links-manager")
 
-      def stub_local_links_manager_has_a_link(authority_slug:, lgsl:, lgil:, url:)
+      def stub_local_links_manager_has_a_link(authority_slug:, lgsl:, lgil:, url:, country_name: "England")
         response = {
           "local_authority" => {
             "name" => authority_slug.capitalize,
             "snac" => "00AG",
             "tier" => "unitary",
             "homepage_url" => "http://#{authority_slug}.example.com",
+            "country_name" => country_name,
           },
           "local_interaction" => {
             "lgsl_code" => lgsl,
@@ -25,13 +26,14 @@ module GdsApi
           .to_return(body: response.to_json, status: 200)
       end
 
-      def stub_local_links_manager_has_no_link(authority_slug:, lgsl:, lgil:)
+      def stub_local_links_manager_has_no_link(authority_slug:, lgsl:, lgil:, country_name: "England")
         response = {
           "local_authority" => {
             "name" => authority_slug.capitalize,
             "snac" => "00AG",
             "tier" => "unitary",
             "homepage_url" => "http://#{authority_slug}.example.com",
+            "country_name" => country_name,
           },
         }
 
@@ -40,13 +42,14 @@ module GdsApi
           .to_return(body: response.to_json, status: 200)
       end
 
-      def stub_local_links_manager_has_no_link_and_no_homepage_url(authority_slug:, lgsl:, lgil:)
+      def stub_local_links_manager_has_no_link_and_no_homepage_url(authority_slug:, lgsl:, lgil:, country_name: "England")
         response = {
           "local_authority" => {
             "name" => authority_slug.capitalize,
             "snac" => "00AG",
             "tier" => "unitary",
             "homepage_url" => nil,
+            "country_name" => country_name,
           },
         }
 
@@ -82,6 +85,7 @@ module GdsApi
             {
               "name" => authority_slug.capitalize,
               "homepage_url" => "http://#{authority_slug}.example.com",
+              "country_name" => "England",
               "tier" => "unitary",
             },
           ],
@@ -98,11 +102,13 @@ module GdsApi
             {
               "name" => district_slug.capitalize,
               "homepage_url" => "http://#{district_slug}.example.com",
+              "country_name" => "England",
               "tier" => "district",
             },
             {
               "name" => county_slug.capitalize,
               "homepage_url" => "http://#{county_slug}.example.com",
+              "country_name" => "England",
               "tier" => "county",
             },
           ],
@@ -131,6 +137,7 @@ module GdsApi
             {
               "name" => authority_slug.capitalize,
               "homepage_url" => "",
+              "country_name" => "England",
               "tier" => "unitary",
             },
           ],
