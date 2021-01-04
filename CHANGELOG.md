@@ -1,6 +1,7 @@
 # Unreleased
 
 * Add a `GdsApi::HTTPBadRequest` exception
+* Remove redundant adapter to send ad-hoc email
 
 # 68.0.0
 

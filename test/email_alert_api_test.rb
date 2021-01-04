@@ -73,15 +73,6 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
-  it "posts a new email" do
-    stub_email_alert_api_accepts_email
-    email_params = { address: "test@test.com", subject: "Subject", body: "Description of thing" }
-
-    assert api_client.create_email(email_params)
-
-    assert_requested(:post, "#{base_url}/emails", body: email_params.to_json)
-  end
-
   let(:unpublish_message) do
     {
       "content_id" => "content-id",
