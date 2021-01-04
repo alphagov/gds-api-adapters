@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add a `GdsApi::HTTPBadRequest` exception
+
 # 68.0.0
 
 * BREAKING: make subscribe test helper interface more flexible
