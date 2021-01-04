@@ -40,6 +40,7 @@ module GdsApi
   class HTTPForbidden < HTTPClientError; end
   class HTTPConflict < HTTPClientError; end
   class HTTPUnprocessableEntity < HTTPClientError; end
+  class HTTPBadRequest < HTTPClientError; end
   class HTTPTooManyRequests < HTTPIntermittentClientError; end
 
   # Superclass & fallback for all 5XX errors
@@ -60,6 +61,8 @@ module GdsApi
 
     def error_class_for_code(code)
       case code
+      when 400
+        GdsApi::HTTPBadRequest
       when 401
         GdsApi::HTTPUnauthorized
       when 403
