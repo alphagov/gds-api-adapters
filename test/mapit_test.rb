@@ -49,6 +49,27 @@ describe GdsApi::Mapit do
       assert_equal "30UN", response.areas.last.codes["ons"]
     end
 
+    it "should return the country name" do
+      stub_mapit_has_a_postcode_and_country_name("SW1A 1AA", [51.5010096, -0.1415870], "England")
+
+      response = @api.location_for_postcode("SW1A 1AA")
+      assert_equal "England", response.country_name
+    end
+
+    it "should allow the country name to be nil" do
+      stub_mapit_has_a_postcode_and_country_name("SW1A 1AA", [51.5010096, -0.1415870], nil)
+
+      response = @api.location_for_postcode("SW1A 1AA")
+      assert_nil response.country_name
+    end
+
+    it "should allow the country name to be an empty string" do
+      stub_mapit_has_a_postcode_and_country_name("SW1A 1AA", [51.5010096, -0.1415870], "")
+
+      response = @api.location_for_postcode("SW1A 1AA")
+      assert_equal "", response.country_name
+    end
+
     it "should raise if a postcode doesn't exist" do
       stub_mapit_does_not_have_a_postcode("SW1A 1AA")
 
