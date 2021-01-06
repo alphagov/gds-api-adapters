@@ -37,6 +37,10 @@ class GdsApi::Mapit < GdsApi::Base
     def postcode
       @response["postcode"]
     end
+
+    def country_name
+      @response["country_name"]
+    end
   end
 
 private

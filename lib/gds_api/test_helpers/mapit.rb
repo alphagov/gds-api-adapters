@@ -43,6 +43,20 @@ module GdsApi
           .to_return(body: response.to_json, status: 200)
       end
 
+      def stub_mapit_has_a_postcode_and_country_name(postcode, coords, country_name)
+        response = {
+          "wgs84_lat" => coords.first,
+          "wgs84_lon" => coords.last,
+          "postcode" => postcode,
+          "country_name" => country_name,
+        }
+
+        stub_request(:get, "#{MAPIT_ENDPOINT}/postcode/" + postcode.tr(" ", "+") + ".json")
+          .to_return(body: response.to_json, status: 200)
+        stub_request(:get, "#{MAPIT_ENDPOINT}/postcode/partial/" + postcode.split(" ").first + ".json")
+          .to_return(body: response.to_json, status: 200)
+      end
+
       def stub_mapit_does_not_have_a_postcode(postcode)
         stub_request(:get, "#{MAPIT_ENDPOINT}/postcode/" + postcode.tr(" ", "+") + ".json")
           .to_return(body: { "code" => 404, "error" => "No Postcode matches the given query." }.to_json, status: 404)

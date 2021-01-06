@@ -18,6 +18,7 @@ describe GdsApi::LocalLinksManager do
           lgsl: 2,
           lgil: 4,
           url: "http://blackburn.example.com/abandoned-shopping-trolleys/report",
+          country_name: "England",
         )
 
         expected_response = {
@@ -26,6 +27,7 @@ describe GdsApi::LocalLinksManager do
             "snac" => "00AG",
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.example.com",
+            "country_name" => "England",
           },
           "local_interaction" => {
             "lgsl_code" => 2,
@@ -43,6 +45,7 @@ describe GdsApi::LocalLinksManager do
           authority_slug: "blackburn",
           lgsl: 2,
           lgil: 4,
+          country_name: "England",
         )
 
         expected_response = {
@@ -51,6 +54,7 @@ describe GdsApi::LocalLinksManager do
             "snac" => "00AG",
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.example.com",
+            "country_name" => "England",
           },
         }
 
@@ -63,6 +67,7 @@ describe GdsApi::LocalLinksManager do
           authority_slug: "blackburn",
           lgsl: 2,
           lgil: 4,
+          country_name: "England",
         )
 
         expected_response = {
@@ -71,6 +76,7 @@ describe GdsApi::LocalLinksManager do
             "snac" => "00AG",
             "tier" => "unitary",
             "homepage_url" => nil,
+            "country_name" => "England",
           },
         }
 
@@ -142,11 +148,13 @@ describe GdsApi::LocalLinksManager do
             {
               "name" => "Blackburn",
               "homepage_url" => "http://blackburn.example.com",
+              "country_name" => "England",
               "tier" => "district",
             },
             {
               "name" => "Rochester",
               "homepage_url" => "http://rochester.example.com",
+              "country_name" => "England",
               "tier" => "county",
             },
           ],
@@ -166,6 +174,7 @@ describe GdsApi::LocalLinksManager do
             {
               "name" => "Blackburn",
               "homepage_url" => "http://blackburn.example.com",
+              "country_name" => "England",
               "tier" => "unitary",
             },
           ],
