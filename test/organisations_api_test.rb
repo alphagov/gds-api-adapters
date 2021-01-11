@@ -108,4 +108,31 @@ describe GdsApi::Organisations do
       assert_equal 40, response.with_subsequent_pages.count
     end
   end
+
+  describe "fetching an organisation by slug" do
+    let(:hmrc) { "hm-revenue-customs" }
+
+    before do
+      organisation_api
+        .given("the organisation hmrc exists")
+        .upon_receiving("a request for hm-revenue-customs")
+        .with(
+          method: :get,
+          path: "/api/organisations/#{hmrc}",
+          headers: GdsApi::JsonClient.default_request_headers,
+        )
+        .will_respond_with(
+          status: 200,
+          body: organisation(slug: hmrc),
+        )
+    end
+
+    it "responds with 200 and the organisation" do
+      response = api_client.organisation(hmrc)
+
+      id = "www.gov.uk/api/organisations/#{hmrc}"
+      assert_equal 200, response.code
+      assert_equal id, response["id"]
+    end
+  end
 end
