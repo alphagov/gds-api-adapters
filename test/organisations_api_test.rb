@@ -135,4 +135,28 @@ describe GdsApi::Organisations do
       assert_equal id, response["id"]
     end
   end
+
+  describe "an organisation doesn't exist for a given slug" do
+    before do
+      organisation_api
+        .given("no organisation exists")
+        .upon_receiving("a request for a non-existant organisation")
+        .with(
+          method: :get,
+          path: "/api/organisations/department-for-making-life-better",
+          headers: GdsApi::JsonClient.default_request_headers,
+        )
+        .will_respond_with(
+          status: 404,
+          body: "404 error",
+        )
+    end
+
+    it "returns a 404 error code" do
+      error = assert_raises(GdsApi::HTTPNotFound) do
+        api_client.organisation("department-for-making-life-better")
+      end
+      assert_equal 404, error.code
+    end
+  end
 end
