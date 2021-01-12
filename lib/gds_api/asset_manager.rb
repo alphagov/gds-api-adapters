@@ -7,12 +7,13 @@ class GdsApi::AssetManager < GdsApi::Base
   #
   # Makes a +POST+ request to the asset manager api to create an asset.
   #
-  # The asset must be provided as a +Hash+ with a single +file+ attribute that
+  # The asset must be provided as a +Hash+ with a +file+ attribute that
   # behaves like a +File+ object. The +content-type+ that the asset manager will
-  # subsequently serve will be based *only* on the file's extension (derived
-  # from +#path+). If you supply a +content-type+ via, for example
+  # subsequently serve will be based on the file's extension (derived from
+  # +#path+). If you supply a +content-type+ via, for example
   # +ActionDispatch::Http::UploadedFile+ or another multipart wrapper, it will
-  # be ignored.
+  # be ignored. To provide a +content-type+ directly you must be specify it
+  # as a +content_type+ attribute of the hash.
   #
   # @param asset [Hash] The attributes for the asset to send to the api. Must
   #   contain +file+, which behaves like a +File+. All other attributes will be
@@ -143,12 +144,10 @@ class GdsApi::AssetManager < GdsApi::Base
   #
   # Makes a +PUT+ request to the asset manager api to update an asset.
   #
-  # The asset must be provided as a +Hash+ with a single +file+ attribute that
-  # behaves like a +File+ object. The +content-type+ that the asset manager will
-  # subsequently serve will be based *only* on the file's extension (derived
-  # from +#path+). If you supply a +content-type+ via, for example
-  # +ActionDispatch::Http::UploadedFile+ or another multipart wrapper, it will
-  # be ignored.
+  # The asset must be provided as a +Hash+ with a +file+ attribute that
+  # behaves like a +File+ object. The +content-type+ of the file will be based
+  # on the files extension unless you specify a +content_type+ attribute of
+  # the hash to set it.
   #
   # @param id [String] The asset identifier (a UUID).
   # @param asset [Hash] The attributes for the asset to send to the api. Must
