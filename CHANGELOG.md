@@ -1,3 +1,7 @@
+# Unreleased
+
+* BREAKING: Switch "find_or_create_subscriber_list" to only call "create" endpoint
+
 # 68.2.0
 
 * Update the local links manager adapter stubs to include country_name - defaults to `England`
