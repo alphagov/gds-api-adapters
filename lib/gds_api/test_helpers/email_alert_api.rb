@@ -124,19 +124,6 @@ module GdsApi
         matching.last
       end
 
-      def stub_email_alert_api_has_subscriber_list(attributes)
-        stub_request(:get, build_subscriber_lists_url(attributes))
-          .to_return(
-            status: 200,
-            body: get_subscriber_list_response(attributes).to_json,
-          )
-      end
-
-      def stub_email_alert_api_does_not_have_subscriber_list(attributes)
-        stub_request(:get, build_subscriber_lists_url(attributes))
-          .to_return(status: 404)
-      end
-
       def stub_email_alert_api_creates_subscriber_list(attributes)
         stub_request(:post, build_subscriber_lists_url)
           .to_return(

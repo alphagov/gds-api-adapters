@@ -1,5 +1,6 @@
 # Unreleased
 
+* BREAKING: remove redundant test helpers for finding subscriber lists
 * BREAKING: Switch "find_or_create_subscriber_list" to only call "create" endpoint
 
 # 68.2.0
