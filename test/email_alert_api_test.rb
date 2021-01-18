@@ -218,10 +218,6 @@ describe GdsApi::EmailAlertApi do
 
       describe "a subscriber list with that tag set does not yet exist" do
         before do
-          stub_email_alert_api_does_not_have_subscriber_list(
-            "tags" => tags,
-          )
-
           stub_email_alert_api_creates_subscriber_list(
             "title" => title,
             "tags" => tags,
@@ -248,7 +244,8 @@ describe GdsApi::EmailAlertApi do
 
       describe "a subscriber list with that tag set does already exist" do
         before do
-          stub_email_alert_api_has_subscriber_list(
+          # the "create" endpoint returns existing lists
+          stub_email_alert_api_creates_subscriber_list(
             "title" => "Some Title",
             "tags" => tags,
             "slug" => "slug",
@@ -277,7 +274,7 @@ describe GdsApi::EmailAlertApi do
         end
 
         before do
-          stub_email_alert_api_has_subscriber_list(
+          stub_email_alert_api_creates_subscriber_list(
             "title" => "Some Title",
             "tags" => tags,
             "document_type" => "travel_advice",
@@ -307,7 +304,7 @@ describe GdsApi::EmailAlertApi do
         end
 
         before do
-          stub_email_alert_api_has_subscriber_list(
+          stub_email_alert_api_creates_subscriber_list(
             "title" => "Some Title",
             "tags" => tags,
             "email_document_supertype" => "publications",
@@ -344,14 +341,6 @@ describe GdsApi::EmailAlertApi do
             "tags" => tags,
             "links" => links,
           }
-        end
-
-        before do
-          stub_email_alert_api_has_subscriber_list(
-            "title" => "Some Title",
-            "tags" => tags,
-            "links" => links,
-          )
         end
 
         it "excludes that attribute from the query string" do

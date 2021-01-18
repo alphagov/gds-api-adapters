@@ -10,37 +10,12 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   #
   # @param attributes [Hash] document_type, links, tags used to search existing subscriber lists
   def find_or_create_subscriber_list(attributes)
-    find_subscriber_list(attributes)
-  rescue GdsApi::HTTPNotFound
-    create_subscriber_list(attributes)
-  end
-
-  # Get a subscriber list
-  #
-  # @param attributes [Hash] document_type, links, tags used to search existing subscriber lists
-  def find_subscriber_list(attributes)
-    tags = attributes["tags"]
-    links = attributes["links"]
-    document_type = attributes["document_type"]
-    email_document_supertype = attributes["email_document_supertype"]
-    government_document_supertype = attributes["government_document_supertype"]
-    combine_mode = attributes["combine_mode"]
-
-    if tags && links
+    if attributes["tags"] && attributes["links"]
       message = "please provide either tags or links (or neither), but not both"
       raise ArgumentError, message
     end
 
-    params = {}
-    params[:tags] = tags if tags
-    params[:links] = links if links
-    params[:document_type] = document_type if document_type
-    params[:email_document_supertype] = email_document_supertype if email_document_supertype
-    params[:government_document_supertype] = government_document_supertype if government_document_supertype
-    params[:combine_mode] = combine_mode if combine_mode
-
-    query_string = nested_query_string(params)
-    get_json("#{endpoint}/subscriber-lists?" + query_string)
+    create_subscriber_list(attributes)
   end
 
   # Post a subscriber list
