@@ -1,6 +1,6 @@
-# Unreleased
+# 69.1.0
 
-* Restore find_subscriber_list adapter
+* Restore find_subscriber_list adapter (for Content Tagger)
 
 # 69.0.0
 
