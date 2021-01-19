@@ -15,13 +15,6 @@ class GdsApi::EmailAlertApi < GdsApi::Base
       raise ArgumentError, message
     end
 
-    create_subscriber_list(attributes)
-  end
-
-  # Post a subscriber list
-  #
-  # @param attributes [Hash] document_type, links, tags used to search existing subscriber lists
-  def create_subscriber_list(attributes)
     post_json("#{endpoint}/subscriber-lists", attributes)
   end
 

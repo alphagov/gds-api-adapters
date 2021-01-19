@@ -1,3 +1,7 @@
+# Unreleased
+
+* Restore find_subscriber_list adapter
+
 # 69.0.0
 
 * BREAKING: remove redundant test helpers for finding subscriber lists
