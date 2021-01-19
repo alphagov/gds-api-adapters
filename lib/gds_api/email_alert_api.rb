@@ -40,17 +40,6 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     post_json("#{endpoint}/messages", message, headers)
   end
 
-  # Unpublishing alert
-  #
-  # @param message [Hash] content_id
-  #
-  # Used by email-alert-service to send a message to email-alert-api
-  # when an unpublishing message is put on the Rabbitmq queue by
-  # publishing-api
-  def send_unpublish_message(message)
-    post_json("#{endpoint}/unpublish-messages", message)
-  end
-
   # Get topic matches
   #
   # @param attributes [Hash] tags, links, document_type,

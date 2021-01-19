@@ -1,3 +1,7 @@
+# Unreleased
+
+* Remove unused email unpublish adapter
+
 # 69.1.0
 
 * Restore find_subscriber_list adapter (for Content Tagger)
