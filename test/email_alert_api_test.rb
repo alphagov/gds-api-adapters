@@ -662,4 +662,24 @@ describe GdsApi::EmailAlertApi do
       assert_equal(201, api_response.code)
     end
   end
+
+  describe "find_subscriber_list" do
+    describe "a matching list exists" do
+      it "returns 200" do
+        stub_email_alert_api_has_subscriber_list("tags" => tags)
+        api_response = api_client.find_subscriber_list("tags" => tags)
+        assert_equal(200, api_response.code)
+      end
+    end
+
+    describe "no matching list exists" do
+      it "returns 404" do
+        stub_email_alert_api_does_not_have_subscriber_list("tags" => tags)
+
+        assert_raises GdsApi::HTTPNotFound do
+          api_client.find_subscriber_list("tags" => tags)
+        end
+      end
+    end
+  end
 end

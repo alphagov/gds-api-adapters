@@ -18,6 +18,14 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     post_json("#{endpoint}/subscriber-lists", attributes)
   end
 
+  # Get a subscriber list
+  #
+  # @param attributes [Hash] document_type, links, tags used to search existing subscriber lists
+  def find_subscriber_list(attributes)
+    query_string = nested_query_string(attributes)
+    get_json("#{endpoint}/subscriber-lists?" + query_string)
+  end
+
   # Post a content change
   #
   # @param content_change [Hash] Valid content change attributes
