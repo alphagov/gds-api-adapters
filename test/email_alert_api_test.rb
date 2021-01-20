@@ -73,24 +73,6 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
-  let(:unpublish_message) do
-    {
-      "content_id" => "content-id",
-    }
-  end
-
-  describe "unpublishing messages" do
-    before do
-      stub_email_alert_api_accepts_unpublishing_message
-    end
-
-    it "sends an unpublish message" do
-      assert api_client.send_unpublish_message(unpublish_message)
-
-      assert_requested(:post, "#{base_url}/unpublish-messages", body: unpublish_message.to_json)
-    end
-  end
-
   describe "subscriptions" do
     describe "URI encoding ids" do
       it "encodes the id for #get_subscription" do
