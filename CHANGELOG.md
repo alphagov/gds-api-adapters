@@ -1,4 +1,4 @@
-# Unreleased
+# 69.2.0
 
 * Remove unused email unpublish adapter
 
