@@ -1,3 +1,7 @@
+# 69.3.0
+
+* Update the local links manager adapter stubs to include the link status - defaults to `ok`
+
 # 69.2.0
 
 * Remove unused email unpublish adapter

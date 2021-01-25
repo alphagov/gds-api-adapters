@@ -19,6 +19,7 @@ describe GdsApi::LocalLinksManager do
           lgil: 4,
           url: "http://blackburn.example.com/abandoned-shopping-trolleys/report",
           country_name: "England",
+          status: "ok",
         )
 
         expected_response = {
@@ -33,6 +34,7 @@ describe GdsApi::LocalLinksManager do
             "lgsl_code" => 2,
             "lgil_code" => 4,
             "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/report",
+            "status" => "ok",
           },
         }
 

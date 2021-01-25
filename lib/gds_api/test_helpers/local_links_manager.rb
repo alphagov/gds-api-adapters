@@ -5,7 +5,7 @@ module GdsApi
     module LocalLinksManager
       LOCAL_LINKS_MANAGER_ENDPOINT = Plek.current.find("local-links-manager")
 
-      def stub_local_links_manager_has_a_link(authority_slug:, lgsl:, lgil:, url:, country_name: "England")
+      def stub_local_links_manager_has_a_link(authority_slug:, lgsl:, lgil:, url:, country_name: "England", status: "ok")
         response = {
           "local_authority" => {
             "name" => authority_slug.capitalize,
@@ -18,6 +18,7 @@ module GdsApi
             "lgsl_code" => lgsl,
             "lgil_code" => lgil,
             "url" => url,
+            "status" => status,
           },
         }
 
