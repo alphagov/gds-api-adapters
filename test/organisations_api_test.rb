@@ -60,4 +60,52 @@ describe GdsApi::Organisations do
       assert_equal 200, response.code
     end
   end
+
+  describe "fetching a paginated list of organisations" do
+    let(:api_client_endpoint) { "#{organisation_api_host}/api/organisations" }
+    let(:page_one_links) { %(<#{api_client_endpoint}?page=2>; rel="next", <#{api_client_endpoint}?page=1>; rel="self") }
+    let(:page_two_links) { %(<#{api_client_endpoint}?page=1>; rel="previous", <#{api_client_endpoint}?page=2>; rel="self") }
+
+    let(:request) do
+      {
+        method: :get,
+        path: "/api/organisations",
+        headers: GdsApi::JsonClient.default_request_headers,
+      }
+    end
+    let(:body) do
+      {
+        results: Pact.each_like({}, min: 20),
+        page_size: 20,
+        pages: 2,
+      }
+    end
+    let(:response) do
+      {
+        status: 200,
+        body: body,
+      }
+    end
+
+    before do
+      organisation_api
+        .given("the organisation list is paginated, beginning at page 1")
+        .upon_receiving("a request without a query param")
+        .with(request.merge(query: ""))
+        .will_respond_with(response.merge(headers: { "link" => page_one_links }))
+
+      organisation_api
+        .given("the organisation list is paginated, beginning at page 2")
+        .upon_receiving("a request with page 2 params")
+        .with(request.merge(query: "page=2"))
+        .will_respond_with(response.merge(headers: { "link" => page_two_links }))
+    end
+
+    it "should handle pagination" do
+      response = api_client.organisations
+
+      assert_equal 20, response["results"].count
+      assert_equal 40, response.with_subsequent_pages.count
+    end
+  end
 end
