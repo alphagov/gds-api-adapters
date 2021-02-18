@@ -14,6 +14,11 @@ node("postgresql-9.6") {
         name: 'PUBLISHING_API_BRANCH',
         defaultValue: 'master',
         description: 'Branch of publishing-api to run pacts against'
+      ),
+      stringParam(
+        name: 'COLLECTIONS_BRANCH',
+        defaultValue: 'master',
+        description: 'Branch of collections to run pacts against'
       )
     ],
     afterTest: {
@@ -27,6 +32,7 @@ node("postgresql-9.6") {
       ]) {
         publishPacts(govuk, env.BRANCH_NAME == 'master')
         runPublishingApiPactTests(govuk)
+        runCollectionsPactTests(govuk)
       }
     }
   )
@@ -44,6 +50,16 @@ def runPublishingApiPactTests(govuk) {
       govuk.bundleApp()
       lock("publishing-api-$NODE_NAME-test") {
         govuk.runRakeTask("db:reset")
+        govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
+      }
+    }
+  }
+}
+def runCollectionsPactTests(govuk){
+  govuk.checkoutDependent("collections", [ branch: COLLECTIONS_BRANCH ]) {
+    stage("Run collections pact") {
+      govuk.bundleApp()
+      lock("collections-$NODE_NAME-test") {
         govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
       }
     }
