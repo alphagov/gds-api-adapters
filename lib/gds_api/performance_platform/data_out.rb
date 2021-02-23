@@ -112,7 +112,7 @@ module GdsApi
       # The performance platform uses Backdrop and its query language for
       # storing and querying data.
       # Backdrop can be found here: https://github.com/alphagov/backdrop
-      def statistics(options, is_multipart = false)
+      def statistics(options, is_multipart = false) # rubocop:disable Style/OptionalBooleanParameter
         params = {
           group_by: options[:group_by],
           collect: options[:collect],

@@ -7,7 +7,7 @@ module GdsApi
     module ContentStore
       include ContentItemHelpers
 
-      def content_store_endpoint(draft = false)
+      def content_store_endpoint(draft = false) # rubocop:disable Style/OptionalBooleanParameter
         draft ? Plek.current.find("draft-content-store") : Plek.current.find("content-store")
       end
 
