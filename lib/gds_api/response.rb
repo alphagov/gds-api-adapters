@@ -24,6 +24,7 @@ module GdsApi
       PATTERN = /([-a-z]+)(?:\s*=\s*([^,\s]+))?,?+/i.freeze
 
       def initialize(value = nil)
+        super()
         parse(value)
       end
 
