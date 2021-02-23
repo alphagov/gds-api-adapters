@@ -4,7 +4,7 @@ module GdsApi
       def calendars_endpoint(in_division: nil)
         endpoint = "#{Plek.new.website_root}/bank-holidays"
         endpoint += "/#{in_division}" unless in_division.nil?
-        endpoint + ".json"
+        "#{endpoint}.json"
       end
 
       def stub_calendars_has_no_bank_holidays(in_division: nil)

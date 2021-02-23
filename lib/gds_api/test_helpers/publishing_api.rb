@@ -8,7 +8,7 @@ module GdsApi
     module PublishingApi
       include ContentItemHelpers
 
-      PUBLISHING_API_V2_ENDPOINT = Plek.current.find("publishing-api") + "/v2"
+      PUBLISHING_API_V2_ENDPOINT = "#{Plek.current.find('publishing-api')}/v2".freeze
       PUBLISHING_API_ENDPOINT = Plek.current.find("publishing-api")
 
       # Stub a PUT /v2/content/:content_id request with the given content id and request body.
@@ -213,7 +213,7 @@ module GdsApi
       # @param attributes_or_matcher [Object]
       # @param times [Integer]
       def assert_publishing_api_put_content(content_id, attributes_or_matcher = nil, times = 1)
-        url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
+        url = "#{PUBLISHING_API_V2_ENDPOINT}/content/#{content_id}"
         assert_publishing_api(:put, url, attributes_or_matcher, times)
       end
 
@@ -243,7 +243,7 @@ module GdsApi
       # @param attributes_or_matcher [Object]
       # @param times [Integer]
       def assert_publishing_api_patch_links(content_id, attributes_or_matcher = nil, times = 1)
-        url = PUBLISHING_API_V2_ENDPOINT + "/links/" + content_id
+        url = "#{PUBLISHING_API_V2_ENDPOINT}/links/#{content_id}"
         assert_publishing_api(:patch, url, attributes_or_matcher, times)
       end
 
@@ -308,7 +308,7 @@ module GdsApi
       # @param items [Array]
       # @param params [Hash]
       def stub_publishing_api_has_content(items, params = {})
-        url = PUBLISHING_API_V2_ENDPOINT + "/content"
+        url = "#{PUBLISHING_API_V2_ENDPOINT}/content"
 
         if params.respond_to? :fetch
           per_page = params.fetch(:per_page, 50)
@@ -369,7 +369,7 @@ module GdsApi
       # @param item [Hash]
       def stub_publishing_api_has_item(item, params = {})
         item = deep_transform_keys(item, &:to_sym)
-        url = PUBLISHING_API_V2_ENDPOINT + "/content/" + item[:content_id]
+        url = "#{PUBLISHING_API_V2_ENDPOINT}/content/#{item[:content_id]}"
         stub_request(:get, url)
           .with(query: hash_including(params))
           .to_return(status: 200, body: item.to_json, headers: {})
@@ -380,7 +380,7 @@ module GdsApi
       # @param items [Array]
       def stub_publishing_api_has_item_in_sequence(content_id, items)
         items = items.each { |item| deep_transform_keys(item, &:to_sym) }
-        url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
+        url = "#{PUBLISHING_API_V2_ENDPOINT}/content/#{content_id}"
         calls = -1
 
         stub_request(:get, url).to_return do |_request|
@@ -395,7 +395,7 @@ module GdsApi
       #
       # @param content_id [UUID]
       def stub_publishing_api_does_not_have_item(content_id, params = {})
-        url = PUBLISHING_API_V2_ENDPOINT + "/content/" + content_id
+        url = "#{PUBLISHING_API_V2_ENDPOINT}/content/#{content_id}"
         stub_request(:get, url)
           .with(query: hash_including(params))
           .to_return(status: 404, body: resource_not_found(content_id, "content item").to_json, headers: {})
@@ -433,7 +433,7 @@ module GdsApi
       #      }
       def stub_publishing_api_has_links(links)
         links = deep_transform_keys(links, &:to_sym)
-        url = PUBLISHING_API_V2_ENDPOINT + "/links/" + links[:content_id]
+        url = "#{PUBLISHING_API_V2_ENDPOINT}/links/#{links[:content_id]}"
         stub_request(:get, url).to_return(status: 200, body: links.to_json, headers: {})
       end
 
@@ -497,7 +497,7 @@ module GdsApi
         request_params["with_drafts"] = false unless with_drafts
         request_params["generate"] = true if generate
 
-        url = PUBLISHING_API_V2_ENDPOINT + "/expanded-links/" + links[:content_id]
+        url = "#{PUBLISHING_API_V2_ENDPOINT}/expanded-links/#{links[:content_id]}"
         stub_request(:get, url)
           .with(query: request_params)
           .to_return(status: 200, body: links.to_json, headers: {})
@@ -528,7 +528,7 @@ module GdsApi
       #         }
       #       }
       def stub_publishing_api_has_links_for_content_ids(links)
-        url = PUBLISHING_API_V2_ENDPOINT + "/links/by-content-id"
+        url = "#{PUBLISHING_API_V2_ENDPOINT}/links/by-content-id"
         stub_request(:post, url).with(body: { content_ids: links.keys }).to_return(status: 200, body: links.to_json, headers: {})
       end
 
@@ -536,7 +536,7 @@ module GdsApi
       #
       # @param content_id [UUID]
       def stub_publishing_api_does_not_have_links(content_id)
-        url = PUBLISHING_API_V2_ENDPOINT + "/links/" + content_id
+        url = "#{PUBLISHING_API_V2_ENDPOINT}/links/#{content_id}"
         stub_request(:get, url).to_return(status: 404, body: resource_not_found(content_id, "link set").to_json, headers: {})
       end
 
@@ -552,7 +552,7 @@ module GdsApi
       #   })
       #
       def stub_publishing_api_has_lookups(lookup_hash)
-        url = PUBLISHING_API_ENDPOINT + "/lookup-by-base-path"
+        url = "#{PUBLISHING_API_ENDPOINT}/lookup-by-base-path"
         stub_request(:post, url).to_return(body: lookup_hash.to_json)
       end
 
@@ -605,7 +605,7 @@ module GdsApi
       # @param items [Array]
       # @param params [Hash]
       def stub_publishing_api_get_editions(editions, params = {})
-        url = PUBLISHING_API_V2_ENDPOINT + "/editions"
+        url = "#{PUBLISHING_API_V2_ENDPOINT}/editions"
 
         results = editions.map do |edition|
           next edition unless params[:fields]
@@ -670,7 +670,7 @@ module GdsApi
       end
 
       def stub_publishing_api_destroy_intent(base_path)
-        url = PUBLISHING_API_ENDPOINT + "/publish-intent" + base_path
+        url = "#{PUBLISHING_API_ENDPOINT}/publish-intent#{base_path}"
         stub_request(:delete, url).to_return(status: 200, body: "{}", headers: { "Content-Type" => "application/json; charset=utf-8" })
       end
 
@@ -679,7 +679,7 @@ module GdsApi
       end
 
       def assert_publishing_api_put_intent(base_path, attributes_or_matcher = {}, times = 1)
-        url = PUBLISHING_API_ENDPOINT + "/publish-intent" + base_path
+        url = "#{PUBLISHING_API_ENDPOINT}/publish-intent#{base_path}"
         assert_publishing_api_put(url, attributes_or_matcher, times)
       end
 
@@ -792,8 +792,7 @@ module GdsApi
       def stub_publishing_api_returns_path_reservation_validation_error_for(base_path, error_fields = {})
         error_fields = { "base_path" => ["Computer says no"] } if error_fields.empty?
 
-        message = error_fields.keys.first.to_s.capitalize.gsub(/_/, " ") + " " +
-          error_fields.values.flatten.first
+        message = "#{error_fields.keys.first.to_s.capitalize.gsub(/_/, ' ')} #{error_fields.values.flatten.first}"
 
         error = { code: 422, message: message, fields: error_fields }
 
@@ -817,7 +816,7 @@ module GdsApi
         response_hash = { status: 200, body: "{}", headers: { "Content-Type" => "application/json; charset=utf-8" } }
         response_hash.merge!(override_response_hash)
         response_hash[:body] = response_hash[:body].to_json if response_hash[:body].is_a?(Hash)
-        url = PUBLISHING_API_V2_ENDPOINT + resource_path + "/" + content_id
+        url = "#{PUBLISHING_API_V2_ENDPOINT}#{resource_path}/#{content_id}"
         stub_request(method, url).with(body: body).to_return(response_hash)
       end
 
@@ -858,7 +857,7 @@ module GdsApi
       end
 
       def stub_publishing_api_unreserve_path_with_code(base_path, publishing_app, code)
-        url = PUBLISHING_API_ENDPOINT + "/paths" + base_path
+        url = "#{PUBLISHING_API_ENDPOINT}/paths#{base_path}"
         body = { publishing_app: publishing_app }
         stub_request(:delete, url).with(body: body).to_return(status: code, body: "{}", headers: { "Content-Type" => "application/json; charset=utf-8" })
       end

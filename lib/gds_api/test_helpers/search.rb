@@ -20,7 +20,7 @@ module GdsApi
         url = if index
                 SEARCH_ENDPOINT + "/#{index}/documents"
               else
-                SEARCH_ENDPOINT + "/documents"
+                "#{SEARCH_ENDPOINT}/documents"
               end
 
         assert_requested(:post, url, **options) do |req|

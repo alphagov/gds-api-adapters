@@ -122,7 +122,7 @@ module GdsApi
         }
 
         filter_param = is_multipart ? :filter_by_prefix : :filter_by
-        params[filter_param] = "pagePath:" + options[:slug]
+        params[filter_param] = "pagePath:#{options[:slug]}"
 
         get_json("#{endpoint}/data/govuk-info/#{options[:transaction]}#{query_string(params)}")
       end

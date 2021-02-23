@@ -68,7 +68,7 @@ module GdsApi
           }
 
           filter_param = is_multipart ? :filter_by_prefix : :filter_by
-          params[filter_param] = "pagePath:" + options[:slug]
+          params[filter_param] = "pagePath:#{options[:slug]}"
 
           stub_http_request(:get, "#{PP_DATA_OUT_ENDPOINT}/data/govuk-info/#{options[:transaction]}")
               .with(query: params)

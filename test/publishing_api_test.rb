@@ -2138,7 +2138,7 @@ describe GdsApi::PublishingApi do
           .upon_receiving("a get linked request")
           .with(
             method: :get,
-            path: "/v2/linked/" + @linked_content_item["content_id"],
+            path: "/v2/linked/#{@linked_content_item['content_id']}",
             query: "fields%5B%5D=content_id&fields%5B%5D=base_path&link_type=topic",
             headers: GdsApi::JsonClient.default_request_headers.merge(
               "Authorization" => "Bearer #{@bearer_token}",

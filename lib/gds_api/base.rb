@@ -71,7 +71,7 @@ private
       case value
       when Array
         value.map do |v|
-          "#{CGI.escape(key.to_s + '[]')}=#{CGI.escape(v.to_s)}"
+          "#{CGI.escape("#{key}[]")}=#{CGI.escape(v.to_s)}"
         end
       else
         "#{CGI.escape(key.to_s)}=#{CGI.escape(value.to_s)}"

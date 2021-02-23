@@ -101,10 +101,10 @@ module GdsApi
       rescue RestClient::Exception => e
         # Attempt to parse the body as JSON if possible
         error_details = begin
-                          e.http_body ? JSON.parse(e.http_body) : nil
-                        rescue JSON::ParserError
-                          nil
-                        end
+          e.http_body ? JSON.parse(e.http_body) : nil
+        rescue JSON::ParserError
+          nil
+        end
         raise build_specific_http_error(e, url, error_details)
       end
 
