@@ -1,3 +1,7 @@
+# Unreleased
+
+* BREAKING: Minimum ruby version supported is updated to 2.6
+
 # 69.3.0
 
 * Update the local links manager adapter stubs to include the link status - defaults to `ok`

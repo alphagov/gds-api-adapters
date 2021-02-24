@@ -2,9 +2,6 @@ inherit_gem:
   rubocop-govuk:
     - config/default.yml
 
-AllCops:
-  TargetRubyVersion: 2.4
-
 Naming/FileName:
   Exclude:
     # This file is named with kebab case to match the gem name so that
