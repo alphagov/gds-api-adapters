@@ -93,7 +93,7 @@ private
     def prefix_destination(redirect, path, query)
       uri = URI.parse(redirect["destination"])
       start_char = redirect["path"].length
-      suffix = path[start_char..-1]
+      suffix = path[start_char..]
 
       if uri.path == "" && suffix[0] != "/"
         uri.path = "/#{suffix}"

@@ -395,7 +395,7 @@ class JsonClientTest < MiniTest::Spec
     )
 
     assert_requested(:get, %r{/some.json}) do |request|
-      headers_with_uppercase_names = Hash[request.headers.collect { |key, value| [key.upcase, value] }]
+      headers_with_uppercase_names = request.headers.transform_keys(&:upcase)
       headers_with_uppercase_names["HEADER-A"] == "B" && headers_with_uppercase_names["HEADER-C"] == "D"
     end
   end
@@ -411,7 +411,7 @@ class JsonClientTest < MiniTest::Spec
     )
 
     assert_requested(:post, %r{/some.json}) do |request|
-      headers_with_uppercase_names = Hash[request.headers.collect { |key, value| [key.upcase, value] }]
+      headers_with_uppercase_names = request.headers.transform_keys(&:upcase)
       headers_with_uppercase_names["HEADER-A"] == "B" && headers_with_uppercase_names["HEADER-C"] == "D"
     end
   end
@@ -427,7 +427,7 @@ class JsonClientTest < MiniTest::Spec
     )
 
     assert_requested(:put, %r{/some.json}) do |request|
-      headers_with_uppercase_names = Hash[request.headers.collect { |key, value| [key.upcase, value] }]
+      headers_with_uppercase_names = request.headers.transform_keys(&:upcase)
       headers_with_uppercase_names["HEADER-A"] == "B" && headers_with_uppercase_names["HEADER-C"] == "D"
     end
   end
@@ -443,7 +443,7 @@ class JsonClientTest < MiniTest::Spec
     )
 
     assert_requested(:delete, %r{/some.json}) do |request|
-      headers_with_uppercase_names = Hash[request.headers.collect { |key, value| [key.upcase, value] }]
+      headers_with_uppercase_names = request.headers.transform_keys(&:upcase)
       headers_with_uppercase_names["HEADER-A"] == "B" && headers_with_uppercase_names["HEADER-C"] == "D"
     end
   end
