@@ -112,7 +112,7 @@ module GdsApi
       # The performance platform uses Backdrop and its query language for
       # storing and querying data.
       # Backdrop can be found here: https://github.com/alphagov/backdrop
-      def statistics(options, is_multipart = false)
+      def statistics(options, is_multipart = false) # rubocop:disable Style/OptionalBooleanParameter
         params = {
           group_by: options[:group_by],
           collect: options[:collect],
@@ -122,7 +122,7 @@ module GdsApi
         }
 
         filter_param = is_multipart ? :filter_by_prefix : :filter_by
-        params[filter_param] = "pagePath:" + options[:slug]
+        params[filter_param] = "pagePath:#{options[:slug]}"
 
         get_json("#{endpoint}/data/govuk-info/#{options[:transaction]}#{query_string(params)}")
       end

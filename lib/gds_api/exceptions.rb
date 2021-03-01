@@ -14,8 +14,11 @@ module GdsApi
   end
 
   class EndpointNotFound < BaseError; end
+
   class TimedOutException < BaseError; end
+
   class InvalidUrl < BaseError; end
+
   class SocketErrorException < BaseError; end
 
   # Superclass for all 4XX and 5XX errors
@@ -31,25 +34,38 @@ module GdsApi
 
   # Superclass & fallback for all 4XX errors
   class HTTPClientError < HTTPErrorResponse; end
+
   class HTTPIntermittentClientError < HTTPClientError; end
 
   class HTTPNotFound < HTTPClientError; end
+
   class HTTPGone < HTTPClientError; end
+
   class HTTPPayloadTooLarge < HTTPClientError; end
+
   class HTTPUnauthorized < HTTPClientError; end
+
   class HTTPForbidden < HTTPClientError; end
+
   class HTTPConflict < HTTPClientError; end
+
   class HTTPUnprocessableEntity < HTTPClientError; end
+
   class HTTPBadRequest < HTTPClientError; end
+
   class HTTPTooManyRequests < HTTPIntermittentClientError; end
 
   # Superclass & fallback for all 5XX errors
   class HTTPServerError < HTTPErrorResponse; end
+
   class HTTPIntermittentServerError < HTTPServerError; end
 
   class HTTPInternalServerError < HTTPServerError; end
+
   class HTTPBadGateway < HTTPIntermittentServerError; end
+
   class HTTPUnavailable < HTTPIntermittentServerError; end
+
   class HTTPGatewayTimeout < HTTPIntermittentServerError; end
 
   module ExceptionHandling

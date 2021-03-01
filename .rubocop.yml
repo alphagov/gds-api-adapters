@@ -2,12 +2,8 @@ inherit_gem:
   rubocop-govuk:
     - config/default.yml
 
-AllCops:
-  TargetRubyVersion: 2.4
-
 Naming/FileName:
   Exclude:
-    # RuboCop wants this to be renamed to `lib/gds_api_adapters.rb`. But I don't
-    # know what effect that'll have on the rest of this gem and don't particularly
-    # have the brain to find out. So I'm ignoring it for now. -- Issy, 2020-05.
+    # This file is named with kebab case to match the gem name so that
+    # require "gds-api-adpaters" works.
     - lib/gds-api-adapters.rb

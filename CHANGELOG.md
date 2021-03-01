@@ -1,3 +1,8 @@
+# Unreleased
+
+* BREAKING: Minimum ruby version supported is updated to 2.6
+* BREAKING: `content_store_endpoint` helper now accepts a keyword argument instead of a boolean
+
 # 69.3.0
 
 * Update the local links manager adapter stubs to include the link status - defaults to `ok`

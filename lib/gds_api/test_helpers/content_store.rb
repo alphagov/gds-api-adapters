@@ -7,7 +7,7 @@ module GdsApi
     module ContentStore
       include ContentItemHelpers
 
-      def content_store_endpoint(draft = false)
+      def content_store_endpoint(draft: false)
         draft ? Plek.current.find("draft-content-store") : Plek.current.find("content-store")
       end
 
@@ -21,10 +21,10 @@ module GdsApi
       def stub_content_store_has_item(base_path, body = content_item_for_base_path(base_path), options = {})
         max_age = options.fetch(:max_age, 900)
         visibility = options[:private] ? "private" : "public"
-        url = content_store_endpoint(options[:draft]) + "/content" + base_path
         body = body.to_json unless body.is_a?(String)
 
-        stub_request(:get, url).to_return(
+        endpoint = content_store_endpoint(draft: options[:draft])
+        stub_request(:get, "#{endpoint}/content#{base_path}").to_return(
           status: 200,
           body: body,
           headers: {
@@ -35,11 +35,9 @@ module GdsApi
       end
 
       def stub_content_store_does_not_have_item(base_path, options = {})
-        url = content_store_endpoint(options[:draft]) + "/content" + base_path
-        stub_request(:get, url).to_return(status: 404, headers: {})
-
-        url = content_store_endpoint(options[:draft]) + "/incoming-links" + base_path
-        stub_request(:get, url).to_return(status: 404, headers: {})
+        endpoint = content_store_endpoint(draft: options[:draft])
+        stub_request(:get, "#{endpoint}/content#{base_path}").to_return(status: 404, headers: {})
+        stub_request(:get, "#{endpoint}/incoming-links#{base_path}").to_return(status: 404, headers: {})
       end
 
       # Content store has gone item
@@ -67,10 +65,9 @@ module GdsApi
       #     "details" => {}
       #   }
       def stub_content_store_has_gone_item(base_path, body = gone_content_item_for_base_path(base_path), options = {})
-        url = content_store_endpoint(options[:draft]) + "/content" + base_path
         body = body.to_json unless body.is_a?(String)
-
-        stub_request(:get, url).to_return(
+        endpoint = content_store_endpoint(draft: options[:draft])
+        stub_request(:get, "#{endpoint}/content#{base_path}").to_return(
           status: 410,
           body: body,
           headers: {},
@@ -86,7 +83,7 @@ module GdsApi
       end
 
       def stub_content_store_has_incoming_links(base_path, links)
-        url = content_store_endpoint + "/incoming-links" + base_path
+        url = "#{content_store_endpoint}/incoming-links#{base_path}"
         body = links.to_json
 
         stub_request(:get, url).to_return(body: body)

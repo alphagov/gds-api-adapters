@@ -1,7 +1,7 @@
 require "test_helper"
 require "gds_api/publishing_api/special_route_publisher"
 require "govuk-content-schema-test-helpers"
-require File.dirname(__FILE__) + "/../../lib/gds_api/test_helpers/publishing_api"
+require "#{File.dirname(__FILE__)}/../../lib/gds_api/test_helpers/publishing_api"
 
 describe GdsApi::PublishingApi::SpecialRoutePublisher do
   include ::GdsApi::TestHelpers::PublishingApi

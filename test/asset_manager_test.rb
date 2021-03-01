@@ -25,7 +25,7 @@ describe GdsApi::AssetManager do
   it "creates an asset with a file" do
     req = stub_request(:post, "#{base_api_url}/assets")
       .with { |request|
-        request.body =~ %r{Content\-Disposition: form\-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent\-Type: text/plain}
+        request.body =~ %r{Content-Disposition: form-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent-Type: text/plain}
       }.to_return(body: JSON.dump(stub_asset_manager_response), status: 201)
 
     response = api.create_asset(file: file_fixture)
@@ -37,7 +37,7 @@ describe GdsApi::AssetManager do
   it "creates a Whitehall asset with a file" do
     req = stub_request(:post, "#{base_api_url}/whitehall_assets")
       .with { |request|
-        request.body =~ %r{Content\-Disposition: form\-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent\-Type: text/plain}
+        request.body =~ %r{Content-Disposition: form-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent-Type: text/plain}
       }.to_return(body: JSON.dump(stub_asset_manager_response), status: 201)
 
     response = api.create_whitehall_asset(file: file_fixture, legacy_url_path: "/government/uploads/path/to/hello.txt")

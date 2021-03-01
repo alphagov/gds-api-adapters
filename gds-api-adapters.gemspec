@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.homepage     = "http://github.com/alphagov/gds-api-adapters"
   s.description  = "A set of adapters providing easy access to the GDS GOV.UK APIs"
 
-  s.required_ruby_version = ">= 2.4.0"
+  s.required_ruby_version = ">= 2.6.0"
   s.files        = Dir.glob("lib/**/*") + Dir.glob("test/fixtures/**/*") + %w[README.md Rakefile]
   s.require_path = "lib"
   s.add_dependency "addressable"
@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rack", "~> 2.0"
   s.add_development_dependency "rack-test"
   s.add_development_dependency "rake", "~> 12.3"
-  s.add_development_dependency "rubocop-govuk"
+  s.add_development_dependency "rubocop-govuk", "4.0.0.pre.1" # Trialling pre-release
   s.add_development_dependency "simplecov", "~> 0.16"
   s.add_development_dependency "simplecov-rcov"
   s.add_development_dependency "timecop", "~> 0.9"
