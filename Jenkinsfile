@@ -24,6 +24,10 @@ node("postgresql-9.6") {
         name: 'FRONTEND_BRANCH',
         defaultValue: 'master',
         description: 'Branch of frontend to run pacts against'
+      ),
+      stringParam(
+        name: 'FRONTEND_PACT_URI',
+        description: 'Local pactfile for Frontend to test against (will test against Pact Broker if left blank). Example: "../gds-api-adapters/spec/pacts/gds_api_adapters-bank_holidays_api.json"'
       )
     ],
     afterTest: {
@@ -76,9 +80,12 @@ def runCollectionsPactTests(govuk){
 def runFrontendPactTests(govuk){
   govuk.checkoutDependent("frontend", [ branch: FRONTEND_BRANCH ]) {
     stage("Run frontend pact") {
+      environment { 
+        PACT_URI = FRONTEND_PACT_URI
+      }
       govuk.bundleApp()
       lock("frontend-$NODE_NAME-test") {
-        govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
+        govuk.runRakeTask("pact:verify")
       }
     }
   }
