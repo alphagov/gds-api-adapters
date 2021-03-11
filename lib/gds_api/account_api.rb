@@ -6,6 +6,8 @@ require_relative "exceptions"
 # @see https://github.com/alphagov/account-api
 # @api documented
 class GdsApi::AccountApi < GdsApi::Base
+  AUTH_HEADER_NAME = "GOVUK-Account-Session".freeze
+
   # Get an OAuth sign-in URL to redirect the user to
   #
   # @param [String, nil] redirect_path path on GOV.UK to send the user to after authentication
@@ -36,9 +38,32 @@ class GdsApi::AccountApi < GdsApi::Base
     post_json("#{endpoint}/api/oauth2/state", attributes: attributes)
   end
 
+  # Check if a user has an email subscription for the Transition Checker
+  #
+  # @param [String] govuk_account_session Value of the session header
+  #
+  # @return [Hash] Whether the user has a subscription, and a new session header
+  def check_for_email_subscription(govuk_account_session:)
+    get_json("#{endpoint}/api/transition-checker-email-subscription", auth_headers(govuk_account_session))
+  end
+
+  # Create or update a user's email subscription for the Transition Checker
+  #
+  # @param [String] govuk_account_session Value of the session header
+  # @param [String] slug The email topic slug
+  #
+  # @return [Hash] Whether the user has a subscription, and a new session header
+  def set_email_subscription(govuk_account_session:, slug:)
+    post_json("#{endpoint}/api/transition-checker-email-subscription", { slug: slug }, auth_headers(govuk_account_session))
+  end
+
 private
 
   def nested_query_string(params)
     Rack::Utils.build_nested_query(params)
+  end
+
+  def auth_headers(govuk_account_session)
+    { AUTH_HEADER_NAME => govuk_account_session }
   end
 end
