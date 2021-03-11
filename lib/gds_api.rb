@@ -1,6 +1,7 @@
 require "addressable"
 require "plek"
 require "time"
+require "gds_api/account_api"
 require "gds_api/asset_manager"
 require "gds_api/calendars"
 require "gds_api/content_store"
@@ -21,6 +22,19 @@ require "gds_api/worldwide"
 
 # @api documented
 module GdsApi
+  # Creates a GdsApi::AccountApi adapter
+  #
+  # This will set a bearer token if a ACCOUNT_API_BEARER_TOKEN environment
+  # variable is set
+  #
+  # @return [GdsApi::AccountApi]
+  def self.account_api(options = {})
+    GdsApi::AccountApi.new(
+      Plek.find("account-api"),
+      { bearer_token: ENV["ACCOUNT_API_BEARER_TOKEN"] }.merge(options),
+    )
+  end
+
   # Creates a GdsApi::AssetManager adapter
   #
   # This will set a bearer token if a ASSET_MANAGER_BEARER_TOKEN environment
