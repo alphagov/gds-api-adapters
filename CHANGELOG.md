@@ -2,7 +2,7 @@
 
 * BREAKING: Minimum ruby version supported is updated to 2.6
 * BREAKING: `content_store_endpoint` helper now accepts a keyword argument instead of a boolean
-* Add new account-api adapter with auth endpoints
+* Add new account-api adapter with auth and transition checker email subscription endpoints
 
 # 69.3.0
 
