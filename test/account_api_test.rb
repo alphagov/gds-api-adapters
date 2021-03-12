@@ -59,4 +59,23 @@ describe GdsApi::AccountApi do
     stub_account_api_set_email_subscription(new_govuk_account_session: "new-session")
     assert_equal("new-session", api_client.set_email_subscription(govuk_account_session: "foo", slug: "slug").to_hash["govuk_account_session"])
   end
+
+  describe "attributes exist" do
+    before { stub_account_api_has_attributes(attributes: attributes.keys, values: attributes, new_govuk_account_session: "new-session") }
+
+    let(:attributes) { { "foo" => { "bar" => %w[baz] } } }
+
+    it "returns the attribute values" do
+      assert(api_client.get_attributes(attributes: attributes.keys, govuk_account_session: "foo")["values"] == attributes)
+    end
+
+    it "returns the new session value" do
+      assert_equal("new-session", api_client.get_attributes(attributes: attributes.keys, govuk_account_session: "foo")["govuk_account_session"])
+    end
+  end
+
+  it "returns a new session when setting attributes" do
+    stub_account_api_set_attributes(attributes: { foo: %w[bar] }, new_govuk_account_session: "new-session")
+    assert_equal("new-session", api_client.set_attributes(govuk_account_session: "foo", attributes: { foo: %w[bar] }).to_hash["govuk_account_session"])
+  end
 end
