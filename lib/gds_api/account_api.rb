@@ -57,6 +57,27 @@ class GdsApi::AccountApi < GdsApi::Base
     post_json("#{endpoint}/api/transition-checker-email-subscription", { slug: slug }, auth_headers(govuk_account_session))
   end
 
+  # Look up the values of a user's attributes
+  #
+  # @param [String] attributes Names of the attributes to check
+  # @param [String] govuk_account_session Value of the session header
+  #
+  # @return [Hash] The attribute values (if present), and a new session header
+  def get_attributes(attributes:, govuk_account_session:)
+    querystring = nested_query_string({ attributes: attributes }.compact)
+    get_json("#{endpoint}/api/attributes?#{querystring}", auth_headers(govuk_account_session))
+  end
+
+  # Create or update attributes for a user
+  #
+  # @param [String] attributes Hash of new attribute values
+  # @param [String] govuk_account_session Value of the session header
+  #
+  # @return [Hash] A new session header
+  def set_attributes(attributes:, govuk_account_session:)
+    patch_json("#{endpoint}/api/attributes", { attributes: attributes.transform_values(&:to_json) }, auth_headers(govuk_account_session))
+  end
+
 private
 
   def nested_query_string(params)

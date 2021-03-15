@@ -71,6 +71,30 @@ module GdsApi
             .to_return(status: 200, body: { govuk_account_session: new_govuk_account_session }.compact.to_json)
         end
       end
+
+      def stub_account_api_has_attributes(govuk_account_session: nil, attributes: [], values: {}, new_govuk_account_session: nil)
+        querystring = Rack::Utils.build_nested_query({ attributes: attributes }.compact)
+        if govuk_account_session
+          stub_request(:get, "#{ACCOUNT_API_ENDPOINT}/api/attributes?#{querystring}")
+            .with(headers: { GdsApi::AccountApi::AUTH_HEADER_NAME => govuk_account_session })
+            .to_return(status: 200, body: { govuk_account_session: new_govuk_account_session, values: values }.compact.to_json)
+        else
+          stub_request(:get, "#{ACCOUNT_API_ENDPOINT}/api/attributes?#{querystring}")
+            .to_return(status: 200, body: { govuk_account_session: new_govuk_account_session, values: values }.compact.to_json)
+        end
+      end
+
+      def stub_account_api_set_attributes(govuk_account_session: nil, attributes: nil, new_govuk_account_session: nil)
+        if govuk_account_session
+          stub_request(:patch, "#{ACCOUNT_API_ENDPOINT}/api/attributes")
+            .with(body: hash_including({ attributes: attributes&.transform_values(&:to_json) }.compact), headers: { GdsApi::AccountApi::AUTH_HEADER_NAME => govuk_account_session })
+            .to_return(status: 200, body: { govuk_account_session: new_govuk_account_session }.compact.to_json)
+        else
+          stub_request(:patch, "#{ACCOUNT_API_ENDPOINT}/api/attributes")
+            .with(body: hash_including({ attributes: attributes&.transform_values(&:to_json) }.compact))
+            .to_return(status: 200, body: { govuk_account_session: new_govuk_account_session }.compact.to_json)
+        end
+      end
     end
   end
 end
