@@ -1,4 +1,4 @@
-# Unreleased
+# 70.0.0
 
 * BREAKING: Minimum ruby version supported is updated to 2.6
 * BREAKING: `content_store_endpoint` helper now accepts a keyword argument instead of a boolean
