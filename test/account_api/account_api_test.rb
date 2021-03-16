@@ -5,8 +5,7 @@ require "gds_api/test_helpers/account_api"
 describe GdsApi::AccountApi do
   include GdsApi::TestHelpers::AccountApi
 
-  let(:base_url)      { Plek.find("account-api") }
-  let(:api_client)    { GdsApi::AccountApi.new(base_url) }
+  let(:api_client) { GdsApi::AccountApi.new(Plek.find("account-api")) }
 
   it "gets a sign in URL" do
     stub_account_api_get_sign_in_url(auth_uri: "https://www.example.com")
