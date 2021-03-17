@@ -1,3 +1,7 @@
+# Unreleased
+
+* BREAKING: Removed support for the Performance Platform.
+
 # 70.0.0
 
 * BREAKING: Minimum ruby version supported is updated to 2.6
