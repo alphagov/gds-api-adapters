@@ -75,7 +75,7 @@ class GdsApi::AccountApi < GdsApi::Base
   #
   # @return [Hash] A new session header
   def set_attributes(attributes:, govuk_account_session:)
-    patch_json("#{endpoint}/api/attributes", { attributes: attributes.transform_values(&:to_json) }, auth_headers(govuk_account_session))
+    patch_json("#{endpoint}/api/attributes", { attributes: attributes }, auth_headers(govuk_account_session))
   end
 
 private

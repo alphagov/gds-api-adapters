@@ -87,11 +87,11 @@ module GdsApi
       def stub_account_api_set_attributes(govuk_account_session: nil, attributes: nil, new_govuk_account_session: nil)
         if govuk_account_session
           stub_request(:patch, "#{ACCOUNT_API_ENDPOINT}/api/attributes")
-            .with(body: hash_including({ attributes: attributes&.transform_values(&:to_json) }.compact), headers: { GdsApi::AccountApi::AUTH_HEADER_NAME => govuk_account_session })
+            .with(body: hash_including({ attributes: attributes }.compact), headers: { GdsApi::AccountApi::AUTH_HEADER_NAME => govuk_account_session })
             .to_return(status: 200, body: { govuk_account_session: new_govuk_account_session }.compact.to_json)
         else
           stub_request(:patch, "#{ACCOUNT_API_ENDPOINT}/api/attributes")
-            .with(body: hash_including({ attributes: attributes&.transform_values(&:to_json) }.compact))
+            .with(body: hash_including({ attributes: attributes }.compact))
             .to_return(status: 200, body: { govuk_account_session: new_govuk_account_session }.compact.to_json)
         end
       end
