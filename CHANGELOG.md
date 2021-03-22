@@ -1,4 +1,4 @@
-# Unreleased
+# 71.0.0
 
 * BREAKING: Removed support for the Performance Platform.
 * Add Pact tests for account-api
