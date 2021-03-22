@@ -24,6 +24,11 @@ node("postgresql-9.6") {
         name: 'FRONTEND_BRANCH',
         defaultValue: 'master',
         description: 'Branch of frontend to run pacts against'
+      ),
+      stringParam(
+        name: 'ACCOUNT_API_BRANCH',
+        defaultValue: 'main',
+        description: 'Branch of account-api to run pacts against'
       )
     ],
     afterTest: {
@@ -39,6 +44,7 @@ node("postgresql-9.6") {
         runPublishingApiPactTests(govuk)
         runCollectionsPactTests(govuk)
         runFrontendPactTests(govuk)
+        runAccountApiPactTests(govuk)
       }
     }
   )
@@ -78,6 +84,17 @@ def runFrontendPactTests(govuk){
     stage("Run frontend pact") {
       govuk.bundleApp()
       lock("frontend-$NODE_NAME-test") {
+        govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
+      }
+    }
+  }
+}
+
+def runAccountApiPactTests(govuk){
+  govuk.checkoutDependent("account-api", [ branch: ACCOUNT_API_BRANCH ]) {
+    stage("Run account-api pact") {
+      govuk.bundleApp()
+      lock("account-api-$NODE_NAME-test") {
         govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
       }
     }
