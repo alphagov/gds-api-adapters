@@ -256,7 +256,7 @@ describe GdsApi::AccountApi do
           .with(
             method: :patch,
             path: "/api/attributes",
-            body: { attributes: attributes.transform_values(&:to_json) },
+            body: { attributes: attributes },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(authenticated_headers),
           )
           .will_respond_with(

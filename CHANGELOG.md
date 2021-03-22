@@ -2,6 +2,7 @@
 
 * BREAKING: Removed support for the Performance Platform.
 * Add Pact tests for account-api
+* Remove explicit JSON encoding of attribute values now that account-api parses non-string values correctly
 
 # 70.0.0
 
