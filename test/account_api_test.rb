@@ -4,7 +4,7 @@ require "gds_api/account_api"
 describe GdsApi::AccountApi do
   include PactTest
 
-  let(:api_client) { GdsApi::AccountApi.new(account_api_host) }
+  let(:api_client) { GdsApi::AccountApi.new(GdsTest::Pact.host(:account_api)) }
 
   let(:authenticated_headers) { { "GOVUK-Account-Session" => govuk_account_session } }
   let(:govuk_account_session) { "logged-in-user-session" }

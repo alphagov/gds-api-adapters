@@ -11,7 +11,7 @@ describe GdsApi::Calendars do
   end
 
   def api_client
-    @api_client ||= GdsApi::Calendars.new(bank_holidays_api_host)
+    @api_client ||= GdsApi::Calendars.new(GdsTest::Pact.host(:bank_holidays_api))
   end
 
   def event

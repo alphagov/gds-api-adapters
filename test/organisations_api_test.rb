@@ -11,7 +11,7 @@ describe GdsApi::Organisations do
   end
 
   def api_client
-    @api_client ||= GdsApi::Organisations.new(organisation_api_host)
+    @api_client ||= GdsApi::Organisations.new(GdsTest::Pact.host(:organisation_api))
   end
 
   def organisation(slug: "test-department")
@@ -62,7 +62,7 @@ describe GdsApi::Organisations do
   end
 
   describe "fetching a paginated list of organisations" do
-    let(:api_client_endpoint) { "#{organisation_api_host}/api/organisations" }
+    let(:api_client_endpoint) { "#{GdsTest::Pact.host(:organisation_api)}/api/organisations" }
     let(:page_one_links) { %(<#{api_client_endpoint}?page=2>; rel="next", <#{api_client_endpoint}?page=1>; rel="self") }
     let(:page_two_links) { %(<#{api_client_endpoint}?page=1>; rel="previous", <#{api_client_endpoint}?page=2>; rel="self") }
 
