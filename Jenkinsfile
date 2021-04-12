@@ -41,6 +41,7 @@ node("postgresql-9.6") {
         ]
       ]) {
         publishPacts(govuk, env.BRANCH_NAME == 'master')
+        govuk.setEnvar("GDS_API_ADAPTERS_PACT_VERSION", "branch-${env.BRANCH_NAME}")
         runPublishingApiPactTests(govuk)
         runCollectionsPactTests(govuk)
         runFrontendPactTests(govuk)
@@ -84,7 +85,7 @@ def runFrontendPactTests(govuk){
     stage("Run frontend pact") {
       govuk.bundleApp()
       lock("frontend-$NODE_NAME-test") {
-        govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
+        govuk.runRakeTask("pact:verify")
       }
     }
   }
