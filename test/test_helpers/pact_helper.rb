@@ -38,7 +38,7 @@ end
 Pact.service_consumer "GDS API Adapters" do
   has_pact_with "Bank Holidays API" do
     mock_service :bank_holidays_api do
-      # port BANK_HOLIDAYS_API_PORT
+      port 3000
     end
   end
 end

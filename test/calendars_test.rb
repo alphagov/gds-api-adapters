@@ -11,7 +11,7 @@ describe GdsApi::Calendars do
   end
 
   def api_client
-    @api_client ||= GdsApi::Calendars.new("http://localhost:80")
+    @api_client ||= GdsApi::Calendars.new("http://localhost:3000")
   end
 
   def event
