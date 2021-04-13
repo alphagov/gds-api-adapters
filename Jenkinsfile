@@ -63,7 +63,7 @@ def runPublishingApiPactTests(govuk) {
       govuk.bundleApp()
       lock("publishing-api-$NODE_NAME-test") {
         govuk.runRakeTask("db:reset")
-        govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
+        govuk.runRakeTask("pact:verify")
       }
     }
   }
@@ -74,7 +74,7 @@ def runCollectionsPactTests(govuk){
     stage("Run collections pact") {
       govuk.bundleApp()
       lock("collections-$NODE_NAME-test") {
-        govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
+        govuk.runRakeTask("pact:verify")
       }
     }
   }
@@ -96,7 +96,7 @@ def runAccountApiPactTests(govuk){
     stage("Run account-api pact") {
       govuk.bundleApp()
       lock("account-api-$NODE_NAME-test") {
-        govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
+        govuk.runRakeTask("pact:verify")
       }
     }
   }
