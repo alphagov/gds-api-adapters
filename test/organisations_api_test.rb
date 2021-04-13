@@ -62,9 +62,20 @@ describe GdsApi::Organisations do
   end
 
   describe "fetching a paginated list of organisations" do
+    let(:host_agnostic_endpoint_regex) { %r{https?://(?:[^/]+)/api/organisations} }
     let(:api_client_endpoint) { "#{organisation_api_host}/api/organisations" }
-    let(:page_one_links) { %(<#{api_client_endpoint}?page=2>; rel="next", <#{api_client_endpoint}?page=1>; rel="self") }
-    let(:page_two_links) { %(<#{api_client_endpoint}?page=1>; rel="previous", <#{api_client_endpoint}?page=2>; rel="self") }
+    let(:page_one_links) do
+      Pact.term(
+        generate: %(<#{api_client_endpoint}?page=2>; rel="next", <#{api_client_endpoint}?page=1>; rel="self"),
+        matcher: /^<#{host_agnostic_endpoint_regex}\?page=2>; rel="next", <#{host_agnostic_endpoint_regex}\?page=1>; rel="self"$/,
+      )
+    end
+    let(:page_two_links) do
+      Pact.term(
+        generate: %(<#{api_client_endpoint}?page=1>; rel="previous", <#{api_client_endpoint}?page=2>; rel="self"),
+        matcher: /^<#{host_agnostic_endpoint_regex}\?page=1>; rel="previous", <#{host_agnostic_endpoint_regex}\?page=2>; rel="self"$/,
+      )
+    end
 
     let(:request) do
       {
