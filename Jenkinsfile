@@ -41,7 +41,7 @@ node("postgresql-9.6") {
         ]
       ]) {
         publishPacts(govuk, env.BRANCH_NAME == 'master')
-        govuk.setEnvar("GDS_API_ADAPTERS_PACT_VERSION", "branch-${env.BRANCH_NAME}")
+        govuk.setEnvar("PACT_CONSUMER_VERSION", "branch-${env.BRANCH_NAME}")
         runPublishingApiPactTests(govuk)
         runCollectionsPactTests(govuk)
         runFrontendPactTests(govuk)
