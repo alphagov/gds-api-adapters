@@ -7,6 +7,7 @@ node("postgresql-9.6") {
   def pact_branch = (env.BRANCH_NAME == 'master' ? 'master' : "branch-${env.BRANCH_NAME}")
   govuk.setEnvar("PACT_TARGET_BRANCH", pact_branch)
   govuk.setEnvar("PACT_BROKER_BASE_URL", "https://pact-broker.cloudapps.digital")
+  govuk.setEnvar("PACT_CONSUMER_VERSION", "branch-${env.BRANCH_NAME}")
 
   govuk.buildProject(
     extraParameters: [
@@ -62,7 +63,7 @@ def runPublishingApiPactTests(govuk) {
       govuk.bundleApp()
       lock("publishing-api-$NODE_NAME-test") {
         govuk.runRakeTask("db:reset")
-        govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
+        govuk.runRakeTask("pact:verify")
       }
     }
   }
@@ -73,7 +74,7 @@ def runCollectionsPactTests(govuk){
     stage("Run collections pact") {
       govuk.bundleApp()
       lock("collections-$NODE_NAME-test") {
-        govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
+        govuk.runRakeTask("pact:verify")
       }
     }
   }
@@ -84,7 +85,7 @@ def runFrontendPactTests(govuk){
     stage("Run frontend pact") {
       govuk.bundleApp()
       lock("frontend-$NODE_NAME-test") {
-        govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
+        govuk.runRakeTask("pact:verify")
       }
     }
   }
@@ -95,7 +96,7 @@ def runAccountApiPactTests(govuk){
     stage("Run account-api pact") {
       govuk.bundleApp()
       lock("account-api-$NODE_NAME-test") {
-        govuk.runRakeTask("pact:verify:branch[${env.BRANCH_NAME}]")
+        govuk.runRakeTask("pact:verify")
       }
     }
   }
