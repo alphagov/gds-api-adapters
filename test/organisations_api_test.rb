@@ -6,10 +6,6 @@ describe GdsApi::Organisations do
   include GdsApi::TestHelpers::Organisations
   include PactTest
 
-  def base_api_url
-    Plek.new.website_root
-  end
-
   def api_client
     @api_client ||= GdsApi::Organisations.new(organisation_api_host)
   end
