@@ -5,40 +5,40 @@ require "gds_api/test_helpers/link_checker_api"
 describe GdsApi::LinkCheckerApi do
   include GdsApi::TestHelpers::LinkCheckerApi
 
-  before do
-    @base_api_url = Plek.find("link-checker-api")
-    @api = GdsApi::LinkCheckerApi.new(@base_api_url)
-  end
+  describe "test helpers" do
+    let(:base_url) { Plek.find("link-checker-api") }
+    let(:api_client) { GdsApi::LinkCheckerApi.new(base_url) }
 
-  describe "#check" do
-    it "returns a useful response" do
-      stub_link_checker_api_check(uri: "http://example.com", status: :broken)
+    describe "#check" do
+      it "returns a useful response" do
+        stub_link_checker_api_check(uri: "http://example.com", status: :broken)
 
-      link_report = @api.check("http://example.com")
+        link_report = api_client.check("http://example.com")
 
-      assert_equal :broken, link_report.status
+        assert_equal :broken, link_report.status
+      end
     end
-  end
 
-  describe "#create_batch" do
-    it "returns a useful response" do
-      stub_link_checker_api_create_batch(uris: ["http://example.com"])
+    describe "#create_batch" do
+      it "returns a useful response" do
+        stub_link_checker_api_create_batch(uris: ["http://example.com"])
 
-      batch_report = @api.create_batch(["http://example.com"])
+        batch_report = api_client.create_batch(["http://example.com"])
 
-      assert_equal :in_progress, batch_report.status
-      assert_equal "http://example.com", batch_report.links[0].uri
+        assert_equal :in_progress, batch_report.status
+        assert_equal "http://example.com", batch_report.links[0].uri
+      end
     end
-  end
 
-  describe "#get_batch" do
-    it "returns a useful response" do
-      stub_link_checker_api_get_batch(id: 10, links: [{ uri: "http://example.com" }])
+    describe "#get_batch" do
+      it "returns a useful response" do
+        stub_link_checker_api_get_batch(id: 10, links: [{ uri: "http://example.com" }])
 
-      batch_report = @api.get_batch(10)
+        batch_report = api_client.get_batch(10)
 
-      assert_equal :completed, batch_report.status
-      assert_equal "http://example.com", batch_report.links[0].uri
+        assert_equal :completed, batch_report.status
+        assert_equal "http://example.com", batch_report.links[0].uri
+      end
     end
   end
 end
