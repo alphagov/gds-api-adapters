@@ -32,7 +32,6 @@ describe GdsApi::PublishingApi do
 
   before do
     @bearer_token = "example-bearer-token"
-    @base_api_url = Plek.current.find("publishing-api")
     @api_client = GdsApi::PublishingApi.new(
       publishing_api_host,
       bearer_token: @bearer_token,

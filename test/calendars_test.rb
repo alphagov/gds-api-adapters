@@ -1,14 +1,8 @@
 require "test_helper"
 require "gds_api/calendars"
-require "gds_api/test_helpers/calendars"
 
 describe GdsApi::Calendars do
-  include GdsApi::TestHelpers::Calendars
   include PactTest
-
-  def base_api_url
-    Plek.new.website_root
-  end
 
   def api_client
     @api_client ||= GdsApi::Calendars.new(bank_holidays_api_host)
