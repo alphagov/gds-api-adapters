@@ -25,25 +25,19 @@ Pact.service_consumer "GDS API Adapters" do
       port PUBLISHING_API_PORT
     end
   end
-end
 
-Pact.service_consumer "GDS API Adapters" do
   has_pact_with "Collections Organisation API" do
     mock_service :organisation_api do
       port ORGANISATION_API_PORT
     end
   end
-end
 
-Pact.service_consumer "GDS API Adapters" do
   has_pact_with "Bank Holidays API" do
     mock_service :bank_holidays_api do
       port BANK_HOLIDAYS_API_PORT
     end
   end
-end
 
-Pact.service_consumer "GDS API Adapters" do
   has_pact_with "Account API" do
     mock_service :account_api do
       port ACCOUNT_API_PORT
