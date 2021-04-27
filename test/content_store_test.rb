@@ -28,26 +28,10 @@ describe GdsApi::ContentStore do
       end
     end
 
-    it "raises if the item doesn't exist" do
-      stub_content_store_does_not_have_item("/non-existent")
-
-      assert_raises GdsApi::HTTPNotFound do
-        @api.content_item("/non-existent")
-      end
-    end
-
     it "raises if the item is gone" do
       stub_content_store_has_gone_item("/it-is-gone")
 
       assert_raises(GdsApi::HTTPGone) do
-        @api.content_item("/it-is-gone")
-      end
-    end
-
-    it "raises if the item is gone" do
-      stub_content_store_has_gone_item("/it-is-gone")
-
-      assert_raises GdsApi::HTTPGone do
         @api.content_item("/it-is-gone")
       end
     end
