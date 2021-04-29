@@ -72,23 +72,6 @@ module GdsApi
             headers: { "Content-Type" => "application/json" },
           )
       end
-
-      def stub_link_checker_api_upsert_resource_monitor(app:, reference:, links:)
-        response_body = { id: 1 }.to_json
-
-        request_body = {
-          links: links,
-          app: app,
-          reference: reference,
-        }.to_json
-
-        stub_request(:post, "#{LINK_CHECKER_API_ENDPOINT}/monitor")
-          .with(body: request_body)
-          .to_return(
-            body: response_body,
-            headers: { "Content-Type" => "application/json" },
-          )
-      end
     end
   end
 end

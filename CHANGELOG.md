@@ -1,3 +1,7 @@
+# Unreleased
+
+* Removed `LinkCheckerApi#upsert_resource_monitor` method as it’s not supported by Link Checker API itself.
+
 # 71.0.0
 
 * BREAKING: Removed support for the Performance Platform.
