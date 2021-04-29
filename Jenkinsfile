@@ -18,7 +18,7 @@ node("postgresql-9.6") {
       ),
       stringParam(
         name: 'COLLECTIONS_BRANCH',
-        defaultValue: 'master',
+        defaultValue: 'main',
         description: 'Branch of collections to run pacts against'
       ),
       stringParam(
