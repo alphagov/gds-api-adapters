@@ -41,7 +41,7 @@ node("postgresql-9.6") {
           passwordVariable: 'PACT_BROKER_PASSWORD'
         ]
       ]) {
-        publishPacts(govuk, env.BRANCH_NAME == 'master')
+        publishPacts(govuk)
         runPactTests(govuk, "publishing-api", PUBLISHING_API_BRANCH, [ resetDatabase: true ])
         runPactTests(govuk, "collections", COLLECTIONS_BRANCH)
         runPactTests(govuk, "frontend", FRONTEND_BRANCH)
@@ -51,7 +51,7 @@ node("postgresql-9.6") {
   )
 }
 
-def publishPacts(govuk, releasedVersion) {
+def publishPacts(govuk) {
   stage("Publish pacts") {
     govuk.runRakeTask("pact:publish:branch")
   }
