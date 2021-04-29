@@ -96,6 +96,7 @@ def runAccountApiPactTests(govuk){
     stage("Run account-api pact") {
       govuk.bundleApp()
       lock("account-api-$NODE_NAME-test") {
+        govuk.runRakeTask("db:reset")
         govuk.runRakeTask("pact:verify")
       }
     }
