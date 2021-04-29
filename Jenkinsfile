@@ -4,8 +4,7 @@ library("govuk")
 
 node("postgresql-9.6") {
 
-  def pact_branch = (env.BRANCH_NAME == 'master' ? 'master' : "branch-${env.BRANCH_NAME}")
-  govuk.setEnvar("PACT_TARGET_BRANCH", pact_branch)
+  govuk.setEnvar("PACT_TARGET_BRANCH", "branch-${env.BRANCH_NAME}")
   govuk.setEnvar("PACT_BROKER_BASE_URL", "https://pact-broker.cloudapps.digital")
   govuk.setEnvar("PACT_CONSUMER_VERSION", "branch-${env.BRANCH_NAME}")
 
