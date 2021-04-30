@@ -42,10 +42,10 @@ node("postgresql-9.6") {
         ]
       ]) {
         publishPacts(govuk, env.BRANCH_NAME == 'master')
-        runPublishingApiPactTests(govuk)
-        runCollectionsPactTests(govuk)
-        runFrontendPactTests(govuk)
-        runAccountApiPactTests(govuk)
+        runPactTests(govuk, "publishing-api", PUBLISHING_API_BRANCH, [ resetDatabase: true ])
+        runPactTests(govuk, "collections", COLLECTIONS_BRANCH)
+        runPactTests(govuk, "frontend", FRONTEND_BRANCH)
+        runPactTests(govuk, "account-api", ACCOUNT_API_BRANCH, [ resetDatabase: true ])
       }
     }
   )
@@ -57,46 +57,14 @@ def publishPacts(govuk, releasedVersion) {
   }
 }
 
-def runPublishingApiPactTests(govuk) {
-  govuk.checkoutDependent("publishing-api", [ branch: PUBLISHING_API_BRANCH ]) {
-    stage("Run publishing-api pact") {
+def runPactTests(govuk, name, branch, options = [ resetDatabase: false ]) {
+  govuk.checkoutDependent(name, [ branch: branch ]) {
+    stage("Run $name pact") {
       govuk.bundleApp()
-      lock("publishing-api-$NODE_NAME-test") {
-        govuk.runRakeTask("db:reset")
-        govuk.runRakeTask("pact:verify")
-      }
-    }
-  }
-}
-
-def runCollectionsPactTests(govuk){
-  govuk.checkoutDependent("collections", [ branch: COLLECTIONS_BRANCH ]) {
-    stage("Run collections pact") {
-      govuk.bundleApp()
-      lock("collections-$NODE_NAME-test") {
-        govuk.runRakeTask("pact:verify")
-      }
-    }
-  }
-}
-
-def runFrontendPactTests(govuk){
-  govuk.checkoutDependent("frontend", [ branch: FRONTEND_BRANCH ]) {
-    stage("Run frontend pact") {
-      govuk.bundleApp()
-      lock("frontend-$NODE_NAME-test") {
-        govuk.runRakeTask("pact:verify")
-      }
-    }
-  }
-}
-
-def runAccountApiPactTests(govuk){
-  govuk.checkoutDependent("account-api", [ branch: ACCOUNT_API_BRANCH ]) {
-    stage("Run account-api pact") {
-      govuk.bundleApp()
-      lock("account-api-$NODE_NAME-test") {
-        govuk.runRakeTask("db:reset")
+      lock("$name-$NODE_NAME-test") {
+        if (options.resetDatabase) {
+          govuk.runRakeTask("db:reset")
+        }
         govuk.runRakeTask("pact:verify")
       }
     }
