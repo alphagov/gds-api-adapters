@@ -10,9 +10,7 @@ describe GdsApi::AccountApi do
   let(:govuk_account_session) { "logged-in-user-session" }
 
   describe "getting a sign-in URL" do
-    let(:redirect_path) { nil }
-
-    before do
+    it "responds with 200 OK, an authentication URI, and a state for CSRF protection" do
       account_api
         .upon_receiving("a sign-in request")
         .with(
@@ -28,18 +26,13 @@ describe GdsApi::AccountApi do
             state: Pact.like("value-to-use-for-csrf-prevention"),
           },
         )
-    end
 
-    it "responds with 200 OK, an authentication URI, and a state for CSRF protection" do
-      response = api_client.get_sign_in_url
-      assert response["auth_uri"].present?
-      assert response["state"].present?
-      assert_equal 200, response.code
+      api_client.get_sign_in_url
     end
   end
 
   describe "validating an OAuth response" do
-    before do
+    it "responds with 200 OK and a govuk_account_session" do
       account_api
         .given("there is a valid OAuth response")
         .upon_receiving("a validation request")
@@ -59,20 +52,15 @@ describe GdsApi::AccountApi do
             govuk_account_session: Pact.like("user-session-id"),
           },
         )
-    end
 
-    it "responds with 200 OK and a govuk_account_session" do
-      response = api_client.validate_auth_response(code: "code", state: "state")
-      assert response["govuk_account_session"].present?
-      assert response["redirect_path"].nil?
-      assert_equal 200, response.code
+      api_client.validate_auth_response(code: "code", state: "state")
     end
   end
 
   describe "validating an OAuth response with a redirect path" do
     let(:redirect_path) { "/some-arbitrary-path" }
 
-    before do
+    it "responds with a redirect_path" do
       account_api
         .given("there is a valid OAuth response, with the redirect path '/some-arbitrary-path'")
         .upon_receiving("a validation request")
@@ -93,18 +81,15 @@ describe GdsApi::AccountApi do
             redirect_path: Pact.like(redirect_path),
           },
         )
-    end
 
-    it "responds with a redirect_path" do
-      response = api_client.validate_auth_response(code: "code", state: "state")
-      assert_equal redirect_path, response["redirect_path"]
+      api_client.validate_auth_response(code: "code", state: "state")
     end
   end
 
   describe "creating a registration state" do
     let(:attributes) { { foo: "bar" } }
 
-    before do
+    it "responds with 200 OK and a state_id" do
       account_api
         .upon_receiving("a create-state request")
         .with(
@@ -120,12 +105,8 @@ describe GdsApi::AccountApi do
             state_id: Pact.like("reference-to-pass-to-get_sign_in_url"),
           },
         )
-    end
 
-    it "responds with 200 OK and a state_id" do
-      response = api_client.create_registration_state(attributes: attributes)
-      assert response["state_id"].present?
-      assert_equal 200, response.code
+      api_client.create_registration_state(attributes: attributes)
     end
   end
 
@@ -154,10 +135,7 @@ describe GdsApi::AccountApi do
       end
 
       it "responds with 200 OK, a new govuk_account_session, and says that the subscription does not exist" do
-        response = api_client.check_for_email_subscription(govuk_account_session: govuk_account_session)
-        assert response["govuk_account_session"].present?
-        assert_equal false, response["has_subscription"]
-        assert_equal 200, response.code
+        api_client.check_for_email_subscription(govuk_account_session: govuk_account_session)
       end
 
       describe "a subscription exists" do
@@ -165,8 +143,7 @@ describe GdsApi::AccountApi do
         let(:has_subscription) { true }
 
         it "says that the subscription exists" do
-          response = api_client.check_for_email_subscription(govuk_account_session: govuk_account_session)
-          assert response["has_subscription"]
+          api_client.check_for_email_subscription(govuk_account_session: govuk_account_session)
         end
       end
     end
@@ -174,7 +151,7 @@ describe GdsApi::AccountApi do
 
   describe "setting the transition checker email subscription" do
     describe "the user is logged in" do
-      before do
+      it "responds with 200 OK and a new govuk_account_session" do
         account_api
           .given("there is a valid user session")
           .upon_receiving("a set-subscription request")
@@ -191,12 +168,8 @@ describe GdsApi::AccountApi do
               govuk_account_session: Pact.like("user-session-id"),
             },
           )
-      end
 
-      it "responds with 200 OK and a new govuk_account_session" do
-        response = api_client.set_email_subscription(govuk_account_session: govuk_account_session, slug: "brexit-emails-123")
-        assert response["govuk_account_session"].present?
-        assert_equal 200, response.code
+        api_client.set_email_subscription(govuk_account_session: govuk_account_session, slug: "brexit-emails-123")
       end
     end
   end
@@ -227,10 +200,7 @@ describe GdsApi::AccountApi do
       end
 
       it "responds with 200 OK, a new govuk_account_session, and no attributes" do
-        response = api_client.get_attributes(govuk_account_session: govuk_account_session, attributes: %w[foo])
-        assert response["govuk_account_session"].present?
-        assert_equal attributes, response["values"]
-        assert_equal 200, response.code
+        api_client.get_attributes(govuk_account_session: govuk_account_session, attributes: %w[foo])
       end
 
       describe "attributes exist" do
@@ -238,8 +208,7 @@ describe GdsApi::AccountApi do
         let(:attributes) { { foo: { bar: "baz" } } }
 
         it "responds with the attribute values" do
-          response = api_client.get_attributes(govuk_account_session: govuk_account_session, attributes: %w[foo])
-          assert_equal attributes[:foo][:bar], response["values"]["foo"]["bar"]
+          api_client.get_attributes(govuk_account_session: govuk_account_session, attributes: %w[foo])
         end
       end
     end
@@ -249,7 +218,7 @@ describe GdsApi::AccountApi do
     let(:attributes) { { foo: [1, 2, 3], bar: { nested: "json" } } }
 
     describe "the user is logged in" do
-      before do
+      it "responds with 200 OK and a new govuk_account_session" do
         account_api
           .given("there is a valid user session")
           .upon_receiving("a set-attributes request")
@@ -266,12 +235,8 @@ describe GdsApi::AccountApi do
               govuk_account_session: Pact.like("user-session-id"),
             },
           )
-      end
 
-      it "responds with 200 OK and a new govuk_account_session" do
-        response = api_client.set_attributes(govuk_account_session: govuk_account_session, attributes: attributes)
-        assert response["govuk_account_session"].present?
-        assert_equal 200, response.code
+        api_client.set_attributes(govuk_account_session: govuk_account_session, attributes: attributes)
       end
     end
   end

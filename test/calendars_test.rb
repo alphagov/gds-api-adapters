@@ -18,7 +18,7 @@ describe GdsApi::Calendars do
   end
 
   describe "fetching all bank holidays" do
-    before do
+    it "responds with 200 OK and a list of bank holidays for each nation" do
       bank_holidays_api
         .given("there is a list of all bank holidays")
         .upon_receiving("the request for the list of all bank holidays")
@@ -47,19 +47,13 @@ describe GdsApi::Calendars do
             "Content-Type" => "application/json; charset=utf-8",
           },
         )
-    end
 
-    it "responds with 200 OK and a list of bank holidays for each nation" do
-      response = api_client.bank_holidays
-      assert response["england-and-wales"]["events"].count.positive?
-      assert response["scotland"]["events"].count.positive?
-      assert response["northern-ireland"]["events"].count.positive?
-      assert_equal 200, response.code
+      api_client.bank_holidays
     end
   end
 
   describe "fetching only Scottish bank holidays" do
-    before do
+    it "responds with 200 OK and a list of bank holidays" do
       bank_holidays_api
         .given("there is a list of all bank holidays")
         .upon_receiving("the request for the list of Scottish bank holidays")
@@ -78,12 +72,8 @@ describe GdsApi::Calendars do
             "Content-Type" => "application/json; charset=utf-8",
           },
         )
-    end
 
-    it "responds with 200 OK and a list of bank holidays" do
-      response = api_client.bank_holidays("scotland")
-      assert response["events"].count.positive?
-      assert_equal 200, response.code
+      api_client.bank_holidays("scotland")
     end
   end
 end

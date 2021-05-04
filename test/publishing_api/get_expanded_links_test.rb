@@ -30,17 +30,7 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      response = @api_client.get_expanded_links(@content_id)
-
-      expected_body = {
-        "expanded_links" => {
-          "organisations" => [
-            { "content_id" => "20583132-1619-4c68-af24-77583172c070" },
-          ],
-        },
-      }
-      assert_equal 200, response.code
-      assert_equal expected_body, response.to_h
+      @api_client.get_expanded_links(@content_id)
     end
 
     it "responds with the empty thing set if there's an empty link set" do
@@ -59,10 +49,7 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      response = @api_client.get_expanded_links(@content_id)
-
-      assert_equal 200, response.code
-      assert_equal({}, response.to_h["expanded_links"])
+      @api_client.get_expanded_links(@content_id)
     end
 
     it "responds with 404 if there's no link set entry" do

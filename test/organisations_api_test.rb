@@ -26,35 +26,29 @@ describe GdsApi::Organisations do
     }
   end
 
-  describe "fetching list of organisations" do
-    before do
-      organisation_api
-        .given("there is a list of organisations")
-        .upon_receiving("a request for the organisation list")
-        .with(
-          method: :get,
-          path: "/api/organisations",
-          headers: GdsApi::JsonClient.default_request_headers,
-        )
-        .will_respond_with(
-          status: 200,
-          body: {
-            results: [
-              organisation,
-              organisation,
-            ],
-          },
-          headers: {
-            "Content-Type" => "application/json; charset=utf-8",
-          },
-        )
-    end
+  it "fetches a list of organisations" do
+    organisation_api
+      .given("there is a list of organisations")
+      .upon_receiving("a request for the organisation list")
+      .with(
+        method: :get,
+        path: "/api/organisations",
+        headers: GdsApi::JsonClient.default_request_headers,
+      )
+      .will_respond_with(
+        status: 200,
+        body: {
+          results: [
+            organisation,
+            organisation,
+          ],
+        },
+        headers: {
+          "Content-Type" => "application/json; charset=utf-8",
+        },
+      )
 
-    it "responds with 200 OK and a list of organisations" do
-      response = api_client.organisations
-      assert_equal 2, response["results"].count
-      assert_equal 200, response.code
-    end
+    api_client.organisations
   end
 
   describe "fetching a paginated list of organisations" do
@@ -94,7 +88,7 @@ describe GdsApi::Organisations do
       }
     end
 
-    before do
+    it "handles pagination" do
       organisation_api
         .given("the organisation list is paginated, beginning at page 1")
         .upon_receiving("a request without a query param")
@@ -106,64 +100,48 @@ describe GdsApi::Organisations do
         .upon_receiving("a request with page 2 params")
         .with(request.merge(query: "page=2"))
         .will_respond_with(response.merge(headers: { "link" => page_two_links }))
-    end
 
-    it "should handle pagination" do
-      response = api_client.organisations
-
-      assert_equal 20, response["results"].count
-      assert_equal 40, response.with_subsequent_pages.count
+      api_client.organisations.with_subsequent_pages.count
     end
   end
 
-  describe "fetching an organisation by slug" do
-    let(:hmrc) { "hm-revenue-customs" }
+  it "fetches an organisation by slug" do
+    hmrc = "hm-revenue-customs"
+    api_response = organisation(slug: hmrc)
+    api_response["id"] = "www.gov.uk/api/organisations/#{hmrc}"
 
-    before do
-      organisation_api
-        .given("the organisation hmrc exists")
-        .upon_receiving("a request for hm-revenue-customs")
-        .with(
-          method: :get,
-          path: "/api/organisations/#{hmrc}",
-          headers: GdsApi::JsonClient.default_request_headers,
-        )
-        .will_respond_with(
-          status: 200,
-          body: organisation(slug: hmrc),
-        )
-    end
+    organisation_api
+      .given("the organisation hmrc exists")
+      .upon_receiving("a request for hm-revenue-customs")
+      .with(
+        method: :get,
+        path: "/api/organisations/#{hmrc}",
+        headers: GdsApi::JsonClient.default_request_headers,
+      )
+      .will_respond_with(
+        status: 200,
+        body: api_response,
+      )
 
-    it "responds with 200 and the organisation" do
-      response = api_client.organisation(hmrc)
-
-      id = "www.gov.uk/api/organisations/#{hmrc}"
-      assert_equal 200, response.code
-      assert_equal id, response["id"]
-    end
+    api_client.organisation(hmrc)
   end
 
-  describe "an organisation doesn't exist for a given slug" do
-    before do
-      organisation_api
-        .given("no organisation exists")
-        .upon_receiving("a request for a non-existant organisation")
-        .with(
-          method: :get,
-          path: "/api/organisations/department-for-making-life-better",
-          headers: GdsApi::JsonClient.default_request_headers,
-        )
-        .will_respond_with(
-          status: 404,
-          body: "404 error",
-        )
-    end
+  it "returns a 404 if no organisation exists for a given slug" do
+    organisation_api
+      .given("no organisation exists")
+      .upon_receiving("a request for a non-existant organisation")
+      .with(
+        method: :get,
+        path: "/api/organisations/department-for-making-life-better",
+        headers: GdsApi::JsonClient.default_request_headers,
+      )
+      .will_respond_with(
+        status: 404,
+        body: "404 error",
+      )
 
-    it "returns a 404 error code" do
-      error = assert_raises(GdsApi::HTTPNotFound) do
-        api_client.organisation("department-for-making-life-better")
-      end
-      assert_equal 404, error.code
+    assert_raises(GdsApi::HTTPNotFound) do
+      api_client.organisation("department-for-making-life-better")
     end
   end
 end

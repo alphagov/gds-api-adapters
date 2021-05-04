@@ -58,9 +58,7 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      content_id = @api_client.lookup_content_id(base_path: "/foo", with_drafts: true)
-
-      assert_equal "cbb460a7-60de-4a74-b5be-0b27c6d6af9b", content_id
+      @api_client.lookup_content_id(base_path: "/foo", with_drafts: true)
     end
   end
 
@@ -89,9 +87,7 @@ describe GdsApi::PublishingApi do
           body: reponse_hash,
         )
 
-      content_id = @api_client.lookup_content_ids(base_paths: ["/foo", "/bar"])
-
-      assert_equal(reponse_hash, content_id)
+      @api_client.lookup_content_ids(base_paths: ["/foo", "/bar"])
     end
   end
 end
