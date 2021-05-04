@@ -26,6 +26,9 @@ describe GdsApi::Organisations do
     }
   end
 
+  let(:host_agnostic_endpoint_regex) { %r{https?://(?:[^/]+)/api/organisations} }
+  let(:api_client_endpoint) { "#{organisation_api_host}/api/organisations" }
+
   it "fetches a list of organisations" do
     organisation_api
       .given("there is a list of organisations")
@@ -52,8 +55,6 @@ describe GdsApi::Organisations do
   end
 
   describe "fetching a paginated list of organisations" do
-    let(:host_agnostic_endpoint_regex) { %r{https?://(?:[^/]+)/api/organisations} }
-    let(:api_client_endpoint) { "#{organisation_api_host}/api/organisations" }
     let(:page_one_links) do
       Pact.term(
         generate: %(<#{api_client_endpoint}?page=2>; rel="next", <#{api_client_endpoint}?page=1>; rel="self"),
@@ -108,7 +109,10 @@ describe GdsApi::Organisations do
   it "fetches an organisation by slug" do
     hmrc = "hm-revenue-customs"
     api_response = organisation(slug: hmrc)
-    api_response["id"] = "www.gov.uk/api/organisations/#{hmrc}"
+    api_response["id"] = Pact.term(
+      generate: %(#{api_client_endpoint}/#{hmrc}),
+      matcher: /^#{host_agnostic_endpoint_regex}\/#{hmrc}$/,
+    )
 
     organisation_api
       .given("the organisation hmrc exists")
