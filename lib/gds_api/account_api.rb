@@ -12,10 +12,17 @@ class GdsApi::AccountApi < GdsApi::Base
   #
   # @param [String, nil] redirect_path path on GOV.UK to send the user to after authentication
   # @param [String, nil] state_id identifier originally returned by #create_registration_state
+  # @param [String, nil] level_of_authentication either "level1" (require MFA) or "level0" (do not require MFA)
   #
   # @return [Hash] An authentication URL and the OAuth state parameter (for CSRF protection)
-  def get_sign_in_url(redirect_path: nil, state_id: nil)
-    querystring = nested_query_string({ redirect_path: redirect_path, state_id: state_id }.compact)
+  def get_sign_in_url(redirect_path: nil, state_id: nil, level_of_authentication: nil)
+    querystring = nested_query_string(
+      {
+        redirect_path: redirect_path,
+        state_id: state_id,
+        level_of_authentication: level_of_authentication,
+      }.compact,
+    )
     get_json("#{endpoint}/api/oauth2/sign-in?#{querystring}")
   end
 

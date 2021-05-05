@@ -5,8 +5,8 @@ module GdsApi
     module AccountApi
       ACCOUNT_API_ENDPOINT = Plek.find("account-api")
 
-      def stub_account_api_get_sign_in_url(redirect_path: nil, state_id: nil, auth_uri: "http://auth/provider", state: "state")
-        querystring = Rack::Utils.build_nested_query({ redirect_path: redirect_path, state_id: state_id }.compact)
+      def stub_account_api_get_sign_in_url(redirect_path: nil, state_id: nil, level_of_authentication: nil, auth_uri: "http://auth/provider", state: "state")
+        querystring = Rack::Utils.build_nested_query({ redirect_path: redirect_path, state_id: state_id, level_of_authentication: level_of_authentication }.compact)
         stub_request(:get, "#{ACCOUNT_API_ENDPOINT}/api/oauth2/sign-in?#{querystring}")
           .to_return(
             status: 200,
