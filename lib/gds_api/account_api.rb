@@ -85,6 +85,17 @@ class GdsApi::AccountApi < GdsApi::Base
     patch_json("#{endpoint}/api/attributes", { attributes: attributes }, auth_headers(govuk_account_session))
   end
 
+  # Look up the names of a user's attributes
+  #
+  # @param [String] attributes Names of the attributes to check
+  # @param [String] govuk_account_session Value of the session header
+  #
+  # @return [Hash] The attribute names (if present), and a new session header
+  def get_attributes_names(attributes:, govuk_account_session:)
+    querystring = nested_query_string({ attributes: attributes }.compact)
+    get_json("#{endpoint}/api/attributes/names?#{querystring}", auth_headers(govuk_account_session))
+  end
+
 private
 
   def nested_query_string(params)

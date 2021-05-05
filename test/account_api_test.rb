@@ -240,4 +240,51 @@ describe GdsApi::AccountApi do
       end
     end
   end
+
+  describe "fetching attribute names" do
+    describe "the user is logged in" do
+      before do
+        account_api
+          .given(given)
+          .upon_receiving("a get-attributes-names request")
+          .with(
+            method: :get,
+            path: "/api/attributes/names",
+            query: { "attributes[]" => queried_attribute_names },
+            headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
+          )
+          .will_respond_with(
+            status: 200,
+            headers: { "Content-Type" => "application/json; charset=utf-8" },
+            body: {
+              govuk_account_session: Pact.like("user-session-id"),
+              values: returned_attribute_names,
+            },
+          )
+      end
+
+      let(:queried_attribute_names) { %w[foo] }
+      let(:response) { api_client.get_attributes_names(govuk_account_session: govuk_account_session, attributes: queried_attribute_names) }
+
+      describe "attributes do not exist" do
+        let(:given) { "there is a valid user session" }
+        let(:returned_attribute_names) { [] }
+
+        it "responds with 200 OK, a new govuk_account_session, and no attributes" do
+          assert response["govuk_account_session"].present?
+          assert_equal returned_attribute_names, response["values"]
+          assert_equal 200, response.code
+        end
+      end
+
+      describe "attributes exist" do
+        let(:given) { "there is a valid user session, with an attribute called 'foo'" }
+        let(:returned_attribute_names) { %w[foo] }
+
+        it "responds with the attribute values" do
+          assert_equal returned_attribute_names, response["values"]
+        end
+      end
+    end
+  end
 end

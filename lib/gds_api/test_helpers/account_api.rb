@@ -95,6 +95,18 @@ module GdsApi
             .to_return(status: 200, body: { govuk_account_session: new_govuk_account_session }.compact.to_json)
         end
       end
+
+      def stub_account_api_get_attributes_names(govuk_account_session: nil, attributes: [], new_govuk_account_session: nil)
+        querystring = Rack::Utils.build_nested_query({ attributes: attributes }.compact)
+        if govuk_account_session
+          stub_request(:get, "#{ACCOUNT_API_ENDPOINT}/api/attributes/names?#{querystring}")
+            .with(headers: { GdsApi::AccountApi::AUTH_HEADER_NAME => govuk_account_session })
+            .to_return(status: 200, body: { govuk_account_session: new_govuk_account_session, values: attributes }.compact.to_json)
+        else
+          stub_request(:get, "#{ACCOUNT_API_ENDPOINT}/api/attributes/names?#{querystring}")
+            .to_return(status: 200, body: { govuk_account_session: new_govuk_account_session, values: attributes }.compact.to_json)
+        end
+      end
     end
   end
 end
