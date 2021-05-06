@@ -5,84 +5,63 @@ require "json"
 describe GdsApi::PublishingApi do
   include PactTest
 
-  before do
-    @api_client = GdsApi::PublishingApi.new(publishing_api_host)
-    @content_id = "bed722e6-db68-43e5-9079-063f623335a7"
-  end
+  let(:api_client) { GdsApi::PublishingApi.new(publishing_api_host) }
+  let(:content_id) { "bed722e6-db68-43e5-9079-063f623335a7" }
 
   describe "#get_links" do
-    describe "when there's a links entry with links" do
-      before do
-        publishing_api
-          .given("organisation links exist for content_id #{@content_id}")
-          .upon_receiving("a get-links request")
-          .with(
-            method: :get,
-            path: "/v2/links/#{@content_id}",
-          )
-          .will_respond_with(
-            status: 200,
-            body: {
-              links: {
-                organisations: %w[20583132-1619-4c68-af24-77583172c070],
-              },
-            },
-          )
-      end
-
-      it "responds with the links" do
-        response = @api_client.get_links(@content_id)
-        assert_equal 200, response.code
-        assert_equal(
-          %w[20583132-1619-4c68-af24-77583172c070],
-          response["links"]["organisations"],
+    it "responds with links when there's a links entry with links" do
+      publishing_api
+        .given("organisation links exist for content_id #{content_id}")
+        .upon_receiving("a get-links request")
+        .with(
+          method: :get,
+          path: "/v2/links/#{content_id}",
         )
-      end
-    end
-
-    describe "when there's an empty links entry" do
-      before do
-        publishing_api
-          .given("empty links exist for content_id #{@content_id}")
-          .upon_receiving("a get-links request")
-          .with(
-            method: :get,
-            path: "/v2/links/#{@content_id}",
-          )
-          .will_respond_with(
-            status: 200,
-            body: {
-              links: {
-              },
+        .will_respond_with(
+          status: 200,
+          body: {
+            links: {
+              organisations: %w[20583132-1619-4c68-af24-77583172c070],
             },
-          )
-      end
+          },
+        )
 
-      it "responds with the empty link set" do
-        response = @api_client.get_links(@content_id)
-        assert_equal 200, response.code
-        assert_equal({}, response["links"])
-      end
+      api_client.get_links(content_id)
     end
 
-    describe "when there's no links entry" do
-      before do
-        publishing_api
-          .given("no links exist for content_id #{@content_id}")
-          .upon_receiving("a get-links request")
-          .with(
-            method: :get,
-            path: "/v2/links/#{@content_id}",
-          )
-          .will_respond_with(
-            status: 404,
-          )
-      end
+    it "responds with the empty link set when there's an empty links entry" do
+      publishing_api
+        .given("empty links exist for content_id #{content_id}")
+        .upon_receiving("a get-links request")
+        .with(
+          method: :get,
+          path: "/v2/links/#{content_id}",
+        )
+        .will_respond_with(
+          status: 200,
+          body: {
+            links: {
+            },
+          },
+        )
 
-      it "responds with 404" do
-        assert_raises(GdsApi::HTTPNotFound) do
-          @api_client.get_links(@content_id)
-        end
+      api_client.get_links(content_id)
+    end
+
+    it "responds with 404 when there's no links entry" do
+      publishing_api
+        .given("no links exist for content_id #{content_id}")
+        .upon_receiving("a get-links request")
+        .with(
+          method: :get,
+          path: "/v2/links/#{content_id}",
+        )
+        .will_respond_with(
+          status: 404,
+        )
+
+      assert_raises(GdsApi::HTTPNotFound) do
+        api_client.get_links(content_id)
       end
     end
   end
