@@ -5,6 +5,7 @@
 * Store response body in new `http_body` field of HTTP exceptions
 * Added Pact tests for the `LinkCheckerApi` adapters.
 * Add get_attributes_names method for [account-api's /api/attributes/names endpoint](https://github.com/alphagov/account-api/pull/58) + Pact tests.
+* Add 401 and 403 test helpers for Account API methods
 
 # 71.0.0
 

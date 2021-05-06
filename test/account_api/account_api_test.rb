@@ -6,6 +6,8 @@ describe GdsApi::AccountApi do
   include GdsApi::TestHelpers::AccountApi
 
   let(:api_client) { GdsApi::AccountApi.new(Plek.find("account-api")) }
+  let(:session_id) { "session-id" }
+  let(:new_session_id) { "new-session-id" }
 
   it "gets a sign in URL" do
     stub_account_api_get_sign_in_url(auth_uri: "https://www.example.com")
@@ -31,58 +33,137 @@ describe GdsApi::AccountApi do
   end
 
   describe "a transition checker subscription exists" do
-    before { stub_account_api_has_email_subscription(new_govuk_account_session: "new-session") }
+    before { stub_account_api_has_email_subscription(new_govuk_account_session: new_session_id) }
 
     it "checks if the user has an email subscription" do
-      assert(api_client.check_for_email_subscription(govuk_account_session: "foo")["has_subscription"])
+      assert(api_client.check_for_email_subscription(govuk_account_session: session_id)["has_subscription"])
     end
 
     it "returns the new session value" do
-      assert_equal("new-session", api_client.check_for_email_subscription(govuk_account_session: "foo")["govuk_account_session"])
+      assert_equal(new_session_id, api_client.check_for_email_subscription(govuk_account_session: session_id)["govuk_account_session"])
     end
   end
 
   describe "a transition checker subscription does not exist" do
-    before { stub_account_api_does_not_have_email_subscription(new_govuk_account_session: "new-session") }
+    before { stub_account_api_does_not_have_email_subscription(new_govuk_account_session: new_session_id) }
 
     it "checks if the user has an email subscription" do
-      assert(api_client.check_for_email_subscription(govuk_account_session: "foo")["has_subscription"] == false)
+      assert(api_client.check_for_email_subscription(govuk_account_session: session_id)["has_subscription"] == false)
     end
 
     it "returns the new session value" do
-      assert_equal("new-session", api_client.check_for_email_subscription(govuk_account_session: "foo")["govuk_account_session"])
+      assert_equal(new_session_id, api_client.check_for_email_subscription(govuk_account_session: session_id)["govuk_account_session"])
     end
   end
 
   it "returns a new session when setting the email subscription" do
-    stub_account_api_set_email_subscription(new_govuk_account_session: "new-session")
-    assert_equal("new-session", api_client.set_email_subscription(govuk_account_session: "foo", slug: "slug").to_hash["govuk_account_session"])
+    stub_account_api_set_email_subscription(new_govuk_account_session: new_session_id)
+    assert_equal(new_session_id, api_client.set_email_subscription(govuk_account_session: session_id, slug: "slug").to_hash["govuk_account_session"])
   end
 
   describe "attributes exist" do
-    before { stub_account_api_has_attributes(attributes: attributes.keys, values: attributes, new_govuk_account_session: "new-session") }
+    before { stub_account_api_has_attributes(attributes: attributes.keys, values: attributes, new_govuk_account_session: new_session_id) }
 
     let(:attributes) { { "foo" => { "bar" => %w[baz] } } }
 
     it "returns the attribute values" do
-      assert(api_client.get_attributes(attributes: attributes.keys, govuk_account_session: "foo")["values"] == attributes)
+      assert(api_client.get_attributes(attributes: attributes.keys, govuk_account_session: session_id)["values"] == attributes)
     end
 
     it "returns the new session value" do
-      assert_equal("new-session", api_client.get_attributes(attributes: attributes.keys, govuk_account_session: "foo")["govuk_account_session"])
+      assert_equal(new_session_id, api_client.get_attributes(attributes: attributes.keys, govuk_account_session: session_id)["govuk_account_session"])
     end
   end
 
   it "returns a new session when setting attributes" do
-    stub_account_api_set_attributes(attributes: { foo: %w[bar] }, new_govuk_account_session: "new-session")
-    assert_equal("new-session", api_client.set_attributes(govuk_account_session: "foo", attributes: { foo: %w[bar] }).to_hash["govuk_account_session"])
+    stub_account_api_set_attributes(attributes: { foo: %w[bar] }, new_govuk_account_session: new_session_id)
+    assert_equal(new_session_id, api_client.set_attributes(govuk_account_session: session_id, attributes: { foo: %w[bar] }).to_hash["govuk_account_session"])
   end
 
   it "returns the attribute names" do
     queried_attribute_names = %w[foo]
-    stub_account_api_get_attributes_names(attributes: queried_attribute_names, new_govuk_account_session: "new-session")
-    returned_attribute_names = api_client.get_attributes_names(attributes: queried_attribute_names, govuk_account_session: "bar")["values"]
+    stub_account_api_get_attributes_names(attributes: queried_attribute_names, new_govuk_account_session: new_session_id)
+    returned_attribute_names = api_client.get_attributes_names(attributes: queried_attribute_names, govuk_account_session: session_id)["values"]
 
     assert_equal queried_attribute_names, returned_attribute_names
+  end
+
+  describe "the user is not logged in or their session is invalid" do
+    it "throws a 401 if the user checks their transition checker subscription" do
+      stub_account_api_unauthorized_get_email_subscription
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.check_for_email_subscription(govuk_account_session: session_id)
+      end
+    end
+
+    it "throws a 401 if the user updates their transition checker subscription" do
+      stub_account_api_unauthorized_set_email_subscription
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.set_email_subscription(slug: "email-topic-slug", govuk_account_session: session_id)
+      end
+    end
+
+    it "throws a 401 if the user gets their attributes" do
+      stub_account_api_unauthorized_has_attributes(attributes: %w[foo bar baz])
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.get_attributes(attributes: %w[foo bar baz], govuk_account_session: session_id)
+      end
+    end
+
+    it "throws a 401 if the user updates their attributes" do
+      stub_account_api_unauthorized_set_attributes(attributes: { foo: %w[bar baz] })
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.set_attributes(attributes: { foo: %w[bar baz] }, govuk_account_session: session_id)
+      end
+    end
+
+    it "throws a 401 if the user checks their attribute names" do
+      stub_account_api_unauthorized_get_attributes_names(attributes: %w[foo bar baz])
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.get_attributes_names(attributes: %w[foo bar baz], govuk_account_session: session_id)
+      end
+    end
+  end
+
+  describe "the user is logged in at too low a level of authentication" do
+    it "throws a 403 and returns a level of authentication if the user checks their transition checker subscription" do
+      stub_account_api_forbidden_get_email_subscription
+      error = assert_raises GdsApi::HTTPForbidden do
+        api_client.check_for_email_subscription(govuk_account_session: session_id)
+      end
+      assert_equal("level1", JSON.parse(error.http_body)["needed_level_of_authentication"])
+    end
+
+    it "throws a 403 and returns a level of authentication if the user updates their transition checker subscription" do
+      stub_account_api_forbidden_set_email_subscription
+      error = assert_raises GdsApi::HTTPForbidden do
+        api_client.set_email_subscription(slug: "email-topic-slug", govuk_account_session: session_id)
+      end
+      assert_equal("level1", JSON.parse(error.http_body)["needed_level_of_authentication"])
+    end
+
+    it "throws a 403 and returns a level of authentication if the user gets their attributes" do
+      stub_account_api_forbidden_has_attributes(attributes: %w[foo bar baz])
+      error = assert_raises GdsApi::HTTPForbidden do
+        api_client.get_attributes(attributes: %w[foo bar baz], govuk_account_session: session_id)
+      end
+      assert_equal("level1", JSON.parse(error.http_body)["needed_level_of_authentication"])
+    end
+
+    it "throws a 403 and returns a level of authentication if the user updates their attributes" do
+      stub_account_api_forbidden_set_attributes(attributes: { foo: %w[bar baz] })
+      error = assert_raises GdsApi::HTTPForbidden do
+        api_client.set_attributes(attributes: { foo: %w[bar baz] }, govuk_account_session: session_id)
+      end
+      assert_equal("level1", JSON.parse(error.http_body)["needed_level_of_authentication"])
+    end
+
+    it "throws a 403 and returns a level of authentication if the user checks their attribute names" do
+      stub_account_api_forbidden_get_attributes_names(attributes: %w[foo bar baz])
+      error = assert_raises GdsApi::HTTPForbidden do
+        api_client.get_attributes_names(attributes: %w[foo bar baz], govuk_account_session: session_id)
+      end
+      assert_equal("level1", JSON.parse(error.http_body)["needed_level_of_authentication"])
+    end
   end
 end
