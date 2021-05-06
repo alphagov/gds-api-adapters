@@ -12,7 +12,7 @@ node("postgresql-9.6") {
     extraParameters: [
       stringParam(
         name: 'PUBLISHING_API_BRANCH',
-        defaultValue: 'master',
+        defaultValue: 'main',
         description: 'Branch of publishing-api to run pacts against'
       ),
       stringParam(
