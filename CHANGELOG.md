@@ -2,6 +2,7 @@
 
 * Removed `LinkCheckerApi#upsert_resource_monitor` method as it’s not supported by Link Checker API itself.
 * Add optional `level_of_authentication` parameter to Account API `get_sign_in_url`.
+* Store response body in new `http_body` field of HTTP exceptions
 
 # 71.0.0
 

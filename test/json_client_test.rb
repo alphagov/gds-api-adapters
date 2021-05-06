@@ -85,6 +85,13 @@ class JsonClientTest < MiniTest::Spec
     assert_equal GdsApi::Response, @client.get_json(url).class
   end
 
+  def test_should_include_body_for_http_error
+    url = "http://some.endpoint/some.json"
+    stub_request(:get, url).to_return(body: "response body goes here", status: 404)
+    error = assert_raises(GdsApi::HTTPErrorResponse) { @client.get_json(url) }
+    assert_equal "response body goes here", error.http_body
+  end
+
   def test_get_bang_should_raise_http_not_found_if_404_returned_from_endpoint
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(body: "{}", status: 404)

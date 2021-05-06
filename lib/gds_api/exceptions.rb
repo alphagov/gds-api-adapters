@@ -23,12 +23,13 @@ module GdsApi
 
   # Superclass for all 4XX and 5XX errors
   class HTTPErrorResponse < BaseError
-    attr_accessor :code, :error_details
+    attr_accessor :code, :error_details, :http_body
 
-    def initialize(code, message = nil, error_details = nil)
+    def initialize(code, message = nil, error_details = nil, http_body = nil)
       super(message)
       @code = code
       @error_details = error_details
+      @http_body = http_body
     end
   end
 
@@ -72,7 +73,7 @@ module GdsApi
     def build_specific_http_error(error, url, details = nil)
       message = "URL: #{url}\nResponse body:\n#{error.http_body}"
       code = error.http_code
-      error_class_for_code(code).new(code, message, details)
+      error_class_for_code(code).new(code, message, details, error.http_body)
     end
 
     def error_class_for_code(code)
