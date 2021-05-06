@@ -4,6 +4,7 @@
 * Add optional `level_of_authentication` parameter to Account API `get_sign_in_url`.
 * Store response body in new `http_body` field of HTTP exceptions
 * Added Pact tests for the `LinkCheckerApi` adapters.
+* Add get_attributes_names method for [account-api's /api/attributes/names endpoint](https://github.com/alphagov/account-api/pull/58) + Pact tests.
 
 # 71.0.0
 

@@ -77,4 +77,12 @@ describe GdsApi::AccountApi do
     stub_account_api_set_attributes(attributes: { foo: %w[bar] }, new_govuk_account_session: "new-session")
     assert_equal("new-session", api_client.set_attributes(govuk_account_session: "foo", attributes: { foo: %w[bar] }).to_hash["govuk_account_session"])
   end
+
+  it "returns the attribute names" do
+    queried_attribute_names = %w[foo]
+    stub_account_api_get_attributes_names(attributes: queried_attribute_names, new_govuk_account_session: "new-session")
+    returned_attribute_names = api_client.get_attributes_names(attributes: queried_attribute_names, govuk_account_session: "bar")["values"]
+
+    assert_equal queried_attribute_names, returned_attribute_names
+  end
 end
