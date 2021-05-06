@@ -29,6 +29,11 @@ node("postgresql-9.6") {
         name: 'ACCOUNT_API_BRANCH',
         defaultValue: 'main',
         description: 'Branch of account-api to run pacts against'
+      ),
+      stringParam(
+        name: 'LINK_CHECKER_API_BRANCH',
+        defaultValue: 'main',
+        description: 'Branch of link-checker-api to run pacts against'
       )
     ],
     afterTest: {
@@ -45,6 +50,7 @@ node("postgresql-9.6") {
         runPactTests(govuk, "collections", COLLECTIONS_BRANCH)
         runPactTests(govuk, "frontend", FRONTEND_BRANCH)
         runPactTests(govuk, "account-api", ACCOUNT_API_BRANCH, [ resetDatabase: true ])
+        runPactTests(govuk, "link-checker-api", LINK_CHECKER_API_BRANCH, [ resetDatabase: true ])
       }
     }
   )
