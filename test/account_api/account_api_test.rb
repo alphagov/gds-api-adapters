@@ -166,4 +166,27 @@ describe GdsApi::AccountApi do
       assert_equal("level1", JSON.parse(error.http_body)["needed_level_of_authentication"])
     end
   end
+
+  describe "#get_saved_pages" do
+    let(:saved_pages) { [{ "page_path" => "/foo" }, { "page_path" => "/bar" }] }
+
+    it "gets saved pages" do
+      stub_saved_pages = saved_pages
+      stub_account_api_returning_saved_pages(saved_pages: stub_saved_pages, new_govuk_account_session: new_session_id)
+      assert_equal(saved_pages, api_client.get_saved_pages(govuk_account_session: new_session_id)["saved_pages"])
+    end
+
+    it "it returns an empty array if there are no saved pages" do
+      stub_account_api_returning_saved_pages(saved_pages: [], new_govuk_account_session: new_session_id)
+      assert_equal([], api_client.get_saved_pages(govuk_account_session: new_session_id)["saved_pages"])
+    end
+
+    it "throws a 401 if user is not logged in or their session is invalid" do
+      stub_account_api_unauthorized_get_saved_pages
+
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.get_saved_pages(govuk_account_session: new_session_id)
+      end
+    end
+  end
 end

@@ -96,6 +96,15 @@ class GdsApi::AccountApi < GdsApi::Base
     get_json("#{endpoint}/api/attributes/names?#{querystring}", auth_headers(govuk_account_session))
   end
 
+  # Look up all pages saved by a user in their Account
+  #
+  # @param [String] govuk_account_session Value of the session header
+  #
+  # @return [Hash] containing :saved_pages, an array of single saved page hashes  def get_saved_pages(govuk_account_session:)
+  def get_saved_pages(govuk_account_session:)
+    get_json("#{endpoint}/api/saved_pages", auth_headers(govuk_account_session))
+  end
+
 private
 
   def nested_query_string(params)

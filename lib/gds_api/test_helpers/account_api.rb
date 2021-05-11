@@ -207,6 +207,27 @@ module GdsApi
           stub_request(method, "#{ACCOUNT_API_ENDPOINT}#{path}").with(**with).to_return(**to_return)
         end
       end
+
+      ######################
+      # GET /api/saved_pages
+      ######################
+      def stub_account_api_returning_saved_pages(saved_pages: [], **options)
+        stub_account_api_request(
+          :get,
+          "/api/saved_pages",
+          response_body: { saved_pages: saved_pages },
+          **options,
+        )
+      end
+
+      def stub_account_api_unauthorized_get_saved_pages(**options)
+        stub_account_api_request(
+          :get,
+          "/api/saved_pages",
+          response_status: 401,
+          **options,
+        )
+      end
     end
   end
 end
