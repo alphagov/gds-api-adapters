@@ -34,6 +34,11 @@ node("postgresql-9.6") {
         name: 'LINK_CHECKER_API_BRANCH',
         defaultValue: 'main',
         description: 'Branch of link-checker-api to run pacts against'
+      ),
+      stringParam(
+        name: 'IMMINENCE_BRANCH',
+        defaultValue: 'main',
+        description: 'Branch of imminence to run pacts against'
       )
     ],
     afterTest: {
@@ -51,6 +56,7 @@ node("postgresql-9.6") {
         runPactTests(govuk, "frontend", FRONTEND_BRANCH)
         runPactTests(govuk, "account-api", ACCOUNT_API_BRANCH, [ resetDatabase: true ])
         runPactTests(govuk, "link-checker-api", LINK_CHECKER_API_BRANCH, [ resetDatabase: true ])
+        runPactTests(govuk, "imminence", IMMINENCE_BRANCH, [ resetDatabase: true, createIndexes: true ])
       }
     }
   )
@@ -62,13 +68,16 @@ def publishPacts(govuk) {
   }
 }
 
-def runPactTests(govuk, name, branch, options = [ resetDatabase: false ]) {
+def runPactTests(govuk, name, branch, options = [ resetDatabase: false, createIndexes: false ]) {
   govuk.checkoutDependent(name, [ branch: branch ]) {
     stage("Run $name pact") {
       govuk.bundleApp()
       lock("$name-$NODE_NAME-test") {
         if (options.resetDatabase) {
           govuk.runRakeTask("db:reset")
+        }
+        if (options.createIndexes) {
+          govuk.runRakeTask("db:mongoid:create_indexes")
         }
         govuk.runRakeTask("pact:verify")
       }
