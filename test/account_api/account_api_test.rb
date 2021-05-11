@@ -211,4 +211,58 @@ describe GdsApi::AccountApi do
       end
     end
   end
+
+  describe "#save_page" do
+    describe "if the saved page does not exist in the user's account" do
+      before { stub_account_api_save_page(page_path: "/foo", new_govuk_account_session: new_session_id) }
+
+      it "responds sucessfully" do
+        assert_equal(200, api_client.save_page(page_path: "/foo", govuk_account_session: session_id).code)
+      end
+
+      it "returns the created value" do
+        assert_equal({ "page_path" => "/foo" }, api_client.save_page(page_path: "/foo", govuk_account_session: session_id)["saved_page"])
+      end
+    end
+
+    it "silently upserts and returns 200 if the page already exists" do
+      stub_account_api_save_page_already_exists(page_path: "/existing", new_govuk_account_session: new_session_id)
+      assert_equal(200, api_client.save_page(page_path: "/existing", govuk_account_session: session_id).code)
+      assert_equal({ "page_path" => "/existing" }, api_client.save_page(page_path: "/existing", govuk_account_session: session_id)["saved_page"])
+    end
+
+    it "responds 401 Unauthorized if user is not logged in or their session is invalid" do
+      stub_account_api_unauthorized_save_page(page_path: "/foo", new_govuk_account_session: new_session_id)
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.save_page(page_path: "/foo", govuk_account_session: session_id)
+      end
+    end
+
+    it "responds 422 Unprocessable Entity if the page path includes a fragment identifier" do
+      invalid_page_path = "/foo#bar"
+
+      stub_account_api_save_page_cannot_save_page(page_path: invalid_page_path, new_govuk_account_session: new_session_id)
+      assert_raises GdsApi::HTTPUnprocessableEntity do
+        api_client.save_page(page_path: invalid_page_path, govuk_account_session: session_id)
+      end
+    end
+
+    it "responds 422 Unprocessable Entity if the page path includes query parameter" do
+      invalid_page_path = "/foo?bar"
+
+      stub_account_api_save_page_cannot_save_page(page_path: invalid_page_path, new_govuk_account_session: new_session_id)
+      assert_raises GdsApi::HTTPUnprocessableEntity do
+        api_client.save_page(page_path: invalid_page_path, govuk_account_session: session_id)
+      end
+    end
+
+    it "responds 422 Unprocessable Entity if the page path includes a domain" do
+      invalid_page_path = "gov.uk/foo"
+
+      stub_account_api_save_page_cannot_save_page(page_path: invalid_page_path, new_govuk_account_session: new_session_id)
+      assert_raises GdsApi::HTTPUnprocessableEntity do
+        api_client.save_page(page_path: invalid_page_path, govuk_account_session: session_id)
+      end
+    end
+  end
 end

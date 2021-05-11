@@ -258,6 +258,50 @@ module GdsApi
           **options,
         )
       end
+
+      #################################
+      # PUT /api/saved_pages/:page_path
+      #################################
+      def stub_account_api_save_page(page_path:, **options)
+        stub_account_api_request(
+          :put,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_body: { saved_page: { page_path: page_path } },
+          **options,
+        )
+      end
+
+      def stub_account_api_save_page_already_exists(page_path:, **options)
+        stub_account_api_save_page(page_path: page_path, **options)
+      end
+
+      def stub_account_api_save_page_cannot_save_page(page_path:, **options)
+        stub_account_api_request(
+          :put,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_status: 422,
+          response_body: { **cannot_save_page_problem_detail({ page_path: page_path }) },
+          **options,
+        )
+      end
+
+      def stub_account_api_unauthorized_save_page(page_path:, **options)
+        stub_account_api_request(
+          :put,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_status: 401,
+          **options,
+        )
+      end
+
+      def cannot_save_page_problem_detail(option = {})
+        {
+          title: "Cannot save page",
+          detail: "Cannot save page with path #{option['page_path']}, check it is not blank, and is a well formatted url path.",
+          type: "https://github.com/alphagov/account-api/blob/main/docs/api.md#cannot-save-page",
+          **option,
+        }
+      end
     end
   end
 end

@@ -115,6 +115,16 @@ class GdsApi::AccountApi < GdsApi::Base
     get_json("#{endpoint}/api/saved_pages/#{CGI.escape(page_path)}", auth_headers(govuk_account_session))
   end
 
+  # Upsert a single saved page entry in a users account
+  #
+  # @param [String] the path of a page to check
+  # @param [String] govuk_account_session Value of the session header
+  #
+  # @return [Hash] A single saved page value (if sucessful)
+  def save_page(page_path:, govuk_account_session:)
+    put_json("#{endpoint}/api/saved_pages/#{CGI.escape(page_path)}", {}, auth_headers(govuk_account_session))
+  end
+
 private
 
   def nested_query_string(params)
