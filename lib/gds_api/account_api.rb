@@ -125,6 +125,17 @@ class GdsApi::AccountApi < GdsApi::Base
     put_json("#{endpoint}/api/saved_pages/#{CGI.escape(page_path)}", {}, auth_headers(govuk_account_session))
   end
 
+  # Delete a single saved page entry from a users account
+  #
+  # @param [String] the path of a page to check
+  # @param [String] govuk_account_session Value of the session header
+  #
+  # @return [GdsApi::Response] A status code of 204 indicates the saved page has been successfully deleted.
+  #                            A status code of 404 indicates there is no saved page with this path.
+  def delete_saved_page(page_path:, govuk_account_session:)
+    delete_json("#{endpoint}/api/saved_pages/#{CGI.escape(page_path)}", {}, auth_headers(govuk_account_session))
+  end
+
 private
 
   def nested_query_string(params)

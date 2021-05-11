@@ -265,4 +265,25 @@ describe GdsApi::AccountApi do
       end
     end
   end
+
+  describe "#delete_saved_page" do
+    it "returns 204 if sucessfully deleted" do
+      stub_account_api_delete_saved_page(page_path: "/foo", new_govuk_account_session: new_session_id)
+      assert_equal(204, api_client.delete_saved_page(page_path: "/foo", govuk_account_session: session_id).code)
+    end
+
+    it "throws 404 if the saved page does not exist" do
+      stub_account_api_delete_saved_page_does_not_exist(page_path: "/foo", new_govuk_account_session: new_session_id)
+      assert_raises GdsApi::HTTPNotFound do
+        api_client.delete_saved_page(page_path: "/foo", govuk_account_session: session_id)
+      end
+    end
+
+    it "throws a 401 if user is not logged in or their session is invalid" do
+      stub_account_api_delete_saved_page_unauthorised(page_path: "/foo", new_govuk_account_session: new_session_id)
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.delete_saved_page(page_path: "/foo", govuk_account_session: session_id)
+      end
+    end
+  end
 end

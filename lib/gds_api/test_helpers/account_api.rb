@@ -302,6 +302,36 @@ module GdsApi
           **option,
         }
       end
+
+      ####################################
+      # DELETE /api/saved-pages/:page_path
+      ####################################
+      def stub_account_api_delete_saved_page(page_path:, **options)
+        stub_account_api_request(
+          :delete,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_status: 204,
+          **options,
+        )
+      end
+
+      def stub_account_api_delete_saved_page_does_not_exist(page_path:, **options)
+        stub_account_api_request(
+          :delete,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_status: 404,
+          **options,
+        )
+      end
+
+      def stub_account_api_delete_saved_page_unauthorised(page_path:, **options)
+        stub_account_api_request(
+          :delete,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_status: 401,
+          **options,
+        )
+      end
     end
   end
 end
