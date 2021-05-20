@@ -189,4 +189,26 @@ describe GdsApi::AccountApi do
       end
     end
   end
+
+  describe "#get_saved_page" do
+    it "gets a single saved page by path and returns a saved page hash" do
+      stub_account_api_get_saved_page(page_path: "/foo", new_govuk_account_session: new_session_id)
+      assert_equal({ "page_path" => "/foo" }, api_client.get_saved_page(page_path: "/foo", govuk_account_session: new_session_id)["saved_page"])
+    end
+
+    it "it returns an empty array if there are no saved pages" do
+      stub_account_api_does_not_have_saved_page(page_path: "/bar", new_govuk_account_session: new_session_id)
+      assert_raises GdsApi::HTTPNotFound do
+        api_client.get_saved_page(page_path: "/bar", govuk_account_session: session_id)
+      end
+    end
+
+    it "throws a 401 if user is not logged in or their session is invalid" do
+      stub_account_api_unauthorized_get_saved_page(page_path: "/foo")
+
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.get_saved_page(page_path: "/foo", govuk_account_session: session_id)
+      end
+    end
+  end
 end

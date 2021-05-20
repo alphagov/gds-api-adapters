@@ -228,6 +228,36 @@ module GdsApi
           **options,
         )
       end
+
+      #################################
+      # GET /api/saved_pages/:page_path
+      #################################
+      def stub_account_api_get_saved_page(page_path:, **options)
+        stub_account_api_request(
+          :get,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_body: { saved_page: { page_path: page_path } },
+          **options,
+        )
+      end
+
+      def stub_account_api_does_not_have_saved_page(page_path:, **options)
+        stub_account_api_request(
+          :get,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_status: 404,
+          **options,
+        )
+      end
+
+      def stub_account_api_unauthorized_get_saved_page(page_path:, **options)
+        stub_account_api_request(
+          :get,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_status: 401,
+          **options,
+        )
+      end
     end
   end
 end

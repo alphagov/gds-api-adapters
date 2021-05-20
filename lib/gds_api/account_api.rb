@@ -105,6 +105,16 @@ class GdsApi::AccountApi < GdsApi::Base
     get_json("#{endpoint}/api/saved_pages", auth_headers(govuk_account_session))
   end
 
+  # Return a single page by unique URL
+  #
+  # @param [String] the path of a page to check
+  # @param [String] govuk_account_session Value of the session header
+  #
+  # @return [Hash] containing :saved_page, a hash of a single saved page value
+  def get_saved_page(page_path:, govuk_account_session:)
+    get_json("#{endpoint}/api/saved_pages/#{CGI.escape(page_path)}", auth_headers(govuk_account_session))
+  end
+
 private
 
   def nested_query_string(params)
