@@ -318,7 +318,20 @@ describe GdsApi::AccountApi do
 
       describe "a user has saved pages" do
         let(:given) { "there is a valid user session, with saved pages" }
-        let(:saved_pages) { [{ page_path: "/page-path/1" }, { page_path: "/page-path/2" }] }
+        let(:saved_pages) do
+          [
+            {
+              page_path: "/page-path/1",
+              content_id: Pact.like("7b7b77b0-257a-467d-84c9-c5167781d05c"),
+              title: Pact.like("Page #1"),
+            },
+            {
+              page_path: "/page-path/2",
+              content_id: Pact.like("7b7b77b0-257a-467d-84c9-c5167781d05c"),
+              title: Pact.like("Page #1"),
+            },
+          ]
+        end
 
         it "responds with 200 OK, a new govuk_account_session, and returns an array of saved pages" do
           api_client.get_saved_pages(govuk_account_session: govuk_account_session)
@@ -347,7 +360,11 @@ describe GdsApi::AccountApi do
             headers: { "Content-Type" => "application/json; charset=utf-8" },
             body: {
               govuk_account_session: Pact.like("user-session-id"),
-              saved_page: { page_path: page_path },
+              saved_page: {
+                page_path: page_path,
+                content_id: Pact.like("6e0e144a-9e59-4ac8-af3b-d87e8ff30a47"),
+                title: Pact.like("Some GOV.UK Guidance"),
+              },
             },
           )
       end

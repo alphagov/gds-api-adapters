@@ -232,11 +232,17 @@ module GdsApi
       #################################
       # GET /api/saved_pages/:page_path
       #################################
-      def stub_account_api_get_saved_page(page_path:, **options)
+      def stub_account_api_get_saved_page(page_path:, content_id: "46163ed2-1777-4ee6-bdd4-6a2007e49d8f", title: "Ministry of Magic", **options)
         stub_account_api_request(
           :get,
           "/api/saved_pages/#{CGI.escape(page_path)}",
-          response_body: { saved_page: { page_path: page_path } },
+          response_body: {
+            saved_page: {
+              page_path: page_path,
+              content_id: content_id,
+              title: title,
+            },
+          },
           **options,
         )
       end
@@ -262,11 +268,17 @@ module GdsApi
       #################################
       # PUT /api/saved_pages/:page_path
       #################################
-      def stub_account_api_save_page(page_path:, **options)
+      def stub_account_api_save_page(page_path:, content_id: "c840bfa2-011a-42cc-ac7a-a6da990aff0b", title: "Ministry of Magic", **options)
         stub_account_api_request(
           :put,
           "/api/saved_pages/#{CGI.escape(page_path)}",
-          response_body: { saved_page: { page_path: page_path } },
+          response_body: {
+            saved_page: {
+              page_path: page_path,
+              content_id: content_id,
+              title: title,
+            },
+          },
           **options,
         )
       end
@@ -280,7 +292,7 @@ module GdsApi
           :put,
           "/api/saved_pages/#{CGI.escape(page_path)}",
           response_status: 422,
-          response_body: { **cannot_save_page_problem_detail({ page_path: page_path }) },
+          response_body: cannot_save_page_problem_detail({ page_path: page_path }),
           **options,
         )
       end

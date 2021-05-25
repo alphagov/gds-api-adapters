@@ -192,8 +192,8 @@ describe GdsApi::AccountApi do
 
   describe "#get_saved_page" do
     it "gets a single saved page by path and returns a saved page hash" do
-      stub_account_api_get_saved_page(page_path: "/foo", new_govuk_account_session: new_session_id)
-      assert_equal({ "page_path" => "/foo" }, api_client.get_saved_page(page_path: "/foo", govuk_account_session: new_session_id)["saved_page"])
+      stub_account_api_get_saved_page(page_path: "/foo", content_id: "content-id", title: "title", new_govuk_account_session: new_session_id)
+      assert_equal({ "page_path" => "/foo", "content_id" => "content-id", "title" => "title" }, api_client.get_saved_page(page_path: "/foo", govuk_account_session: session_id)["saved_page"])
     end
 
     it "it returns an empty array if there are no saved pages" do
@@ -214,21 +214,20 @@ describe GdsApi::AccountApi do
 
   describe "#save_page" do
     describe "if the saved page does not exist in the user's account" do
-      before { stub_account_api_save_page(page_path: "/foo", new_govuk_account_session: new_session_id) }
+      before { stub_account_api_save_page(page_path: "/foo", content_id: "content-id", title: "title", new_govuk_account_session: new_session_id) }
 
       it "responds sucessfully" do
         assert_equal(200, api_client.save_page(page_path: "/foo", govuk_account_session: session_id).code)
       end
 
       it "returns the created value" do
-        assert_equal({ "page_path" => "/foo" }, api_client.save_page(page_path: "/foo", govuk_account_session: session_id)["saved_page"])
+        assert_equal({ "page_path" => "/foo", "content_id" => "content-id", "title" => "title" }, api_client.save_page(page_path: "/foo", govuk_account_session: session_id)["saved_page"])
       end
     end
 
-    it "silently upserts and returns 200 if the page already exists" do
+    it "returns success if the page already exists" do
       stub_account_api_save_page_already_exists(page_path: "/existing", new_govuk_account_session: new_session_id)
       assert_equal(200, api_client.save_page(page_path: "/existing", govuk_account_session: session_id).code)
-      assert_equal({ "page_path" => "/existing" }, api_client.save_page(page_path: "/existing", govuk_account_session: session_id)["saved_page"])
     end
 
     it "responds 401 Unauthorized if user is not logged in or their session is invalid" do
@@ -238,30 +237,10 @@ describe GdsApi::AccountApi do
       end
     end
 
-    it "responds 422 Unprocessable Entity if the page path includes a fragment identifier" do
-      invalid_page_path = "/foo#bar"
-
-      stub_account_api_save_page_cannot_save_page(page_path: invalid_page_path, new_govuk_account_session: new_session_id)
+    it "responds 422 Unprocessable Entity if the page cannot be saved" do
+      stub_account_api_save_page_cannot_save_page(page_path: "/invalid", new_govuk_account_session: new_session_id)
       assert_raises GdsApi::HTTPUnprocessableEntity do
-        api_client.save_page(page_path: invalid_page_path, govuk_account_session: session_id)
-      end
-    end
-
-    it "responds 422 Unprocessable Entity if the page path includes query parameter" do
-      invalid_page_path = "/foo?bar"
-
-      stub_account_api_save_page_cannot_save_page(page_path: invalid_page_path, new_govuk_account_session: new_session_id)
-      assert_raises GdsApi::HTTPUnprocessableEntity do
-        api_client.save_page(page_path: invalid_page_path, govuk_account_session: session_id)
-      end
-    end
-
-    it "responds 422 Unprocessable Entity if the page path includes a domain" do
-      invalid_page_path = "gov.uk/foo"
-
-      stub_account_api_save_page_cannot_save_page(page_path: invalid_page_path, new_govuk_account_session: new_session_id)
-      assert_raises GdsApi::HTTPUnprocessableEntity do
-        api_client.save_page(page_path: invalid_page_path, govuk_account_session: session_id)
+        api_client.save_page(page_path: "/invalid", govuk_account_session: session_id)
       end
     end
   end
