@@ -1,4 +1,4 @@
-# Unreleased
+# 71.2.0
 
 * Add endpoints for authenticated "Save a page" API
 
