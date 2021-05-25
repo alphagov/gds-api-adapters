@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add endpoints for authenticated "Save a page" API
+
 # 71.1.0
 
 * Removed `LinkCheckerApi#upsert_resource_monitor` method as it’s not supported by Link Checker API itself.

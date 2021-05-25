@@ -207,6 +207,131 @@ module GdsApi
           stub_request(method, "#{ACCOUNT_API_ENDPOINT}#{path}").with(**with).to_return(**to_return)
         end
       end
+
+      ######################
+      # GET /api/saved_pages
+      ######################
+      def stub_account_api_returning_saved_pages(saved_pages: [], **options)
+        stub_account_api_request(
+          :get,
+          "/api/saved_pages",
+          response_body: { saved_pages: saved_pages },
+          **options,
+        )
+      end
+
+      def stub_account_api_unauthorized_get_saved_pages(**options)
+        stub_account_api_request(
+          :get,
+          "/api/saved_pages",
+          response_status: 401,
+          **options,
+        )
+      end
+
+      #################################
+      # GET /api/saved_pages/:page_path
+      #################################
+      def stub_account_api_get_saved_page(page_path:, **options)
+        stub_account_api_request(
+          :get,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_body: { saved_page: { page_path: page_path } },
+          **options,
+        )
+      end
+
+      def stub_account_api_does_not_have_saved_page(page_path:, **options)
+        stub_account_api_request(
+          :get,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_status: 404,
+          **options,
+        )
+      end
+
+      def stub_account_api_unauthorized_get_saved_page(page_path:, **options)
+        stub_account_api_request(
+          :get,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_status: 401,
+          **options,
+        )
+      end
+
+      #################################
+      # PUT /api/saved_pages/:page_path
+      #################################
+      def stub_account_api_save_page(page_path:, **options)
+        stub_account_api_request(
+          :put,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_body: { saved_page: { page_path: page_path } },
+          **options,
+        )
+      end
+
+      def stub_account_api_save_page_already_exists(page_path:, **options)
+        stub_account_api_save_page(page_path: page_path, **options)
+      end
+
+      def stub_account_api_save_page_cannot_save_page(page_path:, **options)
+        stub_account_api_request(
+          :put,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_status: 422,
+          response_body: { **cannot_save_page_problem_detail({ page_path: page_path }) },
+          **options,
+        )
+      end
+
+      def stub_account_api_unauthorized_save_page(page_path:, **options)
+        stub_account_api_request(
+          :put,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_status: 401,
+          **options,
+        )
+      end
+
+      def cannot_save_page_problem_detail(option = {})
+        {
+          title: "Cannot save page",
+          detail: "Cannot save page with path #{option['page_path']}, check it is not blank, and is a well formatted url path.",
+          type: "https://github.com/alphagov/account-api/blob/main/docs/api.md#cannot-save-page",
+          **option,
+        }
+      end
+
+      ####################################
+      # DELETE /api/saved-pages/:page_path
+      ####################################
+      def stub_account_api_delete_saved_page(page_path:, **options)
+        stub_account_api_request(
+          :delete,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_status: 204,
+          **options,
+        )
+      end
+
+      def stub_account_api_delete_saved_page_does_not_exist(page_path:, **options)
+        stub_account_api_request(
+          :delete,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_status: 404,
+          **options,
+        )
+      end
+
+      def stub_account_api_delete_saved_page_unauthorised(page_path:, **options)
+        stub_account_api_request(
+          :delete,
+          "/api/saved_pages/#{CGI.escape(page_path)}",
+          response_status: 401,
+          **options,
+        )
+      end
     end
   end
 end

@@ -287,4 +287,129 @@ describe GdsApi::AccountApi do
       end
     end
   end
+
+  describe "#get_saved_pages" do
+    describe "the user is logged in" do
+      let(:given) { "there is a valid user session" }
+      let(:saved_pages) { [] }
+
+      before do
+        account_api
+          .given(given)
+          .upon_receiving("a GET saved_pages request")
+          .with(
+            method: :get,
+            path: "/api/saved_pages",
+            headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
+          )
+          .will_respond_with(
+            status: 200,
+            headers: { "Content-Type" => "application/json; charset=utf-8" },
+            body: {
+              govuk_account_session: Pact.like("user-session-id"),
+              saved_pages: saved_pages,
+            },
+          )
+      end
+
+      it "responds with 200 OK, a new govuk_account_session, and returns an empty array of saved pages" do
+        api_client.get_saved_pages(govuk_account_session: govuk_account_session)
+      end
+
+      describe "a user has saved pages" do
+        let(:given) { "there is a valid user session, with saved pages" }
+        let(:saved_pages) { [{ page_path: "/page-path/1" }, { page_path: "/page-path/2" }] }
+
+        it "responds with 200 OK, a new govuk_account_session, and returns an array of saved pages" do
+          api_client.get_saved_pages(govuk_account_session: govuk_account_session)
+        end
+      end
+    end
+  end
+
+  describe "#get_saved_page" do
+    describe "the user is logged in" do
+      let(:given) { "there is a valid user session, with #{page_path} saved" }
+      let(:page_path) { "/guidance/some-govuk-guidance" }
+      let(:status) { 200 }
+
+      before do
+        account_api
+          .given(given)
+          .upon_receiving("a GET saved-page/:page_path request")
+          .with(
+            method: :get,
+            path: "/api/saved_pages/#{CGI.escape(page_path)}",
+            headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
+          )
+          .will_respond_with(
+            status: 200,
+            headers: { "Content-Type" => "application/json; charset=utf-8" },
+            body: {
+              govuk_account_session: Pact.like("user-session-id"),
+              saved_page: { page_path: page_path },
+            },
+          )
+      end
+
+      describe "a user has saved pages" do
+        it "responds with 200 OK, a new govuk_account_session, and the saved page" do
+          api_client.get_saved_page(page_path: page_path, govuk_account_session: govuk_account_session)
+        end
+      end
+    end
+  end
+
+  describe "#save_page" do
+    describe "the user is logged in" do
+      let(:given) { "there is a valid user session" }
+      let(:page_path) { "/guidance/some-govuk-guidance" }
+
+      before do
+        account_api
+          .given(given)
+          .upon_receiving("a PUT saved-page/:page_path request")
+          .with(
+            method: :put,
+            path: "/api/saved_pages/#{CGI.escape(page_path)}",
+            headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
+          )
+          .will_respond_with(
+            status: 200,
+            headers: { "Content-Type" => "application/json; charset=utf-8" },
+            body: {
+              govuk_account_session: Pact.like("user-session-id"),
+              saved_page: { page_path: page_path },
+            },
+          )
+      end
+
+      it "responds with 200 OK, the page data and a new govuk_account_session if the saved page does not exist" do
+        api_client.save_page(page_path: page_path, govuk_account_session: govuk_account_session)
+      end
+    end
+  end
+
+  describe "#delete_page" do
+    describe "the user is logged in" do
+      let(:given) { "there is a valid user session, with #{page_path} saved" }
+      let(:page_path) { "/guidance/some-govuk-guidance" }
+
+      before do
+        account_api
+          .given(given)
+          .upon_receiving("a DELETE saved-page/:page_path request")
+          .with(
+            method: :delete,
+            path: "/api/saved_pages/#{CGI.escape(page_path)}",
+            headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
+          )
+          .will_respond_with(status: 204)
+      end
+
+      it "responds with 204 NO CONTENT and a new govuk_account_session if the saved page exists" do
+        api_client.delete_saved_page(page_path: page_path, govuk_account_session: govuk_account_session)
+      end
+    end
+  end
 end
