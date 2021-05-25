@@ -1,3 +1,7 @@
+# unreleased
+
+* Add `content_id` and `title` fields to "save a page" test helpers.
+
 # 71.2.0
 
 * Add endpoints for authenticated "Save a page" API
