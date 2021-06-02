@@ -180,10 +180,10 @@ module GdsApi
       raise GdsApi::EndpointNotFound, "Could not connect to #{url}"
     rescue RestClient::Exceptions::Timeout => e
       logger.error loggable.merge(status: "timeout", error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
-      raise GdsApi::TimedOutException
+      raise GdsApi::TimedOutException, e.message
     rescue URI::InvalidURIError => e
       logger.error loggable.merge(status: "invalid_uri", error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
-      raise GdsApi::InvalidUrl
+      raise GdsApi::InvalidUrl, e.message
     rescue RestClient::Exception => e
       # Log the error here, since we have access to loggable, but raise the
       # exception up to the calling method to deal with
@@ -192,10 +192,10 @@ module GdsApi
       raise
     rescue Errno::ECONNRESET => e
       logger.error loggable.merge(status: "connection_reset", error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
-      raise GdsApi::TimedOutException
+      raise GdsApi::TimedOutException, e.message
     rescue SocketError => e
       logger.error loggable.merge(status: "socket_error", error_message: e.message, error_class: e.class.name, end_time: Time.now.to_f).to_json
-      raise GdsApi::SocketErrorException
+      raise GdsApi::SocketErrorException, e.message
     end
   end
 end
