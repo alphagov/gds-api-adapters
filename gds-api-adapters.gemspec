@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.require_path = "lib"
   s.add_dependency "addressable"
   s.add_dependency "link_header"
-  s.add_dependency "null_logger"
+  s.add_dependency "null_logger", "= 0.0.1"
   s.add_dependency "plek", ">= 1.9.0"
   s.add_dependency "rest-client", "~> 2.0"
 
