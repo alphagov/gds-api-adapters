@@ -32,6 +32,25 @@ describe GdsApi::AccountApi do
     assert_equal("state-id", api_client.create_registration_state(attributes: { foo: "bar" }).to_hash["state_id"])
   end
 
+  it "gets the user's information" do
+    stub_account_api_user_info(
+      level_of_authentication: "level90",
+      email: "user@gov.uk",
+      email_verified: false,
+      services: { register_to_become_a_wizard: "yes" },
+      new_govuk_account_session: new_session_id,
+    )
+    assert_equal("level90", api_client.get_user(govuk_account_session: session_id)["level_of_authentication"])
+    assert_equal("user@gov.uk", api_client.get_user(govuk_account_session: session_id)["email"])
+    assert_equal(false, api_client.get_user(govuk_account_session: session_id)["email_verified"])
+    assert_equal("yes", api_client.get_user(govuk_account_session: session_id)["services"]["register_to_become_a_wizard"])
+  end
+
+  it "stubs a single service" do
+    stub_account_api_user_info_service_state(service: "register_to_become_a_wizard", service_state: "yes_but_must_reauthenticate")
+    assert_equal("yes_but_must_reauthenticate", api_client.get_user(govuk_account_session: session_id)["services"]["register_to_become_a_wizard"])
+  end
+
   describe "a transition checker subscription exists" do
     before { stub_account_api_has_email_subscription(new_govuk_account_session: new_session_id) }
 
@@ -89,6 +108,13 @@ describe GdsApi::AccountApi do
   end
 
   describe "the user is not logged in or their session is invalid" do
+    it "throws a 401 if the user checks their information" do
+      stub_account_api_unauthorized_user_info
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.get_user(govuk_account_session: session_id)
+      end
+    end
+
     it "throws a 401 if the user checks their transition checker subscription" do
       stub_account_api_unauthorized_get_email_subscription
       assert_raises GdsApi::HTTPUnauthorized do

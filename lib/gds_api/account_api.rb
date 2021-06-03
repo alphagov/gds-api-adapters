@@ -45,6 +45,15 @@ class GdsApi::AccountApi < GdsApi::Base
     post_json("#{endpoint}/api/oauth2/state", attributes: attributes)
   end
 
+  # Get all the information about a user needed to render the account home page
+  #
+  # @param [String] govuk_account_session Value of the session header
+  #
+  # @return [Hash] Information about the user and the services they've used, and a new session header
+  def get_user(govuk_account_session:)
+    get_json("#{endpoint}/api/user", auth_headers(govuk_account_session))
+  end
+
   # Check if a user has an email subscription for the Transition Checker
   #
   # @param [String] govuk_account_session Value of the session header

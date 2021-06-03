@@ -38,6 +38,37 @@ module GdsApi
           )
       end
 
+      def stub_account_api_user_info(level_of_authentication: "level0", email: "email@example.com", email_verified: true, services: {}, **options)
+        stub_account_api_request(
+          :get,
+          "/api/user",
+          response_body: {
+            level_of_authentication: level_of_authentication,
+            email: email,
+            email_verified: email_verified,
+            services: services,
+          },
+          **options,
+        )
+      end
+
+      def stub_account_api_user_info_service_state(service:, service_state: "yes", **options)
+        stub_account_api_user_info(
+          **options.merge(
+            services: options.fetch(:services, {}).merge(service => service_state),
+          ),
+        )
+      end
+
+      def stub_account_api_unauthorized_user_info(**options)
+        stub_account_api_request(
+          :get,
+          "/api/user",
+          response_status: 401,
+          **options,
+        )
+      end
+
       def stub_account_api_has_email_subscription(**options)
         stub_account_api_request(
           :get,

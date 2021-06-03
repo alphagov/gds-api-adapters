@@ -110,6 +110,51 @@ describe GdsApi::AccountApi do
     end
   end
 
+  describe "getting user information" do
+    describe "the user is logged in" do
+      let(:given) { "there is a valid user session" }
+      let(:saved_pages_service) { "no" }
+
+      before do
+        account_api
+          .given(given)
+          .upon_receiving("a get-user request")
+          .with(
+            method: :get,
+            path: "/api/user",
+            headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
+          )
+          .will_respond_with(
+            status: 200,
+            headers: { "Content-Type" => "application/json; charset=utf-8" },
+            body: {
+              govuk_account_session: Pact.like("user-session-id"),
+              level_of_authentication: Pact.like("level0"),
+              email: Pact.like("user@example.com"),
+              email_verified: Pact.like(true),
+              services: {
+                transition_checker: "no",
+                saved_pages: saved_pages_service,
+              },
+            },
+          )
+      end
+
+      it "responds with a 200 OK" do
+        api_client.get_user(govuk_account_session: govuk_account_session)
+      end
+
+      describe "a user has saved pages" do
+        let(:given) { "there is a valid user session, with /guidance/some-govuk-guidance saved" }
+        let(:saved_pages_service) { "yes" }
+
+        it "responds with 200 OK" do
+          api_client.get_user(govuk_account_session: govuk_account_session)
+        end
+      end
+    end
+  end
+
   describe "checking for a transition checker email subscription" do
     describe "the user is logged in" do
       let(:given) { "there is a valid user session" }
