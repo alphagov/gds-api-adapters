@@ -1,4 +1,4 @@
-# unreleased
+# 71.3.0
 
 * Add `content_id` and `title` fields to "save a page" test helpers.
 * Add `get_user` (for Account API)
