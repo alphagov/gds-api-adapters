@@ -10,4 +10,14 @@ class GdsApi::LocalLinksManager < GdsApi::Base
     url = "#{endpoint}/api/local-authority?authority_slug=#{authority_slug}"
     get_json(url)
   end
+
+  def local_link_by_gss(gss, lgsl, lgil)
+    url = "#{endpoint}/api/link?gss=#{gss}&lgsl=#{lgsl}&lgil=#{lgil}"
+    get_json(url)
+  end
+
+  def local_authority_by_gss(gss)
+    url = "#{endpoint}/api/local-authority?gss=#{gss}"
+    get_json(url)
+  end
 end
