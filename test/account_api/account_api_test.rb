@@ -32,6 +32,25 @@ describe GdsApi::AccountApi do
     assert_equal("state-id", api_client.create_registration_state(attributes: { foo: "bar" }).to_hash["state_id"])
   end
 
+  it "gets the user's information" do
+    stub_account_api_user_info(
+      level_of_authentication: "level90",
+      email: "user@gov.uk",
+      email_verified: false,
+      services: { register_to_become_a_wizard: "yes" },
+      new_govuk_account_session: new_session_id,
+    )
+    assert_equal("level90", api_client.get_user(govuk_account_session: session_id)["level_of_authentication"])
+    assert_equal("user@gov.uk", api_client.get_user(govuk_account_session: session_id)["email"])
+    assert_equal(false, api_client.get_user(govuk_account_session: session_id)["email_verified"])
+    assert_equal("yes", api_client.get_user(govuk_account_session: session_id)["services"]["register_to_become_a_wizard"])
+  end
+
+  it "stubs a single service" do
+    stub_account_api_user_info_service_state(service: "register_to_become_a_wizard", service_state: "yes_but_must_reauthenticate")
+    assert_equal("yes_but_must_reauthenticate", api_client.get_user(govuk_account_session: session_id)["services"]["register_to_become_a_wizard"])
+  end
+
   describe "a transition checker subscription exists" do
     before { stub_account_api_has_email_subscription(new_govuk_account_session: new_session_id) }
 
@@ -89,6 +108,13 @@ describe GdsApi::AccountApi do
   end
 
   describe "the user is not logged in or their session is invalid" do
+    it "throws a 401 if the user checks their information" do
+      stub_account_api_unauthorized_user_info
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.get_user(govuk_account_session: session_id)
+      end
+    end
+
     it "throws a 401 if the user checks their transition checker subscription" do
       stub_account_api_unauthorized_get_email_subscription
       assert_raises GdsApi::HTTPUnauthorized do
@@ -121,6 +147,34 @@ describe GdsApi::AccountApi do
       stub_account_api_unauthorized_get_attributes_names(attributes: %w[foo bar baz])
       assert_raises GdsApi::HTTPUnauthorized do
         api_client.get_attributes_names(attributes: %w[foo bar baz], govuk_account_session: session_id)
+      end
+    end
+
+    it "throws a 401 if the user checks their saved pages" do
+      stub_account_api_unauthorized_get_saved_pages
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.get_saved_pages(govuk_account_session: new_session_id)
+      end
+    end
+
+    it "throws a 401 if the user gets a saved page" do
+      stub_account_api_unauthorized_get_saved_page(page_path: "/foo")
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.get_saved_page(page_path: "/foo", govuk_account_session: session_id)
+      end
+    end
+
+    it "throws a 401 if the user saves a page" do
+      stub_account_api_unauthorized_save_page(page_path: "/foo")
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.save_page(page_path: "/foo", govuk_account_session: session_id)
+      end
+    end
+
+    it "throws a 401 if the user deletes a saved page" do
+      stub_account_api_delete_saved_page_unauthorised(page_path: "/foo")
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.delete_saved_page(page_path: "/foo", govuk_account_session: session_id)
       end
     end
   end
@@ -180,14 +234,6 @@ describe GdsApi::AccountApi do
       stub_account_api_returning_saved_pages(saved_pages: [], new_govuk_account_session: new_session_id)
       assert_equal([], api_client.get_saved_pages(govuk_account_session: new_session_id)["saved_pages"])
     end
-
-    it "throws a 401 if user is not logged in or their session is invalid" do
-      stub_account_api_unauthorized_get_saved_pages
-
-      assert_raises GdsApi::HTTPUnauthorized do
-        api_client.get_saved_pages(govuk_account_session: new_session_id)
-      end
-    end
   end
 
   describe "#get_saved_page" do
@@ -196,18 +242,10 @@ describe GdsApi::AccountApi do
       assert_equal({ "page_path" => "/foo", "content_id" => "content-id", "title" => "title" }, api_client.get_saved_page(page_path: "/foo", govuk_account_session: session_id)["saved_page"])
     end
 
-    it "it returns an empty array if there are no saved pages" do
+    it "throws a 404 if the saved page does not exist" do
       stub_account_api_does_not_have_saved_page(page_path: "/bar", new_govuk_account_session: new_session_id)
       assert_raises GdsApi::HTTPNotFound do
         api_client.get_saved_page(page_path: "/bar", govuk_account_session: session_id)
-      end
-    end
-
-    it "throws a 401 if user is not logged in or their session is invalid" do
-      stub_account_api_unauthorized_get_saved_page(page_path: "/foo")
-
-      assert_raises GdsApi::HTTPUnauthorized do
-        api_client.get_saved_page(page_path: "/foo", govuk_account_session: session_id)
       end
     end
   end
@@ -230,13 +268,6 @@ describe GdsApi::AccountApi do
       assert_equal(200, api_client.save_page(page_path: "/existing", govuk_account_session: session_id).code)
     end
 
-    it "responds 401 Unauthorized if user is not logged in or their session is invalid" do
-      stub_account_api_unauthorized_save_page(page_path: "/foo", new_govuk_account_session: new_session_id)
-      assert_raises GdsApi::HTTPUnauthorized do
-        api_client.save_page(page_path: "/foo", govuk_account_session: session_id)
-      end
-    end
-
     it "responds 422 Unprocessable Entity if the page cannot be saved" do
       stub_account_api_save_page_cannot_save_page(page_path: "/invalid", new_govuk_account_session: new_session_id)
       assert_raises GdsApi::HTTPUnprocessableEntity do
@@ -254,13 +285,6 @@ describe GdsApi::AccountApi do
     it "throws 404 if the saved page does not exist" do
       stub_account_api_delete_saved_page_does_not_exist(page_path: "/foo", new_govuk_account_session: new_session_id)
       assert_raises GdsApi::HTTPNotFound do
-        api_client.delete_saved_page(page_path: "/foo", govuk_account_session: session_id)
-      end
-    end
-
-    it "throws a 401 if user is not logged in or their session is invalid" do
-      stub_account_api_delete_saved_page_unauthorised(page_path: "/foo", new_govuk_account_session: new_session_id)
-      assert_raises GdsApi::HTTPUnauthorized do
         api_client.delete_saved_page(page_path: "/foo", govuk_account_session: session_id)
       end
     end
