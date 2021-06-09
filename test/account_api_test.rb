@@ -344,7 +344,7 @@ describe GdsApi::AccountApi do
           .upon_receiving("a GET saved_pages request")
           .with(
             method: :get,
-            path: "/api/saved_pages",
+            path: "/api/saved-pages",
             headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
           )
           .will_respond_with(
@@ -397,7 +397,7 @@ describe GdsApi::AccountApi do
           .upon_receiving("a GET saved-page/:page_path request")
           .with(
             method: :get,
-            path: "/api/saved_pages/#{CGI.escape(page_path)}",
+            path: "/api/saved-pages/#{CGI.escape(page_path)}",
             headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
           )
           .will_respond_with(
@@ -433,7 +433,7 @@ describe GdsApi::AccountApi do
           .upon_receiving("a PUT saved-page/:page_path request")
           .with(
             method: :put,
-            path: "/api/saved_pages/#{CGI.escape(page_path)}",
+            path: "/api/saved-pages/#{CGI.escape(page_path)}",
             headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
           )
           .will_respond_with(
@@ -463,7 +463,7 @@ describe GdsApi::AccountApi do
           .upon_receiving("a DELETE saved-page/:page_path request")
           .with(
             method: :delete,
-            path: "/api/saved_pages/#{CGI.escape(page_path)}",
+            path: "/api/saved-pages/#{CGI.escape(page_path)}",
             headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
           )
           .will_respond_with(status: 204)

@@ -1,3 +1,7 @@
+# unreleased
+
+* Update "save a page" helpers to use new routes.
+
 # 71.3.0
 
 * Add `content_id` and `title` fields to "save a page" test helpers.
