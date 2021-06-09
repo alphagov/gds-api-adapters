@@ -1,5 +1,6 @@
 # unreleased
 
+* Add `update_user_by_subject_identifier` (for Account API)
 * Update "save a page" helpers to use new routes.
 
 # 71.3.0

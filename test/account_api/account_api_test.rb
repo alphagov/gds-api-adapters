@@ -51,6 +51,11 @@ describe GdsApi::AccountApi do
     assert_equal("yes_but_must_reauthenticate", api_client.get_user(govuk_account_session: session_id)["services"]["register_to_become_a_wizard"])
   end
 
+  it "updates the user's email attributes" do
+    stub_update_user_by_subject_identifier(subject_identifier: "sid", email_verified: true, old_email: "email@example.com")
+    assert_equal({ "sub" => "sid", "email" => "email@example.com", "email_verified" => true }, api_client.update_user_by_subject_identifier(subject_identifier: "sid", email_verified: true).to_hash)
+  end
+
   describe "a transition checker subscription exists" do
     before { stub_account_api_has_email_subscription(new_govuk_account_session: new_session_id) }
 
