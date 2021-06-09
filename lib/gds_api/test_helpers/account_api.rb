@@ -240,12 +240,12 @@ module GdsApi
       end
 
       ######################
-      # GET /api/saved_pages
+      # GET /api/saved-pages
       ######################
       def stub_account_api_returning_saved_pages(saved_pages: [], **options)
         stub_account_api_request(
           :get,
-          "/api/saved_pages",
+          "/api/saved-pages",
           response_body: { saved_pages: saved_pages },
           **options,
         )
@@ -254,7 +254,7 @@ module GdsApi
       def stub_account_api_unauthorized_get_saved_pages(**options)
         stub_account_api_request(
           :get,
-          "/api/saved_pages",
+          "/api/saved-pages",
           response_status: 401,
           **options,
         )
@@ -266,7 +266,7 @@ module GdsApi
       def stub_account_api_get_saved_page(page_path:, content_id: "46163ed2-1777-4ee6-bdd4-6a2007e49d8f", title: "Ministry of Magic", **options)
         stub_account_api_request(
           :get,
-          "/api/saved_pages/#{CGI.escape(page_path)}",
+          "/api/saved-pages/#{CGI.escape(page_path)}",
           response_body: {
             saved_page: {
               page_path: page_path,
@@ -281,7 +281,7 @@ module GdsApi
       def stub_account_api_does_not_have_saved_page(page_path:, **options)
         stub_account_api_request(
           :get,
-          "/api/saved_pages/#{CGI.escape(page_path)}",
+          "/api/saved-pages/#{CGI.escape(page_path)}",
           response_status: 404,
           **options,
         )
@@ -290,19 +290,19 @@ module GdsApi
       def stub_account_api_unauthorized_get_saved_page(page_path:, **options)
         stub_account_api_request(
           :get,
-          "/api/saved_pages/#{CGI.escape(page_path)}",
+          "/api/saved-pages/#{CGI.escape(page_path)}",
           response_status: 401,
           **options,
         )
       end
 
       #################################
-      # PUT /api/saved_pages/:page_path
+      # PUT /api/saved-pages/:page_path
       #################################
       def stub_account_api_save_page(page_path:, content_id: "c840bfa2-011a-42cc-ac7a-a6da990aff0b", title: "Ministry of Magic", **options)
         stub_account_api_request(
           :put,
-          "/api/saved_pages/#{CGI.escape(page_path)}",
+          "/api/saved-pages/#{CGI.escape(page_path)}",
           response_body: {
             saved_page: {
               page_path: page_path,
@@ -321,7 +321,7 @@ module GdsApi
       def stub_account_api_save_page_cannot_save_page(page_path:, **options)
         stub_account_api_request(
           :put,
-          "/api/saved_pages/#{CGI.escape(page_path)}",
+          "/api/saved-pages/#{CGI.escape(page_path)}",
           response_status: 422,
           response_body: cannot_save_page_problem_detail({ page_path: page_path }),
           **options,
@@ -331,7 +331,7 @@ module GdsApi
       def stub_account_api_unauthorized_save_page(page_path:, **options)
         stub_account_api_request(
           :put,
-          "/api/saved_pages/#{CGI.escape(page_path)}",
+          "/api/saved-pages/#{CGI.escape(page_path)}",
           response_status: 401,
           **options,
         )
@@ -352,7 +352,7 @@ module GdsApi
       def stub_account_api_delete_saved_page(page_path:, **options)
         stub_account_api_request(
           :delete,
-          "/api/saved_pages/#{CGI.escape(page_path)}",
+          "/api/saved-pages/#{CGI.escape(page_path)}",
           response_status: 204,
           **options,
         )
@@ -361,7 +361,7 @@ module GdsApi
       def stub_account_api_delete_saved_page_does_not_exist(page_path:, **options)
         stub_account_api_request(
           :delete,
-          "/api/saved_pages/#{CGI.escape(page_path)}",
+          "/api/saved-pages/#{CGI.escape(page_path)}",
           response_status: 404,
           **options,
         )
@@ -370,7 +370,7 @@ module GdsApi
       def stub_account_api_delete_saved_page_unauthorised(page_path:, **options)
         stub_account_api_request(
           :delete,
-          "/api/saved_pages/#{CGI.escape(page_path)}",
+          "/api/saved-pages/#{CGI.escape(page_path)}",
           response_status: 401,
           **options,
         )

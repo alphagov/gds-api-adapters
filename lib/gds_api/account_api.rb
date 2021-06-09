@@ -111,7 +111,7 @@ class GdsApi::AccountApi < GdsApi::Base
   #
   # @return [Hash] containing :saved_pages, an array of single saved page hashes  def get_saved_pages(govuk_account_session:)
   def get_saved_pages(govuk_account_session:)
-    get_json("#{endpoint}/api/saved_pages", auth_headers(govuk_account_session))
+    get_json("#{endpoint}/api/saved-pages", auth_headers(govuk_account_session))
   end
 
   # Return a single page by unique URL
@@ -121,7 +121,7 @@ class GdsApi::AccountApi < GdsApi::Base
   #
   # @return [Hash] containing :saved_page, a hash of a single saved page value
   def get_saved_page(page_path:, govuk_account_session:)
-    get_json("#{endpoint}/api/saved_pages/#{CGI.escape(page_path)}", auth_headers(govuk_account_session))
+    get_json("#{endpoint}/api/saved-pages/#{CGI.escape(page_path)}", auth_headers(govuk_account_session))
   end
 
   # Upsert a single saved page entry in a users account
@@ -131,7 +131,7 @@ class GdsApi::AccountApi < GdsApi::Base
   #
   # @return [Hash] A single saved page value (if sucessful)
   def save_page(page_path:, govuk_account_session:)
-    put_json("#{endpoint}/api/saved_pages/#{CGI.escape(page_path)}", {}, auth_headers(govuk_account_session))
+    put_json("#{endpoint}/api/saved-pages/#{CGI.escape(page_path)}", {}, auth_headers(govuk_account_session))
   end
 
   # Delete a single saved page entry from a users account
@@ -142,7 +142,7 @@ class GdsApi::AccountApi < GdsApi::Base
   # @return [GdsApi::Response] A status code of 204 indicates the saved page has been successfully deleted.
   #                            A status code of 404 indicates there is no saved page with this path.
   def delete_saved_page(page_path:, govuk_account_session:)
-    delete_json("#{endpoint}/api/saved_pages/#{CGI.escape(page_path)}", {}, auth_headers(govuk_account_session))
+    delete_json("#{endpoint}/api/saved-pages/#{CGI.escape(page_path)}", {}, auth_headers(govuk_account_session))
   end
 
 private
