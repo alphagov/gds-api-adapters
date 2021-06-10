@@ -155,6 +155,36 @@ describe GdsApi::AccountApi do
     end
   end
 
+  describe "updating a user from the auth provider" do
+    let(:subject_identifier) { "the-subject-identifier" }
+    let(:email) { "example.email.address@gov.uk" }
+    let(:email_verified) { true }
+
+    before do
+      account_api
+        .upon_receiving("a request to change the user's email attributes")
+        .with(
+          method: :patch,
+          path: "/api/oidc-users/#{subject_identifier}",
+          body: { email: email, email_verified: email_verified },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+      .will_respond_with(
+        status: 200,
+        headers: { "Content-Type" => "application/json; charset=utf-8" },
+        body: {
+          sub: subject_identifier,
+          email: email,
+          email_verified: email_verified,
+        },
+      )
+    end
+
+    it "responds with 200 OK" do
+      api_client.update_user_by_subject_identifier(subject_identifier: subject_identifier, email: email, email_verified: email_verified)
+    end
+  end
+
   describe "checking for a transition checker email subscription" do
     describe "the user is logged in" do
       let(:given) { "there is a valid user session" }

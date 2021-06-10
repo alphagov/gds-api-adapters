@@ -54,6 +54,17 @@ class GdsApi::AccountApi < GdsApi::Base
     get_json("#{endpoint}/api/user", auth_headers(govuk_account_session))
   end
 
+  # Update the user record with privileged information from the auth service.  Only the auth service will call this.
+  #
+  # @param [String] subject_identifier The identifier of the user, shared between the auth service and GOV.UK.
+  # @param [String, nil] email The new email address
+  # @param [Boolean, nil] email_verified Whether the new email address is verified
+  #
+  # @return [Hash] The user's subject identifier and email attributes
+  def update_user_by_subject_identifier(subject_identifier:, email: nil, email_verified: nil)
+    patch_json("#{endpoint}/api/oidc-users/#{subject_identifier}", { email: email, email_verified: email_verified }.compact)
+  end
+
   # Check if a user has an email subscription for the Transition Checker
   #
   # @param [String] govuk_account_session Value of the session header
