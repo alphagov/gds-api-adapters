@@ -69,6 +69,91 @@ module GdsApi
         )
       end
 
+      def stub_account_api_get_email_subscription(name:, topic_slug: "slug", email_alert_api_subscription_id: "12345", **options)
+        stub_account_api_request(
+          :get,
+          "/api/email-subscriptions/#{name}",
+          response_body: {
+            email_subscription: {
+              name: name,
+              topic_slug: topic_slug,
+              email_alert_api_subscription_id: email_alert_api_subscription_id,
+            },
+          },
+          **options,
+        )
+      end
+
+      def stub_account_api_get_email_subscription_does_not_exist(name:, **options)
+        stub_account_api_request(
+          :get,
+          "/api/email-subscriptions/#{name}",
+          response_status: 404,
+          **options,
+        )
+      end
+
+      def stub_account_api_get_email_subscription_unauthorized(name:, **options)
+        stub_account_api_request(
+          :get,
+          "/api/email-subscriptions/#{name}",
+          response_status: 401,
+          **options,
+        )
+      end
+
+      def stub_account_api_put_email_subscription(name:, topic_slug: nil, **options)
+        stub_account_api_request(
+          :put,
+          "/api/email-subscriptions/#{name}",
+          with: { body: hash_including({ topic_slug: topic_slug }.compact) },
+          response_body: {
+            email_subscription: {
+              name: name,
+              topic_slug: topic_slug || "slug",
+            },
+          },
+          **options,
+        )
+      end
+
+      def stub_account_api_unauthorized_put_email_subscription(name:, topic_slug: nil, **options)
+        stub_account_api_request(
+          :put,
+          "/api/email-subscriptions/#{name}",
+          with: { body: hash_including({ topic_slug: topic_slug }.compact) },
+          response_status: 401,
+          **options,
+        )
+      end
+
+      def stub_account_api_delete_email_subscription(name:, **options)
+        stub_account_api_request(
+          :delete,
+          "/api/email-subscriptions/#{name}",
+          response_status: 204,
+          **options,
+        )
+      end
+
+      def stub_account_api_delete_email_subscription_does_not_exist(name:, **options)
+        stub_account_api_request(
+          :delete,
+          "/api/email-subscriptions/#{name}",
+          response_status: 404,
+          **options,
+        )
+      end
+
+      def stub_account_api_unauthorized_delete_email_subscription(name:, **options)
+        stub_account_api_request(
+          :delete,
+          "/api/email-subscriptions/#{name}",
+          response_status: 401,
+          **options,
+        )
+      end
+
       def stub_update_user_by_subject_identifier(subject_identifier:, email: nil, email_verified: nil, old_email: nil, old_email_verified: nil)
         stub_account_api_request(
           :patch,

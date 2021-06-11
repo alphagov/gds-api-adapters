@@ -1,3 +1,7 @@
+# unreleased
+
+* Add functions and test helpers for account-linked email subscriptions.
+
 # 71.4.0
 
 * Add `update_user_by_subject_identifier` (for Account API)
