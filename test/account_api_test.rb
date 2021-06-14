@@ -59,6 +59,17 @@ describe GdsApi::AccountApi do
 
       api_client.validate_auth_response(**params)
     end
+
+    it "responds with 401 Unauthorized if the parameters are not valid" do
+      account_api
+        .upon_receiving("a validation request")
+        .with(method: :post, path: path, headers: headers_with_json_body, body: params)
+        .will_respond_with(status: 401)
+
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.validate_auth_response(**params)
+      end
+    end
   end
 
   describe "#create_registration_state" do
@@ -408,6 +419,18 @@ describe GdsApi::AccountApi do
 
         api_client.get_saved_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
       end
+
+      it "responds with 404 Not Found if there is not a saved page" do
+        account_api
+          .given("there is a valid user session")
+          .upon_receiving("a GET saved-page/:page_path request")
+          .with(method: :get, path: path, headers: headers)
+          .will_respond_with(status: 404)
+
+        assert_raises GdsApi::HTTPNotFound do
+          api_client.get_saved_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
+        end
+      end
     end
 
     describe "#save_page" do
@@ -428,6 +451,24 @@ describe GdsApi::AccountApi do
 
         api_client.save_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
       end
+
+      it "responds with 200 OK and updates an existing saved page" do
+        response_body = response_body_with_session_identifier.merge(
+          saved_page: {
+            page_path: saved_page_path,
+            content_id: Pact.like("6e0e144a-9e59-4ac8-af3b-d87e8ff30a47"),
+            title: Pact.like("Some GOV.UK Guidance"),
+          },
+        )
+
+        account_api
+          .given("there is a valid user session, with '#{saved_page_path}' saved")
+          .upon_receiving("a PUT saved-page/:page_path request")
+          .with(method: :put, path: path, headers: headers)
+          .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
+
+        api_client.save_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
+      end
     end
 
     describe "#delete_saved_page" do
@@ -439,6 +480,18 @@ describe GdsApi::AccountApi do
           .will_respond_with(status: 204)
 
         api_client.delete_saved_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
+      end
+
+      it "responds with 404 Not Found if there is not a saved page" do
+        account_api
+          .given("there is a valid user session")
+          .upon_receiving("a DELETE saved-page/:page_path request")
+          .with(method: :delete, path: path, headers: headers)
+          .will_respond_with(status: 404)
+
+        assert_raises GdsApi::HTTPNotFound do
+          api_client.delete_saved_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
+        end
       end
     end
   end
