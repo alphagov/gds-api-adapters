@@ -18,6 +18,7 @@ module GdsApi
 
       @logger = options[:logger] || NullLogger.instance
       @options = options
+      @bearer_token = parse_bearer_token(options[:bearer_token])
     end
 
     def self.default_request_headers
@@ -80,6 +81,16 @@ module GdsApi
 
   private
 
+    # token: an OAuth bearer token. Can be nil, a string, or a JSON in the form
+    #        { "value": <string> }.
+    def parse_bearer_token(token)
+      return unless token.is_a? String
+
+      JSON.parse(token).fetch("value")
+    rescue JSON::ParserError
+      token
+    end
+
     def do_raw_request(method, url, params = nil)
       do_request(method, url, params)
     rescue RestClient::Exception => e
@@ -116,10 +127,10 @@ module GdsApi
     # Take a hash of parameters for Request#execute; return a hash of
     # parameters with authentication information included
     def with_auth_options(method_params)
-      if @options[:bearer_token]
+      if @bearer_token
         headers = method_params[:headers] || {}
         method_params.merge(headers: headers.merge(
-          "Authorization" => "Bearer #{@options[:bearer_token]}",
+          "Authorization" => "Bearer #{@bearer_token}",
         ))
       elsif @options[:basic_auth]
         method_params.merge(

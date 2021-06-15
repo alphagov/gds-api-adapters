@@ -30,11 +30,15 @@ describe GdsApi::PublishingApi do
     }.merge(attrs)
   end
 
-  before do
-    @bearer_token = "example-bearer-token"
+  before :each do
+    bearer_token = [
+      { given: "example-bearer-token", expected: "example-bearer-token" },
+      { given: JSON.generate(value: "example-bearer-token-from-json"), expected: "example-bearer-token-from-json" },
+    ].sample
+    @bearer_token = bearer_token.fetch(:expected)
     @api_client = GdsApi::PublishingApi.new(
       publishing_api_host,
-      bearer_token: @bearer_token,
+      bearer_token: bearer_token.fetch(:given),
     )
 
     @content_id = "bed722e6-db68-43e5-9079-063f623335a7"
