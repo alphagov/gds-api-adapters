@@ -6,395 +6,378 @@ describe GdsApi::AccountApi do
 
   let(:api_client) { GdsApi::AccountApi.new(account_api_host) }
 
-  let(:authenticated_headers) { { "GOVUK-Account-Session" => govuk_account_session } }
-  let(:govuk_account_session) { "logged-in-user-session" }
+  let(:govuk_account_session) { nil }
 
-  describe "getting a sign-in URL" do
+  let(:headers) { GdsApi::JsonClient.default_request_headers.merge({ "GOVUK-Account-Session" => govuk_account_session }.compact) }
+  let(:headers_with_json_body) { GdsApi::JsonClient.default_request_with_json_body_headers.merge({ "GOVUK-Account-Session" => govuk_account_session }.compact) }
+
+  let(:json_response_headers) { { "Content-Type" => "application/json; charset=utf-8" } }
+
+  let(:response_body_with_session_identifier) { { govuk_account_session: Pact.like("user-session-id") } }
+
+  describe "#get_sign_in_url" do
+    let(:path) { "/api/oauth2/sign-in" }
+
     it "responds with 200 OK, an authentication URI, and a state for CSRF protection" do
+      response_body = {
+        auth_uri: Pact.like("http://authentication-provider/some/oauth/url"),
+        state: Pact.like("value-to-use-for-csrf-prevention"),
+      }
+
       account_api
         .upon_receiving("a sign-in request")
-        .with(
-          method: :get,
-          path: "/api/oauth2/sign-in",
-          headers: GdsApi::JsonClient.default_request_headers,
-        )
-        .will_respond_with(
-          status: 200,
-          headers: { "Content-Type" => "application/json; charset=utf-8" },
-          body: {
-            auth_uri: Pact.like("http://authentication-provider/some/oauth/url"),
-            state: Pact.like("value-to-use-for-csrf-prevention"),
-          },
-        )
+        .with(method: :get, path: path, headers: headers)
+        .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
 
       api_client.get_sign_in_url
     end
   end
 
-  describe "validating an OAuth response" do
-    it "responds with 200 OK and a govuk_account_session" do
+  describe "#validate_auth_response" do
+    let(:path) { "/api/oauth2/callback" }
+    let(:params) { { code: "code", state: "state" } }
+
+    it "responds with 200 OK and a govuk_account_session if the parameters are valid" do
       account_api
         .given("there is a valid OAuth response")
         .upon_receiving("a validation request")
-        .with(
-          method: :post,
-          path: "/api/oauth2/callback",
-          body: {
-            code: "code",
-            state: "state",
-          },
-          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
-        )
-        .will_respond_with(
-          status: 200,
-          headers: { "Content-Type" => "application/json; charset=utf-8" },
-          body: {
-            govuk_account_session: Pact.like("user-session-id"),
-          },
-        )
+        .with(method: :post, path: path, headers: headers_with_json_body, body: params)
+        .will_respond_with(status: 200, headers: json_response_headers, body: response_body_with_session_identifier)
 
-      api_client.validate_auth_response(code: "code", state: "state")
+      api_client.validate_auth_response(**params)
     end
-  end
 
-  describe "validating an OAuth response with a redirect path" do
-    let(:redirect_path) { "/some-arbitrary-path" }
+    it "responds with 200 OK and includes the redirect_path in the response, if given" do
+      redirect_path = "/some-arbitrary-path"
+      response_body = response_body_with_session_identifier.merge(redirect_path: redirect_path)
 
-    it "responds with a redirect_path" do
       account_api
-        .given("there is a valid OAuth response, with the redirect path '/some-arbitrary-path'")
+        .given("there is a valid OAuth response, with the redirect path '#{redirect_path}'")
         .upon_receiving("a validation request")
-        .with(
-          method: :post,
-          path: "/api/oauth2/callback",
-          body: {
-            code: "code",
-            state: "state",
-          },
-          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
-        )
-        .will_respond_with(
-          status: 200,
-          headers: { "Content-Type" => "application/json; charset=utf-8" },
-          body: {
-            govuk_account_session: Pact.like("user-session-id"),
-            redirect_path: Pact.like(redirect_path),
-          },
-        )
+        .with(method: :post, path: path, headers: headers_with_json_body, body: params)
+        .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
 
-      api_client.validate_auth_response(code: "code", state: "state")
+      api_client.validate_auth_response(**params)
+    end
+
+    it "responds with 401 Unauthorized if the parameters are not valid" do
+      account_api
+        .upon_receiving("a validation request")
+        .with(method: :post, path: path, headers: headers_with_json_body, body: params)
+        .will_respond_with(status: 401)
+
+      assert_raises GdsApi::HTTPUnauthorized do
+        api_client.validate_auth_response(**params)
+      end
     end
   end
 
-  describe "creating a registration state" do
-    let(:attributes) { { foo: "bar" } }
+  describe "#create_registration_state" do
+    let(:path) { "/api/oauth2/state" }
 
     it "responds with 200 OK and a state_id" do
+      attributes = { foo: "bar" }
+      response_body = { state_id: Pact.like("reference-to-pass-to-get_sign_in_url") }
+
       account_api
         .upon_receiving("a create-state request")
-        .with(
-          method: :post,
-          path: "/api/oauth2/state",
-          body: { attributes: attributes },
-          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
-        )
-        .will_respond_with(
-          status: 200,
-          headers: { "Content-Type" => "application/json; charset=utf-8" },
-          body: {
-            state_id: Pact.like("reference-to-pass-to-get_sign_in_url"),
-          },
-        )
+        .with(method: :post, path: path, headers: headers_with_json_body, body: { attributes: attributes })
+        .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
 
       api_client.create_registration_state(attributes: attributes)
     end
   end
 
-  describe "getting user information" do
-    describe "the user is logged in" do
-      let(:given) { "there is a valid user session" }
-      let(:saved_pages_service) { "no" }
+  describe "#update_user_by_subject_identifier" do
+    let(:subject_identifier) { "the-subject-identifier" }
+    let(:path) { "/api/oidc-users/#{subject_identifier}" }
 
-      before do
+    before do
+      email_attributes = {
+        email: "example.email.address@gov.uk",
+        email_verified: true,
+      }
+      response_body = email_attributes.merge(sub: subject_identifier)
+
+      account_api
+        .upon_receiving("a request to change the user's email attributes")
+        .with(method: :patch, path: path, headers: headers_with_json_body, body: email_attributes)
+        .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
+
+      api_client.update_user_by_subject_identifier(
+        subject_identifier: subject_identifier,
+        email: email_attributes[:email],
+        email_verified: email_attributes[:email_verified],
+      )
+    end
+  end
+
+  describe "the user is logged in" do
+    let(:govuk_account_session) { "logged-in-user-session" }
+
+    describe "#get_user" do
+      let(:path) { "/api/user" }
+
+      it "responds with 200 OK" do
+        user_details = response_body_with_session_identifier.merge(
+          level_of_authentication: Pact.like("level0"),
+          email: Pact.like("user@example.com"),
+          email_verified: Pact.like(true),
+          services: {
+            transition_checker: "no",
+            saved_pages: "no",
+          },
+        )
+
         account_api
-          .given(given)
+          .given("there is a valid user session")
           .upon_receiving("a get-user request")
-          .with(
-            method: :get,
-            path: "/api/user",
-            headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
-          )
-          .will_respond_with(
-            status: 200,
-            headers: { "Content-Type" => "application/json; charset=utf-8" },
-            body: {
-              govuk_account_session: Pact.like("user-session-id"),
-              level_of_authentication: Pact.like("level0"),
-              email: Pact.like("user@example.com"),
-              email_verified: Pact.like(true),
-              services: {
-                transition_checker: "no",
-                saved_pages: saved_pages_service,
-              },
-            },
-          )
-      end
+          .with(method: :get, path: path, headers: headers)
+          .will_respond_with(status: 200, headers: json_response_headers, body: user_details)
 
-      it "responds with a 200 OK" do
         api_client.get_user(govuk_account_session: govuk_account_session)
       end
 
-      describe "a user has saved pages" do
-        let(:given) { "there is a valid user session, with /guidance/some-govuk-guidance saved" }
-        let(:saved_pages_service) { "yes" }
+      it "includes 'saved_pages: yes' if the user has saved pages" do
+        account_api
+          .given("there is a valid user session, with /guidance/some-govuk-guidance saved")
+          .upon_receiving("a get-user request")
+          .with(method: :get, path: path, headers: headers)
+          .will_respond_with(status: 200, headers: json_response_headers, body: { services: { saved_pages: "yes" } })
+
+        api_client.get_user(govuk_account_session: govuk_account_session)
+      end
+    end
+
+    describe "email subscriptions" do
+      let(:subscription_name) { "wizard-news" }
+      let(:path) { "/api/email-subscriptions/#{subscription_name}" }
+
+      describe "#get_email_subscription" do
+        it "responds with 200 OK if there is a subscription" do
+          subscription_json = {
+            name: subscription_name,
+            topic_slug: Pact.like("wizard-news-topic-slug"),
+          }
+
+          account_api
+            .given("there is a valid user session, with a '#{subscription_name}' email subscription")
+            .upon_receiving("a show-subscription request for '#{subscription_name}'")
+            .with(method: :get, path: path, headers: headers)
+            .will_respond_with(status: 200, headers: json_response_headers, body: { email_subscription: subscription_json })
+
+          api_client.get_email_subscription(name: subscription_name, govuk_account_session: govuk_account_session)
+        end
+
+        it "responds with 404 Not Found if there is not a subscription" do
+          account_api
+            .given("there is a valid user session")
+            .upon_receiving("a show-subscription request for '#{subscription_name}'")
+            .with(method: :get, path: path, headers: headers)
+            .will_respond_with(status: 404)
+
+          assert_raises GdsApi::HTTPNotFound do
+            api_client.get_email_subscription(name: subscription_name, govuk_account_session: govuk_account_session)
+          end
+        end
+      end
+
+      describe "#put_email_subscription" do
+        let(:topic_slug) { "wizard-news-topic-slug" }
+        let(:subscription_json) { { name: subscription_name, topic_slug: topic_slug } }
 
         it "responds with 200 OK" do
-          api_client.get_user(govuk_account_session: govuk_account_session)
+          response_body = response_body_with_session_identifier.merge(email_subscription: subscription_json)
+
+          account_api
+            .given("there is a valid user session")
+            .upon_receiving("a put-subscription request for '#{subscription_name}'")
+            .with(method: :put, path: path, headers: headers_with_json_body, body: { topic_slug: topic_slug })
+            .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
+
+          api_client.put_email_subscription(name: subscription_name, topic_slug: topic_slug, govuk_account_session: govuk_account_session)
+        end
+
+        it "responds with 200 OK and updates an existing subscription" do
+          response_body = response_body_with_session_identifier.merge(email_subscription: subscription_json)
+
+          account_api
+            .given("there is a valid user session, with a '#{subscription_name}' email subscription")
+            .upon_receiving("a put-subscription request for '#{subscription_name}'")
+            .with(method: :put, path: path, headers: headers_with_json_body, body: { topic_slug: topic_slug })
+            .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
+
+          api_client.put_email_subscription(name: subscription_name, topic_slug: topic_slug, govuk_account_session: govuk_account_session)
+        end
+      end
+
+      describe "#delete_email_subscription" do
+        it "responds with 204 No Content if there is a subscription" do
+          account_api
+            .given("there is a valid user session, with a '#{subscription_name}' email subscription")
+            .upon_receiving("a delete-subscription request for '#{subscription_name}'")
+            .with(method: :delete, path: path, headers: headers)
+            .will_respond_with(status: 204)
+
+          api_client.delete_email_subscription(name: subscription_name, govuk_account_session: govuk_account_session)
+        end
+
+        it "responds with 404 Not Found if there is not a subscription" do
+          account_api
+            .given("there is a valid user session")
+            .upon_receiving("a delete-subscription request for '#{subscription_name}'")
+            .with(method: :delete, path: path, headers: headers)
+            .will_respond_with(status: 404)
+
+          assert_raises GdsApi::HTTPNotFound do
+            api_client.delete_email_subscription(name: subscription_name, govuk_account_session: govuk_account_session)
+          end
         end
       end
     end
-  end
 
-  describe "updating a user from the auth provider" do
-    let(:subject_identifier) { "the-subject-identifier" }
-    let(:email) { "example.email.address@gov.uk" }
-    let(:email_verified) { true }
+    describe "legacy transition checker email subscriptions" do
+      let(:path) { "/api/transition-checker-email-subscription" }
 
-    before do
-      account_api
-        .upon_receiving("a request to change the user's email attributes")
-        .with(
-          method: :patch,
-          path: "/api/oidc-users/#{subject_identifier}",
-          body: { email: email, email_verified: email_verified },
-          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
-        )
-      .will_respond_with(
-        status: 200,
-        headers: { "Content-Type" => "application/json; charset=utf-8" },
-        body: {
-          sub: subject_identifier,
-          email: email,
-          email_verified: email_verified,
-        },
-      )
-    end
+      describe "#check_for_email_subscription" do
+        it "responds with 200 OK and 'has_subscription: false' if one does not exist" do
+          response_body = response_body_with_session_identifier.merge(has_subscription: false)
 
-    it "responds with 200 OK" do
-      api_client.update_user_by_subject_identifier(subject_identifier: subject_identifier, email: email, email_verified: email_verified)
-    end
-  end
+          account_api
+            .given("there is a valid user session")
+            .upon_receiving("a has-subscription request")
+            .with(method: :get, path: path, headers: headers)
+            .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
 
-  describe "checking for a transition checker email subscription" do
-    describe "the user is logged in" do
-      let(:given) { "there is a valid user session" }
-      let(:has_subscription) { false }
+          api_client.check_for_email_subscription(govuk_account_session: govuk_account_session)
+        end
 
-      before do
-        account_api
-          .given(given)
-          .upon_receiving("a has-subscription request")
-          .with(
-            method: :get,
-            path: "/api/transition-checker-email-subscription",
-            headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
-          )
-          .will_respond_with(
-            status: 200,
-            headers: { "Content-Type" => "application/json; charset=utf-8" },
-            body: {
-              govuk_account_session: Pact.like("user-session-id"),
-              has_subscription: has_subscription,
-            },
-          )
-      end
+        it "responds with 200 OK and 'has_subscription: true' if one exists" do
+          response_body = response_body_with_session_identifier.merge(has_subscription: true)
 
-      it "responds with 200 OK, a new govuk_account_session, and says that the subscription does not exist" do
-        api_client.check_for_email_subscription(govuk_account_session: govuk_account_session)
-      end
+          account_api
+            .given("there is a valid user session, with a transition checker email subscription")
+            .upon_receiving("a has-subscription request")
+            .with(method: :get, path: path, headers: headers)
+            .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
 
-      describe "a subscription exists" do
-        let(:given) { "there is a valid user session, with a transition checker email subscription" }
-        let(:has_subscription) { true }
-
-        it "says that the subscription exists" do
           api_client.check_for_email_subscription(govuk_account_session: govuk_account_session)
         end
       end
-    end
-  end
 
-  describe "setting the transition checker email subscription" do
-    describe "the user is logged in" do
-      it "responds with 200 OK and a new govuk_account_session" do
-        account_api
-          .given("there is a valid user session")
-          .upon_receiving("a set-subscription request")
-          .with(
-            method: :post,
-            path: "/api/transition-checker-email-subscription",
-            body: { slug: "brexit-emails-123" },
-            headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(authenticated_headers),
-          )
-          .will_respond_with(
-            status: 200,
-            headers: { "Content-Type" => "application/json; charset=utf-8" },
-            body: {
-              govuk_account_session: Pact.like("user-session-id"),
-            },
-          )
+      describe "#set_email_subscription" do
+        it "responds with 200 OK" do
+          slug = "brexit-emails-123"
 
-        api_client.set_email_subscription(govuk_account_session: govuk_account_session, slug: "brexit-emails-123")
-      end
-    end
-  end
+          account_api
+            .given("there is a valid user session")
+            .upon_receiving("a set-subscription request")
+            .with(method: :post, path: path, headers: headers_with_json_body, body: { slug: slug })
+            .will_respond_with(status: 200, headers: json_response_headers, body: response_body_with_session_identifier)
 
-  describe "fetching attribute values" do
-    describe "the user is logged in" do
-      let(:given) { "there is a valid user session" }
-      let(:attributes) { {} }
-
-      before do
-        account_api
-          .given(given)
-          .upon_receiving("a get-attributes request")
-          .with(
-            method: :get,
-            path: "/api/attributes",
-            query: { "attributes[]" => %w[foo] },
-            headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
-          )
-          .will_respond_with(
-            status: 200,
-            headers: { "Content-Type" => "application/json; charset=utf-8" },
-            body: {
-              govuk_account_session: Pact.like("user-session-id"),
-              values: attributes,
-            },
-          )
-      end
-
-      it "responds with 200 OK, a new govuk_account_session, and no attributes" do
-        api_client.get_attributes(govuk_account_session: govuk_account_session, attributes: %w[foo])
-      end
-
-      describe "attributes exist" do
-        let(:given) { "there is a valid user session, with an attribute called 'foo'" }
-        let(:attributes) { { foo: { bar: "baz" } } }
-
-        it "responds with the attribute values" do
-          api_client.get_attributes(govuk_account_session: govuk_account_session, attributes: %w[foo])
+          api_client.set_email_subscription(govuk_account_session: govuk_account_session, slug: slug)
         end
       end
     end
-  end
 
-  describe "setting attribute values" do
-    let(:attributes) { { foo: [1, 2, 3], bar: { nested: "json" } } }
+    describe "attributes" do
+      let(:path) { "/api/attributes" }
 
-    describe "the user is logged in" do
-      it "responds with 200 OK and a new govuk_account_session" do
-        account_api
-          .given("there is a valid user session")
-          .upon_receiving("a set-attributes request")
-          .with(
-            method: :patch,
-            path: "/api/attributes",
-            body: { attributes: attributes },
-            headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(authenticated_headers),
-          )
-          .will_respond_with(
-            status: 200,
-            headers: { "Content-Type" => "application/json; charset=utf-8" },
-            body: {
-              govuk_account_session: Pact.like("user-session-id"),
-            },
-          )
+      describe "#get_attributes" do
+        let(:attribute_name) { "test_attribute_1" }
 
-        api_client.set_attributes(govuk_account_session: govuk_account_session, attributes: attributes)
+        it "responds with 200 OK and no attributes, if none exist" do
+          response_body = response_body_with_session_identifier.merge(values: {})
+
+          account_api
+            .given("there is a valid user session")
+            .upon_receiving("a get-attributes request")
+            .with(method: :get, path: path, headers: headers, query: { "attributes[]" => [attribute_name] })
+            .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
+
+          api_client.get_attributes(govuk_account_session: govuk_account_session, attributes: [attribute_name])
+        end
+
+        it "responds with 200 OK and the attributes, if some exist" do
+          response_body = response_body_with_session_identifier.merge(values: { attribute_name => { bar: "baz" } })
+
+          account_api
+            .given("there is a valid user session, with an attribute called '#{attribute_name}'")
+            .upon_receiving("a get-attributes request")
+            .with(method: :get, path: path, headers: headers, query: { "attributes[]" => [attribute_name] })
+            .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
+
+          api_client.get_attributes(govuk_account_session: govuk_account_session, attributes: [attribute_name])
+        end
+      end
+
+      describe "#set_attributes" do
+        let(:attributes) { { test_attribute_1: [1, 2, 3], test_attribute_2: { nested: "json" } } }
+
+        it "responds with 200 OK" do
+          account_api
+            .given("there is a valid user session")
+            .upon_receiving("a set-attributes request")
+            .with(method: :patch, path: path, headers: headers_with_json_body, body: { attributes: attributes })
+            .will_respond_with(status: 200, headers: json_response_headers, body: response_body_with_session_identifier)
+
+          api_client.set_attributes(govuk_account_session: govuk_account_session, attributes: attributes)
+        end
       end
     end
-  end
 
-  describe "fetching attribute names" do
-    describe "the user is logged in" do
-      before do
+    describe "#get_attributes_names" do
+      let(:path) { "/api/attributes/names" }
+      let(:attribute_name) { "test_attribute_1" }
+
+      it "responds with 200 OK and no attributes, if none exist" do
+        response_body = response_body_with_session_identifier.merge(values: [])
+
         account_api
-          .given(given)
+          .given("there is a valid user session")
           .upon_receiving("a get-attributes-names request")
-          .with(
-            method: :get,
-            path: "/api/attributes/names",
-            query: { "attributes[]" => queried_attribute_names },
-            headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
-          )
-          .will_respond_with(
-            status: 200,
-            headers: { "Content-Type" => "application/json; charset=utf-8" },
-            body: {
-              govuk_account_session: Pact.like("user-session-id"),
-              values: returned_attribute_names,
-            },
-          )
+          .with(method: :get, path: path, headers: headers, query: { "attributes[]" => [attribute_name] })
+          .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
+
+        api_client.get_attributes_names(govuk_account_session: govuk_account_session, attributes: [attribute_name])
       end
 
-      let(:queried_attribute_names) { %w[foo] }
-      let(:response) { api_client.get_attributes_names(govuk_account_session: govuk_account_session, attributes: queried_attribute_names) }
+      it "responds with 200 OK and the attribute names, if they exist" do
+        response_body = response_body_with_session_identifier.merge(values: [attribute_name])
 
-      describe "attributes do not exist" do
-        let(:given) { "there is a valid user session" }
-        let(:returned_attribute_names) { [] }
+        account_api
+          .given("there is a valid user session, with an attribute called '#{attribute_name}'")
+          .upon_receiving("a get-attributes-names request")
+          .with(method: :get, path: path, headers: headers, query: { "attributes[]" => [attribute_name] })
+          .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
 
-        it "responds with 200 OK, a new govuk_account_session, and no attributes" do
-          assert response["govuk_account_session"].present?
-          assert_equal returned_attribute_names, response["values"]
-          assert_equal 200, response.code
-        end
-      end
-
-      describe "attributes exist" do
-        let(:given) { "there is a valid user session, with an attribute called 'foo'" }
-        let(:returned_attribute_names) { %w[foo] }
-
-        it "responds with the attribute values" do
-          assert_equal returned_attribute_names, response["values"]
-        end
+        api_client.get_attributes_names(govuk_account_session: govuk_account_session, attributes: [attribute_name])
       end
     end
   end
 
-  describe "#get_saved_pages" do
-    describe "the user is logged in" do
-      let(:given) { "there is a valid user session" }
-      let(:saved_pages) { [] }
+  describe "saved pages" do
+    let(:saved_page_path) { "/guidance/some-govuk-guidance" }
+    let(:path) { "/api/saved-pages/#{CGI.escape(saved_page_path)}" }
 
-      before do
+    describe "#get_saved_pages" do
+      let(:path) { "/api/saved-pages" }
+
+      it "responds with 200 OK and returns an empty list of saved pages, if none exist" do
+        response_body = response_body_with_session_identifier.merge(saved_pages: [])
+
         account_api
-          .given(given)
+          .given("there is a valid user session")
           .upon_receiving("a GET saved_pages request")
-          .with(
-            method: :get,
-            path: "/api/saved-pages",
-            headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
-          )
-          .will_respond_with(
-            status: 200,
-            headers: { "Content-Type" => "application/json; charset=utf-8" },
-            body: {
-              govuk_account_session: Pact.like("user-session-id"),
-              saved_pages: saved_pages,
-            },
-          )
-      end
+          .with(method: :get, path: path, headers: headers)
+          .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
 
-      it "responds with 200 OK, a new govuk_account_session, and returns an empty array of saved pages" do
         api_client.get_saved_pages(govuk_account_session: govuk_account_session)
       end
 
-      describe "a user has saved pages" do
-        let(:given) { "there is a valid user session, with saved pages" }
-        let(:saved_pages) do
-          [
+      it "responds with 200 OK and a list of saved pages, if some exist" do
+        response_body = response_body_with_session_identifier.merge(
+          saved_pages: [
             {
               page_path: "/page-path/1",
               content_id: Pact.like("7b7b77b0-257a-467d-84c9-c5167781d05c"),
@@ -405,102 +388,110 @@ describe GdsApi::AccountApi do
               content_id: Pact.like("7b7b77b0-257a-467d-84c9-c5167781d05c"),
               title: Pact.like("Page #1"),
             },
-          ]
-        end
+          ],
+        )
 
-        it "responds with 200 OK, a new govuk_account_session, and returns an array of saved pages" do
-          api_client.get_saved_pages(govuk_account_session: govuk_account_session)
-        end
+        account_api
+          .given("there is a valid user session, with saved pages")
+          .upon_receiving("a GET saved_pages request")
+          .with(method: :get, path: path, headers: headers)
+          .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
+
+        api_client.get_saved_pages(govuk_account_session: govuk_account_session)
       end
     end
-  end
 
-  describe "#get_saved_page" do
-    describe "the user is logged in" do
-      let(:given) { "there is a valid user session, with #{page_path} saved" }
-      let(:page_path) { "/guidance/some-govuk-guidance" }
-      let(:status) { 200 }
+    describe "#get_saved_page" do
+      it "responds with 200 OK and the saved page, if it exists" do
+        response_body = response_body_with_session_identifier.merge(
+          saved_page: {
+            page_path: saved_page_path,
+            content_id: Pact.like("6e0e144a-9e59-4ac8-af3b-d87e8ff30a47"),
+            title: Pact.like("Some GOV.UK Guidance"),
+          },
+        )
 
-      before do
         account_api
-          .given(given)
+          .given("there is a valid user session, with '#{saved_page_path}' saved")
           .upon_receiving("a GET saved-page/:page_path request")
-          .with(
-            method: :get,
-            path: "/api/saved-pages/#{CGI.escape(page_path)}",
-            headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
-          )
-          .will_respond_with(
-            status: 200,
-            headers: { "Content-Type" => "application/json; charset=utf-8" },
-            body: {
-              govuk_account_session: Pact.like("user-session-id"),
-              saved_page: {
-                page_path: page_path,
-                content_id: Pact.like("6e0e144a-9e59-4ac8-af3b-d87e8ff30a47"),
-                title: Pact.like("Some GOV.UK Guidance"),
-              },
-            },
-          )
+          .with(method: :get, path: path, headers: headers)
+          .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
+
+        api_client.get_saved_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
       end
 
-      describe "a user has saved pages" do
-        it "responds with 200 OK, a new govuk_account_session, and the saved page" do
-          api_client.get_saved_page(page_path: page_path, govuk_account_session: govuk_account_session)
+      it "responds with 404 Not Found if there is not a saved page" do
+        account_api
+          .given("there is a valid user session")
+          .upon_receiving("a GET saved-page/:page_path request")
+          .with(method: :get, path: path, headers: headers)
+          .will_respond_with(status: 404)
+
+        assert_raises GdsApi::HTTPNotFound do
+          api_client.get_saved_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
         end
       end
     end
-  end
 
-  describe "#save_page" do
-    describe "the user is logged in" do
-      let(:given) { "there is a valid user session" }
-      let(:page_path) { "/guidance/some-govuk-guidance" }
+    describe "#save_page" do
+      it "responds with 200 OK and the saved page" do
+        response_body = response_body_with_session_identifier.merge(
+          saved_page: {
+            page_path: saved_page_path,
+            content_id: Pact.like("6e0e144a-9e59-4ac8-af3b-d87e8ff30a47"),
+            title: Pact.like("Some GOV.UK Guidance"),
+          },
+        )
 
-      before do
         account_api
-          .given(given)
+          .given("there is a valid user session")
           .upon_receiving("a PUT saved-page/:page_path request")
-          .with(
-            method: :put,
-            path: "/api/saved-pages/#{CGI.escape(page_path)}",
-            headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
-          )
-          .will_respond_with(
-            status: 200,
-            headers: { "Content-Type" => "application/json; charset=utf-8" },
-            body: {
-              govuk_account_session: Pact.like("user-session-id"),
-              saved_page: { page_path: page_path },
-            },
-          )
+          .with(method: :put, path: path, headers: headers)
+          .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
+
+        api_client.save_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
       end
 
-      it "responds with 200 OK, the page data and a new govuk_account_session if the saved page does not exist" do
-        api_client.save_page(page_path: page_path, govuk_account_session: govuk_account_session)
+      it "responds with 200 OK and updates an existing saved page" do
+        response_body = response_body_with_session_identifier.merge(
+          saved_page: {
+            page_path: saved_page_path,
+            content_id: Pact.like("6e0e144a-9e59-4ac8-af3b-d87e8ff30a47"),
+            title: Pact.like("Some GOV.UK Guidance"),
+          },
+        )
+
+        account_api
+          .given("there is a valid user session, with '#{saved_page_path}' saved")
+          .upon_receiving("a PUT saved-page/:page_path request")
+          .with(method: :put, path: path, headers: headers)
+          .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
+
+        api_client.save_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
       end
     end
-  end
 
-  describe "#delete_page" do
-    describe "the user is logged in" do
-      let(:given) { "there is a valid user session, with #{page_path} saved" }
-      let(:page_path) { "/guidance/some-govuk-guidance" }
-
-      before do
+    describe "#delete_saved_page" do
+      it "responds with 204 No Content if there is a saved page" do
         account_api
-          .given(given)
+          .given("there is a valid user session, with '#{saved_page_path}' saved")
           .upon_receiving("a DELETE saved-page/:page_path request")
-          .with(
-            method: :delete,
-            path: "/api/saved-pages/#{CGI.escape(page_path)}",
-            headers: GdsApi::JsonClient.default_request_headers.merge(authenticated_headers),
-          )
+          .with(method: :delete, path: path, headers: headers)
           .will_respond_with(status: 204)
+
+        api_client.delete_saved_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
       end
 
-      it "responds with 204 NO CONTENT and a new govuk_account_session if the saved page exists" do
-        api_client.delete_saved_page(page_path: page_path, govuk_account_session: govuk_account_session)
+      it "responds with 404 Not Found if there is not a saved page" do
+        account_api
+          .given("there is a valid user session")
+          .upon_receiving("a DELETE saved-page/:page_path request")
+          .with(method: :delete, path: path, headers: headers)
+          .will_respond_with(status: 404)
+
+        assert_raises GdsApi::HTTPNotFound do
+          api_client.delete_saved_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
+        end
       end
     end
   end

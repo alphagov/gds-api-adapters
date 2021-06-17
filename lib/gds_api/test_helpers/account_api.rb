@@ -5,6 +5,20 @@ module GdsApi
     module AccountApi
       ACCOUNT_API_ENDPOINT = Plek.find("account-api")
 
+      def stub_account_api_request(method, path, with: {}, response_status: 200, response_body: {}, govuk_account_session: nil, new_govuk_account_session: nil)
+        with.merge!(headers: { GdsApi::AccountApi::AUTH_HEADER_NAME => govuk_account_session }) if govuk_account_session
+        new_govuk_account_session = nil if response_status >= 400
+        to_return = { status: response_status, body: response_body.merge(govuk_account_session: new_govuk_account_session).compact.to_json }
+        if with.empty?
+          stub_request(method, "#{ACCOUNT_API_ENDPOINT}#{path}").to_return(**to_return)
+        else
+          stub_request(method, "#{ACCOUNT_API_ENDPOINT}#{path}").with(**with).to_return(**to_return)
+        end
+      end
+
+      #########################
+      # GET /api/oauth2/sign-in
+      #########################
       def stub_account_api_get_sign_in_url(redirect_path: nil, state_id: nil, level_of_authentication: nil, auth_uri: "http://auth/provider", state: "state")
         querystring = Rack::Utils.build_nested_query({ redirect_path: redirect_path, state_id: state_id, level_of_authentication: level_of_authentication }.compact)
         stub_request(:get, "#{ACCOUNT_API_ENDPOINT}/api/oauth2/sign-in?#{querystring}")
@@ -14,6 +28,9 @@ module GdsApi
           )
       end
 
+      ###########################
+      # POST /api/oauth2/callback
+      ###########################
       def stub_account_api_validates_auth_response(code: nil, state: nil, govuk_account_session: "govuk-account-session", redirect_path: "/", ga_client_id: "ga-client-id")
         stub_request(:post, "#{ACCOUNT_API_ENDPOINT}/api/oauth2/callback")
           .with(body: hash_including({ code: code, state: state }.compact))
@@ -29,6 +46,9 @@ module GdsApi
           .to_return(status: 401)
       end
 
+      ########################
+      # POST /api/oauth2/state
+      ########################
       def stub_account_api_create_registration_state(attributes: nil, state_id: "state-id")
         stub_request(:post, "#{ACCOUNT_API_ENDPOINT}/api/oauth2/state")
           .with(body: hash_including({ attributes: attributes }.compact))
@@ -38,6 +58,9 @@ module GdsApi
           )
       end
 
+      ###############
+      # GET /api/user
+      ###############
       def stub_account_api_user_info(level_of_authentication: "level0", email: "email@example.com", email_verified: true, services: {}, **options)
         stub_account_api_request(
           :get,
@@ -69,6 +92,9 @@ module GdsApi
         )
       end
 
+      ###########################################
+      # PATCH /api/oidc-users/:subject_identifier
+      ###########################################
       def stub_update_user_by_subject_identifier(subject_identifier:, email: nil, email_verified: nil, old_email: nil, old_email_verified: nil)
         stub_account_api_request(
           :patch,
@@ -82,6 +108,103 @@ module GdsApi
         )
       end
 
+      ####################################
+      # GET /api/email-subscriptions/:name
+      ####################################
+      def stub_account_api_get_email_subscription(name:, topic_slug: "slug", email_alert_api_subscription_id: "12345", **options)
+        stub_account_api_request(
+          :get,
+          "/api/email-subscriptions/#{name}",
+          response_body: {
+            email_subscription: {
+              name: name,
+              topic_slug: topic_slug,
+              email_alert_api_subscription_id: email_alert_api_subscription_id,
+            },
+          },
+          **options,
+        )
+      end
+
+      def stub_account_api_get_email_subscription_does_not_exist(name:, **options)
+        stub_account_api_request(
+          :get,
+          "/api/email-subscriptions/#{name}",
+          response_status: 404,
+          **options,
+        )
+      end
+
+      def stub_account_api_get_email_subscription_unauthorized(name:, **options)
+        stub_account_api_request(
+          :get,
+          "/api/email-subscriptions/#{name}",
+          response_status: 401,
+          **options,
+        )
+      end
+
+      ####################################
+      # PUT /api/email-subscriptions/:name
+      ####################################
+      def stub_account_api_put_email_subscription(name:, topic_slug: nil, **options)
+        stub_account_api_request(
+          :put,
+          "/api/email-subscriptions/#{name}",
+          with: { body: hash_including({ topic_slug: topic_slug }.compact) },
+          response_body: {
+            email_subscription: {
+              name: name,
+              topic_slug: topic_slug || "slug",
+            },
+          },
+          **options,
+        )
+      end
+
+      def stub_account_api_unauthorized_put_email_subscription(name:, topic_slug: nil, **options)
+        stub_account_api_request(
+          :put,
+          "/api/email-subscriptions/#{name}",
+          with: { body: hash_including({ topic_slug: topic_slug }.compact) },
+          response_status: 401,
+          **options,
+        )
+      end
+
+      #######################################
+      # DELETE /api/email-subscriptions/:name
+      #######################################
+      def stub_account_api_delete_email_subscription(name:, **options)
+        stub_account_api_request(
+          :delete,
+          "/api/email-subscriptions/#{name}",
+          response_status: 204,
+          **options,
+        )
+      end
+
+      def stub_account_api_delete_email_subscription_does_not_exist(name:, **options)
+        stub_account_api_request(
+          :delete,
+          "/api/email-subscriptions/#{name}",
+          response_status: 404,
+          **options,
+        )
+      end
+
+      def stub_account_api_unauthorized_delete_email_subscription(name:, **options)
+        stub_account_api_request(
+          :delete,
+          "/api/email-subscriptions/#{name}",
+          response_status: 401,
+          **options,
+        )
+      end
+
+      ################################################
+      # GET /api/transition-checker-email-subscription
+      ################################################
       def stub_account_api_has_email_subscription(**options)
         stub_account_api_request(
           :get,
@@ -119,6 +242,9 @@ module GdsApi
         )
       end
 
+      #################################################
+      # POST /api/transition-checker-email-subscription
+      #################################################
       def stub_account_api_set_email_subscription(slug: nil, **options)
         stub_account_api_request(
           :post,
@@ -149,6 +275,9 @@ module GdsApi
         )
       end
 
+      #####################
+      # GET /api/attributes
+      #####################
       def stub_account_api_has_attributes(attributes: [], values: {}, **options)
         querystring = Rack::Utils.build_nested_query({ attributes: attributes }.compact)
         stub_account_api_request(
@@ -180,6 +309,9 @@ module GdsApi
         )
       end
 
+      #######################
+      # PATCH /api/attributes
+      #######################
       def stub_account_api_set_attributes(attributes: nil, **options)
         stub_account_api_request(
           :patch,
@@ -210,6 +342,9 @@ module GdsApi
         )
       end
 
+      ###########################
+      # GET /api/attributes/names
+      ###########################
       def stub_account_api_get_attributes_names(attributes: [], **options)
         querystring = Rack::Utils.build_nested_query({ attributes: attributes }.compact)
         stub_account_api_request(
@@ -239,17 +374,6 @@ module GdsApi
           response_body: { needed_level_of_authentication: needed_level_of_authentication },
           **options,
         )
-      end
-
-      def stub_account_api_request(method, path, with: {}, response_status: 200, response_body: {}, govuk_account_session: nil, new_govuk_account_session: nil)
-        with.merge!(headers: { GdsApi::AccountApi::AUTH_HEADER_NAME => govuk_account_session }) if govuk_account_session
-        new_govuk_account_session = nil if response_status >= 400
-        to_return = { status: response_status, body: response_body.merge(govuk_account_session: new_govuk_account_session).compact.to_json }
-        if with.empty?
-          stub_request(method, "#{ACCOUNT_API_ENDPOINT}#{path}").to_return(**to_return)
-        else
-          stub_request(method, "#{ACCOUNT_API_ENDPOINT}#{path}").with(**with).to_return(**to_return)
-        end
       end
 
       ######################
