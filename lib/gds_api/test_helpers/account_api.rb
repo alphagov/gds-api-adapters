@@ -61,7 +61,7 @@ module GdsApi
       ###############
       # GET /api/user
       ###############
-      def stub_account_api_user_info(level_of_authentication: "level0", email: "email@example.com", email_verified: true, services: {}, **options)
+      def stub_account_api_user_info(level_of_authentication: "level0", email: "email@example.com", email_verified: true, has_unconfirmed_email: false, services: {}, **options)
         stub_account_api_request(
           :get,
           "/api/user",
@@ -69,6 +69,7 @@ module GdsApi
             level_of_authentication: level_of_authentication,
             email: email,
             email_verified: email_verified,
+            has_unconfirmed_email: has_unconfirmed_email,
             services: services,
           },
           **options,

@@ -123,6 +123,7 @@ describe GdsApi::AccountApi do
           level_of_authentication: Pact.like("level0"),
           email: Pact.like("user@example.com"),
           email_verified: Pact.like(true),
+          has_unconfirmed_email: Pact.like(true),
           services: {
             transition_checker: "no",
             saved_pages: "no",
