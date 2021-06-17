@@ -57,12 +57,19 @@ class GdsApi::AccountApi < GdsApi::Base
   # Update the user record with privileged information from the auth service.  Only the auth service will call this.
   #
   # @param [String] subject_identifier The identifier of the user, shared between the auth service and GOV.UK.
-  # @param [String, nil] email The new email address
-  # @param [Boolean, nil] email_verified Whether the new email address is verified
+  # @param [String, nil] email The user's current
+  # @param [Boolean, nil] email_verified Whether the user's current email address is verified
+  # @param [Boolean, nil] has_unconfirmed_email Whether the user has a new, pending, email address
   #
   # @return [Hash] The user's subject identifier and email attributes
-  def update_user_by_subject_identifier(subject_identifier:, email: nil, email_verified: nil)
-    patch_json("#{endpoint}/api/oidc-users/#{subject_identifier}", { email: email, email_verified: email_verified }.compact)
+  def update_user_by_subject_identifier(subject_identifier:, email: nil, email_verified: nil, has_unconfirmed_email: nil)
+    params = {
+      email: email,
+      email_verified: email_verified,
+      has_unconfirmed_email: has_unconfirmed_email,
+    }.compact
+
+    patch_json("#{endpoint}/api/oidc-users/#{subject_identifier}", params)
   end
 
   # Check if a user has an email subscription for the Transition Checker
