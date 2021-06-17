@@ -61,7 +61,7 @@ module GdsApi
       ###############
       # GET /api/user
       ###############
-      def stub_account_api_user_info(level_of_authentication: "level0", email: "email@example.com", email_verified: true, services: {}, **options)
+      def stub_account_api_user_info(level_of_authentication: "level0", email: "email@example.com", email_verified: true, has_unconfirmed_email: false, services: {}, **options)
         stub_account_api_request(
           :get,
           "/api/user",
@@ -69,6 +69,7 @@ module GdsApi
             level_of_authentication: level_of_authentication,
             email: email,
             email_verified: email_verified,
+            has_unconfirmed_email: has_unconfirmed_email,
             services: services,
           },
           **options,
@@ -95,15 +96,16 @@ module GdsApi
       ###########################################
       # PATCH /api/oidc-users/:subject_identifier
       ###########################################
-      def stub_update_user_by_subject_identifier(subject_identifier:, email: nil, email_verified: nil, old_email: nil, old_email_verified: nil)
+      def stub_update_user_by_subject_identifier(subject_identifier:, email: nil, email_verified: nil, has_unconfirmed_email: nil, old_email: nil, old_email_verified: nil, old_has_unconfirmed_email: nil)
         stub_account_api_request(
           :patch,
           "/api/oidc-users/#{subject_identifier}",
-          with: { body: hash_including({ email: email, email_verified: email_verified }.compact) },
+          with: { body: hash_including({ email: email, email_verified: email_verified, has_unconfirmed_email: has_unconfirmed_email }.compact) },
           response_body: {
             sub: subject_identifier,
             email: email || old_email,
             email_verified: email_verified || old_email_verified,
+            has_unconfirmed_email: has_unconfirmed_email || old_has_unconfirmed_email,
           },
         )
       end

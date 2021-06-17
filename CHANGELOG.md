@@ -1,6 +1,8 @@
 # unreleased
 
 * Add functions and test helpers for account-linked email subscriptions.
+* Add `has_unconfirmed_email` option to `update_user_by_subject_identifier`.
+* Add `has_unconfirmed_email` option to `get_user` test helper.
 
 # 71.4.0
 

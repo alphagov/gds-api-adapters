@@ -96,6 +96,7 @@ describe GdsApi::AccountApi do
       email_attributes = {
         email: "example.email.address@gov.uk",
         email_verified: true,
+        has_unconfirmed_email: false,
       }
       response_body = email_attributes.merge(sub: subject_identifier)
 
@@ -106,8 +107,7 @@ describe GdsApi::AccountApi do
 
       api_client.update_user_by_subject_identifier(
         subject_identifier: subject_identifier,
-        email: email_attributes[:email],
-        email_verified: email_attributes[:email_verified],
+        **email_attributes,
       )
     end
   end
@@ -123,6 +123,7 @@ describe GdsApi::AccountApi do
           level_of_authentication: Pact.like("level0"),
           email: Pact.like("user@example.com"),
           email_verified: Pact.like(true),
+          has_unconfirmed_email: Pact.like(true),
           services: {
             transition_checker: "no",
             saved_pages: "no",
