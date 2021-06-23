@@ -176,6 +176,18 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     )
   end
 
+  # Verify a GOV.UK Account-holder has a corresponding subscriber
+  #
+  # @param [string] govuk_account_session The request's session identifier
+  #
+  # @return [Hash] subscriber
+  def authenticate_subscriber_by_govuk_account(govuk_account_session:)
+    post_json(
+      "#{endpoint}/subscribers/govuk-account",
+      govuk_account_session: govuk_account_session,
+    )
+  end
+
   # Verify a subscriber has control of a provided email
   #
   # @param [string]       address       Address to send verification email to
