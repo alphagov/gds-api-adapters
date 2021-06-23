@@ -283,6 +283,51 @@ module GdsApi
           .to_return(status: 404)
       end
 
+      def stub_email_alert_api_authenticate_subscriber_by_govuk_account(govuk_account_session, subscriber_id, address, new_govuk_account_session: nil)
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/govuk-account")
+          .with(
+            body: { govuk_account_session: govuk_account_session }.to_json,
+          ).to_return(
+            status: 200,
+            body: {
+              govuk_account_session: new_govuk_account_session,
+            }.compact.merge(get_subscriber_response(subscriber_id, address)).to_json,
+          )
+      end
+
+      def stub_email_alert_api_authenticate_subscriber_by_govuk_account_session_invalid(govuk_account_session)
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/govuk-account")
+          .with(
+            body: { govuk_account_session: govuk_account_session }.to_json,
+          ).to_return(
+            status: 401,
+          )
+      end
+
+      def stub_email_alert_api_authenticate_subscriber_by_govuk_account_email_unverified(govuk_account_session, new_govuk_account_session: nil)
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/govuk-account")
+          .with(
+            body: { govuk_account_session: govuk_account_session }.to_json,
+          ).to_return(
+            status: 403,
+            body: {
+              govuk_account_session: new_govuk_account_session,
+            }.compact.to_json,
+          )
+      end
+
+      def stub_email_alert_api_authenticate_subscriber_by_govuk_account_no_subscriber(govuk_account_session, new_govuk_account_session: nil)
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/govuk-account")
+          .with(
+            body: { govuk_account_session: govuk_account_session }.to_json,
+          ).to_return(
+            status: 404,
+            body: {
+              govuk_account_session: new_govuk_account_session,
+            }.compact.to_json,
+          )
+      end
+
       def assert_unsubscribed(uuid)
         assert_requested(:post, "#{EMAIL_ALERT_API_ENDPOINT}/unsubscribe/#{uuid}", times: 1)
       end

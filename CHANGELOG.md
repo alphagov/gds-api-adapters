@@ -1,3 +1,7 @@
+# unreleased
+
+* Add `authenticate_subscriber_by_govuk_account` (for Email Alert API)
+
 # 71.5.0
 
 * Add functions and test helpers for account-linked email subscriptions.
