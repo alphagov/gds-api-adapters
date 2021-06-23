@@ -1,4 +1,4 @@
-# unreleased
+# 71.6.0
 
 * Add `authenticate_subscriber_by_govuk_account` (for Email Alert API)
 
