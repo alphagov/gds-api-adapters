@@ -22,7 +22,7 @@ node("postgresql-9.6") {
       ),
       stringParam(
         name: 'FRONTEND_BRANCH',
-        defaultValue: 'master',
+        defaultValue: 'main',
         description: 'Branch of frontend to run pacts against'
       ),
       stringParam(
