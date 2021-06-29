@@ -1,4 +1,4 @@
-# unreleased
+# 71.7.0
 
 * Add `id` to Account API user info test helper.
 * Add `govuk_account_id` to Email Alert API subscriber test helpers.
