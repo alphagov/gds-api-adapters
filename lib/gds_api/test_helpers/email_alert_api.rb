@@ -6,11 +6,11 @@ module GdsApi
     module EmailAlertApi
       EMAIL_ALERT_API_ENDPOINT = Plek.find("email-alert-api")
 
-      def stub_email_alert_api_has_updated_subscriber(id, new_address)
+      def stub_email_alert_api_has_updated_subscriber(id, new_address, govuk_account_id: nil)
         stub_request(:patch, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/#{id}")
           .to_return(
             status: 200,
-            body: get_subscriber_response(id, new_address).to_json,
+            body: get_subscriber_response(id, new_address, govuk_account_id).to_json,
           )
       end
 
@@ -265,11 +265,11 @@ module GdsApi
           ).to_return(status: 422)
       end
 
-      def stub_email_alert_api_sends_subscriber_verification_email(subscriber_id, address)
+      def stub_email_alert_api_sends_subscriber_verification_email(subscriber_id, address, govuk_account_id: nil)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/auth-token")
           .to_return(
             status: 201,
-            body: get_subscriber_response(subscriber_id, address).to_json,
+            body: get_subscriber_response(subscriber_id, address, govuk_account_id).to_json,
           )
       end
 
@@ -283,7 +283,7 @@ module GdsApi
           .to_return(status: 404)
       end
 
-      def stub_email_alert_api_authenticate_subscriber_by_govuk_account(govuk_account_session, subscriber_id, address, new_govuk_account_session: nil)
+      def stub_email_alert_api_authenticate_subscriber_by_govuk_account(govuk_account_session, subscriber_id, address, govuk_account_id: "user-id", new_govuk_account_session: nil)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/govuk-account")
           .with(
             body: { govuk_account_session: govuk_account_session }.to_json,
@@ -291,7 +291,7 @@ module GdsApi
             status: 200,
             body: {
               govuk_account_session: new_govuk_account_session,
-            }.compact.merge(get_subscriber_response(subscriber_id, address)).to_json,
+            }.compact.merge(get_subscriber_response(subscriber_id, address, govuk_account_id)).to_json,
           )
       end
 
@@ -359,11 +359,12 @@ module GdsApi
 
     private
 
-      def get_subscriber_response(id, address)
+      def get_subscriber_response(id, address, govuk_account_id)
         {
           "subscriber" => {
             "id" => id,
             "address" => address,
+            "govuk_account_id" => govuk_account_id,
           },
         }
       end
