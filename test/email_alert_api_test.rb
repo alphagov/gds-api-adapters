@@ -693,6 +693,70 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
+  describe "link_subscriber_to_govuk_account" do
+    it "returns subscriber details" do
+      stub_email_alert_api_link_subscriber_to_govuk_account("session-id", 42, "test@example.com")
+      api_response = api_client.link_subscriber_to_govuk_account(govuk_account_session: "session-id")
+      assert_equal(200, api_response.code)
+      assert_equal(42, api_response.dig("subscriber", "id"))
+    end
+
+    it "includes a new govuk_account_session" do
+      stub_email_alert_api_link_subscriber_to_govuk_account("session-id", 42, "test@example.com", new_govuk_account_session: "new-session-id")
+      api_response = api_client.link_subscriber_to_govuk_account(govuk_account_session: "session-id")
+      assert_equal(200, api_response.code)
+      assert_equal("new-session-id", api_response["govuk_account_session"])
+    end
+
+    describe "when the session is invalid" do
+      it "returns a 401" do
+        stub_email_alert_api_link_subscriber_to_govuk_account_session_invalid("session-id")
+
+        assert_raises GdsApi::HTTPUnauthorized do
+          api_client.link_subscriber_to_govuk_account(govuk_account_session: "session-id")
+        end
+      end
+    end
+
+    describe "when the email address is not verified" do
+      it "returns a 403" do
+        stub_email_alert_api_link_subscriber_to_govuk_account_email_unverified("session-id")
+
+        assert_raises GdsApi::HTTPForbidden do
+          api_client.link_subscriber_to_govuk_account(govuk_account_session: "session-id")
+        end
+      end
+
+      it "includes a new govuk_account_session" do
+        stub_email_alert_api_link_subscriber_to_govuk_account_email_unverified("session-id", new_govuk_account_session: "new-session-id")
+
+        error = assert_raises GdsApi::HTTPForbidden do
+          api_client.link_subscriber_to_govuk_account(govuk_account_session: "session-id")
+        end
+        assert_equal("new-session-id", JSON.parse(error.http_body)["govuk_account_session"])
+      end
+    end
+  end
+
+  describe "find_subscriber_by_govuk_account" do
+    it "returns subscriber details" do
+      stub_email_alert_api_find_subscriber_by_govuk_account("user-id", 42, "test@example.com")
+      api_response = api_client.find_subscriber_by_govuk_account(govuk_account_id: "user-id")
+      assert_equal(200, api_response.code)
+      assert_equal(42, api_response.dig("subscriber", "id"))
+    end
+
+    describe "when there is no subscriber" do
+      it "returns a 404" do
+        stub_email_alert_api_find_subscriber_by_govuk_account_no_subscriber("user-id")
+
+        assert_raises GdsApi::HTTPNotFound do
+          api_client.find_subscriber_by_govuk_account(govuk_account_id: "user-id")
+        end
+      end
+    end
+  end
+
   describe "send_subscription_verification_email" do
     it "returns 200" do
       stub_email_alert_api_sends_subscription_verification_email("test@example.com", "immediately", "topic")
