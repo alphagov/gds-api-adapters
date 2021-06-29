@@ -2,6 +2,8 @@
 
 * Add `id` to Account API user info test helper.
 * Add `govuk_account_id` to Email Alert API subscriber test helpers.
+* Add `link_subscriber_to_govuk_account` (for Email Alert API)
+* Add `find_subscriber_by_govuk_account` (for Email Alert API)
 
 # 71.6.0
 

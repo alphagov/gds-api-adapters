@@ -188,6 +188,32 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     )
   end
 
+  # Mark a subscriber as "linked" to its corresponding GOV.UK Account.
+  # In practice "linking" will mean that email-alert-frontend and
+  # account-api will treat the subscriber specially (eg, only allowing
+  # address changes via the account).
+  #
+  # @param [string] govuk_account_session The request's session identifier
+  #
+  # @return [Hash] subscriber
+  def link_subscriber_to_govuk_account(govuk_account_session:)
+    post_json(
+      "#{endpoint}/subscribers/govuk-account/link",
+      govuk_account_session: govuk_account_session,
+    )
+  end
+
+  # Find a subscriber which has been "linked" to a GOV.UK Account.
+  #
+  # @param [String] govuk_account_id An ID for the account.
+  #
+  # @return [Hash] subscriber
+  def find_subscriber_by_govuk_account(govuk_account_id:)
+    get_json(
+      "#{endpoint}/subscribers/govuk-account/#{govuk_account_id}",
+    )
+  end
+
   # Verify a subscriber has control of a provided email
   #
   # @param [string]       address       Address to send verification email to
