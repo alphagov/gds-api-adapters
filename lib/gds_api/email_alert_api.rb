@@ -156,10 +156,10 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   # @param [string] Subscriber new_address
   #
   # @return [Hash] subscriber
-  def change_subscriber(id:, new_address:)
+  def change_subscriber(id:, new_address:, on_conflict: nil)
     patch_json(
       "#{endpoint}/subscribers/#{uri_encode(id)}",
-      new_address: new_address,
+      { new_address: new_address, on_conflict: on_conflict }.compact,
     )
   end
 
