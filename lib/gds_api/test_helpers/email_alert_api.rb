@@ -283,6 +283,11 @@ module GdsApi
           .to_return(status: 404)
       end
 
+      def stub_email_alert_api_subscriber_verification_email_linked_to_govuk_account
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/auth-token")
+          .to_return(status: 403)
+      end
+
       def stub_email_alert_api_authenticate_subscriber_by_govuk_account(govuk_account_session, subscriber_id, address, govuk_account_id: "user-id", new_govuk_account_session: nil)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/govuk-account")
           .with(

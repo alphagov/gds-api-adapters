@@ -1,3 +1,7 @@
+# unreleased
+
+- Add test helper for Email Alert API auth tokens for GOV.UK Account users
+
 # 71.7.0
 
 * Add `id` to Account API user info test helper.
