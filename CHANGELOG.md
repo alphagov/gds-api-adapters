@@ -1,4 +1,4 @@
-# unreleased
+# 71.8.0
 
 - Add `on_conflict` parameter to `change_subscriber` (for Email Alert API)
 - Add test helper for Email Alert API auth tokens for GOV.UK Account users
