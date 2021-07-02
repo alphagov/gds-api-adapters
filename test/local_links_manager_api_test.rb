@@ -13,7 +13,7 @@ describe GdsApi::LocalLinksManager do
   describe "#link" do
     describe "when making a request" do
       it "returns the local authority and local interaction details if link present" do
-        stub_local_links_manager_has_a_link(
+        stub_local_links_manager_has_a_link_with_slug(
           authority_slug: "blackburn",
           lgsl: 2,
           lgil: 4,
@@ -43,7 +43,7 @@ describe GdsApi::LocalLinksManager do
       end
 
       it "returns the local authority details only if no link present" do
-        stub_local_links_manager_has_no_link(
+        stub_local_links_manager_has_no_link_with_slug(
           authority_slug: "blackburn",
           lgsl: 2,
           lgil: 4,
@@ -65,7 +65,7 @@ describe GdsApi::LocalLinksManager do
       end
 
       it "returns the local authority without a homepage url if no homepage link present" do
-        stub_local_links_manager_has_no_link_and_no_homepage_url(
+        stub_local_links_manager_has_no_link_and_no_homepage_url_with_slug(
           authority_slug: "blackburn",
           lgsl: 2,
           lgil: 4,
