@@ -5,8 +5,8 @@ module GdsApi
     module LocalLinksManager
       LOCAL_LINKS_MANAGER_ENDPOINT = Plek.current.find("local-links-manager")
 
-      def stub_local_links_manager_has_a_link(authority_slug:, lgsl:, lgil:, url:, country_name: "England", status: "ok")
-        response = {
+      def local_authority_example_link_response
+        {
           "local_authority" => {
             "name" => authority_slug.capitalize,
             "snac" => "00AG",
@@ -21,14 +21,22 @@ module GdsApi
             "status" => status,
           },
         }
-
-        stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-          .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
-          .to_return(body: response.to_json, status: 200)
       end
 
-      def stub_local_links_manager_has_no_link(authority_slug:, lgsl:, lgil:, country_name: "England")
-        response = {
+      def stub_local_links_manager_has_a_link_with_slug_with_slug(authority_slug:, lgsl:, lgil:, url:, country_name: "England", status: "ok")
+        stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
+          .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
+          .to_return(body: local_authority_example_link_response.to_json, status: 200)
+      end
+
+      def stub_local_links_manager_has_a_link_with_gss(gss:, lgsl:, lgil:, url:, country_name: "England", status: "ok")
+        stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
+          .with(query: { gss: gss, lgsl: lgsl, lgil: lgil })
+          .to_return(body: local_authority_example_link_response.to_json, status: 200)
+      end
+
+      def local_authority_example_no_link_response
+        {
           "local_authority" => {
             "name" => authority_slug.capitalize,
             "snac" => "00AG",
@@ -37,14 +45,22 @@ module GdsApi
             "country_name" => country_name,
           },
         }
-
-        stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-          .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
-          .to_return(body: response.to_json, status: 200)
       end
 
-      def stub_local_links_manager_has_no_link_and_no_homepage_url(authority_slug:, lgsl:, lgil:, country_name: "England")
-        response = {
+      def stub_local_links_manager_has_no_link_with_slug(authority_slug:, lgsl:, lgil:, country_name: "England")
+        stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
+          .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
+          .to_return(body: local_authority_example_no_link_response.to_json, status: 200)
+      end
+
+      def stub_local_links_manager_has_no_link_with_gss(gss:, lgsl:, lgil:, country_name: "England")
+        stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
+          .with(query: { gss: gss, lgsl: lgsl, lgil: lgil })
+          .to_return(body: local_authority_example_no_link_response.to_json, status: 200)
+      end
+
+      def local_authority_example_no_link_and_ho_homepage_url_response
+        {
           "local_authority" => {
             "name" => authority_slug.capitalize,
             "snac" => "00AG",
@@ -53,10 +69,18 @@ module GdsApi
             "country_name" => country_name,
           },
         }
+      end
 
+      def stub_local_links_manager_has_no_link_and_no_homepage_url_with_slug(authority_slug:, lgsl:, lgil:, country_name: "England")
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
           .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
-          .to_return(body: response.to_json, status: 200)
+          .to_return(body: local_authority_example_no_link_and_ho_homepage_url_response.to_json, status: 200)
+      end
+
+      def stub_local_links_manager_has_no_link_and_no_homepage_url_with_gss(gss:, lgsl:, lgil:, country_name: "England")
+        stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
+          .with(query: { gss: gss, lgsl: lgsl, lgil: lgil })
+          .to_return(body: local_authority_example_no_link_and_ho_homepage_url_response.to_json, status: 200)
       end
 
       def stub_local_links_manager_request_with_missing_parameters(authority_slug, lgsl, lgil)
