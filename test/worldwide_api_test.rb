@@ -1,9 +1,10 @@
-require_relative "test_helper"
+require "test_helper"
 require "gds_api/worldwide"
 require "gds_api/test_helpers/worldwide"
 
 describe GdsApi::Worldwide do
   include GdsApi::TestHelpers::Worldwide
+  include PactTest
 
   before do
     @base_api_url = GdsApi::TestHelpers::Worldwide::WORLDWIDE_API_ENDPOINT
