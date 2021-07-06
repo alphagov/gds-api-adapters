@@ -31,12 +31,12 @@ module GdsApi
       ###########################
       # POST /api/oauth2/callback
       ###########################
-      def stub_account_api_validates_auth_response(code: nil, state: nil, govuk_account_session: "govuk-account-session", redirect_path: "/", ga_client_id: "ga-client-id")
+      def stub_account_api_validates_auth_response(code: nil, state: nil, govuk_account_session: "govuk-account-session", redirect_path: "/", ga_client_id: "ga-client-id", cookie_consent: false)
         stub_request(:post, "#{ACCOUNT_API_ENDPOINT}/api/oauth2/callback")
           .with(body: hash_including({ code: code, state: state }.compact))
           .to_return(
             status: 200,
-            body: { govuk_account_session: govuk_account_session, redirect_path: redirect_path, ga_client_id: ga_client_id }.to_json,
+            body: { govuk_account_session: govuk_account_session, redirect_path: redirect_path, ga_client_id: ga_client_id, cookie_consent: cookie_consent }.to_json,
           )
       end
 

@@ -60,6 +60,18 @@ describe GdsApi::AccountApi do
       api_client.validate_auth_response(**params)
     end
 
+    it "responds with 200 OK and includes the cookie_consent in the response, if saved" do
+      response_body = response_body_with_session_identifier.merge(cookie_consent: true)
+
+      account_api
+        .given("there is a valid OAuth response, with cookie consent 'true'")
+        .upon_receiving("a validation request")
+        .with(method: :post, path: path, headers: headers_with_json_body, body: params)
+        .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
+
+      api_client.validate_auth_response(**params)
+    end
+
     it "responds with 401 Unauthorized if the parameters are not valid" do
       account_api
         .upon_receiving("a validation request")
