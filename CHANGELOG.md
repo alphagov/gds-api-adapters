@@ -1,3 +1,7 @@
+# unreleased
+
+- Add `cookie_consent` to Account API auth callback test helper
+
 # 71.8.0
 
 - Add `on_conflict` parameter to `change_subscriber` (for Email Alert API)
