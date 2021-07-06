@@ -1,4 +1,4 @@
-# unreleased
+# 71.9.0
 
 - Add `cookie_consent` to Account API auth callback test helper
 
