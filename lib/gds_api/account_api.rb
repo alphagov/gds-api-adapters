@@ -61,25 +61,6 @@ class GdsApi::AccountApi < GdsApi::Base
     patch_json("#{endpoint}/api/oidc-users/#{subject_identifier}", params)
   end
 
-  # Check if a user has an email subscription for the Transition Checker
-  #
-  # @param [String] govuk_account_session Value of the session header
-  #
-  # @return [Hash] Whether the user has a subscription, and a new session header
-  def check_for_email_subscription(govuk_account_session:)
-    get_json("#{endpoint}/api/transition-checker-email-subscription", auth_headers(govuk_account_session))
-  end
-
-  # Create or update a user's email subscription for the Transition Checker
-  #
-  # @param [String] govuk_account_session Value of the session header
-  # @param [String] slug The email topic slug
-  #
-  # @return [Hash] Whether the user has a subscription, and a new session header
-  def set_email_subscription(govuk_account_session:, slug:)
-    post_json("#{endpoint}/api/transition-checker-email-subscription", { slug: slug }, auth_headers(govuk_account_session))
-  end
-
   # Look up the values of a user's attributes
   #
   # @param [String] attributes Names of the attributes to check

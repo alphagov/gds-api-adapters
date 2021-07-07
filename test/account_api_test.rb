@@ -234,50 +234,6 @@ describe GdsApi::AccountApi do
       end
     end
 
-    describe "legacy transition checker email subscriptions" do
-      let(:path) { "/api/transition-checker-email-subscription" }
-
-      describe "#check_for_email_subscription" do
-        it "responds with 200 OK and 'has_subscription: false' if one does not exist" do
-          response_body = response_body_with_session_identifier.merge(has_subscription: false)
-
-          account_api
-            .given("there is a valid user session")
-            .upon_receiving("a has-subscription request")
-            .with(method: :get, path: path, headers: headers)
-            .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
-
-          api_client.check_for_email_subscription(govuk_account_session: govuk_account_session)
-        end
-
-        it "responds with 200 OK and 'has_subscription: true' if one exists" do
-          response_body = response_body_with_session_identifier.merge(has_subscription: true)
-
-          account_api
-            .given("there is a valid user session, with a transition checker email subscription")
-            .upon_receiving("a has-subscription request")
-            .with(method: :get, path: path, headers: headers)
-            .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
-
-          api_client.check_for_email_subscription(govuk_account_session: govuk_account_session)
-        end
-      end
-
-      describe "#set_email_subscription" do
-        it "responds with 200 OK" do
-          slug = "brexit-emails-123"
-
-          account_api
-            .given("there is a valid user session")
-            .upon_receiving("a set-subscription request")
-            .with(method: :post, path: path, headers: headers_with_json_body, body: { slug: slug })
-            .will_respond_with(status: 200, headers: json_response_headers, body: response_body_with_session_identifier)
-
-          api_client.set_email_subscription(govuk_account_session: govuk_account_session, slug: slug)
-        end
-      end
-    end
-
     describe "attributes" do
       let(:path) { "/api/attributes" }
 

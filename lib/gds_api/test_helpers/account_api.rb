@@ -126,7 +126,7 @@ module GdsApi
         )
       end
 
-      def stub_account_api_get_email_subscription_unauthorized(name:, **options)
+      def stub_account_api_unauthorized_get_email_subscription(name:, **options)
         stub_account_api_request(
           :get,
           "/api/email-subscriptions/#{name}",
@@ -189,79 +189,6 @@ module GdsApi
           :delete,
           "/api/email-subscriptions/#{name}",
           response_status: 401,
-          **options,
-        )
-      end
-
-      ################################################
-      # GET /api/transition-checker-email-subscription
-      ################################################
-      def stub_account_api_has_email_subscription(**options)
-        stub_account_api_request(
-          :get,
-          "/api/transition-checker-email-subscription",
-          response_body: { has_subscription: true },
-          **options,
-        )
-      end
-
-      def stub_account_api_does_not_have_email_subscription(**options)
-        stub_account_api_request(
-          :get,
-          "/api/transition-checker-email-subscription",
-          response_body: { has_subscription: false },
-          **options,
-        )
-      end
-
-      def stub_account_api_unauthorized_get_email_subscription(**options)
-        stub_account_api_request(
-          :get,
-          "/api/transition-checker-email-subscription",
-          response_status: 401,
-          **options,
-        )
-      end
-
-      def stub_account_api_forbidden_get_email_subscription(needed_level_of_authentication: "level1", **options)
-        stub_account_api_request(
-          :get,
-          "/api/transition-checker-email-subscription",
-          response_status: 403,
-          response_body: { needed_level_of_authentication: needed_level_of_authentication },
-          **options,
-        )
-      end
-
-      #################################################
-      # POST /api/transition-checker-email-subscription
-      #################################################
-      def stub_account_api_set_email_subscription(slug: nil, **options)
-        stub_account_api_request(
-          :post,
-          "/api/transition-checker-email-subscription",
-          with: { body: hash_including({ slug: slug }.compact) },
-          **options,
-        )
-      end
-
-      def stub_account_api_unauthorized_set_email_subscription(slug: nil, **options)
-        stub_account_api_request(
-          :post,
-          "/api/transition-checker-email-subscription",
-          with: { body: hash_including({ slug: slug }.compact) },
-          response_status: 401,
-          **options,
-        )
-      end
-
-      def stub_account_api_forbidden_set_email_subscription(slug: nil, needed_level_of_authentication: "level1", **options)
-        stub_account_api_request(
-          :post,
-          "/api/transition-checker-email-subscription",
-          with: { body: hash_including({ slug: slug }.compact) },
-          response_status: 403,
-          response_body: { needed_level_of_authentication: needed_level_of_authentication },
           **options,
         )
       end
@@ -495,7 +422,7 @@ module GdsApi
         )
       end
 
-      def stub_account_api_delete_saved_page_unauthorised(page_path:, **options)
+      def stub_account_api_unauthorized_delete_saved_page(page_path:, **options)
         stub_account_api_request(
           :delete,
           "/api/saved-pages/#{CGI.escape(page_path)}",
