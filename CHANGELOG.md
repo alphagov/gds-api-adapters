@@ -1,3 +1,8 @@
+# unreleased
+
+- BREAKING: Remove `create_registration_state` method and helpers (for Account API)
+- BREAKING: Remove `state_id` parameter from auth URL method and helpers (for Account API)
+
 # 71.9.0
 
 - Add `cookie_consent` to Account API auth callback test helper

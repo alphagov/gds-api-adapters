@@ -31,13 +31,6 @@ describe GdsApi::AccountApi do
     end
   end
 
-  describe "#create_registration_state" do
-    it "returns gives a state ID" do
-      stub_account_api_create_registration_state(attributes: { foo: "bar" }, state_id: "state-id")
-      assert_equal("state-id", api_client.create_registration_state(attributes: { foo: "bar" }).to_hash["state_id"])
-    end
-  end
-
   describe "#get_user" do
     it "gets the user's information" do
       stub_account_api_user_info(
