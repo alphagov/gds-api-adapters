@@ -1,4 +1,4 @@
-# unreleased
+# 72.0.0
 
 - BREAKING: Remove `create_registration_state` method and helpers (for Account API)
 - BREAKING: Remove `state_id` parameter from auth URL method and helpers (for Account API)
