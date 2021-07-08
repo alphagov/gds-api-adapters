@@ -54,4 +54,31 @@ describe GdsApi::Imminence do
       api_client.places("number-plate-supplier", "-2.01", "53.1", "5")
     end
   end
+
+  describe "#areas" do
+    let(:api_client) { GdsApi::Imminence.new(imminence_api_host) }
+
+    it "responds with all responses for the given dataset" do
+      imminence_api
+        .given("places exist with postcodes")
+        .upon_receiving("the request to retrieve the area for the given postcode")
+        .with(
+          method: :get,
+          path: "/areas/WC2B%206SE.json",
+          headers: GdsApi::JsonClient.default_request_headers,
+        )
+        .will_respond_with(
+          status: 200,
+          body: Pact.each_like(
+            {
+
+            },
+          ),
+          headers: {
+            "Content-Type" => "application/json; charset=utf-8",
+          },
+        )
+      api_client.areas_for_postcode("WC2B 6SE")
+    end
+  end
 end
