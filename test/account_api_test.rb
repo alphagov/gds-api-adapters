@@ -84,22 +84,6 @@ describe GdsApi::AccountApi do
     end
   end
 
-  describe "#create_registration_state" do
-    let(:path) { "/api/oauth2/state" }
-
-    it "responds with 200 OK and a state_id" do
-      attributes = { foo: "bar" }
-      response_body = { state_id: Pact.like("reference-to-pass-to-get_sign_in_url") }
-
-      account_api
-        .upon_receiving("a create-state request")
-        .with(method: :post, path: path, headers: headers_with_json_body, body: { attributes: attributes })
-        .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
-
-      api_client.create_registration_state(attributes: attributes)
-    end
-  end
-
   describe "#update_user_by_subject_identifier" do
     let(:subject_identifier) { "the-subject-identifier" }
     let(:path) { "/api/oidc-users/#{subject_identifier}" }

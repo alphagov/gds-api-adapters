@@ -19,8 +19,8 @@ module GdsApi
       #########################
       # GET /api/oauth2/sign-in
       #########################
-      def stub_account_api_get_sign_in_url(redirect_path: nil, state_id: nil, level_of_authentication: nil, auth_uri: "http://auth/provider", state: "state")
-        querystring = Rack::Utils.build_nested_query({ redirect_path: redirect_path, state_id: state_id, level_of_authentication: level_of_authentication }.compact)
+      def stub_account_api_get_sign_in_url(redirect_path: nil, level_of_authentication: nil, auth_uri: "http://auth/provider", state: "state")
+        querystring = Rack::Utils.build_nested_query({ redirect_path: redirect_path, level_of_authentication: level_of_authentication }.compact)
         stub_request(:get, "#{ACCOUNT_API_ENDPOINT}/api/oauth2/sign-in?#{querystring}")
           .to_return(
             status: 200,
@@ -44,18 +44,6 @@ module GdsApi
         stub_request(:post, "#{ACCOUNT_API_ENDPOINT}/api/oauth2/callback")
           .with(body: hash_including({ code: code, state: state }.compact))
           .to_return(status: 401)
-      end
-
-      ########################
-      # POST /api/oauth2/state
-      ########################
-      def stub_account_api_create_registration_state(attributes: nil, state_id: "state-id")
-        stub_request(:post, "#{ACCOUNT_API_ENDPOINT}/api/oauth2/state")
-          .with(body: hash_including({ attributes: attributes }.compact))
-          .to_return(
-            status: 200,
-            body: { state_id: state_id }.to_json,
-          )
       end
 
       ###############
