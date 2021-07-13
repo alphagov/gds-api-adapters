@@ -3,7 +3,7 @@ module GdsApi
   class BaseError < StandardError
     # Give Sentry extra context about this event
     # https://docs.sentry.io/clients/ruby/context/
-    def raven_context
+    def sentry_context
       {
         # Make Sentry group exceptions by type instead of message, so all
         # exceptions like `GdsApi::TimedOutException` will get grouped as one
