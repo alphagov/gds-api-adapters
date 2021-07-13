@@ -6,6 +6,8 @@
 - BREAKING: Remove `set_email_subscription` method and helpers (for Account API)
 - BREAKING: Rename `stub_account_api_get_email_subscription_unauthorized` to `stub_account_api_unauthorized_get_email_subscription` for consistency (for Account API)
 - BREAKING: Rename `stub_account_api_delete_saved_page_unauthorised` to `stub_account_api_unauthorized_delete_saved_page` for consistency (for Account API)
+- BREAKING: Change how we apply Sentry's fingerprinting algorithm ([#1096](https://github.com/alphagov/gds-api-adapters/pull/1096)).
+  Updating gds-api-adapters but failing to update govuk_app_config to v4 may mean application errors are not as effectively 'grouped' in Sentry.
 
 # 71.9.0
 
