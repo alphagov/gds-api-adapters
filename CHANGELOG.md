@@ -2,6 +2,10 @@
 
 - BREAKING: Remove `create_registration_state` method and helpers (for Account API)
 - BREAKING: Remove `state_id` parameter from auth URL method and helpers (for Account API)
+- BREAKING: Remove `check_for_email_subscription` method and helpers (for Account API)
+- BREAKING: Remove `set_email_subscription` method and helpers (for Account API)
+- BREAKING: Rename `stub_account_api_get_email_subscription_unauthorized` to `stub_account_api_unauthorized_get_email_subscription` for consistency (for Account API)
+- BREAKING: Rename `stub_account_api_delete_saved_page_unauthorised` to `stub_account_api_unauthorized_delete_saved_page` for consistency (for Account API)
 
 # 71.9.0
 

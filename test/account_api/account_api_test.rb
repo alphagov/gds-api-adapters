@@ -96,41 +96,6 @@ describe GdsApi::AccountApi do
     end
   end
 
-  describe "legacy transition checker email subscriptions" do
-    describe "#check_for_email_subscription" do
-      describe "a transition checker subscription exists" do
-        before { stub_account_api_has_email_subscription(new_govuk_account_session: new_session_id) }
-
-        it "checks if the user has an email subscription" do
-          assert(api_client.check_for_email_subscription(govuk_account_session: session_id)["has_subscription"])
-        end
-
-        it "returns the new session value" do
-          assert_equal(new_session_id, api_client.check_for_email_subscription(govuk_account_session: session_id)["govuk_account_session"])
-        end
-      end
-
-      describe "a transition checker subscription does not exist" do
-        before { stub_account_api_does_not_have_email_subscription(new_govuk_account_session: new_session_id) }
-
-        it "checks if the user has an email subscription" do
-          assert(api_client.check_for_email_subscription(govuk_account_session: session_id)["has_subscription"] == false)
-        end
-
-        it "returns the new session value" do
-          assert_equal(new_session_id, api_client.check_for_email_subscription(govuk_account_session: session_id)["govuk_account_session"])
-        end
-      end
-    end
-
-    describe "#set_email_subscription" do
-      it "returns a new session when setting the email subscription" do
-        stub_account_api_set_email_subscription(new_govuk_account_session: new_session_id)
-        assert_equal(new_session_id, api_client.set_email_subscription(govuk_account_session: session_id, slug: "slug").to_hash["govuk_account_session"])
-      end
-    end
-  end
-
   describe "attributes" do
     describe "#get_attributes" do
       describe "attributes exist" do
@@ -245,20 +210,6 @@ describe GdsApi::AccountApi do
       end
     end
 
-    it "throws a 401 if the user checks their transition checker subscription" do
-      stub_account_api_unauthorized_get_email_subscription
-      assert_raises GdsApi::HTTPUnauthorized do
-        api_client.check_for_email_subscription(govuk_account_session: session_id)
-      end
-    end
-
-    it "throws a 401 if the user updates their transition checker subscription" do
-      stub_account_api_unauthorized_set_email_subscription
-      assert_raises GdsApi::HTTPUnauthorized do
-        api_client.set_email_subscription(slug: "email-topic-slug", govuk_account_session: session_id)
-      end
-    end
-
     it "throws a 401 if the user gets their attributes" do
       stub_account_api_unauthorized_has_attributes(attributes: %w[foo bar baz])
       assert_raises GdsApi::HTTPUnauthorized do
@@ -302,14 +253,14 @@ describe GdsApi::AccountApi do
     end
 
     it "throws a 401 if the user deletes a saved page" do
-      stub_account_api_delete_saved_page_unauthorised(page_path: "/foo")
+      stub_account_api_unauthorized_delete_saved_page(page_path: "/foo")
       assert_raises GdsApi::HTTPUnauthorized do
         api_client.delete_saved_page(page_path: "/foo", govuk_account_session: session_id)
       end
     end
 
     it "throws a 401 if the user gets an email subscription" do
-      stub_account_api_get_email_subscription_unauthorized(name: "foo")
+      stub_account_api_unauthorized_get_email_subscription(name: "foo")
       assert_raises GdsApi::HTTPUnauthorized do
         api_client.get_email_subscription(name: "foo", govuk_account_session: session_id)
       end
@@ -331,22 +282,6 @@ describe GdsApi::AccountApi do
   end
 
   describe "the user is logged in at too low a level of authentication" do
-    it "throws a 403 and returns a level of authentication if the user checks their transition checker subscription" do
-      stub_account_api_forbidden_get_email_subscription
-      error = assert_raises GdsApi::HTTPForbidden do
-        api_client.check_for_email_subscription(govuk_account_session: session_id)
-      end
-      assert_equal("level1", JSON.parse(error.http_body)["needed_level_of_authentication"])
-    end
-
-    it "throws a 403 and returns a level of authentication if the user updates their transition checker subscription" do
-      stub_account_api_forbidden_set_email_subscription
-      error = assert_raises GdsApi::HTTPForbidden do
-        api_client.set_email_subscription(slug: "email-topic-slug", govuk_account_session: session_id)
-      end
-      assert_equal("level1", JSON.parse(error.http_body)["needed_level_of_authentication"])
-    end
-
     it "throws a 403 and returns a level of authentication if the user gets their attributes" do
       stub_account_api_forbidden_has_attributes(attributes: %w[foo bar baz])
       error = assert_raises GdsApi::HTTPForbidden do
