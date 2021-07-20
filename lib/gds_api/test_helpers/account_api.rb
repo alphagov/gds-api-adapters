@@ -82,6 +82,26 @@ module GdsApi
         )
       end
 
+      ############################################
+      # DELETE /api/oidc-users/:subject_identifier
+      ############################################
+
+      def stub_account_api_delete_user_by_subject_identifier(subject_identifier:)
+        stub_account_api_request(
+          :delete,
+          "/api/oidc-users/#{subject_identifier}",
+          response_status: 204,
+        )
+      end
+
+      def stub_account_api_delete_user_by_subject_identifier_does_not_exist(subject_identifier:)
+        stub_account_api_request(
+          :delete,
+          "/api/oidc-users/#{subject_identifier}",
+          response_status: 404,
+        )
+      end
+
       ###########################################
       # PATCH /api/oidc-users/:subject_identifier
       ###########################################

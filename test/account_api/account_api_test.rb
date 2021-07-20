@@ -52,6 +52,20 @@ describe GdsApi::AccountApi do
     end
   end
 
+  describe "#delete_user_by_subject_identifier" do
+    it "returns 204 if the account is successfully deleted" do
+      stub_account_api_delete_user_by_subject_identifier(subject_identifier: "sid")
+      assert_equal(204, api_client.delete_user_by_subject_identifier(subject_identifier: "sid").code)
+    end
+
+    it "returns 404 if the user cannot be found" do
+      stub_account_api_delete_user_by_subject_identifier_does_not_exist(subject_identifier: "sid")
+      assert_raises GdsApi::HTTPNotFound do
+        api_client.delete_user_by_subject_identifier(subject_identifier: "sid")
+      end
+    end
+  end
+
   describe "#update_user_by_subject_identifier" do
     it "updates the user's email attributes" do
       stub_update_user_by_subject_identifier(subject_identifier: "sid", email_verified: true, old_email: "email@example.com")
