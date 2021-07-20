@@ -108,6 +108,32 @@ describe GdsApi::AccountApi do
     end
   end
 
+  describe "#delete_user_by_subject_identifier" do
+    let(:subject_identifier) { "the-subject-identifier" }
+    let(:path) { "/api/oidc-users/#{subject_identifier}" }
+
+    it "responds with 204 No Content if the user existed and has been deleted" do
+      account_api
+        .given("there is a user with subject identifier '#{subject_identifier}'")
+        .upon_receiving("a delete-user request for '#{subject_identifier}'")
+        .with(method: :delete, path: path, headers: headers)
+        .will_respond_with(status: 204)
+
+      api_client.delete_user_by_subject_identifier(subject_identifier: subject_identifier)
+    end
+
+    it "responds with 404 if the user does not exist" do
+      account_api
+        .upon_receiving("a delete-user request")
+        .with(method: :delete, path: path, headers: headers)
+        .will_respond_with(status: 404)
+
+      assert_raises GdsApi::HTTPNotFound do
+        api_client.delete_user_by_subject_identifier(subject_identifier: subject_identifier)
+      end
+    end
+  end
+
   describe "the user is logged in" do
     let(:govuk_account_session) { "logged-in-user-session" }
 
