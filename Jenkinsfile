@@ -39,6 +39,11 @@ node("postgresql-9.6") {
         name: 'IMMINENCE_BRANCH',
         defaultValue: 'main',
         description: 'Branch of imminence to run pacts against'
+      ),
+      stringParam(
+        name: 'WHITEHALL_BRANCH',
+        defaultValue: 'main',
+        description: 'Branch of whitehall to run pacts against'
       )
     ],
     afterTest: {
@@ -57,6 +62,7 @@ node("postgresql-9.6") {
         runPactTests(govuk, "account-api", ACCOUNT_API_BRANCH, [ resetDatabase: true ])
         runPactTests(govuk, "link-checker-api", LINK_CHECKER_API_BRANCH, [ resetDatabase: true ])
         runPactTests(govuk, "imminence", IMMINENCE_BRANCH, [ resetDatabase: true, createIndexes: true ])
+        runPactTests(govuk, "whitehall", IMMINENCE_BRANCH, [ resetDatabase: true ])
       }
     }
   )
