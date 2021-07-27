@@ -1,3 +1,7 @@
+# Unreleased
+
+- Add `delete_user_by_subject_identifier` (for Account API)
+
 # 72.0.0
 
 - BREAKING: Remove `create_registration_state` method and helpers (for Account API)

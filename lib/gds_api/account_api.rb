@@ -43,6 +43,13 @@ class GdsApi::AccountApi < GdsApi::Base
     get_json("#{endpoint}/api/user", auth_headers(govuk_account_session))
   end
 
+  # Delete a users account
+  #
+  # @param [String] subject_identifier The identifier of the user, shared between the auth service and GOV.UK.
+  def delete_user_by_subject_identifier(subject_identifier:)
+    delete_json("#{endpoint}/api/oidc-users/#{subject_identifier}")
+  end
+
   # Update the user record with privileged information from the auth service.  Only the auth service will call this.
   #
   # @param [String] subject_identifier The identifier of the user, shared between the auth service and GOV.UK.
