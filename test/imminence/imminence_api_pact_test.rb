@@ -82,18 +82,18 @@ describe GdsApi::Imminence do
             results: [
               {
                 name: "Westminster City Council",
-                country_name: nil,
+                country_name: "England",
                 type: "LBO",
                 codes: {
-                  gss: nil,
+                  gss: "E12000008",
                 },
               },
               {
                 name: "London",
-                country_name: nil,
+                country_name: "England",
                 type: "EUR",
                 codes: {
-                  gss: nil,
+                  gss: "E12000009",
                 },
               },
             ],
