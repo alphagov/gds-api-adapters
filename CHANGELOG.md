@@ -1,3 +1,7 @@
+# unreleased
+
+- BREAKING: Remove `get_attributes_names` method and helpers (for Account API)
+
 # 72.1.0
 
 - Add `delete_user_by_subject_identifier` (for Account API)

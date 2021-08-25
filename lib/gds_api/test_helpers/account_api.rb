@@ -280,40 +280,6 @@ module GdsApi
         )
       end
 
-      ###########################
-      # GET /api/attributes/names
-      ###########################
-      def stub_account_api_get_attributes_names(attributes: [], **options)
-        querystring = Rack::Utils.build_nested_query({ attributes: attributes }.compact)
-        stub_account_api_request(
-          :get,
-          "/api/attributes/names?#{querystring}",
-          response_body: { values: attributes },
-          **options,
-        )
-      end
-
-      def stub_account_api_unauthorized_get_attributes_names(attributes: [], **options)
-        querystring = Rack::Utils.build_nested_query({ attributes: attributes }.compact)
-        stub_account_api_request(
-          :get,
-          "/api/attributes/names?#{querystring}",
-          response_status: 401,
-          **options,
-        )
-      end
-
-      def stub_account_api_forbidden_get_attributes_names(attributes: [], needed_level_of_authentication: "level1", **options)
-        querystring = Rack::Utils.build_nested_query({ attributes: attributes }.compact)
-        stub_account_api_request(
-          :get,
-          "/api/attributes/names?#{querystring}",
-          response_status: 403,
-          response_body: { needed_level_of_authentication: needed_level_of_authentication },
-          **options,
-        )
-      end
-
       ######################
       # GET /api/saved-pages
       ######################

@@ -305,35 +305,6 @@ describe GdsApi::AccountApi do
         end
       end
     end
-
-    describe "#get_attributes_names" do
-      let(:path) { "/api/attributes/names" }
-      let(:attribute_name) { "test_attribute_1" }
-
-      it "responds with 200 OK and no attributes, if none exist" do
-        response_body = response_body_with_session_identifier.merge(values: [])
-
-        account_api
-          .given("there is a valid user session")
-          .upon_receiving("a get-attributes-names request")
-          .with(method: :get, path: path, headers: headers, query: { "attributes[]" => [attribute_name] })
-          .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
-
-        api_client.get_attributes_names(govuk_account_session: govuk_account_session, attributes: [attribute_name])
-      end
-
-      it "responds with 200 OK and the attribute names, if they exist" do
-        response_body = response_body_with_session_identifier.merge(values: [attribute_name])
-
-        account_api
-          .given("there is a valid user session, with an attribute called '#{attribute_name}'")
-          .upon_receiving("a get-attributes-names request")
-          .with(method: :get, path: path, headers: headers, query: { "attributes[]" => [attribute_name] })
-          .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
-
-        api_client.get_attributes_names(govuk_account_session: govuk_account_session, attributes: [attribute_name])
-      end
-    end
   end
 
   describe "saved pages" do
