@@ -1,4 +1,4 @@
-# unreleased
+# 73.0.0
 
 - BREAKING: Remove `get_attributes_names` method and helpers (for Account API)
 
