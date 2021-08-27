@@ -1,3 +1,7 @@
+# unreleased
+
+- Add `get_end_session_url` (for Account API)
+
 # 73.0.0
 
 - BREAKING: Remove `get_attributes_names` method and helpers (for Account API)

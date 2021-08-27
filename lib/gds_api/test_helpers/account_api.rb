@@ -46,6 +46,26 @@ module GdsApi
           .to_return(status: 401)
       end
 
+      #############################
+      # GET /api/oauth2/end-session
+      #############################
+      def stub_account_api_get_end_session_url(govuk_account_session: nil, end_session_uri: "http://auth/provider")
+        if govuk_account_session
+          stub_request(:get, "#{ACCOUNT_API_ENDPOINT}/api/oauth2/end-session")
+            .with(headers: { GdsApi::AccountApi::AUTH_HEADER_NAME => govuk_account_session })
+            .to_return(
+              status: 200,
+              body: { end_session_uri: end_session_uri }.to_json,
+            )
+        else
+          stub_request(:get, "#{ACCOUNT_API_ENDPOINT}/api/oauth2/end-session")
+            .to_return(
+              status: 200,
+              body: { end_session_uri: end_session_uri }.to_json,
+            )
+        end
+      end
+
       ###############
       # GET /api/user
       ###############

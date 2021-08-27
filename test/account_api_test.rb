@@ -84,6 +84,23 @@ describe GdsApi::AccountApi do
     end
   end
 
+  describe "#get_end_session_url" do
+    let(:path) { "/api/oauth2/end-session" }
+
+    it "responds with 200 OK and an end-session URI" do
+      response_body = {
+        end_session_uri: Pact.like("http://authentication-provider/some/end/session/url"),
+      }
+
+      account_api
+        .upon_receiving("an end-session request")
+        .with(method: :get, path: path, headers: headers)
+        .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
+
+      api_client.get_end_session_url
+    end
+  end
+
   describe "#update_user_by_subject_identifier" do
     let(:subject_identifier) { "the-subject-identifier" }
     let(:path) { "/api/oidc-users/#{subject_identifier}" }
