@@ -34,6 +34,15 @@ class GdsApi::AccountApi < GdsApi::Base
     post_json("#{endpoint}/api/oauth2/callback", code: code, state: state)
   end
 
+  # Get an OIDC end-session URL to redirect the user to
+  #
+  # @param [String, nil] govuk_account_session Value of the session header
+  #
+  # @return [Hash] An end-session URL
+  def get_end_session_url(govuk_account_session: nil)
+    get_json("#{endpoint}/api/oauth2/end-session", auth_headers(govuk_account_session))
+  end
+
   # Get all the information about a user needed to render the account home page
   #
   # @param [String] govuk_account_session Value of the session header

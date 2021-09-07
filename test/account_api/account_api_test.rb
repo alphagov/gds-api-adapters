@@ -31,6 +31,18 @@ describe GdsApi::AccountApi do
     end
   end
 
+  describe "#get_end_session_url" do
+    it "gives an end-session URI" do
+      stub_account_api_get_end_session_url(end_session_uri: "https://www.example.com/end-session")
+      assert_equal("https://www.example.com/end-session", api_client.get_end_session_url.to_hash["end_session_uri"])
+    end
+
+    it "passes the GOVUK-Account-Session" do
+      stub_account_api_get_end_session_url(govuk_account_session: session_id, end_session_uri: "https://www.example.com/end-session")
+      assert_equal("https://www.example.com/end-session", api_client.get_end_session_url(govuk_account_session: session_id).to_hash["end_session_uri"])
+    end
+  end
+
   describe "#get_user" do
     it "gets the user's information" do
       stub_account_api_user_info(
