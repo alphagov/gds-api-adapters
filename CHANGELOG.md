@@ -1,4 +1,4 @@
-# unreleased
+# 73.1.0
 
 - Add `get_end_session_url` (for Account API)
 
