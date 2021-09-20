@@ -1,3 +1,7 @@
+# unreleased
+
+- BREAKING: Replace `level_of_authentication` parameter with `mfa` (for Account API)
+
 # 73.1.0
 
 - Add `get_end_session_url` (for Account API)

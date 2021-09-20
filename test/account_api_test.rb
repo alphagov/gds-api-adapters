@@ -160,7 +160,7 @@ describe GdsApi::AccountApi do
       it "responds with 200 OK" do
         user_details = response_body_with_session_identifier.merge(
           id: Pact.like("user-id"),
-          level_of_authentication: Pact.like("level0"),
+          mfa: Pact.like(true),
           email: Pact.like("user@example.com"),
           email_verified: Pact.like(true),
           has_unconfirmed_email: Pact.like(true),
