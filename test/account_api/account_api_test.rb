@@ -46,13 +46,13 @@ describe GdsApi::AccountApi do
   describe "#get_user" do
     it "gets the user's information" do
       stub_account_api_user_info(
-        level_of_authentication: "level90",
+        mfa: true,
         email: "user@gov.uk",
         email_verified: false,
         services: { register_to_become_a_wizard: "yes" },
         new_govuk_account_session: new_session_id,
       )
-      assert_equal("level90", api_client.get_user(govuk_account_session: session_id)["level_of_authentication"])
+      assert_equal(true, api_client.get_user(govuk_account_session: session_id)["mfa"])
       assert_equal("user@gov.uk", api_client.get_user(govuk_account_session: session_id)["email"])
       assert_equal(false, api_client.get_user(govuk_account_session: session_id)["email_verified"])
       assert_equal("yes", api_client.get_user(govuk_account_session: session_id)["services"]["register_to_become_a_wizard"])
@@ -290,21 +290,19 @@ describe GdsApi::AccountApi do
     end
   end
 
-  describe "the user is logged in at too low a level of authentication" do
-    it "throws a 403 and returns a level of authentication if the user gets their attributes" do
+  describe "the user is logged in without MFA when it's needed" do
+    it "throws a 403 if the user gets their attributes" do
       stub_account_api_forbidden_has_attributes(attributes: %w[foo bar baz])
-      error = assert_raises GdsApi::HTTPForbidden do
+      assert_raises GdsApi::HTTPForbidden do
         api_client.get_attributes(attributes: %w[foo bar baz], govuk_account_session: session_id)
       end
-      assert_equal("level1", JSON.parse(error.http_body)["needed_level_of_authentication"])
     end
 
-    it "throws a 403 and returns a level of authentication if the user updates their attributes" do
+    it "throws a 403 if the user updates their attributes" do
       stub_account_api_forbidden_set_attributes(attributes: { foo: %w[bar baz] })
-      error = assert_raises GdsApi::HTTPForbidden do
+      assert_raises GdsApi::HTTPForbidden do
         api_client.set_attributes(attributes: { foo: %w[bar baz] }, govuk_account_session: session_id)
       end
-      assert_equal("level1", JSON.parse(error.http_body)["needed_level_of_authentication"])
     end
   end
 end

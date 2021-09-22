@@ -19,8 +19,8 @@ module GdsApi
       #########################
       # GET /api/oauth2/sign-in
       #########################
-      def stub_account_api_get_sign_in_url(redirect_path: nil, level_of_authentication: nil, auth_uri: "http://auth/provider", state: "state")
-        querystring = Rack::Utils.build_nested_query({ redirect_path: redirect_path, level_of_authentication: level_of_authentication }.compact)
+      def stub_account_api_get_sign_in_url(redirect_path: nil, mfa: false, auth_uri: "http://auth/provider", state: "state")
+        querystring = Rack::Utils.build_nested_query({ redirect_path: redirect_path, mfa: mfa }.compact)
         stub_request(:get, "#{ACCOUNT_API_ENDPOINT}/api/oauth2/sign-in?#{querystring}")
           .to_return(
             status: 200,
@@ -69,13 +69,13 @@ module GdsApi
       ###############
       # GET /api/user
       ###############
-      def stub_account_api_user_info(id: "user-id", level_of_authentication: "level0", email: "email@example.com", email_verified: true, has_unconfirmed_email: false, services: {}, **options)
+      def stub_account_api_user_info(id: "user-id", mfa: false, email: "email@example.com", email_verified: true, has_unconfirmed_email: false, services: {}, **options)
         stub_account_api_request(
           :get,
           "/api/user",
           response_body: {
             id: id,
-            level_of_authentication: level_of_authentication,
+            mfa: mfa,
             email: email,
             email_verified: email_verified,
             has_unconfirmed_email: has_unconfirmed_email,
@@ -256,13 +256,12 @@ module GdsApi
         )
       end
 
-      def stub_account_api_forbidden_has_attributes(attributes: [], needed_level_of_authentication: "level1", **options)
+      def stub_account_api_forbidden_has_attributes(attributes: [], **options)
         querystring = Rack::Utils.build_nested_query({ attributes: attributes }.compact)
         stub_account_api_request(
           :get,
           "/api/attributes?#{querystring}",
           response_status: 403,
-          response_body: { needed_level_of_authentication: needed_level_of_authentication },
           **options,
         )
       end
@@ -289,13 +288,12 @@ module GdsApi
         )
       end
 
-      def stub_account_api_forbidden_set_attributes(attributes: nil, needed_level_of_authentication: "level1", **options)
+      def stub_account_api_forbidden_set_attributes(attributes: nil, **options)
         stub_account_api_request(
           :patch,
           "/api/attributes",
           with: { body: hash_including({ attributes: attributes }.compact) },
           response_status: 403,
-          response_body: { needed_level_of_authentication: needed_level_of_authentication },
           **options,
         )
       end
