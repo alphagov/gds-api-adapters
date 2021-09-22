@@ -1,4 +1,4 @@
-# unreleased
+# 74.0.0
 
 - BREAKING: Replace `level_of_authentication` parameter with `mfa` (for Account API)
 
