@@ -147,77 +147,6 @@ describe GdsApi::AccountApi do
     end
   end
 
-  describe "saved pages" do
-    describe "#get_saved_pages" do
-      let(:saved_pages) { [{ "page_path" => "/foo" }, { "page_path" => "/bar" }] }
-
-      it "gets saved pages" do
-        stub_saved_pages = saved_pages
-        stub_account_api_returning_saved_pages(saved_pages: stub_saved_pages, new_govuk_account_session: new_session_id)
-        assert_equal(saved_pages, api_client.get_saved_pages(govuk_account_session: new_session_id)["saved_pages"])
-      end
-
-      it "it returns an empty array if there are no saved pages" do
-        stub_account_api_returning_saved_pages(saved_pages: [], new_govuk_account_session: new_session_id)
-        assert_equal([], api_client.get_saved_pages(govuk_account_session: new_session_id)["saved_pages"])
-      end
-    end
-
-    describe "#get_saved_page" do
-      it "gets a single saved page by path and returns a saved page hash" do
-        stub_account_api_get_saved_page(page_path: "/foo", content_id: "content-id", title: "title", new_govuk_account_session: new_session_id)
-        assert_equal({ "page_path" => "/foo", "content_id" => "content-id", "title" => "title" }, api_client.get_saved_page(page_path: "/foo", govuk_account_session: session_id)["saved_page"])
-      end
-
-      it "throws a 404 if the saved page does not exist" do
-        stub_account_api_does_not_have_saved_page(page_path: "/bar", new_govuk_account_session: new_session_id)
-        assert_raises GdsApi::HTTPNotFound do
-          api_client.get_saved_page(page_path: "/bar", govuk_account_session: session_id)
-        end
-      end
-    end
-
-    describe "#save_page" do
-      describe "if the saved page does not exist in the user's account" do
-        before { stub_account_api_save_page(page_path: "/foo", content_id: "content-id", title: "title", new_govuk_account_session: new_session_id) }
-
-        it "responds sucessfully" do
-          assert_equal(200, api_client.save_page(page_path: "/foo", govuk_account_session: session_id).code)
-        end
-
-        it "returns the created value" do
-          assert_equal({ "page_path" => "/foo", "content_id" => "content-id", "title" => "title" }, api_client.save_page(page_path: "/foo", govuk_account_session: session_id)["saved_page"])
-        end
-      end
-
-      it "returns success if the page already exists" do
-        stub_account_api_save_page_already_exists(page_path: "/existing", new_govuk_account_session: new_session_id)
-        assert_equal(200, api_client.save_page(page_path: "/existing", govuk_account_session: session_id).code)
-      end
-
-      it "responds 422 Unprocessable Entity if the page cannot be saved" do
-        stub_account_api_save_page_cannot_save_page(page_path: "/invalid", new_govuk_account_session: new_session_id)
-        assert_raises GdsApi::HTTPUnprocessableEntity do
-          api_client.save_page(page_path: "/invalid", govuk_account_session: session_id)
-        end
-      end
-    end
-
-    describe "#delete_saved_page" do
-      it "returns 204 if sucessfully deleted" do
-        stub_account_api_delete_saved_page(page_path: "/foo", new_govuk_account_session: new_session_id)
-        assert_equal(204, api_client.delete_saved_page(page_path: "/foo", govuk_account_session: session_id).code)
-      end
-
-      it "throws 404 if the saved page does not exist" do
-        stub_account_api_delete_saved_page_does_not_exist(page_path: "/foo", new_govuk_account_session: new_session_id)
-        assert_raises GdsApi::HTTPNotFound do
-          api_client.delete_saved_page(page_path: "/foo", govuk_account_session: session_id)
-        end
-      end
-    end
-  end
-
   describe "the user is not logged in or their session is invalid" do
     it "throws a 401 if the user checks their information" do
       stub_account_api_unauthorized_user_info
@@ -237,34 +166,6 @@ describe GdsApi::AccountApi do
       stub_account_api_unauthorized_set_attributes(attributes: { foo: %w[bar baz] })
       assert_raises GdsApi::HTTPUnauthorized do
         api_client.set_attributes(attributes: { foo: %w[bar baz] }, govuk_account_session: session_id)
-      end
-    end
-
-    it "throws a 401 if the user checks their saved pages" do
-      stub_account_api_unauthorized_get_saved_pages
-      assert_raises GdsApi::HTTPUnauthorized do
-        api_client.get_saved_pages(govuk_account_session: new_session_id)
-      end
-    end
-
-    it "throws a 401 if the user gets a saved page" do
-      stub_account_api_unauthorized_get_saved_page(page_path: "/foo")
-      assert_raises GdsApi::HTTPUnauthorized do
-        api_client.get_saved_page(page_path: "/foo", govuk_account_session: session_id)
-      end
-    end
-
-    it "throws a 401 if the user saves a page" do
-      stub_account_api_unauthorized_save_page(page_path: "/foo")
-      assert_raises GdsApi::HTTPUnauthorized do
-        api_client.save_page(page_path: "/foo", govuk_account_session: session_id)
-      end
-    end
-
-    it "throws a 401 if the user deletes a saved page" do
-      stub_account_api_unauthorized_delete_saved_page(page_path: "/foo")
-      assert_raises GdsApi::HTTPUnauthorized do
-        api_client.delete_saved_page(page_path: "/foo", govuk_account_session: session_id)
       end
     end
 

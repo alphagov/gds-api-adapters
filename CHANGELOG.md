@@ -1,3 +1,10 @@
+# Unreleased
+
+- BREAKING: Remove `get_saved_pages` (for Account API)
+- BREAKING: Remove `get_saved_page` (for Account API)
+- BREAKING: Remove `save_page` (for Account API)
+- BREAKING: Remove `delete_saved_page` (for Account API)
+
 # 74.0.0
 
 - BREAKING: Replace `level_of_authentication` parameter with `mfa` (for Account API)
