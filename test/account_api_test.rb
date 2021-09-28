@@ -166,7 +166,6 @@ describe GdsApi::AccountApi do
           has_unconfirmed_email: Pact.like(true),
           services: {
             transition_checker: "no",
-            saved_pages: "no",
           },
         )
 
@@ -175,16 +174,6 @@ describe GdsApi::AccountApi do
           .upon_receiving("a get-user request")
           .with(method: :get, path: path, headers: headers)
           .will_respond_with(status: 200, headers: json_response_headers, body: user_details)
-
-        api_client.get_user(govuk_account_session: govuk_account_session)
-      end
-
-      it "includes 'saved_pages: yes' if the user has saved pages" do
-        account_api
-          .given("there is a valid user session, with /guidance/some-govuk-guidance saved")
-          .upon_receiving("a get-user request")
-          .with(method: :get, path: path, headers: headers)
-          .will_respond_with(status: 200, headers: json_response_headers, body: { services: { saved_pages: "yes" } })
 
         api_client.get_user(govuk_account_session: govuk_account_session)
       end
@@ -319,146 +308,6 @@ describe GdsApi::AccountApi do
             .will_respond_with(status: 200, headers: json_response_headers, body: response_body_with_session_identifier)
 
           api_client.set_attributes(govuk_account_session: govuk_account_session, attributes: attributes)
-        end
-      end
-    end
-  end
-
-  describe "saved pages" do
-    let(:saved_page_path) { "/guidance/some-govuk-guidance" }
-    let(:path) { "/api/saved-pages/#{CGI.escape(saved_page_path)}" }
-
-    describe "#get_saved_pages" do
-      let(:path) { "/api/saved-pages" }
-
-      it "responds with 200 OK and returns an empty list of saved pages, if none exist" do
-        response_body = response_body_with_session_identifier.merge(saved_pages: [])
-
-        account_api
-          .given("there is a valid user session")
-          .upon_receiving("a GET saved_pages request")
-          .with(method: :get, path: path, headers: headers)
-          .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
-
-        api_client.get_saved_pages(govuk_account_session: govuk_account_session)
-      end
-
-      it "responds with 200 OK and a list of saved pages, if some exist" do
-        response_body = response_body_with_session_identifier.merge(
-          saved_pages: [
-            {
-              page_path: "/page-path/1",
-              content_id: Pact.like("7b7b77b0-257a-467d-84c9-c5167781d05c"),
-              title: Pact.like("Page #1"),
-            },
-            {
-              page_path: "/page-path/2",
-              content_id: Pact.like("7b7b77b0-257a-467d-84c9-c5167781d05c"),
-              title: Pact.like("Page #1"),
-            },
-          ],
-        )
-
-        account_api
-          .given("there is a valid user session, with saved pages")
-          .upon_receiving("a GET saved_pages request")
-          .with(method: :get, path: path, headers: headers)
-          .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
-
-        api_client.get_saved_pages(govuk_account_session: govuk_account_session)
-      end
-    end
-
-    describe "#get_saved_page" do
-      it "responds with 200 OK and the saved page, if it exists" do
-        response_body = response_body_with_session_identifier.merge(
-          saved_page: {
-            page_path: saved_page_path,
-            content_id: Pact.like("6e0e144a-9e59-4ac8-af3b-d87e8ff30a47"),
-            title: Pact.like("Some GOV.UK Guidance"),
-          },
-        )
-
-        account_api
-          .given("there is a valid user session, with '#{saved_page_path}' saved")
-          .upon_receiving("a GET saved-page/:page_path request")
-          .with(method: :get, path: path, headers: headers)
-          .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
-
-        api_client.get_saved_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
-      end
-
-      it "responds with 404 Not Found if there is not a saved page" do
-        account_api
-          .given("there is a valid user session")
-          .upon_receiving("a GET saved-page/:page_path request")
-          .with(method: :get, path: path, headers: headers)
-          .will_respond_with(status: 404)
-
-        assert_raises GdsApi::HTTPNotFound do
-          api_client.get_saved_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
-        end
-      end
-    end
-
-    describe "#save_page" do
-      it "responds with 200 OK and the saved page" do
-        response_body = response_body_with_session_identifier.merge(
-          saved_page: {
-            page_path: saved_page_path,
-            content_id: Pact.like("6e0e144a-9e59-4ac8-af3b-d87e8ff30a47"),
-            title: Pact.like("Some GOV.UK Guidance"),
-          },
-        )
-
-        account_api
-          .given("there is a valid user session")
-          .upon_receiving("a PUT saved-page/:page_path request")
-          .with(method: :put, path: path, headers: headers)
-          .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
-
-        api_client.save_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
-      end
-
-      it "responds with 200 OK and updates an existing saved page" do
-        response_body = response_body_with_session_identifier.merge(
-          saved_page: {
-            page_path: saved_page_path,
-            content_id: Pact.like("6e0e144a-9e59-4ac8-af3b-d87e8ff30a47"),
-            title: Pact.like("Some GOV.UK Guidance"),
-          },
-        )
-
-        account_api
-          .given("there is a valid user session, with '#{saved_page_path}' saved")
-          .upon_receiving("a PUT saved-page/:page_path request")
-          .with(method: :put, path: path, headers: headers)
-          .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
-
-        api_client.save_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
-      end
-    end
-
-    describe "#delete_saved_page" do
-      it "responds with 204 No Content if there is a saved page" do
-        account_api
-          .given("there is a valid user session, with '#{saved_page_path}' saved")
-          .upon_receiving("a DELETE saved-page/:page_path request")
-          .with(method: :delete, path: path, headers: headers)
-          .will_respond_with(status: 204)
-
-        api_client.delete_saved_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
-      end
-
-      it "responds with 404 Not Found if there is not a saved page" do
-        account_api
-          .given("there is a valid user session")
-          .upon_receiving("a DELETE saved-page/:page_path request")
-          .with(method: :delete, path: path, headers: headers)
-          .will_respond_with(status: 404)
-
-        assert_raises GdsApi::HTTPNotFound do
-          api_client.delete_saved_page(page_path: saved_page_path, govuk_account_session: govuk_account_session)
         end
       end
     end
