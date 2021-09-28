@@ -1,4 +1,4 @@
-# Unreleased
+# 75.0.0
 
 - BREAKING: Remove `get_saved_pages` (for Account API)
 - BREAKING: Remove `get_saved_page` (for Account API)
