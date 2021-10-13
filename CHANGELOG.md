@@ -1,4 +1,4 @@
-# unreleased
+# 75.1.0
 
 - Add `cookie_consent` and `feedback_consent` to `update_user_by_subject_identifier` (for Account API)
 
