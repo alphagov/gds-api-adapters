@@ -22,6 +22,13 @@ describe GdsApi::AccountApi do
       assert(!api_client.validate_auth_response(code: "foo", state: "bar")["govuk_account_session"].nil?)
     end
 
+    it "returns the cookie & feedback consents" do
+      stub_account_api_validates_auth_response(code: "foo", state: "bar", cookie_consent: true, feedback_consent: false)
+      response = api_client.validate_auth_response(code: "foo", state: "bar")
+      assert_equal(true, response["cookie_consent"])
+      assert_equal(false, response["feedback_consent"])
+    end
+
     it "throws a 401 if the auth response does not validate" do
       stub_account_api_rejects_auth_response(code: "foo", state: "bar")
 
