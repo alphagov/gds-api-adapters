@@ -10,8 +10,9 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   #
   # @param attributes [Hash] document_type, links, tags used to search existing subscriber lists
   def find_or_create_subscriber_list(attributes)
-    if attributes["tags"] && attributes["links"]
-      message = "please provide either tags or links (or neither), but not both"
+    present_fields = [attributes["content_id"], attributes["links"], attributes["tags"]].compact.count
+    if present_fields > 1
+      message = "please provide content_id, tags, or links (or none), but not more than one of them"
       raise ArgumentError, message
     end
 

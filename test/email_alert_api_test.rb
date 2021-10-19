@@ -331,6 +331,22 @@ describe GdsApi::EmailAlertApi do
           end
         end
       end
+
+      describe "when content_id and tags are provided" do
+        let(:params) do
+          {
+            "title" => title,
+            "content_id" => "fd427f55-7492-440d-ae3f-0fb6c3592b21",
+            "links" => links,
+          }
+        end
+
+        it "excludes that attribute from the query string" do
+          assert_raises do
+            api_client.find_or_create_subscriber_list(params)
+          end
+        end
+      end
     end
   end
 
