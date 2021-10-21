@@ -1,3 +1,7 @@
+# unreleased
+
+* Forbid creating a SubscriberList with a content_id AND tags or links (for Email Alert API)
+
 # 75.2.0
 
 - Add `feedback_consent` to `stub_account_api_validates_auth_response` test helper (for Account API)
