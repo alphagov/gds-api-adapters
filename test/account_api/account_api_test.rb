@@ -71,6 +71,25 @@ describe GdsApi::AccountApi do
     end
   end
 
+  describe "#match_user_by_email" do
+    it "returns `match: true` if the user matches" do
+      stub_account_api_match_user_by_email_matches(email: "foo@bar.baz")
+      assert_equal(true, api_client.match_user_by_email(govuk_account_session: session_id, email: "foo@bar.baz")["match"])
+    end
+
+    it "returns `match: false` if the user does not match" do
+      stub_account_api_match_user_by_email_does_not_match(email: "foo@bar.baz")
+      assert_equal(false, api_client.match_user_by_email(govuk_account_session: session_id, email: "foo@bar.baz")["match"])
+    end
+
+    it "throws a 404 if the user cannot be found" do
+      stub_account_api_match_user_by_email_does_not_exist(email: "foo@bar.baz")
+      assert_raises GdsApi::HTTPNotFound do
+        assert_equal(false, api_client.match_user_by_email(govuk_account_session: session_id, email: "foo@bar.baz"))
+      end
+    end
+  end
+
   describe "#delete_user_by_subject_identifier" do
     it "returns 204 if the account is successfully deleted" do
       stub_account_api_delete_user_by_subject_identifier(subject_identifier: "sid")

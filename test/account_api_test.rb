@@ -151,6 +151,32 @@ describe GdsApi::AccountApi do
     end
   end
 
+  describe "#match_user_by_email" do
+    let(:email) { "email@example.com" }
+    let(:path) { "/api/user/match-by-email" }
+
+    it "responds with `match: false` if the user exists" do
+      account_api
+        .given("there is a user with email address '#{email}'")
+        .upon_receiving("a match-user-by-email request for '#{email}'")
+        .with(method: :get, path: path, headers: headers, query: { email: email })
+        .will_respond_with(status: 200, headers: json_response_headers, body: { match: Pact.like(false) })
+
+      api_client.match_user_by_email(email: email)
+    end
+
+    it "responds with 404 if the user does not exist" do
+      account_api
+        .upon_receiving("a match-user-by-email request for '#{email}'")
+        .with(method: :get, path: path, headers: headers, query: { email: email })
+        .will_respond_with(status: 404)
+
+      assert_raises GdsApi::HTTPNotFound do
+        api_client.match_user_by_email(email: email)
+      end
+    end
+  end
+
   describe "the user is logged in" do
     let(:govuk_account_session) { "logged-in-user-session" }
 
