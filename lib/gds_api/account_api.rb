@@ -52,6 +52,17 @@ class GdsApi::AccountApi < GdsApi::Base
     get_json("#{endpoint}/api/user", auth_headers(govuk_account_session))
   end
 
+  # Find a user by email address, returning whether they match the given session (if any)
+  #
+  # @param [String] email The email address to search for
+  # @param [String, nil] govuk_account_session Value of the session header, if not given just checks if the given email address exists.
+  #
+  # @return [Hash] One field, "match", indicating whether the session matches the given email address
+  def match_user_by_email(email:, govuk_account_session: nil)
+    querystring = nested_query_string({ email: email })
+    get_json("#{endpoint}/api/user/match-by-email?#{querystring}", auth_headers(govuk_account_session))
+  end
+
   # Delete a users account
   #
   # @param [String] subject_identifier The identifier of the user, shared between the auth service and GOV.UK.
@@ -62,7 +73,7 @@ class GdsApi::AccountApi < GdsApi::Base
   # Update the user record with privileged information from the auth service.  Only the auth service will call this.
   #
   # @param [String] subject_identifier The identifier of the user, shared between the auth service and GOV.UK.
-  # @param [String, nil] email The user's current
+  # @param [String, nil] email The user's current email address
   # @param [Boolean, nil] email_verified Whether the user's current email address is verified
   # @param [Boolean, nil] has_unconfirmed_email Whether the user has a new, pending, email address
   # @param [Boolean, nil] cookie_consent Whether the user has consented to analytics cookies
@@ -138,6 +149,6 @@ private
   end
 
   def auth_headers(govuk_account_session)
-    { AUTH_HEADER_NAME => govuk_account_session }
+    { AUTH_HEADER_NAME => govuk_account_session }.compact
   end
 end

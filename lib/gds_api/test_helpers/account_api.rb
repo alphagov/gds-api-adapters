@@ -102,6 +102,41 @@ module GdsApi
         )
       end
 
+      ##############################
+      # GET /api/user/match-by-email
+      ##############################
+
+      def stub_account_api_match_user_by_email_matches(email:, **options)
+        stub_account_api_request(
+          :get,
+          "/api/user/match-by-email?#{Rack::Utils.build_nested_query({ email: email })}",
+          response_body: {
+            match: true,
+          },
+          **options,
+        )
+      end
+
+      def stub_account_api_match_user_by_email_does_not_match(email:, **options)
+        stub_account_api_request(
+          :get,
+          "/api/user/match-by-email?#{Rack::Utils.build_nested_query({ email: email })}",
+          response_body: {
+            match: false,
+          },
+          **options,
+        )
+      end
+
+      def stub_account_api_match_user_by_email_does_not_exist(email:, **options)
+        stub_account_api_request(
+          :get,
+          "/api/user/match-by-email?#{Rack::Utils.build_nested_query({ email: email })}",
+          response_status: 404,
+          **options,
+        )
+      end
+
       ############################################
       # DELETE /api/oidc-users/:subject_identifier
       ############################################
