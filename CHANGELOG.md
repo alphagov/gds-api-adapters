@@ -1,4 +1,4 @@
-# unreleased
+# 75.3.0
 
 * Add `match_user_by_email` and test helpers (for Account API)
 * Forbid creating a SubscriberList with a content_id AND tags or links (for Email Alert API)
