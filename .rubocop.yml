@@ -2,6 +2,10 @@ inherit_gem:
   rubocop-govuk:
     - config/default.yml
 
+inherit_mode:
+  merge:
+    - Exclude
+
 Naming/FileName:
   Exclude:
     # This file is named with kebab case to match the gem name so that
