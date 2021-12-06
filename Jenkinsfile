@@ -62,7 +62,7 @@ node("postgresql-9.6") {
         runPactTests(govuk, "account-api", ACCOUNT_API_BRANCH, [ resetDatabase: true ])
         runPactTests(govuk, "link-checker-api", LINK_CHECKER_API_BRANCH, [ resetDatabase: true ])
         runPactTests(govuk, "imminence", IMMINENCE_BRANCH, [ resetDatabase: true, createIndexes: true ])
-        runPactTests(govuk, "whitehall", IMMINENCE_BRANCH, [ resetDatabase: true ])
+        runPactTests(govuk, "whitehall", WHITEHALL_BRANCH, [ resetDatabase: true ])
       }
     }
   )
