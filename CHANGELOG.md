@@ -1,4 +1,4 @@
-# Unreleased
+# 76.0.0
 * Remove `has_unconfirmed_email` parameter from Account API calls
 
 # 75.3.0
