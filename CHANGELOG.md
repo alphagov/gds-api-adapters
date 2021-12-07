@@ -1,3 +1,6 @@
+# Unreleased
+* Remove `has_unconfirmed_email` parameter from Account API calls
+
 # 75.3.0
 
 * Add `match_user_by_email` and test helpers (for Account API)
