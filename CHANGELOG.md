@@ -1,5 +1,10 @@
+# unreleased
+
+* BREAKING: Remove `cookie_consent` and `feedback_consent` from `update_user_by_subject_identifier` (for Account API)
+
 # 76.0.0
-* Remove `has_unconfirmed_email` parameter from Account API calls
+
+* BREAKING: Remove `has_unconfirmed_email` parameter from Account API calls
 
 # 75.3.0
 

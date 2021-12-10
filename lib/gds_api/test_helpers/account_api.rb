@@ -159,17 +159,15 @@ module GdsApi
       ###########################################
       # PATCH /api/oidc-users/:subject_identifier
       ###########################################
-      def stub_update_user_by_subject_identifier(subject_identifier:, email: nil, email_verified: nil, cookie_consent: nil, feedback_consent: nil, old_email: nil, old_email_verified: nil, old_cookie_consent: nil, old_feedback_consent: nil)
+      def stub_update_user_by_subject_identifier(subject_identifier:, email: nil, email_verified: nil, old_email: nil, old_email_verified: nil)
         stub_account_api_request(
           :patch,
           "/api/oidc-users/#{subject_identifier}",
-          with: { body: hash_including({ email: email, email_verified: email_verified, cookie_consent: cookie_consent, feedback_consent: feedback_consent }.compact) },
+          with: { body: hash_including({ email: email, email_verified: email_verified }.compact) },
           response_body: {
             sub: subject_identifier,
             email: email || old_email,
             email_verified: email_verified || old_email_verified,
-            cookie_consent: cookie_consent || old_cookie_consent,
-            feedback_consent: feedback_consent || old_feedback_consent,
           },
         )
       end
