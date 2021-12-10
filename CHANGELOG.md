@@ -1,4 +1,4 @@
-# unreleased
+# 77.0.0
 
 * BREAKING: Remove `cookie_consent` and `feedback_consent` from `update_user_by_subject_identifier` (for Account API)
 
