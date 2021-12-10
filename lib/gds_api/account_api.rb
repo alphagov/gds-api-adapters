@@ -75,16 +75,12 @@ class GdsApi::AccountApi < GdsApi::Base
   # @param [String] subject_identifier The identifier of the user, shared between the auth service and GOV.UK.
   # @param [String, nil] email The user's current email address
   # @param [Boolean, nil] email_verified Whether the user's current email address is verified
-  # @param [Boolean, nil] cookie_consent Whether the user has consented to analytics cookies
-  # @param [Boolean, nil] feedback_consent Whether the user has consented to being contacted for feedback
   #
   # @return [Hash] The user's subject identifier and email attributes
-  def update_user_by_subject_identifier(subject_identifier:, email: nil, email_verified: nil, cookie_consent: nil, feedback_consent: nil)
+  def update_user_by_subject_identifier(subject_identifier:, email: nil, email_verified: nil)
     params = {
       email: email,
       email_verified: email_verified,
-      cookie_consent: cookie_consent,
-      feedback_consent: feedback_consent,
     }.compact
 
     patch_json("#{endpoint}/api/oidc-users/#{subject_identifier}", params)
