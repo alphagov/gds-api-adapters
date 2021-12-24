@@ -191,6 +191,50 @@ module GdsApi
         assert_requested(:post, "#{EMAIL_ALERT_API_ENDPOINT}/messages", times: 1, &matcher)
       end
 
+      def stub_email_alert_api_unpublication_notification_default_message(content_id)
+        request_params = {
+          content_id: content_id,
+          notification_template: "default",
+        }
+
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/unpublication_notification")
+          .with(body: request_params.compact.to_json)
+          .to_return(status: 202)
+      end
+
+      def stub_email_alert_api_unpublication_notification_with_unpublishing_type(content_id, notification_template)
+        request_params = {
+          content_id: content_id,
+          notification_template: notification_template,
+        }
+
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/unpublication_notification")
+          .with(body: request_params.compact.to_json)
+          .to_return(status: 202)
+      end
+
+      def stub_email_alert_api_unpublication_notification_subscription_list_not_found(content_id)
+        request_params = {
+          content_id: content_id,
+          notification_template: "default",
+        }
+
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/unpublication_notification")
+          .with(body: request_params.compact.to_json)
+          .to_return(status: 404)
+      end
+
+      def stub_email_alert_api_unpublication_notification_unsupported_unpublishing_type(content_id, notification_template)
+        request_params = {
+          content_id: content_id,
+          notification_template: notification_template,
+        }
+
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/unpublication_notification")
+          .with(body: request_params.compact.to_json)
+          .to_return(status: 400)
+      end
+
       def stub_email_alert_api_unsubscribes_a_subscription(uuid)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/unsubscribe/#{uuid}")
           .with(body: "{}")

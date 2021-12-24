@@ -70,6 +70,24 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     delete_json("#{endpoint}/subscribers/#{uri_encode(id)}")
   end
 
+  # Identify a subscription list for an unpublished piece of content, and notify all users.
+  #
+  # @param [UUID]     content_id            Unique identifier for a piece of content
+  # @param [string]   notification_template    Which email template should be used in the notification
+  # to users (optional). If not set sends a generic message.
+  #
+  # @return [nil]
+  def send_unpublish_message(content_id, notification_template = "default")
+    # @TODO, the params here are TBC, looking at the email-alert-api side, we may not
+    # be able to get everything off the content item... in which case we may need to pass through
+    # more than just a content_id, or narrow the scope of variations on the email.
+    post_json(
+      "#{endpoint}/unpublication_notification",
+      content_id: content_id,
+      notification_template: notification_template,
+    )
+  end
+
   # Subscribe
   #
   # @return [Hash] subscription_id

@@ -808,4 +808,34 @@ describe GdsApi::EmailAlertApi do
       end
     end
   end
+
+  describe "send_unpublish_message" do
+    let(:content_id) { SecureRandom.uuid }
+
+    it "returns 202" do
+      stub_email_alert_api_unpublication_notification_default_message(content_id)
+      api_response = api_client.send_unpublish_message(content_id)
+      assert_equal(202, api_response.code)
+    end
+
+    it "returns 202" do
+      stub_email_alert_api_unpublication_notification_with_unpublishing_type(content_id, "published_in_error_with_redirect")
+      api_response = api_client.send_unpublish_message(content_id, "published_in_error_with_redirect")
+      assert_equal(202, api_response.code)
+    end
+
+    it "returns 404" do
+      stub_email_alert_api_unpublication_notification_subscription_list_not_found(content_id)
+      assert_raises GdsApi::HTTPNotFound do
+        api_client.send_unpublish_message(content_id)
+      end
+    end
+
+    it "returns 400" do
+      stub_email_alert_api_unpublication_notification_unsupported_unpublishing_type(content_id, "automagically_unpublished")
+      assert_raises GdsApi::HTTPBadRequest do
+        api_client.send_unpublish_message(content_id, "automagically_unpublished")
+      end
+    end
+  end
 end
