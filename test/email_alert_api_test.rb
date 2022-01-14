@@ -808,4 +808,63 @@ describe GdsApi::EmailAlertApi do
       end
     end
   end
+
+  describe "bulk_unsubscribe" do
+    let(:subscriber_list_id) { SecureRandom.uuid }
+    let(:public_updated_at) { Time.now }
+    let(:body) { "email message goes here" }
+    let(:sender_message_id) { SecureRandom.uuid }
+
+    it "returns 202 with just a subscriber_list_id" do
+      stub_email_alert_api_bulk_unsubscribe(subscriber_list_id: subscriber_list_id)
+      api_response = api_client.bulk_unsubscribe(subscriber_list_id: subscriber_list_id)
+      assert_equal(202, api_response.code)
+    end
+
+    it "returns 202 with a message" do
+      stub_email_alert_api_bulk_unsubscribe_with_message(subscriber_list_id: subscriber_list_id, body: body, sender_message_id: sender_message_id)
+      api_response = api_client.bulk_unsubscribe(
+        subscriber_list_id: subscriber_list_id,
+        body: body,
+        sender_message_id: sender_message_id,
+      )
+      assert_equal(202, api_response.code)
+    end
+
+    it "returns 404 if the subscription list is not found" do
+      stub_email_alert_api_bulk_unsubscribe_not_found(subscriber_list_id: subscriber_list_id)
+      assert_raises GdsApi::HTTPNotFound do
+        api_client.bulk_unsubscribe(subscriber_list_id: subscriber_list_id)
+      end
+    end
+
+    it "returns 404 if the subscription list is not found and a message is provided" do
+      stub_email_alert_api_bulk_unsubscribe_not_found_with_message(subscriber_list_id: subscriber_list_id, body: body, sender_message_id: sender_message_id)
+      assert_raises GdsApi::HTTPNotFound do
+        api_client.bulk_unsubscribe(
+          subscriber_list_id: subscriber_list_id,
+          body: body,
+          sender_message_id: sender_message_id,
+        )
+      end
+    end
+
+    it "returns 409 if a message has already been received" do
+      stub_email_alert_api_bulk_unsubscribe_conflict_with_message(subscriber_list_id: subscriber_list_id, body: body, sender_message_id: sender_message_id)
+      assert_raises GdsApi::HTTPConflict do
+        api_client.bulk_unsubscribe(
+          subscriber_list_id: subscriber_list_id,
+          body: body,
+          sender_message_id: sender_message_id,
+        )
+      end
+    end
+
+    it "returns 422 if a body is sent without a sender_message_id" do
+      stub_email_alert_api_bulk_unsubscribe_bad_request(subscriber_list_id: subscriber_list_id, body: body)
+      assert_raises GdsApi::HTTPUnprocessableEntity do
+        api_client.bulk_unsubscribe(subscriber_list_id: subscriber_list_id, body: body)
+      end
+    end
+  end
 end

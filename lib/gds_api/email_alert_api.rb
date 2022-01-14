@@ -247,6 +247,22 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     )
   end
 
+  # Unsubscribe all users for a subscription list
+  # optionally send a notification email explaining the reason
+  #
+  # @param [string]               subscriber_list_id    Identifier for the subscription list
+  # @param [string] (optional)    body                  Optional email body to send to alert users they are being unsubscribed
+  # @param [string] (optional)    sender_message_id     A UUID to prevent multiple emails for the same event
+  def bulk_unsubscribe(subscriber_list_id:, body: nil, sender_message_id: nil)
+    post_json(
+      "#{endpoint}/subscriber-lists/#{subscriber_list_id}/bulk-unsubscribe",
+      {
+        body: body,
+        sender_message_id: sender_message_id,
+      }.compact,
+    )
+  end
+
 private
 
   def nested_query_string(params)
