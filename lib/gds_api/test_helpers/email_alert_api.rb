@@ -408,13 +408,13 @@ module GdsApi
           .to_return(status: 404)
       end
 
-      def stub_email_alert_api_bulk_unsubscribe(subscriber_list_id:)
-        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{subscriber_list_id}/bulk-unsubscribe")
+      def stub_email_alert_api_bulk_unsubscribe(slug:)
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
           .to_return(status: 202)
       end
 
-      def stub_email_alert_api_bulk_unsubscribe_with_message(subscriber_list_id:, body:, sender_message_id:)
-        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{subscriber_list_id}/bulk-unsubscribe")
+      def stub_email_alert_api_bulk_unsubscribe_with_message(slug:, body:, sender_message_id:)
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
         .with(
           body: {
             body: body,
@@ -423,13 +423,13 @@ module GdsApi
         ).to_return(status: 202)
       end
 
-      def stub_email_alert_api_bulk_unsubscribe_not_found(subscriber_list_id:)
-        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{subscriber_list_id}/bulk-unsubscribe")
+      def stub_email_alert_api_bulk_unsubscribe_not_found(slug:)
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
           .to_return(status: 404)
       end
 
-      def stub_email_alert_api_bulk_unsubscribe_not_found_with_message(subscriber_list_id:, body:, sender_message_id:)
-        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{subscriber_list_id}/bulk-unsubscribe")
+      def stub_email_alert_api_bulk_unsubscribe_not_found_with_message(slug:, body:, sender_message_id:)
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
         .with(
           body: {
             body: body,
@@ -438,8 +438,8 @@ module GdsApi
         ).to_return(status: 404)
       end
 
-      def stub_email_alert_api_bulk_unsubscribe_conflict_with_message(subscriber_list_id:, body:, sender_message_id:)
-        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{subscriber_list_id}/bulk-unsubscribe")
+      def stub_email_alert_api_bulk_unsubscribe_conflict_with_message(slug:, body:, sender_message_id:)
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
         .with(
           body: {
             body: body,
@@ -448,8 +448,8 @@ module GdsApi
         ).to_return(status: 409)
       end
 
-      def stub_email_alert_api_bulk_unsubscribe_bad_request(subscriber_list_id:, body:)
-        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{subscriber_list_id}/bulk-unsubscribe")
+      def stub_email_alert_api_bulk_unsubscribe_bad_request(slug:, body:)
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
         .with(
           body: { body: body }.to_json,
         ).to_return(status: 422)

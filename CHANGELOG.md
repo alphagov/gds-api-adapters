@@ -1,3 +1,7 @@
+# Unreleased
+
+* Fix `bulk_unsubscribe` should use a `slug` not `subscriber_list_id`
+
 # 77.1.0
 
 * Add `bulk_unsubscribe` endpoint (for Email Alert API)
