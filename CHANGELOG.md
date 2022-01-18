@@ -1,4 +1,4 @@
-# Unreleased
+# 77.1.0
 
 * Add `bulk_unsubscribe` endpoint (for Email Alert API)
 
