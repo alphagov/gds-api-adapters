@@ -1,4 +1,4 @@
-# Unreleased
+# 78.0.0
 
 * Fix `bulk_unsubscribe` should use a `slug` not `subscriber_list_id`
 
