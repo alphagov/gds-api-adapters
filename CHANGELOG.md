@@ -4,7 +4,7 @@
 
 # 78.0.0
 
-* Fix `bulk_unsubscribe` should use a `slug` not `subscriber_list_id`
+* BREAKING: Fix `bulk_unsubscribe` should use a `slug` not `subscriber_list_id`
 
 # 77.1.0
 
