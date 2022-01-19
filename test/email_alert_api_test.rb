@@ -822,9 +822,15 @@ describe GdsApi::EmailAlertApi do
     end
 
     it "returns 202 with a message" do
-      stub_email_alert_api_bulk_unsubscribe_with_message(slug: slug, body: body, sender_message_id: sender_message_id)
+      stub_email_alert_api_bulk_unsubscribe_with_message(
+        slug: slug,
+        govuk_request_id: "govuk_request_id",
+        body: body,
+        sender_message_id: sender_message_id,
+      )
       api_response = api_client.bulk_unsubscribe(
         slug: slug,
+        govuk_request_id: "govuk_request_id",
         body: body,
         sender_message_id: sender_message_id,
       )
@@ -839,10 +845,16 @@ describe GdsApi::EmailAlertApi do
     end
 
     it "returns 404 if the subscription list is not found and a message is provided" do
-      stub_email_alert_api_bulk_unsubscribe_not_found_with_message(slug: slug, body: body, sender_message_id: sender_message_id)
+      stub_email_alert_api_bulk_unsubscribe_not_found_with_message(
+        slug: slug,
+        govuk_request_id: "govuk_request_id",
+        body: body,
+        sender_message_id: sender_message_id,
+      )
       assert_raises GdsApi::HTTPNotFound do
         api_client.bulk_unsubscribe(
           slug: slug,
+          govuk_request_id: "govuk_request_id",
           body: body,
           sender_message_id: sender_message_id,
         )
@@ -850,10 +862,16 @@ describe GdsApi::EmailAlertApi do
     end
 
     it "returns 409 if a message has already been received" do
-      stub_email_alert_api_bulk_unsubscribe_conflict_with_message(slug: slug, body: body, sender_message_id: sender_message_id)
+      stub_email_alert_api_bulk_unsubscribe_conflict_with_message(
+        slug: slug,
+        govuk_request_id: "govuk_request_id",
+        body: body,
+        sender_message_id: sender_message_id,
+      )
       assert_raises GdsApi::HTTPConflict do
         api_client.bulk_unsubscribe(
           slug: slug,
+          govuk_request_id: "govuk_request_id",
           body: body,
           sender_message_id: sender_message_id,
         )

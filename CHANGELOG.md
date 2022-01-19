@@ -1,3 +1,7 @@
+# Unreleased
+
+* Fix `bulk_unsubscribe` requires a `govuk_request_id` if you want to send a message
+
 # 78.0.0
 
 * Fix `bulk_unsubscribe` should use a `slug` not `subscriber_list_id`
