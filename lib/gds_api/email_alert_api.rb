@@ -267,6 +267,17 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     )
   end
 
+  # Update subscriber list details, such as title
+  # @param [Hash]         params        A hash of detail paramaters that can be updated. For example title.
+  #                                     For allowed parameters see:
+  #                                     https://github.com/alphagov/email-alert-api/blob/main/docs/api.md#patch-subscriber-listsxxx
+  def update_subscriber_list_details(slug:, params: {})
+    patch_json(
+      "#{endpoint}/subscriber-lists/#{slug}",
+      params,
+    )
+  end
+
 private
 
   def nested_query_string(params)
