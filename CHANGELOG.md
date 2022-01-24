@@ -1,5 +1,6 @@
 # unreleased
 
+* BREAKING: Add `sender_message_id` and `govuk_request_id` to bulk unsubscribe (bad request) test helper (for Email Alert API)
 * Add `content_id` to subscriber lists URL helper (for Email Alert API)
 
 # 78.1.0

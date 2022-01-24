@@ -451,10 +451,14 @@ module GdsApi
         ).to_return(status: 409)
       end
 
-      def stub_email_alert_api_bulk_unsubscribe_bad_request(slug:, body:)
+      def stub_email_alert_api_bulk_unsubscribe_bad_request(slug:, govuk_request_id:, body:, sender_message_id:)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
         .with(
-          body: { body: body }.to_json,
+          body: {
+            body: body,
+            sender_message_id: sender_message_id,
+          }.to_json,
+          headers: { "Govuk-Request-Id" => govuk_request_id },
         ).to_return(status: 422)
       end
 
