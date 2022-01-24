@@ -1,3 +1,7 @@
+# unreleased
+
+* Add `content_id` to subscriber lists URL helper (for Email Alert API)
+
 # 78.1.0
 
 * Fix `bulk_unsubscribe` requires a `govuk_request_id` if you want to send a message

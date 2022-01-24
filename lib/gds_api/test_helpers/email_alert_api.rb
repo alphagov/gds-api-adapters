@@ -537,6 +537,7 @@ module GdsApi
         if attributes
           tags = attributes["tags"]
           links = attributes["links"]
+          content_id = attributes["content_id"]
           document_type = attributes["document_type"]
           email_document_supertype = attributes["email_document_supertype"]
           government_document_supertype = attributes["government_document_supertype"]
@@ -546,6 +547,7 @@ module GdsApi
           params = {}
           params[:tags] = tags if tags
           params[:links] = links if links
+          params[:content_id] = content_id if content_id
           params[:document_type] = document_type if document_type
           params[:email_document_supertype] = email_document_supertype if email_document_supertype
           params[:government_document_supertype] = government_document_supertype if government_document_supertype
