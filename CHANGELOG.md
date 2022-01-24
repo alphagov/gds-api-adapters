@@ -1,4 +1,4 @@
-# Unreleased
+# 79.0.0
 
 * Remove references to Transition Checker in account-api pact tests
 * Add both with- and without-message variants for bulk unsubscribe test helpers (for Email Alert API)
