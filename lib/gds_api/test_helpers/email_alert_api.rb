@@ -440,6 +440,11 @@ module GdsApi
         ).to_return(status: 404)
       end
 
+      def stub_email_alert_api_bulk_unsubscribe_conflict(slug:)
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
+          .to_return(status: 409)
+      end
+
       def stub_email_alert_api_bulk_unsubscribe_conflict_with_message(slug:, govuk_request_id:, body:, sender_message_id:)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
         .with(
@@ -451,7 +456,12 @@ module GdsApi
         ).to_return(status: 409)
       end
 
-      def stub_email_alert_api_bulk_unsubscribe_bad_request(slug:, govuk_request_id:, body:, sender_message_id:)
+      def stub_email_alert_api_bulk_unsubscribe_bad_request(slug:)
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
+          .to_return(status: 422)
+      end
+
+      def stub_email_alert_api_bulk_unsubscribe_bad_request_with_message(slug:, govuk_request_id:, body:, sender_message_id:)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
         .with(
           body: {
