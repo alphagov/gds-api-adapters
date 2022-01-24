@@ -440,6 +440,11 @@ module GdsApi
         ).to_return(status: 404)
       end
 
+      def stub_email_alert_api_bulk_unsubscribe_conflict(slug:)
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
+          .to_return(status: 409)
+      end
+
       def stub_email_alert_api_bulk_unsubscribe_conflict_with_message(slug:, govuk_request_id:, body:, sender_message_id:)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
         .with(
@@ -451,10 +456,19 @@ module GdsApi
         ).to_return(status: 409)
       end
 
-      def stub_email_alert_api_bulk_unsubscribe_bad_request(slug:, body:)
+      def stub_email_alert_api_bulk_unsubscribe_bad_request(slug:)
+        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
+          .to_return(status: 422)
+      end
+
+      def stub_email_alert_api_bulk_unsubscribe_bad_request_with_message(slug:, govuk_request_id:, body:, sender_message_id:)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
         .with(
-          body: { body: body }.to_json,
+          body: {
+            body: body,
+            sender_message_id: sender_message_id,
+          }.to_json,
+          headers: { "Govuk-Request-Id" => govuk_request_id },
         ).to_return(status: 422)
       end
 
@@ -537,6 +551,7 @@ module GdsApi
         if attributes
           tags = attributes["tags"]
           links = attributes["links"]
+          content_id = attributes["content_id"]
           document_type = attributes["document_type"]
           email_document_supertype = attributes["email_document_supertype"]
           government_document_supertype = attributes["government_document_supertype"]
@@ -546,6 +561,7 @@ module GdsApi
           params = {}
           params[:tags] = tags if tags
           params[:links] = links if links
+          params[:content_id] = content_id if content_id
           params[:document_type] = document_type if document_type
           params[:email_document_supertype] = email_document_supertype if email_document_supertype
           params[:government_document_supertype] = government_document_supertype if government_document_supertype

@@ -861,7 +861,14 @@ describe GdsApi::EmailAlertApi do
       end
     end
 
-    it "returns 409 if a message has already been received" do
+    it "returns 409 on conflict" do
+      stub_email_alert_api_bulk_unsubscribe_conflict(slug: slug)
+      assert_raises GdsApi::HTTPConflict do
+        api_client.bulk_unsubscribe(slug: slug)
+      end
+    end
+
+    it "returns 409 on conflict if a message is provided" do
       stub_email_alert_api_bulk_unsubscribe_conflict_with_message(
         slug: slug,
         govuk_request_id: "govuk_request_id",
@@ -878,10 +885,27 @@ describe GdsApi::EmailAlertApi do
       end
     end
 
-    it "returns 422 if a body is sent without a sender_message_id" do
-      stub_email_alert_api_bulk_unsubscribe_bad_request(slug: slug, body: body)
+    it "returns 422 on bad request" do
+      stub_email_alert_api_bulk_unsubscribe_bad_request(slug: slug)
       assert_raises GdsApi::HTTPUnprocessableEntity do
-        api_client.bulk_unsubscribe(slug: slug, body: body)
+        api_client.bulk_unsubscribe(slug: slug)
+      end
+    end
+
+    it "returns 422 on bad request if a message is provided" do
+      stub_email_alert_api_bulk_unsubscribe_bad_request_with_message(
+        slug: slug,
+        govuk_request_id: "govuk_request_id",
+        body: body,
+        sender_message_id: sender_message_id,
+      )
+      assert_raises GdsApi::HTTPUnprocessableEntity do
+        api_client.bulk_unsubscribe(
+          slug: slug,
+          govuk_request_id: "govuk_request_id",
+          body: body,
+          sender_message_id: sender_message_id,
+        )
       end
     end
   end
