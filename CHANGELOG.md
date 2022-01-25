@@ -1,9 +1,10 @@
-# unreleased
+# Unreleased
 
 * Remove references to Transition Checker in account-api pact tests
 * Add both with- and without-message variants for bulk unsubscribe test helpers (for Email Alert API)
 * BREAKING: Add `sender_message_id` and `govuk_request_id` to bulk unsubscribe (bad request) test helper (for Email Alert API)
 * Add `content_id` to subscriber lists URL helper (for Email Alert API)
+* Add `update_subscriber_list_details` (for Email Alert API)
 
 # 78.1.0
 

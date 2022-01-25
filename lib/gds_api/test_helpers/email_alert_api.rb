@@ -472,6 +472,27 @@ module GdsApi
         ).to_return(status: 422)
       end
 
+      def stub_update_subscriber_list_details(slug:, params:)
+        stub_request(:patch, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}")
+        .with(body: params.to_json)
+        .to_return(
+          status: 200,
+          body: get_subscriber_list_response(params).to_json,
+        )
+      end
+
+      def stub_update_subscriber_list_details_not_found(slug:, params:)
+        stub_request(:patch, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}")
+        .with(body: params.to_json)
+        .to_return(status: 404)
+      end
+
+      def stub_update_subscriber_list_details_unprocessible_entity(slug:, params: {})
+        stub_request(:patch, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}")
+        .with(body: params.to_json)
+        .to_return(status: 422)
+      end
+
     private
 
       def get_subscriber_response(id, address, govuk_account_id)

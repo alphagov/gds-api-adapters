@@ -909,4 +909,37 @@ describe GdsApi::EmailAlertApi do
       end
     end
   end
+
+  describe "update_subscriber_list_details" do
+    let(:slug) { "i_am_a_subscriber_list_slug" }
+
+    it "returns 200 and subscriber list with updated title" do
+      params = { "title" => "New Title" }
+
+      stub_update_subscriber_list_details(slug: slug, params: params)
+      api_response = api_client.update_subscriber_list_details(slug: slug, params: params)
+
+      assert_equal(200, api_response.code)
+      assert_equal(params["title"], api_response.to_h.dig("subscriber_list", "title"))
+    end
+
+    it "returns 404 when subscriber list is not found" do
+      params = { "title" => "New Title" }
+
+      stub_update_subscriber_list_details_not_found(slug: slug, params: params)
+
+      assert_raises GdsApi::HTTPNotFound do
+        api_client.update_subscriber_list_details(slug: slug, params: params)
+      end
+    end
+
+    it "returns 422 when provided with invalid parameters" do
+      params = { "title" => nil }
+      stub_update_subscriber_list_details_unprocessible_entity(slug: slug, params: params)
+
+      assert_raises GdsApi::HTTPUnprocessableEntity do
+        api_client.update_subscriber_list_details(slug: slug, params: params)
+      end
+    end
+  end
 end
