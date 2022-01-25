@@ -188,9 +188,6 @@ describe GdsApi::AccountApi do
           mfa: Pact.like(true),
           email: Pact.like("user@example.com"),
           email_verified: Pact.like(true),
-          services: {
-            transition_checker: "no",
-          },
         )
 
         account_api
@@ -294,7 +291,7 @@ describe GdsApi::AccountApi do
       let(:path) { "/api/attributes" }
 
       describe "#get_attributes" do
-        let(:attribute_name) { "transition_checker_state" }
+        let(:attribute_name) { "feedback_consent" }
 
         it "responds with 200 OK and no attributes, if none exist" do
           response_body = response_body_with_session_identifier.merge(values: {})
@@ -309,7 +306,7 @@ describe GdsApi::AccountApi do
         end
 
         it "responds with 200 OK and the attributes, if some exist" do
-          response_body = response_body_with_session_identifier.merge(values: { attribute_name => { array: [1, 2, 3], some: { nested: "json" } } })
+          response_body = response_body_with_session_identifier.merge(values: { attribute_name => true })
 
           account_api
             .given("there is a valid user session, with an attribute called '#{attribute_name}'")
@@ -322,7 +319,7 @@ describe GdsApi::AccountApi do
       end
 
       describe "#set_attributes" do
-        let(:attributes) { { transition_checker_state: { array: [1, 2, 3], some: { nested: "json" } } } }
+        let(:attributes) { { feedback_consent: true } }
 
         it "responds with 200 OK" do
           account_api
