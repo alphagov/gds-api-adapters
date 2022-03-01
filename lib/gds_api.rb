@@ -10,6 +10,7 @@ require "gds_api/imminence"
 require "gds_api/licence_application"
 require "gds_api/link_checker_api"
 require "gds_api/local_links_manager"
+require "gds_api/locations_api"
 require "gds_api/mapit"
 require "gds_api/maslow"
 require "gds_api/organisations"
@@ -200,5 +201,12 @@ module GdsApi
   # @return [GdsApi::Worldwide]
   def self.worldwide(options = {})
     GdsApi::Worldwide.new(Plek.new.website_root, options)
+  end
+
+  # Creates a GdsApi::LocationsApi adapter
+  #
+  # @return [GdsApi::LocationsApi]
+  def self.locations_api(options = {})
+    GdsApi::LocationsApi.new(Plek.find("locations-api"), options)
   end
 end
