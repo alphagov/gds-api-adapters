@@ -62,5 +62,13 @@ describe GdsApi::LocationsApi do
       response = @api.coordinates_for_postcode("SW1A 1AA")
       assert_equal response, { "latitude" => 51.50100965, "longitude" => -0.14158705 }
     end
+
+    it "should return 400 for an invalid postcode" do
+      stub_locations_api_does_not_have_a_bad_postcode("B4DP05TC0D3")
+
+      assert_raises GdsApi::HTTPClientError do
+        @api.coordinates_for_postcode("B4DP05TC0D3")
+      end
+    end
   end
 end
