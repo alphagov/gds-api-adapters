@@ -10,7 +10,7 @@ class GdsApi::LocationsApi < GdsApi::Base
   def local_custodian_code_for_postcode(postcode)
     response = get_json("#{endpoint}/locations?postcode=#{postcode}.json")
 
-    response["results"].map { |r| r["local_custodian_code"] }
+    response["results"].map { |r| r["local_custodian_code"] }.uniq
   end
 
   # Get the average coordinates for a postcode

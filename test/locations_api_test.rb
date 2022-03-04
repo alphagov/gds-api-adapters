@@ -30,6 +30,32 @@ describe GdsApi::LocationsApi do
       assert_equal [5900, 5901], response
     end
 
+    it "should return only unique local custodian codes " do
+      stub_locations_api_has_location(
+        "SW1A 1AA",
+        [
+          {
+            "latitude" => 51.5010096,
+            "longitude" => -0.1415870,
+            "local_custodian_code" => 5900,
+          },
+          {
+            "latitude" => 51.5010097,
+            "longitude" => -0.1415871,
+            "local_custodian_code" => 5901,
+          },
+          {
+            "latitude" => 51.5010097,
+            "longitude" => -0.1415871,
+            "local_custodian_code" => 5901,
+          },
+        ],
+      )
+
+      response = @api.local_custodian_code_for_postcode("SW1A 1AA")
+      assert_equal [5900, 5901], response
+    end
+
     it "should return the coordinates" do
       stub_locations_api_has_location("SW1A 1AA", @locations)
 
