@@ -10,6 +10,8 @@ class GdsApi::LocationsApi < GdsApi::Base
   def local_custodian_code_for_postcode(postcode)
     response = get_json("#{endpoint}/locations?postcode=#{postcode}.json")
 
+    return [] if response["results"].nil?
+
     response["results"].map { |r| r["local_custodian_code"] }.uniq
   end
 
@@ -21,6 +23,6 @@ class GdsApi::LocationsApi < GdsApi::Base
   def coordinates_for_postcode(postcode)
     response = get_json("#{endpoint}/locations?postcode=#{postcode}.json")
 
-    { "latitude" => response["average_latitude"], "longitude" => response["average_longitude"] }
+    { "latitude" => response["average_latitude"], "longitude" => response["average_longitude"] } unless response["results"].nil?
   end
 end

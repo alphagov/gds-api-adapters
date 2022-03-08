@@ -24,6 +24,11 @@ module GdsApi
           .to_return(body: response.to_json, status: 200)
       end
 
+      def stub_locations_api_has_no_location(postcode)
+        stub_request(:get, "#{LOCATIONS_API_ENDPOINT}/locations?postcode=#{postcode}.json")
+          .to_return(body: { "results" => nil }.to_json, status: 200)
+      end
+
       def stub_locations_api_does_not_have_a_bad_postcode(postcode)
         stub_request(:get, "#{LOCATIONS_API_ENDPOINT}/locations?postcode=#{postcode}.json")
          .to_return(body: { "code" => 400, "error" => "Postcode '#{postcode}' is not valid." }.to_json, status: 400)

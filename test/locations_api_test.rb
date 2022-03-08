@@ -56,11 +56,25 @@ describe GdsApi::LocationsApi do
       assert_equal [5900, 5901], response
     end
 
+    it "should return empty list for postcode with no local custodian codes" do
+      stub_locations_api_has_no_location("SW1A 1AA")
+
+      response = @api.local_custodian_code_for_postcode("SW1A 1AA")
+      assert_equal response, []
+    end
+
     it "should return the coordinates" do
       stub_locations_api_has_location("SW1A 1AA", @locations)
 
       response = @api.coordinates_for_postcode("SW1A 1AA")
       assert_equal response, { "latitude" => 51.50100965, "longitude" => -0.14158705 }
+    end
+
+    it "should return nil for postcode with no coordinates" do
+      stub_locations_api_has_no_location("SW1A 1AA")
+
+      response = @api.coordinates_for_postcode("SW1A 1AA")
+      assert_nil response
     end
 
     it "should return 400 for an invalid postcode" do
