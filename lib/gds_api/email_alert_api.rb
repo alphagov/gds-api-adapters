@@ -38,6 +38,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   #
   # @param message [Hash] Valid message attributes
   def create_message(message, headers = {})
+    warn "#create_message is deprecated and will be removed in a future version."
     post_json("#{endpoint}/messages", message, headers)
   end
 

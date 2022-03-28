@@ -1,3 +1,7 @@
+# Unreleased
+
+* Deprecate `create_message` for Email Alert API
+
 # 79.1.0
 
 * Add `local_custodian_code_for_postcode` and `coordinates_for_postcode` methods for Locations API
