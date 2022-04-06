@@ -1,3 +1,7 @@
+# 79.1.2
+
+* Fix the Locations API endpoints
+
 # 79.1.1
 
 * Deprecate `create_message` for Email Alert API
