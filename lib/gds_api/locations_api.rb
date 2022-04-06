@@ -8,7 +8,7 @@ class GdsApi::LocationsApi < GdsApi::Base
   #
   # @return [Array] All local custodian codes for a specific postcode
   def local_custodian_code_for_postcode(postcode)
-    response = get_json("#{endpoint}/locations?postcode=#{postcode}.json")
+    response = get_json("#{endpoint}/v1/locations?postcode=#{postcode}")
 
     return [] if response["results"].nil?
 
@@ -21,7 +21,7 @@ class GdsApi::LocationsApi < GdsApi::Base
   #
   # @return [Hash] The average coordinates (two fields, "latitude" and "longitude") for a specific postcode
   def coordinates_for_postcode(postcode)
-    response = get_json("#{endpoint}/locations?postcode=#{postcode}.json")
+    response = get_json("#{endpoint}/v1/locations?postcode=#{postcode}")
 
     { "latitude" => response["average_latitude"], "longitude" => response["average_longitude"] } unless response["results"].nil?
   end
