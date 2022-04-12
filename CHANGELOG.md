@@ -766,7 +766,7 @@ retired in favour of `email-alert-api`
 * Add support to request expanded links from publishing api with or without drafts
   - The default is false, for backward compatibility
   - https://github.com/alphagov/gds-api-adapters/pull/676
-  - https://github.com/alphagov/publishing-api/blob/master/doc/api.md#query-string-parameters-2
+  - https://github.com/alphagov/publishing-api/blob/main/docs/api.md#query-string-parameters-2
 
 # 40.4.0
 
@@ -1036,7 +1036,7 @@ retired in favour of `email-alert-api`
 # 30.4.0
 
 * Add publishing API POST /v2/content/:content_id/unpublish endpoint
-  See docs for more info: https://github.com/alphagov/publishing-api/blob/master/doc/api.md#post-v2contentcontent_idunpublish
+  See docs for more info: https://github.com/alphagov/publishing-api/blob/main/docs/api.md#post-v2contentcontent_idunpublish
 
 # 30.3.0
 
