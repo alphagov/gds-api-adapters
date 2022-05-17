@@ -5,6 +5,7 @@ ACCOUNT_API_PORT = 3004
 LINK_CHECKER_API_PORT = 3005
 IMMINENCE_API_PORT = 3006
 WHITEHALL_API_PORT = 3007
+LOCATIONS_API_PORT = 3008
 
 def publishing_api_host
   "http://localhost:#{PUBLISHING_API_PORT}"
@@ -32,6 +33,10 @@ end
 
 def whitehall_api_host
   "http://localhost:#{WHITEHALL_API_PORT}"
+end
+
+def locations_api_host
+  "http://localhost:#{LOCATIONS_API_PORT}"
 end
 
 Pact.service_consumer "GDS API Adapters" do
@@ -74,6 +79,12 @@ Pact.service_consumer "GDS API Adapters" do
   has_pact_with "Whitehall API" do
     mock_service :whitehall_api do
       port WHITEHALL_API_PORT
+    end
+  end
+
+  has_pact_with "Locations API" do
+    mock_service :locations_api do
+      port LOCATIONS_API_PORT
     end
   end
 end
