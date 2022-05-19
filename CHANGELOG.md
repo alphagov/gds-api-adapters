@@ -1,4 +1,4 @@
-# Unreleased
+# 79.2.0
 
 Remove cookie and feedback consent attributes from Account API pact tests
 
