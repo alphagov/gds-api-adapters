@@ -1,3 +1,7 @@
+# Unreleased
+
+Remove cookie and feedback consent attributes from Account API pact tests
+
 # 79.1.2
 
 * Fix the Locations API endpoints
