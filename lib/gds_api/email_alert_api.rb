@@ -252,7 +252,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   # optionally send a notification email explaining the reason
   #
   # @param [string]               slug                  Identifier for the subscription list
-  # @param [string] (optional)    govuk_request_id      An ID allowing us to trace requests across our infra. Required if you want to send an email.
+  # @param [string] (optional)    govuk_request_id      An ID allowing us to trace requests across our infra. Required if you want to send an email by running out-of-band processes via asynchronous workers.
   # @param [string] (optional)    body                  Optional email body to send to alert users they are being unsubscribed. Required if you want to send an email
   # @param [string] (optional)    sender_message_id     A UUID to prevent multiple emails for the same event. Required if you want to send an email.
   def bulk_unsubscribe(slug:, govuk_request_id: nil, body: nil, sender_message_id: nil)

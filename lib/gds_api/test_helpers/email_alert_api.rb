@@ -413,15 +413,15 @@ module GdsApi
           .to_return(status: 202)
       end
 
-      def stub_email_alert_api_bulk_unsubscribe_with_message(slug:, govuk_request_id:, body:, sender_message_id:)
+      def stub_email_alert_api_bulk_unsubscribe_with_message(slug:, body:, sender_message_id:, govuk_request_id: nil)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
-        .with(
+        .with({
           body: {
             body: body,
             sender_message_id: sender_message_id,
           }.to_json,
-          headers: { "Govuk-Request-Id" => govuk_request_id },
-        ).to_return(status: 202)
+        }.tap { |attr| attr[:headers] = { "Govuk-Request-Id" => govuk_request_id } if govuk_request_id })
+        .to_return(status: 202)
       end
 
       def stub_email_alert_api_bulk_unsubscribe_not_found(slug:)
@@ -429,15 +429,15 @@ module GdsApi
           .to_return(status: 404)
       end
 
-      def stub_email_alert_api_bulk_unsubscribe_not_found_with_message(slug:, govuk_request_id:, body:, sender_message_id:)
+      def stub_email_alert_api_bulk_unsubscribe_not_found_with_message(slug:, body:, sender_message_id:, govuk_request_id: nil)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
-        .with(
+        .with({
           body: {
             body: body,
             sender_message_id: sender_message_id,
           }.to_json,
-          headers: { "Govuk-Request-Id" => govuk_request_id },
-        ).to_return(status: 404)
+        }.tap { |attr| attr[:headers] = { "Govuk-Request-Id" => govuk_request_id } if govuk_request_id })
+        .to_return(status: 404)
       end
 
       def stub_email_alert_api_bulk_unsubscribe_conflict(slug:)
@@ -445,15 +445,15 @@ module GdsApi
           .to_return(status: 409)
       end
 
-      def stub_email_alert_api_bulk_unsubscribe_conflict_with_message(slug:, govuk_request_id:, body:, sender_message_id:)
+      def stub_email_alert_api_bulk_unsubscribe_conflict_with_message(slug:, body:, sender_message_id:, govuk_request_id: nil)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
-        .with(
+        .with({
           body: {
             body: body,
             sender_message_id: sender_message_id,
           }.to_json,
-          headers: { "Govuk-Request-Id" => govuk_request_id },
-        ).to_return(status: 409)
+        }.tap { |attr| attr[:headers] = { "Govuk-Request-Id" => govuk_request_id } if govuk_request_id })
+        .to_return(status: 409)
       end
 
       def stub_email_alert_api_bulk_unsubscribe_bad_request(slug:)
@@ -461,15 +461,15 @@ module GdsApi
           .to_return(status: 422)
       end
 
-      def stub_email_alert_api_bulk_unsubscribe_bad_request_with_message(slug:, govuk_request_id:, body:, sender_message_id:)
+      def stub_email_alert_api_bulk_unsubscribe_bad_request_with_message(slug:, body:, sender_message_id:, govuk_request_id: nil)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
-        .with(
+        .with({
           body: {
             body: body,
             sender_message_id: sender_message_id,
           }.to_json,
-          headers: { "Govuk-Request-Id" => govuk_request_id },
-        ).to_return(status: 422)
+        }.tap { |attr| attr[:headers] = { "Govuk-Request-Id" => govuk_request_id } if govuk_request_id })
+        .to_return(status: 422)
       end
 
       def stub_update_subscriber_list_details(slug:, params:)
