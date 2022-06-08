@@ -279,7 +279,7 @@ describe GdsApi::AccountApi do
       let(:path) { "/api/attributes" }
 
       describe "#get_attributes" do
-        let(:attribute_name) { "local_attribute" }
+        let(:attribute_name) { "email" }
 
         it "responds with 200 OK and no attributes, if none exist" do
           response_body = response_body_with_session_identifier.merge(values: {})
@@ -294,7 +294,7 @@ describe GdsApi::AccountApi do
         end
 
         it "responds with 200 OK and the attributes, if some exist" do
-          response_body = response_body_with_session_identifier.merge(values: { attribute_name => true })
+          response_body = response_body_with_session_identifier.merge(values: { attribute_name => "email@example.com" })
 
           account_api
             .given("there is a valid user session, with an attribute called '#{attribute_name}'")
@@ -303,20 +303,6 @@ describe GdsApi::AccountApi do
             .will_respond_with(status: 200, headers: json_response_headers, body: response_body)
 
           api_client.get_attributes(govuk_account_session: govuk_account_session, attributes: [attribute_name])
-        end
-      end
-
-      describe "#set_attributes" do
-        let(:attributes) { { local_attribute: true } }
-
-        it "responds with 200 OK" do
-          account_api
-            .given("there is a valid user session")
-            .upon_receiving("a set-attributes request")
-            .with(method: :patch, path: path, headers: headers_with_json_body, body: { attributes: attributes })
-            .will_respond_with(status: 200, headers: json_response_headers, body: response_body_with_session_identifier)
-
-          api_client.set_attributes(govuk_account_session: govuk_account_session, attributes: attributes)
         end
       end
     end
