@@ -150,23 +150,6 @@ class GdsApi::PublishingApi < GdsApi::Base
     post_json(republish_url(content_id), params)
   end
 
-  # Import content into the publishing API
-  #
-  # The publishing-api will delete any content which has the content
-  # id provided, and then import the data given.
-  #
-  # @param content_id [UUID]
-  # @param content_items [Array]
-  #
-  # @see https://github.com/alphagov/publishing-api/blob/main/docs/api.md#post-v2contentcontent_idimport
-  def import(content_id, locale, content_items)
-    params = {
-      history: content_items,
-    }
-
-    post_json("#{endpoint}/v2/content/#{content_id}/import?locale=#{locale}", params)
-  end
-
   # Unpublish a content item
   #
   # The publishing API will "unpublish" a live item, to remove it from the public
