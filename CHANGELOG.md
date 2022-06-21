@@ -1,3 +1,7 @@
+# 80.0.0
+
+* BREAKING: Remove support for publishing api import endpoint - a temporary endpoint that has been removed from publishing api. However, no apps are using this so it should not be breaking in practice.
+
 # 79.2.0
 
 Remove cookie and feedback consent attributes from Account API pact tests
