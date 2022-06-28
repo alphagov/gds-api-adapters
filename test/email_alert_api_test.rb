@@ -837,6 +837,20 @@ describe GdsApi::EmailAlertApi do
       assert_equal(202, api_response.code)
     end
 
+    it "returns 202 with a message when govuk_request_id is not passed in as a parameter" do
+      stub_email_alert_api_bulk_unsubscribe_with_message(
+        slug: slug,
+        body: body,
+        sender_message_id: sender_message_id,
+      )
+      api_response = api_client.bulk_unsubscribe(
+        slug: slug,
+        body: body,
+        sender_message_id: sender_message_id,
+      )
+      assert_equal(202, api_response.code)
+    end
+
     it "returns 404 if the subscription list is not found" do
       stub_email_alert_api_bulk_unsubscribe_not_found(slug: slug)
       assert_raises GdsApi::HTTPNotFound do
