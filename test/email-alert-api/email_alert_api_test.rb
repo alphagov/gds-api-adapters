@@ -424,7 +424,7 @@ describe GdsApi::EmailAlertApi do
         }
 
         stub_email_alert_api_creates_a_subscription(
-          params.merge(returned_subscription_id: 1),
+          **params.merge(returned_subscription_id: 1),
         )
 
         api_response = api_client.subscribe(**params)
@@ -443,7 +443,7 @@ describe GdsApi::EmailAlertApi do
         }
 
         stub_email_alert_api_creates_a_subscription(
-          params.merge(returned_subscription_id: 1),
+          **params.merge(returned_subscription_id: 1),
         )
 
         api_response = api_client.subscribe(**params)
@@ -462,7 +462,7 @@ describe GdsApi::EmailAlertApi do
           skip_confirmation_email: true,
         }
 
-        stub_email_alert_api_creates_a_subscription(params)
+        stub_email_alert_api_creates_a_subscription(**params)
         api_response = api_client.subscribe(**params)
         assert_equal(200, api_response.code)
       end
@@ -477,7 +477,7 @@ describe GdsApi::EmailAlertApi do
         }
 
         stub_email_alert_api_creates_a_subscription(
-          params.merge(subscriber_id: 1),
+          **params.merge(subscriber_id: 1),
         )
 
         api_response = api_client.subscribe(**params)

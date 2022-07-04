@@ -7,6 +7,7 @@ IMMINENCE_API_PORT = 3006
 WHITEHALL_API_PORT = 3007
 LOCATIONS_API_PORT = 3008
 ASSET_MANAGER_API_PORT = 3009
+EMAIL_ALERT_API_PORT = 3010
 
 def publishing_api_host
   "http://localhost:#{PUBLISHING_API_PORT}"
@@ -42,6 +43,10 @@ end
 
 def asset_manager_api_host
   "http://localhost:#{ASSET_MANAGER_API_PORT}"
+end
+
+def email_alert_api_host
+  "http://localhost:#{EMAIL_ALERT_API_PORT}"
 end
 
 Pact.service_consumer "GDS API Adapters" do
@@ -96,6 +101,12 @@ Pact.service_consumer "GDS API Adapters" do
   has_pact_with "Asset Manager" do
     mock_service :asset_manager do
       port ASSET_MANAGER_API_PORT
+    end
+  end
+
+  has_pact_with "Email Alert API" do
+    mock_service :email_alert_api do
+      port EMAIL_ALERT_API_PORT
     end
   end
 end
