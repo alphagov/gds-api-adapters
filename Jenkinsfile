@@ -54,6 +54,11 @@ node("postgresql-9.6") {
         name: 'ASSET_MANAGER_BRANCH',
         defaultValue: 'main',
         description: 'Branch of asset manager to run pacts against'
+      ),
+      stringParam(
+        name: 'EMAIL_ALERT_API_BRANCH',
+        defaultValue: 'main',
+        description: 'Branch of email-alert-api to run pacts against'
       )
     ],
     afterTest: {
@@ -75,6 +80,7 @@ node("postgresql-9.6") {
         runPactTests(govuk, "imminence", IMMINENCE_BRANCH, [ resetDatabase: true, createIndexes: true ])
         runPactTests(govuk, "whitehall", WHITEHALL_BRANCH, [ resetDatabase: true ])
         runPactTests(govuk, "asset-manager", ASSET_MANAGER_BRANCH, [ resetDatabase: true, createIndexes: true ])
+        runPactTests(govuk, "email-alert-api", EMAIL_ALERT_API_BRANCH, [ resetDatabase: true])
       }
     }
   )
