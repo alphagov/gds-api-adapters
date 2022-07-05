@@ -2,6 +2,9 @@ require "test_helper"
 require "gds_api/email_alert_api"
 require "gds_api/test_helpers/email_alert_api"
 
+# Note that currently these tests rely on an extension being installed in
+# a template database on the CI server (see README.md)
+
 describe GdsApi::EmailAlertApi do
   include GdsApi::TestHelpers::EmailAlertApi
   include PactTest
