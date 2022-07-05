@@ -82,6 +82,34 @@ There are also test helpers for stubbing various requests in other apps.
 
 See [all the test helpers in lib/gds_api/test_helpers](/lib/gds_api/test_helpers).
 
+
+## Pact Verification During CI
+
+During the CI test suite, Jenkins downloads and runs the pact:verify tasks for
+each provider app. It's run directly on the Jenkins machine rather than in
+docker containers for each app. For this reason the email-alert-api app
+requires a specific setup on the CI machine - on db creation it copies the
+database from the template1 db (this is the usual PG behaviour, but for some
+reason rails needs to be told to do this explicitly). This template1 db has
+to have the uuid-ossp extension installed by superuser, because the jenkins
+user that CI runs under cannot create this extension. If this test stops
+working with errors like:
+
+```
+Caused by:
+PG::InsufficientPrivilege: ERROR:  permission denied to create extension "uuid-ossp"
+HINT:  Must be superuser to create this extension.
+```
+
+...the template may have been deleted or changed. Log in to the relevant CI
+agent and run:
+
+`> sudo -u postgres psql -d template1`
+
+Then at the PSQL command line:
+
+`template1=# CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`
+
 ## Licence
 
 Released under the MIT Licence, a copy of which can be found in the file
