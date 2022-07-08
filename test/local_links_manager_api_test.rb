@@ -29,6 +29,7 @@ describe GdsApi::LocalLinksManager do
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.example.com",
             "country_name" => "England",
+            "slug" => "blackburn",
           },
           "local_interaction" => {
             "lgsl_code" => 2,
@@ -57,6 +58,7 @@ describe GdsApi::LocalLinksManager do
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.example.com",
             "country_name" => "England",
+            "slug" => "blackburn",
           },
         }
 
@@ -79,6 +81,7 @@ describe GdsApi::LocalLinksManager do
             "tier" => "unitary",
             "homepage_url" => nil,
             "country_name" => "England",
+            "slug" => "blackburn",
           },
         }
 
@@ -152,12 +155,14 @@ describe GdsApi::LocalLinksManager do
               "homepage_url" => "http://blackburn.example.com",
               "country_name" => "England",
               "tier" => "district",
+              "slug" => "blackburn",
             },
             {
               "name" => "Rochester",
               "homepage_url" => "http://rochester.example.com",
               "country_name" => "England",
               "tier" => "county",
+              "slug" => "rochester",
             },
           ],
         }
@@ -178,6 +183,7 @@ describe GdsApi::LocalLinksManager do
               "homepage_url" => "http://blackburn.example.com",
               "country_name" => "England",
               "tier" => "unitary",
+              "slug" => "blackburn",
             },
           ],
         }

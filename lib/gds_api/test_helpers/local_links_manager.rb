@@ -13,6 +13,7 @@ module GdsApi
             "tier" => "unitary",
             "homepage_url" => "http://#{authority_slug}.example.com",
             "country_name" => country_name,
+            "slug" => authority_slug,
           },
           "local_interaction" => {
             "lgsl_code" => lgsl,
@@ -35,6 +36,7 @@ module GdsApi
             "tier" => "unitary",
             "homepage_url" => "http://#{authority_slug}.example.com",
             "country_name" => country_name,
+            "slug" => authority_slug,
           },
         }
 
@@ -51,6 +53,7 @@ module GdsApi
             "tier" => "unitary",
             "homepage_url" => nil,
             "country_name" => country_name,
+            "slug" => authority_slug,
           },
         }
 
@@ -88,6 +91,7 @@ module GdsApi
               "homepage_url" => "http://#{authority_slug}.example.com",
               "country_name" => "England",
               "tier" => "unitary",
+              "slug" => authority_slug,
             },
           ],
         }
@@ -105,12 +109,14 @@ module GdsApi
               "homepage_url" => "http://#{district_slug}.example.com",
               "country_name" => "England",
               "tier" => "district",
+              "slug" => district_slug,
             },
             {
               "name" => county_slug.capitalize,
               "homepage_url" => "http://#{county_slug}.example.com",
               "country_name" => "England",
               "tier" => "county",
+              "slug" => county_slug,
             },
           ],
         }
@@ -140,6 +146,7 @@ module GdsApi
               "homepage_url" => "",
               "country_name" => "England",
               "tier" => "unitary",
+              "slug" => authority_slug,
             },
           ],
         }
