@@ -6,6 +6,11 @@ class GdsApi::LocalLinksManager < GdsApi::Base
     get_json(url)
   end
 
+  def local_link_by_custodian_code(local_custodian_code, lgsl, lgil)
+    url = "#{endpoint}/api/link?local_custodian_code=#{local_custodian_code}&lgsl=#{lgsl}&lgil=#{lgil}"
+    get_json(url)
+  end
+
   def local_authority(authority_slug)
     url = "#{endpoint}/api/local-authority?authority_slug=#{authority_slug}"
     get_json(url)
