@@ -92,12 +92,12 @@ module GdsApi
           .to_return(body: {}.to_json, status: 404)
       end
 
+      # TODO: change Frontend to use stub_local_links_manager_request_with_invalid_parameters,
+      # then remove this stub method.
+      # https://github.com/alphagov/frontend/blob/90a1f4602b40164adc3fd997c3c9e1305f01cf0a/test/functional/local_transaction_controller_test.rb#L259
       def stub_local_links_manager_does_not_have_required_objects(authority_slug, lgsl, lgil)
         params = { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil }
-
-        stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-          .with(query: params)
-          .to_return(body: {}.to_json, status: 404)
+        stub_local_links_manager_request_with_invalid_parameters(params)
       end
 
       def convert_to_query_string_params(parameters)
