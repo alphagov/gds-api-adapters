@@ -251,6 +251,32 @@ describe GdsApi::LocalLinksManager do
         end
       end
     end
+
+    describe "when making request with invalid required parameters" do
+      it "raises when local_custodian_code is invalid" do
+        stub_local_links_manager_request_with_invalid_parameters(local_custodian_code: 999, lgsl: 2, lgil: 8)
+
+        assert_raises(GdsApi::HTTPNotFound) do
+          @api.local_link_by_custodian_code(999, 2, 8)
+        end
+      end
+
+      it "raises when LGSL is invalid" do
+        stub_local_links_manager_request_with_invalid_parameters(local_custodian_code: 2372, lgsl: 999, lgil: 8)
+
+        assert_raises(GdsApi::HTTPNotFound) do
+          @api.local_link_by_custodian_code(2372, 999, 8)
+        end
+      end
+
+      it "raises when the LGSL and LGIL combination is invalid" do
+        stub_local_links_manager_request_with_invalid_parameters(local_custodian_code: 2372, lgsl: 2, lgil: 9)
+
+        assert_raises(GdsApi::HTTPNotFound) do
+          @api.local_link_by_custodian_code(2372, 2, 9)
+        end
+      end
+    end
   end
 
   describe "#local_authority" do

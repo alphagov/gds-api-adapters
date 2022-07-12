@@ -81,11 +81,15 @@ module GdsApi
       end
 
       def stub_local_links_manager_request_with_missing_parameters(**parameters)
-        # convert nil to an empty string, otherwise query param is not expressed correctly
-        parameters.each { |key, _value| parameters[key] = "" if parameters[key].nil? }
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-          .with(query: parameters)
+          .with(query: convert_to_query_string_params(parameters))
           .to_return(body: {}.to_json, status: 400)
+      end
+
+      def stub_local_links_manager_request_with_invalid_parameters(**parameters)
+        stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
+          .with(query: convert_to_query_string_params(parameters))
+          .to_return(body: {}.to_json, status: 404)
       end
 
       def stub_local_links_manager_does_not_have_required_objects(authority_slug, lgsl, lgil)
@@ -94,6 +98,12 @@ module GdsApi
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
           .with(query: params)
           .to_return(body: {}.to_json, status: 404)
+      end
+
+      def convert_to_query_string_params(parameters)
+        # convert nil to an empty string, otherwise query param is not expressed correctly
+        parameters.each { |key, _value| parameters[key] = "" if parameters[key].nil? }
+        parameters
       end
 
       def stub_local_links_manager_has_a_local_authority(authority_slug, local_custodian_code: nil)
