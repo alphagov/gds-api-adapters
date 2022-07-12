@@ -5,7 +5,7 @@ module GdsApi
     module LocalLinksManager
       LOCAL_LINKS_MANAGER_ENDPOINT = Plek.current.find("local-links-manager")
 
-      def stub_local_links_manager_has_a_link(authority_slug:, lgsl:, lgil:, url:, country_name: "England", status: "ok")
+      def stub_local_links_manager_has_a_link(authority_slug:, lgsl:, lgil:, url:, country_name: "England", status: "ok", local_custodian_code: nil)
         response = {
           "local_authority" => {
             "name" => authority_slug.capitalize,
@@ -26,9 +26,15 @@ module GdsApi
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
           .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
           .to_return(body: response.to_json, status: 200)
+
+        unless local_custodian_code.nil?
+          stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
+            .with(query: { local_custodian_code: local_custodian_code, lgsl: lgsl, lgil: lgil })
+            .to_return(body: response.to_json, status: 200)
+        end
       end
 
-      def stub_local_links_manager_has_no_link(authority_slug:, lgsl:, lgil:, country_name: "England")
+      def stub_local_links_manager_has_no_link(authority_slug:, lgsl:, lgil:, country_name: "England", local_custodian_code: nil)
         response = {
           "local_authority" => {
             "name" => authority_slug.capitalize,
@@ -43,9 +49,15 @@ module GdsApi
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
           .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
           .to_return(body: response.to_json, status: 200)
+
+        unless local_custodian_code.nil?
+          stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
+            .with(query: { local_custodian_code: local_custodian_code, lgsl: lgsl, lgil: lgil })
+            .to_return(body: response.to_json, status: 200)
+        end
       end
 
-      def stub_local_links_manager_has_no_link_and_no_homepage_url(authority_slug:, lgsl:, lgil:, country_name: "England")
+      def stub_local_links_manager_has_no_link_and_no_homepage_url(authority_slug:, lgsl:, lgil:, country_name: "England", local_custodian_code: nil)
         response = {
           "local_authority" => {
             "name" => authority_slug.capitalize,
@@ -60,6 +72,12 @@ module GdsApi
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
           .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
           .to_return(body: response.to_json, status: 200)
+
+        unless local_custodian_code.nil?
+          stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
+            .with(query: { local_custodian_code: local_custodian_code, lgsl: lgsl, lgil: lgil })
+            .to_return(body: response.to_json, status: 200)
+        end
       end
 
       def stub_local_links_manager_request_with_missing_parameters(authority_slug, lgsl, lgil)
