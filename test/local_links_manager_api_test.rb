@@ -211,4 +211,73 @@ describe GdsApi::LocalLinksManager do
       end
     end
   end
+
+  describe "#local_authority_by_custodian_code" do
+    describe "when making a request for a local authority with a parent" do
+      it "should return the local authority and its parent" do
+        stub_local_links_manager_has_a_district_and_county_local_authority("blackburn", "rochester", local_custodian_code: 2372)
+
+        expected_response = {
+          "local_authorities" => [
+            {
+              "name" => "Blackburn",
+              "homepage_url" => "http://blackburn.example.com",
+              "country_name" => "England",
+              "tier" => "district",
+              "slug" => "blackburn",
+            },
+            {
+              "name" => "Rochester",
+              "homepage_url" => "http://rochester.example.com",
+              "country_name" => "England",
+              "tier" => "county",
+              "slug" => "rochester",
+            },
+          ],
+        }
+
+        response = @api.local_authority_by_custodian_code(2372)
+        assert_equal expected_response, response.to_hash
+      end
+    end
+
+    describe "when making a request for a local authority without a parent" do
+      it "should return the local authority" do
+        stub_local_links_manager_has_a_local_authority("blackburn", local_custodian_code: 2372)
+
+        expected_response = {
+          "local_authorities" => [
+            {
+              "name" => "Blackburn",
+              "homepage_url" => "http://blackburn.example.com",
+              "country_name" => "England",
+              "tier" => "unitary",
+              "slug" => "blackburn",
+            },
+          ],
+        }
+
+        response = @api.local_authority_by_custodian_code(2372)
+        assert_equal expected_response, response.to_hash
+      end
+    end
+
+    describe "when making a request without the required parameters" do
+      it "raises HTTPClientError when custodian_code is missing" do
+        stub_local_links_manager_request_without_local_custodian_code
+
+        assert_raises GdsApi::HTTPClientError do
+          @api.local_authority_by_custodian_code(nil)
+        end
+      end
+    end
+
+    describe "when making a request with invalid required parameters" do
+      it "raises when authority_slug is invalid" do
+        stub_local_links_manager_does_not_have_a_custodian_code("99999")
+
+        assert_raises(GdsApi::HTTPNotFound) { @api.local_authority_by_custodian_code("99999") }
+      end
+    end
+  end
 end
