@@ -80,16 +80,11 @@ module GdsApi
         end
       end
 
-      def stub_local_links_manager_request_with_missing_parameters(authority_slug, lgsl, lgil)
+      def stub_local_links_manager_request_with_missing_parameters(**parameters)
         # convert nil to an empty string, otherwise query param is not expressed correctly
-        params = {
-          authority_slug: authority_slug || "",
-          lgsl: lgsl || "",
-          lgil: lgil || "",
-        }
-
+        parameters.each { |key, _value| parameters[key] = "" if parameters[key].nil? }
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-          .with(query: params)
+          .with(query: parameters)
           .to_return(body: {}.to_json, status: 400)
       end
 
