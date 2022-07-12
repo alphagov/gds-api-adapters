@@ -92,14 +92,6 @@ module GdsApi
           .to_return(body: {}.to_json, status: 404)
       end
 
-      def stub_local_links_manager_does_not_have_required_objects(authority_slug, lgsl, lgil)
-        params = { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil }
-
-        stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-          .with(query: params)
-          .to_return(body: {}.to_json, status: 404)
-      end
-
       def convert_to_query_string_params(parameters)
         # convert nil to an empty string, otherwise query param is not expressed correctly
         parameters.each { |key, _value| parameters[key] = "" if parameters[key].nil? }

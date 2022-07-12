@@ -118,7 +118,7 @@ describe GdsApi::LocalLinksManager do
 
     describe "when making request with invalid required parameters" do
       it "raises when authority_slug is invalid" do
-        stub_local_links_manager_does_not_have_required_objects("hogwarts", 2, 8)
+        stub_local_links_manager_request_with_invalid_parameters(authority_slug: "hogwarts", lgsl: 2, lgil: 8)
 
         assert_raises(GdsApi::HTTPNotFound) do
           @api.local_link("hogwarts", 2, 8)
@@ -126,7 +126,7 @@ describe GdsApi::LocalLinksManager do
       end
 
       it "raises when LGSL is invalid" do
-        stub_local_links_manager_does_not_have_required_objects("blackburn", 999, 8)
+        stub_local_links_manager_request_with_invalid_parameters(authority_slug: "blackburn", lgsl: 999, lgil: 8)
 
         assert_raises(GdsApi::HTTPNotFound) do
           @api.local_link("blackburn", 999, 8)
@@ -134,7 +134,7 @@ describe GdsApi::LocalLinksManager do
       end
 
       it "raises when the LGSL and LGIL combination is invalid" do
-        stub_local_links_manager_does_not_have_required_objects("blackburn", 2, 9)
+        stub_local_links_manager_request_with_invalid_parameters(authority_slug: "blackburn", lgsl: 2, lgil: 9)
 
         assert_raises(GdsApi::HTTPNotFound) do
           @api.local_link("blackburn", 2, 9)
