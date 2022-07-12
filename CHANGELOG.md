@@ -1,3 +1,7 @@
+# 81.0.0
+
+* BREAKING: Remove `GdsApi::TestHelpers::LocalLinksManager::stub_local_links_manager_does_not_have_required_objects` stub.
+
 # 80.0.1
 
 * Fix `bulk_unsubscribe` stubs so `govuk_request_id` is not a required parameter
