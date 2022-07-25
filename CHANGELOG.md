@@ -1,3 +1,7 @@
+# 81.0.1
+
+* Add quality of life function to allow retrieval of subscribers to a specific topic
+
 # 81.0.0
 
 * BREAKING: Remove `GdsApi::TestHelpers::LocalLinksManager::stub_local_links_manager_does_not_have_required_objects` stub.
