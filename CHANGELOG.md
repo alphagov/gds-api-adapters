@@ -1,3 +1,7 @@
+# 81.0.2
+
+* Add `local_custodian_code` and `country_name` as optional parameters for local_links_manager stubs
+
 # 81.0.1
 
 * Add quality of life function to allow retrieval of subscribers to a specific topic
