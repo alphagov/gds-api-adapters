@@ -98,13 +98,13 @@ module GdsApi
         parameters
       end
 
-      def stub_local_links_manager_has_a_local_authority(authority_slug, local_custodian_code: nil)
+      def stub_local_links_manager_has_a_local_authority(authority_slug, country_name: "England", local_custodian_code: nil)
         response = {
           "local_authorities" => [
             {
               "name" => authority_slug.capitalize,
               "homepage_url" => "http://#{authority_slug}.example.com",
-              "country_name" => "England",
+              "country_name" => country_name,
               "tier" => "unitary",
               "slug" => authority_slug,
             },
@@ -177,13 +177,13 @@ module GdsApi
           .to_return(body: {}.to_json, status: 404)
       end
 
-      def stub_local_links_manager_has_a_local_authority_without_homepage(authority_slug)
+      def stub_local_links_manager_has_a_local_authority_without_homepage(authority_slug, country_name: "England", local_custodian_code: nil)
         response = {
           "local_authorities" => [
             {
               "name" => authority_slug.capitalize,
               "homepage_url" => "",
-              "country_name" => "England",
+              "country_name" => country_name,
               "tier" => "unitary",
               "slug" => authority_slug,
             },
@@ -193,6 +193,12 @@ module GdsApi
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
           .with(query: { authority_slug: authority_slug })
           .to_return(body: response.to_json, status: 200)
+
+        unless local_custodian_code.nil?
+          stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
+            .with(query: { local_custodian_code: local_custodian_code })
+            .to_return(body: response.to_json, status: 200)
+        end
       end
     end
   end
