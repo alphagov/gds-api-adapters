@@ -71,6 +71,13 @@ describe GdsApi::LocationsApi do
       assert_equal response, { "latitude" => 51.50100965, "longitude" => -0.14158705 }
     end
 
+    it "should return zero for postcode with no coordinates specified" do
+      stub_locations_api_has_location("SW1A 1AA", [{ "local_custodian_code" => 5900 }])
+
+      response = api.coordinates_for_postcode("SW1A 1AA")
+      assert_equal response, { "latitude" => 0, "longitude" => 0 }
+    end
+
     it "should return nil for postcode with no coordinates" do
       stub_locations_api_has_no_location("SW1A 1AA")
 

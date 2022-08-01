@@ -1,3 +1,8 @@
+# 81.0.3
+
+* Make `snac` customizable in local_links_manager stubs
+* Set default values for coordinates in locations_api stub
+
 # 81.0.2
 
 * Add `local_custodian_code` and `country_name` as optional parameters for local_links_manager stubs

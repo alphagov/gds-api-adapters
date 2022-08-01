@@ -7,8 +7,8 @@ module GdsApi
         results = []
         locations.each do |l|
           results << {
-            "latitude" => l["latitude"],
-            "longitude" => l["longitude"],
+            "latitude" => l["latitude"] || 0,
+            "longitude" => l["longitude"] || 0,
             "postcode" => postcode,
             "local_custodian_code" => l["local_custodian_code"],
           }
