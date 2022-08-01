@@ -5,11 +5,11 @@ module GdsApi
     module LocalLinksManager
       LOCAL_LINKS_MANAGER_ENDPOINT = Plek.current.find("local-links-manager")
 
-      def stub_local_links_manager_has_a_link(authority_slug:, lgsl:, lgil:, url:, country_name: "England", status: "ok", local_custodian_code: nil)
+      def stub_local_links_manager_has_a_link(authority_slug:, lgsl:, lgil:, url:, country_name: "England", status: "ok", snac: "00AG", local_custodian_code: nil)
         response = {
           "local_authority" => {
             "name" => authority_slug.capitalize,
-            "snac" => "00AG",
+            "snac" => snac,
             "tier" => "unitary",
             "homepage_url" => "http://#{authority_slug}.example.com",
             "country_name" => country_name,
@@ -34,11 +34,11 @@ module GdsApi
         end
       end
 
-      def stub_local_links_manager_has_no_link(authority_slug:, lgsl:, lgil:, country_name: "England", local_custodian_code: nil)
+      def stub_local_links_manager_has_no_link(authority_slug:, lgsl:, lgil:, country_name: "England", snac: "00AG", local_custodian_code: nil)
         response = {
           "local_authority" => {
             "name" => authority_slug.capitalize,
-            "snac" => "00AG",
+            "snac" => snac,
             "tier" => "unitary",
             "homepage_url" => "http://#{authority_slug}.example.com",
             "country_name" => country_name,
@@ -57,11 +57,11 @@ module GdsApi
         end
       end
 
-      def stub_local_links_manager_has_no_link_and_no_homepage_url(authority_slug:, lgsl:, lgil:, country_name: "England", local_custodian_code: nil)
+      def stub_local_links_manager_has_no_link_and_no_homepage_url(authority_slug:, lgsl:, lgil:, country_name: "England", snac: "00AG", local_custodian_code: nil)
         response = {
           "local_authority" => {
             "name" => authority_slug.capitalize,
-            "snac" => "00AG",
+            "snac" => snac,
             "tier" => "unitary",
             "homepage_url" => nil,
             "country_name" => country_name,

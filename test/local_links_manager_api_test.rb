@@ -45,24 +45,25 @@ describe GdsApi::LocalLinksManager do
 
       it "returns the local authority details only if no link present" do
         stub_local_links_manager_has_no_link(
-          authority_slug: "blackburn",
-          lgsl: 2,
-          lgil: 4,
+          authority_slug: "westminster",
+          lgsl: 461,
+          lgil: 8,
           country_name: "England",
+          snac: "00BK",
         )
 
         expected_response = {
           "local_authority" => {
-            "name" => "Blackburn",
-            "snac" => "00AG",
+            "name" => "Westminster",
+            "snac" => "00BK",
             "tier" => "unitary",
-            "homepage_url" => "http://blackburn.example.com",
+            "homepage_url" => "http://westminster.example.com",
             "country_name" => "England",
-            "slug" => "blackburn",
+            "slug" => "westminster",
           },
         }
 
-        response = @api.local_link("blackburn", 2, 4)
+        response = @api.local_link("westminster", 461, 8)
         assert_equal expected_response, response.to_hash
       end
 
