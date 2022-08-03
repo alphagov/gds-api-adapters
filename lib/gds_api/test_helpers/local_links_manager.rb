@@ -98,7 +98,7 @@ module GdsApi
         parameters
       end
 
-      def stub_local_links_manager_has_a_local_authority(authority_slug, country_name: "England", local_custodian_code: nil)
+      def stub_local_links_manager_has_a_local_authority(authority_slug, country_name: "England", snac: "00AG", local_custodian_code: nil)
         response = {
           "local_authorities" => [
             {
@@ -107,6 +107,7 @@ module GdsApi
               "country_name" => country_name,
               "tier" => "unitary",
               "slug" => authority_slug,
+              "snac" => snac,
             },
           ],
         }
@@ -122,7 +123,7 @@ module GdsApi
         end
       end
 
-      def stub_local_links_manager_has_a_district_and_county_local_authority(district_slug, county_slug, local_custodian_code: nil)
+      def stub_local_links_manager_has_a_district_and_county_local_authority(district_slug, county_slug, district_snac: "00AG", county_snac: "00LC", local_custodian_code: nil)
         response = {
           "local_authorities" => [
             {
@@ -131,6 +132,7 @@ module GdsApi
               "country_name" => "England",
               "tier" => "district",
               "slug" => district_slug,
+              "snac" => district_snac,
             },
             {
               "name" => county_slug.capitalize,
@@ -138,6 +140,7 @@ module GdsApi
               "country_name" => "England",
               "tier" => "county",
               "slug" => county_slug,
+              "snac" => county_snac,
             },
           ],
         }
@@ -177,7 +180,7 @@ module GdsApi
           .to_return(body: {}.to_json, status: 404)
       end
 
-      def stub_local_links_manager_has_a_local_authority_without_homepage(authority_slug, country_name: "England", local_custodian_code: nil)
+      def stub_local_links_manager_has_a_local_authority_without_homepage(authority_slug, country_name: "England", snac: "00AG", local_custodian_code: nil)
         response = {
           "local_authorities" => [
             {
@@ -186,6 +189,7 @@ module GdsApi
               "country_name" => country_name,
               "tier" => "unitary",
               "slug" => authority_slug,
+              "snac" => snac,
             },
           ],
         }

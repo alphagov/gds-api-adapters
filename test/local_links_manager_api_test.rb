@@ -283,7 +283,7 @@ describe GdsApi::LocalLinksManager do
   describe "#local_authority" do
     describe "when making a request for a local authority with a parent" do
       it "should return the local authority and its parent" do
-        stub_local_links_manager_has_a_district_and_county_local_authority("blackburn", "rochester")
+        stub_local_links_manager_has_a_district_and_county_local_authority("blackburn", "rochester", district_snac: "test1", county_snac: "test2")
 
         expected_response = {
           "local_authorities" => [
@@ -293,6 +293,7 @@ describe GdsApi::LocalLinksManager do
               "country_name" => "England",
               "tier" => "district",
               "slug" => "blackburn",
+              "snac" => "test1",
             },
             {
               "name" => "Rochester",
@@ -300,6 +301,7 @@ describe GdsApi::LocalLinksManager do
               "country_name" => "England",
               "tier" => "county",
               "slug" => "rochester",
+              "snac" => "test2",
             },
           ],
         }
@@ -321,6 +323,7 @@ describe GdsApi::LocalLinksManager do
               "country_name" => "England",
               "tier" => "unitary",
               "slug" => "blackburn",
+              "snac" => "00AG",
             },
           ],
         }
@@ -362,6 +365,7 @@ describe GdsApi::LocalLinksManager do
               "country_name" => "England",
               "tier" => "district",
               "slug" => "blackburn",
+              "snac" => "00AG",
             },
             {
               "name" => "Rochester",
@@ -369,6 +373,7 @@ describe GdsApi::LocalLinksManager do
               "country_name" => "England",
               "tier" => "county",
               "slug" => "rochester",
+              "snac" => "00LC",
             },
           ],
         }
@@ -390,6 +395,7 @@ describe GdsApi::LocalLinksManager do
               "country_name" => "England",
               "tier" => "unitary",
               "slug" => "blackburn",
+              "snac" => "00AG",
             },
           ],
         }
