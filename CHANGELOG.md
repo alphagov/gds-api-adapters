@@ -1,3 +1,7 @@
+# 81.0.4
+
+* Return `snac` in local_links_manager stubs for local_authority
+
 # 81.0.3
 
 * Make `snac` customizable in local_links_manager stubs
