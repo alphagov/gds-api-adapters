@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rest-client", "~> 2.0"
 
   s.add_development_dependency "climate_control", "~> 1.2"
-  s.add_development_dependency "govuk-content-schema-test-helpers", "~> 1.6"
+  s.add_development_dependency "govuk_schemas", "~> 4.4"
   s.add_development_dependency "minitest", "~> 5.11"
   s.add_development_dependency "minitest-around", "~> 0.5"
   s.add_development_dependency "mocha", "~> 1.14"
