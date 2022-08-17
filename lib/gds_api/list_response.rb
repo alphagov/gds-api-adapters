@@ -44,11 +44,9 @@ module GdsApi
 
     def previous_page
       # See the note in `next_page` for why this is memoised
-      @previous_page ||= begin
-        if has_previous_page?
-          @api_client.get_list(page_link("previous").href)
-        end
-      end
+      @previous_page ||= if has_previous_page?
+                           @api_client.get_list(page_link("previous").href)
+                         end
     end
 
     # Transparently get all results across all pages. Compare this with #each

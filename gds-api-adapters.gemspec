@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rack", "~> 2.0"
   s.add_development_dependency "rack-test"
   s.add_development_dependency "rake", "~> 12.3"
-  s.add_development_dependency "rubocop-govuk", "4.0.0.pre.1" # Trialling pre-release
+  s.add_development_dependency "rubocop-govuk", "4.7.0"
   s.add_development_dependency "simplecov", "~> 0.16"
   s.add_development_dependency "simplecov-rcov"
   s.add_development_dependency "timecop", "~> 0.9"
