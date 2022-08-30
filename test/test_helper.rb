@@ -17,7 +17,7 @@ require "rack/test"
 require "mocha/minitest"
 require "timecop"
 require "gds-api-adapters"
-require "govuk-content-schema-test-helpers"
+require "govuk_schemas"
 require "climate_control"
 
 class Minitest::Test
@@ -52,11 +52,6 @@ require "test_helpers/pact_helper"
 
 require "webmock/minitest"
 WebMock.disable_net_connect!
-
-GovukContentSchemaTestHelpers.configure do |config|
-  config.schema_type = "publisher_v2"
-  config.project_root = File.absolute_path(File.join(File.basename(__FILE__), ".."))
-end
 
 Mocha.configure do |c|
   c.reinstate_undocumented_behaviour_from_v1_9 = false

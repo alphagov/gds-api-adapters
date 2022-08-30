@@ -1,10 +1,11 @@
 require "test_helper"
 require "gds_api/publishing_api/special_route_publisher"
-require "govuk-content-schema-test-helpers"
+require "govuk_schemas/assert_matchers"
 require "#{File.dirname(__FILE__)}/../../lib/gds_api/test_helpers/publishing_api"
 
 describe GdsApi::PublishingApi::SpecialRoutePublisher do
   include ::GdsApi::TestHelpers::PublishingApi
+  include GovukSchemas::AssertMatchers
 
   let(:content_id) { "a-content-id-of-sorts" }
   let(:special_route) do
@@ -52,7 +53,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
         }
 
         assert_requested(:put, "#{endpoint}/v2/content/#{content_id}", body: expected_payload)
-        assert_valid_special_route(expected_payload)
+        assert_valid_against_publisher_schema(expected_payload, "special_route")
         assert_publishing_api_publish(content_id)
       end
     end
@@ -131,15 +132,5 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
         end
       end
     end
-  end
-
-  def assert_valid_special_route(payload)
-    validator = GovukContentSchemaTestHelpers::Validator.new(
-      "special_route",
-      "schema",
-      payload,
-    )
-
-    assert validator.valid?, validator.errors.join("\n")
   end
 end
