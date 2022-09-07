@@ -354,7 +354,40 @@ describe GdsApi::EmailAlertApi do
   end
 
   describe "#unsubscribe_subscriber" do
-    # TODO: implement pact, used by account-api
+    it "responds with a 404" do
+      email_alert_api
+        .upon_receiving("the request to unsubscribe a missing subscriber")
+        .with(
+          method: :delete,
+          path: "/subscribers/1",
+          headers: GdsApi::JsonClient.default_request_headers,
+        )
+        .will_respond_with(
+          status: 404,
+        )
+
+      begin
+        api_client.unsubscribe_subscriber(1)
+      rescue GdsApi::HTTPNotFound
+        # This is expected
+      end
+    end
+
+    it "responds with a 204" do
+      email_alert_api
+        .given("a subscriber exists")
+        .upon_receiving("the request to unsubscribe that subscriber")
+        .with(
+          method: :delete,
+          path: "/subscribers/1",
+          headers: GdsApi::JsonClient.default_request_headers,
+        )
+        .will_respond_with(
+          status: 204,
+        )
+
+      api_client.unsubscribe_subscriber(1)
+    end
   end
 
   describe "#subscribe" do
