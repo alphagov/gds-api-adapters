@@ -22,20 +22,6 @@ describe GdsApi::TestHelpers::EmailAlertApi do
     end
   end
 
-  describe "#assert_email_alert_api_message_created" do
-    before { stub_any_email_alert_api_call }
-
-    it "matches a post request with any empty attributes by default" do
-      email_alert_api.create_message("foo" => "bar")
-      assert_email_alert_api_message_created
-    end
-
-    it "matches a post request subset of attributes" do
-      email_alert_api.create_message("foo" => "bar", "baz" => "qux")
-      assert_email_alert_api_message_created("foo" => "bar")
-    end
-  end
-
   describe "#stub_email_alert_api_has_subscriber_subscriptions" do
     let(:id) { SecureRandom.uuid }
     let(:address) { "test@example.com" }

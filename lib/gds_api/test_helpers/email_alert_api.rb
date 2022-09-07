@@ -155,11 +155,6 @@ module GdsApi
           .to_return(status: 202, body: {}.to_json)
       end
 
-      def stub_email_alert_api_accepts_message
-        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/messages")
-          .to_return(status: 202, body: {}.to_json)
-      end
-
       def stub_email_alert_api_accepts_email
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/emails")
           .to_return(status: 202, body: {}.to_json)
@@ -178,17 +173,6 @@ module GdsApi
         end
 
         assert_requested(:post, "#{EMAIL_ALERT_API_ENDPOINT}/content-changes", times: 1, &matcher)
-      end
-
-      def assert_email_alert_api_message_created(attributes = nil)
-        if attributes
-          matcher = lambda do |request|
-            payload = JSON.parse(request.body)
-            payload.select { |k, _| attributes.key?(k) } == attributes
-          end
-        end
-
-        assert_requested(:post, "#{EMAIL_ALERT_API_ENDPOINT}/messages", times: 1, &matcher)
       end
 
       def stub_email_alert_api_unsubscribes_a_subscription(uuid)
