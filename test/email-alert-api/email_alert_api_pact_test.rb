@@ -230,7 +230,89 @@ describe GdsApi::EmailAlertApi do
   # end
 
   describe "#bulk_unsubscribe" do
-    # TODO: implement pact, used by email-alert-service
+    it "responds with a 404" do
+      email_alert_api
+        .upon_receiving("the request to bulk unsubscribe a missing subscriber_list")
+        .with(
+          method: :post,
+          path: "/subscriber-lists/missing-subscriber-list/bulk-unsubscribe",
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 404,
+        )
+
+      begin
+        api_client.bulk_unsubscribe(slug: "missing-subscriber-list")
+      rescue GdsApi::HTTPNotFound
+        # This is expected
+      end
+    end
+
+    it "responds with a 409" do
+      email_alert_api
+        .given("a bulk_unsubscribe message with the sender_message_id b735f541-c29c-4752-b084-c4ddb47aee73 and subscriber_list with slug title-1 exists")
+        .upon_receiving("the request to repeat a bulk unsubscribe and email subscribers")
+        .with(
+          method: :post,
+          path: "/subscriber-lists/title-1/bulk-unsubscribe",
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+          body: {
+            body: "Goodbye!",
+            sender_message_id: "b735f541-c29c-4752-b084-c4ddb47aee73",
+          },
+        )
+        .will_respond_with(
+          status: 409,
+        )
+
+      begin
+        api_client.bulk_unsubscribe(
+          slug: "title-1",
+          body: "Goodbye!",
+          sender_message_id: "b735f541-c29c-4752-b084-c4ddb47aee73",
+        )
+      rescue GdsApi::HTTPConflict
+        # This is expected
+      end
+    end
+
+    it "responds with a 422" do
+      email_alert_api
+        .given("a subscriber list with slug title-1 exists")
+        .upon_receiving("the request to bulk unsubscribe with a message body but missing IDs")
+        .with(
+          method: :post,
+          path: "/subscriber-lists/title-1/bulk-unsubscribe",
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+          body: { body: "Goodbye!" },
+        )
+        .will_respond_with(
+          status: 422,
+        )
+
+      begin
+        api_client.bulk_unsubscribe(slug: "title-1", body: "Goodbye!")
+      rescue GdsApi::HTTPUnprocessableEntity
+        # This is expected
+      end
+    end
+
+    it "responds with a 202" do
+      email_alert_api
+        .given("a subscriber list with slug title-1 exists")
+        .upon_receiving("the request to bulk unsubscribe an existing subscriber_list")
+        .with(
+          method: :post,
+          path: "/subscriber-lists/title-1/bulk-unsubscribe",
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 202,
+        )
+
+      api_client.bulk_unsubscribe(slug: "title-1")
+    end
   end
 
   describe "#unsubscribe" do
