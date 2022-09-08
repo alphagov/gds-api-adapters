@@ -825,7 +825,46 @@ describe GdsApi::EmailAlertApi do
   end
 
   describe "#find_subscriber_by_govuk_account" do
-    # TODO: implement pact, used by account-api
+    it "responds with the subscriber" do
+      email_alert_api
+        .upon_receiving("a request to find by a missing govuk account id")
+        .with(
+          method: :get,
+          path: "/subscribers/govuk-account/internal-user-id",
+          headers: GdsApi::JsonClient.default_request_headers,
+        )
+        .will_respond_with(
+          status: 404,
+        )
+
+      begin
+        api_client.find_subscriber_by_govuk_account(govuk_account_id: "internal-user-id")
+      rescue GdsApi::HTTPNotFound
+        # This is expected
+      end
+    end
+
+    it "responds with the subscriber" do
+      email_alert_api
+        .given("a verified govuk_account_session exists with a linked subscriber")
+        .upon_receiving("a request to find by that subscriber's govuk account id")
+        .with(
+          method: :get,
+          path: "/subscribers/govuk-account/internal-user-id",
+          headers: GdsApi::JsonClient.default_request_headers,
+        )
+        .will_respond_with(
+          status: 200,
+          body: {
+            subscriber: example_subscriber.merge(govuk_account_id: "internal-user-id"),
+          },
+          headers: {
+            "Content-Type" => "application/json; charset=utf-8",
+          },
+        )
+
+      api_client.find_subscriber_by_govuk_account(govuk_account_id: "internal-user-id")
+    end
   end
 
   describe "#link_subscriber_to_govuk_account" do
