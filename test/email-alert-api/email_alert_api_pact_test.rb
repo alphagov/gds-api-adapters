@@ -647,7 +647,56 @@ describe GdsApi::EmailAlertApi do
   end
 
   describe "#change_subscription" do
-    # TODO: implement pact, used by email-alert-frontend
+    it "responds with a 404" do
+      email_alert_api
+        .upon_receiving("a request to change the frequency of a missing subscription")
+        .with(
+          method: :patch,
+          path: "/subscriptions/1",
+          body: { frequency: "daily" },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 404,
+        )
+
+      begin
+        api_client.change_subscription(id: 1, frequency: :daily)
+      rescue GdsApi::HTTPNotFound
+        # This is expected
+      end
+    end
+
+    it "responds with the updated subscription" do
+      email_alert_api
+        .given("a subscription with the uuid 719efe7b-00d0-4168-ac30-99fe6093e3fc exists")
+        .upon_receiving("a request to change the frequency for that subscription")
+        .with(
+          method: :patch,
+          path: "/subscriptions/719efe7b-00d0-4168-ac30-99fe6093e3fc",
+          body: { frequency: "daily" },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 200,
+          body: {
+            subscription: {
+              id: Pact.like("719efe7b-00d0-4168-ac30-99fe6093e3fc"),
+              subscriber_list: example_subscriber_list,
+              subscriber: example_subscriber,
+              ended_at: nil,
+              ended_reason: nil,
+              frequency: "daily",
+              source: "frequency_changed",
+            },
+          },
+          headers: {
+            "Content-Type" => "application/json; charset=utf-8",
+          },
+        )
+
+      api_client.change_subscription(id: "719efe7b-00d0-4168-ac30-99fe6093e3fc", frequency: :daily)
+    end
   end
 
   describe "#update_subscriber_list_details" do
