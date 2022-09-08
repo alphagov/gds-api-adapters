@@ -391,7 +391,63 @@ describe GdsApi::EmailAlertApi do
   end
 
   describe "#subscribe" do
-    # TODO: implement pact, used by email-alert-frontend
+    it "responds with a 422" do
+      email_alert_api
+        .given("a subscriber list with id 1 exists")
+        .upon_receiving("request to subscribe with an invalid frequency")
+        .with(
+          method: :post,
+          path: "/subscriptions",
+          body: {
+            subscriber_list_id: 1,
+            address: "test@example.com",
+            frequency: "thrice-fortnightly",
+            skip_confirmation_email: true,
+          },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 422,
+        )
+
+      begin
+        api_client.subscribe(
+          subscriber_list_id: 1,
+          address: "test@example.com",
+          frequency: "thrice-fortnightly",
+          skip_confirmation_email: true,
+        )
+      rescue GdsApi::HTTPUnprocessableEntity
+        # This is expected
+      end
+    end
+
+    it "responds with a 200" do
+      email_alert_api
+        .given("a subscriber list with id 1 exists")
+        .upon_receiving("request to subscribe with a valid frequency")
+        .with(
+          method: :post,
+          path: "/subscriptions",
+          body: {
+            subscriber_list_id: 1,
+            address: "test@example.com",
+            frequency: "daily",
+            skip_confirmation_email: true,
+          },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 200,
+        )
+
+      api_client.subscribe(
+        subscriber_list_id: 1,
+        address: "test@example.com",
+        frequency: "daily",
+        skip_confirmation_email: true,
+      )
+    end
   end
 
   describe "#get_subscriber_list" do
