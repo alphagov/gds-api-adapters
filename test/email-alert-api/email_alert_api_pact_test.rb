@@ -802,7 +802,7 @@ describe GdsApi::EmailAlertApi do
 
     it "responds with the subscriber" do
       email_alert_api
-        .given("a verified govuk_account_session exists with a matching subscriber")
+        .given("a verified govuk_account_session exists with a linked subscriber")
         .upon_receiving("a request to authenticate by the govuk_account_session")
         .with(
           method: :post,
@@ -813,7 +813,7 @@ describe GdsApi::EmailAlertApi do
         .will_respond_with(
           status: 200,
           body: {
-            subscriber: example_subscriber,
+            subscriber: example_subscriber.merge("govuk_account_id": "internal-user-id"),
           },
           headers: {
             "Content-Type" => "application/json; charset=utf-8",
