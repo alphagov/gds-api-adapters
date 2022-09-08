@@ -868,7 +868,70 @@ describe GdsApi::EmailAlertApi do
   end
 
   describe "#link_subscriber_to_govuk_account" do
-    # TODO: implement pact, used by email-alert-frontend
+    it "responds with a 401" do
+      email_alert_api
+        .given("the account api can't find the user by session")
+        .upon_receiving("a request to link the subscriber, but with bad session id")
+        .with(
+          method: :post,
+          path: "/subscribers/govuk-account/link",
+          body: { govuk_account_session: "bad session identifier" },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 401,
+        )
+
+      begin
+        api_client.link_subscriber_to_govuk_account(govuk_account_session: "bad session identifier")
+      rescue GdsApi::HTTPUnauthorized
+        # This is expected
+      end
+    end
+
+    it "responds with a 403" do
+      email_alert_api
+        .given("a govuk_account_session exists but isn't verified")
+        .upon_receiving("a request to link the subscriber")
+        .with(
+          method: :post,
+          path: "/subscribers/govuk-account/link",
+          body: { govuk_account_session: "session identifier" },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 403,
+        )
+
+      begin
+        api_client.link_subscriber_to_govuk_account(govuk_account_session: "session identifier")
+      rescue GdsApi::HTTPForbidden
+        # This is expected
+      end
+    end
+
+    it "responds with the subscriber linked" do
+      email_alert_api
+        .given("a verified govuk_account_session exists with a matching subscriber")
+        .upon_receiving("a request to link the subscriber")
+        .with(
+          method: :post,
+          path: "/subscribers/govuk-account/link",
+          body: { govuk_account_session: "session identifier" },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 200,
+          body: {
+            subscriber: example_subscriber.merge("govuk_account_id": "internal-user-id"),
+          },
+          headers: {
+            "Content-Type" => "application/json; charset=utf-8",
+          },
+        )
+
+      api_client.link_subscriber_to_govuk_account(govuk_account_session: "session identifier")
+    end
   end
 
   describe "#send_subscriber_verification_email" do
