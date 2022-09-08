@@ -700,7 +700,82 @@ describe GdsApi::EmailAlertApi do
   end
 
   describe "#update_subscriber_list_details" do
-    # TODO: implement pact, used by email-alert-service
+    it "responds with a 404" do
+      email_alert_api
+        .upon_receiving("a request to change the title of a missing subscriber list")
+        .with(
+          method: :patch,
+          path: "/subscriber-lists/missing-list",
+          body: { title: "Contract Test New Title" },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 404,
+        )
+
+      begin
+        api_client.update_subscriber_list_details(
+          slug: "missing-list",
+          params: { title: "Contract Test New Title" },
+        )
+      rescue GdsApi::HTTPNotFound
+        # This is expected
+      end
+    end
+
+    it "responds with a 404" do
+      email_alert_api
+        .given("a subscriber list with id 1 exists")
+        .upon_receiving("a request to change no params of that subscriber list")
+        .with(
+          method: :patch,
+          path: "/subscriber-lists/title-1",
+          body: {},
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 422,
+        )
+
+      begin
+        api_client.update_subscriber_list_details(
+          slug: "title-1",
+          params: {},
+        )
+      rescue GdsApi::HTTPUnprocessableEntity
+        # This is expected
+      end
+    end
+
+    it "responds with the update subscription" do
+      email_alert_api
+        .given("a subscriber list with slug title-1 exists")
+        .upon_receiving("a request to update the title and description of that subscriber list")
+        .with(
+          method: :patch,
+          path: "/subscriber-lists/title-1",
+          body: {
+            title: "Contract Test New Title",
+            description: "Contract Test New Description",
+          },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 200,
+          body: { subscriber_list: example_subscriber_list.merge(title: "Contract Test New Title", description: "Contract Test New Description") },
+          headers: {
+            "Content-Type" => "application/json; charset=utf-8",
+          },
+        )
+
+      api_client.update_subscriber_list_details(
+        slug: "title-1",
+        params: {
+          title: "Contract Test New Title",
+          description: "Contract Test New Description",
+        },
+      )
+    end
   end
 
   describe "#authenticate_subscriber_by_govuk_account" do
