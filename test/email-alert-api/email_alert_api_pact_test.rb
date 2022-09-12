@@ -988,7 +988,7 @@ describe GdsApi::EmailAlertApi do
       end
     end
 
-    it "responds with the subscriber linked" do
+    it "responds with the subscriber" do
       email_alert_api
         .given("a verified govuk_account_session exists with a matching subscriber")
         .upon_receiving("a request to send a subscriber verification email to that subscriber")
@@ -1019,6 +1019,61 @@ describe GdsApi::EmailAlertApi do
   end
 
   describe "#send_subscription_verification_email" do
-    # TODO: implement pact, used by email-alert-frontend
+    it "responds with a 404" do
+      email_alert_api
+        .upon_receiving("a request to send a subscription verification email for a missing subscriber list")
+        .with(
+          method: :post,
+          path: "/subscriptions/auth-token",
+          body: {
+            address: "test@example.com",
+            frequency: "daily",
+            topic_id: "title-1",
+          },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 404,
+        )
+
+      begin
+        api_client.send_subscription_verification_email(
+          address: "test@example.com",
+          frequency: "daily",
+          topic_id: "title-1",
+        )
+      rescue GdsApi::HTTPNotFound
+        # This is expected
+      end
+    end
+
+    it "responds with a 200" do
+      email_alert_api
+        .given("a subscriber list with slug title-1 exists")
+        .upon_receiving("a request to send a subscription verification email to that list")
+        .with(
+          method: :post,
+          path: "/subscriptions/auth-token",
+          body: {
+            address: "test@example.com",
+            frequency: "daily",
+            topic_id: "title-1",
+          },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 200,
+          body: {},
+          headers: {
+            "Content-Type" => "application/json; charset=utf-8",
+          },
+        )
+
+      api_client.send_subscription_verification_email(
+        address: "test@example.com",
+        frequency: "daily",
+        topic_id: "title-1",
+      )
+    end
   end
 end
