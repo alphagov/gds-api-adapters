@@ -935,7 +935,87 @@ describe GdsApi::EmailAlertApi do
   end
 
   describe "#send_subscriber_verification_email" do
-    # TODO: implement pact, used by email-alert-frontend
+    it "responds with a 404" do
+      email_alert_api
+        .upon_receiving("a request to send a subscriber verification email to a missing subscriber")
+        .with(
+          method: :post,
+          path: "/subscribers/auth-token",
+          body: {
+            address: "bad-email@example.com",
+            destination: "/authentication-page-on-govuk",
+          },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 404,
+        )
+
+      begin
+        api_client.send_subscriber_verification_email(
+          address: "bad-email@example.com",
+          destination: "/authentication-page-on-govuk",
+        )
+      rescue GdsApi::HTTPNotFound
+        # This is expected
+      end
+    end
+
+    it "responds with a 403" do
+      email_alert_api
+        .given("a verified govuk_account_session exists with a linked subscriber")
+        .upon_receiving("a request to send a subscriber verification email to that subscriber")
+        .with(
+          method: :post,
+          path: "/subscribers/auth-token",
+          body: {
+            address: "test@example.com",
+            destination: "/authentication-page-on-govuk",
+          },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 403,
+        )
+
+      begin
+        api_client.send_subscriber_verification_email(
+          address: "test@example.com",
+          destination: "/authentication-page-on-govuk",
+        )
+      rescue GdsApi::HTTPForbidden
+        # This is expected
+      end
+    end
+
+    it "responds with the subscriber linked" do
+      email_alert_api
+        .given("a verified govuk_account_session exists with a matching subscriber")
+        .upon_receiving("a request to send a subscriber verification email to that subscriber")
+        .with(
+          method: :post,
+          path: "/subscribers/auth-token",
+          body: {
+            address: "test@example.com",
+            destination: "/authentication-page-on-govuk",
+          },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 201,
+          body: {
+            subscriber: example_subscriber,
+          },
+          headers: {
+            "Content-Type" => "application/json; charset=utf-8",
+          },
+        )
+
+      api_client.send_subscriber_verification_email(
+        address: "test@example.com",
+        destination: "/authentication-page-on-govuk",
+      )
+    end
   end
 
   describe "#send_subscription_verification_email" do
