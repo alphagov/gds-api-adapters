@@ -34,14 +34,6 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     post_json("#{endpoint}/content-changes", content_change, headers)
   end
 
-  # Post a message
-  #
-  # @param message [Hash] Valid message attributes
-  def create_message(message, headers = {})
-    warn "#create_message is deprecated and will be removed in a future version."
-    post_json("#{endpoint}/messages", message, headers)
-  end
-
   # Get topic matches
   #
   # @param attributes [Hash] tags, links, document_type,

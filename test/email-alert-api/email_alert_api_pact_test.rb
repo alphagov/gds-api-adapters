@@ -221,10 +221,6 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
-  # describe create_message
-  #   TODO: method is DEPRECATED, so remove this when removed
-  # end
-
   # describe "topic_matches" do
   #   Not currently used by anything, so not a priority
   # end

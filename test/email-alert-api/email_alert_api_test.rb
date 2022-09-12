@@ -48,31 +48,6 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
-  describe "messages" do
-    let(:subject) { "Email subject" }
-    let(:message_params) do
-      {
-        "subject" => subject,
-        "body" => "Body",
-        "tags" => tags,
-      }
-    end
-
-    before do
-      stub_email_alert_api_accepts_message
-    end
-
-    it "posts a new message" do
-      assert api_client.create_message(message_params)
-
-      assert_requested(:post, "#{base_url}/messages", body: message_params.to_json)
-    end
-
-    it "returns the an empty response" do
-      assert api_client.create_message(message_params).to_hash.empty?
-    end
-  end
-
   describe "subscriptions" do
     describe "URI encoding ids" do
       it "encodes the id for #get_subscription" do
