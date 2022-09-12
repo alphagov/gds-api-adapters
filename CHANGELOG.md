@@ -1,3 +1,7 @@
+# 82.0.0
+
+* BREAKING: Remove support for `create_message` endpoint for Email Alert API. However, this has been deprecated for 6 months and no apps are using this so it should not be breaking in practice.
+
 # 81.0.4
 
 * Return `snac` in local_links_manager stubs for local_authority
