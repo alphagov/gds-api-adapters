@@ -35,11 +35,6 @@ class GdsApi::Imminence < GdsApi::Base
     get_json(url)
   end
 
-  def areas_for_type(type)
-    url = "#{@endpoint}/areas/#{type}.json"
-    get_json(url)
-  end
-
   # @private
   def self.extract_location_hash(location)
     # Deal with all known location formats:
