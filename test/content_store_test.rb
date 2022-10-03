@@ -6,7 +6,7 @@ describe GdsApi::ContentStore do
   include GdsApi::TestHelpers::ContentStore
 
   before do
-    @base_api_url = Plek.current.find("content-store")
+    @base_api_url = Plek.find("content-store")
     @api = GdsApi::ContentStore.new(@base_api_url)
   end
 

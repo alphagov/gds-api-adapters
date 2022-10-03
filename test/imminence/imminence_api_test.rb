@@ -2,7 +2,7 @@ require "test_helper"
 require "gds_api/imminence"
 
 class ImminenceApiTest < Minitest::Test
-  ROOT = Plek.current.find("imminence")
+  ROOT = Plek.find("imminence")
   LATITUDE = 52.1327584352089
   LONGITUDE = -0.4702813074674147
 

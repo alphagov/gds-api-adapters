@@ -6,7 +6,7 @@ require "json"
 describe GdsApi::AssetManager do
   include GdsApi::TestHelpers::AssetManager
 
-  let(:base_api_url) { Plek.current.find("asset-manager") }
+  let(:base_api_url) { Plek.find("asset-manager") }
   let(:api) { GdsApi::AssetManager.new(base_api_url) }
 
   let(:file_fixture) { load_fixture_file("hello.txt") }

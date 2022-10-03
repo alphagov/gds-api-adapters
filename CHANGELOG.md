@@ -1,3 +1,7 @@
+# Unreleased
+
+* Replace use of Plek.current to resolve warnings with Plek >= 4.1
+
 # 82.0.0
 
 * BREAKING: Remove support for `create_message` endpoint for Email Alert API. However, this has been deprecated for 6 months and no apps are using this so it should not be breaking in practice.

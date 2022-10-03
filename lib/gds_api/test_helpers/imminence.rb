@@ -5,7 +5,7 @@ module GdsApi
     module Imminence
       # Generally true. If you are initializing the client differently,
       # you could redefine/override the constant or stub directly.
-      IMMINENCE_API_ENDPOINT = Plek.current.find("imminence")
+      IMMINENCE_API_ENDPOINT = Plek.find("imminence")
 
       def stub_imminence_has_places(latitude, longitude, details)
         query_hash = { "lat" => latitude, "lng" => longitude, "limit" => "5" }

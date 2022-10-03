@@ -3,7 +3,7 @@ require "gds_api/test_helpers/json_client_helper"
 module GdsApi
   module TestHelpers
     module LinkCheckerApi
-      LINK_CHECKER_API_ENDPOINT = Plek.current.find("link-checker-api")
+      LINK_CHECKER_API_ENDPOINT = Plek.find("link-checker-api")
 
       def link_checker_api_link_report_hash(uri:, status: :ok, checked: nil, errors: [], warnings: [], problem_summary: nil, suggested_fix: nil)
         {

@@ -1,7 +1,7 @@
 module GdsApi
   module TestHelpers
     module AssetManager
-      ASSET_MANAGER_ENDPOINT = Plek.current.find("asset-manager")
+      ASSET_MANAGER_ENDPOINT = Plek.find("asset-manager")
 
       def stub_any_asset_manager_call
         stub_request(:any, %r{\A#{ASSET_MANAGER_ENDPOINT}}).to_return(status: 200)

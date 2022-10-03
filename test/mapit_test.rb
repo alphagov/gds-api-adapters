@@ -6,7 +6,7 @@ describe GdsApi::Mapit do
   include GdsApi::TestHelpers::Mapit
 
   before do
-    @base_api_url = Plek.current.find("mapit")
+    @base_api_url = Plek.find("mapit")
     @api = GdsApi::Mapit.new(@base_api_url)
   end
 

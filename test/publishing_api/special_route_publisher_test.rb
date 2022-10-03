@@ -21,7 +21,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
   end
 
   let(:publisher) { GdsApi::PublishingApi::SpecialRoutePublisher.new }
-  let(:endpoint) { Plek.current.find("publishing-api") }
+  let(:endpoint) { Plek.find("publishing-api") }
 
   describe ".publish" do
     before do

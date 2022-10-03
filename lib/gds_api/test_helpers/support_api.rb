@@ -4,7 +4,7 @@ require "plek"
 module GdsApi
   module TestHelpers
     module SupportApi
-      SUPPORT_API_ENDPOINT = Plek.current.find("support-api")
+      SUPPORT_API_ENDPOINT = Plek.find("support-api")
 
       def stub_support_api_problem_report_creation(request_details = nil)
         post_stub = stub_http_request(:post, "#{SUPPORT_API_ENDPOINT}/anonymous-feedback/problem-reports")
