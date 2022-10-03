@@ -6,7 +6,7 @@ describe GdsApi::LocalLinksManager do
   include GdsApi::TestHelpers::LocalLinksManager
 
   before do
-    @base_api_url = Plek.current.find("local-links-manager")
+    @base_api_url = Plek.find("local-links-manager")
     @api = GdsApi::LocalLinksManager.new(@base_api_url)
   end
 

@@ -8,7 +8,7 @@ module GdsApi
       include ContentItemHelpers
 
       def content_store_endpoint(draft: false)
-        draft ? Plek.current.find("draft-content-store") : Plek.current.find("content-store")
+        draft ? Plek.find("draft-content-store") : Plek.find("content-store")
       end
 
       # Stubs a content item in the content store.

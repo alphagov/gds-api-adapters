@@ -5,7 +5,7 @@ module GdsApi
     module LicenceApplication
       # Generally true. If you are initializing the client differently,
       # you could redefine/override the constant or stub directly.
-      LICENCE_APPLICATION_ENDPOINT = Plek.current.find("licensify")
+      LICENCE_APPLICATION_ENDPOINT = Plek.find("licensify")
 
       def stub_licence_exists(identifier, licence)
         licence = licence.to_json unless licence.is_a?(String)

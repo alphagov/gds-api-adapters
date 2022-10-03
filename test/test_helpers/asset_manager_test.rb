@@ -6,7 +6,7 @@ describe GdsApi::TestHelpers::AssetManager do
   include GdsApi::TestHelpers::AssetManager
 
   let(:stub_asset_manager) do
-    GdsApi::AssetManager.new(Plek.current.find("asset-manager"))
+    GdsApi::AssetManager.new(Plek.find("asset-manager"))
   end
 
   describe "#stub_asset_manager_receives_an_asset" do

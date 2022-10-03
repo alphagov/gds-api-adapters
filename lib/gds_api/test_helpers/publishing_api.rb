@@ -8,8 +8,8 @@ module GdsApi
     module PublishingApi
       include ContentItemHelpers
 
-      PUBLISHING_API_V2_ENDPOINT = "#{Plek.current.find('publishing-api')}/v2".freeze
-      PUBLISHING_API_ENDPOINT = Plek.current.find("publishing-api")
+      PUBLISHING_API_V2_ENDPOINT = "#{Plek.find('publishing-api')}/v2".freeze
+      PUBLISHING_API_ENDPOINT = Plek.find("publishing-api")
 
       # Stub a PUT /v2/content/:content_id request with the given content id and request body.
       # if no response_hash is given, a default response as follows is created:

@@ -3,7 +3,7 @@ require "gds_api/test_helpers/json_client_helper"
 module GdsApi
   module TestHelpers
     module LocalLinksManager
-      LOCAL_LINKS_MANAGER_ENDPOINT = Plek.current.find("local-links-manager")
+      LOCAL_LINKS_MANAGER_ENDPOINT = Plek.find("local-links-manager")
 
       def stub_local_links_manager_has_a_link(authority_slug:, lgsl:, lgil:, url:, country_name: "England", status: "ok", snac: "00AG", local_custodian_code: nil)
         response = {

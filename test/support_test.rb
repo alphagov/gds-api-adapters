@@ -6,7 +6,7 @@ describe GdsApi::Support do
   include GdsApi::TestHelpers::Support
 
   before do
-    @base_api_url = Plek.current.find("support")
+    @base_api_url = Plek.find("support")
     @api = GdsApi::Support.new(@base_api_url)
   end
 

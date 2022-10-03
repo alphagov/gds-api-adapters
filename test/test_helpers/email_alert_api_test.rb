@@ -5,7 +5,7 @@ require "gds_api/test_helpers/email_alert_api"
 describe GdsApi::TestHelpers::EmailAlertApi do
   include GdsApi::TestHelpers::EmailAlertApi
 
-  let(:base_api_url) { Plek.current.find("email-alert-api") }
+  let(:base_api_url) { Plek.find("email-alert-api") }
   let(:email_alert_api) { GdsApi::EmailAlertApi.new(base_api_url) }
 
   describe "#assert_email_alert_api_content_change_created" do

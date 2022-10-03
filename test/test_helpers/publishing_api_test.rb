@@ -4,7 +4,7 @@ require "gds_api/test_helpers/publishing_api"
 
 describe GdsApi::TestHelpers::PublishingApi do
   include GdsApi::TestHelpers::PublishingApi
-  let(:publishing_api) { GdsApi::PublishingApi.new(Plek.current.find("publishing-api")) }
+  let(:publishing_api) { GdsApi::PublishingApi.new(Plek.find("publishing-api")) }
 
   describe "#stub_publishing_api_has_linked_items" do
     it "stubs the get linked items api call" do

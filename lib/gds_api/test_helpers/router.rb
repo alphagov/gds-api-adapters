@@ -3,7 +3,7 @@ require "gds_api/test_helpers/json_client_helper"
 module GdsApi
   module TestHelpers
     module Router
-      ROUTER_API_ENDPOINT = Plek.current.find("router-api")
+      ROUTER_API_ENDPOINT = Plek.find("router-api")
 
       def stub_router_has_route(path, route, bearer_token = ENV["ROUTER_API_BEARER_TOKEN"])
         stub_get_route(path, bearer_token).to_return(

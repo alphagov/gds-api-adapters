@@ -1,7 +1,7 @@
 module GdsApi
   module TestHelpers
     module LocationsApi
-      LOCATIONS_API_ENDPOINT = Plek.current.find("locations-api")
+      LOCATIONS_API_ENDPOINT = Plek.find("locations-api")
 
       def stub_locations_api_has_location(postcode, locations)
         results = []

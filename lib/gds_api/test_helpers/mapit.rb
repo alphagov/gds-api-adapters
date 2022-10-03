@@ -1,7 +1,7 @@
 module GdsApi
   module TestHelpers
     module Mapit
-      MAPIT_ENDPOINT = Plek.current.find("mapit")
+      MAPIT_ENDPOINT = Plek.find("mapit")
 
       def stub_mapit_has_a_postcode(postcode, coords)
         response = {

@@ -7,7 +7,7 @@ describe GdsApi::LocationsApi do
   include PactTest
 
   describe "Locations API" do
-    let(:base_api_url) { Plek.current.find("locations-api") }
+    let(:base_api_url) { Plek.find("locations-api") }
     let(:api) { GdsApi::LocationsApi.new(base_api_url) }
     let(:locations) do
       [
