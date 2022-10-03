@@ -1,5 +1,6 @@
-# Unreleased
+# 83.0.0
 
+* BREAKING: Remove support for `areas_for_type` endpoint for Imminence API. This was last used by the Publishing app in 2017 (and that call is now removed) and has not been used by any other apps, so it should not be breaking in practice.
 * Replace use of Plek.current to resolve warnings with Plek >= 4.1
 
 # 82.0.0
