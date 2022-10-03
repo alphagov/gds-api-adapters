@@ -171,34 +171,4 @@ class ImminenceApiTest < Minitest::Test
     assert_equal "LBO", areas_from_response.first["type"]
     assert_equal 12, areas_from_response.first["id"]
   end
-
-  def test_areas_by_type
-    areas = [
-      { "id" => 122, "type" => "EUR", "name" => "Yorkshire and the Humber", "country_name" => "England" },
-      { "id" => 665, "type" => "EUR", "name" => "London", "country_name" => "England" },
-    ]
-    results = {
-      "_response_info" => { "status" => "ok" },
-      "total" => areas.size,
-      "startIndex" => 1,
-      "pageSize" => areas.size,
-      "currentPage" => 1,
-      "pages" => 1,
-      "results" => areas,
-    }
-
-    stub_request(:get, "#{ROOT}/areas/EUR.json")
-      .with(headers: GdsApi::JsonClient.default_request_headers)
-      .to_return(status: 200, body: results.to_json)
-
-    response = api_client.areas_for_type("EUR")
-
-    assert_equal "ok", response["_response_info"]["status"]
-    areas_from_response = response["results"]
-    assert_equal 2, areas_from_response.size
-    assert_equal "EUR", areas_from_response.first["type"]
-    assert_equal "EUR", areas_from_response.last["type"]
-    assert_equal 122, areas_from_response.first["id"]
-    assert_equal 665, areas_from_response.last["id"]
-  end
 end
