@@ -1,0 +1,32 @@
+name: run-pact-tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # testing this out on one app
+      - uses: ruby/setup-ruby@v1
+        with:
+          # Refers to https://github.com/alphagov/publishing-api/blob/dd8dd9232d3cbf33b8945fdd898ebe80d7dcfcf6/.ruby-version
+          ruby-version: '3.0'
+      - name: Clone publishing-api
+        uses: actions/checkout@v2
+        with:
+          repository: alphagov/publishing-api
+          ref: deployed-to-production
+          path: tmp/publishing-api
+      - name: Run pact tests for publishing-api
+        run: |
+          cd tmp/publishing-api
+          bundle config set --local path /tmp/bundles
+          bundle config set --local deployment 'true'
+          bundle config set --local without 'development'
+          bundle install
+          echo "RUNNING THE PACT VERIFY TESTS"
+          bundle exec rake pact:verify
+    env:
+      # See https://stackoverflow.com/a/58034787 for the GITHUB_REF syntax
+      PACT_TARGET_BRANCH: branch-${GITHUB_REF##*/}
+      PACT_BROKER_BASE_URL: "https://pact-broker.cloudapps.digital"
+      PACT_CONSUMER_VERSION: branch-${GITHUB_REF##*/}
