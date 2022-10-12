@@ -12,21 +12,6 @@ module GdsApi
         stub_imminence_places_request(details["slug"], query_hash, details["details"])
       end
 
-      def stub_imminence_has_areas_for_postcode(postcode, areas)
-        results = {
-          "_response_info" => { "status" => "ok" },
-          "total" => areas.size,
-          "startIndex" => 1,
-          "pageSize" => areas.size,
-          "currentPage" => 1,
-          "pages" => 1,
-          "results" => areas,
-        }
-
-        stub_request(:get, %r{\A#{IMMINENCE_API_ENDPOINT}/areas/#{postcode}\.json})
-          .to_return(body: results.to_json)
-      end
-
       def stub_imminence_has_places_for_postcode(places, slug, postcode, limit)
         query_hash = { "postcode" => postcode, "limit" => limit }
         stub_imminence_places_request(slug, query_hash, places)

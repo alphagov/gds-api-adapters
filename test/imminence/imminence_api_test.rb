@@ -143,32 +143,4 @@ class ImminenceApiTest < Minitest::Test
     response_body = api_client.places_kml("test")
     assert_equal kml_body, response_body
   end
-
-  def test_areas_for_postcode
-    areas = [
-      { "id" => 12, "type" => "LBO", "name" => "Westminster City Council", "country_name" => "England" },
-      { "id" => 66, "type" => "EUR", "name" => "London", "country_name" => "England" },
-    ]
-    results = {
-      "_response_info" => { "status" => "ok" },
-      "total" => areas.size,
-      "startIndex" => 1,
-      "pageSize" => areas.size,
-      "currentPage" => 1,
-      "pages" => 1,
-      "results" => areas,
-    }
-
-    stub_request(:get, "#{ROOT}/areas/WC2B%206SE.json")
-      .with(headers: GdsApi::JsonClient.default_request_headers)
-      .to_return(status: 200, body: results.to_json)
-
-    response = api_client.areas_for_postcode("WC2B 6SE")
-
-    assert_equal "ok", response["_response_info"]["status"]
-    areas_from_response = response["results"]
-    assert_equal 2, areas_from_response.size
-    assert_equal "LBO", areas_from_response.first["type"]
-    assert_equal 12, areas_from_response.first["id"]
-  end
 end
