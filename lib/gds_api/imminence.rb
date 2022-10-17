@@ -30,11 +30,6 @@ class GdsApi::Imminence < GdsApi::Base
     get_raw("#{@endpoint}/places/#{type}.kml").body
   end
 
-  def areas_for_postcode(postcode)
-    url = "#{@endpoint}/areas/#{uri_encode(postcode)}.json"
-    get_json(url)
-  end
-
   # @private
   def self.extract_location_hash(location)
     # Deal with all known location formats:
