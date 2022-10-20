@@ -179,7 +179,7 @@ module GdsApi
   #
   # @return [GdsApi::Search]
   def self.search(options = {})
-    GdsApi::Search.new(Plek.find("search"), options)
+    GdsApi::Search.new(Plek.find("search-api"), options)
   end
 
   # Creates a GdsApi::Support adapter

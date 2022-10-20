@@ -4,7 +4,7 @@ require "gds_api/test_helpers/json_client_helper"
 module GdsApi
   module TestHelpers
     module Search
-      SEARCH_ENDPOINT = Plek.find("search")
+      SEARCH_ENDPOINT = Plek.find("search-api")
 
       def stub_any_search_post(index: nil)
         if index
