@@ -1,3 +1,8 @@
+# 84.0.0
+
+* BREAKING: `TestHelpers::Search` now uses `search-api` when constructing URLs for requests stubs.
+* Use the canonical name `search-api` instead of the legacy name `search` when connecting to Search API.
+
 # 83.0.0
 
 * BREAKING: Remove support for `areas_for_type` endpoint for Imminence API. This was last used by the Publishing app in 2017 (and that call is now removed) and has not been used by any other apps, so it should not be breaking in practice.
