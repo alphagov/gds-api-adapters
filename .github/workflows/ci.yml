@@ -1,0 +1,44 @@
+on: [push, pull_request]
+
+jobs:
+  # This matrix job runs the test suite against multiple Ruby versions
+  test_matrix:
+    strategy:
+      fail-fast: false
+      matrix:
+        # Due to https://github.com/actions/runner/issues/849, we have to use quotes for '3.0'
+        ruby: [2.7, '3.0', 3.1]
+    runs-on: ubuntu-latest
+    env:
+      GOVUK_CONTENT_SCHEMAS_PATH: vendor/publishing-api/content_schemas
+    steps:
+      - uses: actions/checkout@v3
+      - name: Checkout Publishing API for content schemas
+        uses: actions/checkout@v3
+        with:
+           repository: alphagov/publishing-api
+           ref: deployed-to-production
+           path: vendor/publishing-api
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - run: bundle exec rake
+
+  # This job is needed to work around the fact that matrix jobs spawn multiple status checks – i.e. one job per variant.
+  # The branch protection rules depend on this as a composite job to ensure that all preceding test_matrix checks passed.
+  # Solution taken from: https://github.community/t/status-check-for-a-matrix-jobs/127354/3
+  test:
+    needs: test_matrix
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "All matrix tests have passed 🚀"
+
+  publish:
+    needs: test
+    if: ${{ github.ref == 'refs/heads/main' }}
+    permissions:
+      contents: write
+    uses: alphagov/govuk-infrastructure/.github/workflows/publish-rubygem.yaml@main
+    secrets:
+      GEM_HOST_API_KEY: ${{ secrets.ALPHAGOV_RUBYGEMS_API_KEY }}
