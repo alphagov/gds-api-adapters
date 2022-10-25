@@ -1,3 +1,7 @@
+# UNRELEASED
+
+* BREAKING: Remove Mapit api methods. These are no longer used by any apps, so should not be breaking in practice.
+
 # 84.0.0
 
 * BREAKING: `TestHelpers::Search` now uses `search-api` when constructing URLs for requests stubs.

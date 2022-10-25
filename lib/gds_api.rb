@@ -11,7 +11,6 @@ require "gds_api/licence_application"
 require "gds_api/link_checker_api"
 require "gds_api/local_links_manager"
 require "gds_api/locations_api"
-require "gds_api/mapit"
 require "gds_api/maslow"
 require "gds_api/organisations"
 require "gds_api/publishing_api"
@@ -121,13 +120,6 @@ module GdsApi
   # @return [GdsApi::LocationsApi]
   def self.locations_api(options = {})
     GdsApi::LocationsApi.new(Plek.find("locations-api"), options)
-  end
-
-  # Creates a GdsApi::Mapit adapter
-  #
-  # @return [GdsApi::Mapit]
-  def self.mapit(options = {})
-    GdsApi::Mapit.new(Plek.find("mapit"), options)
   end
 
   # Creates a GdsApi::Maslow adapter
