@@ -12,6 +12,12 @@ Rake::TestTask.new("test") do |t|
   t.warning = false
 end
 
+Rake::TestTask.new("pact_test") do |t|
+  t.libs << "test"
+  t.test_files = FileList["test/pacts/**/*_test.rb"]
+  t.warning = false
+end
+
 task default: %i[lint test]
 
 require "pact_broker/client/tasks"

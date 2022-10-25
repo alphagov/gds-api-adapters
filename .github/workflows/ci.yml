@@ -34,7 +34,23 @@ jobs:
     steps:
       - run: echo "All matrix tests have passed 🚀"
 
-  publish:
+  generate_and_publish_pacts:
+    needs: test
+    runs-on: ubuntu-latest
+    env:
+      PACT_TARGET_BRANCH: branch-${{ github.ref_name }}
+      PACT_BROKER_BASE_URL: https://pact-broker.cloudapps.digital
+      PACT_BROKER_USERNAME: ${{ secrets.GOVUK_PACT_BROKER_USERNAME }}
+      PACT_BROKER_PASSWORD: ${{ secrets.GOVUK_PACT_BROKER_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - run: bundle exec rake pact_test
+      - run: bundle exec rake pact:publish:branch
+
+  publish_gem:
     needs: test
     if: ${{ github.ref == 'refs/heads/main' }}
     permissions:
