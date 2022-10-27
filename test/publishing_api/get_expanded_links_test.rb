@@ -44,8 +44,7 @@ describe GdsApi::PublishingApi do
         .will_respond_with(
           status: 200,
           body: {
-            expanded_links: {
-            },
+            expanded_links: {},
           },
         )
 
