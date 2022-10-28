@@ -1,79 +1,47 @@
 require "test_helper"
 require "gds_api/publishing_api"
-require "gds_api/test_helpers/publishing_api"
-require "json"
 
 describe GdsApi::PublishingApi do
-  include GdsApi::TestHelpers::PublishingApi
   include PactTest
 
-  def content_item_for_content_id(content_id, attrs = {})
-    {
-      "base_path" => "/robots.txt",
-      "content_id" => content_id,
-      "title" => "Instructions for crawler robots",
-      "description" => "robots.txt provides rules for which parts of GOV.UK are permitted to be crawled by different bots.",
-      "schema_name" => "special_route",
-      "document_type" => "special_route",
-      "public_updated_at" => "2015-07-30T13:58:11.000Z",
-      "publishing_app" => "static",
-      "rendering_app" => "static",
-      "locale" => "en",
-      "routes" => [
-        {
-          "path" => attrs["base_path"] || "/robots.txt",
-          "type" => "exact",
-        },
-      ],
-      "update_type" => "major",
-      "details" => {},
-    }.merge(attrs)
-  end
-
-  before do
-    @bearer_token = "example-bearer-token"
-    @api_client = GdsApi::PublishingApi.new(
-      publishing_api_host,
-      bearer_token: @bearer_token,
-    )
-
-    @content_id = "bed722e6-db68-43e5-9079-063f623335a7"
-  end
+  let(:bearer_token) { "example-bearer-token" }
+  let(:api_client) { GdsApi::PublishingApi.new(publishing_api_host, bearer_token: bearer_token) }
+  let(:content_id) { "bed722e6-db68-43e5-9079-063f623335a7" }
 
   describe "#put_content" do
     it "responds with 200 OK if the entry is valid" do
-      @content_item = content_item_for_content_id(@content_id)
+      content_item = content_item_for_content_id(content_id)
 
       publishing_api
         .given("no content exists")
         .upon_receiving("a request to create a content item without links")
         .with(
           method: :put,
-          path: "/v2/content/#{@content_id}",
-          body: @content_item,
+          path: "/v2/content/#{content_id}",
+          body: content_item,
           headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
         )
 
-      @api_client.put_content(@content_id, @content_item)
+      api_client.put_content(content_id, content_item)
     end
 
     it "responds with 422 Unprocessable Entity if the path is reserved by a different app" do
-      @content_item = content_item_for_content_id(@content_id, "base_path" => "/test-item", "publishing_app" => "whitehall")
+      content_item = content_item_for_content_id(content_id, "base_path" => "/test-item", "publishing_app" => "whitehall")
 
       publishing_api
         .given("/test-item has been reserved by the Publisher application")
         .upon_receiving("a request from the Whitehall application to create a content item at /test-item")
         .with(
           method: :put,
-          path: "/v2/content/#{@content_id}",
-          body: @content_item,
+          path: "/v2/content/#{content_id}",
+          body: content_item,
           headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
@@ -93,22 +61,22 @@ describe GdsApi::PublishingApi do
         )
 
       assert_raises(GdsApi::HTTPUnprocessableEntity) do
-        @api_client.put_content(@content_id, @content_item)
+        api_client.put_content(content_id, content_item)
       end
     end
 
     it "responds with 422 Unprocessable Entity when given an invalid item" do
-      @content_item = content_item_for_content_id(@content_id, "base_path" => "not a url path")
+      content_item = content_item_for_content_id(content_id, "base_path" => "not a url path")
 
       publishing_api
         .given("no content exists")
         .upon_receiving("a request to create an invalid content-item")
         .with(
           method: :put,
-          path: "/v2/content/#{@content_id}",
-          body: @content_item,
+          path: "/v2/content/#{content_id}",
+          body: content_item,
           headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
@@ -127,14 +95,14 @@ describe GdsApi::PublishingApi do
         )
 
       assert_raises(GdsApi::HTTPUnprocessableEntity) do
-        @api_client.put_content(@content_id, @content_item)
+        api_client.put_content(content_id, content_item)
       end
     end
 
     describe "optimistic locking" do
       it "responds with 200 OK if the content item has not changed since it was requested" do
-        @content_item = content_item_for_content_id(
-          @content_id,
+        content_item = content_item_for_content_id(
+          content_id,
           "document_type" => "manual",
           "schema_name" => "manual",
           "locale" => "en",
@@ -143,26 +111,26 @@ describe GdsApi::PublishingApi do
         )
 
         publishing_api
-          .given("the content item #{@content_id} is at version 3")
+          .given("the content item #{content_id} is at version 3")
           .upon_receiving("a request to update the content item at version 3")
           .with(
             method: :put,
-            path: "/v2/content/#{@content_id}",
-            body: @content_item,
+            path: "/v2/content/#{content_id}",
+            body: content_item,
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
             status: 200,
           )
 
-        @api_client.put_content(@content_id, @content_item)
+        api_client.put_content(content_id, content_item)
       end
 
       it "responds with 409 Conflict if the content item has changed in the meantime" do
-        @content_item = content_item_for_content_id(
-          @content_id,
+        content_item = content_item_for_content_id(
+          content_id,
           "document_type" => "manual",
           "schema_name" => "manual",
           "locale" => "en",
@@ -171,14 +139,14 @@ describe GdsApi::PublishingApi do
         )
 
         publishing_api
-          .given("the content item #{@content_id} is at version 3")
+          .given("the content item #{content_id} is at version 3")
           .upon_receiving("a request to update the content item at version 2")
           .with(
             method: :put,
-            path: "/v2/content/#{@content_id}",
-            body: @content_item,
+            path: "/v2/content/#{content_id}",
+            body: content_item,
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -198,7 +166,7 @@ describe GdsApi::PublishingApi do
           )
 
         assert_raises(GdsApi::HTTPConflict) do
-          @api_client.put_content(@content_id, @content_item)
+          api_client.put_content(content_id, content_item)
         end
       end
     end
@@ -206,22 +174,20 @@ describe GdsApi::PublishingApi do
 
   describe "#get_content" do
     it "responds with 200 and the content item when the content item exists" do
-      @content_item = content_item_for_content_id(@content_id)
-
       publishing_api
-        .given("a content item exists with content_id: #{@content_id}")
+        .given("a content item exists with content_id: #{content_id}")
         .upon_receiving("a request to return the content item")
         .with(
           method: :get,
-          path: "/v2/content/#{@content_id}",
+          path: "/v2/content/#{content_id}",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
           body: {
-            "content_id" => @content_id,
+            "content_id" => content_id,
             "document_type" => Pact.like("special_route"),
             "schema_name" => Pact.like("special_route"),
             "publishing_app" => Pact.like("publisher"),
@@ -236,27 +202,25 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      @api_client.get_content(@content_id)
+      api_client.get_content(content_id)
     end
 
     it "responds with 200 and the content item when a content item exists in multiple locales" do
-      @content_item = content_item_for_content_id(@content_id)
-
       publishing_api
-        .given("a content item exists in multiple locales with content_id: #{@content_id}")
+        .given("a content item exists in multiple locales with content_id: #{content_id}")
         .upon_receiving("a request to return the content item")
         .with(
           method: :get,
-          path: "/v2/content/#{@content_id}",
+          path: "/v2/content/#{content_id}",
           query: "locale=fr",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
           body: {
-            "content_id" => @content_id,
+            "content_id" => content_id,
             "document_type" => Pact.like("special_route"),
             "schema_name" => Pact.like("special_route"),
             "publishing_app" => Pact.like("publisher"),
@@ -271,27 +235,25 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      @api_client.get_content(@content_id, locale: "fr")
+      api_client.get_content(content_id, locale: "fr")
     end
 
     it "responds with 200 and the superseded content item when requesting the superseded version, when a content item exists in with a superseded version" do
-      @content_item = content_item_for_content_id(@content_id)
-
       publishing_api
-        .given("a content item exists in with a superseded version with content_id: #{@content_id}")
+        .given("a content item exists in with a superseded version with content_id: #{content_id}")
         .upon_receiving("a request to return the superseded content item")
         .with(
           method: :get,
-          path: "/v2/content/#{@content_id}",
+          path: "/v2/content/#{content_id}",
           query: "version=1",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
           body: {
-            "content_id" => @content_id,
+            "content_id" => content_id,
             "document_type" => Pact.like("special_route"),
             "schema_name" => Pact.like("special_route"),
             "publishing_app" => Pact.like("publisher"),
@@ -307,27 +269,25 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      @api_client.get_content(@content_id, version: 1)
+      api_client.get_content(content_id, version: 1)
     end
 
     it "responds with 200 and the draft content item containing a warning, when a content item cannot be published because of a path conflict" do
-      @content_item = content_item_for_content_id(@content_id)
-
       publishing_api
-        .given("a draft content item exists with content_id #{@content_id} with a blocking live item at the same path")
+        .given("a draft content item exists with content_id #{content_id} with a blocking live item at the same path")
         .upon_receiving("a request to return the draft content item")
         .with(
           method: :get,
-          path: "/v2/content/#{@content_id}",
+          path: "/v2/content/#{content_id}",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
           body: {
             "warnings" => Pact.like("content_item_blocking_publish" => "message"),
-            "content_id" => @content_id,
+            "content_id" => content_id,
             "document_type" => Pact.like("special_route"),
             "schema_name" => Pact.like("special_route"),
             "publishing_app" => Pact.like("publisher"),
@@ -342,27 +302,25 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      @api_client.get_content(@content_id, version: 2)
+      api_client.get_content(content_id, version: 2)
     end
 
     it "responds with 200 and the published content item when requesting the published version" do
-      @content_item = content_item_for_content_id(@content_id)
-
       publishing_api
-        .given("a content item exists in with a superseded version with content_id: #{@content_id}")
+        .given("a content item exists in with a superseded version with content_id: #{content_id}")
         .upon_receiving("a request to return the published content item")
         .with(
           method: :get,
-          path: "/v2/content/#{@content_id}",
+          path: "/v2/content/#{content_id}",
           query: "version=2",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
           body: {
-            "content_id" => @content_id,
+            "content_id" => content_id,
             "document_type" => Pact.like("special_route"),
             "schema_name" => Pact.like("special_route"),
             "publishing_app" => Pact.like("publisher"),
@@ -378,26 +336,24 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      @api_client.get_content(@content_id, version: 2)
+      api_client.get_content(content_id, version: 2)
     end
 
     it "responds with 200 and the published content item when requesting no specific version" do
-      @content_item = content_item_for_content_id(@content_id)
-
       publishing_api
-        .given("a content item exists in with a superseded version with content_id: #{@content_id}")
+        .given("a content item exists in with a superseded version with content_id: #{content_id}")
         .upon_receiving("a request to return the content item")
         .with(
           method: :get,
-          path: "/v2/content/#{@content_id}",
+          path: "/v2/content/#{content_id}",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
           body: {
-            "content_id" => @content_id,
+            "content_id" => content_id,
             "document_type" => Pact.like("special_route"),
             "schema_name" => Pact.like("special_route"),
             "publishing_app" => Pact.like("publisher"),
@@ -413,7 +369,7 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      @api_client.get_content(@content_id)
+      api_client.get_content(content_id)
     end
 
     it "responds with 404 when requesting a non-existent item" do
@@ -422,9 +378,9 @@ describe GdsApi::PublishingApi do
         .upon_receiving("a request for a non-existent content item")
         .with(
           method: :get,
-          path: "/v2/content/#{@content_id}",
+          path: "/v2/content/#{content_id}",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
@@ -441,7 +397,7 @@ describe GdsApi::PublishingApi do
         )
 
       assert_raises(GdsApi::HTTPNotFound) do
-        @api_client.get_content(@content_id)
+        api_client.get_content(content_id)
       end
     end
   end
@@ -449,19 +405,19 @@ describe GdsApi::PublishingApi do
   describe "#get_live_content" do
     it "returns the published content item when the latest version of the content item is published" do
       publishing_api
-        .given("a published content item exists with content_id: #{@content_id}")
+        .given("a published content item exists with content_id: #{content_id}")
         .upon_receiving("a request to return the live content item")
         .with(
           method: :get,
-          path: "/v2/content/#{@content_id}",
+          path: "/v2/content/#{content_id}",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
           body: {
-            "content_id" => @content_id,
+            "content_id" => content_id,
             "document_type" => Pact.like("special_route"),
             "schema_name" => Pact.like("special_route"),
             "publishing_app" => Pact.like("publisher"),
@@ -478,24 +434,24 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      @api_client.get_live_content(@content_id)
+      api_client.get_live_content(content_id)
     end
 
     it "responds with NoLiveVersion when the content item has never been live" do
       publishing_api
-        .given("a draft content item exists with content_id: #{@content_id}")
+        .given("a draft content item exists with content_id: #{content_id}")
         .upon_receiving("a request to return the live content item")
         .with(
           method: :get,
-          path: "/v2/content/#{@content_id}",
+          path: "/v2/content/#{content_id}",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
           body: {
-            "content_id" => @content_id,
+            "content_id" => content_id,
             "document_type" => Pact.like("special_route"),
             "schema_name" => Pact.like("special_route"),
             "publishing_app" => Pact.like("publisher"),
@@ -512,26 +468,26 @@ describe GdsApi::PublishingApi do
         )
 
       assert_raises(GdsApi::PublishingApi::NoLiveVersion) do
-        @api_client.get_live_content(@content_id)
+        api_client.get_live_content(content_id)
       end
     end
 
     it "returns the live content item when there is a draft version of live content" do
       publishing_api
-        .given("a published content item exists with a draft edition for content_id: #{@content_id}")
+        .given("a published content item exists with a draft edition for content_id: #{content_id}")
         .upon_receiving("a request to return the content item")
         .with(
           method: :get,
-          path: "/v2/content/#{@content_id}",
+          path: "/v2/content/#{content_id}",
           query: "locale=en",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
           body: {
-            "content_id" => @content_id,
+            "content_id" => content_id,
             "document_type" => Pact.like("special_route"),
             "schema_name" => Pact.like("special_route"),
             "publishing_app" => Pact.like("publisher"),
@@ -549,16 +505,16 @@ describe GdsApi::PublishingApi do
         .upon_receiving("a request to return the live content item")
         .with(
           method: :get,
-          path: "/v2/content/#{@content_id}",
+          path: "/v2/content/#{content_id}",
           query: "locale=en&version=1",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
           body: {
-            "content_id" => @content_id,
+            "content_id" => content_id,
             "document_type" => Pact.like("special_route"),
             "schema_name" => Pact.like("special_route"),
             "publishing_app" => Pact.like("publisher"),
@@ -575,24 +531,24 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      @api_client.get_live_content(@content_id)
+      api_client.get_live_content(content_id)
     end
 
     it "returns the unpublished content item when the latest version of the content item is unpublished" do
       publishing_api
-        .given("an unpublished content item exists with content_id: #{@content_id}")
+        .given("an unpublished content item exists with content_id: #{content_id}")
         .upon_receiving("a request to return the content item")
         .with(
           method: :get,
-          path: "/v2/content/#{@content_id}",
+          path: "/v2/content/#{content_id}",
           headers: GdsApi::JsonClient.default_request_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
           body: {
-            "content_id" => @content_id,
+            "content_id" => content_id,
             "document_type" => Pact.like("special_route"),
             "schema_name" => Pact.like("special_route"),
             "publishing_app" => Pact.like("publisher"),
@@ -609,28 +565,28 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      @api_client.get_live_content(@content_id)
+      api_client.get_live_content(content_id)
     end
   end
 
   describe "#republish" do
     it "responds with 200 if the republish command succeeds" do
       publishing_api
-        .given("an unpublished content item exists with content_id: #{@content_id}")
+        .given("an unpublished content item exists with content_id: #{content_id}")
         .upon_receiving("a republish request")
         .with(
           method: :post,
-          path: "/v2/content/#{@content_id}/republish",
+          path: "/v2/content/#{content_id}/republish",
           body: {},
           headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
         )
 
-      @api_client.republish(@content_id)
+      api_client.republish(content_id)
     end
 
     it "responds with 404 if the content item does not exist" do
@@ -639,10 +595,10 @@ describe GdsApi::PublishingApi do
         .upon_receiving("a republish request")
         .with(
           method: :post,
-          path: "/v2/content/#{@content_id}/republish",
+          path: "/v2/content/#{content_id}/republish",
           body: {},
           headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
@@ -650,44 +606,44 @@ describe GdsApi::PublishingApi do
         )
 
       assert_raises(GdsApi::HTTPNotFound) do
-        @api_client.republish(@content_id)
+        api_client.republish(content_id)
       end
     end
 
     describe "optimistic locking" do
       it "responds with 200 OK if the content item has not changed since it was requested" do
         publishing_api
-          .given("the published content item #{@content_id} is at version 3")
+          .given("the published content item #{content_id} is at version 3")
           .upon_receiving("a republish request for version 3")
           .with(
             method: :post,
-            path: "/v2/content/#{@content_id}/republish",
+            path: "/v2/content/#{content_id}/republish",
             body: {
               previous_version: 3,
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
             status: 200,
           )
 
-        @api_client.republish(@content_id, previous_version: 3)
+        api_client.republish(content_id, previous_version: 3)
       end
 
       it "responds with 409 Conflict if the content item has changed in the meantime" do
         publishing_api
-          .given("the published content item #{@content_id} is at version 3")
+          .given("the published content item #{content_id} is at version 3")
           .upon_receiving("a republish request for version 2")
           .with(
             method: :post,
-            path: "/v2/content/#{@content_id}/republish",
+            path: "/v2/content/#{content_id}/republish",
             body: {
               previous_version: 2,
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -707,7 +663,7 @@ describe GdsApi::PublishingApi do
           )
 
         assert_raises(GdsApi::HTTPConflict) do
-          @api_client.republish(@content_id, previous_version: 2)
+          api_client.republish(content_id, previous_version: 2)
         end
       end
     end
@@ -716,23 +672,23 @@ describe GdsApi::PublishingApi do
   describe "#publish" do
     it "responds with 200 if the publish command succeeds" do
       publishing_api
-        .given("a draft content item exists with content_id: #{@content_id}")
+        .given("a draft content item exists with content_id: #{content_id}")
         .upon_receiving("a publish request")
         .with(
           method: :post,
-          path: "/v2/content/#{@content_id}/publish",
+          path: "/v2/content/#{content_id}/publish",
           body: {
             update_type: "major",
           },
           headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
         )
 
-      @api_client.publish(@content_id, "major")
+      api_client.publish(content_id, "major")
     end
 
     it "responds with 404 if the content item does not exist" do
@@ -741,12 +697,12 @@ describe GdsApi::PublishingApi do
         .upon_receiving("a publish request")
         .with(
           method: :post,
-          path: "/v2/content/#{@content_id}/publish",
+          path: "/v2/content/#{content_id}/publish",
           body: {
             update_type: "major",
           },
           headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
@@ -754,22 +710,22 @@ describe GdsApi::PublishingApi do
         )
 
       assert_raises(GdsApi::HTTPNotFound) do
-        @api_client.publish(@content_id, "major")
+        api_client.publish(content_id, "major")
       end
     end
 
     it "responds with 422 if the update information is invalid" do
       publishing_api
-        .given("a draft content item exists with content_id: #{@content_id}")
+        .given("a draft content item exists with content_id: #{content_id}")
         .upon_receiving("an invalid publish request")
         .with(
           method: :post,
-          path: "/v2/content/#{@content_id}/publish",
+          path: "/v2/content/#{content_id}/publish",
           body: {
             "update_type" => "",
           },
           headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
@@ -786,22 +742,22 @@ describe GdsApi::PublishingApi do
         )
 
       assert_raises(GdsApi::HTTPUnprocessableEntity) do
-        @api_client.publish(@content_id, "")
+        api_client.publish(content_id, "")
       end
     end
 
     it "responds with 409 if the content item is already published" do
       publishing_api
-        .given("a published content item exists with content_id: #{@content_id}")
+        .given("a published content item exists with content_id: #{content_id}")
         .upon_receiving("a publish request")
         .with(
           method: :post,
-          path: "/v2/content/#{@content_id}/publish",
+          path: "/v2/content/#{content_id}/publish",
           body: {
             update_type: "major",
           },
           headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
@@ -814,68 +770,68 @@ describe GdsApi::PublishingApi do
         )
 
       assert_raises(GdsApi::HTTPConflict) do
-        @api_client.publish(@content_id, "major")
+        api_client.publish(content_id, "major")
       end
     end
 
     it "responds with 200 if the update information contains a locale" do
       publishing_api
-        .given("a draft content item exists with content_id: #{@content_id} and locale: fr")
+        .given("a draft content item exists with content_id: #{content_id} and locale: fr")
         .upon_receiving("a publish request")
         .with(
           method: :post,
-          path: "/v2/content/#{@content_id}/publish",
+          path: "/v2/content/#{content_id}/publish",
           body: {
             update_type: "major",
             locale: "fr",
           },
           headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
         )
 
-      @api_client.publish(@content_id, "major", locale: "fr")
+      api_client.publish(content_id, "major", locale: "fr")
     end
 
     describe "optimistic locking" do
       it "responds with 200 OK if the content item has not changed since it was requested" do
         publishing_api
-          .given("the content item #{@content_id} is at version 3")
+          .given("the content item #{content_id} is at version 3")
           .upon_receiving("a publish request for version 3")
           .with(
             method: :post,
-            path: "/v2/content/#{@content_id}/publish",
+            path: "/v2/content/#{content_id}/publish",
             body: {
               update_type: "minor",
               previous_version: 3,
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
             status: 200,
           )
 
-        @api_client.publish(@content_id, "minor", previous_version: 3)
+        api_client.publish(content_id, "minor", previous_version: 3)
       end
 
       it "responds with 409 Conflict if the content item has changed in the meantime" do
         publishing_api
-          .given("the content item #{@content_id} is at version 3")
+          .given("the content item #{content_id} is at version 3")
           .upon_receiving("a publish request for version 2")
           .with(
             method: :post,
-            path: "/v2/content/#{@content_id}/publish",
+            path: "/v2/content/#{content_id}/publish",
             body: {
               update_type: "minor",
               previous_version: 2,
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -895,7 +851,7 @@ describe GdsApi::PublishingApi do
           )
 
         assert_raises(GdsApi::HTTPConflict) do
-          @api_client.publish(@content_id, "minor", previous_version: 2)
+          api_client.publish(content_id, "minor", previous_version: 2)
         end
       end
     end
@@ -904,23 +860,23 @@ describe GdsApi::PublishingApi do
   describe "#unpublish" do
     it "responds with 200 if the unpublish command succeeds" do
       publishing_api
-        .given("a published content item exists with content_id: #{@content_id}")
+        .given("a published content item exists with content_id: #{content_id}")
         .upon_receiving("an unpublish request")
         .with(
           method: :post,
-          path: "/v2/content/#{@content_id}/unpublish",
+          path: "/v2/content/#{content_id}/unpublish",
           body: {
             type: "gone",
           },
           headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
         )
 
-      @api_client.unpublish(@content_id, type: "gone")
+      api_client.unpublish(content_id, type: "gone")
     end
 
     it "responds with 404 if the content item does not exist" do
@@ -929,12 +885,12 @@ describe GdsApi::PublishingApi do
         .upon_receiving("an unpublish request")
         .with(
           method: :post,
-          path: "/v2/content/#{@content_id}/unpublish",
+          path: "/v2/content/#{content_id}/unpublish",
           body: {
             type: "gone",
           },
           headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
@@ -942,22 +898,22 @@ describe GdsApi::PublishingApi do
         )
 
       assert_raises(GdsApi::HTTPNotFound) do
-        @api_client.unpublish(@content_id, type: "gone")
+        api_client.unpublish(content_id, type: "gone")
       end
     end
 
     it "responds with 422 if the type is incorrect" do
       publishing_api
-        .given("a published content item exists with content_id: #{@content_id}")
+        .given("a published content item exists with content_id: #{content_id}")
         .upon_receiving("an invalid unpublish request")
         .with(
           method: :post,
-          path: "/v2/content/#{@content_id}/unpublish",
+          path: "/v2/content/#{content_id}/unpublish",
           body: {
             type: "not-a-valid-type",
           },
           headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
@@ -972,67 +928,67 @@ describe GdsApi::PublishingApi do
         )
 
       assert_raises(GdsApi::HTTPUnprocessableEntity) do
-        @api_client.unpublish(@content_id, type: "not-a-valid-type")
+        api_client.unpublish(content_id, type: "not-a-valid-type")
       end
     end
 
     it "responds with 200 and updates the unpublishing if the content item is already unpublished" do
       publishing_api
-        .given("an unpublished content item exists with content_id: #{@content_id}")
+        .given("an unpublished content item exists with content_id: #{content_id}")
         .upon_receiving("an unpublish request")
         .with(
           method: :post,
-          path: "/v2/content/#{@content_id}/unpublish",
+          path: "/v2/content/#{content_id}/unpublish",
           body: {
             type: "gone",
           },
           headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-            "Authorization" => "Bearer #{@bearer_token}",
+            "Authorization" => "Bearer #{bearer_token}",
           ),
         )
         .will_respond_with(
           status: 200,
         )
 
-      @api_client.unpublish(@content_id, type: "gone")
+      api_client.unpublish(content_id, type: "gone")
     end
 
     describe "optimistic locking" do
       it "responds with 200 OK if the content item has not changed since it was requested" do
         publishing_api
-          .given("the published content item #{@content_id} is at version 3")
+          .given("the published content item #{content_id} is at version 3")
           .upon_receiving("an unpublish request for version 3")
           .with(
             method: :post,
-            path: "/v2/content/#{@content_id}/unpublish",
+            path: "/v2/content/#{content_id}/unpublish",
             body: {
               type: "gone",
               previous_version: 3,
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
             status: 200,
           )
 
-        @api_client.unpublish(@content_id, type: "gone", previous_version: 3)
+        api_client.unpublish(content_id, type: "gone", previous_version: 3)
       end
 
       it "responds with 409 Conflict if the content item has changed in the meantime" do
         publishing_api
-          .given("the published content item #{@content_id} is at version 3")
+          .given("the published content item #{content_id} is at version 3")
           .upon_receiving("an unpublish request for version 2")
           .with(
             method: :post,
-            path: "/v2/content/#{@content_id}/unpublish",
+            path: "/v2/content/#{content_id}/unpublish",
             body: {
               type: "gone",
               previous_version: 2,
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1052,7 +1008,7 @@ describe GdsApi::PublishingApi do
           )
 
         assert_raises(GdsApi::HTTPConflict) do
-          @api_client.unpublish(@content_id, type: "gone", previous_version: 2)
+          api_client.unpublish(content_id, type: "gone", previous_version: 2)
         end
       end
     end
@@ -1061,11 +1017,11 @@ describe GdsApi::PublishingApi do
   describe "#patch_links" do
     it "replaces the links and responds with the new links when setting links of the same type" do
       publishing_api
-        .given("organisation links exist for content_id #{@content_id}")
+        .given("organisation links exist for content_id #{content_id}")
         .upon_receiving("a patch organisation links request")
         .with(
           method: :patch,
-          path: "/v2/links/#{@content_id}",
+          path: "/v2/links/#{content_id}",
           body: {
             links: {
               organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
@@ -1084,8 +1040,8 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      @api_client.patch_links(
-        @content_id,
+      api_client.patch_links(
+        content_id,
         links: {
           organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
         },
@@ -1094,11 +1050,11 @@ describe GdsApi::PublishingApi do
 
     it "adds the new type of links and responds with the whole link set when setting links of a different type" do
       publishing_api
-        .given("organisation links exist for content_id #{@content_id}")
+        .given("organisation links exist for content_id #{content_id}")
         .upon_receiving("a patch topic links request")
         .with(
           method: :patch,
-          path: "/v2/links/#{@content_id}",
+          path: "/v2/links/#{content_id}",
           body: {
             links: {
               topics: %w[225df4a8-2945-4e9b-8799-df7424a90b69],
@@ -1118,8 +1074,8 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      @api_client.patch_links(
-        @content_id,
+      api_client.patch_links(
+        content_id,
         links: {
           topics: %w[225df4a8-2945-4e9b-8799-df7424a90b69],
         },
@@ -1128,11 +1084,11 @@ describe GdsApi::PublishingApi do
 
     it "responds with the links when deleting links of a specific type" do
       publishing_api
-        .given("organisation links exist for content_id #{@content_id}")
+        .given("organisation links exist for content_id #{content_id}")
         .upon_receiving("a patch blank organisation links request")
         .with(
           method: :patch,
-          path: "/v2/links/#{@content_id}",
+          path: "/v2/links/#{content_id}",
           body: {
             links: {
               organisations: [],
@@ -1149,8 +1105,8 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      @api_client.patch_links(
-        @content_id,
+      api_client.patch_links(
+        content_id,
         links: {
           organisations: [],
         },
@@ -1159,11 +1115,11 @@ describe GdsApi::PublishingApi do
 
     it "responds with the links when there's no links entry" do
       publishing_api
-        .given("no links exist for content_id #{@content_id}")
+        .given("no links exist for content_id #{content_id}")
         .upon_receiving("a patch organisation links request")
         .with(
           method: :patch,
-          path: "/v2/links/#{@content_id}",
+          path: "/v2/links/#{content_id}",
           body: {
             links: {
               organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
@@ -1182,8 +1138,8 @@ describe GdsApi::PublishingApi do
           },
         )
 
-      @api_client.patch_links(
-        @content_id,
+      api_client.patch_links(
+        content_id,
         links: {
           organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
         },
@@ -1193,11 +1149,11 @@ describe GdsApi::PublishingApi do
     describe "optimistic locking" do
       it "responds with 200 OK if the linkset has not changed since it was requested" do
         publishing_api
-          .given("the linkset for #{@content_id} is at version 3")
+          .given("the linkset for #{content_id} is at version 3")
           .upon_receiving("a request to update the linkset at version 3")
           .with(
             method: :patch,
-            path: "/v2/links/#{@content_id}",
+            path: "/v2/links/#{content_id}",
             body: {
               links: {
                 organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
@@ -1212,8 +1168,8 @@ describe GdsApi::PublishingApi do
             status: 200,
           )
 
-        @api_client.patch_links(
-          @content_id,
+        api_client.patch_links(
+          content_id,
           links: {
             organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
           },
@@ -1223,11 +1179,11 @@ describe GdsApi::PublishingApi do
 
       it "responds with 409 Conflict if the content item has changed in the meantime" do
         publishing_api
-            .given("the linkset for #{@content_id} is at version 3")
+            .given("the linkset for #{content_id} is at version 3")
             .upon_receiving("a request to update the linkset at version 2")
             .with(
               method: :patch,
-              path: "/v2/links/#{@content_id}",
+              path: "/v2/links/#{content_id}",
               body: {
                 links: {
                   organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
@@ -1255,8 +1211,8 @@ describe GdsApi::PublishingApi do
             )
 
         assert_raises(GdsApi::HTTPConflict) do
-          @api_client.patch_links(
-            @content_id,
+          api_client.patch_links(
+            content_id,
             links: {
               organisations: %w[591436ab-c2ae-416f-a3c5-1901d633fbfb],
             },
@@ -1295,7 +1251,7 @@ describe GdsApi::PublishingApi do
             path: "/v2/linkables",
             query: "document_type=topic",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1303,7 +1259,7 @@ describe GdsApi::PublishingApi do
             body: linkables,
           )
 
-        @api_client.get_linkables(document_type: "topic")
+        api_client.get_linkables(document_type: "topic")
       end
     end
 
@@ -1346,7 +1302,7 @@ describe GdsApi::PublishingApi do
             path: "/v2/links/changes",
             query: "link_types%5B%5D=taxons",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1354,7 +1310,7 @@ describe GdsApi::PublishingApi do
             body: link_changes,
           )
 
-        @api_client.get_links_changes(link_types: %w[taxons])
+        api_client.get_links_changes(link_types: %w[taxons])
       end
     end
 
@@ -1368,7 +1324,7 @@ describe GdsApi::PublishingApi do
             path: "/v2/content",
             query: "document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&page=1&per_page=2",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1395,7 +1351,7 @@ describe GdsApi::PublishingApi do
             path: "/v2/content",
             query: "document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path&page=2&per_page=2",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1415,7 +1371,7 @@ describe GdsApi::PublishingApi do
             },
           )
         assert_equal(
-          @api_client.get_content_items_enum(document_type: "topic", fields: %i[title base_path], per_page: 2).to_a,
+          api_client.get_content_items_enum(document_type: "topic", fields: %i[title base_path], per_page: 2).to_a,
           [
             { "title" => "title_1", "base_path" => "/path_1" },
             { "title" => "title_2", "base_path" => "/path_2" },
@@ -1436,7 +1392,7 @@ describe GdsApi::PublishingApi do
             path: "/v2/content",
             query: "document_type=topic&fields%5B%5D=title&fields%5B%5D=base_path",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1456,7 +1412,7 @@ describe GdsApi::PublishingApi do
             },
           )
 
-        @api_client.get_content_items(
+        api_client.get_content_items(
           document_type: "topic",
           fields: %i[title base_path],
         )
@@ -1464,14 +1420,14 @@ describe GdsApi::PublishingApi do
 
       it "returns the content items in english locale by default" do
         publishing_api
-          .given("a content item exists in multiple locales with content_id: #{@content_id}")
+          .given("a content item exists in multiple locales with content_id: #{content_id}")
           .upon_receiving("a get entries request")
           .with(
             method: :get,
             path: "/v2/content",
             query: "document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1485,12 +1441,12 @@ describe GdsApi::PublishingApi do
                 rel: "self",
               }],
               results: [
-                { content_id: @content_id, locale: "en" },
+                { content_id: content_id, locale: "en" },
               ],
             },
           )
 
-        @api_client.get_content_items(
+        api_client.get_content_items(
           document_type: "topic",
           fields: %i[content_id locale],
         )
@@ -1498,14 +1454,14 @@ describe GdsApi::PublishingApi do
 
       it "returns the content items in a specific locale" do
         publishing_api
-          .given("a content item exists in multiple locales with content_id: #{@content_id}")
+          .given("a content item exists in multiple locales with content_id: #{content_id}")
           .upon_receiving("a get entries request with a specific locale")
           .with(
             method: :get,
             path: "/v2/content",
             query: "document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=fr",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1519,12 +1475,12 @@ describe GdsApi::PublishingApi do
                 rel: "self",
               }],
               results: [
-                { content_id: @content_id, locale: "fr" },
+                { content_id: content_id, locale: "fr" },
               ],
             },
           )
 
-        @api_client.get_content_items(
+        api_client.get_content_items(
           document_type: "topic",
           fields: %i[content_id locale],
           locale: "fr",
@@ -1533,14 +1489,14 @@ describe GdsApi::PublishingApi do
 
       it "returns the content items in all the available locales" do
         publishing_api
-          .given("a content item exists in multiple locales with content_id: #{@content_id}")
+          .given("a content item exists in multiple locales with content_id: #{content_id}")
           .upon_receiving("a get entries request with an 'all' locale")
           .with(
             method: :get,
             path: "/v2/content",
             query: "document_type=topic&fields%5B%5D=content_id&fields%5B%5D=locale&locale=all",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1554,14 +1510,14 @@ describe GdsApi::PublishingApi do
                 rel: "self",
               }],
               results: [
-                { content_id: @content_id, locale: "en" },
-                { content_id: @content_id, locale: "fr" },
-                { content_id: @content_id, locale: "ar" },
+                { content_id: content_id, locale: "en" },
+                { content_id: content_id, locale: "fr" },
+                { content_id: content_id, locale: "ar" },
               ],
             },
           )
 
-        @api_client.get_content_items(
+        api_client.get_content_items(
           document_type: "topic",
           fields: %i[content_id locale],
           locale: "all",
@@ -1570,14 +1526,14 @@ describe GdsApi::PublishingApi do
 
       it "returns details hashes" do
         publishing_api
-          .given("a content item exists with content_id: #{@content_id} and it has details")
+          .given("a content item exists with content_id: #{content_id} and it has details")
           .upon_receiving("a get entries request with details field")
           .with(
             method: :get,
             path: "/v2/content",
             query: "document_type=topic&fields%5B%5D=content_id&fields%5B%5D=details",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1591,12 +1547,12 @@ describe GdsApi::PublishingApi do
                 rel: "self",
               }],
               results: [
-                { content_id: @content_id, details: { foo: :bar } },
+                { content_id: content_id, details: { foo: :bar } },
               ],
             },
           )
 
-        @api_client.get_content_items(
+        api_client.get_content_items(
           document_type: "topic",
           fields: %i[content_id details],
         )
@@ -1611,7 +1567,7 @@ describe GdsApi::PublishingApi do
             path: "/v2/content",
             query: "document_type=topic&fields%5B%5D=content_id&q=an+internal+name&search_in%5B%5D=details.internal_name",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1630,7 +1586,7 @@ describe GdsApi::PublishingApi do
             },
           )
 
-        @api_client.get_content_items(
+        api_client.get_content_items(
           document_type: "topic",
           fields: [:content_id],
           q: "an internal name",
@@ -1642,42 +1598,42 @@ describe GdsApi::PublishingApi do
     describe "#discard_draft(content_id, options = {})" do
       it "responds with 200 when the content item exists" do
         publishing_api
-          .given("a content item exists with content_id: #{@content_id}")
+          .given("a content item exists with content_id: #{content_id}")
           .upon_receiving("a request to discard draft content")
           .with(
             method: :post,
-            path: "/v2/content/#{@content_id}/discard-draft",
+            path: "/v2/content/#{content_id}/discard-draft",
             body: {},
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
             status: 200,
           )
 
-        @api_client.discard_draft(@content_id)
+        api_client.discard_draft(content_id)
       end
 
       it "responds with 200 when the content item exists and is French" do
         publishing_api
-          .given("a French content item exists with content_id: #{@content_id}")
+          .given("a French content item exists with content_id: #{content_id}")
           .upon_receiving("a request to discard French draft content")
           .with(
             method: :post,
-            path: "/v2/content/#{@content_id}/discard-draft",
+            path: "/v2/content/#{content_id}/discard-draft",
             body: {
               locale: "fr",
             },
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
             status: 200,
           )
 
-        @api_client.discard_draft(@content_id, locale: "fr")
+        api_client.discard_draft(content_id, locale: "fr")
       end
 
       it "responds with a 404 when there is no content with that content_id" do
@@ -1686,10 +1642,10 @@ describe GdsApi::PublishingApi do
           .upon_receiving("a request to discard draft content")
           .with(
             method: :post,
-            path: "/v2/content/#{@content_id}/discard-draft",
+            path: "/v2/content/#{content_id}/discard-draft",
             body: {},
             headers: GdsApi::JsonClient.default_request_with_json_body_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1697,7 +1653,7 @@ describe GdsApi::PublishingApi do
           )
 
         assert_raises(GdsApi::HTTPNotFound) do
-          @api_client.discard_draft(@content_id)
+          api_client.discard_draft(content_id)
         end
       end
     end
@@ -1738,7 +1694,7 @@ describe GdsApi::PublishingApi do
             body: response_hash,
           )
 
-        @api_client.get_links_for_content_ids([content_id_with_links, content_id_no_links])
+        api_client.get_links_for_content_ids([content_id_with_links, content_id_no_links])
       end
     end
 
@@ -1749,10 +1705,10 @@ describe GdsApi::PublishingApi do
           .upon_receiving("a request to return the items linked to it")
           .with(
             method: :get,
-            path: "/v2/linked/#{@content_id}",
+            path: "/v2/linked/#{content_id}",
             query: "fields%5B%5D=content_id&fields%5B%5D=base_path&link_type=topic",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1769,8 +1725,8 @@ describe GdsApi::PublishingApi do
           )
 
         assert_raises(GdsApi::HTTPNotFound) do
-          @api_client.get_linked_items(
-            @content_id,
+          api_client.get_linked_items(
+            content_id,
             link_type: "topic",
             fields: %w[content_id base_path],
           )
@@ -1778,63 +1734,66 @@ describe GdsApi::PublishingApi do
       end
 
       describe "there are two documents that link to the wanted document" do
-        before do
-          content_id2 = "08dfd5c3-d935-4e81-88fd-cfe65b78893d"
-          content_id3 = "e2961462-bc37-48e9-bb98-c981ef1a2d59"
+        let(:linked_content_item) { content_item_for_content_id("6cb2cf8c-670f-4de3-97d5-6ad9114581c7") }
 
-          @linked_content_item = content_item_for_content_id("6cb2cf8c-670f-4de3-97d5-6ad9114581c7")
-          @linking_content_item1 = content_item_for_content_id(
-            content_id3,
+        let(:linking_content_item1) do
+          content_item_for_content_id(
+            "e2961462-bc37-48e9-bb98-c981ef1a2d59",
             "base_path" => "/item-b",
             "links" => {
-              "topic" => [@linked_content_item["content_id1"]],
+              "topic" => [linked_content_item["content_id1"]],
             },
           )
-          @linking_content_item2 = content_item_for_content_id(
-            content_id2,
+        end
+
+        let(:linking_content_item2) do
+          content_item_for_content_id(
+            "08dfd5c3-d935-4e81-88fd-cfe65b78893d",
             "base_path" => "/item-a",
             "links" => {
-              "topic" => [@linked_content_item["content_id1"]],
+              "topic" => [linked_content_item["content_id1"]],
             },
           )
+        end
 
+        before do
           publishing_api
             .given("there are two documents with a 'topic' link to another document")
             .upon_receiving("a get linked request")
             .with(
               method: :get,
-              path: "/v2/linked/#{@linked_content_item['content_id']}",
+              path: "/v2/linked/#{linked_content_item['content_id']}",
               query: "fields%5B%5D=content_id&fields%5B%5D=base_path&link_type=topic",
               headers: GdsApi::JsonClient.default_request_headers.merge(
-                "Authorization" => "Bearer #{@bearer_token}",
+                "Authorization" => "Bearer #{bearer_token}",
               ),
             )
             .will_respond_with(
               status: 200,
               body: [
                 {
-                  content_id: @linking_content_item1["content_id"],
-                  base_path: @linking_content_item1["base_path"],
+                  content_id: linking_content_item1["content_id"],
+                  base_path: linking_content_item1["base_path"],
                 },
                 {
-                  content_id: @linking_content_item2["content_id"],
-                  base_path: @linking_content_item2["base_path"],
+                  content_id: linking_content_item2["content_id"],
+                  base_path: linking_content_item2["base_path"],
                 },
               ],
             )
         end
 
         it "returns the requested fields of linking items" do
-          response = @api_client.get_linked_items(
-            @linked_content_item["content_id"],
+          response = api_client.get_linked_items(
+            linked_content_item["content_id"],
             link_type: "topic",
             fields: %w[content_id base_path],
           )
           assert_equal 200, response.code
 
           expected_documents = [
-            { "content_id" => @linking_content_item2["content_id"], "base_path" => "/item-a" },
-            { "content_id" => @linking_content_item1["content_id"], "base_path" => "/item-b" },
+            { "content_id" => linking_content_item2["content_id"], "base_path" => "/item-a" },
+            { "content_id" => linking_content_item1["content_id"], "base_path" => "/item-b" },
           ]
 
           expected_documents.each do |document|
@@ -1854,7 +1813,7 @@ describe GdsApi::PublishingApi do
             path: "/v2/editions",
             query: "fields%5B%5D=content_id",
             headers: GdsApi::JsonClient.default_request_headers.merge(
-              "Authorization" => "Bearer #{@bearer_token}",
+              "Authorization" => "Bearer #{bearer_token}",
             ),
           )
           .will_respond_with(
@@ -1870,7 +1829,7 @@ describe GdsApi::PublishingApi do
             },
           )
 
-        @api_client.get_editions(fields: %w[content_id])
+        api_client.get_editions(fields: %w[content_id])
       end
     end
 
@@ -1888,7 +1847,7 @@ describe GdsApi::PublishingApi do
               path: "/v2/editions",
               query: "fields%5B%5D=content_id&per_page=2",
               headers: GdsApi::JsonClient.default_request_headers.merge(
-                "Authorization" => "Bearer #{@bearer_token}",
+                "Authorization" => "Bearer #{bearer_token}",
               ),
             },
             response: {
@@ -1914,7 +1873,7 @@ describe GdsApi::PublishingApi do
               path: "/v2/editions",
               query: "fields%5B%5D=content_id&per_page=2&after=2017-02-01T00%3A00%3A00.000000Z%2C2",
               headers: GdsApi::JsonClient.default_request_headers.merge(
-                "Authorization" => "Bearer #{@bearer_token}",
+                "Authorization" => "Bearer #{bearer_token}",
               ),
             },
             response: {
@@ -1953,17 +1912,17 @@ describe GdsApi::PublishingApi do
 
           # Manually override JsonClient#get_json, because the Pact tests mean we return an invalid pagination
           # URL, which we have to replace with our mocked publishing_api_host
-          @api_client
+          api_client
             .expects(:get_json)
             .with(first_page_url)
             .returns(GdsApi::JsonClient.new.get_json(first_page_url, first_page[:request][:headers]))
 
-          @api_client
+          api_client
             .expects(:get_json)
             .with("http://example.org#{second_page_path}")
             .returns(GdsApi::JsonClient.new.get_json("#{publishing_api_host}#{second_page_path}", second_page[:request][:headers]))
 
-          response = @api_client.get_paged_editions(fields: %w[content_id], per_page: 2).to_a
+          response = api_client.get_paged_editions(fields: %w[content_id], per_page: 2).to_a
 
           assert_equal 2, response.count
           first_page_content_ids = response[0]["results"].map { |content_item| content_item["content_id"] }
@@ -1979,26 +1938,26 @@ describe GdsApi::PublishingApi do
       %i[get_content get_links get_linked_items discard_draft].each do |method|
         it "happens on #{method}" do
           assert_raises ArgumentError do
-            @api_client.send(method, nil)
+            api_client.send(method, nil)
           end
         end
       end
 
       it "happens on publish" do
         assert_raises ArgumentError do
-          @api_client.publish(nil, "major")
+          api_client.publish(nil, "major")
         end
       end
 
       it "happens on put_content" do
         assert_raises ArgumentError do
-          @api_client.put_content(nil, {})
+          api_client.put_content(nil, {})
         end
       end
 
       it "happens on patch_links" do
         assert_raises ArgumentError do
-          @api_client.patch_links(nil, links: {})
+          api_client.patch_links(nil, links: {})
         end
       end
     end
@@ -2029,7 +1988,7 @@ describe GdsApi::PublishingApi do
             },
           )
 
-        @api_client.put_path(base_path, payload)
+        api_client.put_path(base_path, payload)
       end
 
       it "returns 422 if the request is invalid" do
@@ -2063,7 +2022,7 @@ describe GdsApi::PublishingApi do
           )
 
         assert_raises(GdsApi::HTTPUnprocessableEntity) do
-          @api_client.put_path(base_path, payload)
+          api_client.put_path(base_path, payload)
         end
       end
 
@@ -2093,7 +2052,7 @@ describe GdsApi::PublishingApi do
             },
           )
 
-        @api_client.put_path(base_path, payload)
+        api_client.put_path(base_path, payload)
       end
     end
 
@@ -2121,7 +2080,7 @@ describe GdsApi::PublishingApi do
             },
           )
 
-        @api_client.unreserve_path(base_path, publishing_app)
+        api_client.unreserve_path(base_path, publishing_app)
       end
 
       it "raises an error if the reservation does not exist" do
@@ -2148,7 +2107,7 @@ describe GdsApi::PublishingApi do
           )
 
         assert_raises(GdsApi::HTTPNotFound) do
-          @api_client.unreserve_path(base_path, publishing_app)
+          api_client.unreserve_path(base_path, publishing_app)
         end
       end
 
@@ -2176,7 +2135,7 @@ describe GdsApi::PublishingApi do
           )
 
         assert_raises(GdsApi::HTTPUnprocessableEntity) do
-          @api_client.unreserve_path(base_path, publishing_app)
+          api_client.unreserve_path(base_path, publishing_app)
         end
       end
     end
@@ -2211,7 +2170,7 @@ describe GdsApi::PublishingApi do
             },
           )
 
-        @api_client.put_intent(base_path, publish_intent)
+        api_client.put_intent(base_path, publish_intent)
       end
     end
 
@@ -2234,7 +2193,7 @@ describe GdsApi::PublishingApi do
             },
           )
 
-        @api_client.destroy_intent(base_path)
+        api_client.destroy_intent(base_path)
       end
 
       it "returns 404 Not found if the intent does not exist" do
@@ -2255,8 +2214,33 @@ describe GdsApi::PublishingApi do
             },
           )
 
-        @api_client.destroy_intent(base_path)
+        api_client.destroy_intent(base_path)
       end
     end
+  end
+
+private
+
+  def content_item_for_content_id(content_id, attrs = {})
+    {
+      "base_path" => "/robots.txt",
+      "content_id" => content_id,
+      "title" => "Instructions for crawler robots",
+      "description" => "robots.txt provides rules for which parts of GOV.UK are permitted to be crawled by different bots.",
+      "schema_name" => "special_route",
+      "document_type" => "special_route",
+      "public_updated_at" => "2015-07-30T13:58:11.000Z",
+      "publishing_app" => "static",
+      "rendering_app" => "static",
+      "locale" => "en",
+      "routes" => [
+        {
+          "path" => attrs["base_path"] || "/robots.txt",
+          "type" => "exact",
+        },
+      ],
+      "update_type" => "major",
+      "details" => {},
+    }.merge(attrs)
   end
 end
