@@ -1,17 +1,22 @@
 require "test_helper"
 require "gds_api/asset_manager"
-require "gds_api/test_helpers/asset_manager"
-require "asset_manager/asset_manager_pact_helper"
-require "json"
 
 describe GdsApi::AssetManager do
   include PactTest
-  include AssetManagerPactHelper
 
   let(:api_client) { GdsApi::AssetManager.new(asset_manager_api_host) }
   let(:content_id) { "4dca570c2975bc0d6d437491" }
   let(:filename) { "hello.txt" }
   let(:file_fixture) { load_fixture_file(filename) }
+
+  let(:multipart_headers) do
+    { "Content-Type" => Pact.term(/multipart\/form-data/, "multipart/form-data; boundary=----RubyFormBoundaryjFAA2WBg0ki601kd") }
+  end
+  let(:json_content_type) do
+    { "Content-Type" => "application/json; charset=utf-8" }
+  end
+  let(:asset_details) { "\r\nContent-Disposition: form-data; name=\"asset[file]\"; filename=\"hello.txt\"\r\nContent-Type: text/plain\r\n\r\nHello, world!\n\r\n" }
+  let(:asset_details_regex) { /\s+Content-Disposition: form-data; name="asset\[file\]"; filename="hello.txt"\s+Content-Type: text\/plain\s+Hello, world!\s+/ }
 
   describe "Non-Whitehall assets" do
     let(:url_for_existing_asset) { "http://static.dev.gov.uk/media/#{content_id}/asset.png" }
@@ -25,12 +30,12 @@ describe GdsApi::AssetManager do
             method: :post,
             path: "/assets",
             body: a_multipart_request_body,
-            headers: AssetManagerPactHelper::MULTIPART_HEADERS,
+            headers: multipart_headers,
           )
           .will_respond_with(
             status: 201,
             body: created_asset_body(id: an_asset_id_string, file_url: a_file_url_string),
-            headers: AssetManagerPactHelper::JSON_CONTENT_TYPE,
+            headers: json_content_type,
           )
 
         api_client.create_asset(file: file_fixture)
@@ -49,7 +54,7 @@ describe GdsApi::AssetManager do
           .will_respond_with(
             status: 200,
             body: existing_asset_response_body,
-            headers: AssetManagerPactHelper::JSON_CONTENT_TYPE,
+            headers: json_content_type,
           )
 
         api_client.asset(content_id)
@@ -64,7 +69,7 @@ describe GdsApi::AssetManager do
           )
           .will_respond_with(
             status: 404,
-            headers: AssetManagerPactHelper::JSON_CONTENT_TYPE,
+            headers: json_content_type,
           )
 
         assert_raises(GdsApi::HTTPNotFound) do
@@ -82,7 +87,7 @@ describe GdsApi::AssetManager do
             method: :put,
             path: "/assets/#{content_id}",
             body: a_multipart_request_body,
-            headers: AssetManagerPactHelper::MULTIPART_HEADERS,
+            headers: multipart_headers,
           )
           .will_respond_with(
             status: 200,
@@ -90,7 +95,7 @@ describe GdsApi::AssetManager do
               id: "http://example.org/assets/#{content_id}",
               file_url: "http://static.dev.gov.uk/media/#{content_id}/#{filename}",
             ),
-            headers: AssetManagerPactHelper::JSON_CONTENT_TYPE,
+            headers: json_content_type,
           )
 
         api_client.update_asset(content_id, file: file_fixture)
@@ -104,11 +109,11 @@ describe GdsApi::AssetManager do
             method: :put,
             path: "/assets/#{content_id}",
             body: a_multipart_request_body,
-            headers: AssetManagerPactHelper::MULTIPART_HEADERS,
+            headers: multipart_headers,
           )
           .will_respond_with(
             status: 404,
-            headers: AssetManagerPactHelper::JSON_CONTENT_TYPE,
+            headers: json_content_type,
           )
 
         assert_raises(GdsApi::HTTPNotFound) do
@@ -129,7 +134,7 @@ describe GdsApi::AssetManager do
           .will_respond_with(
             status: 200,
             body: existing_asset_response_body.merge({ "deleted" => true }),
-            headers: AssetManagerPactHelper::JSON_CONTENT_TYPE,
+            headers: json_content_type,
           )
 
         api_client.delete_asset(content_id)
@@ -148,7 +153,7 @@ describe GdsApi::AssetManager do
           .will_respond_with(
             status: 200,
             body: existing_asset_response_body.merge({ "state" => "unscanned" }),
-            headers: AssetManagerPactHelper::JSON_CONTENT_TYPE,
+            headers: json_content_type,
           )
 
         api_client.restore_asset(content_id)
@@ -169,14 +174,14 @@ describe GdsApi::AssetManager do
             method: :post,
             path: "/whitehall_assets",
             body: a_whitehall_multipart_request_body,
-            headers: AssetManagerPactHelper::MULTIPART_HEADERS,
+            headers: multipart_headers,
           ).will_respond_with(
             status: 201,
             body: created_asset_body(
               id: an_asset_id_string,
               file_url: url_for_asset,
             ),
-            headers: AssetManagerPactHelper::JSON_CONTENT_TYPE,
+            headers: json_content_type,
           )
 
         api_client.create_whitehall_asset(file: file_fixture, legacy_url_path: legacy_url_path)
@@ -194,7 +199,7 @@ describe GdsApi::AssetManager do
           ).will_respond_with(
             status: 200,
             body: existing_asset_response_body,
-            headers: AssetManagerPactHelper::JSON_CONTENT_TYPE,
+            headers: json_content_type,
           )
 
         api_client.whitehall_asset(legacy_url_path)
@@ -210,7 +215,7 @@ describe GdsApi::AssetManager do
             method: :put,
             path: "/assets/#{content_id}",
             body: a_multipart_request_body,
-            headers: AssetManagerPactHelper::MULTIPART_HEADERS,
+            headers: multipart_headers,
           )
           .will_respond_with(
             status: 200,
@@ -218,7 +223,7 @@ describe GdsApi::AssetManager do
               id: "http://example.org/assets/#{content_id}",
               file_url: "http://static.dev.gov.uk#{legacy_url_path}",
             ),
-            headers: AssetManagerPactHelper::JSON_CONTENT_TYPE,
+            headers: json_content_type,
           )
 
         api_client.update_asset(content_id, file: file_fixture)
@@ -237,7 +242,7 @@ describe GdsApi::AssetManager do
           .will_respond_with(
             status: 200,
             body: existing_asset_response_body.merge({ "deleted" => true }),
-            headers: AssetManagerPactHelper::JSON_CONTENT_TYPE,
+            headers: json_content_type,
           )
 
         api_client.delete_asset(content_id)
@@ -256,7 +261,7 @@ describe GdsApi::AssetManager do
           .will_respond_with(
             status: 200,
             body: existing_asset_response_body,
-            headers: AssetManagerPactHelper::JSON_CONTENT_TYPE,
+            headers: json_content_type,
           )
 
         api_client.restore_asset(content_id)
@@ -265,6 +270,48 @@ describe GdsApi::AssetManager do
   end
 
 private
+
+  def a_multipart_request_body
+    Pact.term(
+      generate: construct_multipart_string([asset_details]),
+      matcher: construct_multipart_regex([asset_details_regex]),
+    )
+  end
+
+  def a_whitehall_multipart_request_body
+    legacy_url_details = "\r\nContent-Disposition: form-data; name=\"asset[legacy_url_path]\"\r\n\r\n/government/uploads/some-edition/hello.txt\r\n"
+    legacy_url_details_regex = /\s+Content-Disposition: form-data; name="asset\[legacy_url_path\]"\s+\/government\/uploads\/some-edition\/hello.txt\s+/
+    Pact.term(
+      generate: construct_multipart_string([asset_details, legacy_url_details]),
+      matcher: construct_multipart_regex([asset_details_regex, legacy_url_details_regex]),
+    )
+  end
+
+  def a_file_url_string
+    Pact.term(
+      generate: "http://static.dev.gov.uk/media/62b418d7c7d6b700ce9fa93d/hello.txt",
+      matcher: /http:\/\/static.dev.gov.uk\/media\/\w{24}\/hello.txt/,
+    )
+  end
+
+  def an_asset_id_string
+    Pact.term(
+      generate: "http://example.org/assets/4dca570c2975bc0d6d437491",
+      matcher: /http:\/\/example.org\/assets\/\w{24}/,
+    )
+  end
+
+  def construct_multipart_string(multipart_contents)
+    boundary = "------RubyFormBoundaryjFAA2WBg0ki601kd".freeze
+    closing_string = "--\r\n"
+    boundary + multipart_contents.join(boundary) + boundary + closing_string
+  end
+
+  def construct_multipart_regex(regexes)
+    boundary_regex = /------RubyFormBoundary\w{16}/.source
+    closing_regex =  /--\s+/.source
+    Regexp.new(boundary_regex + regexes.map(&:source).join(boundary_regex) + boundary_regex + closing_regex)
+  end
 
   def existing_asset_body(file_url:)
     {
