@@ -1,10 +1,10 @@
 require "test_helper"
 require "gds_api/publishing_api/special_route_publisher"
 require "govuk_schemas/assert_matchers"
-require "#{File.dirname(__FILE__)}/../../lib/gds_api/test_helpers/publishing_api"
+require "gds_api/test_helpers/publishing_api"
 
 describe GdsApi::PublishingApi::SpecialRoutePublisher do
-  include ::GdsApi::TestHelpers::PublishingApi
+  include GdsApi::TestHelpers::PublishingApi
   include GovukSchemas::AssertMatchers
 
   let(:content_id) { "a-content-id-of-sorts" }
