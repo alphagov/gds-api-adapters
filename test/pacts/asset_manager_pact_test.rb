@@ -1,7 +1,7 @@
 require "test_helper"
 require "gds_api/asset_manager"
 
-describe GdsApi::AssetManager do
+describe "GdsApi::AssetManager pact tests" do
   include PactTest
 
   let(:api_client) { GdsApi::AssetManager.new(asset_manager_api_host) }

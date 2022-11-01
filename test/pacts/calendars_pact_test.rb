@@ -1,7 +1,7 @@
 require "test_helper"
 require "gds_api/calendars"
 
-describe GdsApi::Calendars do
+describe "GdsApi::Calendars pact tests" do
   include PactTest
 
   def api_client

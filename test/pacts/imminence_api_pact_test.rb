@@ -2,7 +2,7 @@ require "test_helper"
 require "gds_api/imminence"
 require "gds_api/test_helpers/imminence"
 
-describe GdsApi::Imminence do
+describe "GdsApi::Imminence pact tests" do
   include GdsApi::TestHelpers::Imminence
   include PactTest
 

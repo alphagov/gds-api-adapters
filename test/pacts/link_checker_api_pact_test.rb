@@ -1,7 +1,7 @@
 require "test_helper"
 require "gds_api/link_checker_api"
 
-describe GdsApi::LinkCheckerApi do
+describe "GdsApi::LinkCheckerApi pact tests" do
   include PactTest
 
   let(:api_client) { GdsApi::LinkCheckerApi.new(link_checker_api_host) }

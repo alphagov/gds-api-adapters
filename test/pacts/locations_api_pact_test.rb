@@ -2,7 +2,7 @@ require "test_helper"
 require "gds_api/locations_api"
 require "gds_api/test_helpers/locations_api"
 
-describe GdsApi::LocationsApi do
+describe "GdsApi::LocationsApi pact tests" do
   include GdsApi::TestHelpers::LocationsApi
   include PactTest
 

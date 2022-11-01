@@ -2,7 +2,7 @@ require "test_helper"
 require "gds_api/worldwide"
 require "gds_api/test_helpers/worldwide"
 
-describe GdsApi::Worldwide do
+describe "GdsApi::Worldwide pact tests" do
   include GdsApi::TestHelpers::Worldwide
   include PactTest
 

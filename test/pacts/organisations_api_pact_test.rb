@@ -2,7 +2,7 @@ require "test_helper"
 require "gds_api/organisations"
 require "gds_api/test_helpers/organisations"
 
-describe GdsApi::Organisations do
+describe "GdsApi::Organisations pact tests" do
   include GdsApi::TestHelpers::Organisations
   include PactTest
 

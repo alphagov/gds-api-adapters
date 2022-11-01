@@ -1,7 +1,7 @@
 require "test_helper"
 require "gds_api/account_api"
 
-describe GdsApi::AccountApi do
+describe "GdsApi::AccountApi pact tests" do
   include PactTest
 
   let(:api_client) { GdsApi::AccountApi.new(account_api_host) }
