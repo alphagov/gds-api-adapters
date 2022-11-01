@@ -1,31 +1,10 @@
 require "test_helper"
 require "gds_api/organisations"
-require "gds_api/test_helpers/organisations"
 
 describe "GdsApi::Organisations pact tests" do
-  include GdsApi::TestHelpers::Organisations
   include PactTest
 
-  def api_client
-    @api_client ||= GdsApi::Organisations.new(organisation_api_host)
-  end
-
-  def organisation(slug: "test-department")
-    {
-      "id" => Pact.like("www.gov.uk/api/organisations/#{slug}"),
-      "title" => Pact.like("Test Department"),
-      "updated_at" => Pact.like("2019-05-15T12:12:17.000+01:00"),
-      "web_url" => Pact.like("www.gov.uk/government/organisations/#{slug}"),
-      "details" => {
-        "slug" => Pact.like(slug),
-        "content_id" => Pact.like("b854f170-53c8-4098-bf77-e8ef42f93107"),
-      },
-      "analytics_identifier" => Pact.like("OT1276"),
-      "child_organisations" => [],
-      "superseded_organisations" => [],
-    }
-  end
-
+  let(:api_client) { GdsApi::Organisations.new(organisation_api_host) }
   let(:host_agnostic_endpoint_regex) { %r{https?://(?:[^/]+)/api/organisations} }
   let(:api_client_endpoint) { "#{organisation_api_host}/api/organisations" }
 
@@ -147,5 +126,23 @@ describe "GdsApi::Organisations pact tests" do
     assert_raises(GdsApi::HTTPNotFound) do
       api_client.organisation("department-for-making-life-better")
     end
+  end
+
+private
+
+  def organisation(slug: "test-department")
+    {
+      "id" => Pact.like("www.gov.uk/api/organisations/#{slug}"),
+      "title" => Pact.like("Test Department"),
+      "updated_at" => Pact.like("2019-05-15T12:12:17.000+01:00"),
+      "web_url" => Pact.like("www.gov.uk/government/organisations/#{slug}"),
+      "details" => {
+        "slug" => Pact.like(slug),
+        "content_id" => Pact.like("b854f170-53c8-4098-bf77-e8ef42f93107"),
+      },
+      "analytics_identifier" => Pact.like("OT1276"),
+      "child_organisations" => [],
+      "superseded_organisations" => [],
+    }
   end
 end

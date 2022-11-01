@@ -4,18 +4,7 @@ require "gds_api/calendars"
 describe "GdsApi::Calendars pact tests" do
   include PactTest
 
-  def api_client
-    @api_client ||= GdsApi::Calendars.new(bank_holidays_api_host)
-  end
-
-  def event
-    {
-      "title" => Pact.like("New Year's Day"),
-      "date" => Pact.like("2016-01-01"),
-      "notes" => Pact.like("Substitute day"),
-      "bunting" => Pact.like(true),
-    }
-  end
+  let(:api_client) { GdsApi::Calendars.new(bank_holidays_api_host) }
 
   describe "fetching all bank holidays" do
     it "responds with 200 OK and a list of bank holidays for each nation" do
@@ -75,5 +64,16 @@ describe "GdsApi::Calendars pact tests" do
 
       api_client.bank_holidays("scotland")
     end
+  end
+
+private
+
+  def event
+    {
+      "title" => Pact.like("New Year's Day"),
+      "date" => Pact.like("2016-01-01"),
+      "notes" => Pact.like("Substitute day"),
+      "bunting" => Pact.like(true),
+    }
   end
 end
