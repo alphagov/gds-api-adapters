@@ -52,7 +52,3 @@ require "support/pact_helper"
 
 require "webmock/minitest"
 WebMock.disable_net_connect!
-
-Mocha.configure do |c|
-  c.reinstate_undocumented_behaviour_from_v1_9 = false
-end
