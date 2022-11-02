@@ -48,7 +48,7 @@ def load_fixture_file(filename)
 end
 
 require "gds_api/test_helpers/json_client_helper"
-require "test_helpers/pact_helper"
+require "support/pact_helper"
 
 require "webmock/minitest"
 WebMock.disable_net_connect!

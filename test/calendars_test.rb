@@ -1,79 +1,66 @@
 require "test_helper"
 require "gds_api/calendars"
+require "gds_api/test_helpers/calendars"
 
 describe GdsApi::Calendars do
-  include PactTest
+  include GdsApi::TestHelpers::Calendars
 
-  def api_client
-    @api_client ||= GdsApi::Calendars.new(bank_holidays_api_host)
+  before do
+    @host = Plek.new.website_root
+    @api = GdsApi::Calendars.new(@host)
   end
 
-  def event
-    {
-      "title" => Pact.like("New Year's Day"),
-      "date" => Pact.like("2016-01-01"),
-      "notes" => Pact.like("Substitute day"),
-      "bunting" => Pact.like(true),
-    }
-  end
+  describe "#bank_holidays" do
+    it "fetches all bank holidays when called with no argument" do
+      holidays_request = stub_request(:get, "#{@host}/bank-holidays.json").to_return(status: 200, body: "{}")
 
-  describe "fetching all bank holidays" do
-    it "responds with 200 OK and a list of bank holidays for each nation" do
-      bank_holidays_api
-        .given("there is a list of all bank holidays")
-        .upon_receiving("the request for the list of all bank holidays")
-        .with(
-          method: :get,
-          path: "/bank-holidays.json",
-          headers: GdsApi::JsonClient.default_request_headers,
-        )
-        .will_respond_with(
-          status: 200,
-          body: {
-            "england-and-wales": {
-              division: "england-and-wales",
-              events: Pact.each_like(event),
-            },
-            "scotland": {
-              division: "scotland",
-              events: Pact.each_like(event),
-            },
-            "northern-ireland": {
-              division: "northern-ireland",
-              events: Pact.each_like(event),
-            },
-          },
-          headers: {
-            "Content-Type" => "application/json; charset=utf-8",
-          },
-        )
+      @api.bank_holidays
 
-      api_client.bank_holidays
+      assert_requested(holidays_request)
     end
-  end
 
-  describe "fetching only Scottish bank holidays" do
-    it "responds with 200 OK and a list of bank holidays" do
-      bank_holidays_api
-        .given("there is a list of all bank holidays")
-        .upon_receiving("the request for the list of Scottish bank holidays")
-        .with(
-          method: :get,
-          path: "/bank-holidays/scotland.json",
-          headers: GdsApi::JsonClient.default_request_headers,
-        )
-        .will_respond_with(
-          status: 200,
-          body: {
-            division: "scotland",
-            events: Pact.each_like(event),
-          },
-          headers: {
-            "Content-Type" => "application/json; charset=utf-8",
-          },
-        )
+    it "fetches just the requested bank holidays when called with an argument" do
+      all_holidays_request = stub_request(:get, "#{@host}/bank-holidays.json")
+      scotland_holidays_request = stub_request(:get, "#{@host}/bank-holidays/scotland.json").to_return(status: 200, body: "{}")
 
-      api_client.bank_holidays("scotland")
+      @api.bank_holidays(:scotland)
+
+      assert_not_requested(all_holidays_request)
+      assert_requested(scotland_holidays_request)
+    end
+
+    it "normalises the argument from underscores to dashes" do
+      underscored_england_and_wales_holidays_request = stub_request(:get, "#{@host}/bank-holidays/england_and_wales.json").to_return(status: 200, body: "{}")
+      dashed_england_and_wales_holidays_request = stub_request(:get, "#{@host}/bank-holidays/england-and-wales.json").to_return(status: 200, body: "{}")
+
+      @api.bank_holidays(:england_and_wales)
+
+      assert_not_requested(underscored_england_and_wales_holidays_request)
+      assert_requested(dashed_england_and_wales_holidays_request)
+    end
+
+    it "should raise error if argument is for an area we don't have holidays for" do
+      stub_request(:get, "#{@host}/bank-holidays/lyonesse.json").to_return(status: 404)
+      assert_raises GdsApi::HTTPNotFound do
+        @api.bank_holidays(:lyonesse)
+      end
+    end
+
+    it "fetches the bank holidays requested for all divisions" do
+      stub_calendars_has_a_bank_holiday_on(Date.parse("2012-12-12"))
+      holidays = @api.bank_holidays
+
+      assert_equal "2012-12-12", holidays["england-and-wales"]["events"][0]["date"]
+      assert_equal "2012-12-12", holidays["scotland"]["events"][0]["date"]
+      assert_equal "2012-12-12", holidays["northern-ireland"]["events"][0]["date"]
+    end
+
+    it "fetches the bank holidays requested for just one divisions" do
+      stub_calendars_has_a_bank_holiday_on(Date.parse("2012-12-12"), in_division: "scotland")
+      holidays = @api.bank_holidays(:scotland)
+
+      assert_equal "2012-12-12", holidays["events"][0]["date"]
+      assert_equal "scotland", holidays["division"]
     end
   end
 end
