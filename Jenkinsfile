@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-library("govuk")
+library("govuk@remove-gem-functionality")
 
 node("postgresql-9.6") {
 
