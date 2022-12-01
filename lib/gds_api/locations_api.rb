@@ -25,4 +25,22 @@ class GdsApi::LocationsApi < GdsApi::Base
 
     { "latitude" => response["average_latitude"], "longitude" => response["average_longitude"] } unless response["results"].nil?
   end
+
+  # Get all results for a postcode
+  #
+  # @param [String, nil] postcode The postcode for which results are requested
+  #
+  # @return [Hash] The fulls results as returned from Locations API, with the average latitude
+  # and longitude, and an array of results for individual addresses with lat/long/lcc, eg:
+  #  {
+  #  "average_latitude"=>51.43122412857143,
+  # "average_longitude"=>-0.37395367142857144,
+  # "results"=>
+  #  [{"address"=>"29, DEAN ROAD, HAMPTON, TW12 1AQ",
+  #    "latitude"=>51.4303819,
+  #    "longitude"=>-0.3745976,
+  #    "local_custodian_code"=>5810}, ETC...
+  def results_for_postcode(postcode)
+    get_json("#{endpoint}/v1/locations?postcode=#{postcode}")
+  end
 end

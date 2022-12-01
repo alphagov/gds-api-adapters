@@ -5,11 +5,11 @@ module GdsApi
 
       def stub_locations_api_has_location(postcode, locations)
         results = []
-        locations.each do |l|
+        locations.each_with_index do |l, i|
           results << {
+            "address" => l["address"] || "Empty Address #{i}",
             "latitude" => l["latitude"] || 0,
             "longitude" => l["longitude"] || 0,
-            "postcode" => postcode,
             "local_custodian_code" => l["local_custodian_code"],
           }
         end
