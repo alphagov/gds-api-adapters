@@ -1,6 +1,7 @@
-# UNRELEASED
+# 85.0.0
 
 * BREAKING: Remove Mapit api methods. These are no longer used by any apps, so should not be breaking in practice.
+* added `results_for_postcode` method to Locations API which returns the entire response from the Locations API server.
 
 # 84.0.0
 
