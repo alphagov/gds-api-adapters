@@ -21,7 +21,6 @@ describe "GdsApi::Imminence pact tests" do
           status: 200,
           body: Pact.each_like(
             {
-              _id: { "$oid": "60867a0ee90e0703aed18e46" },
               access_notes: nil,
               address1: "Yarrow Road Tower Park",
               address2: nil,

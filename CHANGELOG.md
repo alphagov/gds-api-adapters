@@ -1,3 +1,7 @@
+# Unreleased
+
+* Remove expectation that Imminence will return the OID field in the response to #places. This is an internal Mongoid field that we shouldn't be returning anyway, and frontend (the consumer) isn't using it.
+
 # 85.0.0
 
 * BREAKING: Remove Mapit api methods. These are no longer used by any apps, so should not be breaking in practice.
