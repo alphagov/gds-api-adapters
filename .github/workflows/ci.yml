@@ -38,10 +38,13 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     env:
-      PACT_TARGET_BRANCH: branch-${{ github.ref_name }}
+      # Git branch name on a PR this is github.head_ref but on a push it's github.ref_name
+      PACT_TARGET_BRANCH: branch-${{ github.head_ref || github.ref_name }}
       PACT_BROKER_BASE_URL: https://pact-broker.cloudapps.digital
       PACT_BROKER_USERNAME: ${{ secrets.GOVUK_PACT_BROKER_USERNAME }}
       PACT_BROKER_PASSWORD: ${{ secrets.GOVUK_PACT_BROKER_PASSWORD }}
+    outputs:
+      pact_target_branch: ${{ steps.return_target_branch.outputs.target_branch }}
     steps:
       - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
@@ -49,60 +52,62 @@ jobs:
           bundler-cache: true
       - run: bundle exec rake pact_test
       - run: bundle exec rake pact:publish:branch
+      - id: return_target_branch
+        run: echo "target_branch=$PACT_TARGET_BRANCH" >> $GITHUB_OUTPUT
 
   account_api_pact:
     needs: generate_and_publish_pacts
     uses: alphagov/account-api/.github/workflows/pact-verify.yml@main
     with:
-      pact_consumer_version: branch-${{ github.ref_name }}
+      pact_consumer_version: ${{ needs.generate_and_publish_pacts.outputs.pact_target_branch }}
 
   asset_manager_pact:
     needs: generate_and_publish_pacts
     uses: alphagov/asset-manager/.github/workflows/pact-verify.yml@main
     with:
-      pact_consumer_version: branch-${{ github.ref_name }}
+      pact_consumer_version: ${{ needs.generate_and_publish_pacts.outputs.pact_target_branch }}
 
   collections_pact:
     needs: generate_and_publish_pacts
     uses: alphagov/collections/.github/workflows/pact-verify.yml@main
     with:
-      pact_consumer_version: branch-${{ github.ref_name }}
+      pact_consumer_version: ${{ needs.generate_and_publish_pacts.outputs.pact_target_branch }}
 
   email_alert_api_pact:
     needs: generate_and_publish_pacts
     uses: alphagov/email-alert-api/.github/workflows/pact-verify.yml@main
     with:
-      pact_consumer_version: branch-${{ github.ref_name }}
+      pact_consumer_version: ${{ needs.generate_and_publish_pacts.outputs.pact_target_branch }}
 
   imminence_pact:
     needs: generate_and_publish_pacts
     uses: alphagov/imminence/.github/workflows/pact-verify.yml@main
     with:
-      pact_consumer_version: branch-${{ github.ref_name }}
+      pact_consumer_version: ${{ needs.generate_and_publish_pacts.outputs.pact_target_branch }}
 
   link_checker_api_pact:
     needs: generate_and_publish_pacts
     uses: alphagov/link-checker-api/.github/workflows/pact-verify.yml@main
     with:
-      pact_consumer_version: branch-${{ github.ref_name }}
+      pact_consumer_version: ${{ needs.generate_and_publish_pacts.outputs.pact_target_branch }}
 
   locations_api_pact:
     needs: generate_and_publish_pacts
     uses: alphagov/locations-api/.github/workflows/pact-verify.yml@main
     with:
-      pact_consumer_version: branch-${{ github.ref_name }}
+      pact_consumer_version: ${{ needs.generate_and_publish_pacts.outputs.pact_target_branch }}
 
   publishing_api_pact:
     needs: generate_and_publish_pacts
     uses: alphagov/publishing-api/.github/workflows/pact-verify.yml@main
     with:
-      pact_consumer_version: branch-${{ github.ref_name }}
+      pact_consumer_version: ${{ needs.generate_and_publish_pacts.outputs.pact_target_branch }}
 
   whitehall_pact:
     needs: generate_and_publish_pacts
     uses: alphagov/whitehall/.github/workflows/pact-verify.yml@main
     with:
-      pact_consumer_version: branch-${{ github.ref_name }}
+      pact_consumer_version: ${{ needs.generate_and_publish_pacts.outputs.pact_target_branch }}
 
   publish_gem:
     needs:
