@@ -18,7 +18,7 @@ class ImminenceApiTest < Minitest::Test
       "fax" => nil,
       "general_notes" => nil,
       "geocode_error" => nil,
-      "location" => [LATITUDE, LONGITUDE],
+      "location" => { "latitude" => LATITUDE, "longitude" => LONGITUDE },
       "name" => "Town Hall",
       "phone" => nil,
       "postcode" => "MK42 9AP",
@@ -29,42 +29,25 @@ class ImminenceApiTest < Minitest::Test
     }
   end
 
-  def test_no_second_address_line
-    c = api_client
-    url = "#{ROOT}/places/wibble.json?limit=5&lat=52&lng=0"
-    place_info = dummy_place.merge "address2" => nil
-    c.expects(:get_json).with(url).returns([place_info])
-    places = c.places("wibble", 52, 0)
-
-    assert_equal 1, places.size
-    assert_equal "Cauldwell Street", places[0]["address"]
+  def dummy_place_response(place_array)
+    {
+      "status" => "ok",
+      "contents" => "places",
+      "places" => place_array,
+    }
   end
 
   def test_search_for_places
     c = api_client
     url = "#{ROOT}/places/wibble.json?limit=5&lat=52&lng=0"
-    c.expects(:get_json).with(url).returns([dummy_place])
-    places = c.places("wibble", 52, 0)
+    c.expects(:get_json).with(url).returns(dummy_place_response([dummy_place]))
+    output = c.places("wibble", 52, 0)
 
+    places = output["places"]
     assert_equal 1, places.size
     place = places[0]
-    assert_equal LATITUDE, place["latitude"]
-    assert_equal LONGITUDE, place["longitude"]
-    assert_equal "Cauldwell Street, Bedford", place["address"]
-  end
-
-  def test_empty_location
-    # Test behaviour when the location field is an empty array
-    c = api_client
-    url = "#{ROOT}/places/wibble.json?limit=5&lat=52&lng=0"
-    place_info = dummy_place.merge("location" => [])
-    c.expects(:get_json).with(url).returns([place_info])
-    places = c.places("wibble", 52, 0)
-
-    assert_equal 1, places.size
-    place = places[0]
-    assert_nil place["latitude"]
-    assert_nil place["longitude"]
+    assert_equal LATITUDE, place["location"]["latitude"]
+    assert_equal LONGITUDE, place["location"]["longitude"]
   end
 
   def test_nil_location
@@ -72,8 +55,9 @@ class ImminenceApiTest < Minitest::Test
     c = api_client
     url = "#{ROOT}/places/wibble.json?limit=5&lat=52&lng=0"
     place_info = dummy_place.merge("location" => nil)
-    c.expects(:get_json).with(url).returns([place_info])
-    places = c.places("wibble", 52, 0)
+    c.expects(:get_json).with(url).returns(dummy_place_response([place_info]))
+    output = c.places("wibble", 52, 0)
+    places = output["places"]
 
     assert_equal 1, places.size
     place = places[0]
@@ -88,21 +72,34 @@ class ImminenceApiTest < Minitest::Test
     place_info = dummy_place.merge(
       "location" => { "longitude" => LONGITUDE, "latitude" => LATITUDE },
     )
-    c.expects(:get_json).with(url).returns([place_info])
-    places = c.places("wibble", 52, 0)
+    c.expects(:get_json).with(url).returns(dummy_place_response([place_info]))
+    output = c.places("wibble", 52, 0)
+    places = output["places"]
 
     assert_equal 1, places.size
     place = places[0]
-    assert_equal LATITUDE, place["latitude"]
-    assert_equal LONGITUDE, place["longitude"]
+    assert_equal LATITUDE, place["location"]["latitude"]
+    assert_equal LONGITUDE, place["location"]["longitude"]
   end
 
   def test_postcode_search
     # Test behaviour when searching by postcode
     c = api_client
     url = "#{ROOT}/places/wibble.json?limit=5&postcode=MK42+9AA"
-    c.expects(:get_json).with(url).returns([dummy_place])
-    places = c.places_for_postcode("wibble", "MK42 9AA")
+    c.expects(:get_json).with(url).returns(dummy_place_response([dummy_place]))
+    output = c.places_for_postcode("wibble", "MK42 9AA")
+    places = output["places"]
+
+    assert_equal 1, places.size
+  end
+
+  def test_postcode_with_local_authority_search
+    # Test behaviour when searching by postcode
+    c = api_client
+    url = "#{ROOT}/places/wibble.json?limit=10&postcode=MK42+9AA&local_authority_slug=broadlands"
+    c.expects(:get_json).with(url).returns(dummy_place_response([dummy_place]))
+    output = c.places_for_postcode("wibble", "MK42 9AA", 10, "broadlands")
+    places = output["places"]
 
     assert_equal 1, places.size
   end

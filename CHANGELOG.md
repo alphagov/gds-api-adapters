@@ -1,3 +1,7 @@
+# Unreleased
+
+* BREAKING: Changes to Imminence API to support split-postcodes. In practice, the only consumer app for this API is Frontend, which is prepared for the change.
+
 # 85.0.1
 
 * Remove expectation that Imminence will return the OID field in the response to #places. This is an internal Mongoid field that we shouldn't be returning anyway, and frontend (the consumer) isn't using it.
