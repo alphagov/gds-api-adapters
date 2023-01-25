@@ -35,6 +35,7 @@ jobs:
       - run: echo "All matrix tests have passed 🚀"
 
   generate_and_publish_pacts:
+    if: ${{ github.ref == 'refs/heads/main' }}
     needs: test
     runs-on: ubuntu-latest
     env:
