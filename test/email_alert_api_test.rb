@@ -312,7 +312,7 @@ describe GdsApi::EmailAlertApi do
           {
             "title" => title,
             "content_id" => "fd427f55-7492-440d-ae3f-0fb6c3592b21",
-            "links" => links,
+            "tags" => tags,
           }
         end
 
@@ -321,6 +321,40 @@ describe GdsApi::EmailAlertApi do
             api_client.find_or_create_subscriber_list(params)
           end
         end
+      end
+    end
+
+    describe "when content_id and links are provided" do
+      let(:content_id) { "fd427f55-7492-440d-ae3f-0fb6c3592b21" }
+      let(:slug) { "my-new-list" }
+      let(:links) { { "document_collections" => %w[a_content_id] } }
+      let(:params) do
+        {
+          "title" => title,
+          "content_id" => content_id,
+          "links" => links,
+          "slug" => slug,
+        }
+      end
+
+      before do
+        stub_email_alert_api_creates_subscriber_list(
+          "title" => title,
+          "links" => links,
+          "content_id" => content_id,
+          "slug" => slug,
+        )
+      end
+
+      it "returns the subscriber list attributes" do
+        subscriber_list_attrs = api_client.find_or_create_subscriber_list(params)
+          .to_hash
+          .fetch("subscriber_list")
+
+        assert_equal(
+          "my-new-list",
+          subscriber_list_attrs.fetch("slug"),
+        )
       end
     end
   end
