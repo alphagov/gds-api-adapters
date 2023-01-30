@@ -1,6 +1,7 @@
 # Unreleased
 
 * Remove expectation that Imminence will return the OID field in the response to #places. This is an internal Mongoid field that we shouldn't be returning anyway, and frontend (the consumer) isn't using it.
+* Update the allowed params for email-alert-api's find_or_create_subscriber_list endpoint.
 
 # 85.0.0
 
