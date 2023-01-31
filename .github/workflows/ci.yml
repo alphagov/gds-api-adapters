@@ -72,6 +72,12 @@ jobs:
     with:
       pact_artifact: pacts
 
+  frontend_pact:
+    needs: generate_pacts
+    uses: alphagov/frontend/.github/workflows/pact-verify.yml@main
+    with:
+      pact_artifact: pacts
+
   imminence_pact:
     needs: generate_pacts
     uses: alphagov/imminence/.github/workflows/pact-verify.yml@main
@@ -108,6 +114,7 @@ jobs:
       - asset_manager_pact
       - collections_pact
       - email_alert_api_pact
+      - frontend_pact
       - imminence_pact
       - link_checker_api_pact
       - locations_api_pact
