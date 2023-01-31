@@ -29,6 +29,7 @@ PactBroker::Client::PublicationTask.new do |task|
     username: ENV.fetch("PACT_BROKER_USERNAME"),
     password: ENV.fetch("PACT_BROKER_PASSWORD"),
   }
+  task.pattern = ENV["PACT_PATTERN"] if ENV["PACT_PATTERN"]
 end
 
 desc "Run the linter against changed files"
