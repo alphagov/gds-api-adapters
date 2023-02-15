@@ -9,12 +9,33 @@ module GdsApi
 
       def stub_imminence_has_places(latitude, longitude, details)
         query_hash = { "lat" => latitude, "lng" => longitude, "limit" => "5" }
-        stub_imminence_places_request(details["slug"], query_hash, details["details"])
+        response_data = {
+          status: "ok",
+          content: "places",
+          places: details["details"],
+        }
+        stub_imminence_places_request(details["slug"], query_hash, response_data)
       end
 
-      def stub_imminence_has_places_for_postcode(places, slug, postcode, limit)
+      def stub_imminence_has_multiple_authorities_for_postcode(addresses, slug, postcode, limit)
         query_hash = { "postcode" => postcode, "limit" => limit }
-        stub_imminence_places_request(slug, query_hash, places)
+        response_data = {
+          status: "address-information-required",
+          content: "addresses",
+          addresses: addresses,
+        }
+        stub_imminence_places_request(slug, query_hash, response_data)
+      end
+
+      def stub_imminence_has_places_for_postcode(places, slug, postcode, limit, local_authority_slug)
+        query_hash = { "postcode" => postcode, "limit" => limit }
+        query_hash.merge!(local_authority_slug: local_authority_slug) if local_authority_slug
+        response_data = {
+          status: "ok",
+          content: "places",
+          places: places,
+        }
+        stub_imminence_places_request(slug, query_hash, response_data)
       end
 
       def stub_imminence_places_request(slug, query_hash, return_data, status_code = 200)
