@@ -21,7 +21,7 @@ module GdsApi
     include Enumerable
 
     class CacheControl < Hash
-      PATTERN = /([-a-z]+)(?:\s*=\s*([^,\s]+))?,?+/i.freeze
+      PATTERN = /([-a-z]+)(?:\s*=\s*([^,\s]+))?,?+/i
 
       def initialize(value = nil)
         super()
