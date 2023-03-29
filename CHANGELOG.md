@@ -1,6 +1,6 @@
-## Unreleased
+# 87.0.0
 
-* Drop support for Ruby 2.7.
+* BREAKING: Drop support for Ruby 2.7.
 
 # 86.0.0
 
