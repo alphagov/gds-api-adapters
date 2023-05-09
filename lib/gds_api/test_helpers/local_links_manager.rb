@@ -5,11 +5,11 @@ module GdsApi
     module LocalLinksManager
       LOCAL_LINKS_MANAGER_ENDPOINT = Plek.find("local-links-manager")
 
-      def stub_local_links_manager_has_a_link(authority_slug:, lgsl:, lgil:, url:, country_name: "England", status: "ok", snac: "00AG", local_custodian_code: nil)
+      def stub_local_links_manager_has_a_link(authority_slug:, lgsl:, lgil:, url:, country_name: "England", status: "ok", snac: "00AG", gss: "EE06000063", local_custodian_code: nil)
         response = {
           "local_authority" => {
             "name" => authority_slug.capitalize,
-            "snac" => snac,
+            "gss" => gss,
             "tier" => "unitary",
             "homepage_url" => "http://#{authority_slug}.example.com",
             "country_name" => country_name,
@@ -22,6 +22,7 @@ module GdsApi
             "status" => status,
           },
         }
+        response["local_authority"]["snac"] = snac if snac
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
           .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
@@ -34,17 +35,18 @@ module GdsApi
         end
       end
 
-      def stub_local_links_manager_has_no_link(authority_slug:, lgsl:, lgil:, country_name: "England", snac: "00AG", local_custodian_code: nil)
+      def stub_local_links_manager_has_no_link(authority_slug:, lgsl:, lgil:, country_name: "England", snac: "00AG", gss: "EE06000063", local_custodian_code: nil)
         response = {
           "local_authority" => {
             "name" => authority_slug.capitalize,
-            "snac" => snac,
+            "gss" => gss,
             "tier" => "unitary",
             "homepage_url" => "http://#{authority_slug}.example.com",
             "country_name" => country_name,
             "slug" => authority_slug,
           },
         }
+        response["local_authority"]["snac"] = snac if snac
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
           .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
@@ -57,17 +59,18 @@ module GdsApi
         end
       end
 
-      def stub_local_links_manager_has_no_link_and_no_homepage_url(authority_slug:, lgsl:, lgil:, country_name: "England", snac: "00AG", local_custodian_code: nil)
+      def stub_local_links_manager_has_no_link_and_no_homepage_url(authority_slug:, lgsl:, lgil:, country_name: "England", snac: "00AG", gss: "EE06000063", local_custodian_code: nil)
         response = {
           "local_authority" => {
             "name" => authority_slug.capitalize,
-            "snac" => snac,
+            "gss" => gss,
             "tier" => "unitary",
             "homepage_url" => nil,
             "country_name" => country_name,
             "slug" => authority_slug,
           },
         }
+        response["local_authority"]["snac"] = snac if snac
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
           .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
@@ -98,7 +101,7 @@ module GdsApi
         parameters
       end
 
-      def stub_local_links_manager_has_a_local_authority(authority_slug, country_name: "England", snac: "00AG", local_custodian_code: nil)
+      def stub_local_links_manager_has_a_local_authority(authority_slug, country_name: "England", snac: "00AG", gss: "EE06000063", local_custodian_code: nil)
         response = {
           "local_authorities" => [
             {
@@ -107,10 +110,11 @@ module GdsApi
               "country_name" => country_name,
               "tier" => "unitary",
               "slug" => authority_slug,
-              "snac" => snac,
+              "gss" => gss,
             },
           ],
         }
+        response["local_authorities"][0]["snac"] = snac if snac
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
           .with(query: { authority_slug: authority_slug })
@@ -123,7 +127,7 @@ module GdsApi
         end
       end
 
-      def stub_local_links_manager_has_a_district_and_county_local_authority(district_slug, county_slug, district_snac: "00AG", county_snac: "00LC", local_custodian_code: nil)
+      def stub_local_links_manager_has_a_district_and_county_local_authority(district_slug, county_slug, district_snac: "00AG", county_snac: "00LC", district_gss: "EE06000063", county_gss: "EE06000064", local_custodian_code: nil)
         response = {
           "local_authorities" => [
             {
@@ -132,7 +136,7 @@ module GdsApi
               "country_name" => "England",
               "tier" => "district",
               "slug" => district_slug,
-              "snac" => district_snac,
+              "gss" => district_gss,
             },
             {
               "name" => county_slug.capitalize,
@@ -140,10 +144,12 @@ module GdsApi
               "country_name" => "England",
               "tier" => "county",
               "slug" => county_slug,
-              "snac" => county_snac,
+              "gss" => county_gss,
             },
           ],
         }
+        response["local_authorities"][0]["snac"] = district_snac if district_snac
+        response["local_authorities"][1]["snac"] = county_snac if county_snac
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
           .with(query: { authority_slug: district_slug })
@@ -180,7 +186,7 @@ module GdsApi
           .to_return(body: {}.to_json, status: 404)
       end
 
-      def stub_local_links_manager_has_a_local_authority_without_homepage(authority_slug, country_name: "England", snac: "00AG", local_custodian_code: nil)
+      def stub_local_links_manager_has_a_local_authority_without_homepage(authority_slug, country_name: "England", snac: "00AG", gss: "EE06000063", local_custodian_code: nil)
         response = {
           "local_authorities" => [
             {
@@ -189,10 +195,11 @@ module GdsApi
               "country_name" => country_name,
               "tier" => "unitary",
               "slug" => authority_slug,
-              "snac" => snac,
+              "gss" => gss,
             },
           ],
         }
+        response["local_authorities"][0]["snac"] = snac if snac
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
           .with(query: { authority_slug: authority_slug })
