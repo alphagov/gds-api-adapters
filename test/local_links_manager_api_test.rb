@@ -69,6 +69,30 @@ describe GdsApi::LocalLinksManager do
         assert_equal expected_response, response.to_hash
       end
 
+      it "returns the local authority details only without snac if no link present and no SNAC" do
+        stub_local_links_manager_has_no_link(
+          authority_slug: "westminster",
+          lgsl: 461,
+          lgil: 8,
+          country_name: "England",
+          snac: nil,
+        )
+
+        expected_response = {
+          "local_authority" => {
+            "name" => "Westminster",
+            "gss" => "EE06000063",
+            "tier" => "unitary",
+            "homepage_url" => "http://westminster.example.com",
+            "country_name" => "England",
+            "slug" => "westminster",
+          },
+        }
+
+        response = @api.local_link("westminster", 461, 8)
+        assert_equal expected_response, response.to_hash
+      end
+
       it "returns the local authority without a homepage url if no homepage link present" do
         stub_local_links_manager_has_no_link_and_no_homepage_url(
           authority_slug: "blackburn",
