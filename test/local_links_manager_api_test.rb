@@ -26,6 +26,7 @@ describe GdsApi::LocalLinksManager do
           "local_authority" => {
             "name" => "Blackburn",
             "snac" => "00AG",
+            "gss" => "EE06000063",
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.example.com",
             "country_name" => "England",
@@ -56,6 +57,31 @@ describe GdsApi::LocalLinksManager do
           "local_authority" => {
             "name" => "Westminster",
             "snac" => "00BK",
+            "gss" => "EE06000063",
+            "tier" => "unitary",
+            "homepage_url" => "http://westminster.example.com",
+            "country_name" => "England",
+            "slug" => "westminster",
+          },
+        }
+
+        response = @api.local_link("westminster", 461, 8)
+        assert_equal expected_response, response.to_hash
+      end
+
+      it "returns the local authority details only without snac if no link present and no SNAC" do
+        stub_local_links_manager_has_no_link(
+          authority_slug: "westminster",
+          lgsl: 461,
+          lgil: 8,
+          country_name: "England",
+          snac: nil,
+        )
+
+        expected_response = {
+          "local_authority" => {
+            "name" => "Westminster",
+            "gss" => "EE06000063",
             "tier" => "unitary",
             "homepage_url" => "http://westminster.example.com",
             "country_name" => "England",
@@ -79,6 +105,7 @@ describe GdsApi::LocalLinksManager do
           "local_authority" => {
             "name" => "Blackburn",
             "snac" => "00AG",
+            "gss" => "EE06000063",
             "tier" => "unitary",
             "homepage_url" => nil,
             "country_name" => "England",
@@ -161,6 +188,7 @@ describe GdsApi::LocalLinksManager do
           "local_authority" => {
             "name" => "Blackburn",
             "snac" => "00AG",
+            "gss" => "EE06000063",
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.example.com",
             "country_name" => "England",
@@ -191,6 +219,7 @@ describe GdsApi::LocalLinksManager do
           "local_authority" => {
             "name" => "Blackburn",
             "snac" => "00AG",
+            "gss" => "EE06000063",
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.example.com",
             "country_name" => "England",
@@ -215,6 +244,7 @@ describe GdsApi::LocalLinksManager do
           "local_authority" => {
             "name" => "Blackburn",
             "snac" => "00AG",
+            "gss" => "EE06000063",
             "tier" => "unitary",
             "homepage_url" => nil,
             "country_name" => "England",
@@ -283,7 +313,7 @@ describe GdsApi::LocalLinksManager do
   describe "#local_authority" do
     describe "when making a request for a local authority with a parent" do
       it "should return the local authority and its parent" do
-        stub_local_links_manager_has_a_district_and_county_local_authority("blackburn", "rochester", district_snac: "test1", county_snac: "test2")
+        stub_local_links_manager_has_a_district_and_county_local_authority("blackburn", "rochester", district_snac: "test1", county_snac: "test2", district_gss: "test1gss", county_gss: "test2gss")
 
         expected_response = {
           "local_authorities" => [
@@ -293,6 +323,7 @@ describe GdsApi::LocalLinksManager do
               "country_name" => "England",
               "tier" => "district",
               "slug" => "blackburn",
+              "gss" => "test1gss",
               "snac" => "test1",
             },
             {
@@ -301,6 +332,7 @@ describe GdsApi::LocalLinksManager do
               "country_name" => "England",
               "tier" => "county",
               "slug" => "rochester",
+              "gss" => "test2gss",
               "snac" => "test2",
             },
           ],
@@ -324,6 +356,7 @@ describe GdsApi::LocalLinksManager do
               "tier" => "unitary",
               "slug" => "blackburn",
               "snac" => "00AG",
+              "gss" => "EE06000063",
             },
           ],
         }
@@ -365,6 +398,7 @@ describe GdsApi::LocalLinksManager do
               "country_name" => "England",
               "tier" => "district",
               "slug" => "blackburn",
+              "gss" => "EE06000063",
               "snac" => "00AG",
             },
             {
@@ -373,6 +407,7 @@ describe GdsApi::LocalLinksManager do
               "country_name" => "England",
               "tier" => "county",
               "slug" => "rochester",
+              "gss" => "EE06000064",
               "snac" => "00LC",
             },
           ],
@@ -396,6 +431,7 @@ describe GdsApi::LocalLinksManager do
               "tier" => "unitary",
               "slug" => "blackburn",
               "snac" => "00AG",
+              "gss" => "EE06000063",
             },
           ],
         }
