@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add support in test helpers for minor change to Local Links Manager API responses.
+
 # 87.0.0
 
 * BREAKING: Drop support for Ruby 2.7.
