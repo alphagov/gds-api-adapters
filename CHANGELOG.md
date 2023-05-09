@@ -1,4 +1,4 @@
-# Unreleased
+# 87.1.0
 
 * Add support in test helpers for minor change to Local Links Manager API responses.
 
