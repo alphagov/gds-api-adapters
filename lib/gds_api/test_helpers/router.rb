@@ -32,7 +32,6 @@ module GdsApi
       def stub_all_router_registration
         stub_request(:put, %r{\A#{ROUTER_API_ENDPOINT}/backends/[a-z0-9-]+\z})
         stub_request(:put, "#{ROUTER_API_ENDPOINT}/routes")
-        stub_request(:post, "#{ROUTER_API_ENDPOINT}/routes/commit")
       end
 
       def stub_router_backend_registration(backend_id, backend_url)
@@ -43,22 +42,18 @@ module GdsApi
       end
 
       def stub_route_registration(path, type, backend_id)
-        route = {
+        stub_route_put({
           route: {
             incoming_path: path,
             route_type: type,
             handler: "backend",
             backend_id: backend_id,
           },
-        }
-
-        register_stub = stub_route_put(route)
-        commit_stub = stub_router_commit
-        [register_stub, commit_stub]
+        })
       end
 
       def stub_redirect_registration(path, type, destination, redirect_type, segments_mode = nil)
-        redirect = {
+        stub_route_put({
           route: {
             incoming_path: path,
             route_type: type,
@@ -67,29 +62,17 @@ module GdsApi
             redirect_type: redirect_type,
             segments_mode: segments_mode,
           },
-        }
-
-        register_stub = stub_route_put(redirect)
-        commit_stub = stub_router_commit
-        [register_stub, commit_stub]
+        })
       end
 
       def stub_gone_route_registration(path, type)
-        route = {
+        stub_route_put({
           route: {
             incoming_path: path,
             route_type: type,
             handler: "gone",
           },
-        }
-
-        register_stub = stub_route_put(route)
-        commit_stub = stub_router_commit
-        [register_stub, commit_stub]
-      end
-
-      def stub_router_commit
-        stub_http_request(:post, "#{ROUTER_API_ENDPOINT}/routes/commit")
+        })
       end
 
     private
