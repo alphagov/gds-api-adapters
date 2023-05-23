@@ -1,3 +1,7 @@
+# 88.0.0
+
+* BREAKING: `Router::add_route`, `add_gone_route` and `delete_route` methods no longer take an `options` parameter. The change is purely syntactic, as the only recognised option (`commit`) has been a no-op since April 2021. The `stub_*` methods in `TestHelpers::Router` now return the request stub directly instead of returning a pair of stubs (the second of which was never used).
+
 # 87.1.0
 
 * Add support in test helpers for minor change to Local Links Manager API responses.
