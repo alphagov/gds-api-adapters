@@ -309,6 +309,123 @@ describe "GdsApi::EmailAlertApi pact tests" do
     end
   end
 
+  describe "#bulk-migrate" do
+    it "responds with a 202" do
+      email_alert_api
+        .given("subscriber lists exist with 'source_list_slug' and 'destination_list_slug'")
+        .upon_receiving("the request to bulk migrate users from source list to destination list")
+        .with(
+          method: :post,
+          path: "/subscriber-lists/bulk-migrate",
+          body: {
+            from_slug: "source_list_slug",
+            to_slug: "destination_list_slug",
+          },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 202,
+        )
+
+      api_client.bulk_migrate(from_slug: "source_list_slug", to_slug: "destination_list_slug")
+    end
+
+    it "responds with a 404" do
+      email_alert_api
+        .given("a subscriber list exists for 'source_slug'")
+        .upon_receiving("the request to bulk migrate users to a subscriber list with slug:'destination_list_slug' which does not exist")
+        .with(
+          method: :post,
+          path: "/subscriber-lists/bulk-migrate",
+          body: {
+            from_slug: "source_list_slug",
+            to_slug: "destination_list_slug",
+          },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 404,
+        )
+
+      begin
+        api_client.bulk_migrate(from_slug: "source_list_slug", to_slug: "destination_list_slug")
+      rescue GdsApi::HTTPNotFound
+        # This is expected
+      end
+    end
+
+    it "responds with a 404" do
+      email_alert_api
+        .given("a subscriber list exists for 'destination_slug'")
+        .upon_receiving("the request to bulk migrate users from a subscriber list with slug:'source_list_slug' which does not exist")
+        .with(
+          method: :post,
+          path: "/subscriber-lists/bulk-migrate",
+          body: {
+            from_slug: "source_list_slug",
+            to_slug: "destination_list_slug",
+          },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 404,
+        )
+
+      begin
+        api_client.bulk_migrate(from_slug: "source_list_slug", to_slug: "destination_list_slug")
+      rescue GdsApi::HTTPNotFound
+        # this is expected
+      end
+    end
+
+    it "responds with a 422" do
+      email_alert_api
+        .given("subscriber lists exist with 'source_list_slug' and 'destination_list_slug'")
+        .upon_receiving("the request to bulk migrate without from_slug")
+        .with(
+          method: :post,
+          path: "/subscriber-lists/bulk-migrate",
+          body: {
+            from_slug: "",
+            to_slug: "destination_list_slug",
+          },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 422,
+        )
+      begin
+        api_client.bulk_migrate(from_slug: "", to_slug: "destination_list_slug")
+      rescue GdsApi::HTTPUnprocessableEntity
+        # this is expected
+      end
+    end
+
+    it "responds with a 422" do
+      email_alert_api
+        .given("subscriber lists exist with 'source_list_slug' and 'destination_list_slug'")
+        .upon_receiving("the request to bulk migrate without to_slug")
+        .with(
+          method: :post,
+          path: "/subscriber-lists/bulk-migrate",
+          body: {
+            from_slug: "source_list_slug",
+            to_slug: "",
+          },
+          headers: GdsApi::JsonClient.default_request_with_json_body_headers,
+        )
+        .will_respond_with(
+          status: 422,
+        )
+
+      begin
+        api_client.bulk_migrate(from_slug: "source_list_slug", to_slug: "")
+      rescue GdsApi::HTTPUnprocessableEntity
+        # this is expected
+      end
+    end
+  end
+
   describe "#unsubscribe" do
     it "responds with a 404" do
       email_alert_api
