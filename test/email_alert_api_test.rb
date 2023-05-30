@@ -933,6 +933,52 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
+  describe "bulk_migrate" do
+    let(:from_slug) { "i_am_a_subscriber_list_slug" }
+    let(:to_slug) { "i_am_another_subscriber_list_slug" }
+
+    it "returns 202 if valid to_slug and from_slug are provided" do
+      stub_email_alert_api_bulk_migrate(
+        from_slug: from_slug,
+        to_slug: to_slug,
+      )
+      api_response = api_client.bulk_migrate(from_slug: from_slug, to_slug: to_slug)
+
+      assert_equal(202, api_response.code)
+    end
+
+    it "returns 404 if the subscription list is not found" do
+      stub_email_alert_api_bulk_migrate_not_found(
+        from_slug: from_slug,
+        to_slug: to_slug,
+      )
+
+      assert_raises GdsApi::HTTPNotFound do
+        api_client.bulk_migrate(from_slug: from_slug, to_slug: to_slug)
+      end
+    end
+
+    it "returns 422 if either from_slug or to_slug are missing" do
+      stub_email_alert_api_bulk_migrate_bad_request(
+        from_slug: from_slug,
+        to_slug: "",
+      )
+
+      assert_raises GdsApi::HTTPUnprocessableEntity do
+        api_client.bulk_migrate(from_slug: from_slug, to_slug: "")
+      end
+
+      stub_email_alert_api_bulk_migrate_bad_request(
+        from_slug: "",
+        to_slug: to_slug,
+      )
+
+      assert_raises GdsApi::HTTPUnprocessableEntity do
+        api_client.bulk_migrate(from_slug: "", to_slug: to_slug)
+      end
+    end
+  end
+
   describe "update_subscriber_list_details" do
     let(:slug) { "i_am_a_subscriber_list_slug" }
 
