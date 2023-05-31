@@ -92,7 +92,7 @@ class JsonClientTest < MiniTest::Spec
     assert_equal "response body goes here", error.http_body
   end
 
-  def test_get_bang_should_raise_http_forbidden_if_403_returned_from_endpoint
+  def test_get_should_raise_if_403_returned_from_endpoint
     url = "http://some.endpoint/some.json"
     stub_request(:get, url).to_return(body: "{}", status: 403)
     assert_raises GdsApi::HTTPForbidden do
