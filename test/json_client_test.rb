@@ -291,11 +291,6 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
-  def empty_response
-    net_http_response = stub(body: "{}")
-    GdsApi::Response.new(net_http_response)
-  end
-
   def test_put_json_does_put_with_json_encoded_packet
     url = "http://some.endpoint/some.json"
     payload = { a: 1 }
