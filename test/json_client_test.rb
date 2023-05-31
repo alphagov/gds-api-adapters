@@ -49,9 +49,9 @@ class JsonClientTest < MiniTest::Spec
 
   def test_post_should_raise_endpoint_not_found_if_connection_refused
     url = "http://some.endpoint/some.json"
-    stub_request(:get, url).to_raise(Errno::ECONNREFUSED)
+    stub_request(:post, url).to_raise(Errno::ECONNREFUSED)
     assert_raises GdsApi::EndpointNotFound do
-      @client.get_json(url)
+      @client.post_json(url)
     end
   end
 
