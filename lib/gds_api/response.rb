@@ -9,7 +9,6 @@ module GdsApi
   # GOV.UK context.  However on internal systems we want to present relative URLs.
   # By specifying a base URI, this will convert all matching web_urls into relative URLs
   # This is useful on non-canonical frontends, such as those in staging environments.
-  # See: https://github.com/alphagov/wiki/wiki/API-conventions for details on the API conventions
   #
   # Example:
   #
