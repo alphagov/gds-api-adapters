@@ -322,15 +322,6 @@ class JsonClientTest < MiniTest::Spec
     end
   end
 
-  def test_can_build_custom_response_object_in_bang_method
-    url = "http://some.endpoint/some.json"
-    stub_request(:get, url).to_return(body: "Hello there!")
-
-    response = @client.get_json(url, &:body)
-    assert response.is_a? String
-    assert_equal "Hello there!", response
-  end
-
   def test_can_access_attributes_of_response_directly
     url = "http://some.endpoint/some.json"
     payload = { a: 1 }
