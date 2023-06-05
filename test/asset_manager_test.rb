@@ -22,7 +22,7 @@ describe GdsApi::AssetManager do
     }
   end
 
-  it "creates an asset with a file" do
+  it "creates the asset with a file" do
     req = stub_request(:post, "#{base_api_url}/assets")
       .with { |request|
         request.body =~ %r{Content-Disposition: form-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent-Type: text/plain}
@@ -46,7 +46,7 @@ describe GdsApi::AssetManager do
     assert_requested(req)
   end
 
-  it "returns not found when an asset does not exist" do
+  it "returns not found when the asset does not exist" do
     stub_asset_manager_does_not_have_an_asset("not-really-here")
 
     assert_raises GdsApi::HTTPNotFound do
@@ -66,7 +66,7 @@ describe GdsApi::AssetManager do
     end
   end
 
-  describe "an asset exists" do
+  describe "the asset exists" do
     before do
       stub_asset_manager_has_an_asset(
         asset_id,
@@ -78,7 +78,7 @@ describe GdsApi::AssetManager do
 
     let(:asset_id) { "test-id" }
 
-    it "updates an asset with a file" do
+    it "updates the asset with a file" do
       req = stub_request(:put, "#{base_api_url}/assets/test-id")
         .to_return(body: JSON.dump(stub_asset_manager_response), status: 200)
 
@@ -88,7 +88,7 @@ describe GdsApi::AssetManager do
       assert_requested(req)
     end
 
-    it "retrieves an asset" do
+    it "retrieves the asset's metadata" do
       asset = api.asset(asset_id)
 
       assert_equal "photo.jpg", asset["name"]
@@ -105,7 +105,7 @@ describe GdsApi::AssetManager do
       )
     end
 
-    it "retrieves an asset" do
+    it "retrieves the asset's metadata" do
       asset = api.whitehall_asset("/government/uploads/photo.jpg")
 
       assert_equal "asset-id", asset["id"]
@@ -120,14 +120,14 @@ describe GdsApi::AssetManager do
       )
     end
 
-    it "retrieves an asset" do
+    it "retrieves the asset's metadata" do
       asset = api.whitehall_asset("/government/uploads/photø.jpg")
 
       assert_equal "asset-id", asset["id"]
     end
   end
 
-  it "deletes an asset for the given id" do
+  it "deletes the asset for the given id" do
     req = stub_request(:delete, "#{base_api_url}/assets/#{asset_id}")
       .to_return(body: JSON.dump(stub_asset_manager_response), status: 200)
 
@@ -137,7 +137,7 @@ describe GdsApi::AssetManager do
     assert_requested(req)
   end
 
-  it "restores an asset for the given id" do
+  it "restores the asset for the given id" do
     req = stub_request(:post, "#{base_api_url}/assets/#{asset_id}/restore")
       .to_return(body: JSON.dump(stub_asset_manager_response), status: 200)
 

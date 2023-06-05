@@ -188,11 +188,11 @@ describe "GdsApi::AssetManager pact tests" do
       end
     end
 
-    describe "#get whitehall asset" do
-      it "gets a whitehall asset" do
+    describe "#get whitehall asset metadata" do
+      it "gets a whitehall asset's metadata" do
         asset_manager
           .given("a whitehall asset exists with legacy url path #{legacy_url_path} and id #{content_id}")
-          .upon_receiving("a get whitehall asset request")
+          .upon_receiving("a get whitehall asset metadata request")
           .with(
             method: :get,
             path: "/whitehall_assets/#{legacy_url_path}",
