@@ -228,6 +228,17 @@ class GdsApi::AssetManager < GdsApi::Base
     post_json("#{base_url}/assets/#{id}/restore")
   end
 
+  # Fetches a Whitehall asset given the legacy URL path
+  #
+  # @param legacy_url_path [String] The Whitehall asset identifier.
+  # @return [GdsApi::Response] A response object containing the raw asset.
+  #   If the asset cannot be found, +GdsApi::HTTPNotFound+ will be raised.
+  #
+  # @raise [HTTPErrorResponse] if the request returns an error
+  def whitehall_media(legacy_url_path)
+    get_raw("#{base_url}/#{uri_encode(legacy_url_path)}")
+  end
+
 private
 
   def base_url

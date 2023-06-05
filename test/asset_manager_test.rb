@@ -110,6 +110,12 @@ describe GdsApi::AssetManager do
 
       assert_equal "asset-id", asset["id"]
     end
+
+    it "retrieves the asset" do
+      asset = api.whitehall_media("/government/uploads/photo.jpg")
+
+      assert_equal "Some file content", asset.body
+    end
   end
 
   describe "a Whitehall asset with a legacy_url_path containing non-ascii characters exists" do
