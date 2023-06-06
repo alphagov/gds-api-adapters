@@ -1,4 +1,4 @@
-# Unreleased
+# 88.2.0
 
 * Add `whitehall_media` method to Asset Manager.
 
