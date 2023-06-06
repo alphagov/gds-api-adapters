@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add `whitehall_media` method to Asset Manager.
+
 # 88.1.0
 
 * Add support for email-alert-api's bulk migrate endpoint

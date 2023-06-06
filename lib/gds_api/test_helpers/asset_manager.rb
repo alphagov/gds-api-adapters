@@ -33,6 +33,9 @@ module GdsApi
 
         stub_request(:get, "#{ASSET_MANAGER_ENDPOINT}/whitehall_assets/#{legacy_url_path}")
           .to_return(body: response.to_json, status: 200)
+
+        stub_request(:get, "#{ASSET_MANAGER_ENDPOINT}/#{legacy_url_path}")
+          .to_return(body: "Some file content", status: 200)
       end
 
       def stub_asset_manager_does_not_have_an_asset(id)

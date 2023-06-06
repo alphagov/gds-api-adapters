@@ -15,6 +15,9 @@ describe "GdsApi::AssetManager pact tests" do
   let(:json_content_type) do
     { "Content-Type" => "application/json; charset=utf-8" }
   end
+  let(:text_content_type) do
+    { "Content-Type" => "text/plain; charset=utf-8" }
+  end
   let(:asset_details) { "\r\nContent-Disposition: form-data; name=\"asset[file]\"; filename=\"hello.txt\"\r\nContent-Type: text/plain\r\n\r\nHello, world!\n\r\n" }
   let(:asset_details_regex) { /\s+Content-Disposition: form-data; name="asset\[file\]"; filename="hello.txt"\s+Content-Type: text\/plain\s+Hello, world!\s+/ }
 
@@ -188,11 +191,11 @@ describe "GdsApi::AssetManager pact tests" do
       end
     end
 
-    describe "#get whitehall asset" do
-      it "gets a whitehall asset" do
+    describe "#get whitehall asset metadata" do
+      it "gets a whitehall asset's metadata" do
         asset_manager
           .given("a whitehall asset exists with legacy url path #{legacy_url_path} and id #{content_id}")
-          .upon_receiving("a get whitehall asset request")
+          .upon_receiving("a get whitehall asset metadata request")
           .with(
             method: :get,
             path: "/whitehall_assets/#{legacy_url_path}",
@@ -203,6 +206,22 @@ describe "GdsApi::AssetManager pact tests" do
           )
 
         api_client.whitehall_asset(legacy_url_path)
+      end
+    end
+
+    describe "#get whitehall asset" do
+      it "gets a whitehall asset" do
+        asset_manager
+          .given("a whitehall asset exists with legacy url path #{legacy_url_path} and id #{content_id}")
+          .upon_receiving("a get whitehall asset request")
+          .with(
+            method: :get,
+            path: legacy_url_path,
+          ).will_respond_with(
+            status: 200,
+          )
+
+        api_client.whitehall_media(legacy_url_path)
       end
     end
 

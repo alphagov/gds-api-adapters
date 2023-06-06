@@ -128,7 +128,7 @@ class GdsApi::AssetManager < GdsApi::Base
     post_multipart("#{base_url}/whitehall_assets", asset: asset)
   end
 
-  # Fetches a Whitehall asset given the legacy URL path
+  # Fetches a Whitehall asset's metadata given the legacy URL path
   #
   # @param legacy_url_path [String] The Whitehall asset identifier.
   # @return [GdsApi::Response] A response object containing the parsed JSON
@@ -171,7 +171,7 @@ class GdsApi::AssetManager < GdsApi::Base
     put_multipart("#{base_url}/assets/#{id}", asset: asset)
   end
 
-  # Fetches an asset given the id
+  # Fetches an asset's metadata given the id
   #
   # @param id [String] The asset identifier (a UUID).
   # @return [GdsApi::Response, nil] A response object containing the parsed JSON response. If
@@ -226,6 +226,17 @@ class GdsApi::AssetManager < GdsApi::Base
   #   asset_manager.restore_asset(uuid)
   def restore_asset(id)
     post_json("#{base_url}/assets/#{id}/restore")
+  end
+
+  # Fetches a Whitehall asset given the legacy URL path
+  #
+  # @param legacy_url_path [String] The Whitehall asset identifier.
+  # @return [GdsApi::Response] A response object containing the raw asset.
+  #   If the asset cannot be found, +GdsApi::HTTPNotFound+ will be raised.
+  #
+  # @raise [HTTPErrorResponse] if the request returns an error
+  def whitehall_media(legacy_url_path)
+    get_raw("#{base_url}/#{uri_encode(legacy_url_path)}")
   end
 
 private
