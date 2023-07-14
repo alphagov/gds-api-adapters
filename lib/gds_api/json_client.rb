@@ -157,7 +157,7 @@ module GdsApi
     end
 
     def do_request(method, url, params = nil, additional_headers = {})
-      loggable = { request_uri: url, start_time: Time.now.to_f }
+      loggable = { request_uri: url, start_time: Time.now.to_f, govuk_request_id: GdsApi::GovukHeaders.headers[:govuk_request_id] }.compact
       start_logging = loggable.merge(action: "start")
       logger.debug start_logging.to_json
 
