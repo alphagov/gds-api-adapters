@@ -1,4 +1,4 @@
-# Unreleased
+# 89.0.0
 
 * BREAKING: Change source for `GdsApi.worldwide.world_locations` method and remove pagination.
 * Change source for `GdsApi.worldwide.world_location` method (the response is backwards compatible).
