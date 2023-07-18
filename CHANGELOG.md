@@ -1,3 +1,7 @@
+# Unreleased
+
+* Change source for `GdsApi.worldwide.world_location` method (the response is backwards compatible).
+
 # 88.2.0
 
 * Add `whitehall_media` method to Asset Manager.

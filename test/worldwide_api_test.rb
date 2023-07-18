@@ -42,14 +42,14 @@ describe GdsApi::Worldwide do
 
   describe "fetching a world location" do
     it "should return the details" do
-      stub_worldwide_api_has_location("rohan")
+      stub_worldwide_api_has_locations(%w[rohan])
 
       response = @api.world_location("rohan")
       assert_equal "Rohan", response["title"]
     end
 
     it "raises for a non-existent location" do
-      stub_worldwide_api_does_not_have_location("non-existent")
+      stub_worldwide_api_has_locations(%w[rohan])
 
       assert_raises(GdsApi::HTTPNotFound) do
         @api.world_location("non-existent")

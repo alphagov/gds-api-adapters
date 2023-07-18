@@ -49,42 +49,6 @@ describe "GdsApi::Worldwide pact tests" do
   end
 
   describe "#world_location" do
-    it "responds with 200 and requested world location" do
-      whitehall_api
-        .given("a world location exists")
-        .upon_receiving("a request to return a specific world location")
-        .with(
-          method: :get,
-          path: "/api/world-locations/france",
-          headers: GdsApi::JsonClient.default_request_headers,
-        )
-        .will_respond_with(
-          status: 200,
-          body: {
-            id: Pact.like("https://www.gov.uk/api/world-locations/france"),
-            title: "France",
-            format: "World location",
-            updated_at: Pact.like("2020-09-02T06:47:34.000+01:00"),
-            web_url: Pact.like("https://www.gov.uk/world/france"),
-            analytics_identifier: Pact.like("WL1"),
-            details: {
-              slug: "france",
-              iso2: nil,
-            },
-            organisations: Pact.like(
-              id: "https://www.gov.uk/api/world-locations/france/organisations",
-              web_url: "https://www.gov.uk/world/france#organisations",
-            ),
-            content_id: Pact.like("5e9ecbce-7706-11e4-a3cb-005056011aef"),
-          },
-          headers: {
-            "Content-Type" => "application/json; charset=utf-8",
-          },
-        )
-
-      api_client.world_location("france")
-    end
-
     describe "#organisations_for_world_location" do
       it "responds with 200 and all worldwide organisations" do
         whitehall_api

@@ -14,10 +14,48 @@ module GdsApi
       # This also sets up the individual endpoints for each slug
       # by calling stub_worldwide_api_has_location below
       def stub_worldwide_api_has_locations(location_slugs)
+        international_delegation_slugs = location_slugs.select do |slug|
+          slug =~ /(delegation|mission)/
+        end
+
+        international_delegations = international_delegation_slugs.map do |slug|
+          {
+            "active": true,
+            "analytics_identifier": "WL1",
+            "content_id": "content_id_for_#{slug}",
+            "iso2": slug[0..1].upcase,
+            "name": titleize_slug(slug, title_case: true),
+            "slug": slug,
+            "updated_at": "2013-03-25T13:06:42+00:00",
+          }
+        end
+
+        world_locations = (location_slugs - international_delegation_slugs).map do |slug|
+          {
+            "active": true,
+            "analytics_identifier": "WL1",
+            "content_id": "content_id_for_#{slug}",
+            "iso2": slug[0..1].upcase,
+            "name": titleize_slug(slug, title_case: true),
+            "slug": slug,
+            "updated_at": "2013-03-25T13:06:42+00:00",
+          }
+        end
+
+        content_item = {
+          "details": {
+            "international_delegation": international_delegations,
+            "world_locations": world_locations,
+          },
+        }
+
+        stub_request(:get, "#{WORLDWIDE_API_ENDPOINT}/api/content/world")
+            .to_return(status: 200, body: content_item.to_json)
+
         location_slugs.each { |s| stub_worldwide_api_has_location(s) }
         pages = []
         location_slugs.each_slice(20) do |slugs|
-          pages << slugs.map { |s| world_location_details_for_slug(s) }
+          pages << slugs.map { |s| stub_worldwide_api_has_locations(s) }
         end
 
         pages.each_with_index do |page, i|
@@ -51,52 +89,10 @@ module GdsApi
         end
       end
 
-      def stub_worldwide_api_has_selection_of_locations
-        stub_worldwide_api_has_locations %w[
-          afghanistan
-          angola
-          australia
-          bahamas
-          belarus
-          brazil
-          brunei
-          cambodia
-          chad
-          croatia
-          denmark
-          eritrea
-          france
-          ghana
-          iceland
-          japan
-          laos
-          luxembourg
-          malta
-          micronesia
-          mozambique
-          nicaragua
-          panama
-          portugal
-          sao-tome-and-principe
-          singapore
-          south-korea
-          sri-lanka
-          uk-delegation-to-council-of-europe
-          uk-delegation-to-organization-for-security-and-co-operation-in-europe
-          united-kingdom
-          venezuela
-          vietnam
-        ]
-      end
-
       def stub_worldwide_api_has_location(location_slug, details = nil)
         details ||= world_location_for_slug(location_slug)
         stub_request(:get, "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}")
           .to_return(status: 200, body: details.to_json)
-      end
-
-      def stub_worldwide_api_does_not_have_location(location_slug)
-        stub_request(:get, "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}").to_return(status: 404)
       end
 
       def stub_worldwide_api_has_organisations_for_location(location_slug, json_or_hash)
@@ -114,14 +110,14 @@ module GdsApi
       end
 
       def world_location_for_slug(slug)
-        singular_response_base.merge(world_location_details_for_slug(slug))
+        singular_response_base.merge(stub_worldwide_api_has_locations(slug))
       end
 
       # Constructs a sample world_location
       #
       # if the slug contains 'delegation' or 'mission' the format will be set to 'International delegation'
       # othersiwe it will be set to 'World location'
-      def world_location_details_for_slug(slug)
+      def stub_worldwide_api_has_locations(slug)
         {
           "id" => "https://www.gov.uk/api/world-locations/#{slug}",
           "title" => titleize_slug(slug, title_case: true),
