@@ -2,7 +2,7 @@ require_relative "base"
 
 class GdsApi::Worldwide < GdsApi::Base
   def world_locations
-    get_list("#{base_url}/world-locations")
+    all_world_locations
   end
 
   def world_location(location_slug)
