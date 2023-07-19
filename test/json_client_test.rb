@@ -613,6 +613,22 @@ class JsonClientTest < MiniTest::Spec
     assert_same client.logger, custom_logger
   end
 
+  def test_should_log_govuk_request_id_when_available
+    GdsApi::GovukHeaders.set_header(:govuk_request_id, "some-request-id")
+    custom_logger = mock
+    client = GdsApi::JsonClient.new(logger: custom_logger)
+    url = "http://www.example.com/timeout.json"
+    stub_request(:get, url).to_timeout
+
+    expected_string = "\"govuk_request_id\":\"some-request-id\""
+    custom_logger.expects(:debug).with(includes(expected_string))
+    custom_logger.expects(:error).with(includes(expected_string))
+
+    assert_raises do
+      client.get_json(url)
+    end
+  end
+
   def test_should_avoid_content_type_header_on_get_without_body
     url = "http://some.endpoint/some.json"
     stub_request(:any, url)
