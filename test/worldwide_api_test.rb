@@ -17,39 +17,20 @@ describe GdsApi::Worldwide do
       stub_worldwide_api_has_locations(country_slugs)
 
       response = @api.world_locations
-      assert_equal(country_slugs, response.map { |r| r["details"]["slug"] })
-      assert_equal "Rohan", response["results"][2]["title"]
-    end
-
-    it "should handle the pagination" do
-      country_slugs = (1..50).map { |n| "country-#{n}" }
-      stub_worldwide_api_has_locations(country_slugs)
-
-      response = @api.world_locations
-      assert_equal(
-        country_slugs,
-        response.with_subsequent_pages.map { |r| r["details"]["slug"] },
-      )
-    end
-
-    it "should raise error if endpoint 404s" do
-      stub_request(:get, "#{@base_api_url}/api/world-locations").to_return(status: 404)
-      assert_raises GdsApi::HTTPNotFound do
-        @api.world_locations
-      end
+      assert_equal(country_slugs, response.map { |r| r.dig("details", "slug") })
     end
   end
 
   describe "fetching a world location" do
     it "should return the details" do
-      stub_worldwide_api_has_location("rohan")
+      stub_worldwide_api_has_locations(%w[rohan])
 
       response = @api.world_location("rohan")
       assert_equal "Rohan", response["title"]
     end
 
     it "raises for a non-existent location" do
-      stub_worldwide_api_does_not_have_location("non-existent")
+      stub_worldwide_api_has_locations(%w[rohan])
 
       assert_raises(GdsApi::HTTPNotFound) do
         @api.world_location("non-existent")
