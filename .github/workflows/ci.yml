@@ -102,12 +102,6 @@ jobs:
     with:
       pact_artifact: pacts
 
-  whitehall_pact:
-    needs: generate_pacts
-    uses: alphagov/whitehall/.github/workflows/pact-verify.yml@main
-    with:
-      pact_artifact: pacts
-
   publish_pacts:
     needs:
       - account_api_pact
@@ -119,7 +113,6 @@ jobs:
       - link_checker_api_pact
       - locations_api_pact
       - publishing_api_pact
-      - whitehall_pact
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:

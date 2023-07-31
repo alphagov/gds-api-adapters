@@ -52,18 +52,28 @@ module GdsApi
         stub_worldwide_api_has_locations([location_slug])
       end
 
-      def stub_worldwide_api_has_organisations_for_location(location_slug, json_or_hash)
-        json = json_or_hash.is_a?(Hash) ? json_or_hash.to_json : json_or_hash
-        url = "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}/organisations"
-        stub_request(:get, url)
-          .to_return(status: 200, body: json, headers: { "Link" => "<#{url}; rel\"self\"" })
+      def stub_search_api_has_organisations_for_location(location_slug, organisation_content_items)
+        response = {
+          "results": organisation_content_items.map do |content_item|
+            {
+              "link": content_item["base_path"],
+            }
+          end,
+        }
+
+        stub_request(:get, "#{WORLDWIDE_API_ENDPOINT}/api/search.json?filter_format=worldwide_organisation&filter_world_locations=#{location_slug}")
+          .to_return(status: 200, body: response.to_json)
+
+        organisation_content_items.each do |content_item|
+          stub_content_store_has_worldwide_organisation(content_item)
+        end
       end
 
-      def stub_worldwide_api_has_no_organisations_for_location(location_slug)
-        details = { "results" => [], "total" => 0, "_response_info" => { "status" => "ok" } }
-        url = "#{WORLDWIDE_API_ENDPOINT}/api/world-locations/#{location_slug}/organisations"
-        stub_request(:get, url)
-          .to_return(status: 200, body: details.to_json, headers: { "Link" => "<#{url}; rel\"self\"" })
+      def stub_content_store_has_worldwide_organisation(content_item)
+        base_path = content_item["base_path"]
+
+        stub_request(:get, "#{WORLDWIDE_API_ENDPOINT}/api/content#{base_path}")
+          .to_return(status: 200, body: content_item.to_json)
       end
     end
   end
