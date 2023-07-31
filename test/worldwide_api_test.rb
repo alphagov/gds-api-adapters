@@ -40,25 +40,230 @@ describe GdsApi::Worldwide do
 
   describe "fetching organisations for a location" do
     it "should return the organisation details" do
-      details = JSON.parse(load_fixture_file("world_organisations_australia.json").read)
-      stub_worldwide_api_has_organisations_for_location("australia", details)
+      content_items = [
+        {
+          "base_path" => "/world/organisations/uk-trade-investment-australia",
+          "title" => "UK Trade & Investment Australia",
+          "updated_at" => "2023-07-31 07:00:12",
+          "analytics_identifier" => "WO1",
+          "links" => {
+            "main_office" => [
+              {
+                "title" => "Australia Office",
+                "web_url" => "https://www.dev.gov.uk/world/offices/australia",
+                "public_updated_at" => "2023-07-30 07:00:12",
+                "details" => {
+                  "access_and_opening_times" => "Open 9 to 5",
+                  "type" => "Other office",
+                },
+                "links" => {
+                  contact: [
+                    {
+                      "details" => {
+                        "email_addresses" => "australia@gov.uk",
+                        "description" => "An office in Australia",
+                        "contact_form_links" => "https://www.gov.uk",
+                        "post_addresses" => [
+                          "title" => "Office Name",
+                          "street_address" => "123 A Street",
+                          "postal_code" => "ABC123",
+                          "locality" => "Canberra",
+                          "region" => "Australian Capital Territory",
+                          "world_location" => "Australia",
+                        ],
+                        "phone_numbers" => [
+                          "title" => "Office number",
+                          "number" => "1234",
+                        ],
+                        "services" => [
+                          {
+                            "title" => "Trade advice",
+                            "type" => "Advice",
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            "home_page_offices" => [
+              {
+                "title" => "A second Australia Office",
+                "web_url" => "https://www.dev.gov.uk/world/offices/australia-2",
+                "public_updated_at" => "2023-07-30 07:00:12",
+                "details" => {
+                  "access_and_opening_times" => "Open 9 to 5",
+                  "type" => "Other office",
+                },
+                "links" => {
+                  contact: [
+                    {
+                      "details" => {
+                        "email_addresses" => "australia@gov.uk",
+                        "description" => "An office in Australia",
+                        "contact_form_links" => "https://www.gov.uk",
+                        "post_addresses" => [
+                          "title" => "Office Name",
+                          "street_address" => "456 A Street",
+                          "postal_code" => "ABC456",
+                          "locality" => "Canberra",
+                          "region" => "Australian Capital Territory",
+                          "world_location" => "Australia",
+                        ],
+                        "phone_numbers" => [
+                          "title" => "Office number",
+                          "number" => "5678",
+                        ],
+                        "services" => [
+                          {
+                            "title" => "Trade advice",
+                            "type" => "Advice",
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            "sponsoring_organisations" => [
+              {
+                "title" => "Foreign, Commonwealth and Development Office",
+                "web_url" => "https://www.fcdo.gov.uk",
+                "details" => {
+                  "acronym" => "FCDO",
+                },
+              },
+            ],
+          },
+        },
+        {
+          "base_path" => "/world/organisations/british-high-commission-canberra",
+          "title" => "British High Commission Canberra",
+          "updated_at" => "2023-07-31 09:00:12",
+          "analytics_identifier" => "WO2",
+        },
+      ]
+
+      stub_search_api_has_organisations_for_location("australia", content_items)
 
       response = @api.organisations_for_world_location("australia")
-      assert response.is_a?(GdsApi::ListResponse)
       assert_equal(
         [
-          "UK Trade & Investment Australia",
-          "British High Commission Canberra",
+          {
+            "id" => "#{Plek.new.website_root}/world/organisations/uk-trade-investment-australia",
+            "title" => "UK Trade & Investment Australia",
+            "format" => "Worldwide Organisation",
+            "updated_at" => "2023-07-31 07:00:12",
+            "web_url" => "#{Plek.new.website_root}/world/organisations/uk-trade-investment-australia",
+            "details" => {
+              "slug" => "uk-trade-investment-australia",
+            },
+            "analytics_identifier" => "WO1",
+            "offices" => {
+              "main" => {
+                "title" => "Australia Office",
+                "format" => "World Office",
+                "updated_at" => "2023-07-30 07:00:12",
+                "web_url" => "https://www.dev.gov.uk/world/offices/australia",
+                "details" => {
+                  "email" => "australia@gov.uk",
+                  "description" => "An office in Australia",
+                  "contact_form_url" => "https://www.gov.uk",
+                  "access_and_opening_times" => "Open 9 to 5",
+                  "type" => "Other office",
+                },
+                "address" => {
+                  "adr" => {
+                    "fn" => "Office Name",
+                    "street-address" => "123 A Street",
+                    "postal-code" => "ABC123",
+                    "locality" => "Canberra",
+                    "region" => "Australian Capital Territory",
+                    "country-name" => "Australia",
+                  },
+                },
+                "contact_numbers" => [
+                  {
+                    "label" => "Office number",
+                    "number" => "1234",
+                  },
+                ],
+                "services" => [
+                  {
+                    title: "Trade advice",
+                    type: "Advice",
+                  },
+                ],
+              },
+              "other" => [
+                {
+                  "title" => "A second Australia Office",
+                  "format" => "World Office",
+                  "updated_at" => "2023-07-30 07:00:12",
+                  "web_url" => "https://www.dev.gov.uk/world/offices/australia-2",
+                  "details" => {
+                    "email" => "australia@gov.uk",
+                    "description" => "An office in Australia",
+                    "contact_form_url" => "https://www.gov.uk",
+                    "access_and_opening_times" => "Open 9 to 5",
+                    "type" => "Other office",
+                  },
+                  "address" => {
+                    "adr" => {
+                      "fn" => "Office Name",
+                      "street-address" => "456 A Street",
+                      "postal-code" => "ABC456",
+                      "locality" => "Canberra",
+                      "region" => "Australian Capital Territory",
+                      "country-name" => "Australia",
+                    },
+                  },
+                  "contact_numbers" => [
+                    {
+                      "label" => "Office number",
+                      "number" => "5678",
+                    },
+                  ],
+                  "services" => [
+                    {
+                      title: "Trade advice",
+                      type: "Advice",
+                    },
+                  ],
+                },
+              ],
+            },
+            "sponsors" => [
+              {
+                "title" => "Foreign, Commonwealth and Development Office",
+                "web_url" => "https://www.fcdo.gov.uk",
+                "details" => {
+                  "acronym" => "FCDO",
+                },
+              },
+            ],
+          },
+          {
+            "id" => "#{Plek.new.website_root}/world/organisations/british-high-commission-canberra",
+            "title" => "British High Commission Canberra",
+            "format" => "Worldwide Organisation",
+            "updated_at" => "2023-07-31 09:00:12",
+            "web_url" => "#{Plek.new.website_root}/world/organisations/british-high-commission-canberra",
+            "details" => {
+              "slug" => "british-high-commission-canberra",
+            },
+            "analytics_identifier" => "WO2",
+            "offices" => {
+              "main" => {},
+              "other" => [],
+            },
+            "sponsors" => [],
+          },
         ],
-        response.map { |item| item["title"] },
+        response,
       )
-    end
-
-    it "should raise error on 404" do
-      stub_request(:get, "#{@base_api_url}/api/world-locations/non-existent/organisations").to_return(status: 404)
-      assert_raises GdsApi::HTTPNotFound do
-        @api.organisations_for_world_location("non-existent")
-      end
     end
   end
 end
