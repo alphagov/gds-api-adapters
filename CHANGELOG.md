@@ -1,4 +1,4 @@
-# Unreleased
+# 90.0.0
 
 * BREAKING: Change source for `GdsApi.worldwide.organisations_for_world_location` method, remove pagination and remove `stub_worldwide_api_has_organisations_for_location` method.
 
