@@ -4,7 +4,7 @@ require "gds_api/json_client"
 require "base64"
 require "null_logger"
 
-class JsonClientTest < MiniTest::Spec
+class JsonClientTest < Minitest::Spec
   def setup
     @client = GdsApi::JsonClient.new
 
