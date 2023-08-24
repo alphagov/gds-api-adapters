@@ -107,35 +107,6 @@ class GdsApi::AccountApi < GdsApi::Base
     patch_json("#{endpoint}/api/attributes", { attributes: attributes }, auth_headers(govuk_account_session))
   end
 
-  # Get the details of an account-linked email subscription.
-  #
-  # @param [String] name Name of the subscription
-  # @param [String] govuk_account_session Value of the session header
-  #
-  # @return [Hash] Details of the subscription, if it exists.
-  def get_email_subscription(name:, govuk_account_session:)
-    get_json("#{endpoint}/api/email-subscriptions/#{CGI.escape(name)}", auth_headers(govuk_account_session))
-  end
-
-  # Create or update an account-linked email subscription.
-  #
-  # @param [String] name Name of the subscription
-  # @param [String] topic_slug The email-alert-api topic slug to subscribe to
-  # @param [String] govuk_account_session Value of the session header
-  #
-  # @return [Hash] Details of the newly created subscription.
-  def put_email_subscription(name:, topic_slug:, govuk_account_session:)
-    put_json("#{endpoint}/api/email-subscriptions/#{CGI.escape(name)}", { topic_slug: topic_slug }, auth_headers(govuk_account_session))
-  end
-
-  # Unsubscribe and delete an account-linked email subscription.
-  #
-  # @param [String] name Name of the subscription
-  # @param [String] govuk_account_session Value of the session header
-  def delete_email_subscription(name:, govuk_account_session:)
-    delete_json("#{endpoint}/api/email-subscriptions/#{CGI.escape(name)}", {}, auth_headers(govuk_account_session))
-  end
-
 private
 
   def nested_query_string(params)
