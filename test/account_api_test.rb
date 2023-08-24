@@ -111,43 +111,6 @@ describe GdsApi::AccountApi do
     end
   end
 
-  describe "email subscriptions" do
-    describe "#get_email_subscription" do
-      it "returns the subscription details if it exists" do
-        stub_account_api_get_email_subscription(name: "foo")
-        assert(!api_client.get_email_subscription(name: "foo", govuk_account_session: session_id)["email_subscription"].nil?)
-      end
-
-      it "throws a 404 if it does not exist" do
-        stub_account_api_get_email_subscription_does_not_exist(name: "foo")
-        assert_raises GdsApi::HTTPNotFound do
-          api_client.get_email_subscription(name: "foo", govuk_account_session: session_id)
-        end
-      end
-    end
-
-    describe "#put_email_subscription" do
-      it "returns the new subscription details" do
-        stub_account_api_put_email_subscription(name: "foo", topic_slug: "slug")
-        assert(!api_client.put_email_subscription(name: "foo", topic_slug: "slug", govuk_account_session: session_id)["email_subscription"].nil?)
-      end
-    end
-
-    describe "#delete_email_subscription" do
-      it "returns no content if it exists" do
-        stub_account_api_delete_email_subscription(name: "foo")
-        assert_equal(204, api_client.delete_email_subscription(name: "foo", govuk_account_session: session_id).code)
-      end
-
-      it "throws a 404 if it does not exist" do
-        stub_account_api_delete_email_subscription_does_not_exist(name: "foo")
-        assert_raises GdsApi::HTTPNotFound do
-          api_client.delete_email_subscription(name: "foo", govuk_account_session: session_id)
-        end
-      end
-    end
-  end
-
   describe "attributes" do
     describe "#get_attributes" do
       describe "attributes exist" do
@@ -192,27 +155,6 @@ describe GdsApi::AccountApi do
       stub_account_api_unauthorized_set_attributes(attributes: { foo: %w[bar baz] })
       assert_raises GdsApi::HTTPUnauthorized do
         api_client.set_attributes(attributes: { foo: %w[bar baz] }, govuk_account_session: session_id)
-      end
-    end
-
-    it "throws a 401 if the user gets an email subscription" do
-      stub_account_api_unauthorized_get_email_subscription(name: "foo")
-      assert_raises GdsApi::HTTPUnauthorized do
-        api_client.get_email_subscription(name: "foo", govuk_account_session: session_id)
-      end
-    end
-
-    it "throws a 401 if the user updates an email subscription" do
-      stub_account_api_unauthorized_put_email_subscription(name: "foo")
-      assert_raises GdsApi::HTTPUnauthorized do
-        api_client.put_email_subscription(name: "foo", topic_slug: "slug", govuk_account_session: session_id)
-      end
-    end
-
-    it "throws a 401 if the user deletes an email subscription" do
-      stub_account_api_unauthorized_delete_email_subscription(name: "foo")
-      assert_raises GdsApi::HTTPUnauthorized do
-        api_client.delete_email_subscription(name: "foo", govuk_account_session: session_id)
       end
     end
   end

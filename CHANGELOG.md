@@ -1,3 +1,10 @@
+# Unreleased
+
+* BREAKING: Remove Account API `get_email_subscription` method and helpers
+* BREAKING: Remove Account API `put_email_subscription` method and helpers
+* BREAKING: Remove Account API `delete_email_subscription` method and helpers
+* Note: These are no longer used by any apps, so should not be breaking in practice.
+
 # 90.0.0
 
 * BREAKING: Change source for `GdsApi.worldwide.organisations_for_world_location` method, remove pagination and remove `stub_worldwide_api_has_organisations_for_location` method.
