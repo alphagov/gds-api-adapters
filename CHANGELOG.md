@@ -3,6 +3,8 @@
 * BREAKING: Remove Account API `get_email_subscription` method and helpers
 * BREAKING: Remove Account API `put_email_subscription` method and helpers
 * BREAKING: Remove Account API `delete_email_subscription` method and helpers
+* Add a basic adapter for the new `search-api-v2` service, intially with a `#search` method along
+  the lines of the existing adapter for `search-api` for consistency
 * Note: These are no longer used by any apps, so should not be breaking in practice.
 
 # 90.0.0
