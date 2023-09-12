@@ -21,11 +21,14 @@ module GdsApi
           .to_return(body: body.to_json, status: 200)
       end
 
-      def stub_asset_manager_has_an_asset(id, atts)
+      def stub_asset_manager_has_an_asset(id, atts, filename = "")
         response = atts.merge("_response_info" => { "status" => "ok" })
 
         stub_request(:get, "#{ASSET_MANAGER_ENDPOINT}/assets/#{id}")
           .to_return(body: response.to_json, status: 200)
+
+        stub_request(:get, "#{ASSET_MANAGER_ENDPOINT}/media/#{id}/#{filename}")
+          .to_return(body: "Some file content", status: 200)
       end
 
       def stub_asset_manager_has_a_whitehall_asset(legacy_url_path, atts)

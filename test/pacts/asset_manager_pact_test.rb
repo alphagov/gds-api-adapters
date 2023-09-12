@@ -81,6 +81,21 @@ describe "GdsApi::AssetManager pact tests" do
       end
     end
 
+    describe "#get asset" do
+      it "gets an asset" do
+        asset_manager
+          .given("an asset exists with id #{content_id} and filename asset.png")
+          .upon_receiving("a get asset request")
+          .with(
+            method: :get,
+            path: "/media/#{content_id}/asset.png",
+          ).will_respond_with(
+            status: 200,
+          )
+
+        api_client.media(content_id, "asset.png")
+      end
+    end
     describe "#update_asset" do
       it "updates an asset" do
         asset_manager
