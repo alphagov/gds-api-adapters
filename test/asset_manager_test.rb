@@ -24,9 +24,9 @@ describe GdsApi::AssetManager do
 
   it "creates the asset with a file" do
     req = stub_request(:post, "#{base_api_url}/assets")
-      .with { |request|
-        request.body =~ %r{Content-Disposition: form-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent-Type: text/plain}
-      }.to_return(body: JSON.dump(stub_asset_manager_response), status: 201)
+            .with { |request|
+              request.body =~ %r{Content-Disposition: form-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent-Type: text/plain}
+            }.to_return(body: JSON.dump(stub_asset_manager_response), status: 201)
 
     response = api.create_asset(file: file_fixture)
 
@@ -36,9 +36,9 @@ describe GdsApi::AssetManager do
 
   it "creates a Whitehall asset with a file" do
     req = stub_request(:post, "#{base_api_url}/whitehall_assets")
-      .with { |request|
-        request.body =~ %r{Content-Disposition: form-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent-Type: text/plain}
-      }.to_return(body: JSON.dump(stub_asset_manager_response), status: 201)
+            .with { |request|
+              request.body =~ %r{Content-Disposition: form-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent-Type: text/plain}
+            }.to_return(body: JSON.dump(stub_asset_manager_response), status: 201)
 
     response = api.create_whitehall_asset(file: file_fixture, legacy_url_path: "/government/uploads/path/to/hello.txt")
 
@@ -70,9 +70,12 @@ describe GdsApi::AssetManager do
     before do
       stub_asset_manager_has_an_asset(
         asset_id,
-        "name" => "photo.jpg",
-        "content_type" => "image/jpeg",
-        "file_url" => "http://fooey.gov.uk/media/photo.jpg",
+        {
+          "name" => "photo.jpg",
+          "content_type" => "image/jpeg",
+          "file_url" => "http://fooey.gov.uk/media/photo.jpg",
+        },
+        "photo.jpg",
       )
     end
 
@@ -80,7 +83,7 @@ describe GdsApi::AssetManager do
 
     it "updates the asset with a file" do
       req = stub_request(:put, "#{base_api_url}/assets/test-id")
-        .to_return(body: JSON.dump(stub_asset_manager_response), status: 200)
+              .to_return(body: JSON.dump(stub_asset_manager_response), status: 200)
 
       response = api.update_asset(asset_id, file: file_fixture)
 
@@ -94,6 +97,12 @@ describe GdsApi::AssetManager do
       assert_equal "photo.jpg", asset["name"]
       assert_equal "image/jpeg", asset["content_type"]
       assert_equal "http://fooey.gov.uk/media/photo.jpg", asset["file_url"]
+    end
+
+    it "retrieves the asset from media" do
+      asset = api.media(asset_id, "photo.jpg")
+
+      assert_equal "Some file content", asset.body
     end
   end
 
@@ -135,7 +144,7 @@ describe GdsApi::AssetManager do
 
   it "deletes the asset for the given id" do
     req = stub_request(:delete, "#{base_api_url}/assets/#{asset_id}")
-      .to_return(body: JSON.dump(stub_asset_manager_response), status: 200)
+            .to_return(body: JSON.dump(stub_asset_manager_response), status: 200)
 
     response = api.delete_asset(asset_id)
 
@@ -145,7 +154,7 @@ describe GdsApi::AssetManager do
 
   it "restores the asset for the given id" do
     req = stub_request(:post, "#{base_api_url}/assets/#{asset_id}/restore")
-      .to_return(body: JSON.dump(stub_asset_manager_response), status: 200)
+            .to_return(body: JSON.dump(stub_asset_manager_response), status: 200)
 
     response = api.restore_asset(asset_id)
 

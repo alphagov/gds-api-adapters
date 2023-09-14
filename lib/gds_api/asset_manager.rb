@@ -239,6 +239,18 @@ class GdsApi::AssetManager < GdsApi::Base
     get_raw("#{base_url}/#{uri_encode(legacy_url_path)}")
   end
 
+  # Fetches an asset given the id and filename
+  #
+  # @param id [String] The asset identifier.
+  # @param filename [String] Filename of the asset.
+  # @return [GdsApi::Response] A response object containing the raw asset.
+  #   If the asset cannot be found, +GdsApi::HTTPNotFound+ will be raised.
+  #
+  # @raise [HTTPErrorResponse] if the request returns an error
+  def media(id, filename)
+    get_raw("#{base_url}/media/#{id}/#{filename}")
+  end
+
 private
 
   def base_url

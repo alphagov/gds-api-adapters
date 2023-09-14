@@ -1,3 +1,6 @@
+# Unreleased
+* Add `media` method to Asset Manager.
+
 # 91.0.0
 
 * BREAKING: Remove Account API `get_email_subscription` method and helpers
