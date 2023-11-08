@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
         with:
            repository: alphagov/publishing-api
-           ref: main
+           ref: deployed-to-production
            path: vendor/publishing-api
       - uses: ruby/setup-ruby@v1
         with:
@@ -125,6 +125,14 @@ jobs:
           name: pacts
           path: tmp/pacts
       - run: bundle exec rake pact:publish
+        env:
+          PACT_CONSUMER_VERSION: branch-${{ github.ref_name }}
+          PACT_BROKER_BASE_URL: https://pact-broker.cloudapps.digital
+          PACT_BROKER_USERNAME: ${{ secrets.GOVUK_PACT_BROKER_USERNAME }}
+          PACT_BROKER_PASSWORD: ${{ secrets.GOVUK_PACT_BROKER_PASSWORD }}
+          PACT_PATTERN: tmp/pacts/*.json
+      - run: bundle exec rake pact:publish
+        continue-on-error: true
         env:
           PACT_CONSUMER_VERSION: branch-${{ github.ref_name }}
           PACT_BROKER_BASE_URL: https://govuk-pact-broker-6991351eca05.herokuapp.com
