@@ -1,3 +1,6 @@
+# Unreleased
+* Alter `snac` field to `gss` in Imminence API `places` method contract.
+
 # 91.1.0
 * Add `media` method to Asset Manager.
 

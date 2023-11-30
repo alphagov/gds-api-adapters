@@ -39,7 +39,7 @@ describe "GdsApi::Imminence pact tests" do
                 phone: "01202 713000",
                 postcode: "BH12 4QY",
                 service_slug: "number-plate-supplier",
-                snac: nil,
+                gss: nil,
                 source_address: "Yarrow Road Tower Park Poole  BH12 4QY",
                 text_phone: nil,
                 town: "Yarrow",
