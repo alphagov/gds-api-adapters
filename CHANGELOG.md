@@ -1,5 +1,7 @@
 # Unreleased
 * Alter `snac` field to `gss` in Imminence API `places` method contract.
+* BREAKING: Remove Asset Manager API `whitehall_asset` method and helpers
+* Note: These are no longer used by any apps, so should not be breaking in practice.
 
 # 91.1.0
 * Add `media` method to Asset Manager.

@@ -31,14 +31,9 @@ module GdsApi
           .to_return(body: "Some file content", status: 200)
       end
 
-      def stub_asset_manager_has_a_whitehall_asset(legacy_url_path, atts)
-        response = atts.merge("_response_info" => { "status" => "ok" })
-
-        stub_request(:get, "#{ASSET_MANAGER_ENDPOINT}/whitehall_assets/#{legacy_url_path}")
-          .to_return(body: response.to_json, status: 200)
-
+      def stub_asset_manager_has_a_whitehall_media_asset(legacy_url_path, content)
         stub_request(:get, "#{ASSET_MANAGER_ENDPOINT}/#{legacy_url_path}")
-          .to_return(body: "Some file content", status: 200)
+          .to_return(body: content, status: 200)
       end
 
       def stub_asset_manager_does_not_have_an_asset(id)
@@ -47,15 +42,6 @@ module GdsApi
         }
 
         stub_request(:any, "#{ASSET_MANAGER_ENDPOINT}/assets/#{id}")
-          .to_return(body: response.to_json, status: 404)
-      end
-
-      def stub_asset_manager_does_not_have_a_whitehall_asset(legacy_url_path)
-        response = {
-          "_response_info" => { "status" => "not found" },
-        }
-
-        stub_request(:get, "#{ASSET_MANAGER_ENDPOINT}/whitehall_assets/#{legacy_url_path}")
           .to_return(body: response.to_json, status: 404)
       end
 

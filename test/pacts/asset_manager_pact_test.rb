@@ -184,46 +184,6 @@ describe "GdsApi::AssetManager pact tests" do
     let(:url_for_asset) { "http://static.dev.gov.uk#{legacy_url_path}" }
     let(:existing_asset_response_body) { existing_asset_body(file_url: url_for_asset) }
 
-    describe "#create whitehall asset" do
-      it "creates a whitehall asset" do
-        asset_manager
-          .upon_receiving("a create whitehall asset request")
-          .with(
-            method: :post,
-            path: "/whitehall_assets",
-            body: a_whitehall_multipart_request_body,
-            headers: multipart_headers,
-          ).will_respond_with(
-            status: 201,
-            body: created_asset_body(
-              id: an_asset_id_string,
-              file_url: url_for_asset,
-            ),
-            headers: json_content_type,
-          )
-
-        api_client.create_whitehall_asset(file: file_fixture, legacy_url_path: legacy_url_path)
-      end
-    end
-
-    describe "#get whitehall asset metadata" do
-      it "gets a whitehall asset's metadata" do
-        asset_manager
-          .given("a whitehall asset exists with legacy url path #{legacy_url_path} and id #{content_id}")
-          .upon_receiving("a get whitehall asset metadata request")
-          .with(
-            method: :get,
-            path: "/whitehall_assets/#{legacy_url_path}",
-          ).will_respond_with(
-            status: 200,
-            body: existing_asset_response_body,
-            headers: json_content_type,
-          )
-
-        api_client.whitehall_asset(legacy_url_path)
-      end
-    end
-
     describe "#get whitehall asset" do
       it "gets a whitehall asset" do
         asset_manager
@@ -237,30 +197,6 @@ describe "GdsApi::AssetManager pact tests" do
           )
 
         api_client.whitehall_media(legacy_url_path)
-      end
-    end
-
-    describe "#update_asset" do
-      it "updates a whitehall asset" do
-        asset_manager
-          .given("a whitehall asset exists with legacy url path #{legacy_url_path} and id #{content_id}")
-          .upon_receiving("an update asset request")
-          .with(
-            method: :put,
-            path: "/assets/#{content_id}",
-            body: a_multipart_request_body,
-            headers: multipart_headers,
-          )
-          .will_respond_with(
-            status: 200,
-            body: created_asset_body(
-              id: "http://example.org/assets/#{content_id}",
-              file_url: "http://static.dev.gov.uk#{legacy_url_path}",
-            ),
-            headers: json_content_type,
-          )
-
-        api_client.update_asset(content_id, file: file_fixture)
       end
     end
 
@@ -309,15 +245,6 @@ private
     Pact.term(
       generate: construct_multipart_string([asset_details]),
       matcher: construct_multipart_regex([asset_details_regex]),
-    )
-  end
-
-  def a_whitehall_multipart_request_body
-    legacy_url_details = "\r\nContent-Disposition: form-data; name=\"asset[legacy_url_path]\"\r\n\r\n/government/uploads/some-edition/hello.txt\r\n"
-    legacy_url_details_regex = /\s+Content-Disposition: form-data; name="asset\[legacy_url_path\]"\s+\/government\/uploads\/some-edition\/hello.txt\s+/
-    Pact.term(
-      generate: construct_multipart_string([asset_details, legacy_url_details]),
-      matcher: construct_multipart_regex([asset_details_regex, legacy_url_details_regex]),
     )
   end
 
