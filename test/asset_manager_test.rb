@@ -34,18 +34,6 @@ describe GdsApi::AssetManager do
     assert_requested(req)
   end
 
-  it "creates a Whitehall asset with a file" do
-    req = stub_request(:post, "#{base_api_url}/whitehall_assets")
-            .with { |request|
-              request.body =~ %r{Content-Disposition: form-data; name="asset\[file\]"; filename="hello\.txt"\r\nContent-Type: text/plain}
-            }.to_return(body: JSON.dump(stub_asset_manager_response), status: 201)
-
-    response = api.create_whitehall_asset(file: file_fixture, legacy_url_path: "/government/uploads/path/to/hello.txt")
-
-    assert_equal asset_url, response["asset"]["id"]
-    assert_requested(req)
-  end
-
   it "returns not found when the asset does not exist" do
     stub_asset_manager_does_not_have_an_asset("not-really-here")
 
@@ -55,14 +43,6 @@ describe GdsApi::AssetManager do
 
     assert_raises GdsApi::HTTPNotFound do
       api.delete_asset("not-really-here")
-    end
-  end
-
-  it "raises not found when a Whitehall asset does not exist" do
-    stub_asset_manager_does_not_have_a_whitehall_asset("/path/to/non-existent-asset.png")
-
-    assert_raises GdsApi::HTTPNotFound do
-      api.whitehall_asset("/path/to/non-existent-asset.png")
     end
   end
 
@@ -108,16 +88,10 @@ describe GdsApi::AssetManager do
 
   describe "a Whitehall asset exists" do
     before do
-      stub_asset_manager_has_a_whitehall_asset(
+      stub_asset_manager_has_a_whitehall_media_asset(
         "/government/uploads/photo.jpg",
-        "id" => "asset-id",
+        "Some file content",
       )
-    end
-
-    it "retrieves the asset's metadata" do
-      asset = api.whitehall_asset("/government/uploads/photo.jpg")
-
-      assert_equal "asset-id", asset["id"]
     end
 
     it "retrieves the asset" do
@@ -129,16 +103,16 @@ describe GdsApi::AssetManager do
 
   describe "a Whitehall asset with a legacy_url_path containing non-ascii characters exists" do
     before do
-      stub_asset_manager_has_a_whitehall_asset(
+      stub_asset_manager_has_a_whitehall_media_asset(
         "/government/uploads/phot%C3%B8.jpg",
-        "id" => "asset-id",
+        "Some file content",
       )
     end
 
     it "retrieves the asset's metadata" do
-      asset = api.whitehall_asset("/government/uploads/photø.jpg")
+      asset = api.whitehall_media("/government/uploads/photø.jpg")
 
-      assert_equal "asset-id", asset["id"]
+      assert_equal "Some file content", asset.body
     end
   end
 
