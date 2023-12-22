@@ -97,7 +97,7 @@ module GdsApi
 
       def convert_to_query_string_params(parameters)
         # convert nil to an empty string, otherwise query param is not expressed correctly
-        parameters.each { |key, _value| parameters[key] = "" if parameters[key].nil? }
+        parameters.each_key { |key| parameters[key] = "" if parameters[key].nil? }
         parameters
       end
 
