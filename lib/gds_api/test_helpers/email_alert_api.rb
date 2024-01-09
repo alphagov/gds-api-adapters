@@ -164,6 +164,16 @@ module GdsApi
         stub_request(:any, %r{\A#{EMAIL_ALERT_API_ENDPOINT}})
       end
 
+      def stub_get_subscriber_list_metrics(path:, response:)
+        stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/metrics#{path}")
+          .to_return(status: 200, body: response)
+      end
+
+      def stub_get_subscriber_list_metrics_not_found(path:)
+        stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/metrics#{path}")
+          .to_return(status: 404)
+      end
+
       def assert_email_alert_api_content_change_created(attributes = nil)
         if attributes
           matcher = lambda do |request|

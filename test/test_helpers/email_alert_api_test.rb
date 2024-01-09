@@ -49,4 +49,24 @@ describe GdsApi::TestHelpers::EmailAlertApi do
       assert_equal(2, result["subscriptions"].count)
     end
   end
+
+  describe "#stub_get_subscriber_list_metrics_not_found" do
+    it "raises 404" do
+      stub_get_subscriber_list_metrics_not_found(path: "/some/path")
+      assert_raises(GdsApi::HTTPNotFound) do
+        email_alert_api.get_subscriber_list_metrics(path: "/some/path")
+      end
+    end
+  end
+
+  describe "#stub_get_subscriber_list_metrics" do
+    it "returns the stubbed data" do
+      json = { subscriber_list_count: 3, all_notify_count: 10 }.to_json
+      stub_get_subscriber_list_metrics(path: "/some/path", response: json)
+      response = email_alert_api.get_subscriber_list_metrics(path: "/some/path")
+      expected = { "subscriber_list_count" => 3, "all_notify_count" => 10 }
+      assert_equal 200, response.code
+      assert_equal expected, response.to_h
+    end
+  end
 end
