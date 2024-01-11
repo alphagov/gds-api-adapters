@@ -1,3 +1,6 @@
+# Unreleased
+* BREAKING: Drop support for Rails 6.5.
+
 # 92.0.0
 * Alter `snac` field to `gss` in Imminence API `places` method contract.
 * BREAKING: Remove Asset Manager API `whitehall_asset` method and helpers
