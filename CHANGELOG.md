@@ -1,3 +1,6 @@
+# 92.1.0
+* Add `get_subscriber_list_metrics` method to Email Alert API.
+
 # 92.0.0
 * Alter `snac` field to `gss` in Imminence API `places` method contract.
 * BREAKING: Remove Asset Manager API `whitehall_asset` method and helpers
