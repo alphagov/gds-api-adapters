@@ -549,6 +549,28 @@ describe GdsApi::EmailAlertApi do
     end
   end
 
+  describe "get_subscribe_list_metrics" do
+    it "returns the parsed json" do
+      stub_get_subscriber_list_metrics(path: "/the/path", response: {
+        subscriber_list_count: 5,
+        all_notify_count: 12,
+      }.to_json)
+
+      api_response = api_client.get_subscriber_list_metrics(path: "/the/path")
+      assert_equal(200, api_response.code)
+      parsed_body = api_response.to_h
+      assert_equal({ "subscriber_list_count" => 5, "all_notify_count" => 12 }, parsed_body)
+    end
+
+    it "raises 404 when not found" do
+      stub_get_subscriber_list_metrics_not_found(path: "/the/path")
+
+      assert_raises GdsApi::HTTPNotFound do
+        api_client.get_subscriber_list_metrics(path: "/the/path")
+      end
+    end
+  end
+
   describe "change_subscriber with an id that needs URI encoding" do
     it "encodes the id" do
       request = stub_email_alert_api_has_updated_subscriber("string%20id", "test2@example.com")

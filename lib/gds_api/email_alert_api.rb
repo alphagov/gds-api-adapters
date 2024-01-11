@@ -94,6 +94,19 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     get_json("#{endpoint}/subscriber-lists/#{uri_encode(slug)}")
   end
 
+  # Get a Subscriber List
+  #
+  # @param [path] path of page for subscriber list
+  #
+  # @return [Hash] {
+  #  subscriber_list_count
+  #  all_notify_count
+  # }
+
+  def get_subscriber_list_metrics(path:)
+    get_json("#{endpoint}/subscriber-lists/metrics#{path}")
+  end
+
   # Get a Subscription
   #
   # @return [Hash] subscription: {
