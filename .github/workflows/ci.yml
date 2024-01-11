@@ -58,7 +58,7 @@ jobs:
         with:
           bundler-cache: true
       - run: bundle exec rake pact_test
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: pacts
           path: spec/pacts/*.json
@@ -135,7 +135,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: pacts
           path: tmp/pacts
@@ -160,7 +160,7 @@ jobs:
     steps:
       # As of Jan 2023, GitHub doesn't provide a delete artifact equivalent to
       # their upload / download ones
-      - uses: geekyeggo/delete-artifact@v2
+      - uses: geekyeggo/delete-artifact@v4
         with:
           name: pacts
 
