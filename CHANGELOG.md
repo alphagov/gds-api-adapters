@@ -1,3 +1,7 @@
+# 93.0.0
+* BREAKING: removed Support app `create_foi_request` method.
+* Note: This is no longer used by any apps, so should not be breaking in practice.
+
 # 92.1.0
 * Add `get_subscriber_list_metrics` method to Email Alert API.
 
