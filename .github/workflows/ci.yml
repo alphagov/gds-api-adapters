@@ -147,23 +147,6 @@ jobs:
           PACT_BROKER_PASSWORD: ${{ secrets.GOVUK_PACT_BROKER_PASSWORD }}
           PACT_PATTERN: tmp/pacts/*.json
 
-  # We don't use the artifact outside of sharing it for jobs so delete it
-  # at the end of the flow.
-  delete_pact_artifact:
-    needs:
-      - generate_pacts
-      - publish_pacts
-    # Run whenever generate_pacts is a success but wait until publish_pacts
-    # is either ran or skipped to ensure all work with the artifact is complete
-    if: ${{ always() && needs.generate_pacts.result == 'success' }}
-    runs-on: ubuntu-latest
-    steps:
-      # As of Jan 2023, GitHub doesn't provide a delete artifact equivalent to
-      # their upload / download ones
-      - uses: geekyeggo/delete-artifact@v4
-        with:
-          name: pacts
-
   publish_gem:
     needs: publish_pacts
     if: ${{ github.ref == 'refs/heads/main' }}
