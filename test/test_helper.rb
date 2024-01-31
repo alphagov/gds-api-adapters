@@ -2,12 +2,10 @@ require "bundler"
 Bundler.setup :default, :development, :test
 
 require "simplecov"
-require "simplecov-rcov"
 
 SimpleCov.start do
   add_filter "/test/"
   add_group "Test Helpers", "lib/gds_api/test_helpers"
-  formatter SimpleCov::Formatter::RcovFormatter
 end
 
 require "minitest/autorun"
