@@ -64,7 +64,7 @@ describe "GdsApi::Organisations pact tests" do
     let(:response) do
       {
         status: 200,
-        body: body,
+        body:,
       }
     end
 

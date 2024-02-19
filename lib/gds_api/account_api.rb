@@ -17,8 +17,8 @@ class GdsApi::AccountApi < GdsApi::Base
   def get_sign_in_url(redirect_path: nil, mfa: false)
     querystring = nested_query_string(
       {
-        redirect_path: redirect_path,
-        mfa: mfa,
+        redirect_path:,
+        mfa:,
       }.compact,
     )
     get_json("#{endpoint}/api/oauth2/sign-in?#{querystring}")
@@ -31,7 +31,7 @@ class GdsApi::AccountApi < GdsApi::Base
   #
   # @return [Hash] The value for the govuk_account_session header, the path to redirect the user to, and the GA client ID (if there is one)
   def validate_auth_response(code:, state:)
-    post_json("#{endpoint}/api/oauth2/callback", code: code, state: state)
+    post_json("#{endpoint}/api/oauth2/callback", code:, state:)
   end
 
   # Get an OIDC end-session URL to redirect the user to
@@ -59,7 +59,7 @@ class GdsApi::AccountApi < GdsApi::Base
   #
   # @return [Hash] One field, "match", indicating whether the session matches the given email address
   def match_user_by_email(email:, govuk_account_session: nil)
-    querystring = nested_query_string({ email: email })
+    querystring = nested_query_string({ email: })
     get_json("#{endpoint}/api/user/match-by-email?#{querystring}", auth_headers(govuk_account_session))
   end
 
@@ -79,8 +79,8 @@ class GdsApi::AccountApi < GdsApi::Base
   # @return [Hash] The user's subject identifier and email attributes
   def update_user_by_subject_identifier(subject_identifier:, email: nil, email_verified: nil)
     params = {
-      email: email,
-      email_verified: email_verified,
+      email:,
+      email_verified:,
     }.compact
 
     patch_json("#{endpoint}/api/oidc-users/#{subject_identifier}", params)
@@ -93,7 +93,7 @@ class GdsApi::AccountApi < GdsApi::Base
   #
   # @return [Hash] The attribute values (if present), and a new session header
   def get_attributes(attributes:, govuk_account_session:)
-    querystring = nested_query_string({ attributes: attributes }.compact)
+    querystring = nested_query_string({ attributes: }.compact)
     get_json("#{endpoint}/api/attributes?#{querystring}", auth_headers(govuk_account_session))
   end
 
@@ -104,7 +104,7 @@ class GdsApi::AccountApi < GdsApi::Base
   #
   # @return [Hash] A new session header
   def set_attributes(attributes:, govuk_account_session:)
-    patch_json("#{endpoint}/api/attributes", { attributes: attributes }, auth_headers(govuk_account_session))
+    patch_json("#{endpoint}/api/attributes", { attributes: }, auth_headers(govuk_account_session))
   end
 
 private

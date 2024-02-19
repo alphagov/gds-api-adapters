@@ -22,9 +22,9 @@ class GdsApi::LinkCheckerApi < GdsApi::Base
   # @raise [HTTPErrorResponse] if the request returns an error
   def check(uri, synchronous: nil, checked_within: nil)
     params = {
-      uri: uri,
-      synchronous: synchronous,
-      checked_within: checked_within,
+      uri:,
+      synchronous:,
+      checked_within:,
     }
 
     response = get_json(
@@ -54,10 +54,10 @@ class GdsApi::LinkCheckerApi < GdsApi::Base
   # @raise [HTTPErrorResponse] if the request returns an error
   def create_batch(uris, checked_within: nil, webhook_uri: nil, webhook_secret_token: nil)
     payload = {
-      uris: uris,
-      checked_within: checked_within,
-      webhook_uri: webhook_uri,
-      webhook_secret_token: webhook_secret_token,
+      uris:,
+      checked_within:,
+      webhook_uri:,
+      webhook_secret_token:,
     }
 
     response = post_json(

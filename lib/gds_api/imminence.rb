@@ -8,13 +8,13 @@ class GdsApi::Imminence < GdsApi::Base
   end
 
   def places(type, lat, lon, limit = 5)
-    url = api_url(type, lat: lat, lng: lon, limit: limit)
+    url = api_url(type, lat:, lng: lon, limit:)
     get_json(url)
   end
 
   def places_for_postcode(type, postcode, limit = 5, local_authority_slug = nil)
-    options = { postcode: postcode, limit: limit }
-    options.merge!(local_authority_slug: local_authority_slug) if local_authority_slug
+    options = { postcode:, limit: }
+    options.merge!(local_authority_slug:) if local_authority_slug
     url = api_url(type, options)
     get_json(url) || []
   end

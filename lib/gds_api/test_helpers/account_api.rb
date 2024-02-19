@@ -20,11 +20,11 @@ module GdsApi
       # GET /api/oauth2/sign-in
       #########################
       def stub_account_api_get_sign_in_url(redirect_path: nil, mfa: false, auth_uri: "http://auth/provider", state: "state")
-        querystring = Rack::Utils.build_nested_query({ redirect_path: redirect_path, mfa: mfa }.compact)
+        querystring = Rack::Utils.build_nested_query({ redirect_path:, mfa: }.compact)
         stub_request(:get, "#{ACCOUNT_API_ENDPOINT}/api/oauth2/sign-in?#{querystring}")
           .to_return(
             status: 200,
-            body: { auth_uri: auth_uri, state: state }.to_json,
+            body: { auth_uri:, state: }.to_json,
           )
       end
 
@@ -33,16 +33,16 @@ module GdsApi
       ###########################
       def stub_account_api_validates_auth_response(code: nil, state: nil, govuk_account_session: "govuk-account-session", redirect_path: "/", ga_client_id: "ga-client-id", cookie_consent: false, feedback_consent: false)
         stub_request(:post, "#{ACCOUNT_API_ENDPOINT}/api/oauth2/callback")
-          .with(body: hash_including({ code: code, state: state }.compact))
+          .with(body: hash_including({ code:, state: }.compact))
           .to_return(
             status: 200,
-            body: { govuk_account_session: govuk_account_session, redirect_path: redirect_path, ga_client_id: ga_client_id, cookie_consent: cookie_consent, feedback_consent: feedback_consent }.to_json,
+            body: { govuk_account_session:, redirect_path:, ga_client_id:, cookie_consent:, feedback_consent: }.to_json,
           )
       end
 
       def stub_account_api_rejects_auth_response(code: nil, state: nil)
         stub_request(:post, "#{ACCOUNT_API_ENDPOINT}/api/oauth2/callback")
-          .with(body: hash_including({ code: code, state: state }.compact))
+          .with(body: hash_including({ code:, state: }.compact))
           .to_return(status: 401)
       end
 
@@ -55,13 +55,13 @@ module GdsApi
             .with(headers: { GdsApi::AccountApi::AUTH_HEADER_NAME => govuk_account_session })
             .to_return(
               status: 200,
-              body: { end_session_uri: end_session_uri }.to_json,
+              body: { end_session_uri: }.to_json,
             )
         else
           stub_request(:get, "#{ACCOUNT_API_ENDPOINT}/api/oauth2/end-session")
             .to_return(
               status: 200,
-              body: { end_session_uri: end_session_uri }.to_json,
+              body: { end_session_uri: }.to_json,
             )
         end
       end
@@ -74,11 +74,11 @@ module GdsApi
           :get,
           "/api/user",
           response_body: {
-            id: id,
-            mfa: mfa,
-            email: email,
-            email_verified: email_verified,
-            services: services,
+            id:,
+            mfa:,
+            email:,
+            email_verified:,
+            services:,
           },
           **options,
         )
@@ -108,7 +108,7 @@ module GdsApi
       def stub_account_api_match_user_by_email_matches(email:, **options)
         stub_account_api_request(
           :get,
-          "/api/user/match-by-email?#{Rack::Utils.build_nested_query({ email: email })}",
+          "/api/user/match-by-email?#{Rack::Utils.build_nested_query({ email: })}",
           response_body: {
             match: true,
           },
@@ -119,7 +119,7 @@ module GdsApi
       def stub_account_api_match_user_by_email_does_not_match(email:, **options)
         stub_account_api_request(
           :get,
-          "/api/user/match-by-email?#{Rack::Utils.build_nested_query({ email: email })}",
+          "/api/user/match-by-email?#{Rack::Utils.build_nested_query({ email: })}",
           response_body: {
             match: false,
           },
@@ -130,7 +130,7 @@ module GdsApi
       def stub_account_api_match_user_by_email_does_not_exist(email:, **options)
         stub_account_api_request(
           :get,
-          "/api/user/match-by-email?#{Rack::Utils.build_nested_query({ email: email })}",
+          "/api/user/match-by-email?#{Rack::Utils.build_nested_query({ email: })}",
           response_status: 404,
           **options,
         )
@@ -163,7 +163,7 @@ module GdsApi
         stub_account_api_request(
           :patch,
           "/api/oidc-users/#{subject_identifier}",
-          with: { body: hash_including({ email: email, email_verified: email_verified }.compact) },
+          with: { body: hash_including({ email:, email_verified: }.compact) },
           response_body: {
             sub: subject_identifier,
             email: email || old_email,
@@ -176,17 +176,17 @@ module GdsApi
       # GET /api/attributes
       #####################
       def stub_account_api_has_attributes(attributes: [], values: {}, **options)
-        querystring = Rack::Utils.build_nested_query({ attributes: attributes }.compact)
+        querystring = Rack::Utils.build_nested_query({ attributes: }.compact)
         stub_account_api_request(
           :get,
           "/api/attributes?#{querystring}",
-          response_body: { values: values },
+          response_body: { values: },
           **options,
         )
       end
 
       def stub_account_api_unauthorized_has_attributes(attributes: [], **options)
-        querystring = Rack::Utils.build_nested_query({ attributes: attributes }.compact)
+        querystring = Rack::Utils.build_nested_query({ attributes: }.compact)
         stub_account_api_request(
           :get,
           "/api/attributes?#{querystring}",
@@ -196,7 +196,7 @@ module GdsApi
       end
 
       def stub_account_api_forbidden_has_attributes(attributes: [], **options)
-        querystring = Rack::Utils.build_nested_query({ attributes: attributes }.compact)
+        querystring = Rack::Utils.build_nested_query({ attributes: }.compact)
         stub_account_api_request(
           :get,
           "/api/attributes?#{querystring}",
@@ -212,7 +212,7 @@ module GdsApi
         stub_account_api_request(
           :patch,
           "/api/attributes",
-          with: { body: hash_including({ attributes: attributes }.compact) },
+          with: { body: hash_including({ attributes: }.compact) },
           **options,
         )
       end
@@ -221,7 +221,7 @@ module GdsApi
         stub_account_api_request(
           :patch,
           "/api/attributes",
-          with: { body: hash_including({ attributes: attributes }.compact) },
+          with: { body: hash_including({ attributes: }.compact) },
           response_status: 401,
           **options,
         )
@@ -231,7 +231,7 @@ module GdsApi
         stub_account_api_request(
           :patch,
           "/api/attributes",
-          with: { body: hash_including({ attributes: attributes }.compact) },
+          with: { body: hash_including({ attributes: }.compact) },
           response_status: 403,
           **options,
         )

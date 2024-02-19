@@ -48,7 +48,7 @@ class GdsApi::PublishingApi < GdsApi::Base
   # @raise [NoLiveVersion] when the content item is not found
   # @see https://github.com/alphagov/publishing-api/blob/main/docs/api.md#get-v2contentcontent_id
   def get_live_content(content_id, locale = "en")
-    content_item = get_content(content_id, locale: locale)
+    content_item = get_content(content_id, locale:)
 
     live_states = %w[published unpublished]
     return content_item if live_states.include?(content_item.to_h["publication_state"])
@@ -56,7 +56,7 @@ class GdsApi::PublishingApi < GdsApi::Base
     live_version_number = content_item["state_history"].find { |_, v| live_states.include?(v) }&.first
     raise NoLiveVersion, "No live version exists for content_id: #{content_id}" unless live_version_number
 
-    get_content(content_id, locale: locale, version: live_version_number)
+    get_content(content_id, locale:, version: live_version_number)
   end
 
   # Find the content_ids for a list of base_paths.
@@ -73,7 +73,7 @@ class GdsApi::PublishingApi < GdsApi::Base
   #
   # @see https://github.com/alphagov/publishing-api/blob/main/docs/api.md#post-lookup-by-base-path
   def lookup_content_ids(base_paths:, exclude_document_types: nil, exclude_unpublishing_types: nil, with_drafts: false)
-    options = { base_paths: base_paths }
+    options = { base_paths: }
     options[:exclude_document_types] = exclude_document_types if exclude_document_types
     options[:exclude_unpublishing_types] = exclude_unpublishing_types if exclude_unpublishing_types
     options[:with_drafts] = with_drafts if with_drafts
@@ -102,9 +102,9 @@ class GdsApi::PublishingApi < GdsApi::Base
   def lookup_content_id(base_path:, exclude_document_types: nil, exclude_unpublishing_types: nil, with_drafts: false)
     lookups = lookup_content_ids(
       base_paths: [base_path],
-      exclude_document_types: exclude_document_types,
-      exclude_unpublishing_types: exclude_unpublishing_types,
-      with_drafts: with_drafts,
+      exclude_document_types:,
+      exclude_unpublishing_types:,
+      with_drafts:,
     )
     lookups[base_path]
   end
@@ -122,7 +122,7 @@ class GdsApi::PublishingApi < GdsApi::Base
   # @see https://github.com/alphagov/publishing-api/blob/main/docs/api.md#post-v2contentcontent_idpublish
   def publish(content_id, update_type = nil, options = {})
     params = {
-      update_type: update_type,
+      update_type:,
     }
 
     optional_keys = %i[locale previous_version]
@@ -168,7 +168,7 @@ class GdsApi::PublishingApi < GdsApi::Base
   # @see https://github.com/alphagov/publishing-api/blob/main/docs/api.md#post-v2contentcontent_idunpublish
   def unpublish(content_id, type:, explanation: nil, alternative_path: nil, discard_drafts: false, allow_draft: false, previous_version: nil, locale: nil, unpublished_at: nil, redirects: nil)
     params = {
-      type: type,
+      type:,
     }
 
     params[:explanation] = explanation if explanation
@@ -435,7 +435,7 @@ class GdsApi::PublishingApi < GdsApi::Base
   #   }
   #
   def get_links_for_content_ids(content_ids)
-    post_json("#{endpoint}/v2/links/by-content-id", content_ids: content_ids).to_hash
+    post_json("#{endpoint}/v2/links/by-content-id", content_ids:).to_hash
   end
 
   # Reserves a path for a publishing application
@@ -452,7 +452,7 @@ class GdsApi::PublishingApi < GdsApi::Base
   end
 
   def unreserve_path(base_path, publishing_app)
-    payload = { publishing_app: publishing_app }
+    payload = { publishing_app: }
     delete_json(unreserve_url(base_path), payload)
   end
 

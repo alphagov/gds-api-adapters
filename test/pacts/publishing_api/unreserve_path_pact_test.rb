@@ -16,7 +16,7 @@ describe "GdsApi::PublishingApi#unreserve_path pact tests" do
       .with(
         method: :delete,
         path: "/paths#{base_path}",
-        body: { publishing_app: publishing_app },
+        body: { publishing_app: },
         headers: {
           "Content-Type" => "application/json",
         },
@@ -42,7 +42,7 @@ describe "GdsApi::PublishingApi#unreserve_path pact tests" do
       .with(
         method: :delete,
         path: "/paths#{base_path}",
-        body: { publishing_app: publishing_app },
+        body: { publishing_app: },
         headers: {
           "Content-Type" => "application/json",
         },

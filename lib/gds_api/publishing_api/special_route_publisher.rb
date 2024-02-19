@@ -22,7 +22,7 @@ module GdsApi
           schema_name: options.fetch(:schema_name, "special_route"),
           title: options.fetch(:title),
           description: options.fetch(:description, ""),
-          locale: locale,
+          locale:,
           details: {},
           routes: [
             {
@@ -33,11 +33,11 @@ module GdsApi
           publishing_app: options.fetch(:publishing_app),
           rendering_app: options.fetch(:rendering_app),
           public_updated_at: time.now.iso8601,
-          update_type: update_type,
+          update_type:,
         )
 
         publishing_api.patch_links(options.fetch(:content_id), links: options[:links]) if options[:links]
-        publishing_api.publish(options.fetch(:content_id), update_type, locale: locale)
+        publishing_api.publish(options.fetch(:content_id), update_type, locale:)
         put_content_response
       end
 

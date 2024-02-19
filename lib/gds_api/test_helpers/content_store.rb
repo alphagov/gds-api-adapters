@@ -26,7 +26,7 @@ module GdsApi
         endpoint = content_store_endpoint(draft: options[:draft])
         stub_request(:get, "#{endpoint}/content#{base_path}").to_return(
           status: 200,
-          body: body,
+          body:,
           headers: {
             cache_control: "#{visibility}, max-age=#{max_age}",
             date: Time.now.httpdate,
@@ -69,7 +69,7 @@ module GdsApi
         endpoint = content_store_endpoint(draft: options[:draft])
         stub_request(:get, "#{endpoint}/content#{base_path}").to_return(
           status: 410,
-          body: body,
+          body:,
           headers: {},
         )
       end
@@ -86,7 +86,7 @@ module GdsApi
         url = "#{content_store_endpoint}/incoming-links#{base_path}"
         body = links.to_json
 
-        stub_request(:get, url).to_return(body: body)
+        stub_request(:get, url).to_return(body:)
       end
     end
   end

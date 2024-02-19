@@ -847,109 +847,109 @@ describe GdsApi::EmailAlertApi do
     let(:sender_message_id) { SecureRandom.uuid }
 
     it "returns 202 with just a subscriber_list_slug" do
-      stub_email_alert_api_bulk_unsubscribe(slug: slug)
-      api_response = api_client.bulk_unsubscribe(slug: slug)
+      stub_email_alert_api_bulk_unsubscribe(slug:)
+      api_response = api_client.bulk_unsubscribe(slug:)
       assert_equal(202, api_response.code)
     end
 
     it "returns 202 with a message" do
       stub_email_alert_api_bulk_unsubscribe_with_message(
-        slug: slug,
+        slug:,
         govuk_request_id: "govuk_request_id",
-        body: body,
-        sender_message_id: sender_message_id,
+        body:,
+        sender_message_id:,
       )
       api_response = api_client.bulk_unsubscribe(
-        slug: slug,
+        slug:,
         govuk_request_id: "govuk_request_id",
-        body: body,
-        sender_message_id: sender_message_id,
+        body:,
+        sender_message_id:,
       )
       assert_equal(202, api_response.code)
     end
 
     it "returns 202 with a message when govuk_request_id is not passed in as a parameter" do
       stub_email_alert_api_bulk_unsubscribe_with_message(
-        slug: slug,
-        body: body,
-        sender_message_id: sender_message_id,
+        slug:,
+        body:,
+        sender_message_id:,
       )
       api_response = api_client.bulk_unsubscribe(
-        slug: slug,
-        body: body,
-        sender_message_id: sender_message_id,
+        slug:,
+        body:,
+        sender_message_id:,
       )
       assert_equal(202, api_response.code)
     end
 
     it "returns 404 if the subscription list is not found" do
-      stub_email_alert_api_bulk_unsubscribe_not_found(slug: slug)
+      stub_email_alert_api_bulk_unsubscribe_not_found(slug:)
       assert_raises GdsApi::HTTPNotFound do
-        api_client.bulk_unsubscribe(slug: slug)
+        api_client.bulk_unsubscribe(slug:)
       end
     end
 
     it "returns 404 if the subscription list is not found and a message is provided" do
       stub_email_alert_api_bulk_unsubscribe_not_found_with_message(
-        slug: slug,
+        slug:,
         govuk_request_id: "govuk_request_id",
-        body: body,
-        sender_message_id: sender_message_id,
+        body:,
+        sender_message_id:,
       )
       assert_raises GdsApi::HTTPNotFound do
         api_client.bulk_unsubscribe(
-          slug: slug,
+          slug:,
           govuk_request_id: "govuk_request_id",
-          body: body,
-          sender_message_id: sender_message_id,
+          body:,
+          sender_message_id:,
         )
       end
     end
 
     it "returns 409 on conflict" do
-      stub_email_alert_api_bulk_unsubscribe_conflict(slug: slug)
+      stub_email_alert_api_bulk_unsubscribe_conflict(slug:)
       assert_raises GdsApi::HTTPConflict do
-        api_client.bulk_unsubscribe(slug: slug)
+        api_client.bulk_unsubscribe(slug:)
       end
     end
 
     it "returns 409 on conflict if a message is provided" do
       stub_email_alert_api_bulk_unsubscribe_conflict_with_message(
-        slug: slug,
+        slug:,
         govuk_request_id: "govuk_request_id",
-        body: body,
-        sender_message_id: sender_message_id,
+        body:,
+        sender_message_id:,
       )
       assert_raises GdsApi::HTTPConflict do
         api_client.bulk_unsubscribe(
-          slug: slug,
+          slug:,
           govuk_request_id: "govuk_request_id",
-          body: body,
-          sender_message_id: sender_message_id,
+          body:,
+          sender_message_id:,
         )
       end
     end
 
     it "returns 422 on bad request" do
-      stub_email_alert_api_bulk_unsubscribe_bad_request(slug: slug)
+      stub_email_alert_api_bulk_unsubscribe_bad_request(slug:)
       assert_raises GdsApi::HTTPUnprocessableEntity do
-        api_client.bulk_unsubscribe(slug: slug)
+        api_client.bulk_unsubscribe(slug:)
       end
     end
 
     it "returns 422 on bad request if a message is provided" do
       stub_email_alert_api_bulk_unsubscribe_bad_request_with_message(
-        slug: slug,
+        slug:,
         govuk_request_id: "govuk_request_id",
-        body: body,
-        sender_message_id: sender_message_id,
+        body:,
+        sender_message_id:,
       )
       assert_raises GdsApi::HTTPUnprocessableEntity do
         api_client.bulk_unsubscribe(
-          slug: slug,
+          slug:,
           govuk_request_id: "govuk_request_id",
-          body: body,
-          sender_message_id: sender_message_id,
+          body:,
+          sender_message_id:,
         )
       end
     end
@@ -961,42 +961,42 @@ describe GdsApi::EmailAlertApi do
 
     it "returns 202 if valid to_slug and from_slug are provided" do
       stub_email_alert_api_bulk_migrate(
-        from_slug: from_slug,
-        to_slug: to_slug,
+        from_slug:,
+        to_slug:,
       )
-      api_response = api_client.bulk_migrate(from_slug: from_slug, to_slug: to_slug)
+      api_response = api_client.bulk_migrate(from_slug:, to_slug:)
 
       assert_equal(202, api_response.code)
     end
 
     it "returns 404 if the subscription list is not found" do
       stub_email_alert_api_bulk_migrate_not_found(
-        from_slug: from_slug,
-        to_slug: to_slug,
+        from_slug:,
+        to_slug:,
       )
 
       assert_raises GdsApi::HTTPNotFound do
-        api_client.bulk_migrate(from_slug: from_slug, to_slug: to_slug)
+        api_client.bulk_migrate(from_slug:, to_slug:)
       end
     end
 
     it "returns 422 if either from_slug or to_slug are missing" do
       stub_email_alert_api_bulk_migrate_bad_request(
-        from_slug: from_slug,
+        from_slug:,
         to_slug: "",
       )
 
       assert_raises GdsApi::HTTPUnprocessableEntity do
-        api_client.bulk_migrate(from_slug: from_slug, to_slug: "")
+        api_client.bulk_migrate(from_slug:, to_slug: "")
       end
 
       stub_email_alert_api_bulk_migrate_bad_request(
         from_slug: "",
-        to_slug: to_slug,
+        to_slug:,
       )
 
       assert_raises GdsApi::HTTPUnprocessableEntity do
-        api_client.bulk_migrate(from_slug: "", to_slug: to_slug)
+        api_client.bulk_migrate(from_slug: "", to_slug:)
       end
     end
   end
@@ -1007,8 +1007,8 @@ describe GdsApi::EmailAlertApi do
     it "returns 200 and subscriber list with updated title" do
       params = { "title" => "New Title" }
 
-      stub_update_subscriber_list_details(slug: slug, params: params)
-      api_response = api_client.update_subscriber_list_details(slug: slug, params: params)
+      stub_update_subscriber_list_details(slug:, params:)
+      api_response = api_client.update_subscriber_list_details(slug:, params:)
 
       assert_equal(200, api_response.code)
       assert_equal(params["title"], api_response.to_h.dig("subscriber_list", "title"))
@@ -1017,19 +1017,19 @@ describe GdsApi::EmailAlertApi do
     it "returns 404 when subscriber list is not found" do
       params = { "title" => "New Title" }
 
-      stub_update_subscriber_list_details_not_found(slug: slug, params: params)
+      stub_update_subscriber_list_details_not_found(slug:, params:)
 
       assert_raises GdsApi::HTTPNotFound do
-        api_client.update_subscriber_list_details(slug: slug, params: params)
+        api_client.update_subscriber_list_details(slug:, params:)
       end
     end
 
     it "returns 422 when provided with invalid parameters" do
       params = { "title" => nil }
-      stub_update_subscriber_list_details_unprocessible_entity(slug: slug, params: params)
+      stub_update_subscriber_list_details_unprocessible_entity(slug:, params:)
 
       assert_raises GdsApi::HTTPUnprocessableEntity do
-        api_client.update_subscriber_list_details(slug: slug, params: params)
+        api_client.update_subscriber_list_details(slug:, params:)
       end
     end
   end

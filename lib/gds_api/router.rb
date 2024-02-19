@@ -28,7 +28,7 @@ class GdsApi::Router < GdsApi::Base
         incoming_path: path,
         route_type: type,
         handler: "backend",
-        backend_id: backend_id,
+        backend_id:,
       },
     )
   end
@@ -41,7 +41,7 @@ class GdsApi::Router < GdsApi::Base
         route_type: type,
         handler: "redirect",
         redirect_to: destination,
-        redirect_type: redirect_type,
+        redirect_type:,
         segments_mode: options[:segments_mode],
       },
     )

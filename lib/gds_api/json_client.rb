@@ -162,8 +162,8 @@ module GdsApi
       logger.debug start_logging.to_json
 
       method_params = {
-        method: method,
-        url: url,
+        method:,
+        url:,
       }
 
       method_params[:payload] = params
