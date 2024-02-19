@@ -59,7 +59,7 @@ describe "GdsApi::PublishingApi#get_content_items pact tests" do
             rel: "self",
           }],
           results: [
-            { content_id: content_id, locale: "en" },
+            { content_id:, locale: "en" },
           ],
         },
       )
@@ -90,7 +90,7 @@ describe "GdsApi::PublishingApi#get_content_items pact tests" do
             rel: "self",
           }],
           results: [
-            { content_id: content_id, locale: "fr" },
+            { content_id:, locale: "fr" },
           ],
         },
       )
@@ -122,9 +122,9 @@ describe "GdsApi::PublishingApi#get_content_items pact tests" do
             rel: "self",
           }],
           results: [
-            { content_id: content_id, locale: "en" },
-            { content_id: content_id, locale: "fr" },
-            { content_id: content_id, locale: "ar" },
+            { content_id:, locale: "en" },
+            { content_id:, locale: "fr" },
+            { content_id:, locale: "ar" },
           ],
         },
       )
@@ -156,7 +156,7 @@ describe "GdsApi::PublishingApi#get_content_items pact tests" do
             rel: "self",
           }],
           results: [
-            { content_id: content_id, details: { foo: :bar } },
+            { content_id:, details: { foo: :bar } },
           ],
         },
       )

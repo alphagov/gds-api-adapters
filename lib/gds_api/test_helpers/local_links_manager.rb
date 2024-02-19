@@ -25,12 +25,12 @@ module GdsApi
         response["local_authority"]["snac"] = snac if snac
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-          .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
+          .with(query: { authority_slug:, lgsl:, lgil: })
           .to_return(body: response.to_json, status: 200)
 
         unless local_custodian_code.nil?
           stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-            .with(query: { local_custodian_code: local_custodian_code, lgsl: lgsl, lgil: lgil })
+            .with(query: { local_custodian_code:, lgsl:, lgil: })
             .to_return(body: response.to_json, status: 200)
         end
       end
@@ -49,12 +49,12 @@ module GdsApi
         response["local_authority"]["snac"] = snac if snac
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-          .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
+          .with(query: { authority_slug:, lgsl:, lgil: })
           .to_return(body: response.to_json, status: 200)
 
         unless local_custodian_code.nil?
           stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-            .with(query: { local_custodian_code: local_custodian_code, lgsl: lgsl, lgil: lgil })
+            .with(query: { local_custodian_code:, lgsl:, lgil: })
             .to_return(body: response.to_json, status: 200)
         end
       end
@@ -73,12 +73,12 @@ module GdsApi
         response["local_authority"]["snac"] = snac if snac
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-          .with(query: { authority_slug: authority_slug, lgsl: lgsl, lgil: lgil })
+          .with(query: { authority_slug:, lgsl:, lgil: })
           .to_return(body: response.to_json, status: 200)
 
         unless local_custodian_code.nil?
           stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/link")
-            .with(query: { local_custodian_code: local_custodian_code, lgsl: lgsl, lgil: lgil })
+            .with(query: { local_custodian_code:, lgsl:, lgil: })
             .to_return(body: response.to_json, status: 200)
         end
       end
@@ -117,12 +117,12 @@ module GdsApi
         response["local_authorities"][0]["snac"] = snac if snac
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
-          .with(query: { authority_slug: authority_slug })
+          .with(query: { authority_slug: })
           .to_return(body: response.to_json, status: 200)
 
         unless local_custodian_code.nil?
           stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
-            .with(query: { local_custodian_code: local_custodian_code })
+            .with(query: { local_custodian_code: })
             .to_return(body: response.to_json, status: 200)
         end
       end
@@ -157,7 +157,7 @@ module GdsApi
 
         unless local_custodian_code.nil?
           stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
-            .with(query: { local_custodian_code: local_custodian_code })
+            .with(query: { local_custodian_code: })
             .to_return(body: response.to_json, status: 200)
         end
       end
@@ -176,13 +176,13 @@ module GdsApi
 
       def stub_local_links_manager_does_not_have_an_authority(authority_slug)
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
-          .with(query: { authority_slug: authority_slug })
+          .with(query: { authority_slug: })
           .to_return(body: {}.to_json, status: 404)
       end
 
       def stub_local_links_manager_does_not_have_a_custodian_code(local_custodian_code)
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
-          .with(query: { local_custodian_code: local_custodian_code })
+          .with(query: { local_custodian_code: })
           .to_return(body: {}.to_json, status: 404)
       end
 
@@ -202,12 +202,12 @@ module GdsApi
         response["local_authorities"][0]["snac"] = snac if snac
 
         stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
-          .with(query: { authority_slug: authority_slug })
+          .with(query: { authority_slug: })
           .to_return(body: response.to_json, status: 200)
 
         unless local_custodian_code.nil?
           stub_request(:get, "#{LOCAL_LINKS_MANAGER_ENDPOINT}/api/local-authority")
-            .with(query: { local_custodian_code: local_custodian_code })
+            .with(query: { local_custodian_code: })
             .to_return(body: response.to_json, status: 200)
         end
       end

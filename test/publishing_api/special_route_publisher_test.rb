@@ -10,7 +10,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
   let(:content_id) { "a-content-id-of-sorts" }
   let(:special_route) do
     {
-      content_id: content_id,
+      content_id:,
       title: "A title",
       description: "A description",
       base_path: "/favicon.ico",
@@ -101,7 +101,7 @@ describe GdsApi::PublishingApi::SpecialRoutePublisher do
         stub(:publishing_api, put_content_item: nil)
       end
       let(:publisher) do
-        GdsApi::PublishingApi::SpecialRoutePublisher.new(publishing_api: publishing_api)
+        GdsApi::PublishingApi::SpecialRoutePublisher.new(publishing_api:)
       end
 
       it "is robust to Time.zone returning nil" do

@@ -27,7 +27,7 @@ describe GdsApi::Response do
         cache_control_headers = { cache_control: "public, max-age=900" }
         headers = cache_control_headers.merge(date: Time.now.httpdate)
 
-        mock_http_response = stub(body: "A Response body", code: 200, headers: headers)
+        mock_http_response = stub(body: "A Response body", code: 200, headers:)
         response = GdsApi::Response.new(mock_http_response)
 
         assert_equal Time.parse("15:15"), response.expires_at
@@ -39,7 +39,7 @@ describe GdsApi::Response do
         cache_headers = { cache_control: "public", expires: (Time.now + 900).httpdate }
         headers = cache_headers.merge(date: Time.now.httpdate)
 
-        mock_http_response = stub(body: "A Response body", code: 200, headers: headers)
+        mock_http_response = stub(body: "A Response body", code: 200, headers:)
         response = GdsApi::Response.new(mock_http_response)
 
         assert_equal Time.parse("15:15"), response.expires_at
@@ -65,7 +65,7 @@ describe GdsApi::Response do
     it "should be seconds remaining from expiration time inferred from max-age" do
       cache_control_headers = { cache_control: "public, max-age=900" }
       headers = cache_control_headers.merge(date: Time.now.httpdate)
-      mock_http_response = stub(body: "A Response body", code: 200, headers: headers)
+      mock_http_response = stub(body: "A Response body", code: 200, headers:)
 
       Timecop.travel(12 * 60) do
         response = GdsApi::Response.new(mock_http_response)
@@ -76,7 +76,7 @@ describe GdsApi::Response do
     it "should be seconds remaining from expiration time inferred from Expires header" do
       cache_headers = { cache_control: "public", expires: (Time.now + 900).httpdate }
       headers = cache_headers.merge(date: Time.now.httpdate)
-      mock_http_response = stub(body: "A Response body", code: 200, headers: headers)
+      mock_http_response = stub(body: "A Response body", code: 200, headers:)
 
       Timecop.travel(12 * 60) do
         response = GdsApi::Response.new(mock_http_response)

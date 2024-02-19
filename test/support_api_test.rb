@@ -100,7 +100,7 @@ describe GdsApi::SupportApi do
 
       stub_get = stub_support_api_anonymous_feedback_organisation_summary(slug, ordering)
 
-      @api.organisation_summary(slug, ordering: ordering)
+      @api.organisation_summary(slug, ordering:)
 
       assert_requested(stub_get)
     end
@@ -194,7 +194,7 @@ describe GdsApi::SupportApi do
 
       stub_get = stub_support_api_anonymous_feedback_doc_type_summary(document_type, ordering)
 
-      @api.document_type_summary(document_type, ordering: ordering)
+      @api.document_type_summary(document_type, ordering:)
 
       assert_requested(stub_get)
     end

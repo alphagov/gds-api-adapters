@@ -45,7 +45,7 @@ class GdsApi::AssetManager < GdsApi::Base
   #    response = asset_manager.create_asset(file: params[:file])
   #    response['content_type'] #=> "image/jpeg"
   def create_asset(asset)
-    post_multipart("#{base_url}/assets", asset: asset)
+    post_multipart("#{base_url}/assets", asset:)
   end
 
   # Updates an asset given a hash with one +file+ attribute
@@ -76,7 +76,7 @@ class GdsApi::AssetManager < GdsApi::Base
   #   uuid = '594602dd-75b3-4e6f-b5d1-cacf8c4d4164'
   #   asset_manager.update_asset(uuid, file: File.new('image.jpg', 'r'))
   def update_asset(id, asset)
-    put_multipart("#{base_url}/assets/#{id}", asset: asset)
+    put_multipart("#{base_url}/assets/#{id}", asset:)
   end
 
   # Fetches an asset's metadata given the id

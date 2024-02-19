@@ -8,7 +8,7 @@ module GdsApi
       end
 
       def stub_calendars_has_no_bank_holidays(in_division: nil)
-        stub_calendars_has_bank_holidays_on([], in_division: in_division)
+        stub_calendars_has_bank_holidays_on([], in_division:)
       end
 
       def stub_calendars_has_bank_holidays_on(dates, in_division: nil)
@@ -26,30 +26,30 @@ module GdsApi
             {
               "england-and-wales" => {
                 division: "england-and-wales",
-                events: events,
+                events:,
               },
               "scotland" => {
                 division: "scotland",
-                events: events,
+                events:,
               },
               "northern-ireland" => {
                 division: "northern-ireland",
-                events: events,
+                events:,
               },
             }
           else
             {
               division: in_division,
-              events: events,
+              events:,
             }
           end
 
-        stub_request(:get, calendars_endpoint(in_division: in_division))
+        stub_request(:get, calendars_endpoint(in_division:))
           .to_return(body: response.to_json, status: 200)
       end
 
       def stub_calendars_has_a_bank_holiday_on(date, in_division: nil)
-        stub_calendars_has_bank_holidays_on([date], in_division: in_division)
+        stub_calendars_has_bank_holidays_on([date], in_division:)
       end
     end
   end

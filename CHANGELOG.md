@@ -1,3 +1,8 @@
+# Unreleased
+
+* Drop support for Ruby 3.0. The minimum required Ruby version is now 3.1.4.
+* Add support for Ruby 3.3.
+
 # 93.0.0
 * BREAKING: removed Support app `create_foi_request` method.
 * Note: This is no longer used by any apps, so should not be breaking in practice.

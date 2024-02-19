@@ -69,10 +69,10 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   def subscribe(subscriber_list_id:, address:, frequency: "immediately", skip_confirmation_email: false)
     post_json(
       "#{endpoint}/subscriptions",
-      subscriber_list_id: subscriber_list_id,
-      address: address,
-      frequency: frequency,
-      skip_confirmation_email: skip_confirmation_email,
+      subscriber_list_id:,
+      address:,
+      frequency:,
+      skip_confirmation_email:,
     )
   end
 
@@ -166,7 +166,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   def change_subscriber(id:, new_address:, on_conflict: nil)
     patch_json(
       "#{endpoint}/subscribers/#{uri_encode(id)}",
-      { new_address: new_address, on_conflict: on_conflict }.compact,
+      { new_address:, on_conflict: }.compact,
     )
   end
 
@@ -179,7 +179,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   def change_subscription(id:, frequency:)
     patch_json(
       "#{endpoint}/subscriptions/#{uri_encode(id)}",
-      frequency: frequency,
+      frequency:,
     )
   end
 
@@ -191,7 +191,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   def authenticate_subscriber_by_govuk_account(govuk_account_session:)
     post_json(
       "#{endpoint}/subscribers/govuk-account",
-      govuk_account_session: govuk_account_session,
+      govuk_account_session:,
     )
   end
 
@@ -206,7 +206,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   def link_subscriber_to_govuk_account(govuk_account_session:)
     post_json(
       "#{endpoint}/subscribers/govuk-account/link",
-      govuk_account_session: govuk_account_session,
+      govuk_account_session:,
     )
   end
 
@@ -231,8 +231,8 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   def send_subscriber_verification_email(address:, destination:)
     post_json(
       "#{endpoint}/subscribers/auth-token",
-      address: address,
-      destination: destination,
+      address:,
+      destination:,
     )
   end
 
@@ -247,9 +247,9 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   def send_subscription_verification_email(address:, frequency:, topic_id:)
     post_json(
       "#{endpoint}/subscriptions/auth-token",
-      address: address,
-      frequency: frequency,
-      topic_id: topic_id,
+      address:,
+      frequency:,
+      topic_id:,
     )
   end
 
@@ -264,8 +264,8 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     post_json(
       "#{endpoint}/subscriber-lists/#{slug}/bulk-unsubscribe",
       {
-        body: body,
-        sender_message_id: sender_message_id,
+        body:,
+        sender_message_id:,
       }.compact,
       {
         "Govuk-Request-Id" => govuk_request_id,
@@ -281,8 +281,8 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   def bulk_migrate(from_slug:, to_slug:)
     post_json(
       "#{endpoint}/subscriber-lists/bulk-migrate",
-      from_slug: from_slug,
-      to_slug: to_slug,
+      from_slug:,
+      to_slug:,
     )
   end
 

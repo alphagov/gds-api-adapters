@@ -115,7 +115,7 @@ module GdsApi
 
       def stub_support_api_organisation(slug = "cabinet-office", response_body = nil)
         response_body ||= {
-          slug: slug,
+          slug:,
           web_url: "https://www.gov.uk/government/organisations/#{slug}",
           title: "Cabinet Office",
           acronym: "CO",

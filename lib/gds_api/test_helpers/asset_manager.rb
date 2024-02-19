@@ -70,7 +70,7 @@ module GdsApi
 
             file_url = "#{ASSET_MANAGER_ENDPOINT}/media/#{options[:id]}/#{options[:filename]}"
           end
-          { body: { file_url: file_url }.to_json, status: 200 }
+          { body: { file_url: }.to_json, status: 200 }
         end
       end
 

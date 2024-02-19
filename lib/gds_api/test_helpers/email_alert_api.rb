@@ -28,7 +28,7 @@ module GdsApi
         stub_request(:patch, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions/#{subscription_id}")
           .to_return(
             status: 200,
-            body: get_subscription_response(subscription_id, frequency: frequency).to_json,
+            body: get_subscription_response(subscription_id, frequency:).to_json,
           )
       end
 
@@ -43,7 +43,7 @@ module GdsApi
         stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/#{id}/subscriptions#{params}")
           .to_return(
             status: 200,
-            body: get_subscriber_subscriptions_response(id, address, subscriptions: subscriptions).to_json,
+            body: get_subscriber_subscriptions_response(id, address, subscriptions:).to_json,
           )
       end
 
@@ -62,11 +62,11 @@ module GdsApi
       )
         response = get_subscription_response(
           id,
-          frequency: frequency,
-          title: title,
-          subscriber_id: subscriber_id,
-          subscriber_list_id: subscriber_list_id,
-          ended: ended,
+          frequency:,
+          title:,
+          subscriber_id:,
+          subscriber_list_id:,
+          ended:,
         ).to_json
 
         stub_request(:get, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions/#{id}")
@@ -217,16 +217,16 @@ module GdsApi
       )
         response = get_subscription_response(
           returned_subscription_id,
-          frequency: frequency,
-          subscriber_list_id: subscriber_list_id,
-          subscriber_id: subscriber_id,
+          frequency:,
+          subscriber_list_id:,
+          subscriber_id:,
         )
 
         request_params = {
-          subscriber_list_id: subscriber_list_id,
-          address: address,
-          frequency: frequency,
-          skip_confirmation_email: skip_confirmation_email,
+          subscriber_list_id:,
+          address:,
+          frequency:,
+          skip_confirmation_email:,
         }
 
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions")
@@ -238,9 +238,9 @@ module GdsApi
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions")
           .with(
             body: hash_including(
-              subscriber_list_id: subscriber_list_id,
-              address: address,
-              frequency: frequency,
+              subscriber_list_id:,
+              address:,
+              frequency:,
             ),
           ).to_return(status: 422)
       end
@@ -248,14 +248,14 @@ module GdsApi
       def stub_email_alert_api_sends_subscription_verification_email(address, frequency, topic_id)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions/auth-token")
           .with(
-            body: { address: address, frequency: frequency, topic_id: topic_id }.to_json,
+            body: { address:, frequency:, topic_id: }.to_json,
           ).to_return(status: 200)
       end
 
       def stub_email_alert_api_subscription_verification_email_invalid(address, frequency, topic_id)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions/auth-token")
           .with(
-            body: { address: address, frequency: frequency, topic_id: topic_id }.to_json,
+            body: { address:, frequency:, topic_id: }.to_json,
           ).to_return(status: 422)
       end
 
@@ -285,7 +285,7 @@ module GdsApi
       def stub_email_alert_api_authenticate_subscriber_by_govuk_account(govuk_account_session, subscriber_id, address, govuk_account_id: "user-id", new_govuk_account_session: nil)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/govuk-account")
           .with(
-            body: { govuk_account_session: govuk_account_session }.to_json,
+            body: { govuk_account_session: }.to_json,
           ).to_return(
             status: 200,
             body: {
@@ -297,7 +297,7 @@ module GdsApi
       def stub_email_alert_api_authenticate_subscriber_by_govuk_account_session_invalid(govuk_account_session)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/govuk-account")
           .with(
-            body: { govuk_account_session: govuk_account_session }.to_json,
+            body: { govuk_account_session: }.to_json,
           ).to_return(
             status: 401,
           )
@@ -306,7 +306,7 @@ module GdsApi
       def stub_email_alert_api_authenticate_subscriber_by_govuk_account_email_unverified(govuk_account_session, new_govuk_account_session: nil)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/govuk-account")
           .with(
-            body: { govuk_account_session: govuk_account_session }.to_json,
+            body: { govuk_account_session: }.to_json,
           ).to_return(
             status: 403,
             body: {
@@ -318,7 +318,7 @@ module GdsApi
       def stub_email_alert_api_authenticate_subscriber_by_govuk_account_no_subscriber(govuk_account_session, new_govuk_account_session: nil)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/govuk-account")
           .with(
-            body: { govuk_account_session: govuk_account_session }.to_json,
+            body: { govuk_account_session: }.to_json,
           ).to_return(
             status: 404,
             body: {
@@ -330,7 +330,7 @@ module GdsApi
       def stub_email_alert_api_link_subscriber_to_govuk_account(govuk_account_session, subscriber_id, address, govuk_account_id: "user-id", new_govuk_account_session: nil)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/govuk-account/link")
           .with(
-            body: { govuk_account_session: govuk_account_session }.to_json,
+            body: { govuk_account_session: }.to_json,
           ).to_return(
             status: 200,
             body: {
@@ -342,7 +342,7 @@ module GdsApi
       def stub_email_alert_api_link_subscriber_to_govuk_account_session_invalid(govuk_account_session)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/govuk-account/link")
           .with(
-            body: { govuk_account_session: govuk_account_session }.to_json,
+            body: { govuk_account_session: }.to_json,
           ).to_return(
             status: 401,
           )
@@ -351,7 +351,7 @@ module GdsApi
       def stub_email_alert_api_link_subscriber_to_govuk_account_email_unverified(govuk_account_session, new_govuk_account_session: nil)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscribers/govuk-account/link")
           .with(
-            body: { govuk_account_session: govuk_account_session }.to_json,
+            body: { govuk_account_session: }.to_json,
           ).to_return(
             status: 403,
             body: {
@@ -380,9 +380,9 @@ module GdsApi
       def assert_subscribed(subscriber_list_id, address, frequency = "immediately")
         assert_requested(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriptions") do |req|
           JSON.parse(req.body).symbolize_keys == {
-            subscriber_list_id: subscriber_list_id,
-            address: address,
-            frequency: frequency,
+            subscriber_list_id:,
+            address:,
+            frequency:,
           }
         end
       end
@@ -411,8 +411,8 @@ module GdsApi
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
         .with({
           body: {
-            body: body,
-            sender_message_id: sender_message_id,
+            body:,
+            sender_message_id:,
           }.to_json,
         }.tap { |attr| attr[:headers] = { "Govuk-Request-Id" => govuk_request_id } if govuk_request_id })
         .to_return(status: 202)
@@ -427,8 +427,8 @@ module GdsApi
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
         .with({
           body: {
-            body: body,
-            sender_message_id: sender_message_id,
+            body:,
+            sender_message_id:,
           }.to_json,
         }.tap { |attr| attr[:headers] = { "Govuk-Request-Id" => govuk_request_id } if govuk_request_id })
         .to_return(status: 404)
@@ -443,8 +443,8 @@ module GdsApi
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
         .with({
           body: {
-            body: body,
-            sender_message_id: sender_message_id,
+            body:,
+            sender_message_id:,
           }.to_json,
         }.tap { |attr| attr[:headers] = { "Govuk-Request-Id" => govuk_request_id } if govuk_request_id })
         .to_return(status: 409)
@@ -459,8 +459,8 @@ module GdsApi
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}/bulk-unsubscribe")
         .with({
           body: {
-            body: body,
-            sender_message_id: sender_message_id,
+            body:,
+            sender_message_id:,
           }.to_json,
         }.tap { |attr| attr[:headers] = { "Govuk-Request-Id" => govuk_request_id } if govuk_request_id })
         .to_return(status: 422)
@@ -468,19 +468,19 @@ module GdsApi
 
       def stub_email_alert_api_bulk_migrate(from_slug:, to_slug:)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/bulk-migrate")
-        .with(body: { from_slug: from_slug, to_slug: to_slug }.to_json)
+        .with(body: { from_slug:, to_slug: }.to_json)
         .to_return(status: 202)
       end
 
       def stub_email_alert_api_bulk_migrate_bad_request(from_slug:, to_slug:)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/bulk-migrate")
-          .with(body: { from_slug: from_slug, to_slug: to_slug }.to_json)
+          .with(body: { from_slug:, to_slug: }.to_json)
           .to_return(status: 422)
       end
 
       def stub_email_alert_api_bulk_migrate_not_found(from_slug:, to_slug:)
         stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/bulk-migrate")
-          .with(body: { from_slug: from_slug, to_slug: to_slug }.to_json)
+          .with(body: { from_slug:, to_slug: }.to_json)
           .to_return(status: 404)
       end
 

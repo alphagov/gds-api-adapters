@@ -18,15 +18,15 @@ module GdsApi
       end
 
       def stub_router_has_backend_route(path, backend_id:, route_type: "exact", disabled: false)
-        stub_router_has_route(path, handler: "backend", backend_id: backend_id, disabled: disabled, route_type: route_type)
+        stub_router_has_route(path, handler: "backend", backend_id:, disabled:, route_type:)
       end
 
       def stub_router_has_redirect_route(path, redirect_to:, redirect_type: "permanent", route_type: "exact", disabled: false)
-        stub_router_has_route(path, handler: "redirect", redirect_to: redirect_to, redirect_type: redirect_type, disabled: disabled, route_type: route_type)
+        stub_router_has_route(path, handler: "redirect", redirect_to:, redirect_type:, disabled:, route_type:)
       end
 
       def stub_router_has_gone_route(path, route_type: "exact", disabled: false)
-        stub_router_has_route(path, handler: "gone", route_type: route_type, disabled: disabled)
+        stub_router_has_route(path, handler: "gone", route_type:, disabled:)
       end
 
       def stub_all_router_registration
@@ -47,7 +47,7 @@ module GdsApi
             incoming_path: path,
             route_type: type,
             handler: "backend",
-            backend_id: backend_id,
+            backend_id:,
           },
         })
       end
@@ -59,8 +59,8 @@ module GdsApi
             route_type: type,
             handler: "redirect",
             redirect_to: destination,
-            redirect_type: redirect_type,
-            segments_mode: segments_mode,
+            redirect_type:,
+            segments_mode:,
           },
         })
       end
