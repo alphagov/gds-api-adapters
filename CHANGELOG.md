@@ -1,4 +1,4 @@
-# Unreleased
+# 94.0.0
 * BREAKING: Drop support for Rails 7.0 and earlier.
 * BREAKING: Drop support for Ruby 3.0. The minimum required Ruby version is now 3.1.4.
 * Add support for Ruby 3.3.
