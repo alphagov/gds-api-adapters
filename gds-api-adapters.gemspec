@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "pact_broker-client", "~> 1.65"
   s.add_development_dependency "pact-consumer-minitest", "~> 1.0"
   s.add_development_dependency "pact-mock_service", "~> 3.10"
-  s.add_development_dependency "rack", "~> 2.2"
+  s.add_development_dependency "rack", "~> 3.0"
   s.add_development_dependency "rack-test"
   s.add_development_dependency "rake"
   s.add_development_dependency "rubocop-govuk", "4.14.0"
