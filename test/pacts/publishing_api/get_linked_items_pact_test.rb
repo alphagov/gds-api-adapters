@@ -14,7 +14,7 @@ describe "GdsApi::PublishingApi#get_linked_items pact tests" do
       .with(
         method: :get,
         path: "/v2/linked/#{content_id}",
-        query: "fields%5B%5D=content_id&fields%5B%5D=base_path&link_type=topic",
+        query: "fields%5B%5D=content_id&fields%5B%5D=base_path&link_type=taxon",
       )
       .will_respond_with(
         status: 404,
@@ -32,7 +32,7 @@ describe "GdsApi::PublishingApi#get_linked_items pact tests" do
     assert_raises(GdsApi::HTTPNotFound) do
       api_client.get_linked_items(
         content_id,
-        link_type: "topic",
+        link_type: "taxon",
         fields: %w[content_id base_path],
       )
     end
@@ -57,12 +57,12 @@ describe "GdsApi::PublishingApi#get_linked_items pact tests" do
 
     before do
       publishing_api
-        .given("there are two documents with a 'topic' link to another document")
+        .given("there are two documents with a 'taxon' link to another document")
         .upon_receiving("a get linked request")
         .with(
           method: :get,
           path: "/v2/linked/#{linked_content_id}",
-          query: "fields%5B%5D=content_id&fields%5B%5D=base_path&link_type=topic",
+          query: "fields%5B%5D=content_id&fields%5B%5D=base_path&link_type=taxon",
         )
         .will_respond_with(
           status: 200,
@@ -82,7 +82,7 @@ describe "GdsApi::PublishingApi#get_linked_items pact tests" do
     it "returns the requested fields of linking items" do
       response = api_client.get_linked_items(
         linked_content_id,
-        link_type: "topic",
+        link_type: "taxon",
         fields: %w[content_id base_path],
       )
       assert_equal 200, response.code

@@ -26,18 +26,18 @@ describe "GdsApi::PublishingApi#get_linkables pact tests" do
 
   it "returns the content items of a given document_type" do
     publishing_api
-      .given("there is content with document_type 'topic'")
+      .given("there is content with document_type 'taxon'")
       .upon_receiving("a get linkables request")
       .with(
         method: :get,
         path: "/v2/linkables",
-        query: "document_type=topic",
+        query: "document_type=taxon",
       )
       .will_respond_with(
         status: 200,
         body: linkables,
       )
 
-    api_client.get_linkables(document_type: "topic")
+    api_client.get_linkables(document_type: "taxon")
   end
 end

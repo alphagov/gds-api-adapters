@@ -1,3 +1,6 @@
+# Unreleased
+* Update Pact specs to match the publishing-api [PR](https://github.com/alphagov/publishing-api/pull/2669)
+
 # 95.0.0
 
 * BREAKING: Drop 'named contact' API methods from Support app.
