@@ -1,5 +1,7 @@
 # GDS API Adapters
 
+;
+
 A set of API adapters to work with the GDS APIs.
 
 Example usage:
