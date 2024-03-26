@@ -1,4 +1,6 @@
-# Unreleased
+# 95.0.0
+
+* BREAKING: Drop 'named contact' API methods from Support app.
 * Fix rack being only a development dependency as it is used at runtime.
 * Fix too strict Ruby version constraint, loosened to Ruby 3.1
 
