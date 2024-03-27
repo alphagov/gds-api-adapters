@@ -43,13 +43,13 @@ describe "GdsApi::PublishingApi#patch_links pact tests" do
   it "adds the new type of links and responds with the whole link set when setting links of a different type" do
     publishing_api
       .given("organisation links exist for content_id #{content_id}")
-      .upon_receiving("a patch topic links request")
+      .upon_receiving("a patch taxons links request")
       .with(
         method: :patch,
         path: "/v2/links/#{content_id}",
         body: {
           links: {
-            topics: %w[225df4a8-2945-4e9b-8799-df7424a90b69],
+            taxons: %w[225df4a8-2945-4e9b-8799-df7424a90b69],
           },
         },
         headers: {
@@ -60,7 +60,7 @@ describe "GdsApi::PublishingApi#patch_links pact tests" do
         status: 200,
         body: {
           links: {
-            topics: %w[225df4a8-2945-4e9b-8799-df7424a90b69],
+            taxons: %w[225df4a8-2945-4e9b-8799-df7424a90b69],
             organisations: %w[20583132-1619-4c68-af24-77583172c070],
           },
         },
@@ -69,7 +69,7 @@ describe "GdsApi::PublishingApi#patch_links pact tests" do
     api_client.patch_links(
       content_id,
       links: {
-        topics: %w[225df4a8-2945-4e9b-8799-df7424a90b69],
+        taxons: %w[225df4a8-2945-4e9b-8799-df7424a90b69],
       },
     )
   end
