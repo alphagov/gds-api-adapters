@@ -1,4 +1,4 @@
-# Unreleased
+# 95.0.1
 * Update Pact specs to match the publishing-api [PR](https://github.com/alphagov/publishing-api/pull/2669)
 
 # 95.0.0
