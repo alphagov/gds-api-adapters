@@ -1,3 +1,6 @@
+# Unreleased
+* Added stub for attempting to delete a missing asset from Asset Manager
+
 # 95.0.1
 * Update Pact specs to match the publishing-api [PR](https://github.com/alphagov/publishing-api/pull/2669)
 

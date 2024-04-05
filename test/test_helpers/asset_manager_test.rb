@@ -64,4 +64,39 @@ describe GdsApi::TestHelpers::AssetManager do
       end
     end
   end
+
+  describe "#stub_asset_manager_delete_asset" do
+    it "returns an ok response and the provided body" do
+      asset_id = "some-asset-id"
+      body = { key: "value" }
+      stub_asset_manager_delete_asset(asset_id, body)
+
+      response = stub_asset_manager.delete_asset(asset_id)
+
+      assert_equal 200, response.code
+      assert_equal body[:key], response["key"]
+    end
+  end
+
+  describe "#stub_asset_manager_delete_asset_missing" do
+    it "raises a not found error" do
+      asset_id = "some-asset-id"
+      stub_asset_manager_delete_asset_missing(asset_id)
+
+      assert_raises GdsApi::HTTPNotFound do
+        stub_asset_manager.delete_asset(asset_id)
+      end
+    end
+  end
+
+  describe "#stub_asset_manager_delete_asset_failure" do
+    it "raises an internal server error" do
+      asset_id = "some-asset-id"
+      stub_asset_manager_delete_asset_failure(asset_id)
+
+      assert_raises GdsApi::HTTPInternalServerError do
+        stub_asset_manager.delete_asset(asset_id)
+      end
+    end
+  end
 end
