@@ -1,4 +1,4 @@
-# Unreleased
+# 95.1.0
 * Added stub for attempting to delete a missing asset from Asset Manager
 
 # 95.0.1
