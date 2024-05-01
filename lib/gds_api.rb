@@ -6,7 +6,7 @@ require "gds_api/asset_manager"
 require "gds_api/calendars"
 require "gds_api/content_store"
 require "gds_api/email_alert_api"
-require "gds_api/imminence"
+require "gds_api/places_manager"
 require "gds_api/licence_application"
 require "gds_api/link_checker_api"
 require "gds_api/local_links_manager"
@@ -82,11 +82,11 @@ module GdsApi
     )
   end
 
-  # Creates a GdsApi::Imminence adapter
+  # Creates a GdsApi::PlacesManager adapter
   #
-  # @return [GdsApi::Imminence]
-  def self.imminence(options = {})
-    GdsApi::Imminence.new(Plek.find("imminence"), options)
+  # @return [GdsApi::PlacesManager]
+  def self.places_manager(options = {})
+    GdsApi::PlacesManager.new(Plek.find("places-manager"), options)
   end
 
   # Creates a GdsApi::LicenceApplication

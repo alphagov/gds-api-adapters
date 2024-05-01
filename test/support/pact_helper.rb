@@ -5,7 +5,7 @@ ORGANISATION_API_PORT = 3002
 BANK_HOLIDAYS_API_PORT = 3003
 ACCOUNT_API_PORT = 3004
 LINK_CHECKER_API_PORT = 3005
-IMMINENCE_API_PORT = 3006
+PLACES_MANAGER_API_PORT = 3006
 LOCATIONS_API_PORT = 3008
 ASSET_MANAGER_API_PORT = 3009
 EMAIL_ALERT_API_PORT = 3010
@@ -30,8 +30,8 @@ def link_checker_api_host
   "http://localhost:#{LINK_CHECKER_API_PORT}"
 end
 
-def imminence_api_host
-  "http://localhost:#{IMMINENCE_API_PORT}"
+def places_manager_api_host
+  "http://localhost:#{PLACES_MANAGER_API_PORT}"
 end
 
 def locations_api_host
@@ -77,9 +77,9 @@ Pact.service_consumer "GDS API Adapters" do
     end
   end
 
-  has_pact_with "Imminence API" do
-    mock_service :imminence_api do
-      port IMMINENCE_API_PORT
+  has_pact_with "PlacesManager API" do
+    mock_service :places_manager_api do
+      port PLACES_MANAGER_API_PORT
     end
   end
 

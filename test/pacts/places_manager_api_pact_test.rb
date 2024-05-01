@@ -1,14 +1,14 @@
 require "test_helper"
-require "gds_api/imminence"
+require "gds_api/places_manager"
 
-describe "GdsApi::Imminence pact tests" do
+describe "GdsApi::PlacesManager pact tests" do
   include PactTest
 
   describe "#places" do
-    let(:api_client) { GdsApi::Imminence.new(imminence_api_host) }
+    let(:api_client) { GdsApi::PlacesManager.new(places_manager_api_host) }
 
     it "responds with all responses for the given dataset" do
-      imminence_api
+      places_manager_api
         .given("a service exists called number-plate-supplier with places")
         .upon_receiving("the request to retrieve relevant places for the current dataset for a lat/lon")
         .with(
@@ -56,7 +56,7 @@ describe "GdsApi::Imminence pact tests" do
     end
 
     it "responds with a choice of addresses for disambiguation of split postcodes" do
-      imminence_api
+      places_manager_api
         .given("a service exists called register office exists with places, and CH25 9BJ is a split postcode")
         .upon_receiving("the request to retrieve relevant places for the current dataset for CH25 9BJ")
         .with(
