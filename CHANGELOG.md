@@ -1,3 +1,6 @@
+# Unreleased
+* BREAKING: Drop support for email-alert-api's bulk migrate endpoint.
+
 # 95.1.0
 * Added stub for attempting to delete a missing asset from Asset Manager
 
