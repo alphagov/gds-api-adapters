@@ -11,7 +11,7 @@ jobs:
       contents: read
       security-events: write
       actions: read
-  
+
   codeql-sast:
     name: CodeQL SAST scan
     uses: alphagov/govuk-infrastructure/.github/workflows/codeql-analysis.yml@main
@@ -21,7 +21,7 @@ jobs:
   dependency-review:
     name: Dependency Review scan
     uses: alphagov/govuk-infrastructure/.github/workflows/dependency-review.yml@main
-  
+
   # This matrix job runs the test suite against multiple Ruby versions
   test_matrix:
     strategy:
@@ -133,7 +133,6 @@ jobs:
       - link_checker_api_pact
       - locations_api_pact
       - publishing_api_pact
-    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
