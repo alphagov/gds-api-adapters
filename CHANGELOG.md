@@ -1,4 +1,4 @@
-# Unreleased
+# 96.0.0
 * BREAKING: Drop support for email-alert-api's bulk migrate endpoint.
 
 # 95.1.0
