@@ -273,19 +273,6 @@ class GdsApi::EmailAlertApi < GdsApi::Base
     )
   end
 
-  # Migrate all users from one existing subscriber list to another existing subscriber list
-  #
-  # @param [string]               to_slug        Identifier for the successor subscription list
-  # @param [string]               from_slug      Identifier for the source subscription list
-
-  def bulk_migrate(from_slug:, to_slug:)
-    post_json(
-      "#{endpoint}/subscriber-lists/bulk-migrate",
-      from_slug:,
-      to_slug:,
-    )
-  end
-
   # Update subscriber list details, such as title
   # @param [Hash]         params        A hash of detail paramaters that can be updated. For example title.
   #                                     For allowed parameters see:

@@ -466,24 +466,6 @@ module GdsApi
         .to_return(status: 422)
       end
 
-      def stub_email_alert_api_bulk_migrate(from_slug:, to_slug:)
-        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/bulk-migrate")
-        .with(body: { from_slug:, to_slug: }.to_json)
-        .to_return(status: 202)
-      end
-
-      def stub_email_alert_api_bulk_migrate_bad_request(from_slug:, to_slug:)
-        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/bulk-migrate")
-          .with(body: { from_slug:, to_slug: }.to_json)
-          .to_return(status: 422)
-      end
-
-      def stub_email_alert_api_bulk_migrate_not_found(from_slug:, to_slug:)
-        stub_request(:post, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/bulk-migrate")
-          .with(body: { from_slug:, to_slug: }.to_json)
-          .to_return(status: 404)
-      end
-
       def stub_update_subscriber_list_details(slug:, params:)
         stub_request(:patch, "#{EMAIL_ALERT_API_ENDPOINT}/subscriber-lists/#{slug}")
         .with(body: params.to_json)
