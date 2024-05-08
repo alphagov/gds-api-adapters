@@ -1,13 +1,13 @@
 require "test_helper"
-require "gds_api/imminence"
+require "gds_api/places_manager"
 
-class ImminenceApiTest < Minitest::Test
-  ROOT = Plek.find("imminence")
+class PlacesManagerApiTest < Minitest::Test
+  ROOT = Plek.find("places-manager")
   LATITUDE = 52.1327584352089
   LONGITUDE = -0.4702813074674147
 
   def api_client
-    GdsApi::Imminence.new(ROOT)
+    GdsApi::PlacesManager.new(ROOT)
   end
 
   def dummy_place
