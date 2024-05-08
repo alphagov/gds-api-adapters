@@ -1,9 +1,7 @@
-# UNRELEASED
+# 96.0.0
 
 * BREAKING: Rename imminence endpoints to places_manager [PR](https://github.com/alphagov/gds-api-adapters/pull/1253)
 * Note: This is used in Frontend only, so for other apps should not be breaking in practice.
-
-# 96.0.0
 * BREAKING: Drop support for email-alert-api's bulk migrate endpoint
 
 # 95.1.0
