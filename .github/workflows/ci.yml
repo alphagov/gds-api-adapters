@@ -129,6 +129,7 @@ jobs:
       - collections_pact
       - email_alert_api_pact
       - frontend_pact
+      - places_manager_pact
       - link_checker_api_pact
       - locations_api_pact
       - publishing_api_pact
