@@ -77,7 +77,7 @@ Pact.service_consumer "GDS API Adapters" do
     end
   end
 
-  has_pact_with "PlacesManager API" do
+  has_pact_with "Places Manager API" do
     mock_service :places_manager_api do
       port PLACES_MANAGER_API_PORT
     end
