@@ -100,7 +100,7 @@ jobs:
 
   places_manager_pact:
     needs: generate_pacts
-    uses: alphagov/imminence/.github/workflows/pact-verify.yml@main
+    uses: alphagov/places-manager/.github/workflows/pact-verify.yml@main
     with:
       pact_artifact: pacts
 
