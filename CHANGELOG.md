@@ -1,4 +1,4 @@
-# Unreleased
+# 96.0.1
 
 * Update Pact specs to match the email-alert-api [PR](https://github.com/alphagov/email-alert-api/pull/2136)
 
