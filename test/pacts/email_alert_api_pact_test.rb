@@ -23,7 +23,7 @@ describe "GdsApi::EmailAlertApi pact tests" do
     {
       id: Pact.like(1),
       links: {},
-      tags: { topics: { any: ["motoring/road_rage"] } },
+      tags: { tribunal_decision_categories: { any: %w[agency-workers] } },
       document_type: "",
       slug: Pact.like("title-1"),
       title: Pact.like("title 1"),
@@ -39,7 +39,7 @@ describe "GdsApi::EmailAlertApi pact tests" do
           path: "/subscriber-lists",
           body: {
             title: "new-title",
-            tags: { topics: { any: ["motoring/road_rage"] } },
+            tags: { tribunal_decision_categories: { any: %w[agency-workers] } },
           },
           headers: GdsApi::JsonClient.default_request_with_json_body_headers,
         )
@@ -53,19 +53,19 @@ describe "GdsApi::EmailAlertApi pact tests" do
           },
         )
 
-      api_client.find_or_create_subscriber_list(title: "new-title", tags: { topics: { any: ["motoring/road_rage"] } })
+      api_client.find_or_create_subscriber_list(title: "new-title", tags: { tribunal_decision_categories: { any: %w[agency-workers] } })
     end
 
     it "responds with the subscriber list with an updated title" do
       email_alert_api
-        .given("a subscriber list with the tag topic: motoring/road_rage exists")
+        .given("a subscriber list with the tag tribunal decision category: agency-workers exists")
         .upon_receiving("a request to find or create a subscriber list")
         .with(
           method: :post,
           path: "/subscriber-lists",
           body: {
             title: "new-title",
-            tags: { topics: { any: ["motoring/road_rage"] } },
+            tags: { tribunal_decision_categories: { any: %w[agency-workers] } },
           },
           headers: GdsApi::JsonClient.default_request_with_json_body_headers,
         )
@@ -79,7 +79,7 @@ describe "GdsApi::EmailAlertApi pact tests" do
           },
         )
 
-      api_client.find_or_create_subscriber_list(title: "new-title", tags: { topics: { any: ["motoring/road_rage"] } })
+      api_client.find_or_create_subscriber_list(title: "new-title", tags: { tribunal_decision_categories: { any: %w[agency-workers] } })
     end
   end
 
@@ -92,7 +92,7 @@ describe "GdsApi::EmailAlertApi pact tests" do
           path: "/subscriber-lists",
           # Query here is odd because the parser doesn't quite handle
           # the output of Rack::Utils.build_nested_query
-          query: { "tags[topics][any][]": ["motoring/road_rage"] },
+          query: { "tags[tribunal_decision_categories][any][]": %w[agency-workers] },
           headers: GdsApi::JsonClient.default_request_headers,
         )
         .will_respond_with(
@@ -104,7 +104,7 @@ describe "GdsApi::EmailAlertApi pact tests" do
         )
 
       begin
-        api_client.find_subscriber_list(tags: { topics: { any: ["motoring/road_rage"] } })
+        api_client.find_subscriber_list(tags: { tribunal_decision_categories: { any: %w[agency-workers] } })
       rescue GdsApi::HTTPNotFound
         # We expect this to throw an exception
       end
@@ -112,14 +112,14 @@ describe "GdsApi::EmailAlertApi pact tests" do
 
     it "responds with the subscriber list" do
       email_alert_api
-        .given("a subscriber list with the tag topic: motoring/road_rage exists")
+        .given("a subscriber list with the tag tribunal decision category: agency-workers exists")
         .upon_receiving("a request for the subscriber list")
         .with(
           method: :get,
           path: "/subscriber-lists",
           # Query here is odd because the parser doesn't quite handle
           # the output of Rack::Utils.build_nested_query
-          query: { "tags[topics][any][]": ["motoring/road_rage"] },
+          query: { "tags[tribunal_decision_categories][any][]": %w[agency-workers] },
           headers: GdsApi::JsonClient.default_request_headers,
         )
         .will_respond_with(
@@ -132,7 +132,7 @@ describe "GdsApi::EmailAlertApi pact tests" do
           },
         )
 
-      api_client.find_subscriber_list(tags: { topics: { any: ["motoring/road_rage"] } })
+      api_client.find_subscriber_list(tags: { tribunal_decision_categories: { any: %w[agency-workers] } })
     end
   end
 

@@ -1,3 +1,7 @@
+# Unreleased
+
+* Update Pact specs to match the email-alert-api [PR](https://github.com/alphagov/email-alert-api/pull/2136)
+
 # 96.0.0
 
 * BREAKING: Rename imminence endpoints to places_manager [PR](https://github.com/alphagov/gds-api-adapters/pull/1253)
