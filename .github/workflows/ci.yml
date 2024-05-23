@@ -112,6 +112,7 @@ jobs:
       pact_artifact: pacts
 
   publish_pacts:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     needs:
       - account_api_pact
       - asset_manager_pact
