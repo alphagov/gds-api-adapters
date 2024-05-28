@@ -22,6 +22,24 @@ class GdsApi::SupportApi < GdsApi::Base
     post_json("#{endpoint}/anonymous-feedback/global-export-requests", global_export_request: request_details)
   end
 
+  # Raise a support ticket
+  # Makes a +POST+ request to support-api to create a new support ticket.
+  #
+  # @params params [Hash] Any attributes that relate to creating a new support ticket.
+
+  # @example
+  # SupportApi.raise_support_ticket(
+  #   subject: "Feedback for app",
+  #   tags: ["app_name"]
+  #   body: {
+  #     "User agent": "Safari",
+  #     "Details": "Ticket details go here.",
+  #   }
+  # )
+  def raise_support_ticket(params)
+    post_json("#{endpoint}/support-tickets", params)
+  end
+
   # Create a Page Improvement
   #
   # Makes a +POST+ request to the support api to create a Page Improvement.

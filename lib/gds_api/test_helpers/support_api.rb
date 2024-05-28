@@ -150,6 +150,12 @@ module GdsApi
           .to_return(status: 200, body: response_body.to_json)
       end
 
+      def stub_support_api_raise_support_ticket(params)
+        post_stub = stub_http_request(:post, "#{SUPPORT_API_ENDPOINT}/support-tickets")
+        post_stub.with(body: params)
+        post_stub.to_return(status: 201)
+      end
+
       def stub_any_support_api_call
         stub_request(:any, %r{\A#{SUPPORT_API_ENDPOINT}})
       end

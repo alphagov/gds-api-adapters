@@ -240,4 +240,15 @@ describe GdsApi::SupportApi do
       assert_requested(stub_get)
     end
   end
+
+  describe "POST /support-tickets" do
+    it "makes a POST request to the support API" do
+      params = { subject: "Feedback for app", tags: "app_name", details: "Ticket details go here." }
+      stub_post = stub_support_api_raise_support_ticket(params)
+
+      @api.raise_support_ticket(params)
+
+      assert_requested(stub_post)
+    end
+  end
 end
