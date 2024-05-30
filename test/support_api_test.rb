@@ -242,13 +242,28 @@ describe GdsApi::SupportApi do
   end
 
   describe "POST /support-tickets" do
-    it "makes a POST request to the support API" do
-      params = { subject: "Feedback for app", tags: "app_name", details: "Ticket details go here." }
-      stub_post = stub_support_api_raise_support_ticket(params)
+    it "makes a valid POST request to the support API" do
+      params = {
+        subject: "Feedback for app",
+        tags: "app_name",
+        user_agent: "Safari",
+        description: "There is something wrong with this page.",
+      }
+      stub_post = stub_support_api_valid_raise_support_ticket(params)
 
       @api.raise_support_ticket(params)
 
       assert_requested(stub_post)
+    end
+
+    it "makes an invalid POST request to the support API" do
+      params = { subject: "Ticket without body" }
+
+      stub_support_api_invalid_raise_support_ticket(params)
+
+      assert_raises GdsApi::HTTPUnprocessableEntity do
+        @api.raise_support_ticket(params)
+      end
     end
   end
 end
