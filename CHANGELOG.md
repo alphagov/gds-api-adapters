@@ -1,3 +1,6 @@
+# Unreleased
+* Add Pact tests for support-api [PR](https://github.com/alphagov/gds-api-adapters/pull/1273).
+
 # 96.0.1
 
 * Update Pact specs to match the email-alert-api [PR](https://github.com/alphagov/email-alert-api/pull/2136)

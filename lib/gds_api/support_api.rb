@@ -31,10 +31,8 @@ class GdsApi::SupportApi < GdsApi::Base
   # SupportApi.raise_support_ticket(
   #   subject: "Feedback for app",
   #   tags: ["app_name"]
-  #   body: {
-  #     "User agent": "Safari",
-  #     "Details": "Ticket details go here.",
-  #   }
+  #   user_agent: "Safari",
+  #   description: "Ticket details go here.",
   # )
   def raise_support_ticket(params)
     post_json("#{endpoint}/support-tickets", params)
