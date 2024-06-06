@@ -111,6 +111,12 @@ jobs:
     with:
       pact_artifact: pacts
 
+  support_api_pact:
+    needs: generate_pacts
+    uses: alphagov/support-api/.github/workflows/pact-verify.yml@main
+    with:
+      pact_artifact: pacts
+
   publish_pacts:
     if: ${{ github.actor != 'dependabot[bot]' }}
     needs:
@@ -123,6 +129,7 @@ jobs:
       - link_checker_api_pact
       - locations_api_pact
       - publishing_api_pact
+      - support_api_pact
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
