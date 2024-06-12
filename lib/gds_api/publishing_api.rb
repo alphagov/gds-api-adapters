@@ -487,6 +487,53 @@ class GdsApi::PublishingApi < GdsApi::Base
     e
   end
 
+  # Get all schemas
+  #
+  # @return [GdsApi::Response] A map of schema names with JSON schemas.
+  #
+  # @example
+  #
+  #   publishing_api.get_schemas()
+  #     # => {
+  #       "email_address" => {
+  #           "type": "email_address",
+  #           "required": ["email"],
+  #           "properties": {
+  #             "email": { "type" => "string" },
+  #           },
+  #         }
+  #     }
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/main/docs/api.md#get-v2schemas
+  def get_schemas
+    get_json("#{endpoint}/v2/schemas").to_hash
+  end
+
+  # Get a content schema by name
+  #
+  # @param schema_name [String]
+  #
+  # @return [GdsApi::Response] A response mapping schema name with JSON schema.
+  #
+  # @example
+  #
+  #   publishing_api.get_schema("email_address")
+  #     # => {
+  #       "email_address" => {
+  #           "type": "email_address",
+  #           "required": ["email"],
+  #           "properties": {
+  #             "email": { "type" => "string" },
+  #           },
+  #         }
+  #     }
+  #
+  # @raise [HTTPNotFound] when the schema is not found
+  # @see https://github.com/alphagov/publishing-api/blob/main/docs/api.md#get-v2schemasschema_name
+  def get_schema(schema_name)
+    get_json("#{endpoint}/v2/schemas/#{schema_name}").to_hash
+  end
+
 private
 
   def content_url(content_id, params = {})
