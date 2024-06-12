@@ -802,6 +802,59 @@ module GdsApi
                      body: { error: }.to_json)
       end
 
+      # Stub a request to get a schema by schema name
+      #
+      # @param [String] schema name
+      #
+      # @example
+      #   stub_publishing_api_has_schemas_for_schema_name(
+      #     "email_address",
+      #     { "email_address" =>  {
+      #         "type": "email_address",
+      #         "required": ["email"],
+      #         "properties": {
+      #           "email": { "type" => "string" },
+      #         },
+      #       },
+      #     }
+      #   )
+      def stub_publishing_api_has_schemas_for_schema_name(schema_name, schema)
+        url = "#{PUBLISHING_API_V2_ENDPOINT}/schemas/#{schema_name}"
+        stub_request(:get, url).to_return(status: 200, body: schema.to_json, headers: {})
+      end
+
+      def stub_publishing_api_schema_name_path_to_return_not_found(schema_name)
+        url = "#{PUBLISHING_API_V2_ENDPOINT}/schemas/#{schema_name}"
+        stub_request(:get, url).to_return(status: 404, headers: { "Content-Type" => "application/json; charset=utf-8" })
+      end
+
+      # Stub a request to get all schemas
+      #
+      #
+      # @example
+      #   stub_publishing_api_has_schemas(
+      #     {
+      #         "email_address" =>  {
+      #           "type": "email_address",
+      #           "required": ["email"],
+      #           "properties": {
+      #             "email": { "type" => "string" },
+      #           },
+      #         },
+      #         "tax_bracket" => {
+      #           "type": "tax_bracket",
+      #           "required": ["code"],
+      #           "properties": {
+      #             "code": { "type" => "string" },
+      #           },
+      #         }
+      #     }
+      #   )
+      def stub_publishing_api_has_schemas(schemas)
+        url = "#{PUBLISHING_API_V2_ENDPOINT}/schemas"
+        stub_request(:get, url).to_return(status: 200, body: schemas.to_json, headers: {})
+      end
+
     private
 
       def stub_publishing_api_put(*args)
