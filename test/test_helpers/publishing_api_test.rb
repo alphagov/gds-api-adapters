@@ -539,6 +539,78 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
+  describe "#stub_publishing_api_has_schemas" do
+    it "returns the given schemas" do
+      schemas = {
+        "email_address" => {
+          "type": "email_address",
+          "required": %w[email],
+          "properties": {
+            "email": { "type" => "string" },
+          },
+        },
+        "tax_bracket" => {
+          "type": "tax_bracket",
+          "required": %w[code],
+          "properties": {
+            "code": { "type" => "string" },
+          },
+        },
+      }
+
+      stub_publishing_api_has_schemas(
+        schemas,
+      )
+
+      api_response = publishing_api.get_schemas
+
+      assert_equal(
+        schemas.to_json,
+        api_response.to_json,
+      )
+    end
+  end
+
+  describe "#stub_publishing_api_has_schemas_for_schema_name" do
+    it "returns the given schema" do
+      schema_name = "email_address"
+
+      schema = {
+        "email_address" => {
+          "type": "email_address",
+          "required": %w[email],
+          "properties": {
+            "email": { "type" => "string" },
+          },
+        },
+      }
+
+      stub_publishing_api_has_schemas_for_schema_name(
+        schema_name,
+        schema,
+      )
+
+      api_response = publishing_api.get_schema(schema_name)
+
+      assert_equal(
+        schema.to_json,
+        api_response.to_json,
+      )
+    end
+  end
+
+  describe "#stub_publishing_api_schema_name_path_to_return_not_found" do
+    it "returns a GdsApi::HTTPNotFound for a call to get a schema by name" do
+      schema_name = "missing_schema"
+
+      stub_publishing_api_schema_name_path_to_return_not_found(schema_name)
+
+      assert_raises GdsApi::HTTPNotFound do
+        publishing_api.get_schema(schema_name)
+      end
+    end
+  end
+
   describe "#request_json_matching predicate" do
     describe "nested required attribute" do
       let(:matcher) { request_json_matching("a" => { "b" => 1 }) }
