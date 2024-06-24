@@ -1,4 +1,8 @@
 # Unreleased
+
+# 96.0.2
+
+* Add /schemas publishing api endpoints [PR](https://github.com/alphagov/gds-api-adapters/pull/1275).
 * Add Pact tests for support-api [PR](https://github.com/alphagov/gds-api-adapters/pull/1273).
 
 # 96.0.1
