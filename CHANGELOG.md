@@ -1,5 +1,7 @@
 # Unreleased
 
+# 96.0.3
+
 * Add support for getting content with embeds from the Publishing API [PR](https://github.com/alphagov/gds-api-adapters/pull/1283)
 
 # 96.0.2
