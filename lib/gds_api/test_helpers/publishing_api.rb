@@ -340,6 +340,43 @@ module GdsApi
           .to_return(status: 200, body: body.to_json, headers: {})
       end
 
+      # Stub GET /v2/content/:content_id/embedded to return a list of content items that embed the target content_id
+      #
+      # @example
+      #
+      #   stub_publishing_api_has_content_(
+      #     content_id: "9faacf5c-f4e6-4bf9-ba90-413e997c1f22" # this is the content_id for a reusable edition
+      #     total: 1 # the number of results returned
+      #     results: [{
+      #       "title" => "foo",
+      #       "document_type" => "document",
+      #       "base_path" => "/foo",
+      #       "content_id" => "e60fae2a-5490-4e2f-9e80-2093c47608d4",
+      #       "primary_publishing_organisation" => {
+      #         "content_id" => "7662e1e7-79f9-4d0a-b754-6232186851f6",
+      #         "title" => "bar",
+      #         "base_path" => "/organisation/bar",
+      #       },
+      #     }] # an array of content items that embed the target content_id
+      #   )
+      # @param content_id [UUID, Mocha::ParameterMatchers::Anything]
+      # @param total Integer
+      # @param params [Hash]
+      def stub_publishing_api_has_embedded_content(content_id:, total: 0, results: [])
+        url = if content_id.is_a?(Mocha::ParameterMatchers::Anything)
+                %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/[0-9a-fA-F-]{36}/embedded}
+              else
+                "#{PUBLISHING_API_V2_ENDPOINT}/content/#{content_id}/embedded"
+              end
+
+        stub_request(:get, url)
+          .to_return(body: {
+            "content_id" => content_id,
+            "total" => total,
+            "results" => results,
+          }.to_json)
+      end
+
       # This method has been refactored into publishing_api_has_content (above)
       # publishing_api_has_content allows for flexible passing in of arguments, please use instead
       def stub_publishing_api_has_fields_for_document(document_type, items, fields)
