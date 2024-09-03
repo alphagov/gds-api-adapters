@@ -110,6 +110,30 @@ Then at the PSQL command line:
 
 `template1=# CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`
 
+## Releasing
+
+1. Read the CHANGELOG.md and decide on the new semantic version number
+1. Create a release branch, eg. `release-96.0.3`
+1. Update the CHANGELOG.md
+    - Declare a new version number
+    - Move all unreleased changes beneath it
+1. Update `lib/gds_api/version.rb` to match, eg
+
+    ```ruby
+      module GdsApi
+        VERSION = "96.0.3".freeze
+      end
+    ```
+
+1. Copy the lines from the CHANGELOG.md into the git commit
+1. Propose and merge the pull request into `main`
+
+Nb:
+
+- You do not need to set any git tags
+- After merging, CI will release the new version of the gem and Dependabot will
+  propose the new version of the gem to help distribute the changes to consumers
+
 ## Licence
 
 Released under the MIT Licence, a copy of which can be found in the file
