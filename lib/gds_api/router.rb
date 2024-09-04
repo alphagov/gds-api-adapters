@@ -33,7 +33,7 @@ class GdsApi::Router < GdsApi::Base
     )
   end
 
-  def add_redirect_route(path, type, destination, redirect_type = "permanent", options = {})
+  def add_redirect_route(path, type, destination, options = {})
     put_json(
       "#{endpoint}/routes",
       route: {
@@ -41,7 +41,6 @@ class GdsApi::Router < GdsApi::Base
         route_type: type,
         handler: "redirect",
         redirect_to: destination,
-        redirect_type:,
         segments_mode: options[:segments_mode],
       },
     )
