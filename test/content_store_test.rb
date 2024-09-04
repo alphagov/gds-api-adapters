@@ -46,15 +46,13 @@ describe GdsApi::ContentStore do
       path:,
       destination: "/destination",
       type: "exact",
-      segments_mode: "ignore",
-      redirect_type: "permanent"
+      segments_mode: "ignore"
     )
       {
         "path" => path,
         "destination" => destination,
         "type" => type,
         "segments_mode" => segments_mode,
-        "redirect_type" => redirect_type,
       }
     end
 
@@ -94,22 +92,13 @@ describe GdsApi::ContentStore do
       assert_equal "https://example.com/b", destination
     end
 
-    it "includes a 301 status code for a permanent redirect" do
+    it "includes a 301 status code for a redirect" do
       @content_item["redirects"] = [
-        create_redirect(path: "/a", redirect_type: "permanent"),
+        create_redirect(path: "/a"),
       ]
 
       _, status_code = GdsApi::ContentStore.redirect_for_path(@content_item, "/a")
       assert_equal 301, status_code
-    end
-
-    it "includes a 301 status code for a temporary redirect" do
-      @content_item["redirects"] = [
-        create_redirect(path: "/a", redirect_type: "temporary"),
-      ]
-
-      _, status_code = GdsApi::ContentStore.redirect_for_path(@content_item, "/a")
-      assert_equal 302, status_code
     end
 
     it "returns an absolute URL redirect unmodified" do

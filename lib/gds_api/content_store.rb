@@ -53,7 +53,7 @@ private
               "#{Plek.new.website_root}#{destination_uri}"
             end
 
-      [url, status_code(redirect)]
+      [url, 301]
     end
 
     private_class_method :new
@@ -104,10 +104,6 @@ private
       uri.query = query if uri.query.nil? && !query.empty?
 
       uri.to_s
-    end
-
-    def status_code(redirect)
-      redirect["redirect_type"] == "temporary" ? 302 : 301
     end
   end
 
