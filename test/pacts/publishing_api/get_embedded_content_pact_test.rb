@@ -18,6 +18,7 @@ describe "GdsApi::PublishingApi#get_content_by_embedded_document pact tests" do
           "title" => "foo",
           "base_path" => "/foo",
           "document_type" => "publication",
+          "publishing_app" => "publisher",
           "primary_publishing_organisation" => {
             "content_id" => publishing_organisation_content_id,
             "title" => "bar",
