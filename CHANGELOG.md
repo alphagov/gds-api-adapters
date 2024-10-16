@@ -2,7 +2,11 @@
 
 ## Unreleased
 
-* Remove ability to specify "temporary" redirects for Router API.
+## 97.0.0
+
+* BREAKING: Remove ability to specify "temporary" redirects for Router API [PR](https://github.com/alphagov/gds-api-adapters/pull/1286)
+  * Note: This is an unused feature, so should not be breaking in practice.
+* Add publishing app to Host Content [PR](https://github.com/alphagov/gds-api-adapters/pull/1287)
 
 ## 96.0.3
 
