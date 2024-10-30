@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* Add GraphQL endpoint for Publishing API [PR](https://github.com/alphagov/gds-api-adapters/pull/1290)
+  * Note: This endpoint is to be used for the GraphQL proof of concept prototype only.
+
 ## 97.0.0
 
 * BREAKING: Remove ability to specify "temporary" redirects for Router API [PR](https://github.com/alphagov/gds-api-adapters/pull/1286)
