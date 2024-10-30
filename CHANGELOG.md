@@ -1,6 +1,9 @@
 # Changelog
 
-## Unreleased
+## 97.1.0
+
+* Add GraphQL endpoint for Publishing API [PR](https://github.com/alphagov/gds-api-adapters/pull/1290)
+  * Note: This endpoint is to be used for the GraphQL proof of concept prototype only.
 
 ## 97.0.0
 

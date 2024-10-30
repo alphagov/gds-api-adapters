@@ -611,6 +611,32 @@ describe GdsApi::TestHelpers::PublishingApi do
     end
   end
 
+  describe "#stub_publishing_api_graphql_query" do
+    it "returns the given response" do
+      query = "some query"
+
+      stubbed_response = {
+        data: {
+          edition: {
+            title: "some title",
+          },
+        },
+      }
+
+      stub_publishing_api_graphql_query(
+        query,
+        stubbed_response,
+      )
+
+      api_response = publishing_api.graphql_query(query)
+
+      assert_equal(
+        stubbed_response.to_json,
+        api_response.to_json,
+      )
+    end
+  end
+
   describe "#request_json_matching predicate" do
     describe "nested required attribute" do
       let(:matcher) { request_json_matching("a" => { "b" => 1 }) }

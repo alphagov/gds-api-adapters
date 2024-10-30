@@ -550,6 +550,15 @@ class GdsApi::PublishingApi < GdsApi::Base
     get_json("#{endpoint}/v2/schemas/#{schema_name}").to_hash
   end
 
+  # Make a GraphQL query
+  #
+  # @param query [String]
+  #
+  # @return [Hash] A response with the result of the GraphQL query.
+  def graphql_query(query)
+    post_json("#{endpoint}/graphql", query:).to_hash
+  end
+
 private
 
   def content_url(content_id, params = {})
