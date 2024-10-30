@@ -18,7 +18,7 @@ describe "GdsApi::PublishingApi#graphql_query pact tests" do
     QUERY
 
     publishing_api
-      .given("a published content item exists with base_path /my-example")
+      .given("a published content item exists with base_path /my-document")
       .upon_receiving("a GraphQL request")
       .with(
         method: :post,
