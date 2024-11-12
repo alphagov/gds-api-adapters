@@ -374,8 +374,9 @@ module GdsApi
       #   )
       # @param content_id [UUID, Mocha::ParameterMatchers::Anything]
       # @param total Integer
-      # @param params [Hash]
-      def stub_publishing_api_has_embedded_content(content_id:, total: 0, results: [])
+      # @param total_pages Integer
+      # @param results [Hash]
+      def stub_publishing_api_has_embedded_content(content_id:, total: 0, total_pages: 0, results: [])
         url = if content_id.is_a?(Mocha::ParameterMatchers::Anything)
                 %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/[0-9a-fA-F-]{36}/embedded}
               else
@@ -386,6 +387,7 @@ module GdsApi
           .to_return(body: {
             "content_id" => content_id,
             "total" => total,
+            "total_pages" => total_pages,
             "results" => results,
           }.to_json)
       end

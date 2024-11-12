@@ -47,6 +47,44 @@ describe "GdsApi::PublishingApi#get_content_by_embedded_document pact tests" do
     assert_equal(expected_body, response.parsed_content)
   end
 
+  it "supports pagination" do
+    publishing_api
+      .given("a content item exists (content_id: #{content_id}) that embeds the reusable content (content_id: #{reusable_content_id})")
+      .upon_receiving("a get_content_by_embedded_document request with pagination")
+      .with(
+        method: :get,
+        path: "/v2/content/#{reusable_content_id}/embedded",
+        query: "page=2",
+      )
+      .will_respond_with(
+        status: 200,
+        body: expected_body,
+      )
+
+    response = api_client.get_content_by_embedded_document(reusable_content_id, { page: 2 })
+
+    assert_equal(expected_body, response.parsed_content)
+  end
+
+  it "supports sorting" do
+    publishing_api
+      .given("a content item exists (content_id: #{content_id}) that embeds the reusable content (content_id: #{reusable_content_id})")
+      .upon_receiving("a get_content_by_embedded_document request with sorting")
+      .with(
+        method: :get,
+        path: "/v2/content/#{reusable_content_id}/embedded",
+        query: "order=-last_edited_at",
+      )
+      .will_respond_with(
+        status: 200,
+        body: expected_body,
+      )
+
+    response = api_client.get_content_by_embedded_document(reusable_content_id, { order: "-last_edited_at" })
+
+    assert_equal(expected_body, response.parsed_content)
+  end
+
   it "responds with 404 if the content item does not exist" do
     missing_content_id = "missing-content-id"
     publishing_api
