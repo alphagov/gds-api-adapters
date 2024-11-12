@@ -339,18 +339,21 @@ class GdsApi::PublishingApi < GdsApi::Base
 
   # Get content items which embed a reusable content_id
   #
-  # No params are currently permitted.
+  # @param content_id [UUID]
+  # @param params [Hash]
   #
-  # @example
-  #
-  #   publishing_api.get_content_by_embedded_document("4b148ebc-b2bb-40db-8e48-dd8cff363ff7")
+  #   publishing_api.get_content_by_embedded_document(
+  #     "4b148ebc-b2bb-40db-8e48-dd8cff363ff7",
+  #     { page: 1, order: '-last_edited_at' }
+  #   )
   #
   # @return [GdsApi::Response] A response containing a summarised list of the content items which embed the target.
   # The content items returned will be in either the draft of published state.
   #
   # @see https://github.com/alphagov/publishing-api/blob/main/docs/api.md#get-v2contentcontent_idembedded
-  def get_content_by_embedded_document(content_id)
-    get_json("#{endpoint}/v2/content/#{content_id}/embedded")
+  def get_content_by_embedded_document(content_id, params = {})
+    query = query_string(params)
+    get_json("#{endpoint}/v2/content/#{content_id}/embedded#{query}")
   end
 
   # Returns an Enumerator of content items for the provided
