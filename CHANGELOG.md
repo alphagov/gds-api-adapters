@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+*  Add new args to get_content_by_embedded_document [PR](https://github.com/alphagov/gds-api-adapters/pull/1291)
+
 ## 97.1.0
 
 * Add GraphQL endpoint for Publishing API [PR](https://github.com/alphagov/gds-api-adapters/pull/1290)
