@@ -9,23 +9,24 @@ describe "GdsApi::PublishingApi#get_content_by_embedded_document pact tests" do
   let(:reusable_content_id) { "bed722e6-db68-43e5-9079-063f623335a7" }
   let(:content_id) { "d66d6552-2627-4451-9dbc-cadbbd2005a1" }
   let(:publishing_organisation_content_id) { "d1e7d343-9844-4246-a469-1fa4640e12ad" }
+  let(:result) do
+    {
+      "title" => "foo",
+      "base_path" => "/foo",
+      "document_type" => "publication",
+      "publishing_app" => "publisher",
+      "primary_publishing_organisation" => {
+        "content_id" => publishing_organisation_content_id,
+        "title" => "bar",
+        "base_path" => "/bar",
+      },
+    }
+  end
   let(:expected_body) do
     {
       "content_id" => reusable_content_id,
       "total" => 1,
-      "results" => [
-        {
-          "title" => "foo",
-          "base_path" => "/foo",
-          "document_type" => "publication",
-          "publishing_app" => "publisher",
-          "primary_publishing_organisation" => {
-            "content_id" => publishing_organisation_content_id,
-            "title" => "bar",
-            "base_path" => "/bar",
-          },
-        },
-      ],
+      "results" => [result],
     }
   end
 
@@ -47,42 +48,107 @@ describe "GdsApi::PublishingApi#get_content_by_embedded_document pact tests" do
     assert_equal(expected_body, response.parsed_content)
   end
 
-  it "supports pagination" do
-    publishing_api
-      .given("a content item exists (content_id: #{content_id}) that embeds the reusable content (content_id: #{reusable_content_id})")
-      .upon_receiving("a get_content_by_embedded_document request with pagination")
-      .with(
-        method: :get,
-        path: "/v2/content/#{reusable_content_id}/embedded",
-        query: "page=2",
-      )
-      .will_respond_with(
-        status: 200,
-        body: expected_body,
-      )
+  describe "there are multiple pages" do
+    let(:publishing_api_with_multiple_content_items) do
+      publishing_api.given("multiple content items exist that embed the reusable content (content_id: #{reusable_content_id})")
+    end
 
-    response = api_client.get_content_by_embedded_document(reusable_content_id, { page: 2 })
+    let(:result) do
+      {
+        "title" => "foo",
+        "base_path" => "/foo",
+        "document_type" => "publication",
+        "publishing_app" => "publisher",
+        "primary_publishing_organisation" => {
+          "content_id" => nil,
+          "title" => nil,
+          "base_path" => nil,
+        },
+      }
+    end
 
-    assert_equal(expected_body, response.parsed_content)
-  end
+    it "returns the first page of results" do
+      publishing_api_with_multiple_content_items
+        .upon_receiving("a get_content_by_embedded_document request for multiple pages")
+        .with(
+          method: :get,
+          path: "/v2/content/#{reusable_content_id}/embedded",
+        )
+        .will_respond_with(
+          status: 200,
+          body: {
+            "content_id" => reusable_content_id,
+            "total" => 12,
+            "total_pages" => 2,
+            "results" => Pact.each_like(result, min: 10),
+          },
+        )
 
-  it "supports sorting" do
-    publishing_api
-      .given("a content item exists (content_id: #{content_id}) that embeds the reusable content (content_id: #{reusable_content_id})")
-      .upon_receiving("a get_content_by_embedded_document request with sorting")
-      .with(
-        method: :get,
-        path: "/v2/content/#{reusable_content_id}/embedded",
-        query: "order=-last_edited_at",
-      )
-      .will_respond_with(
-        status: 200,
-        body: expected_body,
-      )
+      api_client.get_content_by_embedded_document(reusable_content_id)
+    end
 
-    response = api_client.get_content_by_embedded_document(reusable_content_id, { order: "-last_edited_at" })
+    it "supports a page argument" do
+      publishing_api_with_multiple_content_items
+        .upon_receiving("a get_content_by_embedded_document request for multiple pages with a page argument")
+        .with(
+          method: :get,
+          path: "/v2/content/#{reusable_content_id}/embedded",
+          query: "page=2",
+        )
+        .will_respond_with(
+          status: 200,
+          body: {
+            "content_id" => reusable_content_id,
+            "total" => 12,
+            "total_pages" => 2,
+            "results" => Pact.each_like(result, min: 2),
+          },
+        )
 
-    assert_equal(expected_body, response.parsed_content)
+      api_client.get_content_by_embedded_document(reusable_content_id, { page: 2 })
+    end
+
+    it "supports a per page argument" do
+      publishing_api_with_multiple_content_items
+        .upon_receiving("a get_content_by_embedded_document request for multiple pages with a per_page argument")
+        .with(
+          method: :get,
+          path: "/v2/content/#{reusable_content_id}/embedded",
+          query: "per_page=1",
+        )
+        .will_respond_with(
+          status: 200,
+          body: {
+            "content_id" => reusable_content_id,
+            "total" => 12,
+            "total_pages" => 12,
+            "results" => Pact.each_like(result, min: 1),
+          },
+        )
+
+      api_client.get_content_by_embedded_document(reusable_content_id, { per_page: 1 })
+    end
+
+    it "supports sorting" do
+      publishing_api_with_multiple_content_items
+        .upon_receiving("a get_content_by_embedded_document request for multiple pages with sorting")
+        .with(
+          method: :get,
+          path: "/v2/content/#{reusable_content_id}/embedded",
+          query: "order=-last_edited_at",
+        )
+        .will_respond_with(
+          status: 200,
+          body: {
+            "content_id" => reusable_content_id,
+            "total" => 12,
+            "total_pages" => 2,
+            "results" => Pact.each_like(result, min: 10),
+          },
+        )
+
+      api_client.get_content_by_embedded_document(reusable_content_id, { order: "-last_edited_at" })
+    end
   end
 
   it "responds with 404 if the content item does not exist" do
