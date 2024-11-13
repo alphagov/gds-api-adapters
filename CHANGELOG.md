@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## 97.2.0
 
-*  Add new args to get_content_by_embedded_document [PR](https://github.com/alphagov/gds-api-adapters/pull/1291)
+*  Add page and order args to get_content_by_embedded_document [PR](https://github.com/alphagov/gds-api-adapters/pull/1291)
 
 ## 97.1.0
 
