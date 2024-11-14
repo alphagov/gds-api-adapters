@@ -376,16 +376,36 @@ module GdsApi
       # @param total Integer
       # @param total_pages Integer
       # @param results [Hash]
-      def stub_publishing_api_has_embedded_content(content_id:, total: 0, total_pages: 0, results: [])
-        url = if content_id.is_a?(Mocha::ParameterMatchers::Anything)
-                %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/[0-9a-fA-F-]{36}/embedded}
-              else
-                "#{PUBLISHING_API_V2_ENDPOINT}/content/#{content_id}/embedded"
-              end
+      def stub_publishing_api_has_embedded_content(content_id:, total: 0, total_pages: 0, results: [], page_number: nil, order: nil)
+        url = "#{PUBLISHING_API_V2_ENDPOINT}/content/#{content_id}/embedded"
+
+        query = {
+          "page" => page_number,
+          "order" => order,
+        }.compact
 
         stub_request(:get, url)
+          .with(query:)
           .to_return(body: {
             "content_id" => content_id,
+            "total" => total,
+            "total_pages" => total_pages,
+            "results" => results,
+          }.to_json)
+      end
+
+      def stub_publishing_api_has_embedded_content_for_any_content_id(total: 0, total_pages: 0, results: [], page_number: nil, order: nil)
+        url = %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/[0-9a-fA-F-]{36}/embedded}
+
+        query = {
+          "page" => page_number,
+          "order" => order,
+        }.compact
+
+        stub_request(:get, url)
+          .with { |request| WebMock::Util::QueryMapper.query_to_values(request.uri.query) == query }
+          .to_return(body: {
+            "content_id" => SecureRandom.uuid,
             "total" => total,
             "total_pages" => total_pages,
             "results" => results,
