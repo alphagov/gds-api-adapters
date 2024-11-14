@@ -1,7 +1,8 @@
 # Changelog
 
-## Unreleased
+## 97.3.0
 
+* Add page and order args to get_content_by_embedded_document test helper [PR](https://github.com/alphagov/gds-api-adapters/pull/1295)
 * Add autocomplete endpoint for Search API v2 [PR](https://github.com/alphagov/gds-api-adapters/pull/1292)
 
 ## 97.2.0
