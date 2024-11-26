@@ -31,4 +31,15 @@ describe GdsApi::PublishingApi do
       end
     end
   end
+
+  describe "#get_content_by_embedded_document" do
+    it "sends a warning and calls #get_host_content_for_content_id" do
+      content_id = SecureRandom.uuid
+      args = { some: "args" }
+      api_client.expects(:warn).with("GdsAPI::PublishingApi: #get_content_by_embedded_document deprecated (please use #get_host_content_for_content_id)")
+      api_client.expects(:get_host_content_for_content_id).with(content_id, args)
+
+      api_client.get_content_by_embedded_document(content_id, args)
+    end
+  end
 end
