@@ -1,7 +1,7 @@
 require "test_helper"
 require "gds_api/publishing_api"
 
-describe "GdsApi::PublishingApi#get_content_by_embedded_document pact tests" do
+describe "GdsApi::PublishingApi#get_host_content_for_content_id pact tests" do
   include PactTest
 
   let(:api_client) { GdsApi::PublishingApi.new(publishing_api_host) }
@@ -33,17 +33,17 @@ describe "GdsApi::PublishingApi#get_content_by_embedded_document pact tests" do
   it "responds with 200 if the target content item exists" do
     publishing_api
       .given("a content item exists (content_id: #{content_id}) that embeds the reusable content (content_id: #{reusable_content_id})")
-      .upon_receiving("a get_content_by_embedded_document request")
+      .upon_receiving("a get_host_content_for_content_id request")
       .with(
         method: :get,
-        path: "/v2/content/#{reusable_content_id}/embedded",
+        path: "/v2/content/#{reusable_content_id}/host-content",
       )
       .will_respond_with(
         status: 200,
         body: expected_body,
       )
 
-    response = api_client.get_content_by_embedded_document(reusable_content_id)
+    response = api_client.get_host_content_for_content_id(reusable_content_id)
 
     assert_equal(expected_body, response.parsed_content)
   end
@@ -69,10 +69,10 @@ describe "GdsApi::PublishingApi#get_content_by_embedded_document pact tests" do
 
     it "returns the first page of results" do
       publishing_api_with_multiple_content_items
-        .upon_receiving("a get_content_by_embedded_document request for multiple pages")
+        .upon_receiving("a get_host_content_for_content_id request for multiple pages")
         .with(
           method: :get,
-          path: "/v2/content/#{reusable_content_id}/embedded",
+          path: "/v2/content/#{reusable_content_id}/host-content",
         )
         .will_respond_with(
           status: 200,
@@ -84,15 +84,15 @@ describe "GdsApi::PublishingApi#get_content_by_embedded_document pact tests" do
           },
         )
 
-      api_client.get_content_by_embedded_document(reusable_content_id)
+      api_client.get_host_content_for_content_id(reusable_content_id)
     end
 
     it "supports a page argument" do
       publishing_api_with_multiple_content_items
-        .upon_receiving("a get_content_by_embedded_document request for multiple pages with a page argument")
+        .upon_receiving("a get_host_content_for_content_id request for multiple pages with a page argument")
         .with(
           method: :get,
-          path: "/v2/content/#{reusable_content_id}/embedded",
+          path: "/v2/content/#{reusable_content_id}/host-content",
           query: "page=2",
         )
         .will_respond_with(
@@ -105,15 +105,15 @@ describe "GdsApi::PublishingApi#get_content_by_embedded_document pact tests" do
           },
         )
 
-      api_client.get_content_by_embedded_document(reusable_content_id, { page: 2 })
+      api_client.get_host_content_for_content_id(reusable_content_id, { page: 2 })
     end
 
     it "supports a per page argument" do
       publishing_api_with_multiple_content_items
-        .upon_receiving("a get_content_by_embedded_document request for multiple pages with a per_page argument")
+        .upon_receiving("a get_host_content_for_content_id request for multiple pages with a per_page argument")
         .with(
           method: :get,
-          path: "/v2/content/#{reusable_content_id}/embedded",
+          path: "/v2/content/#{reusable_content_id}/host-content",
           query: "per_page=1",
         )
         .will_respond_with(
@@ -126,15 +126,15 @@ describe "GdsApi::PublishingApi#get_content_by_embedded_document pact tests" do
           },
         )
 
-      api_client.get_content_by_embedded_document(reusable_content_id, { per_page: 1 })
+      api_client.get_host_content_for_content_id(reusable_content_id, { per_page: 1 })
     end
 
     it "supports sorting" do
       publishing_api_with_multiple_content_items
-        .upon_receiving("a get_content_by_embedded_document request for multiple pages with sorting")
+        .upon_receiving("a get_host_content_for_content_id request for multiple pages with sorting")
         .with(
           method: :get,
-          path: "/v2/content/#{reusable_content_id}/embedded",
+          path: "/v2/content/#{reusable_content_id}/host-content",
           query: "order=-last_edited_at",
         )
         .will_respond_with(
@@ -147,7 +147,7 @@ describe "GdsApi::PublishingApi#get_content_by_embedded_document pact tests" do
           },
         )
 
-      api_client.get_content_by_embedded_document(reusable_content_id, { order: "-last_edited_at" })
+      api_client.get_host_content_for_content_id(reusable_content_id, { order: "-last_edited_at" })
     end
   end
 
@@ -155,17 +155,17 @@ describe "GdsApi::PublishingApi#get_content_by_embedded_document pact tests" do
     missing_content_id = "missing-content-id"
     publishing_api
       .given("no content exists")
-      .upon_receiving("a get_content_by_embedded_document request")
+      .upon_receiving("a get_host_content_for_content_id request")
       .with(
         method: :get,
-        path: "/v2/content/#{missing_content_id}/embedded",
+        path: "/v2/content/#{missing_content_id}/host-content",
       )
       .will_respond_with(
         status: 404,
       )
 
     assert_raises(GdsApi::HTTPNotFound) do
-      api_client.get_content_by_embedded_document(missing_content_id)
+      api_client.get_host_content_for_content_id(missing_content_id)
     end
   end
 end
