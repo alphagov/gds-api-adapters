@@ -392,7 +392,7 @@ module GdsApi
         order: nil,
         rollup: {}
       )
-        url = "#{PUBLISHING_API_V2_ENDPOINT}/content/#{content_id}/embedded"
+        url = "#{PUBLISHING_API_V2_ENDPOINT}/content/#{content_id}/host-content"
 
         query = {
           "page" => page_number,
@@ -418,7 +418,7 @@ module GdsApi
         order: nil,
         rollup: {}
       )
-        url = %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/[0-9a-fA-F-]{36}/embedded}
+        url = %r{\A#{PUBLISHING_API_V2_ENDPOINT}/content/[0-9a-fA-F-]{36}/host-content}
 
         query = {
           "page" => page_number,
