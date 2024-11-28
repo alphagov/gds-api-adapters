@@ -22,11 +22,20 @@ describe "GdsApi::PublishingApi#get_host_content_for_content_id pact tests" do
       },
     }
   end
+  let(:rollup) do
+    {
+      "views" => 0,
+      "locations" => 1,
+      "instances" => 1,
+      "organisations" => 1,
+    }
+  end
   let(:expected_body) do
     {
       "content_id" => reusable_content_id,
       "total" => 1,
       "results" => [result],
+      "rollup" => rollup,
     }
   end
 
