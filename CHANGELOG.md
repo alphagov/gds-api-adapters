@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 97.4.1
 
 * Add rollup data to host content endpoint [PR](https://github.com/alphagov/gds-api-adapters/pull/1300)
 
