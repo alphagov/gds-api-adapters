@@ -562,9 +562,9 @@ class GdsApi::PublishingApi < GdsApi::Base
   #
   # @param query [String]
   #
-  # @return [Hash] A response with the result of the GraphQL query.
+  # @return [GdsApi::Response] A response with the result of the GraphQL query.
   def graphql_query(query)
-    post_json("#{endpoint}/graphql", query:).to_hash
+    post_json("#{endpoint}/graphql", query:)
   end
 
 private

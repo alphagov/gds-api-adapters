@@ -632,7 +632,7 @@ describe GdsApi::TestHelpers::PublishingApi do
 
       assert_equal(
         stubbed_response.to_json,
-        api_response.to_json,
+        api_response.raw_response_body,
       )
     end
   end
