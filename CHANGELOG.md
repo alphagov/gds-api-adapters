@@ -1,5 +1,9 @@
 # Changelog
 
+## 97.5.0
+
+* Return response to GraphQL endpoint as `GdsApi::Response` instead of `Hash` [PR](https://github.com/alphagov/gds-api-adapters/pull/1304).
+
 ## 97.4.1
 
 * Add rollup data to host content endpoint [PR](https://github.com/alphagov/gds-api-adapters/pull/1300)
