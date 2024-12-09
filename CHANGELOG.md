@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Add a method to fetch a single host content item [PR](https://github.com/alphagov/gds-api-adapters/pull/1306)
+
 ## 97.5.0
 
 * Return response to GraphQL endpoint as `GdsApi::Response` instead of `Hash` [PR](https://github.com/alphagov/gds-api-adapters/pull/1304).
