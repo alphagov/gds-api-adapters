@@ -14,7 +14,6 @@ require "gds_api/locations_api"
 require "gds_api/maslow"
 require "gds_api/organisations"
 require "gds_api/publishing_api"
-require "gds_api/router"
 require "gds_api/search"
 require "gds_api/search_api_v2"
 require "gds_api/support"
@@ -152,19 +151,6 @@ module GdsApi
     GdsApi::PublishingApi.new(
       Plek.find("publishing-api"),
       { bearer_token: ENV["PUBLISHING_API_BEARER_TOKEN"] }.merge(options),
-    )
-  end
-
-  # Creates a GdsApi::Router adapter for communicating with Router API
-  #
-  # This will set a bearer token if a ROUTER_API_BEARER_TOKEN environment
-  # variable is set
-  #
-  # @return [GdsApi::Router]
-  def self.router(options = {})
-    GdsApi::Router.new(
-      Plek.find("router-api"),
-      { bearer_token: ENV["ROUTER_API_BEARER_TOKEN"] }.merge(options),
     )
   end
 

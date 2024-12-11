@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Remove router-api [PR](https://github.com/alphagov/gds-api-adapters/pull/1308)
+
 ## 97.6.0
 
 * Add a method to fetch a single host content item [PR](https://github.com/alphagov/gds-api-adapters/pull/1306)
