@@ -579,9 +579,11 @@ class GdsApi::PublishingApi < GdsApi::Base
   #
   # @param query [String]
   #
-  # @return [GdsApi::Response] A response with the result of the GraphQL query.
+  # @return [GdsApi::Response] A response with the result of the GraphQL query whose keys are changed to be underscored.
   def graphql_query(query)
-    post_json("#{endpoint}/graphql", query:)
+    response = post_json("#{endpoint}/graphql", query:)
+    response.stringify_keys
+    response
   end
 
 private

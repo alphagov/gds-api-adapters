@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 3.1"
   s.files        = Dir.glob("lib/**/*") + Dir.glob("test/fixtures/**/*") + %w[README.md Rakefile]
   s.require_path = "lib"
+  s.add_dependency "activesupport"
   s.add_dependency "addressable"
   s.add_dependency "link_header"
   s.add_dependency "null_logger"

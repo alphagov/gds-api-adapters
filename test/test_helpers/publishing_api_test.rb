@@ -612,15 +612,21 @@ describe GdsApi::TestHelpers::PublishingApi do
   end
 
   describe "#stub_publishing_api_graphql_query" do
-    it "returns the given response" do
+    it "returns the given response with underscored keys" do
       query = "some query"
 
       stubbed_response = {
         data: {
           edition: {
             title: "some title",
+            camelCasedField: "value",
           },
         },
+      }
+
+      expected_response = {
+        title: "some title",
+        camel_cased_field: "value",
       }
 
       stub_publishing_api_graphql_query(
@@ -631,7 +637,7 @@ describe GdsApi::TestHelpers::PublishingApi do
       api_response = publishing_api.graphql_query(query)
 
       assert_equal(
-        stubbed_response.to_json,
+        expected_response.to_json,
         api_response.raw_response_body,
       )
     end

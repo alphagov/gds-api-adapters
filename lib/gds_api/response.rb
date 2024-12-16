@@ -153,6 +153,19 @@ module GdsApi
       false
     end
 
+    def stringify_keys
+      require "active_support/core_ext/hash/keys"
+      require "active_support/core_ext/string/inflections"
+
+      updated_response = JSON.parse(@http_response.body).dig("data", "edition").deep_transform_keys(&:underscore)
+
+      @http_response = RestClient::Response.create(
+        updated_response.to_json,
+        @http_response.net_http_res,
+        @http_response.request,
+      )
+    end
+
   private
 
     def transform_parsed(value)
