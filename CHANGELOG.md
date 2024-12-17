@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## 98.0.0
 
-* Remove router-api [PR](https://github.com/alphagov/gds-api-adapters/pull/1308)
+* BREAKING: Remove Router API methods [PR](https://github.com/alphagov/gds-api-adapters/pull/1308)
 * Add a method to get events for a Content ID [PR](https://github.com/alphagov/gds-api-adapters/pull/1309)
 
 ## 97.6.0
