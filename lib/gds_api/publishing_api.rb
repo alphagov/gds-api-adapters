@@ -378,6 +378,24 @@ class GdsApi::PublishingApi < GdsApi::Base
     get_host_content_for_content_id(content_id, params)
   end
 
+  # Get events for a specific content_id
+  #
+  # @param content_id [UUID]
+  # @param params [Hash]
+  #
+  #  publishing_api.get_events_for_content_id(
+  #     "7ac47b33-c09c-4c1d-a9a7-0cfef99081ac",
+  #     { action: "PutContent", from: "2023-01-01T00:00:00Z", to: "2023-01-05T10:00:00Z" }
+  #  )
+  #
+  # @return [GdsApi::Response] A response containing a list of events for that content ID
+  #
+  # @see https://github.com/alphagov/publishing-api/blob/main/docs/api.md#get-v2contentcontent_idevents
+  def get_events_for_content_id(content_id, params = {})
+    query = query_string(params)
+    get_json("#{endpoint}/v2/content/#{content_id}/events#{query}")
+  end
+
   # Returns an Enumerator of content items for the provided
   # query string parameters.
   #
