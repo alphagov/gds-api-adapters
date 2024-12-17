@@ -3,6 +3,7 @@
 ## Unreleased
 
 * Remove router-api [PR](https://github.com/alphagov/gds-api-adapters/pull/1308)
+* Add a method to get events for a Content ID [PR](https://github.com/alphagov/gds-api-adapters/pull/1309)
 
 ## 97.6.0
 
