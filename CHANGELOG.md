@@ -1,5 +1,9 @@
 # Changelog
 
+## 98.1.0
+
+* Add method to get GraphQL responses in a similar format to Content Store content items [PR](https://github.com/alphagov/gds-api-adapters/pull/1314).
+
 ## 98.0.0
 
 * BREAKING: Remove Router API methods [PR](https://github.com/alphagov/gds-api-adapters/pull/1308)
