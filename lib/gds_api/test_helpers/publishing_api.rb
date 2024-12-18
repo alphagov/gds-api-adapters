@@ -201,6 +201,19 @@ module GdsApi
         stub_request(:post, url).with(body: { query: }).to_return(response)
       end
 
+      # Stub a POST /graphql content item request
+      #
+      # @param query [String]
+      def stub_publishing_api_graphql_content_item(query, response_hash = {})
+        url = "#{PUBLISHING_API_ENDPOINT}/graphql"
+        response = {
+          status: 200,
+          body: response_hash.to_json,
+          headers: { "Content-Type" => "application/json; charset=utf-8" },
+        }
+        stub_request(:post, url).with(body: { query: }).to_return(response)
+      end
+
       # Assert that a draft was saved and published, and links were updated.
       # - PUT /v2/content/:content_id
       # - POST /v2/content/:content_id/publish

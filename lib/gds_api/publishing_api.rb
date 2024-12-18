@@ -602,6 +602,25 @@ class GdsApi::PublishingApi < GdsApi::Base
     post_json("#{endpoint}/graphql", query:)
   end
 
+  # Make a GraphQL query and return the response in the same format as a Content Store content item
+  #
+  # @param query [String]
+  #
+  # @return [GdsApi::Response] A response with the result of the GraphQL query formatted like a Content Store content item.
+  def graphql_content_item(query)
+    create_response = proc do |r|
+      updated_body = JSON.parse(r.body).dig("data", "edition")
+      updated_response = RestClient::Response.create(
+        updated_body.to_json,
+        r.net_http_res,
+        r.request,
+      )
+      GdsApi::Response.new(updated_response)
+    end
+
+    post_json("#{endpoint}/graphql", query:, &create_response)
+  end
+
 private
 
   def content_url(content_id, params = {})
