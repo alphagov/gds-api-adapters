@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 98.1.0
 
 * Add method to get GraphQL responses in a similar format to Content Store content items [PR](https://github.com/alphagov/gds-api-adapters/pull/1314).
 
