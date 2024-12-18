@@ -9,7 +9,7 @@ describe "GdsApi::PublishingApi#graphql_query pact tests" do
   it "returns the response to the query" do
     query = <<~QUERY
       {
-        edition(basePath: "/my-document") {
+        edition(base_path: "/my-document") {
           ... on Edition {
             title
           }
