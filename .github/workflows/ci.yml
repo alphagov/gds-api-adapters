@@ -113,7 +113,7 @@ jobs:
 
   signon_api_pact:
     needs: generate_pacts
-    uses: alphagov/signon/.github/workflows/pact-verify.yml@main
+    uses: alphagov/signon/.github/workflows/pact-verify.yml@content-modelling/783-add-api-adapters-for-signon
     with:
       pact_artifact: pacts
 
