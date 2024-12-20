@@ -111,6 +111,12 @@ jobs:
     with:
       pact_artifact: pacts
 
+  signon_api_pact:
+    needs: generate_pacts
+    uses: alphagov/signon/.github/workflows/pact-verify.yml@main
+    with:
+      pact_artifact: pacts
+
   support_api_pact:
     needs: generate_pacts
     uses: alphagov/support-api/.github/workflows/pact-verify.yml@main
@@ -130,6 +136,7 @@ jobs:
       - locations_api_pact
       - publishing_api_pact
       - support_api_pact
+      - signon_api_pact
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
