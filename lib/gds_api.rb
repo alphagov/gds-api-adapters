@@ -16,6 +16,7 @@ require "gds_api/organisations"
 require "gds_api/publishing_api"
 require "gds_api/search"
 require "gds_api/search_api_v2"
+require "gds_api/signon_api"
 require "gds_api/support"
 require "gds_api/support_api"
 require "gds_api/worldwide"
@@ -151,6 +152,19 @@ module GdsApi
     GdsApi::PublishingApi.new(
       Plek.find("publishing-api"),
       { bearer_token: ENV["PUBLISHING_API_BEARER_TOKEN"] }.merge(options),
+    )
+  end
+
+  # Creates a GdsApi::SignonApi adapter
+  #
+  # This will set a bearer token if a PUBLISHING_API_BEARER_TOKEN environment
+  # variable is set
+  #
+  # @return [GdsApi::SignonApi]
+  def self.signon_api(options = {})
+    GdsApi::SignonApi.new(
+      Plek.find("signon"),
+      { bearer_token: ENV["SIGNON_API_BEARER_TOKEN"] }.merge(options),
     )
   end
 

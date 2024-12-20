@@ -10,6 +10,7 @@ LOCATIONS_API_PORT = 3008
 ASSET_MANAGER_API_PORT = 3009
 EMAIL_ALERT_API_PORT = 3010
 SUPPORT_API_PORT = 3011
+SIGNON_API_PORT = 3012
 
 def publishing_api_host
   "http://localhost:#{PUBLISHING_API_PORT}"
@@ -49,6 +50,10 @@ end
 
 def support_api_host
   "http://localhost:#{SUPPORT_API_PORT}"
+end
+
+def signon_api_host
+  "http://localhost:#{SIGNON_API_PORT}"
 end
 
 Pact.service_consumer "GDS API Adapters" do
@@ -109,6 +114,12 @@ Pact.service_consumer "GDS API Adapters" do
   has_pact_with "Support API" do
     mock_service :support_api do
       port SUPPORT_API_PORT
+    end
+  end
+
+  has_pact_with "Signon API" do
+    mock_service :signon_api do
+      port SIGNON_API_PORT
     end
   end
 end
