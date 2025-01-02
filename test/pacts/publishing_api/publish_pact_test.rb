@@ -77,7 +77,7 @@ describe "GdsApi::PublishingApi#publish pact tests" do
     end
   end
 
-  it "responds with 409 if the content item is already published" do
+  it "responds with 200 if the content item is already published" do
     publishing_api
       .given("a published content item exists with content_id: #{content_id}")
       .upon_receiving("a publish request")
@@ -90,17 +90,10 @@ describe "GdsApi::PublishingApi#publish pact tests" do
         headers: GdsApi::JsonClient.default_request_with_json_body_headers,
       )
       .will_respond_with(
-        status: 409,
-        body: {
-          "error" => {
-            "code" => 409, "message" => Pact.term(generate: "Cannot publish an already published content item", matcher: /\S+/)
-          },
-        },
+        status: 200,
       )
 
-    assert_raises(GdsApi::HTTPConflict) do
-      api_client.publish(content_id, "major")
-    end
+    api_client.publish(content_id, "major")
   end
 
   it "responds with 200 if the update information contains a locale" do
