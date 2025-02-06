@@ -133,6 +133,10 @@ module GdsApi
       end
     end
 
+    def see_other?
+      @http_response.history.any? && @http_response.history.first.code == 303
+    end
+
     def cache_control
       @cache_control ||= CacheControl.new(headers[:cache_control])
     end

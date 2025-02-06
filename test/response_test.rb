@@ -100,6 +100,31 @@ describe GdsApi::Response do
     end
   end
 
+  describe "#see_other?" do
+    it "returns false if the content item was not redirected with a 303" do
+      mock_http_response = stub(body: "A Response body", history: [], code: 200, headers: {})
+      response = GdsApi::Response.new(mock_http_response)
+
+      assert !response.see_other?
+    end
+
+    it "returns false if the content item was redirected with a 301" do
+      mock_redirect = stub(code: 301)
+      mock_http_response = stub(body: "A Response body", history: [mock_redirect], code: 200, headers: {})
+      response = GdsApi::Response.new(mock_http_response)
+
+      assert !response.see_other?
+    end
+
+    it "returns true is the content item was redirected with a 303" do
+      mock_redirect = stub(code: 303)
+      mock_http_response = stub(body: "A Response body", history: [mock_redirect], code: 200, headers: {})
+      response = GdsApi::Response.new(mock_http_response)
+
+      assert response.see_other?
+    end
+  end
+
   describe "processing web_urls" do
     def build_response(body_string, relative_to = "https://www.gov.uk")
       GdsApi::Response.new(stub(body: body_string), web_urls_relative_to: relative_to)
