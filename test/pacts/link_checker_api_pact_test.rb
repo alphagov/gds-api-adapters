@@ -24,6 +24,7 @@ describe "GdsApi::LinkCheckerApi pact tests" do
             checked: nil,
             errors: [],
             warnings: [],
+            danger: [],
             problem_summary: nil,
             suggested_fix: nil,
           },
