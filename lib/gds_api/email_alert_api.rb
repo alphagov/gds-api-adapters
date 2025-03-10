@@ -11,7 +11,7 @@ class GdsApi::EmailAlertApi < GdsApi::Base
   # @param attributes [Hash] document_type, links, tags used to search existing subscriber lists
   def find_or_create_subscriber_list(attributes)
     present_fields = [attributes["content_id"], attributes["links"], attributes["tags"]].compact.count
-    if (present_fields > 1) && (attributes["tags"])
+    if (present_fields > 1) && attributes["tags"]
       message = "Invalid attributes provided. Valid attributes are content_id only, tags only, links only, content_id AND links, or none."
       raise ArgumentError, message
     end
