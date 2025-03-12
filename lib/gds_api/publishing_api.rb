@@ -360,17 +360,20 @@ class GdsApi::PublishingApi < GdsApi::Base
   #
   # @param content_id [UUID]
   # @param host_content_id [UUID]
+  # @param params [Hash]
   #
   #   publishing_api.get_host_content_item_for_content_id(
   #     "4b148ebc-b2bb-40db-8e48-dd8cff363ff7",
   #     "10d91dd1-cc9d-4c4c-9540-219ebb8d4501",
+  #     { locale: "en" }
   #   )
   #
   # @return [GdsApi::Response] A response containing the content item which embeds the target.
   #
   # @see https://github.com/alphagov/publishing-api/blob/main/docs/api.md#get-v2contentcontent_idhost-contenthost_content_id
-  def get_host_content_item_for_content_id(content_id, host_content_id)
-    get_json("#{endpoint}/v2/content/#{content_id}/host-content/#{host_content_id}")
+  def get_host_content_item_for_content_id(content_id, host_content_id, params = {})
+    query = query_string(params)
+    get_json("#{endpoint}/v2/content/#{content_id}/host-content/#{host_content_id}#{query}")
   end
 
   def get_content_by_embedded_document(content_id, params = {})

@@ -41,6 +41,25 @@ describe "GdsApi::PublishingApi#get_host_content_item_for_content_id pact tests"
     assert_equal(expected_body, response.parsed_content)
   end
 
+  it "allows a locale to be specified" do
+    publishing_api
+      .given("a content item exists (content_id: #{content_id}) that embeds the reusable content (content_id: #{reusable_content_id})")
+      .upon_receiving("a get_host_content_item_for_content_id request with a locale")
+      .with(
+        method: :get,
+        path: "/v2/content/#{reusable_content_id}/host-content/#{content_id}",
+        query: "locale=en",
+      )
+      .will_respond_with(
+        status: 200,
+        body: expected_body,
+      )
+
+    response = api_client.get_host_content_item_for_content_id(reusable_content_id, content_id, locale: "en")
+
+    assert_equal(expected_body, response.parsed_content)
+  end
+
   it "responds with 404 if the content item does not exist" do
     missing_content_id = "missing-content-id"
     publishing_api
