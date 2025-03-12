@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 98.3.0
 
 * Allow locale to be specified when getting host content [PR](https://github.com/alphagov/gds-api-adapters/pull/1326)
 
