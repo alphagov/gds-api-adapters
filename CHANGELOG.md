@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Allow locale to be specified when getting host content [PR](https://github.com/alphagov/gds-api-adapters/pull/1326)
+
 ## 98.2.0
 
 * Add support for the the Signon API users endpoint [PR](https://github.com/alphagov/gds-api-adapters/pull/1316)
