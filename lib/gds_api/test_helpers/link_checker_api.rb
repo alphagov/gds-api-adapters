@@ -5,13 +5,14 @@ module GdsApi
     module LinkCheckerApi
       LINK_CHECKER_API_ENDPOINT = Plek.find("link-checker-api")
 
-      def link_checker_api_link_report_hash(uri:, status: :ok, checked: nil, errors: [], warnings: [], problem_summary: nil, suggested_fix: nil)
+      def link_checker_api_link_report_hash(uri:, status: :ok, checked: nil, errors: [], warnings: [], danger: [], problem_summary: nil, suggested_fix: nil)
         {
           uri:,
           status:,
           checked: checked || Time.now.iso8601,
           errors:,
           warnings:,
+          danger:,
           problem_summary:,
           suggested_fix:,
         }
@@ -27,9 +28,9 @@ module GdsApi
         }
       end
 
-      def stub_link_checker_api_check(uri:, status: :ok, checked: nil, errors: [], warnings: [], problem_summary: nil, suggested_fix: nil)
+      def stub_link_checker_api_check(uri:, status: :ok, checked: nil, errors: [], warnings: [], danger: [], problem_summary: nil, suggested_fix: nil)
         body = link_checker_api_link_report_hash(
-          uri:, status:, checked:, errors:, warnings:, problem_summary:, suggested_fix:,
+          uri:, status:, checked:, errors:, warnings:, danger:, problem_summary:, suggested_fix:,
         ).to_json
 
         stub_request(:get, "#{LINK_CHECKER_API_ENDPOINT}/check")
