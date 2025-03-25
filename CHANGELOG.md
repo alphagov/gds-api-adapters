@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 99.0.0
 
 * BREAKING: Drop support for Ruby 3.1 [PR](https://github.com/alphagov/gds-api-adapters/pull/1333)
 
