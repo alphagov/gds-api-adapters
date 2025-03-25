@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.homepage     = "http://github.com/alphagov/gds-api-adapters"
   s.description  = "A set of adapters providing easy access to the GDS GOV.UK APIs"
 
-  s.required_ruby_version = ">= 3.1"
+  s.required_ruby_version = ">= 3.2"
   s.files        = Dir.glob("lib/**/*") + Dir.glob("test/fixtures/**/*") + %w[README.md Rakefile]
   s.require_path = "lib"
   s.add_dependency "addressable"
