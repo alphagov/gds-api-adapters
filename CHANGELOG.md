@@ -1,5 +1,9 @@
 # Changelog
 
+## 99.0.0
+
+* BREAKING: Drop support for Ruby 3.1 [PR](https://github.com/alphagov/gds-api-adapters/pull/1333)
+
 ## 98.4.0
 
 * Add 'danger' property support to `link_checker_api_link_report_hash` test method. [PR](https://github.com/alphagov/gds-api-adapters/pull/1330)
