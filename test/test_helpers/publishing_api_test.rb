@@ -665,6 +665,42 @@ describe GdsApi::TestHelpers::PublishingApi do
         api_response.raw_response_body,
       )
     end
+
+    it "returns the error data when the edition has been unpublished" do
+      query = "some query"
+
+      stubbed_response = {
+        data: {
+          edition: nil,
+        },
+        errors: [
+          {
+            message: "Edition has been unpublished",
+            extensions: {
+              "document_type": "gone",
+              "schema_name": "gone",
+            },
+          },
+        ],
+      }
+
+      expected_response = {
+        "document_type": "gone",
+        "schema_name": "gone",
+      }
+
+      stub_publishing_api_graphql_content_item(
+        query,
+        stubbed_response,
+      )
+
+      api_response = publishing_api.graphql_content_item(query)
+
+      assert_equal(
+        expected_response.to_json,
+        api_response.raw_response_body,
+      )
+    end
   end
 
   describe "#request_json_matching predicate" do

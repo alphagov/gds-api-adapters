@@ -612,7 +612,14 @@ class GdsApi::PublishingApi < GdsApi::Base
   # @return [GdsApi::Response] A response with the result of the GraphQL query formatted like a Content Store content item.
   def graphql_content_item(query)
     create_response = proc do |r|
-      updated_body = JSON.parse(r.body).dig("data", "edition")
+      parsed_body = JSON.parse(r.body)
+
+      updated_body = if parsed_body["errors"] && (unpublished_error = parsed_body["errors"].find { |error| error["message"] == "Edition has been unpublished" })
+                       unpublished_error["extensions"]
+                     else
+                       parsed_body.dig("data", "edition")
+                     end
+
       updated_response = RestClient::Response.create(
         updated_body.to_json,
         r.net_http_res,
