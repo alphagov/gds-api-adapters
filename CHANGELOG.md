@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 99.1.0
 
 * Support setting link title in the stub_local_links_manager_has_a_link method [PR](https://github.com/alphagov/gds-api-adapters/pull/1344)
 
