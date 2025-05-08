@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 99.2.0
 
 * Add support for unpublished editions in `graphql_content_item` method [PR](https://github.com/alphagov/gds-api-adapters/pull/1343).
 * Raise `GdsApi::HTTPGone` when a GraphQL response indicates the edition has been marked as 'gone' and has no 'details' [PR](https://github.com/alphagov/gds-api-adapters/pull/1343).
