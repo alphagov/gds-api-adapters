@@ -615,6 +615,11 @@ class GdsApi::PublishingApi < GdsApi::Base
       parsed_body = JSON.parse(r.body)
 
       updated_body = if parsed_body["errors"] && (unpublished_error = parsed_body["errors"].find { |error| error["message"] == "Edition has been unpublished" })
+                       if unpublished_error.dig("extensions", "schema_name") == "gone" &&
+                           (unpublished_error.dig("extensions", "details").nil? || unpublished_error.dig("extensions", "details").values.compact.reject(&:empty?).empty?)
+                         raise GdsApi::HTTPGone.new(410, nil, unpublished_error["extensions"])
+                       end
+
                        unpublished_error["extensions"]
                      else
                        parsed_body.dig("data", "edition")
