@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Support setting link title in the stub_local_links_manager_has_a_link method [PR](https://github.com/alphagov/gds-api-adapters/pull/1344)
+
 ## 99.0.0
 
 * BREAKING: Drop support for Ruby 3.1 [PR](https://github.com/alphagov/gds-api-adapters/pull/1333)
