@@ -99,6 +99,10 @@ module GdsApi
       @web_urls_relative_to = options[:web_urls_relative_to] ? URI.parse(options[:web_urls_relative_to]) : nil
     end
 
+    def request_content_length
+      request_headers.fetch("Content-Length", 0).to_i
+    end
+
     def raw_response_body
       @http_response.body
     end
@@ -179,6 +183,10 @@ module GdsApi
       else
         value
       end
+    end
+
+    def request_headers
+      @http_response.request.processed_headers
     end
   end
 end
