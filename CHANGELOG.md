@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* BREAKING: Drop support for Calendars
+
 ## 99.2.0
 
 * Add support for unpublished editions in `graphql_content_item` method [PR](https://github.com/alphagov/gds-api-adapters/pull/1343).
