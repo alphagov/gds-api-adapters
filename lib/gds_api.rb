@@ -3,7 +3,6 @@ require "plek"
 require "time"
 require "gds_api/account_api"
 require "gds_api/asset_manager"
-require "gds_api/calendars"
 require "gds_api/content_store"
 require "gds_api/email_alert_api"
 require "gds_api/places_manager"
@@ -47,13 +46,6 @@ module GdsApi
       Plek.find("asset-manager"),
       { bearer_token: ENV["ASSET_MANAGER_BEARER_TOKEN"] }.merge(options),
     )
-  end
-
-  # Creates a GdsApi::Calendars adapter
-  #
-  # @return [GdsApi::Calendars]
-  def self.calendars(options = {})
-    GdsApi::Calendars.new(Plek.new.website_root, options)
   end
 
   # Creates a GdsApi::ContentStore adapter
