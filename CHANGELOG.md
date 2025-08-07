@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 99.3.0
 
 * Add support for Publishing API's `/graphql/content/:base_path` endpoint, which behaves like Content Store [PR](https://github.com/alphagov/gds-api-adapters/pull/1360).
 
