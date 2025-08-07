@@ -636,6 +636,15 @@ class GdsApi::PublishingApi < GdsApi::Base
     post_json("#{endpoint}/graphql", query:, &create_response)
   end
 
+  # Get the live content item using GraphQL
+  #
+  # @return [GdsApi::Response] A response with the result of the GraphQL query formatted like a Content Store content item.
+  def graphql_live_content_item(base_path)
+    get_json("#{endpoint}/graphql/content#{base_path}")
+  rescue GdsApi::HTTPNotFound => e
+    raise ItemNotFound.build_from(e)
+  end
+
 private
 
   def content_url(content_id, params = {})
