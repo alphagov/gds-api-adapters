@@ -8,6 +8,12 @@ class GdsApi::Base
   class InvalidAPIURL < StandardError
   end
 
+  class ItemNotFound < GdsApi::HTTPNotFound
+    def self.build_from(http_error)
+      new(http_error.code, http_error.message, http_error.error_details)
+    end
+  end
+
   extend Forwardable
 
   def client
