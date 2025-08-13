@@ -11,7 +11,6 @@ require "gds_api/licence_application"
 require "gds_api/link_checker_api"
 require "gds_api/local_links_manager"
 require "gds_api/locations_api"
-require "gds_api/maslow"
 require "gds_api/organisations"
 require "gds_api/publishing_api"
 require "gds_api/search"
@@ -121,16 +120,6 @@ module GdsApi
   # @return [GdsApi::LocationsApi]
   def self.locations_api(options = {})
     GdsApi::LocationsApi.new(Plek.find("locations-api"), options)
-  end
-
-  # Creates a GdsApi::Maslow adapter
-  #
-  # It's set to use an external url as an endpoint as the Maslow adapter is
-  # used to generate external links
-  #
-  # @return [GdsApi::Maslow]
-  def self.maslow(options = {})
-    GdsApi::Maslow.new(Plek.new.external_url_for("maslow"), options)
   end
 
   # Creates a GdsApi::Organisations adapter for accessing Whitehall
