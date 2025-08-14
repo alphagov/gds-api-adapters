@@ -1,5 +1,9 @@
 # Changelog
 
+## 101.0.0
+
+* BREAKING: Remove Publishing API's `graphql_content_item` method [PR](https://github.com/alphagov/gds-api-adapters/pull/1364).
+
 ## 100.0.0
 
 * Removes Maslow

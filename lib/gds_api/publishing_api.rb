@@ -605,37 +605,6 @@ class GdsApi::PublishingApi < GdsApi::Base
     post_json("#{endpoint}/graphql", query:)
   end
 
-  # Make a GraphQL query and return the response in the same format as a Content Store content item
-  #
-  # @param query [String]
-  #
-  # @return [GdsApi::Response] A response with the result of the GraphQL query formatted like a Content Store content item.
-  def graphql_content_item(query)
-    create_response = proc do |r|
-      parsed_body = JSON.parse(r.body)
-
-      updated_body = if parsed_body["errors"] && (unpublished_error = parsed_body["errors"].find { |error| error["message"] == "Edition has been unpublished" })
-                       if unpublished_error.dig("extensions", "schema_name") == "gone" &&
-                           (unpublished_error.dig("extensions", "details").nil? || unpublished_error.dig("extensions", "details").values.compact.reject(&:empty?).empty?)
-                         raise GdsApi::HTTPGone.new(410, nil, unpublished_error["extensions"])
-                       end
-
-                       unpublished_error["extensions"]
-                     else
-                       parsed_body.dig("data", "edition")
-                     end
-
-      updated_response = RestClient::Response.create(
-        updated_body.to_json,
-        r.net_http_res,
-        r.request,
-      )
-      GdsApi::Response.new(updated_response)
-    end
-
-    post_json("#{endpoint}/graphql", query:, &create_response)
-  end
-
   # Get the live content item using GraphQL
   #
   # @return [GdsApi::Response] A response with the result of the GraphQL query formatted like a Content Store content item.
