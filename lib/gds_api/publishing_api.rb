@@ -8,8 +8,6 @@ require_relative "exceptions"
 # @see https://github.com/alphagov/publishing-api/blob/main/docs/model.md
 # @api documented
 class GdsApi::PublishingApi < GdsApi::Base
-  class NoLiveVersion < GdsApi::BaseError; end
-
   # Put a content item
   #
   # @param content_id [UUID]
@@ -45,18 +43,10 @@ class GdsApi::PublishingApi < GdsApi::Base
   #
   # @return [GdsApi::Response] a content item
   #
-  # @raise [NoLiveVersion] when the content item is not found
+  # @raise [HTTPNotFound] when the content item is not found
   # @see https://github.com/alphagov/publishing-api/blob/main/docs/api.md#get-v2contentcontent_id
   def get_live_content(content_id, locale = "en")
-    content_item = get_content(content_id, locale:)
-
-    live_states = %w[published unpublished]
-    return content_item if live_states.include?(content_item.to_h["publication_state"])
-
-    live_version_number = content_item["state_history"].find { |_, v| live_states.include?(v) }&.first
-    raise NoLiveVersion, "No live version exists for content_id: #{content_id}" unless live_version_number
-
-    get_content(content_id, locale:, version: live_version_number)
+    get_content(content_id, locale:, content_store: :live)
   end
 
   # Find the content_ids for a list of base_paths.
