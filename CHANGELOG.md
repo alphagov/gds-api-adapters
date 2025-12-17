@@ -1,5 +1,9 @@
 # Changelog
 
+## 101.2.0
+
+* Update the Pact tests to reflect the removal of the `?version=` and the addition of the `?content_store=` param on `GET /v2/content/:id` [PR](https://github.com/alphagov/gds-api-adapters/pull/1373)
+
 ## 101.1.0
 
 * Refactor Publishing API's `get_live_content` method to use `content_store: :live` instead of checking the state history [PR](https://github.com/alphagov/gds-api-adapters/pull/1372)
