@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "govuk_schemas", "~> 6.0"
   s.add_development_dependency "minitest", "~> 5.19"
   s.add_development_dependency "minitest-around", "~> 0.5"
-  s.add_development_dependency "mocha", "~> 2.1"
+  s.add_development_dependency "mocha", "~> 3.0"
   s.add_development_dependency "pact", "~> 1.62"
   s.add_development_dependency "pact_broker-client", "~> 1.65"
   s.add_development_dependency "pact-consumer-minitest", "~> 1.0"
