@@ -1,5 +1,9 @@
 # Changelog
 
+## 101.1.0
+
+* Refactor Publishing API's `get_live_content` method to use `content_store: :live` instead of checking the state history [PR](https://github.com/alphagov/gds-api-adapters/pull/1372)
+
 ## 101.0.0
 
 * BREAKING: Remove Publishing API's `graphql_content_item` method [PR](https://github.com/alphagov/gds-api-adapters/pull/1364).

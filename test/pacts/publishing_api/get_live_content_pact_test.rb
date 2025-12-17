@@ -38,70 +38,14 @@ describe "GdsApi::PublishingApi#get_live_content pact tests" do
     api_client.get_live_content(content_id)
   end
 
-  it "responds with NoLiveVersion when the content item has never been live" do
-    publishing_api
-      .given("a draft content item exists with content_id: #{content_id}")
-      .upon_receiving("a request to return the live content item")
-      .with(
-        method: :get,
-        path: "/v2/content/#{content_id}",
-      )
-      .will_respond_with(
-        status: 200,
-        body: {
-          "content_id" => content_id,
-          "document_type" => Pact.like("special_route"),
-          "schema_name" => Pact.like("special_route"),
-          "publishing_app" => Pact.like("publisher"),
-          "rendering_app" => Pact.like("frontend"),
-          "locale" => Pact.like("en"),
-          "routes" => Pact.like([{}]),
-          "details" => Pact.like({}),
-          "state_history" => { "1" => "draft" },
-          "publication_state" => "draft",
-        },
-        headers: {
-          "Content-Type" => "application/json; charset=utf-8",
-        },
-      )
-
-    assert_raises(GdsApi::PublishingApi::NoLiveVersion) do
-      api_client.get_live_content(content_id)
-    end
-  end
-
   it "returns the live content item when there is a draft version of live content" do
     publishing_api
       .given("a published content item exists with a draft edition for content_id: #{content_id}")
-      .upon_receiving("a request to return the content item")
-      .with(
-        method: :get,
-        path: "/v2/content/#{content_id}",
-        query: "locale=en",
-      )
-      .will_respond_with(
-        status: 200,
-        body: {
-          "content_id" => content_id,
-          "document_type" => Pact.like("special_route"),
-          "schema_name" => Pact.like("special_route"),
-          "publishing_app" => Pact.like("publisher"),
-          "rendering_app" => Pact.like("frontend"),
-          "locale" => Pact.like("en"),
-          "routes" => Pact.like([{}]),
-          "details" => Pact.like({}),
-          "state_history" => { "1" => "published", "2" => "draft" },
-          "publication_state" => "draft",
-        },
-        headers: {
-          "Content-Type" => "application/json; charset=utf-8",
-        },
-      )
       .upon_receiving("a request to return the live content item")
       .with(
         method: :get,
         path: "/v2/content/#{content_id}",
-        query: "locale=en&version=1",
+        query: "locale=en&content_store=live",
       )
       .will_respond_with(
         status: 200,
