@@ -6,31 +6,6 @@ module GdsApi
     module Search
       SEARCH_ENDPOINT = Plek.find("search-api")
 
-      def stub_any_search_post(index: nil)
-        if index
-          stub_request(:post, %r{#{SEARCH_ENDPOINT}/#{index}/documents})
-            .to_return(status: [202, "Accepted"])
-        else
-          stub_request(:post, %r{#{SEARCH_ENDPOINT}/documents})
-            .to_return(status: [202, "Accepted"])
-        end
-      end
-
-      def assert_search_posted_item(attributes, index: nil, **options)
-        url = if index
-                SEARCH_ENDPOINT + "/#{index}/documents"
-              else
-                "#{SEARCH_ENDPOINT}/documents"
-              end
-
-        assert_requested(:post, url, **options) do |req|
-          data = JSON.parse(req.body)
-          attributes.to_a.all? do |key, value|
-            data[key.to_s] == value
-          end
-        end
-      end
-
       def stub_any_search
         stub_request(:get, %r{#{SEARCH_ENDPOINT}/search.json})
       end
@@ -41,47 +16,6 @@ module GdsApi
 
       def assert_search(options)
         assert_requested :get, "#{SEARCH_ENDPOINT}/search.json", **options
-      end
-
-      def stub_any_search_delete(index: nil)
-        if index
-          stub_request(:delete, %r{#{SEARCH_ENDPOINT}/#{index}/documents/.*})
-        else
-          # use search-api's default index
-          stub_request(:delete, %r{#{SEARCH_ENDPOINT}/documents/.*})
-        end
-      end
-
-      def stub_any_search_delete_content
-        stub_request(:delete, %r{#{SEARCH_ENDPOINT}/content.*})
-      end
-
-      def assert_search_deleted_item(id, index: nil, **options)
-        if id =~ %r{^/}
-          raise ArgumentError, "Search id must not start with a slash"
-        end
-
-        if index
-          assert_requested(
-            :delete,
-            %r{#{SEARCH_ENDPOINT}/#{index}/documents/#{id}},
-            **options,
-          )
-        else
-          assert_requested(
-            :delete,
-            %r{#{SEARCH_ENDPOINT}/documents/#{id}},
-            **options,
-          )
-        end
-      end
-
-      def assert_search_deleted_content(base_path, **options)
-        assert_requested(
-          :delete,
-          %r{#{SEARCH_ENDPOINT}/content.*#{base_path}},
-          **options,
-        )
       end
 
       def stub_search_has_services_and_info_data_for_organisation
@@ -155,15 +89,6 @@ module GdsApi
         File.read(
           File.expand_path(
             "../../../test/fixtures/new_policies_for_dwp.json",
-            __dir__,
-          ),
-        )
-      end
-
-      def old_policies_results
-        File.read(
-          File.expand_path(
-            "../../../test/fixtures/old_policies_for_dwp.json",
             __dir__,
           ),
         )
