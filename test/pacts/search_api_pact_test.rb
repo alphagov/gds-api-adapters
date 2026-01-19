@@ -34,6 +34,31 @@ describe "GdsApi::Search pact tests" do
 
       api_client.search(q: "universal credit")
     end
+
+    it "raises an exception if the service at the search URI returns a 500" do
+      search_api
+        .given("the search URI returns a 500")
+        .upon_receiving("a query for universal credit")
+        .with(
+          method: :get,
+          query: "q=universal+credit",
+          path: "/search.json",
+          headers: GdsApi::JsonClient.default_request_headers,
+        )
+        .will_respond_with(
+          status: 500,
+          body: {
+            "error" => {
+              "code" => 500,
+              "message" => "Internal Server Error",
+            },
+          },
+        )
+
+      assert_raises(GdsApi::HTTPServerError) do
+        api_client.search(q: "universal credit")
+      end
+    end
   end
 
 private
