@@ -47,6 +47,15 @@ describe GdsApi::PublishingApi do
   end
 
   describe "#graphql_live_content_item" do
+    it "indirectly returns the item" do
+      base_path = "/test-from-content-store"
+      stub_publishing_api_graphql_has_item(base_path)
+
+      response = api_client.graphql_live_content_item_indirectly(base_path)
+
+      assert_equal base_path, response["base_path"]
+    end
+
     it "returns the item" do
       base_path = "/test-from-content-store"
       stub_publishing_api_graphql_has_item(base_path)

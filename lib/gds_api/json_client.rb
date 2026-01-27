@@ -49,6 +49,7 @@ module GdsApi
     end
 
     def get_json(url, additional_headers = {}, &create_response)
+      puts caller_locations().filter{ |x| x.path.start_with? '/govuk/gds-api-adapters/lib/gds_api/' }.last.label
       do_json_request(:get, url, nil, additional_headers, &create_response)
     end
 
