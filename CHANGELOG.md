@@ -1,5 +1,9 @@
 # Changelog
 
+## 102.0.0
+
+* BREAKING: Remove Search API's `add_document`, `delete_document`, `get_content` and `delete_content` methods. [PR](https://github.com/alphagov/gds-api-adapters/pull/1376)
+
 ## 101.2.0
 
 * Update the Pact tests to reflect the removal of the `?version=` and the addition of the `?content_store=` param on `GET /v2/content/:id` [PR](https://github.com/alphagov/gds-api-adapters/pull/1373)
