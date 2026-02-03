@@ -10,7 +10,7 @@ describe "GdsApi::Search pact tests" do
     it "fetches a search response" do
       search_api
         .given("there are search results for universal credit")
-        .upon_receiving("a query for universal credit")
+        .upon_receiving("a valid query for universal credit")
         .with(
           method: :get,
           query: "q=universal+credit",
@@ -37,6 +37,29 @@ describe "GdsApi::Search pact tests" do
         )
 
       api_client.search(q: "universal credit")
+    end
+
+    it "responds with 422 when ordering field is invalid" do
+      search_api
+        .given("there are search results for universal credit")
+        .upon_receiving("a request to order results by invalid-order-field")
+        .with(
+          method: :get,
+          query: "q=universal+credit&order=invalid-order-field",
+          path: "/search.json",
+          headers: GdsApi::JsonClient.default_request_headers,
+        )
+        .will_respond_with(
+          status: 422,
+          body: { "error" => "\"invalid-order-field\" is not a valid sort field" },
+          headers: {
+            "Content-Type" => "application/json",
+          },
+        )
+
+      assert_raises(GdsApi::HTTPUnprocessableEntity) do
+        api_client.search(q: "universal credit", order: "invalid-order-field")
+      end
     end
   end
 
