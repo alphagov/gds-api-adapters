@@ -9,7 +9,7 @@ describe "GdsApi::Search pact tests" do
   describe "#search" do
     it "fetches a search response when search term is included" do
       search_api
-        .given("there are search results for universal credit")
+        .given("there are four search results for universal credit")
         .upon_receiving("a valid query for universal credit")
         .with(
           method: :get,
@@ -21,11 +21,13 @@ describe "GdsApi::Search pact tests" do
           status: 200,
           body: {
             results: [
-              search_result,
-              search_result,
+              search_result_1,
+              search_result_2,
+              search_result_3,
+              search_result_4,
             ],
-            total: Pact.like(2),
-            start: Pact.like(0),
+            total: 4,
+            start: 0,
             aggregates: Pact.like({}),
             suggested_queries: Pact.like([]),
             suggested_autocomplete: Pact.like([]),
@@ -41,11 +43,11 @@ describe "GdsApi::Search pact tests" do
 
     it "fetches a search response when no search term is included" do
       search_api
-        .given("there are search results for universal credit")
+        .given("there are four search results for universal credit")
         .upon_receiving("a valid query with no keyword")
         .with(
           method: :get,
-          query: "count=2",
+          query: "count=4",
           path: "/search.json",
           headers: GdsApi::JsonClient.default_request_headers,
         )
@@ -53,11 +55,13 @@ describe "GdsApi::Search pact tests" do
           status: 200,
           body: {
             results: [
-              search_result,
-              search_result,
+              search_result_1,
+              search_result_2,
+              search_result_3,
+              search_result_4,
             ],
-            total: Pact.like(2),
-            start: Pact.like(0),
+            total: 4,
+            start: 0,
             aggregates: Pact.like({}),
             suggested_queries: Pact.like([]),
             suggested_autocomplete: Pact.like([]),
@@ -68,12 +72,12 @@ describe "GdsApi::Search pact tests" do
           },
         )
 
-      api_client.search(count: 2)
+      api_client.search(count: 4)
     end
 
     it "responds with 422 when ordering field is invalid" do
       search_api
-        .given("there are search results for universal credit")
+        .given("there are four search results for universal credit")
         .upon_receiving("a request to order results by invalid-order-field")
         .with(
           method: :get,
@@ -259,17 +263,6 @@ describe "GdsApi::Search pact tests" do
   end
 
 private
-
-  def search_result
-    {
-      "link" => Pact.like("/universal-credit"),
-      "title" => Pact.like("Universal credit"),
-      "index" => Pact.like("government_test"),
-      "_id" => Pact.like("/universal-credit"),
-      "elasticsearch_type" => Pact.like("edition"),
-      "document_type" => Pact.like("edition"),
-    }
-  end
 
   def search_result_1
     {
