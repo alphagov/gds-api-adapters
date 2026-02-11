@@ -1,5 +1,9 @@
 # Changelog
 
+## 103.0.0
+
+* BREAKING: Remove Search API's `batch_search` method. [PR](https://github.com/alphagov/gds-api-adapters/pull/1381)
+
 ## 102.0.0
 
 * BREAKING: Remove Search API's `add_document`, `delete_document`, `get_content` and `delete_content` methods. [PR](https://github.com/alphagov/gds-api-adapters/pull/1376)
