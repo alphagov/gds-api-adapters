@@ -113,6 +113,12 @@ jobs:
     with:
       pact_artifact: pacts
 
+  search_api_pact:
+    needs: generate_pacts
+    uses: alphagov/search-api/.github/workflows/pact-verify.yml@main
+    with:
+      pact_artifact: pacts
+
   signon_api_pact:
     needs: generate_pacts
     uses: alphagov/signon/.github/workflows/pact-verify.yml@main
