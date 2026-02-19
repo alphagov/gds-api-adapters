@@ -4,7 +4,6 @@ require "gds_api/search"
 describe GdsApi::Search do
   before(:each) do
     stub_request(:get, /example.com\/search/).to_return(body: "[]")
-    stub_request(:get, /example.com\/batch_search/).to_return(body: "[]")
   end
 
   # tests for search
@@ -79,21 +78,6 @@ describe GdsApi::Search do
     GdsApi::Search.new("http://example.com").search({ q: "query" }, "authorization" => "token")
 
     assert_requested :get, /.*/, headers: { "authorization" => "token" }
-  end
-
-  it "#batch_search should issue a single request containing all queries" do
-    GdsApi::Search.new("http://example.com").batch_search([{ q: "self assessment" }, { q: "tax return" }])
-
-    assert_requested :get, /search\[\]\[0\]\[q\]=self assessment/
-    assert_requested :get, /search\[\]\[1\]\[q\]=tax return/
-  end
-
-  it "#batch_search should return the search deserialized from json" do
-    batch_search_results = [{ "title" => "document-title" }, { "title" => "document-title-2" }]
-    stub_request(:get, "http://example.com/batch_search.json?search[][0][q]=self+assessment&search[][1][q]=tax+return")
-      .to_return(body: batch_search_results.to_json)
-    results = GdsApi::Search.new("http://example.com").batch_search([{ q: "self assessment" }, { q: "tax return" }])
-    assert_equal batch_search_results, results.to_hash
   end
 
   # tests for search_enum
