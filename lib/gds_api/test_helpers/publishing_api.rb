@@ -177,6 +177,11 @@ module GdsApi
         stub_request(:any, %r{\A#{PUBLISHING_API_ENDPOINT}})
       end
 
+      # Stub any request to the publishing API to return a 504 response
+      def stub_any_publishing_api_call_to_return_timeout
+        stub_request(:any, /#{PUBLISHING_API_ENDPOINT}\/.*/).to_timeout
+      end
+
       # Stub any request to the publishing API to return a 404 response
       def stub_any_publishing_api_call_to_return_not_found
         stub_request(:any, %r{\A#{PUBLISHING_API_ENDPOINT}})

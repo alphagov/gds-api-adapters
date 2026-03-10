@@ -1,5 +1,9 @@
 # Changelog
 
+## 103.1.0
+
+* Add Publishing API timeout test helper
+
 ## 103.0.0
 
 * BREAKING: Remove Search API's `batch_search` method. [PR](https://github.com/alphagov/gds-api-adapters/pull/1381)
