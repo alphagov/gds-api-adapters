@@ -519,7 +519,7 @@ class GdsApi::PublishingApi < GdsApi::Base
   #   {
   #     publish_time: '2024-03-15T09:00:00.000+00:00',
   #     publishing_app: 'content-publisher',
-  #     rendering_app: 'government-frontend',
+  #     rendering_app: 'frontend',
   #   }
   # )
   #
