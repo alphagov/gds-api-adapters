@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 103.1.1
 
 * Add `plek` as a requirement for Publishing API test helpers
 
