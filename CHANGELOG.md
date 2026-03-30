@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Add `plek` as a requirement for Publishing API test helpers
+
 ## 103.1.0
 
 * Add Publishing API timeout test helper
