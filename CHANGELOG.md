@@ -1,5 +1,9 @@
 # Changelog
 
+## 103.2.0
+
+* Drop support for Ruby 3.2
+
 ## 103.1.1
 
 * Add `plek` as a requirement for Publishing API test helpers
