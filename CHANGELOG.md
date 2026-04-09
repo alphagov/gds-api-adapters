@@ -1,5 +1,9 @@
 # Changelog
 
+## 103.3.0
+
+* Add development dependency "rdoc" to support Ruby 4.0 tests
+
 ## 103.2.0
 
 * Drop support for Ruby 3.2
