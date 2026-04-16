@@ -6,6 +6,18 @@ updates:
       interval: daily
     cooldown:
       default-days: 3
+    groups:
+      test:
+        patterns:
+          - "climate_control"
+          - "govuk_schemas"
+          - "minitest*"
+          - "mocha"
+          - "pact*"
+          - "rack-test"
+          - "simplecov"
+          - "timecop"
+          - "webmock"
 
   - package-ecosystem: github-actions
     directory: /
