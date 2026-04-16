@@ -1,10 +1,11 @@
 version: 2
 updates:
   - package-ecosystem: bundler
-    directory: "/"
+    directory: /
     schedule:
       interval: daily
-  - package-ecosystem: "github-actions"
-    directory: "/"
+
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
       interval: daily
