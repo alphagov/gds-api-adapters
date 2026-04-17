@@ -154,7 +154,7 @@ private
     {
       "link" => Pact.like("/universal-credit"),
       "title" => Pact.like("Universal credit"),
-      "index" => Pact.like("government_test"),
+      "index" => Pact.like("govuk_test"),
       "_id" => Pact.like("/universal-credit"),
       "elasticsearch_type" => Pact.like("edition"),
       "document_type" => Pact.like("edition"),
