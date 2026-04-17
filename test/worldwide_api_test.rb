@@ -64,16 +64,20 @@ describe GdsApi::Worldwide do
                         "description" => "An office in Australia",
                         "contact_form_links" => "https://www.gov.uk",
                         "post_addresses" => [
-                          "title" => "Office Name",
-                          "street_address" => "123 A Street",
-                          "postal_code" => "ABC123",
-                          "locality" => "Canberra",
-                          "region" => "Australian Capital Territory",
-                          "world_location" => "Australia",
+                          {
+                            "title" => "Office Name",
+                            "street_address" => "123 A Street",
+                            "postal_code" => "ABC123",
+                            "locality" => "Canberra",
+                            "region" => "Australian Capital Territory",
+                            "world_location" => "Australia",
+                          },
                         ],
                         "phone_numbers" => [
-                          "title" => "Office number",
-                          "number" => "1234",
+                          {
+                            "title" => "Office number",
+                            "number" => "1234",
+                          },
                         ],
                         "services" => [
                           {
@@ -104,16 +108,20 @@ describe GdsApi::Worldwide do
                         "description" => "An office in Australia",
                         "contact_form_links" => "https://www.gov.uk",
                         "post_addresses" => [
-                          "title" => "Office Name",
-                          "street_address" => "456 A Street",
-                          "postal_code" => "ABC456",
-                          "locality" => "Canberra",
-                          "region" => "Australian Capital Territory",
-                          "world_location" => "Australia",
+                          {
+                            "title" => "Office Name",
+                            "street_address" => "456 A Street",
+                            "postal_code" => "ABC456",
+                            "locality" => "Canberra",
+                            "region" => "Australian Capital Territory",
+                            "world_location" => "Australia",
+                          },
                         ],
                         "phone_numbers" => [
-                          "title" => "Office number",
-                          "number" => "5678",
+                          {
+                            "title" => "Office number",
+                            "number" => "5678",
+                          },
                         ],
                         "services" => [
                           {
