@@ -1,5 +1,9 @@
 # Changelog
 
+## 103.3.1
+
+* Update Pact test to reflect new base/absolute path content schema definition ([PR](https://github.com/alphagov/gds-api-adapters/pull/1392))
+
 ## 103.3.0
 
 * Add development dependency "rdoc" to support Ruby 4.0 tests
