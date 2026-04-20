@@ -77,8 +77,8 @@ describe "GdsApi::PublishingApi#put_content pact tests" do
           {
             schema: Pact.like({}),
             fragment: "#/base_path",
-            message: Pact.like("The property '#/base_path' value \"not a url path\" did not match the regex '^/(([a-zA-Z0-9._~!$&'()*+,;=:@-]|%[0-9a-fA-F]{2})+(/([a-zA-Z0-9._~!$&'()*+,;=:@-]|%[0-9a-fA-F]{2})*)*)?$' in schema 729a13d6-8ddb-5ba8-b116-3b7604dc3d3d#"),
-            failed_attribute: "Pattern",
+            message: Pact.like("The property '#/base_path' of type string did not match all of the required schemas in schema 91ab1054-cf15-5464-b83d-bf8f19abe4b0#"),
+            failed_attribute: "AllOf",
           },
         ],
         headers: {
