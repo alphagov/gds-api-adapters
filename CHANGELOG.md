@@ -6,19 +6,19 @@
 
 ## 103.3.0
 
-* Add development dependency "rdoc" to support Ruby 4.0 tests
+* Add development dependency "rdoc" to support Ruby 4.0 tests ([PR](https://github.com/alphagov/gds-api-adapters/pull/1388))
 
 ## 103.2.0
 
-* Drop support for Ruby 3.2
+* Drop support for Ruby 3.2 ([PR](https://github.com/alphagov/gds-api-adapters/pull/1387))
 
 ## 103.1.1
 
-* Add `plek` as a requirement for Publishing API test helpers
+* Add `plek` as a requirement for Publishing API test helpers ([PR](https://github.com/alphagov/gds-api-adapters/pull/1386))
 
 ## 103.1.0
 
-* Add Publishing API timeout test helper
+* Add Publishing API timeout test helper ([PR](https://github.com/alphagov/gds-api-adapters/pull/1384))
 
 ## 103.0.0
 
