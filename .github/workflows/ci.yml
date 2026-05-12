@@ -30,7 +30,7 @@ jobs:
            repository: alphagov/publishing-api
            ref: main
            path: vendor/publishing-api
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1.306.0
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1.306.0
         with:
           bundler-cache: true
       - run: bundle exec rake pact_test
@@ -148,7 +148,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1.306.0
         with:
           bundler-cache: true
       - uses: actions/download-artifact@v4
