@@ -40,12 +40,19 @@ describe "GdsApi::PublishingApi#put_content pact tests" do
       )
       .will_respond_with(
         status: 422,
+        error_code: Pact.like("base_path_already_in_use"),
         body: {
           "error" => {
             "code" => 422,
             "message" => Pact.term(generate: "Conflict", matcher: /\S+/),
             "fields" => {
-              "base_path" => Pact.each_like("is already in use by the 'publisher' app", min: 1),
+              "base_path" => Pact.each_like(
+                {
+                  "error" => Pact.term(generate: "/test-item is already reserved by publisher", matcher: /\S+/),
+                  "code" => Pact.like("base_path_already_in_use"),
+                },
+                min: 1,
+              ),
             },
           },
         },
