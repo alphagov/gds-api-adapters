@@ -279,6 +279,8 @@ class GdsApi::PublishingApi < GdsApi::Base
   # @option params [Hash] links A "links hash"
   # @option params [Integer] previous_version The previous version (returned by `get_links`). If this version is not the current version, the publishing-api will reject the change and return 409 Conflict. (optional)
   # @option params [Boolean] bulk_publishing Set to true to indicate that this is part of a mass-republish. Allows the publishing-api to prioritise human-initiated publishing (optional, default false)
+  # @option params [Boolean] validate_schema Set to false to skip validation of links against the content schema for the latest edition. After changing a document's document type, allows for removal of links of types unsupported by the new type.
+  #
   # @example
   #
   #   publishing_api.patch_links(
@@ -291,13 +293,24 @@ class GdsApi::PublishingApi < GdsApi::Base
   #     bulk_publishing: true
   #   )
   #
+  # @example
+  #
+  #   publishing_api.patch_links(
+  #     '86963c13-1f57-4005-b119-e7cf3cb92ecf',
+  #     links: {
+  #       topics: [],
+  #     },
+  #     previous_version: 10,
+  #     validate_schema: false
+  #   )
+  #
   # @see https://github.com/alphagov/publishing-api/blob/main/docs/api.md#patch-v2linkscontent_id
   def patch_links(content_id, params)
     payload = {
       links: params.fetch(:links),
     }
 
-    payload = merge_optional_keys(payload, params, %i[previous_version bulk_publishing])
+    payload = merge_optional_keys(payload, params, %i[previous_version bulk_publishing validate_schema])
 
     patch_json(links_url(content_id), payload)
   end
