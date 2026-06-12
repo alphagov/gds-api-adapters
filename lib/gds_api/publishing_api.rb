@@ -277,8 +277,8 @@ class GdsApi::PublishingApi < GdsApi::Base
   # @param content_id [UUID]
   # @param params [Hash]
   # @option params [Hash] links A "links hash"
+  # @option params [Boolean] bulk_publishing Set to true to indicate that this is part of a mass-republish. Allows the publishing-api to prioritise human-initiated publishing
   # @option params [Integer] previous_version The previous version (returned by `get_links`). If this version is not the current version, the publishing-api will reject the change and return 409 Conflict. (optional)
-  # @option params [Boolean] bulk_publishing Set to true to indicate that this is part of a mass-republish. Allows the publishing-api to prioritise human-initiated publishing (optional, default false)
   # @option params [Boolean] validate_schema Set to false to skip validation of links against the content schema for the latest edition. After changing a document's document type, allows for removal of links of types unsupported by the new type.
   #
   # @example
