@@ -1,5 +1,9 @@
 # Changelog
 
+## 103.4.0
+
+* Support skipping validation in patch links requests ([PR](https://github.com/alphagov/gds-api-adapters/pull/1401))
+
 ## 103.3.1
 
 * Update Pact test to reflect new base/absolute path content schema definition ([PR](https://github.com/alphagov/gds-api-adapters/pull/1392))
