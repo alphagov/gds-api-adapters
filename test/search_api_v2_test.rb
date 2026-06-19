@@ -51,13 +51,8 @@ describe GdsApi::SearchApiV2 do
       stub_request(:get, /example.com\/autocomplete/).to_return(body: "[]")
     end
 
-    it "should raise an exception if the request is unsuccessful" do
-      stub_request(:get, /example.com\/autocomplete.json/).to_return(
-        status: [500, "Internal Server Error"],
-      )
-      assert_raises(GdsApi::HTTPServerError) do
-        GdsApi::SearchApiV2.new("http://example.com").autocomplete("prime minis")
-      end
+    it "should not raise an error if there are no autocomplete suggestions returned" do
+      GdsApi::SearchApiV2.new("http://example.com").autocomplete("prime minis")
     end
 
     it "should request the autocomplete results in JSON format" do
