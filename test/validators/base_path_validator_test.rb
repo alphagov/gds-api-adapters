@@ -13,6 +13,7 @@ describe GdsApi::Validators::BasePathValidator do
 
   let(:invalid_path_examples) do
     [
+      "government/topical-events",
       "//",
       "//govuk",
       "/Government/topical-events",
@@ -32,6 +33,7 @@ describe GdsApi::Validators::BasePathValidator do
 
   let(:invalid_path_examples_errors) do
     [
+      "Path must start with a /",
       "Path contains runs of . and or / characters, which could be penetration attempts",
       "Path contains runs of . and or / characters, which could be penetration attempts",
       "Path contains characters that are not lowercase letters, numbers, -, ., or /",
