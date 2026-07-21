@@ -14,15 +14,19 @@ module GdsApi
       end
 
       def errors
-        return ["Path cannot be nil"] if base_path.nil?
+        return { base_path_invalid: ["Path cannot be nil"] } if base_path.nil?
 
         errors = []
-        errors << "Path must start with a /" if no_leading_slash?
-        errors << "Path cannot be longer than #{MAX_PATH_LENGTH} characters" if too_long?
-        errors << "Path contains runs of . and or / characters, which could be penetration attempts" if potential_path_traversal?
-        errors << "Path cannot end with a ." if ends_with_a_period?
-        errors << "Path contains characters that are not lowercase letters, numbers, -, ., or /" if invalid_chars?
-        errors
+        errors << [:base_path_invalid, "Path must start with a /"] if no_leading_slash?
+        errors << [:base_path_too_long, "Path cannot be longer than #{MAX_PATH_LENGTH} characters"] if too_long?
+        errors << [:base_path_invalid, "Path contains runs of . and or / characters, which could be penetration attempts"] if potential_path_traversal?
+        errors << [:base_path_invalid, "Path cannot end with a ."] if ends_with_a_period?
+        errors << [:base_path_invalid, "Path contains characters that are not lowercase letters, numbers, -, ., or /"] if invalid_chars?
+
+        errors.each_with_object({}) do |err, memo|
+          memo[err[0]] ||= []
+          memo[err[0]] << err[1]
+        end
       end
 
     private
