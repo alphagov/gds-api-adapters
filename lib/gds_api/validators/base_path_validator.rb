@@ -14,8 +14,9 @@ module GdsApi
       end
 
       def errors
+        return ["Path cannot be nil"] if base_path.nil?
+
         errors = []
-        errors << "Path cannot be nil" if base_path.nil?
         errors << "Path must start with a /" if no_leading_slash?
         errors << "Path cannot be longer than #{MAX_PATH_LENGTH} characters" if too_long?
         errors << "Path contains runs of . and or / characters, which could be penetration attempts" if potential_path_traversal?
