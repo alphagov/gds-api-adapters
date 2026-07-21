@@ -36,7 +36,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rake"
   s.add_development_dependency "rdoc"
   s.add_development_dependency "rubocop-govuk", "5.2.1"
-  s.add_development_dependency "simplecov", "~> 0.21"
+  s.add_development_dependency "simplecov", "~> 1.0"
   s.add_development_dependency "timecop", "~> 0.9"
   s.add_development_dependency "webmock", "~> 3.17"
 end
