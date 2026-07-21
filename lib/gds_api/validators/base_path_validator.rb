@@ -43,7 +43,7 @@ module GdsApi
       end
 
       def invalid_chars?
-        base_path !~ /^\/$|^(\/[a-z0-9.-]+)+$/
+        base_path !~ /^([\/a-z0-9.-])+$/
       end
     end
   end
