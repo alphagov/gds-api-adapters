@@ -7,7 +7,7 @@ describe GdsApi::Validators::BasePathValidator do
       "/",
       "/government/topical-event/heat-wave-2026",
       "/government/topical-event/heat-wave-2026.csv",
-      "#{'/0123456789' * 46}.json",
+      "#{'/0123456789' * 46}.jsonp",
     ]
   end
 
@@ -25,7 +25,7 @@ describe GdsApi::Validators::BasePathValidator do
       "/govermment/news/%0d%0a",
       "/govermment/😊",
       "/gövernment/news",
-      "#{'/0123456789' * 46}x.json",
+      "#{'/0123456789' * 46}x.jsonp",
       "/government/news.",
     ]
   end
@@ -44,7 +44,7 @@ describe GdsApi::Validators::BasePathValidator do
       "Path contains characters that are not lowercase letters, numbers, -, ., or /",
       "Path contains characters that are not lowercase letters, numbers, -, ., or /",
       "Path contains characters that are not lowercase letters, numbers, -, ., or /",
-      "Path cannot be longer than 511 characters",
+      "Path cannot be longer than 512 characters",
       "Path cannot end with a .",
     ]
   end

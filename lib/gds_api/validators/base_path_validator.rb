@@ -1,7 +1,7 @@
 module GdsApi
   module Validators
     class BasePathValidator
-      MAX_PATH_LENGTH = 511
+      MAX_PATH_LENGTH = 512
 
       attr_reader :base_path
 
