@@ -1,6 +1,7 @@
 require "addressable"
 require "plek"
 require "time"
+require "gds_api/validators/base_path_validator"
 require "gds_api/account_api"
 require "gds_api/asset_manager"
 require "gds_api/calendars"
