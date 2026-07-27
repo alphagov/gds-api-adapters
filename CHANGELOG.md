@@ -1,5 +1,10 @@
 # Changelog
 
+## 103.4.0
+
+* Improve RFC-192 validator method ([PR](https://github.com/alphagov/gds-api-adapters/pull/1411))
+* Add RFC-192 compliant base path validator ([PR](https://github.com/alphagov/gds-api-adapters/pull/1406))
+
 ## 103.3.1
 
 * Update Pact test to reflect new base/absolute path content schema definition ([PR](https://github.com/alphagov/gds-api-adapters/pull/1392))
