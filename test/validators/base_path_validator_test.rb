@@ -7,12 +7,14 @@ describe GdsApi::Validators::BasePathValidator do
       "/",
       "/government/topical-event/heat-wave-2026",
       "/government/topical-event/heat-wave-2026.csv",
-      "#{'/0123456789' * 46}.json",
+      "#{'/0123456789' * 46}.jsonp",
     ]
   end
 
   let(:invalid_path_examples) do
     [
+      nil,
+      "government/topical-events",
       "//",
       "//govuk",
       "/Government/topical-events",
@@ -25,27 +27,29 @@ describe GdsApi::Validators::BasePathValidator do
       "/govermment/news/%0d%0a",
       "/govermment/😊",
       "/gövernment/news",
-      "#{'/0123456789' * 46}x.json",
+      "#{'/0123456789' * 46}x.jsonp",
       "/government/news.",
     ]
   end
 
   let(:invalid_path_examples_errors) do
     [
-      "Path contains runs of . and or / characters, which could be penetration attempts",
-      "Path contains runs of . and or / characters, which could be penetration attempts",
-      "Path contains characters that are not lowercase letters, numbers, -, ., or /",
-      "Path contains characters that are not lowercase letters, numbers, -, ., or /",
-      "Path contains characters that are not lowercase letters, numbers, -, ., or /",
-      "Path contains characters that are not lowercase letters, numbers, -, ., or /",
-      "Path contains characters that are not lowercase letters, numbers, -, ., or /",
-      "Path contains runs of . and or / characters, which could be penetration attempts",
-      "Path contains characters that are not lowercase letters, numbers, -, ., or /",
-      "Path contains characters that are not lowercase letters, numbers, -, ., or /",
-      "Path contains characters that are not lowercase letters, numbers, -, ., or /",
-      "Path contains characters that are not lowercase letters, numbers, -, ., or /",
-      "Path cannot be longer than 511 characters",
-      "Path cannot end with a .",
+      { base_path_invalid: ["must not be nil"] },
+      { base_path_invalid: ["must start with a /"] },
+      { base_path_invalid: ["must not include runs of . and or / characters, which could be penetration attempts"] },
+      { base_path_invalid: ["must not include runs of . and or / characters, which could be penetration attempts"] },
+      { base_path_invalid: ["must not include characters that are not lowercase letters, numbers, -, ., or /"] },
+      { base_path_invalid: ["must not include characters that are not lowercase letters, numbers, -, ., or /"] },
+      { base_path_invalid: ["must not include characters that are not lowercase letters, numbers, -, ., or /"] },
+      { base_path_invalid: ["must not include characters that are not lowercase letters, numbers, -, ., or /"] },
+      { base_path_invalid: ["must not include characters that are not lowercase letters, numbers, -, ., or /"] },
+      { base_path_invalid: ["must not include runs of . and or / characters, which could be penetration attempts"] },
+      { base_path_invalid: ["must not include characters that are not lowercase letters, numbers, -, ., or /"] },
+      { base_path_invalid: ["must not include characters that are not lowercase letters, numbers, -, ., or /"] },
+      { base_path_invalid: ["must not include characters that are not lowercase letters, numbers, -, ., or /"] },
+      { base_path_invalid: ["must not include characters that are not lowercase letters, numbers, -, ., or /"] },
+      { base_path_too_long: ["must not be longer than 512 bytes"] },
+      { base_path_invalid: ["must not end with a ."] },
     ]
   end
 
@@ -64,15 +68,15 @@ describe GdsApi::Validators::BasePathValidator do
   end
 
   describe "#errors" do
-    it "returns an empty array for valid paths" do
+    it "returns an empty hash for valid paths" do
       valid_path_examples.each do |base_path|
-        assert_equal([], GdsApi::Validators::BasePathValidator.new(base_path).errors, "#{base_path} should not return errors")
+        assert_equal({}, GdsApi::Validators::BasePathValidator.new(base_path).errors, "#{base_path} should not return errors")
       end
     end
 
     it "returns appropriate errors for valid paths" do
       invalid_path_examples.each_with_index do |base_path, idx|
-        assert_includes(GdsApi::Validators::BasePathValidator.new(base_path).errors, invalid_path_examples_errors[idx], "#{base_path} should include errors")
+        assert_equal(GdsApi::Validators::BasePathValidator.new(base_path).errors, invalid_path_examples_errors[idx], "#{base_path} should include errors")
       end
     end
   end

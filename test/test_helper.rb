@@ -4,6 +4,7 @@ Bundler.setup :default, :development, :test
 require "simplecov"
 
 SimpleCov.start do
+  enable_coverage :branch
   add_filter "/test/"
   add_group "Test Helpers", "lib/gds_api/test_helpers"
 end
