@@ -68,7 +68,7 @@ describe GdsApi::Validators::BasePathValidator do
   end
 
   describe "#errors" do
-    it "returns an empty hashs for valid paths" do
+    it "returns an empty hash for valid paths" do
       valid_path_examples.each do |base_path|
         assert_equal({}, GdsApi::Validators::BasePathValidator.new(base_path).errors, "#{base_path} should not return errors")
       end
