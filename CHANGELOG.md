@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Add RFC-192 Validation to ContentStore#content_item ([PR](https://github.com/alphagov/gds-api-adapters/pull/1414))
+
 ## 103.4.4
 
 * Remove `stub_asset_manager_restore_asset_conflict` test helper ([PR](https://github.com/alphagov/gds-api-adapters/pull/XXXX))
