@@ -78,6 +78,39 @@ describe GdsApi::TestHelpers::AssetManager do
     end
   end
 
+  describe "#stub_asset_manager_responds_forbidden" do
+    it "raises a forbidden error" do
+      asset_id = "some-asset-id"
+      stub_asset_manager_responds_forbidden(asset_id)
+
+      assert_raises GdsApi::HTTPForbidden do
+        stub_asset_manager.asset(asset_id)
+      end
+    end
+  end
+
+  describe "#stub_asset_manager_responds_payload_too_large" do
+    it "raises a payload too large error" do
+      asset_id = "some-asset-id"
+      stub_asset_manager_responds_payload_too_large
+
+      assert_raises GdsApi::HTTPPayloadTooLarge do
+        stub_asset_manager.asset(asset_id)
+      end
+    end
+  end
+
+  describe "#stub_asset_manager_responds_unprocessable" do
+    it "raises an Unprocessable Entity  error" do
+      asset_id = "some-asset-id"
+      stub_asset_manager_responds_unprocessable
+
+      assert_raises GdsApi::HTTPUnprocessableEntity do
+        stub_asset_manager.asset(asset_id)
+      end
+    end
+  end
+
   describe "#stub_asset_manager_delete_asset_missing" do
     it "raises a not found error" do
       asset_id = "some-asset-id"

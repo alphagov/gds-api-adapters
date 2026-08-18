@@ -45,6 +45,23 @@ module GdsApi
           .to_return(body: response.to_json, status: 404)
       end
 
+      def stub_asset_manager_responds_forbidden(id)
+        response = {
+          "_response_info" => { "status" => "Forbidden. You don't have permission to access this resource." },
+        }
+
+        stub_request(:any, "#{ASSET_MANAGER_ENDPOINT}/assets/#{id}")
+          .to_return(body: response.to_json, status: 403)
+      end
+
+      def stub_asset_manager_responds_payload_too_large
+        stub_request(:any, %r{\A#{ASSET_MANAGER_ENDPOINT}}).to_return(status: 413)
+      end
+
+      def stub_asset_manager_responds_unprocessable
+        stub_request(:any, %r{\A#{ASSET_MANAGER_ENDPOINT}}).to_return(status: 422)
+      end
+
       # This can take a string of an exact url or a hash of options
       #
       # with a string:
