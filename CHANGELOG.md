@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## 103.4.1
 
-* Add extra test helpers to Asset Manager ([PR]https://github.com/alphagov/gds-api-adapters/pull/1415)
+* Add extra test helpers to Asset Manager ([PR](https://github.com/alphagov/gds-api-adapters/pull/1415))
 
 ## 103.4.0
 
