@@ -5,6 +5,7 @@
 * Add new test helpers for Asset Manager ([PR](https://github.com/alphagov/gds-api-adapters/pull/1416))
   * `stub_asset_manager_create_asset_too_large`
   * `stub_asset_manager_create_asset_unprocessable`
+  * `stub_asset_manager_get_asset_forbidden`
   * `stub_asset_manager_request_to_asset_media`
   * `stub_asset_manager_request_to_get_asset`
   * `stub_asset_manager_update_asset_forbidden`

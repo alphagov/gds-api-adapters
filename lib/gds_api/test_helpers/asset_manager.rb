@@ -52,6 +52,10 @@ module GdsApi
           .to_return(body: response.to_json, status: 404)
       end
 
+      def stub_asset_manager_get_asset_forbidden(id)
+        stub_request(:get, "#{ASSET_MANAGER_ENDPOINT}/assets/#{id}").to_return(status: 403)
+      end
+
       # This can take a string of an exact url or a hash of options
       #
       # with a string:
