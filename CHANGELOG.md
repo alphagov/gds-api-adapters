@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 103.4.1
 
 * Add new test helpers for Asset Manager ([PR](https://github.com/alphagov/gds-api-adapters/pull/1416))
   * `stub_asset_manager_create_asset_too_large`
