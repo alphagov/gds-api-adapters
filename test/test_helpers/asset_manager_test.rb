@@ -186,4 +186,26 @@ describe GdsApi::TestHelpers::AssetManager do
       end
     end
   end
+
+  describe "#stub_asset_manager_create_asset_unprocessable" do
+    describe "when the endpoint is requested" do
+      it "raises GdsApi::HTTPUnprocessableEntity" do
+        stub_asset_manager_create_asset_unprocessable
+
+        assert_raises GdsApi::HTTPUnprocessableEntity do
+          stub_asset_manager.create_asset({})
+        end
+      end
+
+      it "includes the body when provided" do
+        stub_asset_manager_create_asset_unprocessable("Some output")
+
+        error = assert_raises GdsApi::HTTPUnprocessableEntity do
+          stub_asset_manager.create_asset({})
+        end
+
+        assert_includes error.message, "Some output"
+      end
+    end
+  end
 end
