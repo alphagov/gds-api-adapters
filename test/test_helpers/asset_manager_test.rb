@@ -174,4 +174,16 @@ describe GdsApi::TestHelpers::AssetManager do
       end
     end
   end
+
+  describe "#stub_asset_manager_create_asset_too_large" do
+    describe "when the endpoint is requested" do
+      it "raises GdsApi::HTTPPayloadTooLarge" do
+        stub_asset_manager_create_asset_too_large
+
+        assert_raises GdsApi::HTTPPayloadTooLarge do
+          stub_asset_manager.create_asset({})
+        end
+      end
+    end
+  end
 end

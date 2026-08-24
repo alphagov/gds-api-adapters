@@ -91,6 +91,10 @@ module GdsApi
         stub_asset_manager_create_asset(response_url)
       end
 
+      def stub_asset_manager_create_asset_too_large
+        stub_request(:post, "#{ASSET_MANAGER_ENDPOINT}/assets").to_return(status: 413)
+      end
+
       def stub_asset_manager_upload_failure
         stub_request(:post, "#{ASSET_MANAGER_ENDPOINT}/assets").to_return(status: 500)
       end
