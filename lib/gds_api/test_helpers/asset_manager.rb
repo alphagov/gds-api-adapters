@@ -108,6 +108,14 @@ module GdsApi
           .to_return(body: body.to_json, status: 200)
       end
 
+      def stub_asset_manager_update_asset_forbidden(asset_id)
+        stub_request(:put, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}").to_return(status: 403)
+      end
+
+      def stub_asset_manager_update_asset_not_found(asset_id)
+        stub_request(:put, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}").to_return(status: 404)
+      end
+
       def stub_asset_manager_update_asset_failure(asset_id)
         stub_request(:put, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}").to_return(status: 500)
       end
