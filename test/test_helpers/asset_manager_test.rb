@@ -99,4 +99,59 @@ describe GdsApi::TestHelpers::AssetManager do
       end
     end
   end
+
+  describe "#stub_asset_manager_has_an_asset" do
+    describe "when the asset endpoint is requested" do
+      it "returns the given attributes" do
+        asset_id = "some-asset-id"
+        body = { key: "value" }
+        stub_asset_manager_has_an_asset(asset_id, body)
+        response = stub_asset_manager.asset(asset_id)
+
+        assert_equal 200, response.code
+        assert_equal body[:key], response["key"]
+      end
+    end
+
+    describe "when the media endpoint is requested" do
+      it "returns the file content" do
+        asset_id = "some-asset-id"
+        body = { key: "value" }
+        filename = "file.pdf"
+        stub_asset_manager_has_an_asset(asset_id, body, filename)
+        response = stub_asset_manager.media(asset_id, filename)
+
+        assert_equal 200, response.code
+        assert_equal "Some file content", response
+      end
+    end
+  end
+
+  describe "#stub_asset_manager_request_to_get_asset" do
+    describe "when the asset endpoint is requested" do
+      it "returns the given attributes" do
+        asset_id = "some-asset-id"
+        body = { key: "value" }
+        stub_asset_manager_request_to_get_asset(asset_id, body)
+        response = stub_asset_manager.asset(asset_id)
+
+        assert_equal 200, response.code
+        assert_equal body[:key], response["key"]
+      end
+    end
+  end
+
+  describe "#stub_asset_manager_request_to_asset_media" do
+    describe "when the media endpoint is requested" do
+      it "returns the file content" do
+        asset_id = "some-asset-id"
+        filename = "file.pdf"
+        stub_asset_manager_request_to_asset_media(asset_id, filename)
+        response = stub_asset_manager.media(asset_id, filename)
+
+        assert_equal 200, response.code
+        assert_equal "Some file content", response
+      end
+    end
+  end
 end

@@ -24,9 +24,16 @@ module GdsApi
       def stub_asset_manager_has_an_asset(id, atts, filename = "")
         response = atts.merge("_response_info" => { "status" => "ok" })
 
+        stub_asset_manager_request_to_get_asset(id, response)
+        stub_asset_manager_request_to_asset_media(id, filename)
+      end
+
+      def stub_asset_manager_request_to_get_asset(id, response)
         stub_request(:get, "#{ASSET_MANAGER_ENDPOINT}/assets/#{id}")
           .to_return(body: response.to_json, status: 200)
+      end
 
+      def stub_asset_manager_request_to_asset_media(id, filename)
         stub_request(:get, "#{ASSET_MANAGER_ENDPOINT}/media/#{id}/#{filename}")
           .to_return(body: "Some file content", status: 200)
       end

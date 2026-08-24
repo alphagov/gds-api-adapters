@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+* Add new test helpers for Asset Manager ([PR](https://github.com/alphagov/gds-api-adapters/pull/1416))
+  * `stub_asset_manager_request_to_asset_media`
+  * `stub_asset_manager_request_to_get_asset`
+
 ## 103.4.0
 
 * Improve RFC-192 validator method ([PR](https://github.com/alphagov/gds-api-adapters/pull/1411))
