@@ -69,7 +69,7 @@ module GdsApi
       #
       # `stub_asset_manager_create_asset`
       # which would return a file url of "https://asset-manager/media/0053adbf-0737-4923-9d8a-8180f2c723af/0d19136c4a94f07"
-      def stub_asset_manager_create_asset(response_url = {})
+      def stub_asset_manager_create_asset(response_url = {}, response_body = {})
         stub_request(:post, "#{ASSET_MANAGER_ENDPOINT}/assets").to_return do
           if response_url.is_a?(String)
             file_url = response_url
@@ -81,7 +81,7 @@ module GdsApi
 
             file_url = "#{ASSET_MANAGER_ENDPOINT}/media/#{options[:id]}/#{options[:filename]}"
           end
-          { body: { file_url: }.to_json, status: 200 }
+          { body: response_body.merge(file_url:).to_json, status: 200 }
         end
       end
 

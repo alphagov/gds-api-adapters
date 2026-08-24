@@ -63,6 +63,17 @@ describe GdsApi::TestHelpers::AssetManager do
         assert_match url_format, response["file_url"]
       end
     end
+
+    describe "when passed a response body" do
+      it "returns the body in the response" do
+        url = "https://assets.example.com/path/to/asset"
+        response_body = { "key": "value" }
+        stub_asset_manager_create_asset(url, response_body)
+        response = stub_asset_manager.create_asset({})
+
+        assert_equal "value", response["key"]
+      end
+    end
   end
 
   describe "#stub_asset_manager_receives_an_asset" do
