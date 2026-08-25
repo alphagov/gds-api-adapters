@@ -120,6 +120,17 @@ describe GdsApi::TestHelpers::AssetManager do
     end
   end
 
+  describe "#stub_asset_manager_delete_asset_forbidden" do
+    it "raises a forbidden error" do
+      asset_id = "some-asset-id"
+      stub_asset_manager_delete_asset_forbidden(asset_id)
+
+      assert_raises GdsApi::HTTPForbidden do
+        stub_asset_manager.delete_asset(asset_id)
+      end
+    end
+  end
+
   describe "#stub_asset_manager_delete_asset_failure" do
     it "raises an internal server error" do
       asset_id = "some-asset-id"

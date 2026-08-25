@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+* Add even more new test helpers for Asset Manager ([PR](https://github.com/alphagov/gds-api-adapters/pull/1418))
+  * `stub_asset_manager_delete_asset_forbidden`
+
 ## 103.4.1
 
 * Add new test helpers for Asset Manager ([PR](https://github.com/alphagov/gds-api-adapters/pull/1416))
