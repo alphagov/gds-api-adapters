@@ -5,6 +5,7 @@
 * Add yet more new test helpers for Asset Manager ([PR](https://github.com/alphagov/gds-api-adapters/pull/1417))
   * `stub_asset_manager_restore_asset`
   * `stub_asset_manager_restore_asset_conflict`
+  * `stub_asset_manager_restore_asset_failure`
   * `stub_asset_manager_restore_asset_forbidden`
   * `stub_asset_manager_restore_asset_not_found`
 
