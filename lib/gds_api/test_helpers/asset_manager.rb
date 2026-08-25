@@ -155,6 +155,11 @@ module GdsApi
         stub_request(:post, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}/restore")
           .to_return(body: body.to_json, status: 200)
       end
+
+      def stub_asset_manager_restore_asset_forbidden(asset_id)
+        stub_request(:post, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}/restore")
+          .to_return(status: 403)
+      end
     end
   end
 end

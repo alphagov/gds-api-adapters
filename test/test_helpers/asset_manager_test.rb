@@ -319,4 +319,17 @@ describe GdsApi::TestHelpers::AssetManager do
       end
     end
   end
+
+  describe "#stub_asset_manager_restore_asset_forbidden" do
+    describe "when the endpoint is requested with the given ID" do
+      it "raises GdsApi::HTTPForbidden" do
+        asset_id = "some-id"
+        stub_asset_manager_restore_asset_forbidden(asset_id)
+
+        assert_raises GdsApi::HTTPForbidden do
+          stub_asset_manager.restore_asset(asset_id)
+        end
+      end
+    end
+  end
 end
