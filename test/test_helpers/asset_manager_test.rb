@@ -9,11 +9,11 @@ describe GdsApi::TestHelpers::AssetManager do
     GdsApi::AssetManager.new(Plek.find("asset-manager"))
   end
 
-  describe "#stub_asset_manager_receives_an_asset" do
+  describe "#stub_asset_manager_create_asset" do
     describe "when passed a string" do
       it "returns the string as the file url" do
         url = "https://assets.example.com/path/to/asset"
-        stub_asset_manager_receives_an_asset(url)
+        stub_asset_manager_create_asset(url)
         response = stub_asset_manager.create_asset({})
 
         assert_equal url, response["file_url"]
@@ -22,7 +22,7 @@ describe GdsApi::TestHelpers::AssetManager do
 
     describe "when passed no arguments" do
       it "returns a random, yet valid asset manager url" do
-        stub_asset_manager_receives_an_asset
+        stub_asset_manager_create_asset
         response = stub_asset_manager.create_asset({})
 
         url_format = %r{\Ahttp://asset-manager.dev.gov.uk/media/[^/]*/[^/]*\Z}
@@ -30,7 +30,7 @@ describe GdsApi::TestHelpers::AssetManager do
       end
 
       it "returns a different URL each call" do
-        stub_asset_manager_receives_an_asset
+        stub_asset_manager_create_asset
         response1 = stub_asset_manager.create_asset({})
         response2 = stub_asset_manager.create_asset({})
 
@@ -40,7 +40,7 @@ describe GdsApi::TestHelpers::AssetManager do
 
     describe "when passed a hash" do
       it "can specify the id of an asset" do
-        stub_asset_manager_receives_an_asset(id: "123")
+        stub_asset_manager_create_asset(id: "123")
         response = stub_asset_manager.create_asset({})
 
         url_format = %r{\Ahttp://asset-manager.dev.gov.uk/media/123/[^/]*\Z}
@@ -48,7 +48,7 @@ describe GdsApi::TestHelpers::AssetManager do
       end
 
       it "can specify the filename of an asset" do
-        stub_asset_manager_receives_an_asset(filename: "file.ext")
+        stub_asset_manager_create_asset(filename: "file.ext")
         response = stub_asset_manager.create_asset({})
 
         url_format = %r{\Ahttp://asset-manager.dev.gov.uk/media/[^/]*/file.ext\Z}
@@ -56,12 +56,32 @@ describe GdsApi::TestHelpers::AssetManager do
       end
 
       it "can specify both filename and id" do
-        stub_asset_manager_receives_an_asset(id: "123", filename: "file.ext")
+        stub_asset_manager_create_asset(id: "123", filename: "file.ext")
         response = stub_asset_manager.create_asset({})
 
         url_format = %r{\Ahttp://asset-manager.dev.gov.uk/media/123/file.ext\Z}
         assert_match url_format, response["file_url"]
       end
+    end
+  end
+
+  describe "#stub_asset_manager_receives_an_asset" do
+    it "includes a deprecation warning" do
+      expects(:warn).with(
+        <<~WARNING,
+          stub_asset_manager_receives_an_asset is deprecated and will be removed
+          in a future version of gds-api-adapters. Replace calls to this method with
+          stub_asset_manager_create_asset.
+        WARNING
+      )
+
+      stub_asset_manager_receives_an_asset
+    end
+
+    it "delegates to the new method" do
+      expects(:stub_asset_manager_create_asset).once
+
+      stub_asset_manager_receives_an_asset
     end
   end
 

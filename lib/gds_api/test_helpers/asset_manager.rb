@@ -55,17 +55,17 @@ module GdsApi
       # This can take a string of an exact url or a hash of options
       #
       # with a string:
-      # `stub_asset_manager_receives_an_asset("https://asset-manager/media/619ce797-b415-42e5-b2b1-2ffa0df52302/file.jpg")`
+      # `stub_asset_manager_create_asset("https://asset-manager/media/619ce797-b415-42e5-b2b1-2ffa0df52302/file.jpg")`
       #
       # with a hash:
-      # `stub_asset_manager_receives_an_asset(id: "20d04259-e3ae-4f71-8157-e6c843096e96", filename: "file.jpg")`
+      # `stub_asset_manager_create_asset(id: "20d04259-e3ae-4f71-8157-e6c843096e96", filename: "file.jpg")`
       # which would return a file url of "https://asset-manager/media/20d04259-e3ae-4f71-8157-e6c843096e96/file.jpg"
       #
       # with no argument
       #
-      # `stub_asset_manager_receives_an_asset`
+      # `stub_asset_manager_create_asset`
       # which would return a file url of "https://asset-manager/media/0053adbf-0737-4923-9d8a-8180f2c723af/0d19136c4a94f07"
-      def stub_asset_manager_receives_an_asset(response_url = {})
+      def stub_asset_manager_create_asset(response_url = {})
         stub_request(:post, "#{ASSET_MANAGER_ENDPOINT}/assets").to_return do
           if response_url.is_a?(String)
             file_url = response_url
@@ -79,6 +79,16 @@ module GdsApi
           end
           { body: { file_url: }.to_json, status: 200 }
         end
+      end
+
+      def stub_asset_manager_receives_an_asset(response_url = {})
+        warn <<~WARNING
+          stub_asset_manager_receives_an_asset is deprecated and will be removed
+          in a future version of gds-api-adapters. Replace calls to this method with
+          stub_asset_manager_create_asset.
+        WARNING
+
+        stub_asset_manager_create_asset(response_url)
       end
 
       def stub_asset_manager_upload_failure

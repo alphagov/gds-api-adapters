@@ -5,6 +5,7 @@
 * Add new test helpers for Asset Manager ([PR](https://github.com/alphagov/gds-api-adapters/pull/1416))
   * `stub_asset_manager_request_to_asset_media`
   * `stub_asset_manager_request_to_get_asset`
+* Rename `stub_asset_manager_receives_an_asset` test helper to `stub_asset_manager_create_asset`; the old name will be deprecated in a later release ([PR](https://github.com/alphagov/gds-api-adapters/pull/1416))
 
 ## 103.4.0
 
