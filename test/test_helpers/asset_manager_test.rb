@@ -332,4 +332,17 @@ describe GdsApi::TestHelpers::AssetManager do
       end
     end
   end
+
+  describe "#stub_asset_manager_restore_asset_not_found" do
+    describe "when the endpoint is requested with the given ID" do
+      it "raises GdsApi::HTTPNotFound" do
+        asset_id = "some-id"
+        stub_asset_manager_restore_asset_not_found(asset_id)
+
+        assert_raises GdsApi::HTTPNotFound do
+          stub_asset_manager.restore_asset(asset_id)
+        end
+      end
+    end
+  end
 end
