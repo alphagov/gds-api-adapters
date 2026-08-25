@@ -120,6 +120,17 @@ describe GdsApi::TestHelpers::AssetManager do
     end
   end
 
+  describe "#stub_asset_manager_delete_asset_forbidden" do
+    it "raises a forbidden error" do
+      asset_id = "some-asset-id"
+      stub_asset_manager_delete_asset_forbidden(asset_id)
+
+      assert_raises GdsApi::HTTPForbidden do
+        stub_asset_manager.delete_asset(asset_id)
+      end
+    end
+  end
+
   describe "#stub_asset_manager_delete_asset_failure" do
     it "raises an internal server error" do
       asset_id = "some-asset-id"
@@ -220,6 +231,29 @@ describe GdsApi::TestHelpers::AssetManager do
     end
   end
 
+  describe "#stub_asset_manager_update_asset_unprocessable" do
+    describe "when the endpoint is requested with the given ID" do
+      let(:asset_id) { "some_id" }
+      it "raises GdsApi::HTTPUnprocessableEntity" do
+        stub_asset_manager_update_asset_unprocessable(asset_id)
+
+        assert_raises GdsApi::HTTPUnprocessableEntity do
+          stub_asset_manager.update_asset(asset_id, {})
+        end
+      end
+
+      it "includes the body when provided" do
+        stub_asset_manager_update_asset_unprocessable(asset_id, "Some output")
+
+        error = assert_raises GdsApi::HTTPUnprocessableEntity do
+          stub_asset_manager.update_asset(asset_id, {})
+        end
+
+        assert_includes error.message, "Some output"
+      end
+    end
+  end
+
   describe "#stub_asset_manager_update_asset_forbidden" do
     describe "when the endpoint is requested with the given ID" do
       it "raises GdsApi::HTTPForbidden" do
@@ -227,6 +261,19 @@ describe GdsApi::TestHelpers::AssetManager do
         stub_asset_manager_update_asset_forbidden(asset_id)
 
         assert_raises GdsApi::HTTPForbidden do
+          stub_asset_manager.update_asset(asset_id, {})
+        end
+      end
+    end
+  end
+
+  describe "#stub_asset_manager_update_asset_too_large" do
+    describe "when the endpoint is requested with the given ID" do
+      it "raises GdsApi::HTTPPayloadTooLarge" do
+        asset_id = "some-id"
+        stub_asset_manager_update_asset_too_large(asset_id)
+
+        assert_raises GdsApi::HTTPPayloadTooLarge do
           stub_asset_manager.update_asset(asset_id, {})
         end
       end
