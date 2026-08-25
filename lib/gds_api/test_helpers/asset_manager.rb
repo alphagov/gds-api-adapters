@@ -124,6 +124,10 @@ module GdsApi
         stub_request(:put, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}").to_return(status: 413)
       end
 
+      def stub_asset_manager_update_asset_unprocessable(asset_id, body = "")
+        stub_request(:put, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}").to_return(body:, status: 422)
+      end
+
       def stub_asset_manager_update_asset_failure(asset_id)
         stub_request(:put, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}").to_return(status: 500)
       end
