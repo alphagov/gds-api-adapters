@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+* Add yet more new test helpers for Asset Manager ([PR](https://github.com/alphagov/gds-api-adapters/pull/1417))
+  * `stub_asset_manager_restore_asset`
+
 ## 103.4.2
 
 * Add even more new test helpers for Asset Manager ([PR](https://github.com/alphagov/gds-api-adapters/pull/1418))

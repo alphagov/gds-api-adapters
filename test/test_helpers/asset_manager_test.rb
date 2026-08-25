@@ -305,4 +305,18 @@ describe GdsApi::TestHelpers::AssetManager do
       end
     end
   end
+
+  describe "#stub_asset_manager_restore_asset" do
+    describe "when the endpoint is requested with the given ID" do
+      it "returns the given attributes" do
+        asset_id = "some-asset-id"
+        body = { key: "value" }
+        stub_asset_manager_restore_asset(asset_id, body)
+        response = stub_asset_manager.restore_asset(asset_id)
+
+        assert_equal 200, response.code
+        assert_equal body[:key], response["key"]
+      end
+    end
+  end
 end

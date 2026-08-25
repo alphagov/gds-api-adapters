@@ -150,6 +150,11 @@ module GdsApi
       def stub_asset_manager_delete_asset_failure(asset_id)
         stub_request(:delete, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}").to_return(status: 500)
       end
+
+      def stub_asset_manager_restore_asset(asset_id, body = {})
+        stub_request(:post, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}/restore")
+          .to_return(body: body.to_json, status: 200)
+      end
     end
   end
 end
