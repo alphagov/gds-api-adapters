@@ -244,6 +244,19 @@ describe GdsApi::TestHelpers::AssetManager do
     end
   end
 
+  describe "#stub_asset_manager_update_asset_too_large" do
+    describe "when the endpoint is requested with the given ID" do
+      it "raises GdsApi::HTTPPayloadTooLarge" do
+        asset_id = "some-id"
+        stub_asset_manager_update_asset_too_large(asset_id)
+
+        assert_raises GdsApi::HTTPPayloadTooLarge do
+          stub_asset_manager.update_asset(asset_id, {})
+        end
+      end
+    end
+  end
+
   describe "#stub_asset_manager_update_asset_not_found" do
     describe "when the endpoint is requested with the given ID" do
       it "raises GdsApi::HTTPNotFound" do
