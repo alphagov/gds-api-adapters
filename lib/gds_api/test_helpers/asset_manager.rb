@@ -107,9 +107,10 @@ module GdsApi
         stub_request(:post, "#{ASSET_MANAGER_ENDPOINT}/assets").to_return(status: 500)
       end
 
-      def stub_asset_manager_update_asset(asset_id, body = {})
+      def stub_asset_manager_update_asset(asset_id, request_body = {}, response_body = {})
         stub_request(:put, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}")
-          .to_return(body: body.to_json, status: 200)
+        .with(body: request_body.to_json)
+        .to_return(body: response_body.to_json, status: 200)
       end
 
       def stub_asset_manager_update_asset_forbidden(asset_id)
