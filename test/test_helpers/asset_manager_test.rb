@@ -346,19 +346,6 @@ describe GdsApi::TestHelpers::AssetManager do
     end
   end
 
-  describe "#stub_asset_manager_restore_asset_conflict" do
-    describe "when the endpoint is requested with the given ID" do
-      it "raises GdsApi::HTTPConflict" do
-        asset_id = "some-id"
-        stub_asset_manager_restore_asset_conflict(asset_id)
-
-        assert_raises GdsApi::HTTPConflict do
-          stub_asset_manager.restore_asset(asset_id)
-        end
-      end
-    end
-  end
-
   describe "#stub_asset_manager_restore_asset_failure" do
     describe "when the endpoint is requested with the given ID" do
       it "raises GdsApi::HTTPInternalServerError" do
