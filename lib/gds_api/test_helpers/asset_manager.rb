@@ -166,11 +166,6 @@ module GdsApi
           .to_return(status: 404)
       end
 
-      def stub_asset_manager_restore_asset_conflict(asset_id)
-        stub_request(:post, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}/restore")
-          .to_return(status: 409)
-      end
-
       def stub_asset_manager_restore_asset_failure(asset_id)
         stub_request(:post, "#{ASSET_MANAGER_ENDPOINT}/assets/#{asset_id}/restore")
           .to_return(status: 500)

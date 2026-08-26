@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Remove `stub_asset_manager_restore_asset_conflict` test helper ([PR](https://github.com/alphagov/gds-api-adapters/pull/XXXX))
+
 ## 103.4.3
 
 * Add yet more new test helpers for Asset Manager ([PR](https://github.com/alphagov/gds-api-adapters/pull/1417))
