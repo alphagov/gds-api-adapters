@@ -305,4 +305,70 @@ describe GdsApi::TestHelpers::AssetManager do
       end
     end
   end
+
+  describe "#stub_asset_manager_restore_asset" do
+    describe "when the endpoint is requested with the given ID" do
+      it "returns the given attributes" do
+        asset_id = "some-asset-id"
+        body = { key: "value" }
+        stub_asset_manager_restore_asset(asset_id, body)
+        response = stub_asset_manager.restore_asset(asset_id)
+
+        assert_equal 200, response.code
+        assert_equal body[:key], response["key"]
+      end
+    end
+  end
+
+  describe "#stub_asset_manager_restore_asset_forbidden" do
+    describe "when the endpoint is requested with the given ID" do
+      it "raises GdsApi::HTTPForbidden" do
+        asset_id = "some-id"
+        stub_asset_manager_restore_asset_forbidden(asset_id)
+
+        assert_raises GdsApi::HTTPForbidden do
+          stub_asset_manager.restore_asset(asset_id)
+        end
+      end
+    end
+  end
+
+  describe "#stub_asset_manager_restore_asset_not_found" do
+    describe "when the endpoint is requested with the given ID" do
+      it "raises GdsApi::HTTPNotFound" do
+        asset_id = "some-id"
+        stub_asset_manager_restore_asset_not_found(asset_id)
+
+        assert_raises GdsApi::HTTPNotFound do
+          stub_asset_manager.restore_asset(asset_id)
+        end
+      end
+    end
+  end
+
+  describe "#stub_asset_manager_restore_asset_conflict" do
+    describe "when the endpoint is requested with the given ID" do
+      it "raises GdsApi::HTTPConflict" do
+        asset_id = "some-id"
+        stub_asset_manager_restore_asset_conflict(asset_id)
+
+        assert_raises GdsApi::HTTPConflict do
+          stub_asset_manager.restore_asset(asset_id)
+        end
+      end
+    end
+  end
+
+  describe "#stub_asset_manager_restore_asset_failure" do
+    describe "when the endpoint is requested with the given ID" do
+      it "raises GdsApi::HTTPInternalServerError" do
+        asset_id = "some-id"
+        stub_asset_manager_restore_asset_failure(asset_id)
+
+        assert_raises GdsApi::HTTPInternalServerError do
+          stub_asset_manager.restore_asset(asset_id)
+        end
+      end
+    end
+  end
 end
