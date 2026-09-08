@@ -4,6 +4,7 @@ require "gds_api/validators/base_path_validator"
 describe GdsApi::Validators::BasePathValidator do
   let(:valid_path_examples) do
     [
+      nil,
       "/",
       "/government/topical-event/heat-wave-2026",
       "/government/topical-event/heat-wave-2026.csv",
@@ -13,7 +14,6 @@ describe GdsApi::Validators::BasePathValidator do
 
   let(:invalid_path_examples) do
     [
-      nil,
       "government/topical-events",
       "//",
       "//govuk",
@@ -34,7 +34,6 @@ describe GdsApi::Validators::BasePathValidator do
 
   let(:invalid_path_examples_errors) do
     [
-      { base_path_invalid: ["must not be nil"] },
       { base_path_invalid: ["must start with a /"] },
       { base_path_invalid: ["must not include runs of . and or / characters, which could be penetration attempts"] },
       { base_path_invalid: ["must not include runs of . and or / characters, which could be penetration attempts"] },
