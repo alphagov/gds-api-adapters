@@ -1,6 +1,7 @@
 require "test_helper"
 require "gds_api/content_store"
 require "gds_api/test_helpers/content_store"
+require "minitest/mock"
 
 describe GdsApi::ContentStore do
   include GdsApi::TestHelpers::ContentStore
@@ -33,6 +34,21 @@ describe GdsApi::ContentStore do
 
       assert_raises(GdsApi::HTTPGone) do
         @api.content_item("/it-is-gone")
+      end
+    end
+
+    describe "when the base_path validator returns false" do
+      before do
+        mock = Minitest::Mock.new
+        def mock.valid? = false
+        def mock.errors = { mocked_error: ["always fails"] }
+        GdsApi::Validators::BasePathValidator.stubs(:new).returns(mock)
+      end
+
+      it "raises HTTPBadRequest and doesn't call content store" do
+        assert_raises(GdsApi::HTTPBadRequest) do
+          @api.content_item("/it-is-gone")
+        end
       end
     end
   end
