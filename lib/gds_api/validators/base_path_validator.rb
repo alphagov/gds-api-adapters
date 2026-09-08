@@ -10,11 +10,13 @@ module GdsApi
       end
 
       def valid?
-        !(base_path.nil? || no_leading_slash? || too_long? || potential_path_traversal? || ends_with_a_period? || invalid_chars?)
+        return true unless base_path
+
+        !(no_leading_slash? || too_long? || potential_path_traversal? || ends_with_a_period? || invalid_chars?)
       end
 
       def errors
-        return { base_path_invalid: ["must not be nil"] } if base_path.nil?
+        return {} unless base_path
 
         errors = []
         errors << [:base_path_invalid, "must start with a /"] if no_leading_slash?
