@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 103.5.0
 
 * Allow nil base_paths in validator ([PR](https://github.com/alphagov/gds-api-adapters/pull/1421))
 * Add RFC-192 Validation to ContentStore#content_item ([PR](https://github.com/alphagov/gds-api-adapters/pull/1414))
