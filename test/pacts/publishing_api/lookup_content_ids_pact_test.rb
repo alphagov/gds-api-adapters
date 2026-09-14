@@ -29,6 +29,7 @@ describe "GdsApi::PublishingApi#lookup_content_ids pact test" do
       .will_respond_with(
         status: 200,
         body: reponse_hash,
+        headers: { "Content-Type" => "application/json; charset=utf-8" },
       )
 
     api_client.lookup_content_ids(base_paths: ["/foo", "/bar"])

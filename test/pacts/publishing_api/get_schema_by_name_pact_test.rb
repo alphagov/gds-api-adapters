@@ -30,6 +30,7 @@ describe "GdsApi::PublishingApi##get_schemas_by_name pact tests" do
         .will_respond_with(
           status: 200,
           body: schema,
+          headers: { "Content-Type" => "application/json; charset=utf-8" },
         )
     end
 

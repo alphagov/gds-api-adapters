@@ -22,9 +22,8 @@ describe "GdsApi::PublishingApi#lookup_content_id pact tests" do
       )
       .will_respond_with(
         status: 200,
-        body: {
-          "/foo" => "08f86d00-e95f-492f-af1d-470c5ba4752e",
-        },
+        body: { "/foo" => "08f86d00-e95f-492f-af1d-470c5ba4752e" },
+        headers: { "Content-Type" => "application/json; charset=utf-8" },
       )
 
     content_id = api_client.lookup_content_id(base_path: "/foo")
@@ -49,9 +48,8 @@ describe "GdsApi::PublishingApi#lookup_content_id pact tests" do
       )
       .will_respond_with(
         status: 200,
-        body: {
-          "/foo" => "cbb460a7-60de-4a74-b5be-0b27c6d6af9b",
-        },
+        body: { "/foo" => "cbb460a7-60de-4a74-b5be-0b27c6d6af9b" },
+        headers: { "Content-Type" => "application/json; charset=utf-8" },
       )
 
     api_client.lookup_content_id(base_path: "/foo", with_drafts: true)
