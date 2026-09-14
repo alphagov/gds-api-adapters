@@ -64,7 +64,7 @@ describe "GdsApi::PublishingApi#unpublish pact tests" do
         body: {
           "error" => {
             "code" => 422,
-            "message" => Pact.term(generate: "not-a-valid-type is not a valid unpublishing type", matcher: /\S+/),
+            "message" => Pact.term(generate: "not-a-valid-type is not a valid unpublishing type", matcher: /.+/),
             "fields" => {},
           },
         },
@@ -133,7 +133,7 @@ describe "GdsApi::PublishingApi#unpublish pact tests" do
           body: {
             "error" => {
               "code" => 409,
-              "message" => Pact.term(generate: "Conflict", matcher: /\S+/),
+              "message" => Pact.term(generate: "Conflict", matcher: /.+/),
               "fields" => {
                 "previous_version" => Pact.each_like("does not match", min: 1),
               },

@@ -170,7 +170,7 @@ describe "GdsApi::PublishingApi#get_content pact tests" do
         body: {
           "error" => {
             "code" => 404,
-            "message" => Pact.term(generate: "not found", matcher: /\S+/),
+            "message" => Pact.term(generate: "not found", matcher: /.+/),
           },
         },
         headers: {

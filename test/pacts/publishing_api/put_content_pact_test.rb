@@ -44,11 +44,11 @@ describe "GdsApi::PublishingApi#put_content pact tests" do
         body: {
           "error" => {
             "code" => 422,
-            "message" => Pact.term(generate: "Conflict", matcher: /\S+/),
+            "message" => Pact.term(generate: "Conflict", matcher: /.+/),
             "fields" => {
               "base_path" => Pact.each_like(
                 {
-                  "error" => Pact.term(generate: "/test-item is already reserved by publisher", matcher: /\S+/),
+                  "error" => Pact.term(generate: "/test-item is already reserved by publisher", matcher: /.+/),
                   "code" => Pact.like("base_path_already_in_use"),
                 },
                 min: 1,
@@ -149,7 +149,7 @@ describe "GdsApi::PublishingApi#put_content pact tests" do
           body: {
             "error" => {
               "code" => 409,
-              "message" => Pact.term(generate: "Conflict", matcher: /\S+/),
+              "message" => Pact.term(generate: "Conflict", matcher: /.+/),
               "fields" => {
                 "previous_version" => Pact.each_like("does not match", min: 1),
               },
