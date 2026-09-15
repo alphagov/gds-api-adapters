@@ -52,7 +52,13 @@ describe "GdsApi::PublishingApi#get_paged_editions pact tests" do
               { content_id: content_id_4 },
             ],
             links: [
-              { href: "http://example.org/v2/editions?fields%5B%5D=content_id&per_page=2&after=2017-02-01T00%3A00%3A00.000000Z%2C2", rel: "self" },
+              {
+                href: Pact.term(
+                  generate: "http://example.org/v2/editions?after=2017-02-01T00%3A00%3A00.000000Z%2C2&fields%5B%5D=content_id&per_page=2",
+                  matcher: %r{\Ahttp://example.org/v2/editions\?(after=2017-02-01T00%3A00%3A00\.000000Z%2C2&fields%5B%5D=content_id&per_page=2|fields%5B%5D=content_id&per_page=2&after=2017-02-01T00%3A00%3A00\.000000Z%2C2)\z},
+                ),
+                rel: "self",
+              },
               { href: "http://example.org/v2/editions?fields%5B%5D=content_id&per_page=2&before=2017-03-01T00%3A00%3A00.000000Z%2C3", rel: "previous" },
             ],
           },

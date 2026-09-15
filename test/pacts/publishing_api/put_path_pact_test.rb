@@ -57,11 +57,11 @@ describe "GdsApi::PublishingApi#put_path pact tests" do
         body: {
           "error" => {
             "code" => 422,
-            "message" => Pact.term(generate: "Unprocessable", matcher: /\S+/),
+            "message" => Pact.term(generate: "Unprocessable", matcher: /.+/),
             "fields" => {
               "base_path" => Pact.each_like(
                 {
-                  "error" => Pact.term(generate: "/test-item is already reserved by publisher", matcher: /\S+/),
+                  "error" => Pact.term(generate: "/test-item is already reserved by publisher", matcher: /.+/),
                   "code" => Pact.like("base_path_already_in_use"),
                 },
                 min: 1,

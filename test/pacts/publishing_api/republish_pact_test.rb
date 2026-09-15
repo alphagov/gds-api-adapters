@@ -80,7 +80,7 @@ describe "GdsApi::PublishingApi#republish pact tests" do
           body: {
             "error" => {
               "code" => 409,
-              "message" => Pact.term(generate: "Conflict", matcher: /\S+/),
+              "message" => Pact.term(generate: "Conflict", matcher: /.+/),
               "fields" => {
                 "previous_version" => Pact.each_like("does not match", min: 1),
               },

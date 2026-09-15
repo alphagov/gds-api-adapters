@@ -64,7 +64,7 @@ describe "GdsApi::PublishingApi#publish pact tests" do
         body: {
           "error" => {
             "code" => 422,
-            "message" => Pact.term(generate: "Unprocessable entity", matcher: /\S+/),
+            "message" => Pact.term(generate: "Unprocessable entity", matcher: /.+/),
             "fields" => {
               "update_type" => Pact.each_like("is required", min: 1),
             },
@@ -93,7 +93,7 @@ describe "GdsApi::PublishingApi#publish pact tests" do
         status: 409,
         body: {
           "error" => {
-            "code" => 409, "message" => Pact.term(generate: "Cannot publish an already published content item", matcher: /\S+/)
+            "code" => 409, "message" => Pact.term(generate: "Cannot publish an already published content item", matcher: /.+/)
           },
         },
       )
@@ -162,7 +162,7 @@ describe "GdsApi::PublishingApi#publish pact tests" do
           body: {
             "error" => {
               "code" => 409,
-              "message" => Pact.term(generate: "Conflict", matcher: /\S+/),
+              "message" => Pact.term(generate: "Conflict", matcher: /.+/),
               "fields" => {
                 "previous_version" => Pact.each_like("does not match", min: 1),
               },
