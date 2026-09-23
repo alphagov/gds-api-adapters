@@ -172,4 +172,12 @@ class GdsApi::SupportApi < GdsApi::Base
   def mark_reviewed_for_spam(request_details)
     put_json("#{endpoint}/anonymous-feedback/problem-reports/mark-reviewed-for-spam", reviewed_problem_report_ids: request_details)
   end
+
+  def get_draft_support_request(ref)
+    get_json("#{endpoint}/draft-support-requests/#{ref}")
+  end
+
+  def put_draft_support_request(ref, params)
+    put_json("#{endpoint}/draft-support-requests/#{ref}", params)
+  end
 end
