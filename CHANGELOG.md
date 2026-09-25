@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+`ContentStore#content_item` now validates its argument with
+`allow_underscores: true`, so requests for paths generated under a prefix route
+(e.g. smart answer routes like
+`/check-benefits-financial-support/y/england/yes/sixteen_or_more_per_week`) are
+no longer rejected with `GdsApi::HTTPBadRequest`.
+`GdsApi::Validators::BasePathValidator` keeps enforcing the strict RFC-192
+character set by default, so publishing-side validation is unaffected.
+([PR](https://github.com/alphagov/gds-api-adapters/pull/1425))
+
 ## 103.5.0
 
 * Allow nil base_paths in validator ([PR](https://github.com/alphagov/gds-api-adapters/pull/1421))

@@ -5,7 +5,7 @@ require_relative "exceptions"
 
 class GdsApi::ContentStore < GdsApi::Base
   def content_item(base_path)
-    validator = GdsApi::Validators::BasePathValidator.new(base_path)
+    validator = GdsApi::Validators::BasePathValidator.new(base_path, allow_underscores: true)
     raise GdsApi::HTTPBadRequest, validator.errors unless validator.valid?
 
     get_json(content_item_url(base_path))
