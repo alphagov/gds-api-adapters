@@ -3,10 +3,17 @@ module GdsApi
     class BasePathValidator
       MAX_PATH_LENGTH = 512
 
+      # The RFC-192 character set for base paths: a-z 0-9 . - /
+      RFC_192_CHARACTER_SET = /^([\/a-z0-9.-])+$/
+
+      # As above but permitting underscores
+      UNDERSCORE_TOLERANT_CHARACTER_SET = /^([\/a-z0-9._-])+$/
+
       attr_reader :base_path
 
-      def initialize(base_path)
+      def initialize(base_path, allow_underscores: false)
         @base_path = base_path
+        @allow_underscores = allow_underscores
       end
 
       def valid?
@@ -23,7 +30,7 @@ module GdsApi
         errors << [:base_path_too_long, "must not be longer than #{MAX_PATH_LENGTH} bytes"] if too_long?
         errors << [:base_path_invalid, "must not include runs of . and or / characters, which could be penetration attempts"] if potential_path_traversal?
         errors << [:base_path_invalid, "must not end with a ."] if ends_with_a_period?
-        errors << [:base_path_invalid, "must not include characters that are not lowercase letters, numbers, -, ., or /"] if invalid_chars?
+        errors << [:base_path_invalid, "must not include characters that are not lowercase letters, numbers, -, ., #{'_, ' if allow_underscores?}or /"] if invalid_chars?
 
         errors.each_with_object({}) do |err, memo|
           memo[err[0]] ||= []
@@ -50,7 +57,17 @@ module GdsApi
       end
 
       def invalid_chars?
-        base_path !~ /^([\/a-z0-9.-])+$/
+        base_path !~ allowed_chars_regex
+      end
+
+      def allowed_chars_regex
+        return UNDERSCORE_TOLERANT_CHARACTER_SET if allow_underscores?
+
+        RFC_192_CHARACTER_SET
+      end
+
+      def allow_underscores?
+        @allow_underscores
       end
     end
   end

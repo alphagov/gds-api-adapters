@@ -37,18 +37,38 @@ describe GdsApi::ContentStore do
       end
     end
 
-    describe "when the base_path validator returns false" do
-      before do
-        mock = Minitest::Mock.new
-        def mock.valid? = false
-        def mock.errors = { mocked_error: ["always fails"] }
-        GdsApi::Validators::BasePathValidator.stubs(:new).returns(mock)
+    it "returns the item for a request path containing underscores" do
+      base_path = "/check-benefits-financial-support/england/no/yes/sixteen_or_more_per_week/yes/yes/yes_unable_to_work/no/no/no/none_16000"
+      stub_content_store_has_item(base_path)
+
+      response = @api.content_item(base_path)
+
+      assert_equal base_path, response["base_path"]
+    end
+
+    it "raises HTTPNotFound, not HTTPBadRequest, for an underscored request path without an item" do
+      base_path = "/check-benefits-financial-support/england/no/yes/sixteen_or_more_per_week/yes/yes/yes_unable_to_work/no/no/no/none_16000"
+      stub_content_store_does_not_have_item(base_path)
+
+      error = assert_raises(GdsApi::HTTPNotFound) do
+        @api.content_item(base_path)
       end
 
-      it "raises HTTPBadRequest and doesn't call content store" do
-        assert_raises(GdsApi::HTTPBadRequest) do
-          @api.content_item("/it-is-gone")
-        end
+      assert_instance_of(GdsApi::Base::ItemNotFound, error)
+    end
+  end
+
+  describe "when the base_path validator returns false" do
+    before do
+      mock = Minitest::Mock.new
+      def mock.valid? = false
+      def mock.errors = { mocked_error: ["always fails"] }
+      GdsApi::Validators::BasePathValidator.stubs(:new).returns(mock)
+    end
+
+    it "raises HTTPBadRequest and doesn't call content store" do
+      assert_raises(GdsApi::HTTPBadRequest) do
+        @api.content_item("/it-is-gone")
       end
     end
   end

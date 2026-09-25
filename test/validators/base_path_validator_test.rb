@@ -79,4 +79,54 @@ describe GdsApi::Validators::BasePathValidator do
       end
     end
   end
+
+  describe "when allow_underscores is true" do
+    let(:underscored_valid_path_examples) do
+      [
+        nil,
+        "/government/topical-events",
+        "/check-benefits-financial-support/england/no/yes/sixteen_or_more_per_week/yes/yes/yes_unable_to_work/no/no/no/none_16000",
+      ]
+    end
+
+    let(:still_invalid_path_examples) do
+      [
+        "government/topical-events",
+        "//govuk",
+        "/Government/topical_events",
+        "government/../topical-events",
+        "government/news/%0D%0A",
+        "gövernment/news",
+        "government/topical-events.",
+        "#{'/01223456789_' * 46}x",
+      ]
+    end
+
+    it "returns true for paths containing underscores" do
+      underscored_valid_path_examples.each do |base_path|
+        assert(
+          GdsApi::Validators::BasePathValidator.new(base_path, allow_underscores: true).valid?,
+          "#{base_path} should be accepted",
+        )
+      end
+    end
+
+    it "returns false for paths that are invalid for other reasons" do
+      still_invalid_path_examples.each do |base_path|
+        refute(
+          GdsApi::Validators::BasePathValidator.new(base_path, allow_underscores: true).valid?,
+          "#{base_path} should not be accepted",
+        )
+      end
+    end
+
+    it "returns errors that mention underscores are allowed" do
+      errors = GdsApi::Validators::BasePathValidator.new(
+        "/Government/topical_events",
+        allow_underscores: true,
+      ).errors
+
+      assert_equal({ base_path_invalid: ["must not include characters that are not lowercase letters, numbers, -, ., _, or /"] }, errors)
+    end
+  end
 end
