@@ -4,10 +4,10 @@ module GdsApi
       MAX_PATH_LENGTH = 512
 
       # The RFC-192 character set for base paths: a-z 0-9 . - /
-      RFC_192_CHARACTER_SET = /^([\/a-z0-9.-])+$/
+      RFC_192_CHARACTER_SET = /\A([\/a-z0-9.-])+\z/
 
       # As above but permitting underscores
-      UNDERSCORE_TOLERANT_CHARACTER_SET = /^([\/a-z0-9._-])+$/
+      UNDERSCORE_TOLERANT_CHARACTER_SET = /\A([\/a-z0-9._-])+\z/
 
       attr_reader :base_path
 
