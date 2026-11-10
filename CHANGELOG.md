@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 104.0.0
 
 * BREAKING: Remove Publishing API's GraphQL methods [PR](https://github.com/alphagov/gds-api-adapters/pull/1434)
   * Note: these are now unused, so this should not be breaking in practice
