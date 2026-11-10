@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+* BREAKING: Remove Publishing API's GraphQL methods [PR](https://github.com/alphagov/gds-api-adapters/pull/1434)
+  * Note: these are now unused, so this should not be breaking in practice
+
 ## 103.5.0
 
 * Allow nil base_paths in validator ([PR](https://github.com/alphagov/gds-api-adapters/pull/1421))

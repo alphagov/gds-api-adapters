@@ -45,31 +45,4 @@ describe GdsApi::PublishingApi do
       api_client.get_content_by_embedded_document(content_id, args)
     end
   end
-
-  describe "#graphql_live_content_item" do
-    it "returns the item" do
-      base_path = "/test-from-content-store"
-      stub_publishing_api_graphql_has_item(base_path)
-
-      response = api_client.graphql_live_content_item(base_path)
-
-      assert_equal base_path, response["base_path"]
-    end
-
-    it "raises if the item doesn't exist" do
-      stub_publishing_api_graphql_does_not_have_item("/non-existent")
-
-      assert_raises(GdsApi::HTTPNotFound) do
-        api_client.graphql_live_content_item("/non-existent")
-      end
-    end
-
-    it "raises if the item is gone" do
-      stub_publishing_api_graphql_has_gone_item("/it-is-gone")
-
-      assert_raises(GdsApi::HTTPGone) do
-        api_client.graphql_live_content_item("/it-is-gone")
-      end
-    end
-  end
 end
