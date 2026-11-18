@@ -194,44 +194,6 @@ module GdsApi
         stub_request(:any, /#{PUBLISHING_API_ENDPOINT}\/.*/).to_return(status: 503)
       end
 
-      # Stub a POST /graphql request
-      #
-      # @param query [String]
-      def stub_publishing_api_graphql_query(query, response_hash = {})
-        url = "#{PUBLISHING_API_ENDPOINT}/graphql"
-        response = {
-          status: 200,
-          body: response_hash.to_json,
-          headers: { "Content-Type" => "application/json; charset=utf-8" },
-        }
-        stub_request(:post, url).with(body: { query: }).to_return(response)
-      end
-
-      # Stub a GET /graphql/content/:base_path request
-      def stub_publishing_api_graphql_has_item(base_path, body = content_item_for_base_path(base_path), options = {})
-        max_age = options.fetch(:max_age, 900)
-        body = body.to_json unless body.is_a?(String)
-
-        stub_request(:get, "#{PUBLISHING_API_ENDPOINT}/graphql/content#{base_path}").to_return(
-          status: 200,
-          body:,
-          headers: {
-            cache_control: "public, max-age=#{max_age}",
-            date: Time.now.httpdate,
-          },
-        )
-      end
-
-      # Stub a GET /graphql/content/:base_path request returns 404 not found
-      def stub_publishing_api_graphql_does_not_have_item(base_path)
-        stub_request(:get, "#{PUBLISHING_API_ENDPOINT}/graphql/content#{base_path}").to_return(status: 404, headers: {})
-      end
-
-      # Stub a GET /graphql/content/:base_path request returns 410 gone
-      def stub_publishing_api_graphql_has_gone_item(base_path)
-        stub_request(:get, "#{PUBLISHING_API_ENDPOINT}/graphql/content#{base_path}").to_return(status: 410, headers: {})
-      end
-
       # Assert that a draft was saved and published, and links were updated.
       # - PUT /v2/content/:content_id
       # - POST /v2/content/:content_id/publish
