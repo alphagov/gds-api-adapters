@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "byebug"
   s.add_development_dependency "climate_control", "~> 1.2"
   s.add_development_dependency "govuk_schemas", "~> 6.0"
+  s.add_development_dependency "json", "~> 2.21"
   s.add_development_dependency "minitest", "~> 6.0"
   s.add_development_dependency "minitest-around", "~> 0.5"
   s.add_development_dependency "minitest-mock"
